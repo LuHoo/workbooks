@@ -1,1 +1,1 @@
-install.packages("readr", "rmarkdown")
+install.packages(c("readr", "rmarkdown"))
