@@ -1,0 +1,122 @@
+---
+title: "Workshop Chapter 3"
+author: "Lucas Hoogduin"
+date: "`r Sys.Date()`"
+output: html_notebook
+---
+
+## 3. Estimating the population mean and proportion
+
+### 3.1 Drawing a sample
+
+```{r}
+library(FSaudit)
+names(salaries)
+(N <- nrow(salaries))
+```
+We sample 50 units from the `salaries` dataset by using the `sample()` function.
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+n <- 50
+set.seed(12345)
+salaries[2, 3]
+sample1 <- salaries[sample(N, n), ]
+head(sample1)
+```
+### 3.2 Point estimation of the mean
+
+```{r}
+sum(sample1$gross)
+(y_bar <- mean(sample1$gross))
+```
+```{r}
+N * y_bar
+```
+
+### 3.3 Confidence intervals around the mean
+
+First, we estimate the variance in the population from the variance of the sample.
+
+```{r}
+(s2 <- var(sample1$gross))
+```
+
+The calculation of the standard error is then
+
+```{r}
+(se <- sqrt(s2 / n))
+```
+
+```{r}
+(tval <- qt(0.975, df = (n - 1)))
+```
+
+We multiply the $t$-value with the standard error to obtain the precision achieved.
+
+```{r}
+(precAch <- tval * se)
+```
+
+For a 99\% confidence interval, the calculations are
+
+```{r}
+(lowerBound <- y_bar + qt(0.005, 49) * se)
+(upperBound <- y_bar + qt(0.995, 49) * se)
+N * lowerBound
+N * upperBound
+```
+
+### 3.4 Extending the sample
+
+We extend the sample from Exercise 3.1 from 50 to 131 sampling units.
+
+```{r}
+set.seed(12345)
+sample2 <- salaries[sample(N, 131), ]
+```
+
+The mean of the total sample is:
+
+```{r}
+mean(sample2$gross)
+```
+
+```{r}
+var(sample2$gross)
+sd(sample2$gross)
+```
+
+
+### 3.5 Finite populations
+
+```{r}
+E <- 300000
+tval <- qt(0.975, df = (n - 1))
+(gamma <- E^2 / (N * tval^2 * sd(sample1$gross)^2))
+(N / (1 + gamma))
+```
+
+The total sample size is then 524:
+
+```{r}
+(N^2 * tval^2) * var(sample1$gross)/E^2
+```
+
+### 3.6 Confidence intervals around the proportion
+
+These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
+
+```{r}
+lower(k = 31, popn = 2222, n = 50, alpha = .025)
+upper(k = 31, popn = 2222, n = 50, alpha = .025)
+```
+
+Binomial bounds can be obtained, by adding the distribution to the respective functions.
+
+```{r}
+lower(k = 31, n = 50, alpha = .025, dist = "binom")
+upper(k = 31, n = 50, alpha = .025, dist = "binom")
+lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+```
