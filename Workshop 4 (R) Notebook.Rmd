@@ -1,0 +1,263 @@
+---
+title: "Workshop Chapter 4"
+author: "Lucas Hoogduin"
+date: "`r Sys.Date()`"
+output: html_notebook
+---
+
+## Estimation with auxiliary variables and stratification
+
+### The inventoryData file
+
+Population characteristics of the file inventoryData: number of items:
+
+```{r}
+library(FSaudit)
+(N <- nrow(inventoryData))
+sum(inventoryData$bv)
+head(inventoryData[1:3])
+```
+
+### Working with objects
+
+The `cvs_obj` mySample is a container that gathers all the data relevant to a particular sampling application. We create it by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiyers `id`, and the random seed number `seed`.
+
+```{r}
+mySample <- cvs_obj(n = 400,
+                    bv = inventoryData$bv,
+                    id = inventoryData$item,
+                    seed = 12345)
+```
+
+The CVS object has 19 different attributes attached to it, that will be filled as we proceed from sample planning, through stratification and selection to evaluation. The following is a list of all attributes.
+
+```{r}
+names(mySample)
+```
+
+Some of these attributes are empty for now.
+
+```{r}
+mySample$sample
+```
+
+
+In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of *R* we set it to `Rounding`, which was the default prior to version 3.6.
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+```
+
+We sample 400 units from the `inventoryData` dataset with the `select()` function. This effectively fills the `sample` attribute in `mySample`.
+
+```{r}
+mySample <-  select(mySample)
+head(mySample$sample)
+```
+
+We audit the sampling units selected, and submit the audit values to the CVS object for the sample to be evaluated.
+
+```{r}
+audit_values <-
+  inventoryData[match(mySample$sample$item, inventoryData$item), "av"]
+mySample <- evaluate(mySample, av = audit_values)
+```
+
+The evaluation results are stored in the `evalResults` attribute of the CVS object. This attribute itself is a list of 17 different attributes.
+
+```{r}
+names(mySample$evalResults)
+```
+
+### Mean-per-unit estimator
+
+In Section 4.1 we found an estimate of the population value $\hat{Y}_{MPU}$ = 7,561,859, and achieved precision of 684,415. These values are stored in `mySample`.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount mpu`
+```
+```{r}
+mySample$evalResults$`Achieved precision mpu`
+```
+
+The prediction interval is stored in:
+
+```{r}
+mySample$evalResults$Estimates[4:5, 1]
+```
+
+In this call, the number in brackets refer to the 4th and 5th row of the Estimates table. The first column stores the results of the mean-per-unit estimator.
+
+
+### Regression estimator
+
+The results for the regression estimator are stored in a similar way.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount regression`
+```
+```{r}
+mySample$evalResults$`Achieved precision regression`
+```
+
+The prediction interval is determined by:
+
+```{r}
+mySample$evalResults$Estimates[4:5, 4]
+```
+
+### Difference
+
+The results for the difference estimator are as follows.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount difference`
+```
+
+```{r}
+mySample$evalResults$`Achieved precision difference`
+```
+
+The prediction interval is determined by:
+
+```{r}
+mySample$evalResults$Estimates[4:5, 2]
+```
+
+### Ratio estimator
+
+Finally, the results of the ratio estimator.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount ratio`
+```
+
+```{r}
+mySample$evalResults$`Achieved precision ratio`
+```
+
+The prediction interval is determined by:
+
+```{r}
+mySample$evalResults$Estimates[4:5, 2]
+```
+
+### Sporadic errors
+
+# Using CVS with sporadic errors
+
+We start with setting up a cvs_obj object, and fill it with the parameters.
+
+```{r}
+arSample <- cvs_obj(bv = accounts_receivable$amount,
+                    id = accounts_receivable$invoice,
+                    n = 100)
+```
+
+We select the sample, using a seed equal to 1.
+
+```{r}
+arSample <- select(arSample, seed = 1)
+```
+
+We look up the audit values of the selected sampling units.
+
+```{r}
+audit_values <- accounts_receivable[match(arSample$sample$item,
+                                          accounts_receivable$invoice), "av2"]
+```
+
+We then evaluate the sample and look at the Estimates attribute.
+
+```{r}
+arSample <- evaluate(arSample, av = audit_values$av2)
+arSample$evalResults$Estimates
+```
+
+The number of differences is stored in the #_Errors attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error (k = 4 to 19) method, or using the standard CVS method.
+
+```{r}
+arSample$evalResults$`Regression estimation`$`#_Errors`
+```
+
+Most of the calculations presented in Section 4.7 are easy to follow. The value of $M_U$ is obtained as follows.
+
+```{r}
+N <- nrow(accounts_receivable)
+m <- 6
+(m_u <- upper(k = m, popn = N, n = 100, alpha = 0.05) / N)
+```
+The effective degrees of freedom is $m - 1$. This explains the $t$ value used.
+
+```{r}
+qt(0.975, df = m - 1)
+```
+
+### Stratification
+
+Assign cvs object
+
+```{r}
+equal <- cvs_obj(bv = inventoryData$bv,
+                   id = inventoryData$item)
+```
+
+### Stratify population with equal recorded boundaries
+
+```{r}
+equal <- stratify(myStrat, 
+                    strata = 3,
+                    stratMeth = "equal")
+equal$stratSumm
+```
+
+### Stratify population with cumulative method
+
+```{r}
+cumul <- stratify(myStrat,
+                  strata = 3,
+                  classes = 10,
+                  stratMeth = "cumulative")
+```
+
+Classes
+
+```{r}
+cumul$classSumm
+```
+
+Stratification result
+
+```{r}
+cumul$stratSumm
+```
+
+Calculate sample size for precision of 200,000.
+
+```{r}
+cumul <- size(cumul, desPrec = 200000)
+cumul$n
+```
+
+Select sample
+
+```{r}
+cumul <- select(cumul, seed = 12345)
+head(cumul$sample)
+```
+
+Obtain audit values
+
+```{r}
+true_values <- inventoryData[match(cumul$sample$item,
+                                   inventoryData$item), "av"]
+head(true_values)
+```
+
+Evaluate sample (Table 4.9)
+
+```{r}
+cumul <- evaluate(cumul,
+                      av = true_values)
+cumul$evalResults$Estimates
+```
