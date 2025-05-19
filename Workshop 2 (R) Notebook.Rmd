@@ -20,10 +20,10 @@ dhyper(x = 0, m = 17, n = 314, k = 60)
 Similarly, the probability $P(k = 1)$ of finding one error is
 
 ```{r}
-
+dhyper(x = 1, m = 17, n = 314, k = 60)
 ```
 
-Cumulative probability function. the probability $P(k \leq 1)$ of finding up to one error is
+Cumulative probability function. The probability $P(k \leq 1)$ of finding up to one error is
 
 ```{r}
 phyper(1, 17, 314, 60)
@@ -49,7 +49,7 @@ phyper(1, 17, 314, 60) + phyper(1, 17, 314, 60, lower.tail = FALSE)
 
 ### 2.2 Binomial distribution
 
-Density function. The function `dbinom` requires three arguments, `x = k`, `size = n`, and `prob = p`. The probabilty `prob` is the error rate in the population, in *Case: Number of students* this is $p = M / N = 17 / 331$.
+Density function. The function `dbinom` requires three arguments, `x = k`, `size = n`, and `prob = p`. The probabilty `prob` is the error rate in the population, in *Case: Number of students* this is $p = M / N = 17 / 331$. The probability $P(k = 1)$ of finding one error is
 
 ```{r}
 dbinom(x = 1, size = 60, prob = 17 / 331)
@@ -57,13 +57,15 @@ dbinom(x = 1, size = 60, prob = 17 / 331)
 
 Cumulative probability function.
 
+The probability $P(k \leq 1)$ of finding up to one error is
+
 ```{r}
 pbinom(1, 60, 17 / 331)
 ```
 
 ### 2.3 Poisson distribution
 
-Density function. The function `dpois` requires two arguments, `x = k`, and `lambda = np`, with `p` defined as for the binomial distribution.
+Density function. The function `dpois` requires two arguments, `x = k`, and `lambda = np`, with `p` defined as for the binomial distribution. The probabilities of finding one error $P(k = 1)$ and three errors $P(k = 3)$ are:
 
 ```{r}
 dpois(x = 1, lambda = 60 * 17/ 331)
@@ -71,6 +73,8 @@ dpois(3, 60 * 17/ 331)
 ```
 
 Cumulative probability function.
+
+The probability $P(k \leq 1)$ of finding up to one error is
 
 ```{r}
 ppois(1, 60 * 17/ 331)
@@ -127,7 +131,7 @@ Hypothesis testing is done with the function `qf`, where we use the argument `lo
 
 In the example above, the critical value of the $F$ statistic is `r round(f_crit, 6)`. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not. 
 
-The probability of obtaining this particular value of the test statistic is calculated with the `pf` function.
+The probability of obtaining this particular value of the test statistic is calculated with the `pf` function. With this we will find back the p = 0.05 that was the input earlier.
 
 ```{r}
 pf(q = 1.996271, df1 = 25, df2 = 23, lower.tail = FALSE)
