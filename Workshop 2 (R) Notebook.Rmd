@@ -48,7 +48,7 @@ They require two parameter values as arguments: the number of errors $k$ and the
 For the *Case: Number of students* remember that $n = 60$ and $\pi = 17 / 331$.
  
 ```{r}
-dpois(dpois(1, 60 * 17/ 331))
+dpois(1, 60 * 17/ 331)
 dpois(3, 60 * 17/ 331)
 ```
  
