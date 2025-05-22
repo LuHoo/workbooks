@@ -1,0 +1,765 @@
+\chapter{Hypothesis testing} % (fold)
+\label{cha:hypothesis_testing}
+
+\begin{quote}
+`There's two possible outcomes:  \newline if the result confirms the hypothesis, then you've made a discovery. \newline If the result is contrary to the hypothesis, then you've made a discovery.'\\
+Enrico Fermi (1901-1954)
+\end{quote}
+
+
+Statistical hypothesis testing plays an important role in all statistics and statistical inferences. Contrary to point estimation and interval estimation, we are not interested in the exact value of a parameter with or without a prediction interval around it, but we want to answer the question of whether the information collected is sufficient to reject a hypothetical value of the parameter.
+
+In auditing, hypothesis testing is the preferred technique for attribute sampling and monetary unit sampling. This chapter explores both the mathematically related methods. We also show that the distinction between interval estimation and hypothesis is not very strict, as hypotheses can be tested using prediction intervals.
+
+\section*{Learning objectives}
+After studying this chapter, you will be able to:
+
+\begin{compactitem}
+
+\item define\marginnote{remember} the purpose of a hypothesis test and describe the steps involved in carrying it out.
+\item distinguish between Type I and Type II errors, including their definitions and implications.
+\item list the conditions under which hypothesis tests are valid.
+
+\item explain\marginnote{understand} how the required sample size is determined for a hypothesis test, taking into account factors like significance level, effect size, and power.
+\item identify scenarios where hypothesis testing is feasible and appropriate.
+\item describe how the theory of hypothesis testing is applied within the context of Monetary Unit Sampling (MUS).
+
+\item conduct\marginnote{apply} a hypothesis test using sample data, including interpreting the results in the context of an audit.
+\item implement selection methods for a Monetary Unit Sample, ensuring adherence to best practices and auditing standards.
+\item use MUS to evaluate the sufficiency and reliability of audit evidence.
+
+\item assess\marginnote{analyze} the role of sample size, selection methods, and assumptions in determining the validity and reliability of a hypothesis test.
+\item compare the pros and cons of different selection methods in Monetary Unit Sampling, such as random sampling versus systematic selection.
+
+\item evaluate\marginnote{evaluate} the results of a Monetary Unit Sample to determine whether audit objectives have been met.
+\item critically appraise the robustness of a hypothesis test or MUS procedure, identifying potential limitations or areas for improvement.
+
+\item develop\marginnote{create} a step-by-step plan for carrying out a hypothesis test tailored to a specific audit scenario.
+\item design a Monetary Unit Sampling procedure, including sample selection and evaluation methods, to achieve audit objectives effectively.
+
+\end{compactitem}
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\section*{Case: Information provided by the entity}
+\begin{fullwidth}
+\begin{multicols}{2}
+Your client provides financial and non-financial information of its 1,200 employees to an actuary for the calculation of pension liability. For liability to be accurate, you want to test whether the information provided is appropriate. The information elements include gross monthly salary, gender, date of birth, and tenure. 
+
+You agree that the information is considered materially misstated if more than 5\% of the data points are incorrect.
+\end{multicols}
+
+\section*{Objective}
+\sloppy
+Conclude with 90\% confidence that the information provided to the actuary is free of material misstatement. Decide whether to allow for errors in the sample. Calculate the required sample size and provide a decision rule to determine whether the data are appropriate.
+\end{fullwidth}
+
+\end{mdframed}
+
+\section{The nine-step approach} % (fold)
+\label{sec:the_nine_step_approach}\index{nine-step approach}
+In the previous two chapters, we wanted to understand the value of a certain quantity or proportion. We used a statistical technique of estimation to obtain a point estimate and constructed a prediction interval around this estimate. Hypothesis testing is another frequently used statistical technique. We apply it to situations where we have developed a research question or hypothesis. The objective of the hypothesis test is to collect sufficient information such that the hypothesis can be rejected. 
+
+In this chapter, we address two questions that are often encountered in tests of details. The first is whether the elements in a population have been subjected to predefined compliance criteria. The second is whether a population (part of an account, account, or group of accounts) is free of material misstatement.
+
+\bigskip 
+Hypothesis testing is presented in later chapters related to statistical modeling. It is applied to questions about model assumptions or whether the models or individual parameters are significant. The practical introduction in this chapter will help recognize the general principles of these other applications.
+
+\bigskip 
+When carrying out a hypothesis test, we apply a nine-step approach:
+\begin{enumerate}
+\item Develop the research question.
+\item State the null and alternative hypotheses.
+\item Consider statistical assumptions about the sample used to do the test.
+\item Choose an appropriate test and its test statistic.
+\item Derive the distribution of the test statistic under the null hypothesis.
+\item Select a significance level.
+\item Determine the critical region.
+\item Compute the value of the test statistic from the sample.
+\item Conclude on the test, by using the critical region, the $p$-value of the test statistic or the confidence interval.
+%\label{}
+\end{enumerate}
+
+We illustrate how a hypothesis is carried out by applying it to the \emph{Case: Information provided by the entity}. 
+
+\paragraph{Step 1. Develop the research question.} The research question introduced above in \emph{Case: Information provided by the entity} is: are more than 5\% of the data points incorrect? In this example, the material error in the data provided to the actuary is 5\% or more. In the context of an attribute sample, material error is usually referred to as the \emph{tolerable deviation rate}\index{tolerable deviation rate}\marginnote{tolerable deviation rate}.
+
+\paragraph{Step 2. State the null and alternative hypotheses.} It is a general practice for auditors to define the \emph{null hypothesis}\index{null hypothesis}\index{hypothesis!null}\marginnote{null hypothesis} or default position, as the population being materially in error. It is then the task of the auditor to accumulate sufficient evidence to disprove it. Formally, we can define the null hypothesis $H_0$ as
+\begin{equation*}
+H_0 : \pi \geq 0.05
+%\label{}
+\end{equation*}
+where $\pi$ is the fraction of errors in the population.
+
+Along with the null hypothesis, we define an \emph{alternative hypothesis}\index{hypothesis!alternative}\marginnote{alternative hypothesis}, which is its complement:
+\begin{equation*}
+H_a : \pi < 0.05
+%\label{}
+\end{equation*}
+When we accumulate sufficient evidence to disprove the null hypothesis, we can accept the alternative. The opposite is usually not true; therefore, we typically do not \emph{accept} the null hypothesis, but in such cases, we say that we \emph{fail to reject} it.
+
+\paragraph{Step 3. Consider statistical assumptions about the sample used to do the test.} The sample population consists of 1,200 employees. We have shown in Chapter \ref{cha:probability_distributions} that sampling from a finite population without replacement is accurately described by the hypergeometric distribution.
+
+\paragraph{Step 4. Choose an appropriate test and its test statistic.} The test statistic is related to the null hypothesis $\pi$ by calculating $p$, which is the fraction of errors in the sample with $p = k / n$. Thus, we derive the test statistic $k$, which is the number of errors observed in the sample.
+
+\paragraph{Step 5. Derive the distribution of the test statistic under the null hypothesis.} In general, we know the distribution of the test statistic, or approximate it.
+
+If the null hypothesis $\pi \geq$ 0.05 is true, then $k$ has a hypergeometric distribution, with parameter population size $N =$ 1,200, number of errors in the population $M = N * \pi = $ 1,200 $\times$ 0.05 = 60, and sample size $n$.
+
+\paragraph{Step 6. Select a significance level.} The significance level is the level of probability at which the null hypothesis is rejected. The significance level is given in the \emph{Objective} paragraph of \emph{Case: Information provided by the entity}, where it was stated that we want to conclude with 90\% confidence. The \emph{significance level}\index{significance level}\marginnote{significance level} is the complement of this number, or $\alpha =$ 10\%.\nomenclature{$\alpha$}{significance level}
+
+Calculations are performed with a single value for $\pi$ rather than the range of values of $\pi \geq$ 0.05. Choosing $\pi =$ 0.05, the border value of the null hypothesis, is appropriate, because, at this value, the significance level of 10\% is set. This implies that, if the true population error rate is 5\%, we run a risk of no more than 10\% to inadvertently fail to reject the null hypothesis, whereas this risk is smaller when the true population error rate is higher than 5\%.
+
+\paragraph{Step 7. Determine the critical region.} The auditor also determines the \emph{critical region}\index{critical region}\marginnote{critical region}. It contains the values for the test statistic $k$ for which the null hypothesis is rejected. For example, we can choose to reject $H_0$ only if there are no errors in the sample. In this case, the critical region is defined as $k = $ 0, or more formally, $\{\stoch{k} | k = 0\}$, the set of values $k$ for which $k =$ 0. 
+
+Alternatively, one may want to allow for a small number of errors in the test. For example, we can choose to reject $H_0$ only if no more than two errors are found in the sample. In this case, the critical region is defined as  $\{\stoch{k} | k \leq 2\}$.
+
+\bigskip
+The critical region affects the minimum required sample size. We determine the sample size $n$ such that if the null hypothesis is true, that is, the population contains a material misstatement ($\pi \geq 0.05$), the probability of finding $k$ in the critical region $\{k | k \leq k_{cr}\}$ is less than or equal to the significance level of the test, that is, 10\%. Mathematically we are looking for the smallest sample size $n$ for which
+\begin{equation}
+P(\stoch{k} \leq k_{cr} | \pi = 0.05) \leq \alpha
+\label{eq:sample_size _calculation_att}
+\end{equation}
+
+This leads to a sample size of $n =$ 45, if we do not allow for any errors in the sample. If we determine the critical region to be $\{\stoch{k} | k \leq 2\}$, allowing for up to two errors in the sample, the minimum required sample size is 102.\marginnote{See Exercise \ref{ex:critical_region} for the calculation of these sample sizes.}
+
+As we can see, the choice of the critical region has a big effect on the sample size. Choosing a narrow region leads to a small sample size, at the risk of finding errors, and therefore failing to reject the null hypothesis. A larger region improves the chances of being able to conclude on the test, but at the expense of a larger sample size. The choice of critical region should correspond to the \emph{expected error}\index{expected error}\index{error!expected}\marginnote{expected error} in the population. For larger expected error rates, we allow for more errors in the sample and work with a wider critical region.
+
+\bigskip
+The application of the hypothesis test in \emph{Case: Information provided by the entity} is an example of what auditors refer to as \emph{attribute sampling}\index{attribute sampling}\marginnote{attribute sampling}. In attribute sampling, we are concerned with the rate of occurrence or frequency of elements in a population that have a certain attribute. The attribute is dichotomous: it is there, or it is not. There are no in-between situations. An element is either correct or incorrect. Internal control procedures were either applied to one element or not.
+
+Other testing strategies can also address the problem raised in \emph{Case: Information provided by the entity}. For example, a \emph{double-sampling plan}\index{double-sampling plan}\marginnote{double-sampling plan} allows the sample to be extended if a single error is found. A \emph{sequential sampling plan}\index{sequential sampling plan}\marginnote{sequential sampling plan} allows for taking an accept/continue/reject decision after the evaluation of every single tested item.
+
+\paragraph{Step 8. Compute the value of the test statistic from the sample.} In our case, the computation is simple: only the number of errors in the sample is counted. Alternatively, we can calculate a one-sided confidence interval for the number of errors in the population.
+% In other cases the computation of the test statistic may be more complicated.
+
+\paragraph{Step 9. Conclude on the test, by using the critical region, the $p$-value of the test statistic or the confidence interval.} Let us assume a test with a critical region $\{k | k = 0\}$, and one error was found in the sample of $n =$ 45. Because $k = 1$ is not an element of the critical region, the null hypothesis cannot be rejected in favor of the alternative. The test results are inconclusive.
+
+Alternatively, if a test is carried out with a critical region $\{k | k \leq 2\}$, two errors are found in the sample with $n =$ 102. This time, $k = 2$ is an element of the critical region, and therefore, the null hypothesis is rejected in favor of the alternative. We may conclude with 90\% confidence that the data file is appropriate.
+
+\bigskip
+The construction of a critical region is a tradition when calculations are difficult to perform manually. The critical regions were derived from extensive tables of the results. A modern alternative is to calculate the probability of the sample result and then compare this probability with the significance level. In the first example, we have $P(k \leq 1, n = 45, N = 1,200, M = 60) = 0.3294$\label{p_value1}, and because this is greater than the 10\% significance level, the null hypothesis is rejected. In the second example, $P(k \leq 2, n = 102, N = 1,200, M = 60) = 0.0999$, and because this is less than the significance level, the null hypothesis is rejected in favor of the alternative.
+
+The significance level is also referred to as \emph{Type I error}\index{Type I error}\marginnote{Type I error}. This represents the probability of rejecting the null hypothesis when it is correct. If we obtain a value for the test statistic that is not in the critical region, we can commit a \emph{Type II error}\index{Type II error}\marginnote{Type II error}, failing to reject the null hypothesis when it is true. A nonmaterial error rate is required to evaluate this probability. For example, when one error was found in a sample of 45 items, the test was inconclusive. It is possible that the error rate in the population is greater than 5\%, but the sampling result is not very unlikely if the error rate in the population is, say, 
+\marginnote{Type II error is calculated at an arbitrary error rate within the alternative hypothesis.}
+2\%. The Type II error at a population error rate of 2\% is $P(\stoch{k} \geq 1, n = 45, N = 1,200, M = 0,02 \times 1200 = 24) = 0.6040$.\label{type_two_error} 
+
+\bigskip
+Fig. \ref{fig:typeIIerror} shows the relationship between the number of errors in the population and the probability of committing a Type II error. Type II error is not defined for values of $M \geq 60$; for those values, the population is materially misstated.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{TypeIIerror.png}
+  \caption{Type II error for a sampling plan with $n = 45$ and $N = 1200$ at various numbers of population errors.}
+  \label{fig:typeIIerror}
+\end{figure}
+
+This also explains why we cannot claim that the `null hypothesis is true' if it cannot be rejected. The test is not sufficiently powerful to distinguish between material and nonmaterial error rates.
+
+The hypothesis test \marginnote{Testing the hypotheses with a confidence interval} can also be performed using a confidence interval. In \emph{Case: Information provided by the entity} we used a significance level of 10\%, and materiality was set at 5\%. Tolerating up to two errors or applying a critical region $\{\stoch{k} | k \leq 2\}$ led to a sample size $n =$ 102. We use Equations \ref{eq:sample_proportion}, \ref{eq:point_estimate_number} and \ref{eq:upper_bound} to obtain a point estimate of the total number of errors in the population and its 90\% one-sided upper bound. We calculate these estimates for each case when we find zero, one, two, or three errors in the sample. The results are summarized in Table \ref{tab:confidence_intervals}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k$} &
+\parbox[t]{1.5 cm}{\raggedleft $k / n$} &
+\parbox[t]{1.5 cm}{\raggedleft $N k / n$} &
+\parbox[t]{1.5 cm}{\raggedleft $M_U$} &
+\parbox[t]{3 cm}{\raggedleft $p_U = M_U / N$} \\
+
+\midrule
+
+0 & 0.00\% & 0.0 & 25 & 2.08\%  \\
+1 & 0.98\% & 11.8 & 43 & 3.58\%  \\
+2 & 1.96\% & 23.5 & 59 & 4.92\%  \\
+3 & 2.94\% & 35.3 & 75 & 6.25\% \\
+
+\bottomrule
+\end{tabular*}
+\caption{Point estimates and one-sided 90\% upper bounds (for a sample of size $n =$ 102 from a population of $N =$ 1,200 elements.}
+\label{tab:confidence_intervals}
+\end{table}
+
+Rather than determining whether the number of errors $k$ is an element of the critical region, we now compare the upper bound of the confidence interval with the materiality set. Materiality is 5\% in this example or 60 errors in the entire population (5\% $\times$ 1,200). From the results in Table \ref{tab:confidence_intervals}, if we find up to two errors, $p_U \leq \pi_0 =$ 0.05, or $M_U \leq M_0 =$ 60, we can reject the null hypothesis and conclude that the percentage of errors in the population is significantly lower than 5\%. This is not the case if we find three or more errors.
+
+% section the_nine_step_approach (end)
+
+\section{Attribute sampling} % (fold)
+\label{sec:attribute_sampling}
+
+The example used in the previous section was \emph{attribute sampling}\index{attribute sampling}\index{sampling!attribute}\marginnote{attribute sampling}. It is a sampling plan carried out with simple random sampling, with equal inclusion probabilities for the sampling units, and the object of interest has two possible outcomes: true or false, zero or one, and control deviation or no control deviation. We used a fixed sample size depending on the critical region chosen. If the critical region is $\{k | k = 0\}$, then the sample is referred to as a \emph{discovery sample}\index{discovery sample}\index{sample!discovery}\marginnote{discovery sample}. 
+
+We observed that the sample size is mainly driven by three parameters: the significance level $\alpha$, critical region $k_{cr}$, and tolerable deviation rate $\pi$.\marginnote{The fourth parameter, the population size $N$, has a significant effect only for high values of $n$ compared to $N$.} Tables \ref{tab:attribute_sample_sizes_alpha05} and \ref{tab:attribute_sample_sizes_alpha10} show the sample sizes for the combination of critical regions and tolerable deviation rates for the significance levels of 5\% and 10\%, respectively. Note that the sample sizes in Table \ref{tab:attribute_sample_sizes_alpha10} are close to those obtained when using the hypergeometric distribution in Table \ref{tab:confidence_intervals}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k_{cr}$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 1\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 5\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 10\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 15\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 20\%$} \\
+
+\midrule
+
+0 & 299 & 59 & 29 & 19 & 14 \\
+1 & 473 & 93 & 46 & 30 & 22 \\
+2 & 628 & 124 & 61 & 40 & 30 \\
+3 & 773 & 153 & 76 & 50 & 37 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Attribute sample sizes, significance level $\alpha = 0.05$, binomial approximation.}
+\label{tab:attribute_sample_sizes_alpha05}
+\end{table}
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k_{cr}$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 1\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 5\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 10\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 15\%$} &
+\parbox[t]{1.5 cm}{\raggedleft $\pi = 20\%$} \\
+
+\midrule
+
+0 & 230 & 45 & 22 & 15 & 11 \\
+1 & 388 & 77 & 38 & 25 & 18 \\
+2 & 531 & 105 & 52 & 34 & 25 \\
+3 & 667 & 132 & 65 & 43 & 32 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Attribute sample sizes, significance level $\alpha = 0.10$, binomial approximation.}
+\label{tab:attribute_sample_sizes_alpha10}
+\end{table}
+
+The performance of attribute sampling plans can be visualized using the \emph{operating characteristics curve}\index{operating characteristics curve}\marginnote{operating characteristics curve} (OCC). This curve depicts the probability of rejecting the null hypothesis at a certain deviation rate within the population.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{three_attribute_occ.png}
+  \caption{Operating Characteristics Curves for attribute sampling plans with sample sizes 45, 77 and 107.}
+  \label{fig:three_attribute_occ}
+\end{figure}
+
+The OCC in Fig. \ref{fig:three_attribute_occ}, reflecting a test with $H_0: \pi \geq 0.05$ shows that populations with a low deviation rate have a high chance of being accepted, whereas the probability of acceptance decreases as the population deviation rate increases. There is a 10\% risk associated with all three attribute sampling plans, testing a population with a 5\% deviation rate. This is indicated by the spot where the curve intersects with a 10\% probability of acceptance. 
+
+The $y$-axis reflects the \emph{power}\index{power}\marginnote{power} of the test. For example, when $n = 45$ and the true population error rate $\pi = 0.02$ we find the power  $(1 - \beta) = (1 - \pi)^n = (1 - 0.02)^{45} = 0.40$. 
+
+As we have seen in the previous section, the choice of the critical region affected the sample size. Without allowing for errors, the sample size was 45, but allowing for one or two errors, the sample size increased to 77 or 105. Auditors with no prior information on the expected error rate in the population may therefore be uncomfortable with regard to the choice of the critical region. If it is set too low, the probability of finding one or more deviations could be quite high; however, setting it too high would lead to significantly larger sample sizes. Consequently, the auditor is either stuck with inconclusive test results or has tested too many items. 
+
+% section attribute_sampling (end)
+
+\section{Double sampling} % (fold)
+\label{sec:double_sampling}
+
+The problem described in the last paragraph of the previous section can be addressed by introducing flexibility in the sample design. Rather than building error tolerance using a fixed attribute sampling plan, \emph{double sampling}\index{double sampling}\index{sampling!double}\marginnote{double sampling} allows evaluation of the sample at an intermediate stage. If the sample is inconclusive at this stage, the second stage is executed. 
+
+The procedure is as follows:
+
+\begin{enumerate}
+	\item Draw an initial sample of size $n_0$.
+	\item If the sample reveals no deviations, accept the population.
+	\item If the sample reveals one deviation, extend the sample with size $n_1$.
+	\item If the second sample reveals no deviations, accept the population.
+	\item In all other cases, reject the population. 
+\end{enumerate}
+
+\begin{figure*}
+
+\begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+    % Place nodes
+    \node[blueblock] (first) {Initial \newline sample $n_0$};
+    \node[blueblock,  right = 2 cm of first] (seco) {Extension $n_1$};
+    \node[whiteblock, above = 1.0 cm of seco] (acc1) {Accept the population};
+    \node[whiteblock, below = 1.0 cm of seco] (rej1) {Reject the population};
+    \node[right = 4 cm of seco] (dummy) {}; 
+    \node[whiteblock, above = 0.5 cm of dummy] (acc2)  {Accept the population};
+    \node[whiteblock, below = 0.5 cm of dummy] (rej2)  {Reject the population};
+    % Draw edges
+    \path [line] (first) -- node {k = 0} (acc1);
+    \path [line] (first) -- node {k = 1} (seco);
+    \path [line] (first) -- node {k > 1} (rej1);
+    \path [line] (seco) -- node {k = 0} (acc2);
+    \path [line] (seco) -- node {k > 0} (rej2);
+
+\end{tikzpicture}
+\caption{Executing a double sampling plan.}
+\end{figure*}
+
+Double sampling is appropriate when the auditor allows for a small error rate, particularly when incidental errors occur that are not systematic.
+
+\bigskip
+Auditors often use double sampling to test manually recurring controls. Then, the auditor selects and tests the initial sample. If a control deviation is found, the auditor first investigates the circumstances that give rise to the deviation and determines whether the deviation is systematic or anomalous. When systematic, the auditor would then stratify the population and not rely on internal controls for those instances where controls failed and rely on internal controls for the remaining part of the population after retesting compliance. When anomalous and if no more than one deviation is found in the initial sample, the auditor confirms the anomalous nature of the deviation by testing the incremental sample.
+
+\bigskip
+Typically, the size of an incremental sample is equal to that of an initial sample. The probability of accepting the population (the probability of rejecting the null hypothesis) is the sum of 
+\begin{compactitem}
+	\item The probability of finding no deviations in the initial sample of size $n_0$\marginnote{$P(k = 0 | n_0) = (1 - \pi)^{n_0}$}; plus
+	\item The probability of finding one deviation in the initial sample of size $n_0$ and then finding one deviation in the extension of size $n_1$.\marginnote{$P(k = 1 | n_0) \times P(k = 0 | n_1) = \newline n \pi (1 - \pi)^{n_0 - 1} (1 - \pi)^{n_1}$}
+\end{compactitem}
+
+The sum of these probabilities is
+
+\begin{equation}
+P(Accept) = (1 - \pi)^{n_0} + n \pi (1 - \pi)^{n_0 - 1} (1 - \pi)^{n_1}
+\label{eq:p_accept}
+\end{equation}
+
+If we choose the size of the extension equal to that of the initial sample, $n = n_0 = n_1$, the probability to accept is
+
+\begin{equation*}
+P(Accept) = (1 - \pi)^{n} + n \pi (1 - \pi)^{n - 1} (1 - \pi)^{n} = 
+\end{equation*}
+\begin{equation}
+(1 - \pi)^{n} (1 + n \pi (1 - \pi)^{n - 1}) \leq \alpha
+\label{eq:p_accept_n0_equal_to_n1}
+\end{equation}
+
+The probability of accepting a population with a certain population deviation rate, $\pi$, can be calculated using Equation \ref{eq:p_accept_n0_equal_to_n1}. For example, if we apply double sampling to \emph{Case: Information provided by the entity}, with a significance level $\alpha$ of 10\% and a tolerable deviation rate $\pi$ of 5\%, we find by trial and error that $n_0 = n_1 = 49$ is the smallest sample size that satisfies $P(Accept) \leq \alpha$. Note that this sample size is only slightly larger than that for a discovery sample with the same significance level and tolerable deviation rate.
+
+We can now compare the OCCs for attribute sampling with those for the double sampling plan. The graph is shown in Fig. \ref{fig:att_double_occ}.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{att_double_occ.png}
+  \caption{Operating Characteristics Curves for two attribute sampling plans with sample sizes 45 and 77, and a double sampling plan with $n_0 = n_1 = 49$.}
+  \label{fig:att_double_occ}
+\end{figure}
+
+The operating characteristics of a double-sampling plan can also be compared to those of a discovery sample and an attribute sampling plan that allows for one deviation. All three plans have sample sizes such that a population with a 5\% deviation rate have an approximate probability of acceptance of 10\%. The results are shown in Fig. \ref{fig:att_double_occ}. This comparison shows the advantages of double sampling: the initial sample size is marginally larger than that of the discovery sample. The `penalty' for allowing an extension is not very large. At the same time, the acceptance probabilities are quite close to those of a fixed-attribute plan that allows for one deviation.
+
+% section double_sampling (end)
+
+
+\section{Monetary unit sampling with 100\% errors} % (fold)
+\label{sec:monetary_unit_sampling}
+
+In the previous section, we introduced hypothesis testing on a non-financial population. This strategy can also be used in financial settings. This introduces a further opportunity: we may conclude on the fraction of errors, as in the example in the previous section, or we may conclude on the total error amount. The following case study provides an example of the latter.
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\section*{Case: European innovation subsidies}
+\begin{fullwidth}
+\begin{multicols}{2}
+The European Fund for Strategic Investments is the central pillar of the Investment Plan for Europe. Research, development and innovation activities are financed for a wide range of sectors. 
+
+Your client applied for funding certain activities in the current calendar year. As part of the funding conditions, your client must submit an auditor's opinion on the appropriateness of the costs submitted for funding. You, as the auditor, should state with a confidence of 95\% that the total submitted costs do not exceed 1\% of the total claimed amount.
+
+The grant conditions clearly state the appropriate costs. For a sample of cost elements, you will check if they are rightfully added to the funding request and if all funding conditions are met.
+
+\bigskip
+A total of 12 million was submitted for the grant, and your client has provided a detailed list of 6,400 items supporting the claim.
+\end{multicols}
+
+
+\section*{Objective}
+Conclude with 95\% confidence that the claim is free of material misstatement.
+\end{fullwidth}
+
+\end{mdframed}
+
+\paragraph{Sample selection.} Rather than considering the population subject to testing as consisting of 6,400 elements that can be sampled, we will view it as a collection of 12 million monetary units that could be correct (adhering to the conditions for funding) or incorrect. However, it is not possible to test individual monetary units; to assess the appropriateness of a single unit we will test the entire unit that contains it. To enable this, we therefore select the items for testing not randomly but with a \emph{probability proportional to size}\index{probability proportional to size}\marginnote{probability proportional to size}. The image of sampling individual monetary units provides this method with the name of \emph{Monetary Unit Sampling}\index{Monetary Unit Sampling}\index{sampling!Monetary Unit}\marginnote{Monetary Unit Sampling} or MUS.
+
+The most commonly used sampling schemes with probabilities proportional to the size of the elements are discussed in Section \ref{sub:selection_with_probability_proportional_to_size}.
+
+% \begin{description}
+\paragraph{Step 1. Develop the research question.} For \emph{Case: European innovation subsidies}, we need to investigate whether the population of innovation expenses contains items not applicable for funding with a total amount of 1\% of the total.
+
+\paragraph{Step 2. State the null and alternative hypotheses.} If we define $M$ as the total amount of inappropriate cost items, then we define the null hypothesis as follows:
+\begin{equation*}
+H_0 : M \geq 120,000 \text{ or } \pi \geq 0.01
+%\label{}
+\end{equation*}
+We test the null hypothesis against alternative:
+\begin{equation*}
+H_a : M < 120,000 \text{ or } \pi < 0.01
+%\label{}
+\end{equation*}
+
+\paragraph{Step 3. Consider statistical assumptions about the sample used to do the test.} It is assumed that the tested cost items can only be correct or incorrect, and that they cannot be partially correct. The sample is drawn with a probability proportional to size. 
+
+\paragraph{Step 4. Choose an appropriate test and its test statistic.} The test statistic is the number of errors, $k$, in the sample. A cost item is deemed incorrect if one or more of the inclusion conditions are not met.
+
+\paragraph{Step 5. Derive the distribution of the test statistic under the null hypothesis.} Under the null hypothesis, $k$ follows a hypergeometric distribution with parameters $N = 12,000,000$ and $M_0 = 0,01 \times 12,000,000 = 120,000$.
+
+\paragraph{Step 6. Select a significance level.} Given the required confidence level of 95\%, the significance level of the test is its complement of 5\%.
+
+\paragraph{Step 7. Determine the critical region.} As in the previous \emph{Case: Information provided by the entity} we have to decide on the critical region. The minimum sample size $n = $ 299 is obtained for the smallest region $\{k | k = 0\}$, allowing for no errors in the sample. 
+
+\paragraph{Step 8. Compute the value of the test statistic from the sample.} The remainder of the test is similar to that of the previous \emph{Case: Information produced by the entity}. Select the number of items in line with the chosen critical region, audit the items and count the number of sampling units $k$ that are not in accordance with the conditions for the grant.
+
+\paragraph{Step 9. Conclude on the test, by using the critical region, the $p$-value of the test statistic or the confidence interval.} If $k$ is within the critical region, the null hypothesis is rejected. We may conclude with 95\% confidence that the total amount that is not in accordance with the conditions for the grant is less than 120,000. 
+
+If $k$ is not within the critical region, then the sample is inconclusive. Communicate the findings with the client, who may want to review the process of collecting expense items subject to the grant based on the information provided.
+
+%\label{}
+% \end{description}
+
+% section monetary_unit_sampling (end)
+
+\section{Monetary unit sampling with partial errors} % (fold)
+\label{sec:partial_errors}
+
+In the \emph{Case: European innovation subsidies}, the selected elements could be either correct or incorrect, and it was not possible for an item to be partially correct and partially incorrect.  In many other audit applications, the elements can be partially correct and partially incorrect. This is illuminated through a case commonly encountered by auditors: the circularization of accounts receivable balances.
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\sloppy
+\section*{Case: Accounts receivable circularization}
+\begin{fullwidth}
+\begin{multicols}{2}
+
+To obtain audit evidence of the existence of trade accounts receivable balances at the year-end, you intend to have a sample of these balances confirmed by your client's customers. You have chosen the positive form of confirmation, asking the customer to respond to you whether the account balance is correctly stated.
+
+The selected elements can be completely or partially incorrect. For example, if an invoice is issued before the year-end and goods are dispatched after the year-end, the receivable is incorrectly accounted for at the year-end, and the entire balance selected is incorrect (as well as the corresponding amount of revenue). If an invoice is issued for goods delivered but the price or quantity invoiced is incorrect, the receivable outstanding and revenue realized are partially incorrect.
+
+\bigskip
+There are 10,000 trade account receivable invoices outstanding at year-end, their total amount is 13,500,000. Performance materiality for this account is 450,000. Based on the findings from previous years, you expect the total misstatement in the population to not exceed 100,000.
+
+\end{multicols}
+
+\section*{Objectives}
+Calculate the minimum required sample size that allows you, at a significance level of 5\%, to reject the hypothesis that the population is overstated by more than 450,000 if the extrapolated error from the sample does not exceed 100,000. Determine the number of errors that can be tolerated. Given that errors may be partial, calculate the point estimate and a one-sided 95\% upper bound of the total error.
+
+\end{fullwidth}
+
+\end{mdframed}
+
+In the previous case study, the \emph{Case: European innovation subsidies}, we observed that the choice of the critical region had a dramatic effect on the sample size; increasing the critical region from $\{k | k = 0\}$ to $\{k | k \leq 1\}$ increased the sample size from $n = 299$ to $n = 473$. in \emph{Case: Accounts receivable circularization}, errors can be partial, and this has an effect on the evaluation, and therefore also on the sample size calculation.
+
+A sample size of $n = 145$ is then calculated using a \emph{performance materiality}\index{performance materiality}\index{materiality!performance}\marginnote{performance materiality} ($PM$) of 450,000, and the expected error of 100,000 as specified in the case study.
+
+The MUS sample size lies between the fixed attribute sample sizes of 141 (for $k = 1$) and 187 (for $k = 2$).\marginnote{The calculation of the sample size is explained on page~\pageref{par:sample_size_calculation}} Before we can explain how this sample size is calculated, we first need to turn to the evaluation of the sample. 
+
+\bigskip
+Four methods allow the evaluation of partially correct elements.
+\begin{enumerate}
+\item All-or-Nothing-Approach;
+\item Stringer bound; 
+\item Cell bounds; and
+\item PPS estimation.
+%\label{}
+\end{enumerate}
+
+\paragraph{All-or-Nothing-Approach}\index{all-or-nothing-approach} When we introduced the \emph{Case: European innovation subsidies} we saw that we could apply the theory of proportions to monetary populations by simply regarding each individual monetary unit in the population as an individual population element that could be selected and tested separately. A single monetary unit can only be audited through the logical unit that contains it, but this does not prevent us from applying the hypergeometric distribution to make statistical statements on the proportions of correct and incorrect monetary units in the population. Thus, a conclusion in monetary terms can be developed. 
+
+In the presence of partial errors, this is still possible, particularly when a selection mechanism is used that allows multiple monetary units to be selected from a single logical unit that contains them, such as in the \emph{Random monetary units} selection method. See Exercise \ref{ex:double_hits} for an example.
+
+\bigskip
+If the elements can only be correct or incorrect, both monetary units are evaluated according to whether the logical unit is correct or incorrect. If correct, both monetary units are deemed correct for evaluation purposes, and if the logical unit is incorrect, both monetary units are evaluated as errors.
+
+What happens if the logical unit is partially correct and partially incorrect? For example, if its book value is 7 and its audit value is 5, then we can regard the first five monetary units to be correct and the last two monetary units to be incorrect. Therefore, the first selected monetary unit, connected to random number 2, is evaluated as a correct unit, and the second one, connected to random number 7, is treated as an error.
+
+\begin{marginfigure}
+\includegraphics[width=1\textwidth]{Partially_correct_item.png}
+\caption{Element A contains 5 correct  and 2 incorrect monetary units.}
+\label{fig:Partially_correct_item}
+\end{marginfigure}
+
+This evaluation method is referred to as the \emph{all-or-nothing-approach}\index{all-or-nothing-approach}\marginnote{all-or-nothing-approach}. The evaluation of the hypothesis test is exactly the same as in the previous section, with the only distinction that when partially incorrect elements are encountered, we need to determine whether the monetary unit(s) selected within the tested element reside in the correct or incorrect part of the element.
+
+\bigskip
+Most selection methods allow for the determination of selected monetary units within the tested element. The all-or-nothing-approach has a perceived disadvantage in that not all audit information is considered when evaluating the sample; it could be the case that multiple erroneous elements are in the sample, but that each selected monetary unit happens to be in the correct part of the element. As a result, the auditor found information about errors in the population that are not reflected in the statistical evaluation of the sample.
+
+\paragraph{Stringer Bound} This evaluation method is named after its inventor, Kenneth W. Stringer.\index{Stringer Bound}\marginnote{Stringer Bound} It uses all available information of the sampled elements to calculate an \emph{upper confidence bound}\index{confidence bound}\index{bound!confidence}\marginnote{upper confidence bound} of the error amount. The null hypothesis is rejected if this upper bound is less than performance materiality $PM$.
+
+Let us assume that three errors were found, as summarized in Table~\ref{tab:three_errors}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{2.0 cm}{ID} &
+\parbox[t]{2.0 cm}{\raggedleft Book value $x$} &
+\parbox[t]{2.0 cm}{\raggedleft Audit value $y$} &
+\parbox[t]{1.6 cm}{\raggedleft Difference $d = x - y$} &
+\parbox[t]{1.6 cm}{\raggedleft Tainting $t = d / x$}  \\
+
+\midrule
+
+201702532 & 5,548.53 & 4,438.82 & 1,109.71 & 20.00\% \\
+201720040 & 670.43 & 0.00 & 670.43 & 100.00\% \\
+201724407 & 5,761.85 & 5,531.38 & 230.47 & 4.00\% \\
+
+\bottomrule
+\end{tabular*}
+\caption{Differences found in the sample of accounts receivable. }
+\label{tab:three_errors}
+\end{table}
+
+The \emph{tainting}\index{tainting}\marginnote{tainting} $t$ is calculated as the difference between the book and audit values relative to book value.
+
+\begin{equation}
+t_i = \frac{x_i - y_i}{x_i} = \frac{d_i}{x_i}
+\label{eq:tainting}
+\end{equation}
+
+We start by calculating the point estimates and one-sided 95\% upper confidence bounds for up to three errors, assuming that all errors have 100\% tainting. These are listed in Table \ref{tab:confidence_intervals_MUS}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{0.6 cm}{$k$} &
+\parbox[t]{2.5 cm}{\raggedleft Point estimate $X k / n$} &
+\parbox[t]{1.5 cm}{\raggedleft $M_U$} &
+\parbox[t]{2.5 cm}{\raggedleft Increase in $M_U$} &
+\parbox[t]{1.5 cm}{\raggedleft $PGW$} \\
+
+\midrule
+
+0 & 0.00 & 276,050.00 & 276,050.00 & 0.00 \\
+1 & 93,103.45 & 436,007.00 & 159,957.00 & 66,853.55 \\
+2 & 186,206.90 & 577,535.00 & 141,528.00 & 48,424.55 \\
+3 & 279,310.34 & 710,132.00 & 132,597.00 & 39,493.55 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Point estimate and one-sided 95\% upper bound for a sample of size $n =$ 145 from a monetary population with a total value of $X =$ 13,500,000.}
+\label{tab:confidence_intervals_MUS}
+\end{table}
+
+Table \ref{tab:confidence_intervals_MUS} shows that the point estimate increases with $X / n = $ 13,500,000 / 145 = 93,103.45 for each error found. The increase in the upper bound $M_U$ \marginnote{$M_U$ is the upper bound on incorrect monetary units, calculated using Equation \ref{eq:upper_bound}.} is not linear with an increase in the number of errors. It starts at 276,050, when no errors are found. This quantity is referred to as \emph{basic precision}\index{basic precision}\marginnote{basic precision} (BP). For each error, $M_U$ increases. 
+
+The increase in $M_U$ is partially due to the increase in the point estimate. The remaining increase, referred to as \emph{precision gap widening}\index{precision gap widening}\marginnote{precision gap widening} (PGW), gradually decreases in size. For example, $PGW$ for the first error is calculated from the increase in $M_U$ (159,957.00) not attributed to the increase in point estimate (93,103.45), therefore $PGW_1 =$ 159,957.00 - 93,103.45 = 66,853.55.
+
+\bigskip
+The philosophy behind the Stringer bound is that all elements in the evaluation related to individual errors (i.e., everything except basic precision) are taken into account in the evaluation only to the extent that the particular sampling unit was in error. In other words, increases in the point estimate and upper bound are reduced by multiplying with the tainting percentage $t$. 
+
+Table \ref{tab:point_estimate_Stringer} shows how the three errors affect the point estimate. 
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k$} &
+\parbox[t]{1.5 cm}{\raggedleft $t$} &
+\parbox[t]{1.5 cm}{\raggedleft $SI = X / n$} &
+\parbox[t]{1.5 cm}{\raggedleft $t X / n$} \\
+
+\midrule
+
+1 & 100.00\% & 93,103.45 & 93,103.45 \\
+2 & 20.00\% & 93,103.45 & 18,620.76 \\
+3 & 4.00\% & 93,103.45 & 3,724.07 \\
+
+\midrule
+
+Total & & & 115,448.28 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Point estimate for a sample of size $n =$ 145 from a monetary population with a total value of $X =$ 13,500,000, where three errors are found with taintings $t =$ 100\%, 20\%, and 4\%.}
+\label{tab:point_estimate_Stringer}
+\end{table}
+
+Similarly, the precision of the estimate is obtained by taking the taintings $t$ into consideration when calculating the PGW for each error. The results are presented in Table \ref{tab:precision_Stringer}. Note that the errors are ordered by decreasing tainting so that the largest taintings are multiplied with the largest PGWs.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k$} &
+\parbox[t]{1.5 cm}{\raggedleft $t$} &
+\parbox[t]{1.5 cm}{\raggedleft $PGW_k$} &
+\parbox[t]{1.5 cm}{\raggedleft $t PGW_k$} \\
+
+\midrule
+
+0 & & & 276,050.00 \\
+1 & 100.00\% & 66,853.55 & 66,853.55 \\
+2 & 20.00\% & 48,424.55 & 9,684.95 \\
+3 & 4.00\% & 39,493.55 & 1,579.71 \\
+
+\midrule
+
+Total & & & 354,168.21 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Precision of the estimate for a sample of size $n =$ 145 from a monetary population with a total value of $X =$ 13,500,000, where three errors are found with taintings $t =$ 100\%, 20\%, and 4\%.}
+\label{tab:precision_Stringer}
+\end{table}
+
+The \emph{upper confidence bound}\index{confidence bound}\index{bound!confidence} on errors according to the Stringer bound method is the sum of the point estimate of 115,448.28, and the precision achieved is 354,168.21; the result is 469,616.49. We may assert with 95\% confidence that the amount of misstatement does not exceed 469,616.49. The auditor's interpretation of this statistical conclusion is discussed in Section \ref{sec:auditor_interpretation}.
+
+\paragraph{Cell bounds} The \emph{cell bounds}\index{cell bounds}\marginnote{cell bounds} evaluation method is a further refinement of the Stringer bound method. The philosophy behind this is that if a partial misstatement is encountered, it can be proven that the most conservative evaluation approach is either
+
+\begin{description}
+\item[Load and Spread.] In addition to the partial error, all other errors in the population are 100\% errors. As a result, the upper bound $M_U[k]$ for error $k$ is the sum of the previous upper bound $M_U[k-1]$ and the point estimate $t_k X / n$ for error $k$; or\marginnote{$M_{U,LS}[k] = M_U[k-1] + t X / n$}
+
+\item[Simple Spread.] All partial errors in the population exhibit the same tainting. This results in applying the average tainting $\bar{t}$ to the upper bound $M_U$.\marginnote{$M_{U,SS}[k] = M_U[k] \bar{t}$}
+
+%\label{}
+\end{description}
+
+\bigskip
+The sample is evaluated according to both approaches, and at each stage in the evaluation, the most conservative upper bound is chosen. Table \ref{tab:precision_Cell} shows the calculations involved in the cell bounds evaluation method executed on the same three errors found. These numbers can be explained as follows:
+
+
+\begin{table*}[tpbh]
+\begin{tabular*}{17.2 cm}{lrrrrrrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k$} &
+\parbox[t]{1.2 cm}{\raggedleft $M_U[k]$} &
+\parbox[t]{1.2 cm}{\raggedleft $t$} &
+\parbox[t]{1.2 cm}{\raggedleft $t X / n$} &
+\parbox[t]{1.2 cm}{\raggedleft $\bar{t}$} &
+\parbox[t]{1.8 cm}{\raggedleft Stage $M_U[k - 1]$} &
+\parbox[t]{1.8 cm}{\raggedleft Load and Spread} &
+\parbox[t]{1.8 cm}{\raggedleft Simple Spread} &
+\parbox[t]{1.8 cm}{\raggedleft Stage $M_U$} \\
+
+\midrule
+
+0 & 276,050 & & & & & & 276,050.00 & 276,050.00 \\
+1 & 436,007 & 100.00\% & 93,103.45 & 100.00\% & 276,050.00 & 369,153.45 & 436,007.00 & 436,007.00 \\
+2 & 577,535 & 20.00\% & 18,620.69 & 60.00\% & 436,007.00 & 454,627.69 & 346,521.00 & 454,627.69 \\
+3 & 710,132 & 4.00\% & 3,724.14 & 41.33\% & 454,627.69 & 458,351.83 & 293,497.56 & 458,351.83 \\
+
+
+\midrule
+
+Total & & & 115,448.28 \\
+
+\bottomrule
+\end{tabular*}
+\caption[][0. cm]{Precision of the estimate for a sample of size $n =$ 145 from a monetary population with a total value of $X =$ 13,500,000, where three errors are found with taintings $t =$ 100\%, 20\%, and 4\%, using the Cell bounds evaluation method.}
+\label{tab:precision_Cell}
+\end{table*}
+
+
+\paragraph{Step 1.} When no errors are found, we only calculate the basic precision, which is the upper bound on the error calculated using Equation \ref{eq:upper_bound}. 
+
+\paragraph{Step 2.} The first error is a 100\% error; therefore, $t_1 = 1.00$ and $\bar{t} = 1.00$.
+
+\begin{compactitem}
+\item \emph{Simple spread}: $M_U[1] \bar{t} = 436,007 \times 1.00 = 436,007$.
+\item \emph{Load and spread}: Stage $M_U[0] + t_1 \frac{X}{n} = 276,050 + 1.00 \times 93,103.45 = 369,153.45$.
+\item \emph{Stage} $M_U$: The largest of these two values (436,007 and 369,153.45) is 436,007.
+\end{compactitem}
+
+\paragraph{Step 3.} The second error is a 20\% error; therefore, $t_2 = 0.20$ and $\bar{t} = 1.20 / 2 = 0.60$.
+
+\begin{compactitem}
+\item \emph{Simple spread}: $M_U[2] \bar{t} = 577,535 \times 0.60 = 346,521$.
+\item \emph{Load and spread}: Stage $M_U[1] + t_3 \frac{X}{n} = 436,007 + 0.20 \times 93,103.45 = 454,627.69$.
+\item \emph{Stage} $M_U$: The largest of these two values (346,521 and 454,627.69) is 454,627.69.
+\end{compactitem}
+
+\paragraph{Step 4.} The third error is a 4\% error; $t_3 = 0.04$ and $\bar{t} = 1.24 / 3 = 0.4133$.
+
+\begin{compactitem}
+\item \emph{Simple spread}: $M_U[3] \bar{t} = 710,132 \times 0.4133 = 293,521.23$.
+\item \emph{Load and spread}: Stage $M_U[2] + t_2 \frac{X}{n} = 454,627.69 + 0.04 \times 93,103.45 = 458,351.83$.
+\item \emph{Stage} $M_U$: The largest of these two values (293,521.23 and 458,351.83) is 458,351.83.
+\end{compactitem}
+
+\bigskip
+The conclusion is that we may assert, with 95\% confidence, that the total misstatement does not exceed the \emph{upper confidence bound} of 458,351.83. Note that the projected misstatement of 115,448.28 is not different from that calculated using the Stringer-bound evaluation method.
+Again, the auditor interpretation of the statistical conclusion is discussed in Section \ref{sec:auditor_interpretation}.
+
+\bigskip 
+A final remark on large taintings\marginnote{taintings > 1}\index{tainting!large}: If a sampling unit is overstated by more than the book value, its corresponding audit value is negative and  related tainting $t > 1$. Similarly, if an item is understated, there is no bound on the amount of understatement; therefore, taintings can be greater than one. This has an effect on the evaluation of the sample: basic precision is multiplied by the largest tainting found, reflecting that there could be other sampling units that have large taintings.
+
+For this reason, it has often been claimed that MUS should not be used to test for understatements. It is true that the evaluation of understatements is conservative, but we believe that conservatism alone is not a sufficient rationale for resorting to an anti-conservative method. The main disadvantage of MUS sampling is that overstatements and understatements are evaluated separately, whereas CVS combines overstatements and understatements in the evaluation of the sample.
+
+\paragraph{PPS estimation} \label{par:pps_estimation}
+The last evaluation method that we discuss is \emph{PPS estimation}\index{PPS estimation}\index{estimation!PPS}\marginnote{PPS estimation}. It has been suggested for situations where more than 20 differences have been found in a sample that was selected with probabilities proportional to size.\sidenote{We suggest to use a $t$-value with $m - 1$ degrees of freedom to mitigate the effect of underestimating the standard deviation of the taintings.} The method assumes that taintings $t$ are normally distributed, and thus, the evaluation of the sample is similar to that of ratio estimation, as discussed in Section \ref{sec:ratio_estimator}. Note that this effectively means that there should be a visible normal pattern in the distribution of the taintings; if most taintings found in the sample are constant, for example when most elements in the population are correct, the standard error of the taintings is understated.
+
+\bigskip
+The PPS estimator of the correct value of the population is given by
+\begin{equation}
+\hat{Y}_{pps} = X (1 - \bar{t})
+\label{eq:pps_estimate}
+\end{equation}
+where $X$ is the total book value of the population and $\bar{t}$ is the average tainting. 
+
+\bigskip
+A two-sided prediction interval is given by
+\begin{equation}
+  \hat{Y}_{pps} \pm t_{\alpha/2} s_t \frac{X}{\sqrt{n}}
+\label{eq:pred_interval_pps}
+\end{equation}
+where $t_{\alpha/2}$ is the relevant $t$-value with $m - 1$ degrees of freedom, $m$ is the number of nonzero differences, and $s_t$ is the standard deviation of the taintings $t$.
+
+\begin{equation}
+s_{t} = \sqrt{\frac{\sum{t_j^2} - (\sum{t_j})^2/n}{n - 1}}
+\label{eq:sd_t}
+\end{equation}
+
+\paragraph{Sample size calculation} \label{par:sample_size_calculation}
+Now that we know how an MUS sample is evaluated, we can calculate the required sample size given a certain expected error. Previously, in attribute sampling, we chose a certain critical region and the sample size was determined based on the number of errors that could be tolerated in the sample. In MUS, the errors are integer numbers or fractions. As a result, sample sizes do not increase in large steps as we increase the critical region, but for every sample size chosen we can tolerate a number of 100\% errors plus an additional partial error.
+
+\bigskip
+We turn to the parameters from the \emph{Case: Accounts receivable circularization}. The total book value of the population $X =$ 13,500,000, performance materiality $PM =$ 450,000, and we expect a total misstatement in the population of 100,000. 
+
+With only 100\% errors, Table \ref{tab:attribute_sample_sizes} shows the sample sizes $n_k$, sampling intervals $SI_k$ and expected errors $k \times SI_k$ for the various critical regions. Sample size $n_k$ is calculated using Equation \ref{eq:sample_size _calculation_att}. 
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{0.8 cm}{$k \leq$} &
+\parbox[t]{0.8 cm}{\raggedleft $n$} &
+\parbox[t]{1.6 cm}{\raggedleft $X / n = SI$} &
+\parbox[t]{2.4 cm}{\raggedleft $EE = k \times SI$}  \\
+
+\midrule
+
+0 & 89 & 151,685.39 & 0.00 \\
+1 & 141 & 95,744.68 & 95,744.68 \\
+2 & 187 & 72,192.51 & 144,385.03 \\
+3 & 231 & 58,441.56 & 175,324.68 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Sample sizes and sampling intervals at various critical regions for an attribute sample from a population with a total book value of $X =$ 13,500,000 elements, at a significance level of 5\%, with only 100\% errors.}
+\label{tab:attribute_sample_sizes}
+\end{table}
+
+In Table \ref{tab:attribute_sample_sizes_alpha05}, the sampling interval $SI_k$ for $k$ tolerated errors is calculated by dividing the total book value $X$ by the minimum required sample size $n_k$. For example, $SI_2 =$ 13,500,000 / 187 = 72,192.51. This implies that if we tolerate two errors and we find two errors, the point estimate equals $k \times SI_2 =$ 2 $\times$ 72,192.51 = 144,385.03. Tolerating two errors, therefore, is synonymous with building error tolerance for an expected error of 144,385.03.
+
+Similarly, if the expected error is 95,744.68, the sample size $n =$ 141 and the critical region $\{k | k \leq 1\}$. 
+
+In \emph{Case: Accounts receivable circularization}, the expected error $EE =$ 100,000. Therefore, we need to find a $t^*$ between the sample sizes $n_1 =$ 141 and $n_2 =$ 187 such that the point estimate $t^* X / n^* = EE$.
+
+We also know that $t^*$ increases in increments of $\frac{1}{n_2 - n_1}$ between $n_1$ and $n_2$; therefore, $t^* = k + \frac{n^* - n_1}{n_2 - n_1}$.
+
+From these two equations, we derive that, if we interpolate between $n_k$ and $n_{k + 1}$, the sample size $n^*$ is given by
+
+\begin{equation}
+n^* = \frac{k - \frac{n_k}{n_{k + 1} - n_k}}{\frac{EE}{X} - \frac{1}{n_{k + 1} - n_{k}}}
+\label{eq:MUS_sample_size}
+\end{equation}
+
+Applying formula \ref{eq:MUS_sample_size} to the parameters from the \emph{Case: Accounts receivable circularization}, we obtain:
+
+\begin{equation*}
+n^* = \frac{1 - \frac{141}{187 - 141}}{\frac{100,000}{13,500,000} - \frac{1}{187 - 141}} = 144.1
+\end{equation*}
+Rounding this sample size upward leads to a required sample size $n =$ 145.\marginnote{This calculation assumes that the sample is evaluated with the Stringer bound method. If the cell evaluation method is used, the sample size is usually lower, because errors with a small tainting have no effect on the precision achieved.} We can calculate the number of tolerable taintings from
+
+\begin{equation*}
+t_{tol} = k + \frac{EE - M_{U, k}}{M_{U, k+1} - M_{U, k}} = 1 + \frac{450,000 - 436,007}{577,535 - 436,007} = 1.09887
+\end{equation*}
+where $k$ and $k+1$ are the two numbers of errors between which the sample size has been interpolated.
+
+The conclusion is that, if we expect a total error in the population of 100,000, the minimum sample size is 145, and we can tolerate one 100\% error and a partial error of 9.887\%.
+
+% section partial_errors (end)
+
+\section{Auditor interpretation} % (fold)
+\label{sec:auditor_interpretation}
+
+As explained in Section \ref{sec:nature_and_cause_of_deviations_and_misstatements}, before extrapolating the differences, the auditor should first evaluate their nature and causes. For statistical evaluation, the hypothesis test is carried out with the upper confidence bound $M_U$ as the test statistic, with the critical region as $M_U \leq PM$. If $M_U$ is within the critical range, the null hypothesis that the population is materially misstated is rejected in favor of the alternative. Auditors conclude, with $(1 - \alpha)$ confidence, the population is not materially misstated.
+
+If $M_U$ is not within the critical region, the null hypothesis cannot be rejected; however, this does not automatically mean that the alternative hypothesis is true. In this case, it is usually best to first discuss the misstatements found with the client and then decide on an alternative approach. The client may want to clean up the population before submitting it to the auditor for testing. Alternatively, the auditor may extend the sample, particularly if the original sample is set up with low expected error. The size of the extended sample can be obtained by using the point estimate from the original sample as the expected error of the new sample. However, the extended sample could be quite large if the expected error is more than $PM/2$. For example, increasing the expected error from 100,000 to 300,000 increases the sample size from 145 to 746.
+
+Auditors are unlikely to reach their objectives by reducing their confidence levels, especially in light of the misstatements found. The reverse is more likely when the auditor needs to increase the confidence level because, for example, the misstatements found no longer warrant reliance on controls. Finally, obtaining additional evidence from other substantive (analytical) procedures is uncommon, as these procedures are typically planned ahead of the substantive sample. When substantive sample results are unfavorable, a substantive analytical procedure is more likely to confirm this evidence than it would serve the auditor to reach an accept conclusion.
+
+% section auditor_interpretation (end)
+
+\section{Workshop} % (fold)
+\label{sec:workshop05}
+
+\input{workshop05_R}
+
+% section workshop_03 (end)
+
+
+% chapter hypothesis_testing (end)

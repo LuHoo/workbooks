@@ -1,0 +1,754 @@
+\chapter{Audit sampling} % (fold)
+\label{cha:sampling}
+
+\begin{quote}
+`He uses statistics as a drunken man uses lamp-posts: for support rather than illumination.'\\
+Andrew Lang (1844-1912)
+\end{quote}
+
+The International Federation of Accountants (IFAC) issues International Standards on Auditing (ISA) through the International Auditing and Assurance Standards Board (IAASB). These ISAs are standards to be applied by auditors when auditing historical financial information. In this chapter, our focus is mainly on ISA 530, Audit Sampling, and its US counterpart.
+
+The IAASB aims for the voluntary international acceptance of its guidelines. ISAs are not intended to override national regulations or pronouncements relating to audits of financial information. They are designed to be in harmony with national regulations and pronouncements concerning audits of financial information. This means that while ISAs provide a global framework and guidelines for auditing practices, they are not meant to supersede or replace the specific regulations and requirements set by individual countries or jurisdictions.
+
+ISAs were made mandatory in Europe in 2005, followed by the USA and other regions in the world. In particular, in the USA, the Auditing Standards Board of the American Institute of Certified Public Accounts (AICPA) executed a project between 2004 and 2009 to converge US Generally Accepted Auditing Standards  with ISAs while avoiding unnecessary conflict with the standards issued by the Public Company Accounting Oversight Board (PCAOB). As a result, there are no significant differences between the international ISA 530 standard and the US AU Series C\footnote{Hereafter, abbreviated as AU-C} 530 standard. Therefore, we refer to `Standard 530' in general, and as such, this will cover guidance from both the ISA and AU-C.
+
+Each standard is written in a structured way, with an introduction, clear objectives, definitions, and requirements, together with application and other explanatory materials. We introduce Standard 530 on Audit Sampling in great detail, as this standard forms the basis of substantive procedures to which the theory in Chapters \ref{cha:estimation} to \ref{cha:hypothesis_testing} pertains. The standard that is relevant for substantive analytical procedures, Standard 520, is discussed in Chapter \ref{cha:analytical_procedures}, prior to the introduction of analytical procedures in Chapters \ref{cha:introduction_to_regression_analysis} to \ref{cha:classification}.
+
+\bigskip
+At times, it may be difficult to understand the standard, as it covers both statistical and nonstatistical sampling approaches, and uses terminology that is common to auditors but may be confusing to others. For example, when auditors draw a \hlblue{representative} sample, it means that they (intend to) draw a \hlblue{random} sample. This example illustrates both issues: a nonstatistical sample does not require random selection, and auditors have replaced the correct \emph{random} with the approximate \emph{representative}.
+
+\section*{Learning objectives}
+At the end of this chapter you will be able to
+\begin{compactitem}
+% \item differentiate between requirements from the standard and further guidance;
+% \item recognize how the standard deals at the same time with statistical and nonstatistical sampling;
+% \item compare auditor terminology to data-science terminology;
+% \item identify the different stages of a sampling application;
+% \item differentiate between a population and a sampling frame;
+% \item identify the types of risk associated with a sampling application;
+% \item recognize the minimum requirement for sample evaluation.
+
+% - **Remember**:
+\item differentiate\marginnote{remember} between requirements outlined in the standard and additional guidance provided for implementation.
+\item define key terms such as population, sampling frame, statistical sampling, and non-statistical sampling.
+\item identify the types of risks associated with a sampling application (e.g., sampling risk, Type I and II error, non-sampling risk).
+
+% - **Understand**:
+\item explain\marginnote{understand} how the standard accommodates both statistical and non-statistical sampling approaches, highlighting their similarities and differences.
+\item describe the minimum requirements for evaluating a sample, as per the standard.
+\item compare auditor terminology (e.g., population, representative sample) to data-science terminology (e.g., data frame, random sample).
+
+% - **Apply**:
+\item identify\marginnote{apply} the different stages of a sampling application, from defining the objective and selecting the sample to evaluating results and drawing conclusions.
+\item distinguish between a population and a sampling frame in the context of an audit or data analysis scenario.
+\item implement the guidance from the standard in practical sampling applications, ensuring adherence to minimum requirements.
+
+% - **Analyze**:
+\item assess\marginnote{analyze} the implications of using statistical versus non-statistical sampling in terms of precision, reliability, and documentation requirements.
+\item evaluate how differences in terminology can influence communication between auditors and data scientists in collaborative environments.
+
+% - **Evaluate**:
+\item critique\marginnote{evaluate} a sampling application by analyzing whether it meets the requirements of the standard and follows best practices.
+\item judge the appropriateness of the sampling frame for a given population and audit objective.
+
+% - **Create**:
+\item design\marginnote{create} a sampling plan that integrates the requirements of the standard and aligns with audit or data analysis objectives.
+\item develop a framework for bridging terminology gaps between auditors and data scientists to enhance collaborative sampling efforts.
+
+\end{compactitem}
+
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10, innerleftmargin=0.3cm]
+\section*{Case: Inventories}
+% \begin{fullwidth}
+% \begin{multicols}{2}
+\RaggedRight
+
+As part of a financial statement audit, you want to test the existence and completeness of inventories by applying statistical samples. 
+
+You have obtained from your client 
+\begin{compactitem}
+	\item a listing of inventories per location; and
+	\item a listing of empty inventory locations.
+\end{compactitem}
+
+\bigskip
+You intend to sample a sufficiently large number of these locations, and for each selected location compare the quantity of inventory items at the location with the quantity as per the inventory registration. To address the completeness assertion, items for testing are selected from randomly selected inventory locations ('floor to book'). To address the existence assertion, a sample of inventory items is drawn from the inventory listing ('book to floor'), with a preference for sampling units that have a higher value.
+
+You want to address locations with a zero value (zero quantity or zero price) separately. For this purpose, one warehouse employee travels the entire warehouse checking that all empty locations do not contain any goods, and making sure that all empty locations are listed. There are two reasons to do this: both samples are sensitive to sampling units that either have a zero book value or a zero audit value. 
+
+You want to project your findings to the entire population and evaluate the results. 
+
+% \end{multicols}
+
+\section*{Objective}
+Apply the requirements of Standard 530 for the sampling procedure.
+% \end{fullwidth}
+\end{mdframed}
+
+\begin{table}[htbp]
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrr}
+\toprule
+
+Item number & \multicolumn{1}{r}{Location} & \multicolumn{1}{r}{Value} \\
+
+\midrule
+
+7750359 & A1.1002 & 61.54 \\
+555938 & A1.1003 & 515.55 \\ 
+567291 & A1.1005 & 206.20 \\
+7371159 & A1.1009 & 265.22 \\
+8096520 & A1.1010 & 275.70 \\
+1797740 & A1.1011 & 1,503.82 \\
+1827858 & A1.1012 & 1,252.07 \\
+2112299 & A1.1014 & 2,190.70 \\
+4360219 & A1.1018 & 4,121.89 \\
+2611283 & A1.1020 & 631.20 \\
+.. & .. \\
+.. & .. \\
+.. & ...\\
+
+\midrule
+
+Total & & 10,013,432.86\\
+
+\bottomrule
+\end{tabular*}
+\caption{Inventory listing (partial view)}
+\label{tab:inventory_listing}
+\end{table}
+
+% \begin{table}[htbp]
+% \begin{center}
+% \begin{tabular}{l r r}
+
+% \hline
+
+% \textbf{Item number} & \textbf{Location} & \textbf{Value} \\
+% \hline
+
+% % 7750359 & A1.1002 & 61.54 \\
+% % 555938 & A1.1003 & 515.55 \\ 
+% % 567291 & A1.1005 & 206.20 \\
+% % 7371159 & A1.1009 & 265.22 \\
+% % 8096520 & A1.1010 & 275.70 \\
+% % 1797740 & A1.1011 & 1,503.82 \\
+% % 1827858 & A1.1012 & 1,252.07 \\
+% % 2112299 & A1.1014 & 2,190.70 \\
+% % 4360219 & A1.1018 & 4,121.89 \\
+% % 2611283 & A1.1020 & 631.20 \\
+% % .. & .. \\
+% % .. & .. \\
+% % .. & ...\\
+% \hline
+% % Total & & 10,013,432.86\\
+% \hline
+
+% \end{tabular}
+% \end{center}
+% % \caption{Inventory listing (partial view)}
+% % \label{tab:inventory_listing}
+% \end{table}
+
+\section{Introduction} % (fold)
+\label{sec:H1_introduction}
+
+Auditors can choose from many different audit procedures to address an audit objective. After assessing inherent risk, we may decide to rely on controls, and if deemed necessary, we employ \hlblue{substantive analytical procedures}\index{substantive analytical procedures} and/or \hlblue{tests of detail}\index{tests of detail}.
+
+Detailed testing of inventories, in particular, the attendance of an inventory count, is a common procedure to obtain evidence as to the completeness and existence assertions. A sample from 'floor to book' addresses completeness, and a sample from 'book to floor' addresses existence. In this chapter, we will see how the guidance in Standard 530 \emph{Audit Sampling} can be interpreted when selecting a sample to address these assertions. Standard 530 could be relevant in this case, as a large part of the audit evidence is derived from the sample. 
+
+We may decide that sampling is the most effective way to achieve our audit objectives; for example, if internal controls are not effective, or simply because the execution of an audit sample by itself is more effective than a combination of internal control tests and additional substantive tests.
+
+\bigskip
+The standard is set up as follows. After introducing the scope and effective date of the standard, its objective is defined in paragraph 530.4.\footnote{Paragraphs will be indicated with reference to the number of the standard, so paragraph 4 from the standard on Audit Sampling, standard 530, will be referred to as 530.4.} 
+
+Paragraph 530.5 provides definitions, and paragraphs 530.6 to 530.15 provide the requirements. These are followed by application and other explanatory materials, at 530.A1 to 530.A23. There are four appendices.
+
+\bigskip
+The standard indicates five consecutive phases of sampling applications:
+\begin{compactitem}
+\item Sample design, size, and selection of items for testing (Section \ref{sec:sample_design_size_and_selection_of_items_for_testing});
+\item Performing audit procedures (Section \ref{sec:performing_audit_procedures}); 
+\item Nature and cause of deviations and misstatements (Section \ref{sec:nature_and_cause_of_deviations_and_misstatements});
+\item Projecting misstatements (Section \ref{sec:projecting_misstatements}); and
+\item Evaluating results of audit sampling (Section \ref{sec:evaluating_results_of_audit_sampling}).
+\end{compactitem}
+
+These phases are discussed in the following sections. 
+
+\section{Sample design, sample size, and selection of items for testing} % (fold)
+\label{sec:sample_design_size_and_selection_of_items_for_testing}
+
+\subsection{Sample design} % (fold)
+\label{sub:sampling_method}
+
+\begin{figure}[bthp] 
+\begin{center}
+  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+% Place nodes
+	\node[wideblueblock] (comp) {Test Attributes or Values?};
+	\node[wideblueblock, below = 1 cm of comp] (test) {Many errors expected?};
+	\node[widewhiteblock, right = 1.5 cm of comp] (attr) {Attribute sampling};
+	\node[widewhiteblock, below = 1 cm of test] (cvs) {Test of details: CVS};
+	\node[widewhiteblock, right = 1.5 cm of test] (mus) {Test of details: MUS};
+  
+% Draw edges
+	\path [line] (comp) -- node {val} (test);
+	\path [line] (comp) -- node {att} (attr);
+	\path [line] (test) -- node {no} (mus);
+	\path [line] (test) -- node {yes} (cvs);
+
+\end{tikzpicture}
+
+\caption{Choice of sampling method}
+% \setfloatalignment{b}
+\label{fig:H1Method}
+
+\end{center}
+\end{figure}
+
+The first question that arises when designing a sample concerns the audit procedure. Figure \ref{fig:H1Method} shows the thought process leading to the appropriate sampling method. \hlblue{Attribute sampling}\index{attribute sampling}\index{sampling!attribute} is a technique to assess whether an element either does or does not possess a certain attribute. The outcome of the test is dichotomous. This technique is commonly used for tests of controls and for tests on \hlblue{relevant data elements}\index{relevant data elements} (RDEs) in accordance with Standard 500.11, although auditors rarely perform these tests statistically. If performed statistically, we follow the nine-step approach discussed in Section \ref{sec:attribute_sampling}.
+
+For tests of details, we choose between \hlblue{monetary unit sampling}\index{monetary unit sampling}\index{sampling!monetary unit} (MUS) and \hlblue{classical variables sampling}\index{classical variables sampling}\index{sampling!classical variables} (CVS).\footnote{CVS is classical in the sense that it uses classical normal distribution theory in the development of the sample statistics.} MUS is the sampling method most commonly used by auditors. It is designed for situations where most of the elements in a population are correct and the auditor wants to test for the occurrence of a \hlblue{material misstatement}\index{material misstatement}\index{misstatement!material}, the difference between the true value of an element in the population (its \hlblue{audit value}\index{audit value}), and its recorded value (commonly referred to as the \hlblue{book value}\index{book value}). The audited sampling units are evaluated statistically, and a point estimate of the total misstatement is provided as well as an upper bound on the total amount of overstatement. MUS is explained in detail in Section \ref{sec:monetary_unit_sampling} of Chapter \ref{cha:hypothesis_testing}.
+
+On the other hand, CVS is employed when the auditor estimates the total value of the population. This may be necessary when book values of population elements are not available, in which case, CVS is the only method that can be used. The method may also provide good results when there are many differences between the book and audit values. Chapters \ref{cha:estimation} and \ref{cha:stratified_sampling} explain these estimation techniques.
+
+Auditors often prefer to use CVS over MUS to test understatements.\footnote{If the book value of an item is greater than its audit value, the item is \hlblue{overstated}\index{overstatement}. Conversely, if the book value is less than the audit value, the item is \hlblue{understated}\index{understatement}. } This is particularly useful when understatements arise from individual transactions or balances recorded at too low a value. Both CVS and MUS perform poorly if understatements arise from transactions of balances that have not been recorded. This is related to the fact that if a balance or transaction is not recorded, it is difficult to represent it in a sampling frame. The choice of sampling technique ultimately depends on factors such as the nature of the audit objectives, the characteristics of the population being tested, and the specific risks associated with understatements in the financial statements
+
+In the \emph{Case: Inventories}, we want to address both the existence and completeness assertions, through two separate tests of detail. The test that addresses the existence assertion is a test of material misstatement, for which we employ MUS. The completeness test is performed using CVS.
+
+% subsection sampling_method (end)
+
+\subsection{Sample size} % (fold)
+\label{sub:sample_size}
+
+Once the sampling method that best addresses the objective of the audit procedure is chosen, we determine the minimum required sample size that allows us to draw conclusions. 530.7 requires us to determine the sample size such that \hlblue{sampling risk} is reduced to an acceptably low level. 
+
+One of the advantages of statistical sampling is that sampling risk can be measured. Particularly for hypothesis tests, \footnote{see Chapter \ref{cha:hypothesis_testing}} we have a robust procedure that allows us to conclude on the basis of the outcome of the test; however, this conclusion may be incorrect. 
+
+\bigskip
+In the case of a test of controls
+\begin{compactitem}
+\item we may conclude that controls are effective when they are actually not; or
+\item we may conclude that controls are not effective when in fact they are.
+\end{compactitem}
+
+\bigskip
+In the case of a test of details
+\begin{compactitem}
+\item we may conclude that a material misstatement does not exist, when in fact it does; or
+\item we may conclude that a material misstatement exists, when in fact it does not.
+\end{compactitem}
+
+\bigskip
+These erroneous conclusions are in statistical literature typically referred to as \hlblue{Type I error}\index{Type I error}\index{error!Type I} and \hlblue{Type II error}\index{Type II error}\index{error!Type II}. The risk of committing a Type I error is referred to as $\alpha$, and the risk of committing a Type II error is referred to as $\beta$.\footnote{Unfortunately, most auditing literature reverses the null and alternative hypotheses, and therefore $\alpha$ and $\beta$ have opposite meanings.} Both risks are \hlblue{sampling risks}\index{sampling risk}\index{risk!sampling}. 530.5c explains in the definition of \hlblue{sampling risk} that it is the risk of committing a Type I error with which the auditor should primarily be concerned.
+
+% \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=-0.2cm, innerleftmargin=0cm]
+% \section*{The positive and negative approach to testing}
+% \begin{fullwidth}
+% \begin{multicols}{2}
+
+% The first samples ever drawn by auditors were simple random samples evaluated using the \emph{direct estimator} (see Chapter \ref{cha:estimation}). When the population contains no misstatements and the sample is of reasonable size, the projected audit value $\hat{Y}$ follows a normal distribution. We then construct a 95\% prediction interval $(Y_L; Y_U)$ around the projected audit value $\hat{Y}$. This means that if we would take numerous samples of the same size from this population, in 95\% of the cases, the \emph{prediction interval}\index{prediction interval} $(Y_L; Y_U)$ would contain the population book value, and in 5\% of the cases, it would be not. Note that it is typical to denote the confidence level as $(1 - \alpha)$; therefore, the risk of obtaining a sample result such that the population book value is not contained in the prediction interval is $\alpha$.
+
+% Auditors soon realized that the $\alpha$ risk is not the risk they should be focusing on. It may be unfortunate to run into a situation where a `clean' population is rejected and submitted for further testing; a worse situation arises when the population contains a material misstatement and the sample yields a prediction interval $(Y_L; Y_U)$ that contains the population book value. We denote the risk associated with this situation by $\beta$.
+
+% Note that the statement `the population is materially misstated' is ambiguous. The population book value can be either overstated or understated; thus, formally speaking, the \emph{null hypothesis}\index{null hypothesis} (see Chapter \ref{cha:hypothesis_testing}) is that the population is not misstated versus two \emph{alternative hypotheses}\index{alternative hypothesis}. The first hypothesis is that the population is materially overstated and the second is that the population is materially understated.
+
+% It follows that auditors have consistently denoted their most important risk $\beta$, contrary to usage in other sciences. In this book, however, we follow the general scientific custom of sampling risk denoted by $\alpha$, and we do this by reversing the hypotheses.
+
+% \end{multicols}
+% \end{fullwidth}
+% \end{mdframed}
+
+\bigskip
+This leaves us with two questions. The first question arises when we deem controls ineffective or what constitutes a material misstatement. The second question concerns the extent to which risk is acceptable.
+
+The first question is answered using the \hlblue{tolerable rate of deviation}\index{tolerable rate of deviation} for tests of controls and \hlblue{tolerable misstatement}\index{tolerable misstatement}\index{misstatement!tolerable} for tests of details. Both are set by the auditor, but the standard does not provide further guidance on how they should be set. 
+
+The amount of sampling risk that is acceptable is not prescribed by the standard. The common maximum levels for tests of controls are 5\% and 10\%. For tests of details, auditors determine the level by considering the amount of audit evidence obtained from other procedures that address the same objective as the sampling procedure. For example, if auditors rely on internal controls, the level of assurance required for substantive procedures is lower than if there is no control reliance. The assessed level of inherent risk (significant, elevated, or base) also plays a role in determining the level of assurance required for substantive procedures: the lower the level of inherent risk, the lower the level of assurance required, and hence, the lower the required sample size.
+
+The final factor affecting the sample size is the \hlblue{expected rate of deviation}\index{expected rate of deviation} or \hlblue{expected misstatement}\index{expected misstatement}. Sample sizes are minimal when the expected rate of deviation or expected misstatement is zero. As the expected rate of deviation or expected misstatement increases, sample sizes also increase. If the expected deviation rate is greater than the tolerable rate, a test of controls may not be an efficient approach: the test will likely reveal too many control deviations. In such cases, the auditor may be better off not trying to rely on the control at all and obtain substantive evidence from an MUS or CVS sample.
+
+For the \emph{Case: Inventories}, the MUS sample size is calculated using the relevant inputs of sampling risk, based on inherent risk and the assumption that we do not rely on controls, expected misstatement, and tolerable misstatement. These inputs cannot be used for the CVS that addresses completeness. For this test we apply professional judgment and sample 200 locations from the inventory list.
+
+% Include table of influencing factors with the sign of their influence.
+
+% subsection sample_size (end)
+
+% Use steps from Sarndal page 8.
+\subsection{Selection of items for testing} % (fold)
+\label{sub:selection_of_items_for_testing}
+
+Standard 530 governs both statistical and nonstatistical samples. One of the differences between these two approaches is the selection of items. For statistical samples, it is necessary that elements are selected with a known probability, whereas for nonstatistical samples, the only requirement is that all elements in the population have a nonzero selection probability. In this section, we focus only on the selection methods for statistical samples. 
+
+\bigskip
+We define \hlblue{random sampling}\index{random sampling}\index{sampling!random} as a selection procedure that satisfies the following requirements:
+
+\begin{enumerate}
+\item We can define a set of samples that can be obtained through the selection procedure;
+\item The probability of obtaining each possible sample is known in advance;
+\item The procedure gives each element in the population a selection probability greater than zero; and\footnote{See also ISA/AU-C 530.8}
+\item We select a sample through a probability mechanism through which every possible sample is obtained with exactly its selection probability.
+\end{enumerate}
+
+Auditors customarily refer to random samples as \hlblue{representative}\index{representative} samples. For example, according to 530.A12 it is 'important that the auditor selects a representative sample.' A representative sample is a subset of a larger population that accurately reflects the key characteristics and diversity of the entire population. The goal is to ensure that the sample is a proportional and unbiased representation, allowing generalizations and conclusions drawn from the sample to be applicable to the larger population. However, representativeness cannot be guaranteed, and there is no way to tell whether a selected sample is representative, as this presumes knowledge about the population that we are hoping to gather when auditing the sample. It is better to realize that of all the possible samples that we could draw, some are not representative, and that random sampling enables us to calculate, and therefore control, the risk of drawing an incorrect conclusion on the basis of the sample. 
+
+\bigskip
+We usually distinguish between the \hlblue{population}\index{population}, the object of our audit procedure, and the \hlblue{sampling frame}\index{sampling frame}\index{frame}, which represents the population from which the \hlblue{sampling units}\index{sampling unit} are drawn. A sampling unit is an individual unit in the sampling frame that is subjected to the audit procedure. 
+
+For example, in the \emph{Case: Inventories} we test from 'book to floor,' to address the existence assertion, and from 'floor to book,' to address the completeness assertion. When testing from book to floor, the sampling frame is a listing of the recorded inventory items, as shown in Table \ref{tab:inventory_listing}. We then need to decide whether the sampling unit is a particular inventory item at a specific location, or combine all locations for each inventory item. When testing from floor to book, the sampling frame is a list of all inventory locations. This frame is sub-divided into two separate frames: one with locations that are empty, and one with locations that are filled. We test all empty locations, and sample randomly from the filled locations.
+
+\bigskip 
+Unfortunately, the standard does not distinguish between sampling frame and population; both sampling frame and population are referred to as the population. This could create confusion when interpreting 530.A5, which states that 'auditors should perform audit procedures to obtain evidence that the population from which the audit sample is drawn is complete'. This requirement is easier to interpret when we realize that there is a difference between the sampling frame from which the sampling units are selected for testing and the population represented by the frame. 
+
+For example, we test the internal controls on expenses and draw a sample from all expenses. However, it is assumed that this particular control applies only to expenses that exceed a certain limit. In this case, it is more accurate to define the population as the expenses over this limit and to ensure that the sampling frame only reflects these higher-value items.
+
+The definition of a random sample, provided earlier, applies to simple random samples, where each element in the population has the same inclusion probability, and to methods with unequal probabilities. We now discuss the selection procedures with equal probabilities. Methods with probabilities proportional to size are discussed in Section \ref{sub:selection_with_probability_proportional_to_size}.
+
+% subsection selection_of_items_for_testing (end)
+
+\subsection{Simple random sampling} % (fold)
+\label{sub:simple_random_sampling}
+
+Table \ref{tab:example_pop} lists the elements in a small population that is used to explain the selection methods.
+
+% \begin{margintable}[-4cm]
+\begin{table}[htbp]
+\centering
+\begin{tabular*}{6 cm}{llr}
+\toprule
+\parbox[t]{1.5 cm}{Item no} &
+\parbox[t]{2 cm}{Description} &
+\parbox[t]{1 cm}{\raggedleft Value} \\
+
+\midrule
+
+1 & A & 700 \\
+2 & B & 750 \\
+3 & C & 1,000 \\
+4 & D & 900 \\
+5 & E & 6,000 \\
+\midrule
+Total & & 9,350 \\
+\bottomrule
+
+\end{tabular*}
+
+\caption{Example sampling frame}
+\label{tab:example_pop}
+
+\end{table}
+% \end{margintable}
+
+\bigskip
+In \hlblue{simple random sampling}\index{simple random sampling}\index{sampling!simple random} each element in the population has the same inclusion probability. Even though the elements have different values, they play no role in the selection process. If we sample $n$ elements without replacement, the set of possible samples contains all the possible subsets of $n$ elements. For example, if we sample $n = 2$ elements from the  sampling frame in Table \ref{tab:example_pop}, the set $S$ of all possible samples contains 10 elements, as shown in Table \ref{tab:possible_srs}.
+
+\begin{table}[htbp]
+\raggedright
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llll}
+\toprule
+\parbox[t]{1.5cm}{Sample} & \parbox[t]{3cm}{Selected elements} &
+\parbox[t]{1.5cm}{Sample} & \parbox[t]{3cm}{Selected elements} \\
+\midrule
+1 & A, B & 6 & B, D \\
+2 & A, C & 7 & B, E \\
+3 & A, D & 8 & C, D \\
+4 & A, E & 9 & C, E \\
+5 & B, C & 10 & D, E \\
+\bottomrule
+\end{tabular*}
+\caption{Possible samples of size $n = 2$ with simple random sampling without replacement}
+\label{tab:possible_srs}
+\end{table}
+
+There are ten possible samples, and each possible sample has the same probability. The sampling procedure gives each element in the population an inclusion probability greater than zero, in fact 0.40 for each element. The inclusion probability is calculated by dividing the sample size by the population size.
+
+\begin{equation}
+\text{Inclusion probability} = \frac{\text{Sample size}}{\text{Population size}}
+\end{equation}
+
+The probability mechanism used to select the sample is usually hidden when computer programs are used to select a sample. 
+
+\bigskip
+In \hlblue{fixed-interval selection}\index{fixed-interval selection}\index{selection!fixed-interval}, we first calculate the \hlblue{skip}\index{skip} or \hlblue{sampling interval}\index{sampling interval}\nomenclature{$I$}{sampling interval} by dividing the population size $N$\nomenclature{$N$}{population size} by sample size $n$\nomenclature{$n$}{sample size}.
+\begin{equation}
+I = N / n
+\end{equation}
+We then choose a random starting point within the first interval and skip through the population with steps of $I$, selecting the elements that are hit. 
+
+Applications of this selection method are rare for simple random sampling. A worked-out example is provided in Section \ref{sub:selection_with_probability_proportional_to_size} for selection with a probability proportional to the size, where the method is much more common.
+
+% Table \ref{tab:possible_fixed} shows the possible samples of size $n=2$ with fixed-interval selection.
+
+% \begin{table}[htbp]
+% \raggedright
+% \begin{tabular*}{5.5 cm}{lll}
+% \toprule
+% \parbox[t]{1.5 cm}{Sample} &
+% \parbox[t]{1.5 cm}{Random start} &
+% \parbox[t]{1.5 cm}{Selected elements} \\
+
+% \midrule
+
+% 1 & [0, 0.5) & A, C \\
+% 2 & [0.5, 1) & A, D \\
+% 3 & [1, 1.5) & B, D \\
+% 4 & [1.5, 2) & B, E \\
+% 5 & [2, 2.5) & C, E \\
+
+% \bottomrule
+
+% \end{tabular*}
+
+% \caption{Possible samples of size $n = 2$ with fixed-interval selection}
+% \label{tab:possible_fixed}
+
+% \end{table}
+
+% Table \ref{tab:example_syst_sel} shows how to perform this with the example population from Table \ref{tab:example_pop}. Here we sequentially number the elements in the population. If step (rounded up to the nearest integer) equals the sequential number of an element, that element is selected. The sampling interval $I = N / n = $ 5 / 2 = 2.5, and we assume a random starting point of 1.2. The respective steps are therefore 1.2 and 3.7 (1.2 + 2.5). After rounding up to the nearest integer, this implies the selection of items 2 and 4.
+
+% \begin{table}[htbp]
+% \begin{tabular*}{11.2 cm}{llrrr}
+% \toprule
+% \parbox[t]{1.6 cm}{\raggedright Number} &
+% \parbox[t]{0.8 cm}{\raggedright Item} &
+% \parbox[t]{1.2 cm}{\raggedleft Value} &
+% \parbox[t]{0.8 cm}{\raggedleft Step} &
+% \parbox[t]{1.6 cm}{\raggedleft Selected?} \\
+% \midrule
+
+% 1 & A & 700 &  & \\
+% 2 & B & 750 & 1.2 & yes\\
+% 3 & C & 1,000 &  & \\
+% 4 & D & 900 & 3.7 & yes\\
+% 5 & E & 6,000 &  & \\
+% \bottomrule
+% \end{tabular*}
+
+% \caption{Example fixed-interval selection}
+% \label{tab:example_syst_sel}
+% \end{table}
+
+% Fixed-interval sampling is easy to perform manually, which makes this method very attractive in practice. A disadvantage is that the particular order of the elements within the population has an effect on sampling risk.
+
+\bigskip
+For the \emph{Case: Inventories}, we choose simple random sampling to select elements from the sampling frame that contains the inventory locations at which inventory is located. The frame consisting of all empty locations is tested completely. The test is easy to carry out. Along with testing whether there are misplaced inventory items at locations that are empty according to the inventory registration, we identify empty locations that are not on the listing. This part of the procedure filters all locations that are completely in error. 
+
+% subsection simple_random_sampling (end)
+
+\subsection{Selection with probability proportional to size} % (fold)
+\label{sub:selection_with_probability_proportional_to_size}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{../_PNG_files/H5_pps_selection_population.png}
+\caption{Visual representation of a population with ten elements and a total book value of 45. Note that element \emph{E} has a book value of 0 and therefore has an inclusion probability of 0}
+\label{fig:H5_pps_selection_population}
+\end{figure}
+
+Figure \ref{fig:H5_pps_selection_population} shows a stylized population with ten elements and a total book value of 45. This is used to show how the selection methods in this section work. The sample size $n =$ 5. The population is summarized in Table \ref{tab:example_pop_2}. Note that the population contains element E with a value $x_E = 0$. Probability proportional to size selection methods assign zero inclusion probability to this element, in other words, there is no possibility of selecting it. When applying these methods, we should be aware of this fact. If the population contains elements with a zero book value, these elements may require special care.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{l r r}
+\toprule
+Element & \multicolumn{1}{c}{Value} & \multicolumn{1}{c}{Running} \\
+\midrule
+A & 7 & 7 \\
+B & 3 & 10 \\
+C & 4 & 14 \\
+D & 9 & 23 \\
+E & 0 & 23 \\
+F & 1 & 24 \\
+G & 8 & 32 \\
+H & 2 & 34 \\
+I & 6 & 40 \\
+J & 5 & 45 \\
+\midrule
+Total & 45 & \\
+\bottomrule
+\end{tabular}
+\caption{Example population}
+\label{tab:example_pop_2}
+\end{table}
+
+For example, in the \emph{Case: Inventories}, we make a list of all inventory locations that have a zero book value. We then investigate if there is any inventory present at these locations.
+
+\bigskip
+The selection methods discussed in the previous subsection have in common that the inclusion probability of an element is the same for all the elements in the population. These selection methods are the only statistically valid methods for attribute sampling and CVS.
+
+If we want to use MUS for the purpose of our audit procedure, elements in the population should be selected with a probability proportional to their size. There are advantages with regard to improved efficiency, precision, cost-effectiveness, and representativeness in using such a sampling scheme if the (audit) value of an element in the population is approximately proportional to a known auxiliary variable, such as its book value. These schemes are called \hlblue{probability proportional to size}\index{probability proportional to size}.
+
+For populations with large variations in book values, it may not be possible to select a sample that is in strict agreement with the proportionality rule. The \hlblue{inclusion probability}\index{inclusion probability}\index{probability!inclusion}\nomenclature{$\pi$}{inclusion probability} of an element $i$\nomenclature{$i$}{index} with book value $x_i$\nomenclature{$x$}{book value} is given by
+
+\begin{equation}
+\pi _i = \frac{n x_i}{X}
+\label{eq:inclusion_probability}
+\end{equation}
+where $X = \sum{x_i}$\nomenclature{$X$}{total book value of the population} denotes the total book value of the population. For all elements, it is required that these inclusion probabilities are unequal to zero, and that they cannot be larger than one ($0 < \pi_i \leq 1$). If $n > 1$ and some $x_i$ are very large, it could happen that
+
+\begin{equation*}
+\frac{n x_i}{X} > 1
+\end{equation*}
+
+For example, when we sample $n = 6$ units from the example population in Table \ref{tab:example_pop_2} with total value $X = 45$, the inclusion probability of element D with book value $x_D = 9$ is
+
+\begin{equation*}
+\frac{6 \times 9}{45} = 1.2 > 1
+\end{equation*}
+
+This is particularly true if $x_i > {X} / {n}$.
+Therefore, we assign an inclusion probability $\pi_i = 1$ to these elements, That is, we ensure that they are all selected, and let $\pi_i$ be proportional to the remaining elements. Elements with inclusion probability $\pi_i = 1$ are usually referred to as \hlblue{individually significant items}\index{individually significant items}, or are said to belong to the \hlblue{census stratum}\index{census stratum}\index{stratum!census}.
+
+\bigskip
+When we apply a selection with a probability proportional to size, all sampling units that we select from should have the same sign to ensure consistency, mathematical accuracy, and statistical validity in the sampling process. For example, when we sample from sampling units with a positive value, negative and zero-value elements will not have a chance of selection, and the statistical conclusion will only extend to positive values. Therefore, we should pay attention to whether these elements are present in the account under review. Two distinct situations are frequently encountered when it comes to this problem. 
+
+In the first case, negative elements are adjustments or corrections, or can be specifically assigned to the positive elements to which they pertain. The correct way to address these types of negative items is to cancel them into specific positive elements before calculating the sample size and selecting the sample. 
+
+The second case relates to items that represent a different class of transactions so that the negative elements cannot be specifically assigned to positive elements. From an auditing perspective, this class of transactions usually has different control objectives and, as such, should be audited separately. The statistical sample is performed on the positive elements only, and the sum of all positive elements is used as an input for the calculation of the sample size.
+
+Elements with zero values have no probability of being selected. When they are present in a population, they should be reviewed to assess for any risk. For example, in an inventory population, elements with no quantities and a certain price may not indicate issues, whereas elements with quantities but a zero price may indicate  understatement.
+
+\bigskip
+There are many selection methods with a probability proportional to size. We now discuss a few methods that are commonly used by auditors. 
+% Methods with replacement are rarely used by auditors. The commonly used methods without replacement all suffer from the fact that second-order inclusion probabilities cannot be easily computed.\marginnote{See Särndal (1992) for a discussion.} 
+\begin{enumerate}
+\item \textit{Random monetary units.} A random sample of monetary units is selected and traced to the elements that contain them.
+\item \textit{(Randomized) Fixed-interval selection.} After a random start, we take fixed intervals of \hlblue{monetary units} to select elements.\footnote{This is similar to fixed-interval selection applied to \hlblue{elements} in a population, see Section \ref{sub:simple_random_sampling}.}
+% \item Randomized fixed-interval selection. Fixed-interval selection, where the order of the elements is randomized before the selection process, is carried out according to the \emph{fixed-interval selection} method. 
+\item \textit{Cell selection.} The list of elements is divided into cells of fixed width, and a random monetary unit is selected from each cell.
+\item \textit{(Modified) Sieve selection.} All elements' values larger than the opening of the sieve are selected.
+% \item [Modified sieve selection] A modification of the sieve method, fixing the sample size and ensuring that all individually significant items are selected.
+%\label{}
+\end{enumerate}
+
+\paragraph{1. Random monetary units} \label{par:random_monetary_units}The easiest way to select elements from the population with a probability proportional to the size of the element is by first selecting $n$ random numbers between 1 and the population book value $X$, and then tracing these selected monetary units to the running total of the book values.\index{random monetary units selection}\index{selection!random monetary units}  
+
+For example, if the 5 random numbers are 7, 43, 2, 32, and 22, then the selected elements are A, J, A, G, and D. 
+
+The advantage of this method is that it is random. All combinations of population elements have the correct probability of constituting the sample. One disadvantage is that a population element can be selected multiple times. A further disadvantage is that individually significant items (in this example, element D has a book value greater than or equal to $X/n = 45/5 = 9$) may not be selected at all. A practical way to avoid this is to extract these elements from the population before selecting the sampling units.
+
+\paragraph{2. (Randomized) fixed-interval selection}\label{par:fixed_interval_selection} In this method, we first calculate the sampling interval 
+\begin{equation}
+I = X / n
+\label{eq:sampling_interval}
+\end{equation}
+Then, a random monetary unit is selected from the first interval and every consecutive $I$th unit.\index{fixed-interval selection}\index{selection!fixed-interval}
+
+For example, with $X =$ 45 and $n =$ 5, we calculate the interval $I = 45/5 =9$. We choose a random number between 1 and 9, in this example 2. The selected monetary units are 2, 11, 20, 29, and 38, corresponding to elements A, C, D, G, and I, respectively.
+
+The main disadvantage of fixed-interval selection is that the number of possible samples is reduced. In this example, there are only six possible samples. This disadvantage can be overcome by randomizing the order of the sampling units in the population. This method is referred to as the \hlblue{randomized fixed-interval selection}\index{randomized fixed-interval selection}\index{selection!randomized fixed-interval} 
+
+% An ideal selection mechanism would allow each of the 70\marginnote{Taking into account that element D has a 100\% inclusion probability and therefore is part of each of the $\left( \begin{array}{c}8\\4\end{array} \right) =$ 70 sets.} possible combinations of 5 elements. This can be achieved by first randomizing the order of the population elements before drawing the sample.
+
+% \begin{table}[htbp]
+% \begin{tabular*}{11.2 cm}{lrl}
+% \toprule
+% \parbox[t]{2.3 cm}{Random start} &
+% \parbox[t]{2 cm}{\raggedleft Probability} &
+% \parbox[t]{3 cm}{Selected elements} \\
+
+% \midrule
+
+% 0 -- 1 & 0.1111 & A, B, D, G, I \\
+% 1 -- 4 & 0.3333 & A, C, D, G, I \\
+% 4 -- 5 & 0.1111 & A, C, D, G, J \\
+% 5 -- 6 & 0.1111 & A, D, F, H, J \\
+% 6 -- 7 & 0.1111 & A, D, G, H, J \\
+% 7 -- 9 & 0.2222 & B, D, G, I, J \\
+
+% \bottomrule
+% \end{tabular*}
+% \caption{Possible samples with fixed-interval selection}
+% \label{tab:possible_samples}
+% \end{table}
+
+% We can easily derive the inclusion probabilities $\pi_k$ from Table \ref{tab:possible_samples}. For example, the inclusion probability of element A is the sum of the probabilities of the samples in which it is part: $0.1111 + 0.3333 + ... + 0.1111 = 0.7777$, which is equivalent to the calculation using Equation \ref{eq:inclusion_probability}:
+
+% \begin{equation*}
+% \pi_A = \frac{n x_A}{X} = \frac{5 \times 7}{45} \approx 0.7777
+% \end{equation*}
+
+\paragraph{3. Cell selection} An improvement on the fixed-interval selection method is obtained through the \hlblue{cell selection}\index{cell selection}\index{selection!cell} method. Again, we divide the total book value $X$ by the sample size $n$ to obtain cells of width $X / n = 45 / 5 = 9$, but rather than selecting the same monetary unit within each cell, we select a random one.
+
+For example, by constructing five cells of size nine each, we obtain five random numbers, $RN = $ 0.5196, 0.0988, 0.0968, 0.7983, and 0.3822. We then indicate the selected cumulative monetary unit. Note that we do not need to round the results. In practice, we use the ceiling value for the nearest monetary value. Table \ref{tab:example_cell_selection} lists the results of these calculations.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrc}
+\toprule
+\parbox[t]{1 cm}{Cell} &
+\parbox[t]{1.7 cm}{\raggedleft Random number $RN$} &
+\parbox[t]{2 cm}{\raggedleft Random monetary unit} &
+\parbox[t]{2 cm}{\raggedleft Selected monetary unit ($\times $ 9)} &
+\parbox[t]{2 cm}{Selected element} \\
+
+\midrule
+
+1 & 0.5196 & 0.5196 & 4.676 & A \\
+2 & 0.0988 & 1.0988 & 9.889 & B \\
+3 & 0.0968 & 2.0968 & 18.871 & D \\
+4 & 0.7983 & 3.7983 & 34.185 & I \\
+5 & 0.3822 & 4.3822 & 39.440 & I \\
+
+\bottomrule
+\end{tabular*}
+\caption{Example cell selection}
+\label{tab:example_cell_selection}
+\end{table}
+
+Although the disadvantages of the fixed-interval selection method now have been slightly alleviated, new problems have been introduced. First, element D, which should have a 100\% inclusion probability, may not be hit at all. This can be overcome by removing all items greater than or equal to $I$ from the population before creating the cells. Another practical problem is that elements straddling a cell boundary may be hit twice, as in the case with element I in the example. It may be counterintuitive to take the same element into account twice when evaluating the sample, and it will be difficult to explain to the client that a population cannot be approved because we found too many errors, simply because we selected an incorrect element twice.
+
+\paragraph{4a. Sieve selection}
+
+Sieve selection aims to overcome the disadvantages of previously discussed methods. This method works as follows:\index{sieve selection}\index{selection!sieve}
+\begin{compactitem}
+\item Calculate the sampling interval $I = X / n$.
+\item For each element in the population, multiply the sampling interval $I$ with a random number $RN$\nomenclature{$RN$}{random number between 0 and 1} between 0 and 1 to obtain the sieve opening $u_i = I \times RN_i$.\nomenclature{$u$}{sieve opening}
+\item Compare the book value of the $i$th element $x_i$ to the sieve opening $u_i$. If $x_i \geq u_i$, then the element is caught by the sieve and selected for testing. If $x_i < u_i$, then the element falls through the sieve and is not selected for testing.
+%\label{}
+\end{compactitem}
+
+\bigskip
+Applying this logic to the example population from Table \ref{tab:example_pop_2}, we obtain $I =$ 45 / 5 = 9 and the results in Table \ref{tab:example_sieve_selection}.
+
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{%
+  >{\raggedright\arraybackslash}p{1.5cm}  % Element
+  >{\raggedleft\arraybackslash}p{1.5cm}   % Book value x
+  Y                                     % Random number RN
+  Y                                     % Sieve opening
+  >{\centering\arraybackslash}X         % Selected?
+}
+\toprule
+Element &
+Book value $x$ &
+Random number $RN$ &
+Sieve opening $u = I \times RN$ &
+Selected if $x \geq u$ \\
+\midrule
+A & 7 & 0.1465 & 1.319 & Yes \\
+B & 3 & 0.9565 & 8.609 & No  \\
+C & 4 & 0.0442 & 0.398 & Yes \\
+D & 9 & 0.8027 & 7.224 & Yes \\
+E & 0 & n/a    & n/a   & n/a \\
+F & 1 & 0.4815 & 4.334 & No  \\
+G & 8 & 0.7083 & 6.375 & Yes \\
+H & 2 & 0.1783 & 1.605 & Yes \\
+I & 6 & 0.9207 & 8.286 & No  \\
+J & 5 & 0.1335 & 1.202 & Yes \\
+\bottomrule
+\end{tabularx}
+\caption{Example sieve selection}
+\label{tab:example_sieve_selection}
+\end{table}
+
+The advantages of the sieve method are that elements can be hit no more than once, and the inclusion probabilities of the elements are independent of each other. A disadvantage is that the sample size obtained is unknown in advance. We see from the results in Table \ref{tab:example_sieve_selection} that even though the desired sample size $n = $ 5, we selected six elements. This disadvantage is addressed by modifying the sieve method.
+
+\paragraph{4b. Modified sieve selection} In the sieve method an element is selected if $x_i \geq I \times RN_i$. This is equivalent to $x_i / RN_i \geq I$. Instead of multiplying the sampling interval $I$ by a random number $RN_i$ and comparing it to the book value of the element, we divide the book value by a random number and compare the resulting sieve number $sn_i = x_i / RN_i$ to $I$.\nomenclature{$sn$}{sieve number} We select exactly $n$ elements with the largest sieve numbers $sn_i$.\index{modified sieve selection}\index{selection!modified sieve} 
+
+We apply this logic to the example population and obtain the results in Table \ref{tab:example_modified_sieve_selection}.
+
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{lYYYY}
+\toprule
+Element & Book value $x$ & Random number $RN$ & Sieve number $sn = x / RN$ & Selected? \\
+\midrule
+C & 4 & 0.0442 & 90.50 & Yes \\
+A & 7 & 0.1465 & 47.78 & Yes \\
+J & 5 & 0.1335 & 37.45 & Yes \\
+G & 8 & 0.7083 & 11.29 & Yes \\
+H & 2 & 0.1783 & 11.22 & No \\
+D & 9 & 0.8027 & 11.21 & Yes \\
+I & 6 & 0.9207 & 6.52 & No \\
+B & 3 & 0.9565 & 3.14 & No \\
+F & 1 & 0.4815 & 2.08 & No \\
+\bottomrule
+\end{tabularx}
+\caption{Example modified sieve selection. The table is sorted on descending sieve number $sn$. Note that element D is individually significant when $n = $ 5 and is automatically selected even before element H with a higher sieve number.}
+\label{tab:example_modified_sieve_selection}
+\end{table}
+
+We need to devote special attention to individually significant items: an element with a large book value may not be among the $n$ elements with the largest sieve numbers. The easiest way to achieve this is by eliminating individually significant items before starting the selection procedure; however, if the sample size is not known in advance, we do not know which items are individually significant. The modified sieve method adjusts the order of element selection by considering the sample size at which they become individually significant.
+
+\bigskip
+A final word on the rationale for treating individually significant items separately. Because these elements have a 100\% inclusion probability, they are not part of the sample, but are part of the so-called \hlblue{census stratum}\index{census stratum}\index{stratum!census}, a collection of all elements that are removed from the population. All elements in the census stratum are tested, but the findings of these tests are not extrapolated to the population.
+
+For example, for the \emph{Case: Inventories}, we use modified sieve selection to select sampling units. The method identifies individually significant items automatically, and, if needed, it is easy to extend the sample.
+
+% subsection selection_with_probability_proportional_to_size (end)
+
+% section sample_design_size_and_selection_of_items_for_testing (end)
+
+\section{Performing audit procedures} % (fold)
+\label{sec:performing_audit_procedures}
+
+After selecting the sample, the standard states the following three requirements.
+
+\begin{enumerate}
+\item All selected sampling units should be audited (530.9);
+\item If the audit procedure cannot be applied to or is not relevant for the selected sampling unit, it should be applied to a replacement unit (530.10); and
+\item If no audit evidence can be obtained for the selected sampling unit, the unit should be treated as a deviation or misstatement when evaluating the sample (530.11).
+\end{enumerate}
+
+The requirement in 530.10 may seem at odds with paragraph 530.11. The situation described in 530.10 arises when the sampling frame is ill defined. For example, if we want to test a control that only pertains to expenses over a certain amount, then the sampling frame should be a list of these expenses only and exclude smaller expenses. 
+
+This is different from situations described by 530.11. It is clearly not allowed to replace one selected unit with another if it cannot be audited, for example, when supporting documentation is missing.
+
+\bigskip
+To summarize, for the \emph{Case: Inventories} we perform the following audit procedures:
+
+\begin{compactitem}
+	\item Count the number of items of selected inventory items at their location for existence ('book to floor'), including individually significant items;
+	\item Count the number of items of selected inventory locations ('floor to book'); and
+	\item Visit all inventory locations, and check that all empty locations are listed, and all listed locations are empty.
+\end{compactitem}
+
+By performing three separate tests, we increase the efficiency of the substantive procedure. We apply an MUS sample for overstatements, and mitigate problems arising from potential understatements by applying a separate sample from floor to book, and a complete investigation of all empty locations.
+
+% section performing_audit_procedures (end)
+
+\section{Nature and cause of deviations and misstatements} % (fold)
+\label{sec:nature_and_cause_of_deviations_and_misstatements}
+
+Prior to projecting misstatements\footnote{ISA 530.12 and 530.A17, AU-C 530.12 and 530.A21 to 530.A23} and drawing a conclusion based on the findings from the sample, we should first investigate the nature and cause of deviations and misstatements. There are several reasons for this. First, deviations and misstatements may be indicative of intentional mistakes. Furthermore, if the cause of deviations and misstatements is systematic, we may want to stratify the population, and apply different sampling intensities or even different audit approaches to each of the strata. In addition, the misstatements could contradict evidence from other procedures performed toward the same assertion, or provide disconfirming evidence on other accounts.
+
+\bigskip
+The current version of the ISA standard is highly specific with regard to \hlblue{anomalous misstatements and deviations}\index{anomalous misstatements and deviations}. These are defined as misstatements or deviations that are demonstrably not representative of misstatements or deviations in a population. Treating large errors as anomalous has for a long time been a convenient strategy for auditors to ignore the disconfirming audit evidence. Elder and Allen\footnote{Elder, 1998} found that particularly large errors were considered anomalous. Auditors would consign these errors to a subpopulation or would suggest that these errors were unique. A follow-up study\footnote{Allen, 2005} showed that this practice has become even more popular among auditors.
+
+The standard now requires us to perform additional procedures to obtain sufficient and appropriate audit evidence that the misstatement or deviation does not affect the remainder of the population, which is probably much more work than just treating the error as a `normal' misstatement, extrapolating it, and executing the additional work required.
+
+The US Standard does not recognize the notion of anomalies. This is the only substantial difference between the international ISA  530 standard and its US equivalent.
+
+% section nature_and_cause_of_deviations_and_misstatements (end)
+
+\section{Projecting misstatements} % (fold)
+\label{sec:projecting_misstatements}
+
+Paragraph 530.14 states that the projection of misstatements is required for tests of details, and paragraph 530.A20 clarifies that the projection of deviations is not necessary for tests of controls. This projection is essential for evaluating the sampling results, because the standard does not require us to calculate the precision of the projection. The decision of whether the sample has provided sufficient audit evidence that the population is not materially misstated is made by comparing the projected misstatement with the expected misstatement\marginnote{see \ref{sub:sample_size}} used in the calculation of the sample size. This assumes that the sample size was calculated considering the expected misstatement. If the projected misstatement is less than the expected misstatement, the sampling results are deemed inconsistent with the hypothesis that the population is materially misstated. In other words, based on the test results we can reject the hypothesis that the population is materially misstated in favor of the alternative hypothesis.
+
+Chapters \ref{cha:estimation} and \ref{cha:stratified_sampling} detail the calculations used to project misstatements in simple random samples and stratified samples, whereas Chapter \ref{cha:hypothesis_testing} shows the projection of samples drawn with a probability proportional to the size of the elements in the population: monetary unit samples.
+
+The standard does not detail how projections should be made, but for nonstatistical samples, two methods can be applied. The first method calculates the mean misstatement in the sampling units and multiplies it with the number of elements in the population. The second method calculates the percentage misstatement in the sampling units by dividing the total misstatement observed by the total book value of the sampling units and multiplying this result by the total book value of the population. We shall see in Chapter \ref{cha:stratified_sampling} that the first method is consistent with the technique called \hlblue{difference estimation}, and the second with \hlblue{ratio estimation}. 
+
+Even though we have a choice as to which projection method to use, we also show (in Section \ref{sec:relationships_between_the_estimators}) that under certain circumstances, both methods yield the same result. In particular, if the sample is drawn randomly from the population without preference for sampling units with higher book values, the difference between the projection methods should be small. Therefore, if we project the sampling results with both methods and the difference in the projection is considerable, this indicates that the sampling units were drawn with a bias for higher book values; in this case, one projection method will yield an upward bias on the projection result and the other method will yield a downward bias. We expand on this phenomenon in Section \ref{sec:relationships_between_the_estimators}.
+
+Paragraph 530.A20 mentions that the `projection may not be sufficient to determine an amount to be recorded'. We assume that with `sufficient' the standard means `sufficiently precise.' This statement raises two questions. If samples yield sufficiently precise projections, should we not incorporate this into the calculation of the sample size? In particular, when the expected misstatement is less than performance materiality, this could result in significantly lower sample sizes. Second, can the client adjust their financial statements based on \emph{our} projection of misstatements from a sampling procedure? Does this affect our independence?\footnote{These questions arise in general at the application of estimation methods like CVS, and also the projections from MUS.}
+
+We agree that projection of deviations is not necessary, but not for the reason stated in paragraph 530.A20. When we introduce \hlblue{hypothesis testing} in Chapter \ref{cha:hypothesis_testing}, we explain that these samples are evaluated by comparing the number of deviations found with the expected number of deviations used in the calculation of the sample size. Hence, the projected deviation rate does not play a role in the evaluation of the sample. 
+
+\bigskip
+For the \emph{Case: Inventories}, we exercise care when evaluating differences found. Because the procedure to test empty locations finds all 100\% differences (locations where no inventory is present where it should be, or where inventory is present where the inventory registration indicates that the location is present,) this part of the inventory observation is not a sample but a census test, and the findings do not need to be projected. This is true in particular locations that are part of the MUS sample. Similarly, inventory items that have nonzero quantities and a zero price are investigated separately.
+
+The differences of the MUS and CVS samples are projected using statistical theory. This is discussed in Chapter \ref{cha:hypothesis_testing} for MUS, and Chapter \ref{cha:estimation} for CVS.
+
+% section projecting_misstatements (end)
+
+\section{Evaluating results of audit sampling} % (fold)
+\label{sec:evaluating_results_of_audit_sampling}
+
+As explained before, because for nonstatistical samples, there is no valid way of calculating the precision of the projection, sampling results are evaluated by comparing the projected misstatement to the expected misstatement, under the assumption that we have determined a sufficient sample size. Statistical sampling allows the calculation of precision. As part of the sampling results, we obtain not only the projected misstatement but also an upper bound on the total misstatement. If this upper bound is less than performance materiality, we can conclude at a certain confidence level that the population is free of material misstatement. If it is not, the sample is inconclusive unless the projected misstatement is distinctly greater than performance materiality. 
+
+Chapter \ref{cha:hypothesis_testing} discusses how the projected misstatement and the upper bound on the total misstatement are calculated.
+
+% section evaluating_results_of_audit_sampling (end)
+
+% chapter sampling (end)

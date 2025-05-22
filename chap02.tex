@@ -1,0 +1,893 @@
+\chapter{Probability distributions} % (fold)
+\label{cha:probability_distributions}
+
+\begin{quote}
+`Beauty is a manifestation of secret natural laws, which otherwise would have been hidden from us forever.'\\
+Johann Wolfgang von Goethe (1749-1832)
+\end{quote}
+
+Probability distributions play an important role in probability theory and statistics. Probability theory is used to describe the probabilities of the possible outcomes of an experiment.
+
+In statistics, probability distributions are important to make a statement about an unknown quantity of the population. For example, when we sample from a population, the number of errors in the sample follows a hypergeometric distribution. This helps us draw inferences about, for example, the (unknown) number of errors in the population from the number of errors in the sample. 
+
+In this chapter, we will examine a few distributions that are used throughout this book. Some of these are discrete; they describe situations where possible outcomes are distinct, as in the example above. Other distributions are continuous and applicable to scenarios in which possible outcomes can take on values in a continuous range. A commonly encountered continuous probability distribution is the normal distribution. We show the results of a simple simulation study that illustrates the central limit theorem and that the sample mean is normally distributed if we sample from a normal distribution. If we sample from a differently distributed population, the sample mean becomes normally distributed as the sample size increases. 
+
+Under certain circumstances, the differences between distributions could become so small that it is possible to approximate the calculations of one distribution with those from another. Previously, when computing power and software were not as advanced as they are today, these approximations were very useful. With current resources, approximations are rare. Nevertheless, we will discuss them, as some professional literature may be difficult to follow without this knowledge.
+
+We finish the chapter with a workshop in which we demonstrate how probabilities are calculated using \ttblue{R}.
+
+\section*{Learning objectives}
+At the end of this chapter you will be able to
+\begin{compactitem}
+
+\item define\marginnote{remember} a probability distribution and explain its role in describing possible outcomes of an experiment.
+\item recall examples of discrete and continuous probability distributions (e.g., hypergeometric, binomial, normal).
+\item list common distributions used in statistics, including the hypergeometric, binomial, Poisson, normal, Student’s $t$, $\chi^2$, and $F$ distributions.
+
+\item explain\marginnote{understand} the difference between sampling with and without replacement and its impact on the distribution of successes (e.g., hypergeometric versus binomial).
+\item describe the central limit theorem and its implications for the distribution of the sample mean as sample size increases.
+\item discuss the historical and practical significance of approximating one probability distribution with another.
+
+\item compute\marginnote{apply} probabilities using the hypergeometric, binomial, Poisson, normal, Student’s $t$, $\chi^2$, and $F$ distributions.
+\item perform probability calculations in \ttblue{R} or \ttblue{Python} to solve practical problems using these distributions.
+
+\item assess\marginnote{analyze} the conditions under which the binomial distribution can approximate the hypergeometric distribution.
+\item determine when the Poisson distribution can be used to approximate the binomial distribution.
+\item evaluate whether the normal distribution can approximate the $t$-distribution under given circumstances.
+
+\item judge\marginnote{evaluate} the appropriateness of approximations between distributions in modern computational contexts.
+\item critique the usefulness of such approximations in specific professional or theoretical applications, even when computing power is not a limitation.
+
+\item design\marginnote{create} a simulation study to illustrate the central limit theorem, showing how the sample mean approaches a normal distribution with increasing sample size.
+\item conduct exercises in \ttblue{R} or \ttblue{Python} to calculate probabilities for various distributions, enabling students to apply statistical concepts using programming tools.
+
+\end{compactitem}
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\section*{Case: Number of students}
+\begin{fullwidth}
+\begin{multicols}{2}
+In the Netherlands, universities receive government funding based on the number of new students, master's degrees, and PhD degrees. After a few scandals, when schools were caught claiming too many students in order to receive higher funding, the government required an auditor report on the accuracy of the numbers reported.
+
+Universities report the names of the students in each category (new student, master's degree and PhD degree) on an annual basis. The external auditor draws a random sample from each category and tests the students selected for having been correctly reported as specified by the government. The auditor reports  the number of non-conforming students per category.
+
+In 20XX, the University of Weulnerdam reported 331 PhD degrees. 
+
+For the following calculations, we assume that the number of erroneously reported PhD degrees is 17. The auditor selects a sample of 60 from the group of 331 PhD degrees.
+
+\end{multicols}
+\end{fullwidth}
+\section*{Objective}
+What is the probability of finding 0, 1, or 2 errors in each sample?
+\end{mdframed}
+
+\bigskip
+In this chapter, we work with probability distributions. A \emph{probability distribution}\index{probability distribution}\index{distribution!probability}\marginnote{probability distribution} is a mathematical function that provides the probability of occurrence of different possible outcomes in an experiment. In the \emph{Case: Number of students}, the experiment is a sample without replacement, and the possible outcomes are the number of erroneously reported students observed in the sample.
+
+Probability distributions can be divided into two classes. A discrete probability distribution (applicable to the scenario above where the set of possible outcomes is discrete), can be encoded by a discrete\sidenote{the set of possible outcomes contains a finite or countably infinite number of values} list of the probabilities of the outcomes, known as a \emph{probability mass function}\index{probability mass function}\marginnote{probability mass function}. We discuss the hypergeometric distribution (\ref{sec:hypergeometric_distribution}), binomial distribution (\ref{sec:binomial_distribution}), and Poisson distribution (\ref{sec:poisson_distribution}). 
+
+On the other hand, a continuous probability distribution (applicable to scenarios where the set of possible outcomes can take on values in a continuous range)\sidenote{elements of the set of possible outcomes could be real numbers}, such as the average value of an inventory item, and is typically described by \emph{probability density functions}\index{probability density functions}\marginnote{probability density functions} (with the probability of any individual outcome being zero, if you can measure precisely enough). The normal distribution (\ref{sec:normal_distribution}) represents a commonly encountered continuous probability distribution. We also discuss the Student's $t$ distribution (\ref{sec:student_t_distribution}), the $\chi^2$ distribution (\ref{sec:chi_squared_distribution}), which plays an essential role in problems related to goodness-of-fit\marginnote{goodness-of-fit is the subject of Chapter \ref{cha:goodness_of_fit}, whereas regression models are introduced in Chapter \ref{cha:introduction_to_regression_analysis}}, and the $F$ distribution (\ref{sec:f_distribution}), associated with tests on regression models.
+
+\section*{Discrete probability distributions}
+In \ref{sub:sampling_method} we discuss the attributes of the population element. In \emph{Case: Number of students}, the attribute is dichotomous: students on the list are either correctly or incorrectly reported. There is no in-between. For example, if government regulations state that a student can be reported if she had enrolled before September 1 and had earned at least 60 credits, she would not qualify if she had earned only 59 credits. This attribute is a pass or a fail.
+
+\section{Hypergeometric distribution} % (fold)
+\label{sec:hypergeometric_distribution}
+
+When we draw a sample from a sampling frame, we typically do not replace an item selected before drawing the next item. This is what we call \emph{sampling without replacement}\index{sampling!without replacement}\marginnote{sampling without replacement}. It does not make much sense to allow items to be selected more than once: imagine that you selected an item twice, and find it to be the only error. Would you report to the client that the population could not be accepted because you found two errors?
+
+The distinction between sampling with and without replacement is typically made when comparing the \emph{hypergeometric distribution}\index{hypergeometric distribution}\index{distribution!hypergeometric} with the binomial distribution\index{distribution!binomial}\index{binomial distribution}, as discussed in the next section. Until recently, it was hardly possible to calculate the hypergeometric probabilities for values of $n$ larger than 20. Improved hardware and software allow us to work with a much larger population and sample size.
+
+In this section, we assume that we sample without replacement. We sample 60 items from the list of 331 PhDs in the \emph{Case: Number of students}, and we assume that 17 of these have erroneously been listed; the remaining 314 are correct. When we draw the first element, the probability that it is correct is therefore 314/331 $\approx$ 0.9486. The probability of the second item being correct is different if the first item is not replaced: it is 313/330 $\approx$ 0.9485. If the first item is incorrect, then the probability of drawing a correct one in the second draw is 314/330 $\approx$ 0.9515. It follows that the probability of drawing a correct item is not constant from draw to draw, as it depends on the results of the previous draws.
+
+The probability distribution that describes the probability of `success' (erroneous item) or `failure' (correct item) in a number of draws without replacement from a finite population is the hypergeometric distribution\index{distribution!hypergeometric}\index{hypergeometric distribution}. Its probability mass function is given by
+
+\begin{equation}
+P(\stoch{k} = k) = \frac{
+\left( \begin{array}{c}M\\k\end{array} \right)
+\left( \begin{array}{c}N-M\\n-k\end{array} \right)}
+{\left( \begin{array}{c}N\\n\end{array} \right)}
+\label{eq:hypergeometric}
+\end{equation}
+\begin{figure*} 
+ \centering
+ \includegraphics[width=1\textwidth]{H2hypergeometric.png}
+ \caption{Hypergeometric distribution ($N =$ 331; $M =$ 17) with sample size $n$ = \hlblue{10}, \hlblue{20}, \hlblue{40}, \hllblue{60}, \hlblue{90}, and \hlblue{120}}
+ \label{fig:H2hypergeometric}
+\end{figure*}
+\begin{tabular}{p{1 cm}p{1 cm}p{12 cm}}
+with: & $M$ & : \nomenclature{$M$}{number of `successes' in the population}number of errors in the population\\ 
+& $k$ & : \nomenclature{$k$}{number of `successes' in the sample}number of errors in the sample\\
+& $N$ & : population size\\
+& $n$ & : sample size\\
+\end{tabular}
+and the \emph{binomial coefficient}\index{binomial coefficient}\index{coefficient!binomial}\marginnote{binomial coefficient} is defined as
+\begin{equation*}\left( \begin{array}{c}a\\b\end{array} \right) = \frac{a!}{b!(a-b)!}\end{equation*}
+
+The hypergeometric distribution has three parameters: population size $N$, number of errors in the population $M$ and sample size $n$. Once we obtain the correct values for these three parameters, we can calculate the probability of each particular result.
+
+We can use Equation \ref{eq:hypergeometric} to calculate the probability of finding no errors in the sample of 60 elements from the list of 331 Ph.D.s.\marginnote{See Section \ref{sec:workshop02r} and \ref{sec:workshop02p} for worked out examples.}
+
+\begin{equation*}
+P(\stoch{k} = 0) = \frac{
+\left( \begin{array}{c}17\\0\end{array} \right)
+\left( \begin{array}{c}314\\60\end{array} \right)}
+{\left( \begin{array}{c}331\\60\end{array} \right)} = 
+\frac{\frac{17!}{0!17!} \frac{314!}{60!254!}}{\frac{331!}{60!271!}} =
+\end{equation*}
+\marginnote[-1.5cm]{Note that $\left( \begin{array}{c}17\\0\end{array} \right) = 1$}
+
+\begin{equation*}
+\frac{\frac{314!}{60!254!}}{\frac{331!}{60!271!}} = \frac{314!}{60!254!} \frac{60!271!}{331!} =
+\end{equation*}
+
+\begin{equation*}
+\frac{314! 271!}{331! 254!} = \frac{314! 271 \times 270 \times ... \times 255 \times 254!}{331 \times 330 \times ... \times 315 \times 314! 254!} =
+\end{equation*}
+
+\begin{equation*}
+\frac{271 \times 270 \times ... \times 255 }{331 \times 330 \times ... \times 315} \approx 0.0304
+\end{equation*}
+
+The results are shown in Figure \ref{fig:H2hypergeometric}, where the fourth panel shows the results for a sample size of $n = 60$. We also show the results for different sample sizes to provide an impression of the shape of the distribution.
+
+\bigskip
+The number of errors observed in the sample $k$ is a \emph{random variable}\index{random variable}\marginnote{random variable}. There are simple equations for its mean and variance, the respective measures of location and dispersion.
+
+\bigskip
+The mean is:\nomenclature{$\mu$}{mean}
+\begin{equation}
+\mu = n \frac{M}{N} = n \pi
+\end{equation}
+where $\pi = M / N$ denotes the \emph{population error rate}\index{population error rate}\index{population error rate!population}\marginnote{population error rate}.
+
+\bigskip
+The variance is:\nomenclature{$\sigma^2$}{variance, square of the standard deviation $\sigma$}
+\begin{equation}
+\sigma^2 = n \pi (1 - \pi) \frac{N - n}{N - 1}
+\label{eq:variance_hyper}
+\end{equation}
+
+For \emph{Case: Number of students}, the mean number of errors in the sample is $n M / N =$ 60 $\times$ 17 / 331 $\approx 3.0816$. The variance is $n \pi (1 - \pi) \frac{N - n}{N - 1} = 60 \times \frac{17}{331} \times (1 - \frac{17}{331}) \times \frac{331 - 60}{331 - 1} \approx 2.4007$.
+
+The mean value of a random variable is referred to as the \emph{expected value}\index{expected value}\marginnote{expected value}. It can intuitively be regarded as the long-run average of the results if the experiment is repeated a large number of times.
+
+\bigskip
+Although the hypergeometric distribution is the correct approach for calculating the outcomes of a sample without replacement, in practice, approximations with distributions that are less cumbersome to work out are often used, for example, with the binomial distribution, Poisson distribution, or normal distribution. In Section \ref{sec:approximations} we investigate how closely these approximations can be obtained. 
+
+% section hypergeometric_distribution (end)
+
+\section{Binomial distribution} % (fold)
+\label{sec:binomial_distribution}
+
+In the previous section, we observed that the probability of drawing an error depends on the previous results of the draws. The successive probabilities of success were not constant. The probabilities are constant when we \emph{replace}\index{sampling!with replacement}\marginnote{sampling with replacement} a selected item in the population so that it has another chance for selection. We cannot practically imagine why one would do this, other than that it makes  manual calculations much simpler. 
+
+The \emph{binomial distribution}\index{binomial distribution}\index{distribution!binomial} is the discrete probability distribution of the number of successes in a sequence of $n$ independent experiments.
+% , such as the hypergeometric distribution, each asking a yes-no question and each with its own dichotomous outcome: a random variable containing a single bit of information, success or failure, yes or no, or true or false. The probability of success, yes, and true in each trial is $p$\nomenclature{$p$}{probability of success}, and the probability of failure, no, and false is $q = 1 - p$.
+
+\begin{figure*}[thbp]
+ \centering
+ \includegraphics[width=1\textwidth]{H2Binomial.png}
+ \caption{Binomial distribution ($\pi = 17/331$) with sample size $n$ = \hlblue{10}, \hlblue{20}, \hlblue{40}, \hllblue{60,} \hlblue{90}, and \hlblue{120}}
+ \label{fig:H2Binomiaal}
+\end{figure*}
+
+\bigskip
+In the \emph{Case: Number of students} the chance of drawing an incorrect item from the list of PhDs is
+
+\begin{equation*}
+\pi = \frac{M}{N} = \frac{17}{331} = 0.0514
+\end{equation*}
+
+There is a fixed ratio between the population size $N$ and number of errors $M$. Because we replace every selected item after inspection, this ratio does not change. The binomial distribution therefore has only two parameters, the sample size $n$ and the error rate $\pi$.\nomenclature{$\pi$}{error rate}
+
+\bigskip
+The probability mass function is
+\begin{equation}
+P(\stoch{k} = k) = \left(\begin{array}{c}n\\k\end{array}\right)\pi^{k} (1-\pi)^{n-k}
+\label{eq:KansfunctieBinomiaal}
+\end{equation}
+with mean
+\begin{equation}
+\mu = n\pi
+\end{equation}
+and variance
+\begin{equation}
+\sigma^2 = n\pi(1-\pi)
+\label{eq:variance_binom}
+\end{equation}
+
+Comparing Equations \ref{eq:variance_hyper} and \ref{eq:variance_binom}, the difference is the factor $\frac{N - n}{N - 1}$.
+
+Using Equation \ref{eq:KansfunctieBinomiaal}, the probability of finding one error is 
+
+\begin{equation*}
+P(\stoch{k} = 1) = \left(\begin{array}{c}60\\1\end{array}\right)0.0514^{1} (1-0.0514)^{60-1} = 0.1373
+\end{equation*}
+
+The mean number of errors is $\mu =$ 60 $\times$ 0.0514 $\approx 3.0816$, and the variance is $\sigma^2 =$ 60 $\times$ 0.0514 $\times$ (1 - 0.0514) $\approx$ 2.9233.
+
+The probability mass functions of the binomial distribution for different sample sizes are shown in Figure \ref{fig:H2Binomiaal}. If we compare it with that of the hypergeometric distribution in Figure \ref{fig:H2hypergeometric} we see considerable similarity. 
+
+The mean of both distributions is the same, and the variance is practically the same if $\frac{N - n}{N - 1} \approx 1$, that is, if $n$ is much smaller than $N$. This implies that both distributions return approximately the same result if the sample size is small compared to the population size. We return to this observation when discussing the approximations in Section \ref{sec:approximations}.
+
+% section binomial_distribution (end)
+
+\section{Poisson distribution} % (fold)
+\label{sec:poisson_distribution}
+
+The \emph{Poisson distribution}\index{distribution!Poisson}\index{Poisson distribution} is associated with the number of events occurring in a fixed continuous interval (time, space, distance, area, or volume) if these events occur with a known average rate and independent of the time since the last event. In the auditing literature, it is used as an approximation for the binomial distribution.\marginnote{See Section \ref{sub:binomial_approximated_by_poisson}}
+
+The Poisson distribution is characterized by only one parameter ($\mu$). This allows auditors to use simple tables to calculate the required sample size and evaluate the results of their sample. The approximation is conservative, which means that the required sample sizes and the resulting upper bounds on the error rates are somewhat larger than necessary.
+
+\bigskip
+The probability mass function is
+\begin{equation}
+P(\stoch{k} = k) = \frac{\mu^k}{k!}e^{-\mu}
+\label{eq:Poisson}
+\end{equation}
+with mean
+\begin{equation}
+\mu = n\pi
+\end{equation}
+and variance
+\begin{equation}
+\sigma^2 = n\pi
+\label{eq:variance_poiss}
+\end{equation}
+where $e \approx $ 2.718 (the base of the natural logarithm).
+
+\bigskip
+Let us use the probability mass function to calculate the probability of finding exactly three errors in the sample of 60 PhD students.
+
+First, we calculate the value of parameter $\mu = n \pi = 60 \times 17 / 331 \approx 3.0816$. We then get
+\begin{equation*}
+P(\stoch{k} = 3) = \frac{3.0816^3}{3!}e^{-3.08} \approx 0.2238
+\end{equation*}
+
+\begin{figure*}[thbp]
+ \centering
+ \includegraphics[width=1\textwidth]{H2Poisson.png}
+ \caption{Poisson distribution ($\pi = 17 / 331$) with sample size $n$ = \hlblue{10}, \hlblue{20}, \hlblue{40}, \hllblue{60,} \hlblue{90}, and \hlblue{120}}
+ \label{fig:H2Poisson}
+\end{figure*}
+
+We plotted various probability mass functions calculated using the Poisson distribution in Figure \ref{fig:H2Poisson}. 
+
+To appreciate the differences between the calculations using three different distributions, we summarize the probabilities for the sample of $n = 60$ items in Table \ref{tab:summaryProbabilities} and Figure \ref{fig:H2Discrete_distributions}.
+
+\begin{figure} 
+ \centering
+ \includegraphics[width=1\textwidth]{H2Discrete_distributions.png}
+ \caption{Probabilities for three distributions of the sample results, $N = 331$, $n = 60$, $\pi = 17/331$}
+ \label{fig:H2Discrete_distributions}
+\end{figure}
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{2.3 cm}{Number of errors} &
+\parbox[t]{2.3 cm}{\raggedleft Hypergeometric} &
+\parbox[t]{2.3 cm}{\raggedleft Binomial} &
+\parbox[t]{2.3 cm}{\raggedleft Poisson} \\
+
+\midrule
+
+0 & 0.0304 & 0.0423 & 0.0459 \\
+1 & 0.1215 & 0.1373 & 0.1414 \\
+2 & 0.2239 & 0.2193 & 0.2179 \\
+\dots & \dots & \dots & \dots \\
+
+\bottomrule
+
+\end{tabular*}
+
+\caption{Probabilities for three distributions of the sample results, $N = 331$, $n = 60$, $\pi = 17/331$}
+\label{tab:summaryProbabilities}
+\setfloatalignment{t}
+\end{table}
+
+For \emph{Case: Number of students}, we learn from Table \ref{tab:summaryProbabilities} that there are differences in the results. 
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+
+\parbox[t]{2.3 cm}{Probability distribution} &
+\parbox[t]{2.3 cm}{\raggedleft Number of parameters} &
+\parbox[t]{2.3 cm}{\raggedleft Expected value} &
+\parbox[t]{2.3 cm}{\raggedleft Variance} \\
+
+\midrule
+Hypergeometric & 3 & 3.0816 & 2.4007 \\
+Binomial & 2 & 3.0816 & 2.9233 \\
+Poisson & 1 & 3.0816 & 3.0816 \\
+
+\bottomrule
+
+\end{tabular*}
+
+\caption{Characteristics of three discrete probability distributions}
+\label{tab:uitkomstenDiscreet}
+\setfloatalignment{t}
+\end{table}
+
+The most important statistics of the three distributions have been summarized in Table \ref{tab:uitkomstenDiscreet}. Note that the expected value is the same for all three distributions, and the variance is the lowest for the hypergeometric distribution and highest for the Poisson distribution. This is true regardless of the parameter values used. In Section \ref{sec:approximations} we investigate the size of these differences; this is helpful for understanding when approximations are valid.
+
+% section poisson_distribution (end)
+
+\section*{Continuous distributions} % (fold)
+\label{sec:continuous_distributions}
+
+In the next sections, we work with the \emph{Case: Social security payments}.
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\begin{fullwidth}
+\section*{Case: Social security payments}
+\begin{sloppypar}
+\begin{multicols}{2}
+You obtained a large data file with a large number of social security payments. According to the agent, payments were increased from the previous year to adjust for inflation. The mean payment value is 1,030.
+
+You want to obtain an indication of the accuracy of this number and select two separate samples.
+
+\paragraph{Objective sample 1:} obtain an indication of the variance of the payments.
+\paragraph{Action:} select 10 payments and record their values.
+
+\paragraph{Objective sample 2:} obtain an indication of the mean payment.
+\paragraph{Action:} select 200 payments, record their values and calculate their mean and variance.
+
+\bigskip
+The first sample is prepared for the second sample. In Chapter \ref{cha:estimation} we discuss how the sample size of sample 2 can be determined in order to obtain an estimate of the mean value with a certain desired precision, and to do this it is helpful to have an indication of the variance of the payment values from sample 1.
+
+\bigskip
+The results for the two samples are as follows:
+
+\paragraph{Sample 1:}  The values of the payments are 930, 1,035, 1,073, 994, 910, 1,033, 947, 1,102, 1,095, 921.
+Mean $\bar{x} = 1.004$, standard deviation $s = 73.78$.
+
+\paragraph{Sample 2:} The mean of the $N = 200$ payments $\bar{x} = 1,012,$ their standard deviation $s = 115.26$.
+\end{multicols}
+
+\section*{Objective}
+Given the sample results, determine whether it is probable that the mean payment value in the population equals 1,030.
+\end{sloppypar}
+
+\end{fullwidth}
+
+\end{mdframed}
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{llrrr}
+\toprule
+
+\parbox[t]{1 cm}{Sample} &
+\parbox[t]{1 cm}{Objective} &
+
+\parbox[t]{1.5 cm}{\raggedleft Sample size $n$} &
+\parbox[t]{1.5 cm}{\raggedleft Sample mean $\bar{x}$} &
+\parbox[t]{3.0 cm}{\raggedleft Sample standard deviation $s$} \\
+
+\midrule
+1 & variance & 10  & 1,004 &  73.78 \\
+2 & mean     & 200 & 1,012 & 115.26 \\
+
+\bottomrule
+
+\end{tabular*}
+
+\caption{Characteristics of \emph{Case: Social Security Payments} samples}
+\label{tab:characteristicsSocSecurity}
+\setfloatalignment{t}
+\end{table}
+
+In Sections \ref{sec:hypergeometric_distribution} - \ref{sec:poisson_distribution} we have seen that with discrete probability distributions we have a mathematical function that assigns the probability of occurrence for every possible outcome. The number of possible outcomes can be infinite; however, they are countable. This is not possible for \emph{continuous probability distributions}\index{continuous probability distribution}\index{probability distribution!continuous}\marginnote{continuous probability distribution}. These distributions are related to outcomes from measurements; therefore, it makes no sense to specify the probability of one particular outcome, but rather to specify the probability of a range of outcomes. For both discrete and continuous distributions, it is true that the sum of the probabilities over all possible outcomes is equal to 1 or 100\%.  
+
+Therefore, we need another method to represent the probabilities. The solution is to measure probabilities not at a single point but over a certain range. Rather than using a probability \emph{mass} function, we use a \emph{probability density function}\index{probability density function}\marginnote{probability density function} to calculate the probabilities. The total area under the curve described by the probability density function is equal to 100\%. In Figure \ref{fig:H2ContinueKansverdeling} we show a continuous probability density; the total probability (100\%) is shaded blue.
+
+\begin{marginfigure}
+ \centering
+ \includegraphics[width=1\textwidth]{H2ContinueKansverdeling.png}
+ \caption{Probability density function of a continuous probability distribution}
+ \label{fig:H2ContinueKansverdeling}
+\end{marginfigure}
+
+The evaluation of sample 1 is executed with the $\chi^2$ distribution in Section \ref{sec:chi_squared_distribution}, and that of sample 2 with the normal distribution in Section \ref{sec:normal_distribution}. We discuss two more continuous distributions, the Student's $t$ distribution in Section \ref{sec:student_t_distribution} and the $F$ distribution in Section \ref{sec:f_distribution}.
+
+% section continuous_distributions (end)
+
+\section{Normal distribution} % (fold)
+\label{sec:normal_distribution}
+
+The \emph{normal distribution}\index{normal distribution}\index{distribution!normal} is useful because of the central limit theorem\index{central limit theorem}\sidenote{The central limit theorem establishes that when independent random variables are added, their sum and average tend toward a normal distribution even if the original variables themselves are not normally distributed}. Physical quantities expected to be the sum of many independent processes (such as measurement errors) often have distributions that can be approximated with a normal distribution. Moreover, many results and methods (such as propagation of uncertainty\sidenote{the effect of variable uncertainties on the uncertainty of a function based on them} and least squares parameter fitting) can be derived analytically in an explicit form when the relevant variables are normally distributed.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=1\textwidth]{H2Standaardnormaal.png}
+ \caption{(Standard) normal distribution}
+ \label{fig:H2Standaardnormaal}
+\end{figure}
+
+\begin{figure*}[htbp]
+\includegraphics[width=1\textwidth]{H2sampling_distributions_v3.png}
+\caption{Sampling distribution of $\bar{x}$ from populations with an exponential, normal, or uniform distribution, sample size $n = 1, 2, 5, 10, 20$}
+\label{fig:H2sampling_distributions}
+\end{figure*}
+
+To illustrate the central limit theorem, we can examine the distribution of the sample mean by repeatedly sampling the same population. Three different populations were sampled. One has an exponential distribution with a large number of smaller-value items and a low number of higher-value items. This type of population distribution is typical of the populations we encounter as auditors. The results were compared with those from a normally distributed population and those from a uniformly distributed population. The three populations have similar variances and the same mean; however, the exponential distribution is skewed. The results for the samples of different sizes are shown in Figure \ref{fig:H2sampling_distributions}.
+
+\bigskip
+The distribution of the sample mean from a skewed population is skewed. However, as the sample size increases, the distribution gradually became more similar to a normal distribution. If we sample from a normal population, the sample mean is normally distributed regardless of the sample size. The uniform distribution is not skewed, and hence, the sampling distribution reverts to a normal distribution for lower sample sizes than for a skewed distribution such as the exponential distribution.
+
+\bigskip
+The probability density function of the normal distribution is given by
+
+\begin{equation}
+  f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left( \frac{x-\mu}{\sigma} \right)^2}
+  \label{eq:normal_distribution}
+\end{equation}\marginnote[-1 cm]{Note that in this equation $\pi$ is the constant approximately equal to 3.14, not the population error rate.}
+
+From Equation \ref{eq:normal_distribution} it shows that the probability density function requires two parameters ($\mu$ and $\sigma$). To perform any calculations, we need to \emph{standardize}\index{standardization} the distribution. Standardization involves rescaling the distribution by shifting the distribution along the $x$-axis by subtracting the mean and then dividing it by the standard deviation\nomenclature{$\sigma$}{standard deviation, square root of the variance $\sigma^2$}. The result is the \emph{standard normal distribution}\index{standard normal distribution}\index{distribution!standard normal}\marginnote{standard normal distribution}, a special case of the normal distribution with a standardized $z = \frac{x - \mu}{\sigma}$\nomenclature{$z$}{standardized value from the normal distribution} such that it has $\mu = 0$ and $\sigma = 1$. The result is the probability density function of the standard normal distribution from Equation \ref{eq:normal_distribution}
+
+\begin{equation}
+f(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}\left( z \right)^2}
+\label{eq:standard_normal_distribution}
+\end{equation}
+
+Because the population mean $\mu$ and population variance $\sigma^2$ are usually unknown, we use the following estimators: the mean $\mu$ is estimated by the \emph{sample mean}\index{sample mean}\marginnote{sample mean} $\overline{x}$,
+
+\begin{equation}
+\overline{x} = \frac{\sum{x_i}}{n}
+\label{eq:sample_mean}
+\end{equation}
+
+The population variance $\sigma^2$ is estimated using the estimator $s^2$,
+
+\begin{equation}
+s^2 = \frac{\sum{(x_i - \overline{x})^2}}{n - 1}
+\label{eq:sample_variance}
+\end{equation}
+
+This equation is often used in the form
+
+\begin{equation}
+s^2 = \frac{\sum{x^2 - (\sum{x})^2 / n}}{n - 1}
+\label{eq:sample_var_shortcut}
+\end{equation}
+
+\bigskip
+Let us consider the results of Sample 2 from \emph{Case: Social security payments}. The sample size for Sample 2 is $n = 200$. The results for this sample are $\overline{x} =$ 1,012 and $s =  $ 115.26. The sample mean $\overline{x}$ has an approximate normal distribution\marginnote{by virtue of the central limit theorem}, and therefore 
+\begin{equation}
+z \approx \frac{\overline{x}-\mu}{s/\sqrt{n}} 
+\label{eq:vanTnaarZ}
+\end{equation}\marginnote[-0.9 cm]{$(\text{for } n \geq 200)$}
+has a standard normal distribution. Note the effect of sample size $n$ on the distribution of the sample mean: when $n = 1$ the sample mean has the same variance as the population, but as the sample size increases, the variance of the sample mean decreases.
+
+\bigskip
+The standard normal distribution has known probabilities between fixed multiples of $s$ around the mean $\mu = 0$, for example, 68.3\% between $z = -1$ and $z = 1$, 95.4\% between $z = -2$ and $z = 2$, and 99.7\% between $z = -3$ and $z = 3$. Therefore we can construct a 99.7\% confidence interval for $z$ in [-3, 3]. Similarly, a $1 - \alpha$ confidence interval is denoted by [$-z_{\alpha/2}, z_{\alpha/2}$]; for example, a 95\% confidence interval is [-1.96, 1.96].\nomenclature{$z_{\alpha/2}$}{two-tailed $z$-value}\nomenclature{$z_{\alpha}$}{one-tailed $z$-value}
+
+\bigskip
+Assuming that the population mean is 1,030, we can now calculate the probability of obtaining the result of Sample 2 in the \emph{Case: Social security payments}: a sample mean of 1,012 or less by applying Equation \ref{eq:vanTnaarZ}:
+\begin{equation*}
+z = \frac{1,012 - 1,030}{115.26 / \sqrt{200}} = -2.2086
+\end{equation*}
+
+The probabilities for $z$ are tabulated; without statistical software, this is the most efficient way to obtain them. When we look up the rounded value of -2.21 in such a table, the probability of 1.36\% is found.\marginnote{See Exercise \ref{ex:norm} in Section \ref{sec:workshop02r}}
+
+For large samples ($n \geq 200$), the normal distribution is used as a very close approximation of the Student's $t$ distribution. This is explored in \ref{sub:t_approximated_by_normal}. The calculations with a normal distribution involve one less parameter and are simpler. If the sample size in the \emph{Case: Social security payments} was less than 200, we used the Student's $t$ distribution instead.
+
+% section normal_distribution (end)
+
+\section{Student's t distribution} % (fold)
+\label{sec:student_t_distribution}
+
+The results of small samples can be described with \emph{Student's $t$ distribution}\index{Student's $t$ distribution}\index{distribution!Student's $t$} if the sample is drawn from a normally distributed population.
+
+Similar to the standard normal distribution, the Student's $t$ distribution has a symmetrical probability density function, with mean $\mu = 0$ and variance $\sigma^2 = \frac{n - 1}{n - 3}$. The variance is greater than that of the standard normal distribution, particularly for small $n$. As a result, the tails of the Student's $t$ distribution are slightly fatter than that of the standard normal distribution, which is a reflection of the increased uncertainty surrounding smaller samples. We refer to this as the abbreviated form of $t$ distribution.
+
+In the \emph{Case: Social security payments}, the social security agency is principally concerned with the mean value of the payments, not the value of each individual payment. The mean payment of Sample 1 with $n = 10$ payments can be described by a $t$ distribution with\marginnote{degrees of freedom} $df = n - 1 = 9$ \emph{degrees of freedom}\index{degrees of freedom}\nomenclature{$df$}{degrees of freedom}. The quantity $n - 1$ bears resemblance to the denominator of the estimated variance; see Equation \ref{eq:sample_variance}.
+
+Figure \ref{fig:H2tverdelingen} shows $t$ distributions with 1, 3, 9, and 100 degrees of freedom.
+
+\begin{figure*}[htbp]
+ \centering
+ \includegraphics[width=1\textwidth]{H2tverdelingen.png}
+ \caption{Student's $t$ distribution with $df = $ 1, 3, 9, and 100}
+ \label{fig:H2tverdelingen}
+\end{figure*}
+
+Similar to the standard normal distribution of the statistic $z$, we can use the $t$ distribution to calculate the probabilities. First, we calculate the statistic $t$:
+
+\begin{equation}
+t = \frac{\overline{x}-\mu}{s/\sqrt{n}}
+\label{eq:omrekening}
+\end{equation}
+\begin{tabular}{p{1 cm}p{0.3 cm}p{10 cm}}
+where: &$\overline{x}$ & : sample mean\\
+& $\mu$ & : population mean\\
+& $s$ & : sample standard deviation\\
+& $n$ & : sample size\\
+\end{tabular}
+
+\bigskip
+Note that Equation \ref{eq:omrekening} is exact for all sample sizes $n$, unlike Equation \ref{eq:vanTnaarZ}, which yields valid results only when $n \geq 200$.
+
+\bigskip
+The mean payment in the sample is $\bar{x}$ = 1,004. The standard deviation of the sample payments is $s$ = 73.78. To calculate the probability of our sample result given the population mean 1,030, we fill out Equation \ref{eq:omrekening} to obtain
+\begin{equation*}
+t = \frac{1,004 - 1,030}{73.78 / \sqrt{10}} = -1.11
+\end{equation*}
+
+Similar to the normal distribution, there are tables for the $t$ distribution. In Exercise \ref{ex:student} in Section \ref{sec:workshop02r} and Exercise \ref{ex:student_p} in Section \ref{sec:workshop02p}, the probability of finding the $t$-value is 14.7\%.
+
+\begin{marginfigure}
+ \centering
+ \includegraphics[width=1\textwidth]{H2KansInTVerdeling.png}
+ \caption{Probability in the $t$ distribution}
+ \label{fig:H2KansInT}
+\end{marginfigure}
+
+Therefore, the probability of obtaining a sample mean of 1,004 or less in a sample of 10 items is equal to the probability of $t <$ -1.11. This probability is shown in Figure \ref{fig:H2KansInT} and is approximately equal to 14.7\%. We use this result in \emph{Case: Social Security Payments} to obtain the likelihood that the mean payment in the population equals 1,030. 
+
+% section student_t_distribution (end)
+
+\section{\texorpdfstring{$\chi^2$}{chi-squared} distribution} % (fold)
+\label{sec:chi_squared_distribution}
+
+The $\chi^2$ (\emph{chi-squared}) \emph{distribution}\index{$\chi^2$ distribution}\index{chi-squared distribution}\index{distribution!$\chi^2$}\index{distribution!chi-squared} arises naturally when we add the squares of independent random variables, each of which has a standard normal distribution. One application is when estimating a population variance.
+
+An estimator of population variance $\sigma^2$ is the sample variance given by Equation \ref{eq:sample_variance}:
+\begin{equation*}
+s^2 = \frac{\sum \left( x_{i}-\overline{x} \right)^2}{n-1}
+\end{equation*}
+
+The quantity $(n-1)s^2/\sigma^2$ can be used to draw inferences on the population variance, because it has a $\chi^2$ distribution with $n-1$ degrees of freedom if the sample is drawn from a normal distribution. Figure \ref{fig:H2Chisquare} shows $\chi^2$ distributions with different degrees of freedom.
+
+\begin{figure*}
+ \centering
+ \includegraphics[width=1\textwidth]{H2Chisquare.png}
+ \caption{Chi-squared distributions with 3, 6 and 10 degrees of freedom}
+ \label{fig:H2Chisquare}
+\end{figure*}
+
+\bigskip
+The $\chi^2$ distribution can be used to construct a confidence interval of the population variance, for example, for the results of Sample 1 of \emph{Case: Social security payments}. The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is 16.92\marginnote{See Exercise \ref{ex:chisq}} and therefore
+\begin{equation*}
+\sigma^2 \geq \frac{(n - 1)s^2}{\chi^2} = \frac{(10 - 1) \times 73.78^2}{16.92} \approx 2,896
+\end{equation*}
+is the 95\% lower bound for the population variance.
+
+Similarly, to calculate the upper bound for $\sigma^2$, we begin with the lower bound of a $\chi^2$ distributed variable of 3.33.
+
+\begin{equation*}
+\sigma^2 \leq \frac{(n - 1)s^2}{\chi^2} = \frac{(10 - 1) \times 73.78^2}{3.33} \approx 14,736
+%\label{}
+\end{equation*}
+
+We find that $\sigma^2 \geq$ 2,896. The two one-sided 95\% confidence intervals are combined into a single two-sided 90\% confidence interval of [2,896; 14,736] for the population variance. 
+
+\bigskip
+This is not the only application of the $\chi^2$ distribution. Later in this book, in Chapter \ref{cha:introduction_to_regression_analysis}, we discuss other uses. Chapter \ref{cha:goodness_of_fit} focuses on this distribution in its entirety.
+
+% section chi_squared_distribution (end)
+
+\section{F distribution} % (fold)
+\label{sec:f_distribution}
+
+In this book, we use the \emph{$F$ distribution}\index{F distribution}\index{distribution!F} in Chapter \ref{cha:introduction_to_regression_analysis} which discusses regression analysis, primarily for testing hypotheses.
+
+If we divide two independent random variables $X_1$ and $X_2$ each of which has a $\chi^2$ distribution with $k_1$ and $k_2$ degrees of freedom, the resulting random variable $F = X_1 / X_2$ has an $F$ distribution with $(k_1, k_2)$ degrees of freedom.
+
+Figure \ref{fig:H2Fverdelingen} shows $F$ distributions for different combinations of degrees of freedom. This clearly shows that the distribution is not symmetrical. Negative values for $F$ cannot be observed because they are obtained by dividing two $\chi^2$ distributed variables. These are obtained by adding the squares of normally distributed variables. Squared values are always positive, as are the sum of the squared values. Consequently, the $F$-statistic is the result of the division of two positive numbers, which is also a positive number.
+
+\begin{figure*}
+ \centering
+ \includegraphics[width=1\textwidth]{H2Fverdelingen.png}
+ \caption{Probability distribution function for three $F$-distributed random variables with different numbers of degrees of freedom}
+ \label{fig:H2Fverdelingen}
+\end{figure*}
+
+A classic example we discuss when introducing hypothesis testing is to compare the outcome of an $F$-distributed test statistic with a critical value at a given significance level. For example, if we know that the test statistic has $\nu_1 = $ 25 and $\nu_2 = $ 23 degrees of freedom and we test with a significance level of $\alpha =  0.05$, we would look up the critical value in a table for the $F$ distribution.\nomenclature{$\nu_1$, $\nu_2$}{number of degrees of freedom of an $F$ distributed random variable}
+
+\section{Workshop R} % (fold)
+\label{sec:workshop02r}
+
+\input{workshop02_R}
+
+% section workshop_R (end)
+
+\section{Workshop Python} % (fold)
+\label{sec:workshop02p}
+
+\input{workshop02_Python}
+
+% section workshop_Python (end)
+
+
+
+\section{Approximations} % (fold)
+\label{sec:approximations}
+
+Several relationships exist between the probability distributions introduced in the preceding sections. We have already observed that some distributions are \emph{special cases}\marginnote{special case} of others. For example, the standard normal distribution is a normal distribution with $\mu = 0$ and $\sigma = 1$.
+
+Sometimes, if we \emph{transform}\marginnote{transformation} a random variable, then we know the distribution of the resulting random variable. For example, if $X$ follows a normal distribution, its linear transformation $aX + b$ also follows a normal distribution, elthough with different parameters.
+
+We have also seen examples of \emph{combinations}\marginnote{combination} of random variables; when we introduced the $\chi^2$ distribution, we said that if $X$ follows a normal distribution, $X^2$ follows a $\chi^2$ distribution. 
+
+\bigskip
+Another class of relationships occurs when parameter values associated with a distribution tend to some value in the limit such that the distribution \emph{approaches}\marginnote{approximation (limit)} a different distribution. For example, if the sample size $n$ approaches infinity, then the $t$ distribution approaches a normal distribution.
+
+Figure \ref{fig:H2Benaderingen} shows the approximate relationships between certain probability distributions. In this section, we discuss these approximate and limit relationships, including the threshold values of the parameters for which the approximation is sufficiently close.
+
+It should be noted that the particular circumstances of the analysis dictate what `sufficiently' close entails. Therefore, the conditions under which approximations are deemed valid may differ from those mentioned elsewhere.
+
+\begin{figure} 
+\begin{center}
+  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+    % Place nodes
+  \node[whiteblock] (hype) {hyper\-geo\-metric};
+  \node[whiteblock, below= 1 cm of hype] (bino) {binomial};
+  \node[whiteblock, below= 1 cm of bino] (pois) {Poisson};
+  \node[whiteblock, right= 1.5 cm of bino] (stud) {Student's $t$};
+  \node[whiteblock, right= 1.5 cm of pois] (norm) {normal};
+  
+    % Draw edges
+    \path [line] (hype) -- node {d} (bino);
+    \path [line] (bino) -- node {d} (pois);
+  \path [line] (pois) -- node {c} (norm);
+  \path [line] (bino) -- node {c} (norm);
+  \path [line] (stud) -- node {c} (norm); 
+\end{tikzpicture}
+\caption{Approximate relationships among probability distributions}
+\setfloatalignment{b}
+\label{fig:H2Benaderingen}
+
+\end{center}
+\end{figure}
+
+The approximations are discrete (d) or continuous (c). 
+
+\bigskip
+In the past, approximations have been very useful to avoid cumbersome calculations. For example, it was much easier for auditors to look up a value from a Poisson table to calculate the required sample size or evaluate the results of a sample compared to using binomial or hypergeometric distributions. Nowadays,\marginnote{It is, however, only fair to say that software packages use approximations when the parameter values submitted are very large.} with publicly available software it is no longer necessary to limit ourselves to approximating values. 
+
+The flowchart in Figure \ref{fig:H2Benaderingen} indicates that both  binomial and Poisson distributions can be approximated by normal distributions. These approximations may have been useful in the past, but as we see no urgency to discuss them, we will not devote specific attention to them.
+
+\subsection{Hypergeometric approximated by binomial} % (fold)
+\label{sub:hypergeometric_approximated_by_binomial}
+
+\begin{marginfigure}[2 cm]
+  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+  % Place nodes
+  \node[blueblock] (hype) {hyper\-geo\-metric};
+  \node[blueblock, below= 0.5 cm of hype] (bino) {binomial};
+  \node[whiteblock, below= 0.5 cm of bino] (pois) {Poisson};
+  \node[whiteblock, right= 1.5 cm of bino] (stud) {Student's $t$};
+  \node[whiteblock, right= 1.5 cm of pois] (norm) {normal};
+  
+  % Draw edges
+  \path [line] (hype) -- node {d} (bino);
+  \path [line] (bino) --  (pois);
+  \path [line] (pois) --  (norm);
+  \path [line] (bino) --  (norm);
+  \path [line] (stud) --  (norm); 
+\end{tikzpicture}
+\setfloatalignment{b}
+\end{marginfigure}
+
+The practical difference between the use of the hypergeometric distribution and that of the binomial distribution is whether or not a selected item is replaced. If it is not replaced, there is a difference between successive selection probabilities, but these differences decrease as the population size $N$ increases in relation to the sample size $n$. Mathematically, if $N$ tends to infinity, the probability mass function of the hypergeometric distribution transforms into that of the binomial distribution. At this point, there is no difference between sampling with and without replacement.
+
+If we compare the expected value and variance of both distributions, we observe that the effect of the approximation is not on the expected value but on the variance only. Table \ref{tab:vergHyperBinom} summarizes the expected values and variances.
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{lll}
+\toprule
+
+\parbox[t]{2.5 cm}{Probability distribution} &
+\parbox[t]{2.5 cm}{Expected value} &
+\parbox[t]{1.5 cm}{Variance} \\
+
+\midrule
+Hypergeometric & $n\pi$ & $n\pi (1-\pi) \frac{N - n}{N - 1}$\\
+Binomial & $n\pi$ & $n\pi (1-\pi) $\\
+\bottomrule
+
+\end{tabular*}
+
+\caption{Expected value and variance for the hypergeometric and binomial distributions}
+\label{tab:vergHyperBinom}
+\end{table}
+
+\bigskip
+Factor $(N - n) / (N - 1)$ is the \emph{finite-population correction factor}\marginnote{finite-population correction factor}\index{finite-population correction factor}, introduced in Section \ref{sub:the_effect_of_finiteness}. As $N$ increases (and $N \approx N - 1$), it becomes
+
+\begin{equation}
+\frac{N - n}{N - 1} \approx \frac{N - n}{N} = 1 - \frac{n}{N}
+\label{eq:eindigheidApprox}
+\end{equation}
+
+We can now easily see that this factor has very little effect when $N$ is very large, as long as $n$ is reasonably small. As a result, we formulate the condition for binomial approximation:
+
+\begin{equation}
+\frac{n}{N} < 0.10
+\label{eq:condition_binomial_approx}
+\end{equation}
+
+The correction factor $(N - n) / (N - 1)$ is equal to 1 if the sample size $n = 1$ and gradually decreases to zero as the sample size increases to $N$. Consequently, the variance decreases and the probability mass becomes narrower. This results in more accurate results. Equation \ref{eq:condition_binomial_approx} shows that we can use the binomial approximation if the sample size $n$ is less than 10\% of the population size $N$.
+
+\begin{figure*}[bhtp]
+\centering
+\includegraphics[width=1\textwidth]{H2_hyp_appr_bin.png}
+\caption{Approximations of the \hlblue{hypergeometric distribution}  with the \hllblue{binomial} for various sample sizes, $N = 1000$ and $\pi = 0.05$.}
+\label{fig:H2_hyp_appr_bin.png}
+\end{figure*}
+
+Figure \ref{fig:H2_hyp_appr_bin.png} shows a comparison of the probability mass functions for samples of different sizes from a population of $N =$ 1000 elements. The population error rate $\pi = 0.05$.
+
+The first two panels show situations in which the sample size $n$ is less than 10\% of population size $N$. It can be seen that the approximation is accurate.
+
+The third panel is borderline because $n = 100 = 10\% \times N$. The last two panels show a much larger sample size, and the approximation is not very close: the binomial distribution has fatter tails than the hypergeometric distribution.
+
+% subsection hypergeometric_approximated_by_binomial (end)
+
+\subsection{Binomial approximated by Poisson} % (fold)
+\label{sub:binomial_approximated_by_poisson}
+
+\begin{marginfigure}[4 cm]
+  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+  % Place nodes
+  \node[whiteblock] (hype) {hyper\-geometric};
+  \node[blueblock, below= 0.5 cm of hype] (bino) {binomial};
+  \node[blueblock, below= 0.5 cm of bino] (pois) {Poisson};
+  \node[whiteblock, right= 1.5 cm of bino] (stud) {Student's $t$};
+  \node[whiteblock, right= 1.5 cm of pois] (norm) {normal};
+  
+  % Draw edges
+  \path [line] (hype) --  (bino);
+  \path [line] (bino) -- node {d} (pois);
+  \path [line] (pois) --  (norm);
+  \path [line] (bino) --  (norm);
+  \path [line] (stud) --  (norm); 
+\end{tikzpicture}
+\setfloatalignment{t}
+\end{marginfigure}
+
+The binomial distribution converges towards the Poisson distribution as the sample size approaches infinity, while the product $n\pi$ remains fixed. Therefore, it can be approximated using the Poisson distribution for small values of $\pi$. 
+
+This approximation has been used very often in accounting literature, because it facilitates manual calculations at times when computer calculations are expensive. The Poisson distribution has only one parameter ($n\pi = \mu$), tables exist for the cumulative distribution of the number of errors $k$, and tables that assist in approximating the lower and upper bounds\sidenote{Estimation of an error rate is discussed in Chapter \ref{cha:estimation}} on the number of errors.
+
+\bigskip
+Table \ref{tab:vergBinomPoiss} compares the expected values and variances of  binomial and Poisson distributions.
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{lll}
+\toprule
+
+\parbox[t]{2.5 cm}{Distribution} &
+\parbox[t]{2.5 cm}{Expected value} &
+\parbox[t]{1.5 cm}{Variance} \\
+
+\midrule
+Binomial & $n\pi$ & $n\pi (1 - \pi) $\\
+Poisson & $n\pi$ & $n\pi $\\
+
+\bottomrule
+
+\end{tabular*}
+
+\caption{Expected value and variance for the binomial and Poisson distributions}
+\label{tab:vergBinomPoiss}
+\end{table}
+
+Similar to what we discussed in \ref{sub:hypergeometric_approximated_by_binomial}, the difference between the two distributions lies in their variance. As $n$ tends to infinity and $n\pi$ remains constant, the difference in variance is expressed as $1 - \pi$. This factor tends to one as $\pi$ decreases, with equality for the trivial case $\pi = 0$.
+
+We observe that the variance of the Poisson distribution is always greater than that of the binomial distribution, and the difference is smaller for lower values of $\pi$. If $\pi < 0.1$ the adjustment factor $1 - \pi > 0.9$ and the variances are sufficiently close. We use as a general rule that the difference is sufficiently small if
+
+\begin{equation}
+\pi < 0.10, n \geq 20
+\end{equation}\marginnote{If the Poisson distribution is used to approximate the hypergeometric distribution, we should also check whether $n / N < 0.10$.}
+
+Figure \ref{fig:H2_hyp_appr_poiss.png} shows a comparison of the probability mass functions for a sample of $n = 60$ elements from populations with different error rates.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{H2_bin_app_poiss.png}
+\caption{Approximations of the \hlblue{binomial distribution}  with the \hllblue{Poisson} for various population error rates, $n = 60$.}
+\label{fig:H2_hyp_appr_poiss.png}
+\end{figure*}
+
+The two right panels show situations where the population error rate $\pi < 0.10$ and the approximations are close enough to be valid. The middle panel is borderline. The two left panels show examples of invalid approximations: the Poisson distribution has fatter tails.
+
+% subsection binomial_approximated_by_poisson (end)
+
+\subsection{Student's t approximated by normal} % (fold)
+\label{sub:t_approximated_by_normal}
+
+\begin{marginfigure}[2 cm] 
+  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+    % Place nodes
+  \node[whiteblock] (hype) {hyper\-geometric};
+  \node[whiteblock, below= 0.5 cm of hype] (bino) {binomial};
+  \node[whiteblock, below= 0.5 cm of bino] (pois) {Poisson};
+  \node[blueblock, right= 1.5 cm of bino] (stud) {Student's $t$};
+  \node[blueblock, right= 1.5 cm of pois] (norm) {normal};
+  
+    % Draw edges
+    \path [line] (hype) --  (bino);
+    \path [line] (bino) --  (pois);
+  \path [line] (pois) --  (norm);
+  \path [line] (bino) --  (norm);
+  \path [line] (stud) -- node {c} (norm); 
+\end{tikzpicture}
+\setfloatalignment{b}
+\end{marginfigure}
+
+The advantage of approximating the Student's $t$ distribution with the normal distribution lies in the fact that we do not need to consider the number of degrees of freedom ($df = n - 1$). Generally, we assume that the difference between the two distributions is sufficiently small if $n \geq 200$. As $n$ approaches infinity, Student's $t$ distribution approaches the standard normal distribution.
+
+Table \ref{tab:vergPoissNorm} compares $t$-values for samples of size $n = 50, 100$, and $200$ with the $z$-value from the normal distribution at different significance levels\sidenote{Significance levels are explained in Chapter \ref{cha:hypothesis_testing}}. We observe that the difference between $t$ and $z$ values decreases as $n$ increases.
+
+The general condition
+\begin{equation}
+n \geq 200
+\end{equation}
+therefore seems reasonable for the approximation of the $t$ distribution by the normal distribution.
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+
+\parbox[t]{2.0 cm}{Significance level $\alpha$} &
+\parbox[t]{1.5 cm}{\raggedleft $t[49]$} &
+\parbox[t]{1.5 cm}{\raggedleft $t[99]$} &
+\parbox[t]{1.5 cm}{\raggedleft $t[199]$} &
+\parbox[t]{1.5 cm}{\raggedleft $z = t[\infty]$} \\
+
+\midrule
+1\% & 2.405 & 2.365 & 2.345 & 2.326 \\
+5\% & 1.677 & 1.660 & 1.653 & 1.645 \\
+10\% & 1.299 & 1.290 & 1.286 & 1.282 \\
+
+\bottomrule
+
+\end{tabular*}
+
+\caption{Comparison of $t$-values at $n = 50, 100$, and $200$ with the $z$-value from the normal distribution}
+\label{tab:vergPoissNorm}
+\end{table}
+
+\subsection{Summary approximations} % (fold)
+\label{sub:recap_approximations}
+Figure \ref{fig:BenaderingenMetVoorwaarden} summarizes all previously discussed approximations and their conditions.
+
+\begin{figure} 
+  \centering
+  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
+    % Place nodes
+  \node[whiteblock] (hype) {hyper\-geometric};
+  \node[whiteblock, below= 1 cm of hype] (bino) {binomial};
+  \node[whiteblock, below= 1 cm of bino] (pois) {Poisson};
+  \node[whiteblock, right= 4 cm of bino] (stud) {Student's $t$};
+  \node[whiteblock, right= 4 cm of pois] (norm) {normal};
+  
+    % Draw edges
+  \path [line] (hype) -- node {$\frac{n}{N} < 0,10$} (bino);
+  \path [line] (bino) -- node [shift={(-1.61,0)}]{$\pi < 0.10, n \geq 20$} (pois);
+  \path [line] (stud) -- node {$n \geq 200$} (norm);  
+\end{tikzpicture}
+\caption{Approximations and their conditions}
+\label{fig:BenaderingenMetVoorwaarden}
+%\setfloatalignment{b}
+\end{figure}
+There is no longer a use for the approximation of the binomial or Poisson distributions with the normal distribution.
+
+
+% subsection recap_approximations (end)
+
+% section approximations (end)
+
+
+% chapter probability_distributions (end)

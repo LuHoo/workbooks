@@ -1,0 +1,565 @@
+\chapter{Estimating the population mean and proportion}
+\label{cha:estimation}
+
+\begin{quote}
+`I do not mind lying but I hate inaccuracy.'\\
+Samuel Butler (English novelist, 1835-1902)
+\end{quote}
+
+
+The most important objective of estimation is to obtain a numerical value for the total population or the finite-population of items of a particular kind in the population. We estimate the values of the population parameters by computing the corresponding characteristics of a sample. Therefore, it is necessary that we have a sampling frame for the population. 
+
+Since we cannot expect that the values calculated from a sample are exactly equal to the population value, we develop interval estimates\index{interval!estimate}, either two-sided\index{confidence interval!two-sided}\index{interval!confidence!two-sided} or one-sided\index{confidence interval!one-sided}\index{interval!confidence!one-sided}. The key elements are the confidence\index{confidence} that the interval contains the population value and precision\index{precision} of the estimate at the desired level of confidence. We also examine the effect of finite populations, which is important when the sample is large compared to the number of items in the population. Confidence and precision are increased using larger samples. To achieve the target precision at a given confidence level, we can estimate the minimum required sample size. The precision achieved, however, is also dependent on the actual sample findings, which may not be consistent with our expectations. In these cases, we can calculate the number of additional sample\index{additional sample}\index{sample!additional} items.
+
+We distinguish between the population mean and population proportion. This distinction is necessary because quantitative characteristics are numeric, whereas qualitative characteristics may not. 
+
+Finally, we investigate the validity of the assumption that the sample mean is normally distributed. Strategies to discover when the normality assumption is doubtful are presented in Chapter \ref{cha:stratified_sampling}.
+
+\newpage
+
+\section*{Learning objectives}
+After studying this chapter, you will be able to:
+
+\begin{compactitem}
+
+\item define\marginnote{remember} point estimation and interval estimation for population parameters.
+\item identify the difference between population mean, population total, and population proportion.
+\item recall the purpose of the finite population correction factor.
+
+\item explain\marginnote{understand} the relationship between sample size, confidence level, and precision in estimation.
+\item describe the importance of distinguishing between qualitative and quantitative characteristics in estimation.
+\item explain the assumptions underlying the normality of the sample mean and recognize when these assumptions may be invalid.
+
+\item calculate\marginnote{apply} point estimates for the population mean, population total, and population proportion using sample data.
+\item construct two-sided and one-sided confidence intervals for the population mean, population total, and population proportion.
+
+\item assess\marginnote{analyze} the effect of the finite population correction factor on interval estimates.
+\item evaluate the adequacy of sample findings in achieving desired precision and determine the need for additional sampling.
+
+\item judge\marginnote{evaluate} the precision of interval estimates and their consistency with recorded population characteristics.
+\item critique the validity of the normality assumption in specific sampling scenarios.
+
+\item design\marginnote{create} a sampling plan that ensures target precision at a given confidence level.
+\item develop strategies to handle cases where the normality assumption for the sample mean does not hold.
+
+\end{compactitem}
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=0cm, innerleftmargin=0cm]
+\section*{Case: Salaries}
+\begin{fullwidth}
+\begin{multicols}{2}
+Winesburg (OH) employs 2,222 civil servants. A full list of employee IDs is available. To perform a substantive analysis of the monthly personnel expenses, you want to make a substantive test of the charge for one month and then perform a trend analysis over all 12 months. In addition, you want to know if Winesburg prefers hiring men over women, and therefore, you want an estimate of the proportion of men and women.
+
+To do this, you obtain a random sample of 50 employees employed in January 20XX and determine their gross salaries and genders. The sample results have been partially reproduced in Table \ref{tab:sample50}. The total gross pay in the sample is 150,708, and the number of women in the sample is 31. 
+
+\end{multicols}
+\section*{Objective}
+Estimate, with 95\% confidence, the total monthly payroll for January 20XX, and the proportions of men and women employed by the town.\\
+\end{fullwidth}
+\end{mdframed}
+
+\begin{table}[htbp]
+
+\begin{tabular*}{11.2 cm}{lrrrrr}
+
+\toprule
+
+\parbox[t]{1.6 cm}{Item number} &
+\parbox[t]{1.2 cm}{\raggedleft Grade} &
+\parbox[t]{1.2 cm}{\raggedleft Step} &
+\parbox[t]{1.2 cm}{\raggedleft Gross} &
+\parbox[t]{1.2 cm}{\raggedleft ID} &
+\parbox[t]{1.2 cm}{\raggedleft Gender} \\
+
+\midrule
+
+1602  &    6  &   1 &  1,612 & 910046  &  0 \\
+1946  &   13  &   8 &  4,818 & 536825  &  1 \\
+1690  &    4  &   0 &  1,399 & 468652  &  0 \\
+1967  &   10  &   4 &  2,845 & 890951  &  0 \\
+1013  &    8  &   6 &  2,486 & 688734  &  0 \\
+369   &   15  &   7 &  5,585 & 798493 &   0 \\
+\dots & \dots & \dots & \dots & \dots & \dots \\
+
+\midrule
+
+Totals & & & 150,708 & & 31 \\
+
+\bottomrule
+
+\end{tabular*}
+
+\caption{Sample of 50 employees (top 6 records). The variable Gender is coded with 1 = female, 0 = male.}
+\label{tab:sample50}
+% \setfloatalignment{b}
+\end{table}
+
+\section{Point estimation of the mean} % (fold)
+\label{sec:point_estimation}
+\index{point estimate|(}\index{estimate!point|(}
+An important condition for the validity of the estimates is that we obtain a random sample from the complete sampling frame. In \emph{Case: Salaries} we assume that the list of employees is complete and accurate. We have to be confident that there are 2,222 employee IDs and that each ID reflects an employee who is currently employed.
+
+The monthly gross salaries of employees are quantitative and expressed as numeric values. To estimate the average monthly gross salary in the population, we compute a corresponding characteristic in the sample, referred to as the \emph{sample statistic}\index{sample statistic}. The sample statistic\marginnote{sample statistic} for population mean $\mu$ is the sample mean $\bar{y}$, as introduced in Equation \ref{eq:sample_mean}:
+
+\begin{equation*}
+  \bar{y} = \frac{\sum y_i}{n} 
+\end{equation*}
+
+The result for our sample is 150,708 / 50 = 3,014.16.
+
+\bigskip
+
+This estimate can easily be expanded to obtain an estimate of the total monthly payroll by multiplying the sample mean by the total number of employees in the population:
+
+\begin{equation}
+  \hat{Y} = N\frac{\sum y_i}{n} 
+  \label{eq:estimate_total}
+\end{equation} \marginnote[-.7 cm]{Estimate of total}
+
+The estimated total gross payroll for January 20XX is therefore
+
+\begin{equation*}
+\hat{Y} = 2,222 \times \frac{150,708}{50} = 6,697,464
+\end{equation*}
+
+\index{point estimate|)}\index{estimate!point|)}
+% section point_estimation (end)
+
+\section{Confidence intervals around the mean} % (fold)
+\label{sec:confidence_intervals}
+
+\subsection{Two-sided intervals} % (fold)
+\label{sub:two_sided_intervals}
+
+In the previous section, we obtained an estimate of the mean monthly payroll for the population of 3,014.16. However, it is not reasonable to assume that this estimate value is exactly equal to the population mean, and we would like to know how large the \emph{sampling error}\marginnote{sampling error}\index{sampling error} is, the difference between the sample result $\bar{y}$ and the population mean $\mu$:
+
+\begin{equation}
+  \textrm{Sampling error} = | \bar{y} - \mu |.
+\end{equation}
+
+This is of little practical value because we do not know the actual value of $\mu$. Instead, we use knowledge of the sampling distribution of $\bar{y}$ to make probability statements about the sampling error. Let us assume that 3,014.16 is the true value of the population mean $\mu$. We repeatedly obtain different samples of the same size from the population and draw a histogram of the resulting $\bar{y}$. This is illustrated in Figure \ref{fig:H3best_estimate}.
+
+\begin{marginfigure}[-10\baselineskip]
+  \includegraphics[width=\linewidth]{H3best_estimate.png}
+  \caption{Sampling distribution of mean monthly payroll, $\mu = 3014.16$}
+  \label{fig:H3best_estimate}
+\end{marginfigure}
+
+As shown in this figure, the distribution of $\bar{y}$ exhibits a peak at $\mu$. This is a good reason to refer to the sample mean as the \emph{best estimate}\marginnote{best estimate}\index{best estimate}\index{estimate!best} of the population mean. 
+
+\begin{marginfigure}
+  \includegraphics[width=\linewidth]{H3low_estimate.png}
+  \caption{Sampling distribution of mean monthly payroll, $\mu = 3200.00$}
+  \label{fig:H3low_estimate}
+\end{marginfigure}
+
+If the true population mean is 3,200.00, as in Figure \ref{fig:H3low_estimate}, the sample mean found to be 3,014.16 (marked with an `x') is still close to the true value. This is not as good an estimate as we had before, but it is still quite close. It is still within the bell-shaped area, which indicates the likely values of the sample mean, given the population mean. 
+
+As the population mean increases or decreases, the sample mean ends in one of the tails of the distribution. In this manner, we can determine the $\mu$ lower and upper bounds that define the area of reasonable estimates. This range of values is referred to as the \emph{confidence interval}\marginnote{confidence interval}\index{confidence interval}\index{interval!confidence}. This is illustrated in Figure \ref{fig:H3two_borderline_sampling_distributions}. 
+We see two borderline sampling distributions, one for samples from a population with a low population mean ($\mu$ = 2,577.19) and one for samples from a population with a high population mean ($\mu$ = 3,451.13).\marginnote{We explain later why these two particular values were chosen} In both cases, the sample mean found of 3,014.16 is just acceptable. If the true population mean is less than 2,577.19, the observed sample mean ends up in the right tail and is distrusted as being exceptionally high, whereas if the true population mean is greater than 3,451.13, the sample mean is in the left tail, in which case it is distrusted as being unexpectedly low. 
+\begin{figure*}
+  \includegraphics[width=\linewidth]{H3two_borderline_sampling_distributions.png}
+  \caption{Two sampling distributions for which sample mean of 3,014.16 is just acceptable}
+  \label{fig:H3two_borderline_sampling_distributions}
+\end{figure*}
+For all values of the population mean between 2,577.19 and 3,451.13, the sample mean is consistent with the assumption that the sample is obtained from a population with this mean. Hence, we infer that the population mean is between 2,577.19 and 3,451.13.
+
+\bigskip
+We also need to discuss what is acceptable and what is not acceptable. This is related to the \emph{confidence}\marginnote{confidence}\index{confidence} with which we make our statement. When the confidence of our statement is higher, we accept values farther away from the true mean, which leads to wider intervals. If we can live with lower confidence, the confidence interval\marginnote{confidence interval}\index{confidence interval}\index{interval!confidence} is narrower.
+
+\bigskip
+
+Under certain conditions (we validate these conditions in Chapter \ref{cha:stratified_sampling}), we know that the sample mean has a $t$ distribution with $n-1$ degrees of freedom. To calculate the lower and upper bounds of the confidence interval, we need to estimate the variance of the sample mean $s^2_{\bar{y}}$, as follows:\nomenclature{$s$}{standard deviation}
+
+\begin{equation}
+s^2_{\bar{y}} = \frac{s^2}{n}
+\end{equation} 
+The resulting standard deviation of the sample mean, that is, the square root of the sample variance, is given by
+
+\begin{equation}
+s_{\bar{y}} = \frac{s}{\sqrt{n}}
+\end{equation} 
+It is usually referred to as the \emph{standard error}\marginnote{standard error}\index{standard error}.
+
+In this equation, $s^2$ is the estimated population \emph{variance}\index{variance} from Equation \ref{eq:sample_variance}: 
+
+\begin{equation*}
+s^2 = \frac{\sum (y_i - \bar{y})^2}{n-1}
+\label{eq:est_pop_stdev}
+\end{equation*} 
+where $n$ denotes the sample size. 
+
+\begin{marginfigure}
+  \includegraphics[width=\linewidth]{twosided.png}
+  \caption{Two-sided precision interval}
+  \label{fig:twosided}
+\end{marginfigure}
+
+As we use a two-sided interval, $\alpha$ is split into two equal parts, one for each tail, as shown in Figure \ref{fig:twosided}.
+With these building blocks, we can determine the lower and upper bounds as follows:
+
+\begin{equation}
+\bar{y} \pm t_{\alpha/2} \frac{s}{\sqrt{n}}
+\label{eq:two-sided}
+\end{equation}
+
+The quantity $t_{\alpha/2} {s}/{\sqrt{n}}$\nomenclature{$t_{\alpha/2}$}{two-tailed $t$ value} is referred to as \emph{precision achieved}\index{precision!achieved}\marginnote{precision achieved}. The interval around the mean value of an element obtained from Equation \ref{eq:two-sided} can be extended to an interval around the estimated total value of the population by multiplying by the number of elements $N$ in the population:\marginnote{See Section \ref{sec:validity_of_the_normality_assumption}, this applies to situations when $n \geq 100$.
+}
+
+\begin{equation}
+N \bar{y} \pm N t_{\alpha/2} \frac{s}{\sqrt{n}}
+\label{eq:two-sided_pop}
+\end{equation}
+
+From these formulae we can derive that precision achieved is smaller and therefore leads to a more accurate estimate if
+
+\begin{compactitem}
+\item the confidence decreases, decreasing the $t$ value;
+\item the sample size $n$ increases; or
+\item we had sampled from a population with smaller standard deviation, resulting in a lower estimate of $s$.
+\end{compactitem}
+
+To achieve a more accurate estimate, decreasing confidence is often undesirable and only goes so far, and the standard deviation is dependent on the quality of the population and is beyond our influence. This leaves us with increasing the sample size to achieve a higher accuracy.
+
+\bigskip
+We use the $t$ distribution with an $\alpha$ value of 5\% to obtain a confidence level of 95\%, and we use $n - 1 = 49$ degrees of freedom. 
+First, we estimate the variance in the population from the variance of the sample.
+
+\begin{equation*}
+s^2 = \frac{ (1,612 - 3,014.16)^2 + (4,818 - 3,014.16)^2 + \ldots}{50-1} = 2,364,064
+\end{equation*} 
+
+The calculation of the standard error is then
+
+\begin{equation}
+s_{\bar{y}} = \sqrt{\frac{2,364,064}{50}} = \frac{1,537.55}{\sqrt{50}}
+\end{equation} 
+
+We multiply the standard error by the relevant $t$ values. 
+
+\begin{equation*}
+3,014.16 \pm 2.010 \times \frac{1,537.55}{\sqrt{50}} = 3,014.16 \pm 436.97
+\end{equation*}
+
+
+Therefore, we can be 95\% confident that the interval [2,577.19, 3,451.13] contains the true population mean. Expanding this over the number of employees in the population of $N =$ 2,222, we obtain a 95\% two-sided confidence interval for the total monthly salary cost of [5,726,522,\hspace{0.5em} 7,668,405].
+
+\bigskip
+
+If we desire a statement with a different confidence level, the value of $t$ must be changed. For example, at 99\% confidence the corresponding $t$ value is approximately 2.680, leading to bounds of 
+
+\begin{equation*}
+3,014.16 \pm 2.680 \times \frac{1,537.55}{\sqrt{50}} = 3,014.16 \pm 582.74
+\end{equation*} 
+and the interval estimate is [2,431.42,\hspace{0.5em} 3,596.90]. This creates a 99\% two-sided confidence interval for the total monthly salary cost [5,402,625, 7,992,302]. Note that the 99\% confdence interval is wider than the 95\% confidence interval.
+
+% subsection two_sided_intervals (end)
+
+\subsection{One-sided intervals} % (fold)
+\label{sub:one_sided_intervals}
+
+In the previous section, we found a 95\% confidence interval for the mean monthly payroll of [2,577.19,\hspace{0.5em} 3,451.13]. We can make similar statements about the minimum or maximum mean monthly payroll using a one-sided interval rather than a two-sided interval. For the minimum mean monthly payroll, we use
+
+\begin{equation}
+  \bar{y} - t_{\alpha} \frac{s}{\sqrt{n}}
+\end{equation}\nomenclature{$t_{\alpha}$}{one-tailed $t$ value}
+and for the maximum 
+
+\begin{equation}
+  \bar{y} + t_{\alpha} \frac{s}{\sqrt{n}}
+\end{equation}
+
+Note that we do not split $\alpha$, but apply it to a single tail. Applying this to the results from the sample, we get for the maximum
+
+\begin{equation*}
+  3,014.16 + 1.677 \times \frac{1,537.55}{\sqrt{50}} = 3,378.71
+\end{equation*}
+and the interpretation is that we can be 95\% confident that the true mean monthly payroll does not exceed 3,378.71, and the total payroll charge for the month does not exceed 7,507,502.
+
+% subsection one_sided_intervals (end)
+
+\subsection{The effect of finiteness} % (fold)
+\label{sub:the_effect_of_finiteness}
+
+So far, we have worked with a sample from a large population and have ignored the fact that the population is finite. To consider this effect, we require the \emph{finite-population correction factor}\marginnote{finite-population correction factor}\index{finite-population correction factor} $\sqrt{(N - n)/(N-1)}$. Lower and upper bounds are then calculated by adding the finite-population correction factor to Equation \ref{eq:two-sided}
+
+\begin{equation}
+  \bar{y} \pm t_{\alpha/2} \frac{s}{\sqrt{n}}\sqrt{\frac{N-n}{N-1}}
+  \label{eq:two-sided_finite}
+\end{equation}
+
+\begin{marginfigure}
+  \includegraphics[width=1\linewidth]{fpcf.png}
+  \caption{Effect of the finite-population correction factor as function of $n/N$.}
+  \label{fig:fpcf}
+\end{marginfigure}
+
+Figure \ref{fig:fpcf} shows the effects of the finite-population correction factor. The $x$-axis represents the sample size $n$ as a fraction of the population size $N$. The $y$-axis shows the value of $\sqrt{(N - n)/(N - 1)}$. If $n / N$ is  very small, the correction is close to one, which means that there is little effect. As $n / N$ increases, the correction factor decreases and therefore becomes prominent. As $n$ approaches $N$, the correction factor decreases to zero. When we sampled the entire population, the precision achieved is zero, and we could exactly calculate the total and average population.
+
+\bigskip
+Using the values from \emph{Case: Salaries}, the two-sided 95\% confidence interval\index{confidence interval}\index{interval!confidence} is now calculated as 
+
+\begin{equation*}
+  3,014.16 \pm 2.010 \times \frac{1,537.55}{\sqrt{50}}\sqrt{\frac{2,222 - 50}{2,221}} = 3,014.16 \pm 432.21
+\end{equation*}
+
+By considering the finite-population correction factor, the precision achieved\index{precision!achieved} is reduced from 436.97 to 432.21. 
+
+It is always permissible to use the finite-population correction factor regardless of the value of $n / N$, but if the sample is less than 10\% of the population, then the correction is close to 1 (no correction). In our case, the sample proportion was 50 / 2,222 $\approx$ 2.2\%, and the correction $\sqrt((2,222 - 50)/(2,221))$ $\approx$ 0.989.
+
+% subsection the_effect_of_finiteness (end)
+
+% section confidence_intervals (end)
+
+\section{Minimum sample size to estimate the mean} % (fold)
+\label{sec:estimating_the_sample_size}
+\index{additional sample|(}\index{sample!additional|(}
+When we presented the results of the sample, a sample size of $n =$ 50 was  determined. The resulting 95\% confidence intervals for the mean monthly payroll of [2,577.19, 3,451.13], and for the total monthly salary cost of [5,726,522, 7,668,405], may be too wide. In this section, we focus on determining the sample size $n$ that is sufficient to generate a confidence interval (at a given confidence level) with a certain target precision\index{precision!target}\index{target precision}. 
+
+\subsection{Infinite populations} % (fold)
+\label{sub:infinite_populations}
+
+If we ignore the fact that we are sampling from a finite population, the calculation of the required sample size is straightforward. Remember from Equation \ref{eq:two-sided_pop} that the confidence interval is calculated as 
+
+\begin{equation*}
+  N \bar{y} \pm N t_{\alpha/2} \frac{s}{\sqrt{n}}
+\end{equation*}
+
+Suppose we are not satisfied with the precision achieved of 970,941, which leads to a 95\% two-sided confidence interval of [5,726,522, 7,668,405]. Instead, let us assume that we would like the distance between each of the bounds and the point estimate to be less than the \emph{target precision}\index{precision!target}\marginnote{target precision} $E$\nomenclature{$E$}{target precision} of 600,000. 
+
+\begin{equation*}
+  N t_{\alpha/2} \frac{s}{\sqrt{n}} \leq E
+\end{equation*}
+
+Solving for $n$ gives the minimum required sample size
+
+\begin{equation}
+\label{eq:minimum_sample_size}
+  n \geq \frac{N^2 t_{\alpha/2}^2 s^2}{E^2}
+\end{equation}
+
+For the sample of 50 employees, the results are
+
+\begin{equation*}
+  n = \frac{2,222^2 \times 2.010^2 \times 2,364,064}{600,000^2} = 130,93.
+\end{equation*}
+
+The sample size must be at least 131 to achieve a precision\index{precision} of 600,000 with 95\% confidence. Given that we already sampled 50 employees, the \emph{additional sample}\index{additional sample}\index{sample!additional}\marginnote{additional sample} must have a size of $n' = 81$.
+
+We need to make a few remarks regarding this result. First, we used the \emph{estimated} variance of the population (2,364,064) calculated for the original sample. This number may increase or decrease as more observations become available. If it moves up, we may still fail to achieve the target precision. In this case, we may need to take another additional sample to satisfy the target precision. This also implies that we cannot use this formula in practice if we do not have a reasonable estimate of the population variance. 
+
+Second, the value of $t$ used in the calculation is associated with 49 degrees of freedom. As more observations become available, the number of degrees of freedom increases and the associated $t$ value decreases. This creates safety in the estimated sample size. Finally, the sample size could be larger than 10\% of the population size, at which point we should consider the finite-population correction factor\index{finite-population correction factor}.
+
+Of these, only an underestimation of the population standard deviation could lead to an underestimation of the required sample size. 
+
+To address these problems, Stein (1945) developed a two-step procedure\marginnote{Note that, in this procedure, Stein uses $s_1$ from the initial sample and $\bar{y}$ based on both the initial and additional samples.} guaranteeing sufficiency of an additional sample. In this procedure the construction of the confidence interval is
+
+\begin{equation}
+  N \bar{y}_{tot} \pm N t_{\alpha/2}[n_1-1] \frac{s_1}{\sqrt{n_{tot}}}
+  \label{eq:stein}
+\end{equation}
+
+Therefore, we draw an additional sample of 81 units. We select a sample of 131 units and use the same random number seed as before to make sure that the units selected in the initial sample are included again.
+The mean of the total sample is 3,332.14, and its standard deviation 1,705.37.\marginnote{See the calculations in Exercise \ref{ex:extending_the_sample}}
+
+Applying Equation \ref{eq:stein} to these results, we obtain 
+\marginnote{Compare this with the result obtained with Equation \ref{eq:two-sided}: $2,222 \times 3,332.14 \pm$ $2,222 \times1.978 \times 1,705.37 / \sqrt{131}$ = 7,404,009 $\pm$ 654,993, which does not satisfy the target precision.}
+
+\begin{equation*}
+  2,222 \times 3,332.14 \pm 2,222 \times 2.010 \times \frac{1,537.55}{\sqrt{131}} = 7,404,009 \pm 600,000
+\end{equation*}
+
+Under Stein's method, the precision achieved is, by definition, equal to the target precision.
+
+% subsection infinite_populations (end)
+
+\subsection{Finite populations} % (fold)
+\label{sub:finite_populations}
+
+We saw in Section \ref{sub:the_effect_of_finiteness} that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = 50$, $N = 2,222$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
+
+The confidence interval incorporating the finite-population correction factor\index{finite-population correction factor} is given by Equation \ref{eq:two-sided_finite}:
+
+\begin{equation*}
+N \bar{y} \pm N t_{\alpha/2} \frac{s}{\sqrt{n}}\sqrt{\frac{N-n}{N-1}}
+\end{equation*}
+
+It follows that each half interval\marginnote{In some cases these half intervals may have different lengths.} around the point estimate should be less than the target precision $E$.
+
+\begin{equation*}
+  N t_{\alpha/2} \frac{s}{\sqrt{n}} \sqrt{\frac{N - n}{N-1}} \leq E
+\end{equation*}
+
+Solving this for $n$ yields
+\begin{equation}
+  n \geq \frac{N}{1 + \gamma}
+\end{equation}
+with
+\begin{equation}
+  \gamma = \frac{E^2 (N-1)}{N^2 t_{\alpha/2}^2 s^2} \approx \frac{E^2}{N t_{\alpha/2}^2 s^2}
+\end{equation}
+The required minimum sample size to satisfy $E \leq 300,000$ is now calculated at
+
+\begin{align*} 
+\gamma &= \frac{300,000^2}{2,222 \times 2.010^2 \times 2,364,064} = 4.243 \\ 
+n &\geq \frac{2,222}{1 + 4.243} = 424.0
+\end{align*}
+
+The total sample size required to obtain an estimate of the mean monthly payroll with a precision of 300,000 at 95\% confidence is 424. This is more than 10\% of the population size; therefore, we were right to use the finite-population correction factor. If we had not anticipated that the required sample size would have been unnecessarily large, not taking the finite-population correction factor into account would have resulted in a sample size of 524.
+
+% subsection finite_populations (end)
+\index{additional sample|)}\index{sample!additional|)}
+% section estimating_the_sample_size (end)
+
+\section{Point estimation of the proportion} % (fold)
+\label{sec:point_estimation_of_the_proportion}
+
+\index{point estimate|(}\index{estimate!point|(}
+
+The sample data presented in Table \ref{tab:sample50} also shows the number of men and women. Men were coded with 0, and women were coded with 1. This is an example of a \emph{nominal variable}\marginnote{nominal variable}\index{nominal variable}\index{variable!nominal}. The numbers indicate only two separate classes. The value of the number does not say anything qualitatively about the class; the only function of the numbers is that they help distinguish classes.
+
+Similar to the average monthly salary, we can estimate the proportion of employed women. The \emph{sample proportion}\marginnote{sample proportion}\index{sample proportion} $p$ is the sample statistic for population proportion $\pi$:
+
+\begin{equation}
+  p = \frac{k}{n}
+  \label{eq:sample_proportion}
+\end{equation}
+where $k$ denotes the number of women in the sample. Note that when conveniently coding a nominal variable that consists of only two possible values, we can simply sum the observations to obtain a count of the class that is coded with 1.
+
+In the sample of 50 employees we found 31 women; therefore, the estimated proportion is $31 / 50 = 0.62$.
+
+Again, we can turn this estimate into an estimate of the total number of women employed by expanding the total number of employees.
+
+\begin{equation}
+  \hat{K} = N \frac{k}{n}
+  \label{eq:point_estimate_number}
+\end{equation}
+
+For our sample, we estimate the number of women employed at 2,222 $\times$ 31 / 50 = 1,377.6. Note that this estimate is not an integer, and we do not need to round it.
+
+\index{point estimate|)}\index{estimate!point|)}
+
+% section point_estimation_of_the_proportion (end)
+
+\section{Confidence intervals around the proportion} % (fold)
+\label{sec:confidence_intervals_around_the_proportion}
+
+We now turn to the calculation of the confidence interval\index{confidence interval}\index{interval!confidence} around the proportion of women in the sample. Recall that we find $k = 31$ women in the sample with $n = 50$. 
+
+To calculate a confidence interval\index{confidence interval!proportion}\index{interval!confidence!proportion} for a proportion in a finite population, we should employ the hypergeometric distribution.\marginnote{Only if $n / N < 0.1$ can we use the binomial distribution as an approximation.} Unfortunately, there is no simple formula to calculate the bounds; therefore numerical methods must be used to determine the correct values.
+
+The \emph{hypergeometric lower bound}\index{hypergeometric lower bound}\index{lower bound!hypergeometric}\marginnote{hypergeometric lower bound} is defined as the smallest value of $M$ such that the probability of finding this sample result or worse exceeds $\alpha/2$:\nomenclature{$M_L(k)$}{lower bound on the number of `successes' in the population $M$, based on the sample result $k$}
+
+\begin{equation}
+  M_L(k) = min{\sum_{i=k}^n hyp(N, M, n, i) > \alpha /2}
+\end{equation}
+
+The \emph{hypergeometric upper bound}\index{hypergeometric upper bound}\index{upper bound!hypergeometric}\marginnote{hypergeometric upper bound} is defined as the largest value of $M$ such that the probability of finding this sample result or better exceeds $\alpha/2$:\nomenclature{$M_U(k)$}{upper bound on the number of `successes' in the population $M$, based on the sample result $k$}
+
+\begin{equation}
+  M_U(k) = max{\sum_{i=0}^k hyp(N, M, n, i) > \alpha /2}
+  \label{eq:upper_bound}
+\end{equation}
+
+The \emph{binomial lower bound}\index{binomial lower bound}\index{lower bound!binomial}\marginnote{binomial lower bound} of the confidence interval is given by
+\marginnote{Equations \ref{eq:lower_bound_binomial} and \ref{eq:upper_bound_binomial} approximate the correct hypergeometric bounds with a binomial distribution.}
+\begin{equation}
+  p_l(k) = \frac{k}{k + (n - k + 1) F_{\alpha/2}}
+\label{eq:lower_bound_binomial}
+\end{equation}
+
+with the number of degrees of freedom of $F$ given by $\nu_1 = 2n - 2k + 2$ and $\nu_2 = 2k$.\nomenclature{$p_l$}{lower bound on the proportion of successes in the population $p$, based on the sample result $k$}
+
+The \emph{binomial upper bound}\index{binomial upper bound}\index{upper bound!binomial}\marginnote{binomial upper bound} is given by
+
+\begin{equation}
+  p_u(k) = \frac{k + 1}{k + 1 + (n - k)/F_{\alpha/2}}
+\label{eq:upper_bound_binomial}
+\end{equation}
+with the number of degrees of freedom of $F$ given by $\nu_1 = 2k + 2$ and $\nu_2 = 2n - 2k$.\nomenclature{$p_u$}{upper bound on the proportion of successes in the population $p$, based on the sample result $k$}
+
+\bigskip
+Using the results from the sample, we can calculate the lower bound as
+
+\begin{equation*}
+  p_l = \frac{31}{31 + (50 - 31 + 1) \times 1.735} = 0.472
+\end{equation*}
+and the upper bound as
+\begin{equation*}
+  p_u = \frac{31 + 1}{31 + 1 + (50 - 31)/1.815} = 0.754
+\end{equation*}
+
+The interval estimate is [47.2\%, 75.4\%].\marginnote{Throughout this book we round lower bounds up and upper bounds down.\index{rounding}}
+
+To obtain a one-sided confidence interval for a proportion, we can use Equations \ref{eq:lower_bound_binomial} or \ref{eq:upper_bound_binomial}, again using $\alpha$ rather than $\alpha/2$.
+
+% section confidence_intervals_around_the_proportion (end)
+
+\section{Minimum sample size to estimate a proportion} % (fold)
+\label{sec:minimum_sample_size_to_estimate_a_proportion}
+
+We now estimate the required sample size for a proportion. We found the lower and upper bounds for the estimated proportion in Equations \ref{eq:lower_bound_binomial} and \ref{eq:upper_bound_binomial}. From these results, we derive the minimum $n$ that satisfies $p_u - p \leq E$ and $p - p_l \leq E$. However, this is not straightforward, because the inputs to the calculation of the bounds include the unknown $\pi$ and $n$ that we try to solve.
+
+Therefore, we use the normal approximation\sidenote{We approve of this approximation if $n \geq 20$, $n\pi \geq 5$ and $n(1-\pi) \geq 5$} for the binomial distribution, using the following equation for a confidence interval around the estimated population proportion $p$:\marginnote{Even though Equations \ref{eq:lower_bound_binomial} and \ref{eq:upper_bound_binomial} are fairly easy to implement, the approximation using the normal distribution is persistent in practice. This is fine for values of $p$ close to 0.5, but for values of $p$ close to zero or close to one an approximation with a symmetrical interval for what is truly an asymmetrical interval may not yield acceptable results.}
+
+\begin{equation*}
+  p \pm z_{\alpha/2} \sqrt{p(1-p)/n}
+\end{equation*}
+
+$E$ is the target precision\index{target precision}\index{precision!target}, we get
+
+\begin{equation*}
+  z_{\alpha/2} \sqrt{p(1-p)/n} \leq E
+\end{equation*}
+which we solve for $n$ to get
+
+\begin{equation}
+  n \geq \frac{(z_{\alpha/2})^2 p(1-p)}{E^2}
+  \label{eq:sampsize_proportion}
+\end{equation}
+
+We obtained $p = 0.62$ and the interval estimate was [47.2\%, 75.3\%]. If we set $E= 10\% =.1$, the minimum required sample size $n$ is
+
+\begin{equation*}
+  n \geq \frac{1.96^2 \times 0.62 \times 0.38}{0.1^2}  = 90.5
+\end{equation*}
+and it follows that the sample must be extended to $n$ = 91. We now double-check if the sample size is sufficient, assuming we find the same proportion of women in the additional sample of 41 items (overall $k'$ = 0.62 $\times$ 91 = 56.4, rounded to 57). This gives us
+
+\begin{equation*}
+  p_l = \frac{57}{57 + (91 - 57 + 1) \times 1.511} = 0.519
+\end{equation*}
+and the upper bound as
+\begin{equation*}
+  p_u = \frac{57 + 1}{57 + 1 + (91 - 57)/1.550} = 0.726
+\end{equation*}
+
+The interval estimate is reduced to [51.9\%, 72.6\%]. 
+\begin{figure}
+  \includegraphics[width=\linewidth]{old_and_new_intervals_fraction.png}
+  \caption{Confidence intervals of the finite-population women for the initial sample (above) and extended sample (below)}
+  \label{fig:old_and_new_intervals_finite-population}
+\end{figure}
+
+We notice that  $p-p_l$ is slightly above the target $E = 0.1$; this is due to the fact that the normal approximation is \emph{anti-conservative}\index{anti-conservative}\sidenote{anti-conservative means that the confidence intervals are narrower than required to contain the true population parameter in at least $(1 - \alpha) \times$ 100\% of the cases} and assumes symmetry\sidenote{Two-sided intervals constructed using the binomial or hypergeometric distributions generally have $p_u - p \neq p - p_l$}. To accomodate this, we decide to use a slightly larger sample size. It should be noted that the confidence intervals are tighter when $p$ is closer to 0 or 1, and less tight when $p$ is closer to 0.5. A lot depends on the actual finite-population found in an additional sample.
+
+% section minimum_sample_size_to_estimate_a_finite-population (end)
+
+\section{Validity of the normality assumption} % (fold)
+\label{sec:validity_of_the_normality_assumption}
+
+Thus far, we have assumed that the sample mean was normally distributed. This is generally the case if
+\begin{compactitem}
+\item the sample is drawn from a population that has a normal distribution; or
+\item the sample is sufficiently large  ($n \geq 100$).
+\end{compactitem}
+
+When these conditions are not met, the results may not be reliable. The sample size may be increased to at least 100 items, auxiliary variables may be used, or the population may be stratified. We explain these strategies in Chapter \ref{cha:stratified_sampling}.
+
+% section validity_of_the_normality_assumption (end)
+
+\section{Workshop R} % (fold)
+\label{sec:workshop03}
+
+\input{workshop03_R}
+
+% section workshop_03 (end)

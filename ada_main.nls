@@ -1,0 +1,15 @@
+
+\begin{thenomenclature} 
+\nomgroup{A}
+  \item [{$\pi$}]\begingroup inclusion probability\nomeqref {1.2}\nompageref{16}
+  \item [{$I$}]\begingroup sampling interval\nomeqref {1.1}\nompageref{14}
+  \item [{$i$}]\begingroup index\nomeqref {1.2}\nompageref{16}
+  \item [{$N$}]\begingroup population size\nomeqref {1.1}\nompageref{14}
+  \item [{$n$}]\begingroup sample size\nomeqref {1.1}\nompageref{14}
+  \item [{$RN$}]\begingroup random number between 0 and 1\nomeqref {1.4}\nompageref{19}
+  \item [{$sn$}]\begingroup sieve number\nomeqref {1.4}\nompageref{20}
+  \item [{$u$}]\begingroup sieve opening\nomeqref {1.4}\nompageref{19}
+  \item [{$X$}]\begingroup total book value of the population\nomeqref {1.3}\nompageref{16}
+  \item [{$x$}]\begingroup book value\nomeqref {1.2}\nompageref{16}
+
+\end{thenomenclature}

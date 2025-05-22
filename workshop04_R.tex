@@ -1,0 +1,399 @@
+\begin{exercise}
+\label{ex:inventoryData}
+
+\textbf{The \ttblue{inventoryData} file}
+
+In this Chapter we will work with the \ttblue{inventoryData}\marginnote{Try the command \ttblue{?inventoryData}. It produces detail information of the file and the variables contained therein.} data file, that serves as the sample frame for the \emph{Case: Valuation of inventories}. The data file is included with the \ttblue{FSaudit} package. The data file indicates for each of the 3,500 elements in the inventories population its \ttblue{id}, a sequential number from 1 to 3,500, the book value $x$ is \ttblue{bv}, and we have added an audit value $y =$ \ttblue{av} to enable running simulations on the file to compare different sampling strategies.
+
+Details of the data file can be obtained using base \ttblue{R} functionality.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{library(FSaudit)}
+\textcolor{KPMG_blue}{names(inventoryData)}
+\textcolor{KPMG_light_blue}{[1] "item"   "bv"     "av"     "av_mus" "av_reg" "av_dif" "av_rat"}
+\textcolor{KPMG_blue}{(N <- nrow(inventoryData))}
+\textcolor{KPMG_light_blue}{[1] 3500}
+\textcolor{KPMG_blue}{sum(inventoryData$bv)}
+\textcolor{KPMG_light_blue}{[1] 7360816}
+\textcolor{KPMG_blue}{head(inventoryData[1:3])}
+\textcolor{KPMG_light_blue}{  item      bv      av}
+\textcolor{KPMG_light_blue}{1    1  120.60  109.92}
+\textcolor{KPMG_light_blue}{2    2 2600.10 2219.24}
+\textcolor{KPMG_light_blue}{3    3 4899.90 6398.96}
+\textcolor{KPMG_light_blue}{4    4 1660.49 1676.29}
+\textcolor{KPMG_light_blue}{5    5 5398.28 4511.42}
+\textcolor{KPMG_light_blue}{6    6 1063.70  953.08}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:working_with_objects}
+
+\textbf{Working with the CVS object}
+
+We first create a CVS object. This is a container that gathers all the data relevant to a particular sampling application. The \ttblue{FSaudit} package recognizes three such objects. We work with the CVS object \ttblue{cvs\_obj} in this chapter, and with the attribute \ttblue{att\_obj} and MUS \ttblue{mus\_obj} objects in Chapter \ref{cha:hypothesis_testing}.
+
+We create the CVS object \ttblue{mySample} by running the \ttblue{cvs\_obj} function, and at the same time fill it with information on the required sample size \ttblue{n}, the relevant book values \ttblue{bv}, identifiyers \ttblue{id}, and the random seed number \ttblue{seed}.
+
+\begin{samepage}
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample <- cvs_obj(n = 400, }
+\textcolor{KPMG_blue}{                    bv = inventoryData$bv,}
+\textcolor{KPMG_blue}{                    id = inventoryData$item,}
+\textcolor{KPMG_blue}{                    seed = 12345)}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{cvs\_obj}}
+\end{samepage}
+
+
+The CVS object has 19 different attributes attached to it, that will be filled as we proceed from sample planning, through stratification and selection to evaluation. The following is a list of all attributes.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{names(mySample)}
+\textcolor{KPMG_light_blue}{ [1] "id"          "bv"          "popn"        "popBv"       "n"           "strata"}
+\textcolor{KPMG_light_blue}{ [7] "classes"     "stratMeth"   "classSumm"   "stratSumm"   "strat"       "cl"}
+\textcolor{KPMG_light_blue}{[13] "desPrec"     "sdAv"        "alloc"       "seed"        "sample"      "av"}
+\textcolor{KPMG_light_blue}{[19] "results"     "evalResults"}
+\end{Verbatim}
+Some of these attributes are empty for now.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$sample}
+\textcolor{KPMG_light_blue}{NULL}
+\end{Verbatim}
+
+
+We sample 400 units from the \ttblue{inventoryData} dataset with the \ttblue{select()} function. This effectively fills the \ttblue{sample} attribute in \ttblue{mySample}.
+\marginnote{In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of \ttblue{R} we set it to \ttblue{Rounding}, which was the default prior to version 3.6.}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{RNGkind(sample.kind = "Rounding")}
+\textcolor{red}{Warning message:}
+\textcolor{red}{In RNGkind(sample.kind = "Rounding") : non-uniform 'Rounding' }
+\textcolor{red}{sampler used}
+\textcolor{KPMG_blue}{mySample <-  select(mySample)}
+\textcolor{KPMG_blue}{head(mySample$sample)}
+\textcolor{KPMG_light_blue}{     item      bv strat}
+\textcolor{KPMG_light_blue}{2524 2524  728.40     1}
+\textcolor{KPMG_light_blue}{3065 3065 2199.37     1}
+\textcolor{KPMG_light_blue}{2662 2662 1452.48     1}
+\textcolor{KPMG_light_blue}{3099 3099   68.61     1}
+\textcolor{KPMG_light_blue}{1596 1596 5292.84     1}
+\textcolor{KPMG_light_blue}{582   582  910.03     1}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{select}}
+
+We audit the sampling units selected, and submit the audit values to the CVS object for the sample to be evaluated.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{audit_values <- }
+\textcolor{KPMG_blue}{  inventoryData[match(mySample$sample$item, inventoryData$item), "av"]}
+\textcolor{KPMG_blue}{mySample <- evaluate(mySample, av = audit_values)}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{evaluate}}
+
+The evaluation results are stored in the \ttblue{evalResults} attribute of the CVS object. This attribute itself is a list of 17 different attributes.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{names(mySample$evalResults)}
+\textcolor{KPMG_light_blue}{ [1] "Estimates"                                   "Mean per unit estimation"                 }  
+\textcolor{KPMG_light_blue}{ [3] "Most likely total audited amount mpu"        "Most likely total error mpu"                }
+\textcolor{KPMG_light_blue}{ [5] "Achieved precision mpu"                      "Difference estimation"                     } 
+\textcolor{KPMG_light_blue}{ [7] "Most likely total audited amount difference" "Most likely total error difference"         }
+\textcolor{KPMG_light_blue}{ [9] "Achieved precision difference"               "Ratio estimation"                           }
+\textcolor{KPMG_light_blue}{[11] "Most likely total audited amount ratio"      "Most likely total error ratio"              }
+\textcolor{KPMG_light_blue}{[13] "Achieved precision ratio"                    "Regression estimation"                     } 
+\textcolor{KPMG_light_blue}{[15] "Most likely total audited amount regression" "Most likely total error regression"         }
+\textcolor{KPMG_light_blue}{[17] "Achieved precision regression"         }
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:mpu_estimator}
+
+\textbf{The Mean-Per-Unit estimator}
+
+In Section \ref{sec:mpu_estimator} we found an estimate of the population value $\hat{Y}_{MPU}$ = 7,561,859, and achieved precision of 684,415. These values are stored in \ttblue{mySample}.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Most likely total audited amount mpu`}
+\textcolor{KPMG_light_blue}{[1] 7561859}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Achieved precision mpu`}
+\textcolor{KPMG_light_blue}{[1] 684415}
+\end{Verbatim}
+
+The prediction interval is stored in:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$Estimates$[4:5, 1]}
+\textcolor{KPMG_light_blue}{[1] 6877444 8246274}
+\end{Verbatim}
+
+In this call, the number in brackets refer to the 4th and 5th row of the \ttblue{Estimates} table. The first column stores the results of the mean-per-unit estimator. Alternatively, we can refer to the label of the relevant column.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$Estimates$mpu[4:5]}
+\textcolor{KPMG_light_blue}{[1] 6877444 8246274}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:regression_estimator}
+
+\textbf{The Regression Estimator}
+
+The results for the regression estimator are stored in a similar way.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Most likely total audited amount regression`}
+\textcolor{KPMG_light_blue}{[1] 7373882}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Achieved precision regression`}
+\textcolor{KPMG_light_blue}{[1] 188122.6}
+\end{Verbatim}
+
+The prediction interval is determined by:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$Estimates$regr[4:5]}
+\textcolor{KPMG_light_blue}{[1] 7185760 7562005}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:difference_estimator}
+
+\textbf{The Difference Estimator}
+
+The results for the difference estimator are as follows.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Most likely total audited amount difference`}
+\textcolor{KPMG_light_blue}{[1] 7369663}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Achieved precision difference`}
+\textcolor{KPMG_light_blue}{[1] 188466.5}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$Estimates$diff[4:5]}
+\textcolor{KPMG_light_blue}{[1] 7181197 7558130}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:ex:ratio_estimator}
+
+\textbf{The Ratio Estimator}
+
+Finally, the results of the ratio estimator.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$`Most likely total audited amount ratio`}
+\textcolor{KPMG_light_blue}{[1] 7369438}
+\textcolor{KPMG_blue}{mySample$evalResults$`Achieved precision ratio`}
+\textcolor{KPMG_light_blue}{[1] 188529.9}
+\textcolor{KPMG_blue}{mySample$evalResults$Estimates$ratio[4:5]}
+\textcolor{KPMG_light_blue}{[1] 7180908 7557968}
+\end{Verbatim}
+
+An overview of all estimates is given by
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{mySample$evalResults$Estimates}
+\textcolor{KPMG_light_blue}{                 mpu    diff   ratio    regr}
+\textcolor{KPMG_light_blue}{audit value  7561859 7369663 7369438 7373882}
+\textcolor{KPMG_light_blue}{misstatement -201043   -8847   -8622  -13066}
+\textcolor{KPMG_light_blue}{precision     684415  188466  188529  188122}
+\textcolor{KPMG_light_blue}{lower bound  6877444 7181196 7180908 7185759}
+\textcolor{KPMG_light_blue}{upper bound  8246274 7558129 7557967 7562005}
+\textcolor{KPMG_light_blue}{effective df     399     399     399     399}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:sporadic}
+
+\textbf{Using CVS with sporadic errrors}
+
+We start with setting up a \ttblue{cvs\_obj} object, and fill it with the parameters.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{arSample <- cvs_obj(bv = accounts_receivable$amount,}
+\textcolor{KPMG_blue}{                    id = accounts_receivable$invoice,}
+\textcolor{KPMG_blue}{                    n = 100)}
+\end{Verbatim}
+We select the sample, using the \ttblue{seed} equal to 1.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{arSample <- select(arSample, seed = 1)}
+\end{Verbatim}
+We look up the audit values of the selected sampling units.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{audit_values <- accounts_receivable[match(arSample$sample$item,}
+\textcolor{KPMG_blue}{                                          accounts_receivable$invoice), "av2"]}
+\end{Verbatim}
+We then evaluate the sample and look at the \ttblue{Estimates} attribute.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{arSample <- evaluate(arSample, av = audit_values$av2)}
+\textcolor{KPMG_blue}{arSample$evalResults$Estimates}
+\textcolor{KPMG_light_blue}{                  mpu     diff    ratio     regr}
+\textcolor{KPMG_light_blue}{audit value  10873416 13306202 13263601 13285520}
+\textcolor{KPMG_light_blue}{misstatement  2626584   193798   236398   214479}
+\textcolor{KPMG_light_blue}{precision     2100022   533347   551006   532846}
+\textcolor{KPMG_light_blue}{lower bound   8773393 12772854 12712595 12752674}
+\textcolor{KPMG_light_blue}{upper bound  12973438 13839549 13814607 13818366}
+\textcolor{KPMG_light_blue}{effective df       99        5        5        5}
+\end{Verbatim}
+
+The number of differences is stored in the \ttblue{\#\_Errors} attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error ($m$ = 4 to 19) method, or using the standard CVS method.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{arSample$evalResults$`Regression estimation`$`#_Errors`}
+\textcolor{KPMG_light_blue}{[1] 6}
+\end{Verbatim}
+
+Most of the calculations presented in Section \ref{sec:using_cvs_with_sporadic_errors}
+ are easy to follow. The value of $M_U$ is obtained as follows.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{N <- nrow(accounts_receivable)}
+\textcolor{KPMG_blue}{m <- 6}
+\textcolor{KPMG_blue}{(m_u <- upper(k = m, popn = N, n = 100, alpha = 0.05) / N)}
+\textcolor{KPMG_light_blue}{[1] 0.1147}
+\end{Verbatim}
+
+The effective degrees of freedom is $m - 1$. This explains the $t$ value used.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{qt(0.975, df = m - 1)}
+\textcolor{KPMG_light_blue}{[1] 2.570582}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:stratification_equal}
+
+\textbf{Stratification with equal recorded boundaries}
+
+We start with creating a CVS object.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{equal <- cvs_obj(bv = inventoryData$bv,}
+\textcolor{KPMG_blue}{                   id = inventoryData$item)}
+\end{Verbatim}
+
+We then stratify with the equal method (\ttblue{stratMeth = equal}), and view the summary.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{equal <- stratify(equal, }
+\textcolor{KPMG_blue}{                    strata = 3,}
+\textcolor{KPMG_blue}{                    stratMeth = "equal")}
+\textcolor{KPMG_blue}{equal$stratSumm}
+\textcolor{KPMG_light_blue}{  strat  cum_bv freq   minBv    maxBv}
+\textcolor{KPMG_light_blue}{1     1 2452927 2431    1.57  2478.93}
+\textcolor{KPMG_light_blue}{2     2 2453455  710 2480.29  4833.28}
+\textcolor{KPMG_light_blue}{3     3 2454434  359 4839.62 18496.21}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{cvs\_obj}}\index[FSaudit]{\ttblue{stratify}}
+
+\end{exercise}
+
+\begin{exercise}
+\label{ex:stratification_cumulative}
+
+\textbf{Stratification with the cumulative method}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{cumul <- cvs_obj(bv = inventoryData$bv,}
+\textcolor{KPMG_blue}{                   id = inventoryData$item)}
+\textcolor{KPMG_blue}{cumul <- stratify(cumul,}
+\textcolor{KPMG_blue}{                  strata = 3,}
+\textcolor{KPMG_blue}{                  classes = 10,}
+\textcolor{KPMG_blue}{                  stratMeth = "cumulative")}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{stratify}}
+
+The classification in Table \ref{tab:class_inventories} is stored in the \ttblue{classSum} attribute.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{cumul$classSumm}
+\textcolor{KPMG_light_blue}{  cl freq    minBv    maxBv  sqrtFreq     cmSum strat}
+\textcolor{KPMG_light_blue}{1  1 2030     1.57  1848.60 45.055521  45.05552     1}
+\textcolor{KPMG_light_blue}{2  2  857  1851.65  3694.56 29.274562  74.33008     2}
+\textcolor{KPMG_light_blue}{3  3  360  3700.70  5547.71 18.973666  93.30375     2}
+\textcolor{KPMG_light_blue}{4  4  154  5556.67  7398.87 12.409674 105.71342     3}
+\textcolor{KPMG_light_blue}{5  5   63  7406.10  9238.08  7.937254 113.65068     3}
+\textcolor{KPMG_light_blue}{6  6   24  9273.30 11077.31  4.898979 118.54966     3}
+\textcolor{KPMG_light_blue}{7  7    7 11299.53 12723.03  2.645751 121.19541     3}
+\textcolor{KPMG_light_blue}{8  8    4 13131.76 14125.05  2.000000 123.19541     3}
+\textcolor{KPMG_light_blue}{9 10    1 18496.21 18496.21  1.000000 124.19541     3}
+\end{Verbatim}
+
+The stratification summary is then:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{cumul$stratSumm}
+\textcolor{KPMG_light_blue}{  strat   minBv    maxBv freq   cumSum}
+\textcolor{KPMG_light_blue}{1     1    1.57  1848.60 2030 45.05552}
+\textcolor{KPMG_light_blue}{2     2 1851.65  5547.71 1217 48.24823}
+\textcolor{KPMG_light_blue}{3     3 5556.67 18496.21  253 30.89166}
+\end{Verbatim}
+
+We calculate the required sample size for a desired precision of 200,000.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{cumul <- size(cumul, desPrec = 200000)}
+\textcolor{KPMG_blue}{cumul$n}
+\textcolor{KPMG_light_blue}{[1] 584}
+\end{Verbatim}
+
+Select the sample.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{cumul <- select(cumul, seed = 12345)}
+\textcolor{KPMG_blue}{head(cumul$sample)}
+\textcolor{KPMG_light_blue}{     item      bv strat}
+\textcolor{KPMG_light_blue}{1464  915 1144.45     1}
+\textcolor{KPMG_light_blue}{1777 2989 1505.04     1}
+\textcolor{KPMG_light_blue}{1544 3245 1227.34     1}
+\textcolor{KPMG_light_blue}{1797  142 1528.79     1}
+\textcolor{KPMG_light_blue}{925  1275  640.07     1}
+\textcolor{KPMG_light_blue}{337   536  207.02     1}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{select}}
+
+Obtain the audit values and evaluate the sample.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{true_values <- inventoryData[match(cumul$sample$item,}
+\textcolor{KPMG_blue}{                                   inventoryData$item), "av"]}
+\textcolor{KPMG_blue}{cumul <- evaluate(cumul, av = true_values$av)}
+\end{Verbatim}
+\index[FSaudit]{\ttblue{evaluate}}
+
+A summary table of the estimates for each of the estimation methods is stored in the \ttblue{Estimates} argument, which is part of the \ttblue{evalResults} argument.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{cumul$evalResults$Estimates}
+\textcolor{KPMG_light_blue}{                 mpu    diff   ratio    regr}
+\textcolor{KPMG_light_blue}{audit value  7670700 7418814 7416895 7412260}
+\textcolor{KPMG_light_blue}{misstatement -309884  -57998  -56079  -51444}
+\textcolor{KPMG_light_blue}{precision     245700  127345  127288  127576}
+\textcolor{KPMG_light_blue}{lower bound  7424999 7291468 7289606 7284684}
+\textcolor{KPMG_light_blue}{upper bound  7916401 7546159 7544184 7539837}
+\textcolor{KPMG_light_blue}{effective df     564     465     466     467}
+\end{Verbatim}
+
+\end{exercise}

@@ -1,0 +1,1534 @@
+\chapter{Estimation with auxiliary variables and stratification} % (fold)
+\label{cha:stratified_sampling}
+
+\begin{quote}
+`The world is divided into two classes, those who believe the incredible, and those who do the improbable.'\\
+Oscar Wilde (1854-1900)
+\end{quote}
+
+
+In Chapter \ref{cha:probability_distributions} we see that the distribution of the sample mean depends on both the distribution from which we sample and the sample size. In Chapter \ref{cha:estimation} we assume that the sample mean is normally distributed. Unless the sample size is large or the population sampled from is normally distributed, this assumption may not be valid. Moreover, even with sample sizes greater than 100, the estimates may not be precise.
+
+This chapter addresses these issues. The use of an auxiliary variable and/or stratification reduces the imprecision of the estimate and promotes normal distribution of the sample mean. The estimators discussed in this chapter belong to a class commonly referred to as \emph{classical variables sampling}\index{classical variables sampling}\marginnote{classical variables sampling} (CVS).
+
+\section*{Learning Objectives}
+
+After studying this chapter, you will be able to:
+
+\begin{compactitem}
+
+\item define\marginnote{remember} auxiliary variables and stratification in the context of sampling.
+\item list the four estimators discussed: mean-per-unit, regression, ratio, and difference estimation.
+\item recall the assumption of normality for the sample mean and the conditions under which it may be violated.
+
+\item explain\marginnote{understand} how auxiliary variables improve the precision of estimates.
+\item describe the benefits of stratifying a population and how it supports normality of the sample mean.
+\item differentiate between the four estimators (mean-per-unit, regression, ratio, and difference estimation) and explain their appropriate use cases.
+
+\item stratify\marginnote{apply} a population based on available data.
+\item allocate a calculated sample size to strata using proportional or optimal allocation methods.
+\item evaluate the results of a stratified sample to estimate population characteristics.
+
+\item assess\marginnote{analyze} sampling situations to determine whether auxiliary variables or stratification would improve estimation precision.
+\item examine the impact of stratification and auxiliary variables on reducing bias and promoting normality.
+
+\item critically\marginnote{evaluate} assess whether the assumption of normality for the sample mean holds in specific sampling scenarios.
+\item compare the precision and accuracy of different estimators in varied sampling contexts.
+
+\item design\marginnote{create} a sampling plan incorporating stratification and auxiliary variables to achieve precise and unbiased estimates.
+\item develop strategies to address cases where the assumption of normality is violated.
+
+\end{compactitem}
+
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\section*{Case: Valuation of inventories}
+\begin{fullwidth}
+\begin{multicols}{2}
+As part of the financial statement audit, you perform procedures for the valuation of inventories. There are 3,500 elements, with a total value of $B = 7,360,816$\nomenclature{$B$}{total book value of the population}. 
+
+Your client records inventory items at an internal calculation value, and he asserts that this is a good approximation for the lower of cost and market prices.
+
+You want to investigate whether this statement is correct. You select 400 items from the population. For every item selected, the historic cost price is obtained by vouching the item to the most recent purchase invoices. You also perform tests for impairment. The results for the sample are partially reproduced in Table \ref{tab:sample_results}. Furthermore, the following totals are given as
+\begin{compactitem}
+\item the cross-product of book value ($x$) and audit value ($y$)\nomenclature{$y$}{audit value} $\sum x y = $ 3,550,437,464;
+\item the squared book values $\sum x^2 = $3,586,086,982;
+\item the squared audit values $\sum y^2 = $3,649,977,984;
+\item the squared differences $\sum d^2\nomenclature{$d$}{difference $x - y$ between the book value $x$ and audit value $y$} = $135,190,038.
+\end{compactitem}
+
+\bigskip
+The audited values are then extrapolated to obtain a 95\% two-sided prediction interval for the true value of inventories. The target precision for this estimate is 200,000. 
+
+\end{multicols}
+
+\section* {Objective}
+Obtain a 95\% prediction interval for the true value of inventories.
+
+\end{fullwidth}
+\end{mdframed}
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1.1 cm}{Item} &
+\parbox[t]{2 cm}{\raggedleft Book~value $x$} &
+\parbox[t]{2 cm}{\raggedleft Audit~value $y$} &
+\parbox[t]{2 cm}{\raggedleft Difference $d = x - y$} \\
+
+\midrule
+
+2524 &   728.40 &   842.99 & -114.59 \\
+3065 & 2,199.37 & 1,999.96 &  199.41 \\
+2662 & 1,452.48 & 1,589.65 & -137.17 \\
+3099 &    68.61 &    36.39 &   32.22 \\
+1596 & 5,292.84 & 5,273.66 &   19.18 \\
+ 582 &   910.03 &   969.29 &  -59.26 \\
+\ldots & \ldots & \ldots   &  \ldots \\
+\midrule
+Total & 863,201.37 & 864,212.48 & -1,011.11 \\
+\bottomrule
+\end{tabular*}
+
+\caption{Sample results}
+\label{tab:sample_results}
+\end{table}
+
+\section{Mean-per-unit estimator} % (fold)
+\label{sec:mpu_estimator}
+
+We start addressing the problem in the \emph{Case: Valuation of inventories} with the estimator introduced in the previous chapter. An estimate of the correct value of the population is obtained by extrapolating the audited values of $n = $ 400 sampled items. We refer to this estimator as the \emph{direct estimator}\index{direct estimator}\index{estimator!direct}\marginnote{direct estimator} or, more commonly, among auditors, as the \emph{mean-per-unit (MPU) estimator}\index{mean-per-unit estimator}\index{estimator!mean-per-unit}\marginnote{mean-per-unit estimator}. The total \emph{audit value}\index{audit value}\marginnote{audit value} of the 400 sampled items $\sum y =$ 864,212.48, resulting in the mean audit value
+
+\begin{equation*}
+\overline{y} = \frac{\sum{y_i}}{n} = \frac{864,212.48}{400} = 2,160.53
+\end{equation*}
+
+We then use Equation \ref{eq:estimate_total} 
+\begin{equation*}
+  \hat{Y}_{MPU} = N\frac{\sum y_i}{n} = 3,500 \times 2,160.53 = 7,561,859
+\end{equation*}
+to estimate of the population value. 
+The variance of the audit values is calculated with Equation \ref{eq:sample_var_shortcut}
+
+\begin{align*}
+s_y^2 &= \frac{\sum{y^2 - (\sum{y})^2 / n}}{n - 1} \\
+&= \frac{3,649,977,984 - 864,212.48^2 / 400}{400 - 1} = 4,468,220
+\end{align*}
+
+A 95\% two-sided prediction interval on the correct population value is then calculated by applying Equation \ref{eq:two-sided_finite}, multiplied by $N$
+
+\begin{equation}
+  \hat{Y}_{MPU} \pm N t_{\alpha/2} \frac{s_{y}}{\sqrt{n}}\sqrt{\frac{N-n}{N}} 
+  \label{eq:prediction_interval_MPU}
+\end{equation}
+From here onwards we combine all occurrences of $N$ and $n$ into one factor\nomenclature{$g$}{$\sqrt{\frac{N(N - n)}{n}}$}
+\begin{equation}
+g = \frac{N}{\sqrt{n}}\sqrt{\frac{N - n}{N}} = \sqrt{\frac{N(N - n)}{n}}
+\end{equation}
+so that Equation \ref{eq:prediction_interval_MPU} reduces to
+\begin{equation}
+  \hat{Y}_{MPU} \pm g t_{\alpha/2} s_{y}
+  \label{eq:prediction_interval_MPU_with_g}
+\end{equation}
+Applying Equation \ref{eq:prediction_interval_MPU_with_g} to the values from the \emph{Case:Valuation of inventories} we obtain
+\begin{equation*}
+g = \sqrt{\frac{3,500(3,500 - 400)}{400}} = 164.6967
+\end{equation*}
+\begin{equation*}
+  7,561,859 \pm  164.6967 \times 1.966 \times \sqrt{4,468,220} = 
+\end{equation*}
+\begin{equation*}
+	7,561,859 \pm 684,415
+\end{equation*}
+which then yields the prediction interval [6,877,444; 8,246,274]. 
+
+We can see that the precision achieved is 684,415, exceeding the desired precision of 200,000. To achieve this precision by just extending the sample, the sample size should be 2,107,\marginnote{Use equation \ref{eq:minimum_sample_size}} more than half of the population.
+
+% section mpu_estimator (end)
+
+\section{Regression estimator} % (fold)
+\label{sec:regression_estimator}
+
+In the previous section, we obtained an estimate of the total correct value of the population of inventories and observed that the achieved precision of the estimate was too large. We could address this issue by extending the sample, as in Chapter \ref{cha:estimation}, but there is an alternative that does not require us to test more items.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{H4_scatterplot_bv_av.png}
+	\caption{Book values and audit values of a sample of $n =$ 400 inventory items}
+	\label{fig:H4_scatter_inventory_sample}
+\end{figure}
+
+Figure \ref{fig:H4_scatter_inventory_sample} shows a graphical representation of the book and audit values of a sample of 400 inventory items. As expected, there is a close relationship between an item's book value and its audit value. This relationship can be used to improve the precision of estimates. The estimator developed here is based on the theory of regression analysis, which is discussed in more detail in Chapter \ref{cha:introduction_to_regression_analysis}.
+
+\bigskip
+The \emph{regression estimator}\index{regression estimator}\marginnote{regression estimator} of the correct value of the population is given by
+
+\begin{equation}
+\hat{y} = b_0 + b_1 x
+\label{eq:regression equation}
+\end{equation}
+
+Coefficients $b_0$ and $b_1$ are estimated using a technique called \emph{least squares estimation}\index{least squares estimation}\index{estimation!least squares}\marginnote{least squares estimation}. This minimizes the vertical distances between each of the observations in Figure \ref{fig:H4_scatter_inventory_sample}. Consequently, the \emph{regression intercept}\index{regression intercept}\index{intercept!regression}\marginnote{regression intercept} $b_0$ is given by
+\begin{equation}
+b_0 = \bar{y} - b_1 \bar{x}
+\label{eq:regression_intercept}
+\end{equation}\nomenclature{$b_0$}{regression intercept}
+and the \emph{regression slope}\index{regression slope}\index{slope!regression}\marginnote{regression slope} $b_1$ is found with
+\begin{equation}
+b_1 = \frac{\sum{xy - n \bar{x} \bar{y}}}{\sum{x^2} - n \bar{x}^2} 
+ = \frac{\sum{x y} - \frac{\sum{x}\sum{y}}{n}}{\sum{x^2} - \frac{(\sum{x})^2}{n}}
+\label{eq:regression_slope}
+\end{equation}\nomenclature{$b_1$}{regression slope}
+Filling in the value of the intercept coefficient the regression estimate for a single observation reduces to
+\begin{equation*}
+\hat{y} = \bar{y} - b_1 \bar{x} + b_1 x = \bar{y} + b_1(x - \bar{x})
+\label{eq:regression_estimate_single}
+\end{equation*} 
+An estimate of the total value of the population is then obtained by multiplying with the total number of elements in the population $N$
+\begin{align}
+N \hat{y} &= N \bar{y} + N b_1(x - \bar{x}) \\
+\hat{Y}_R &= N \overline{y} + b_1 (X - N \overline{x})
+\label{eq:regression_estimate}
+\end{align}
+
+\begin{tabular*}{11.2 cm}{lll}
+where: &$\hat{Y}_R$ & : estimated correct value of the population\\
+& $N$ & : number of elements in the population\\
+& $y$ & : audit value of a sampled item\\
+& $b_1$ & : slope of the regression line\\
+& $X$ & : total book value of the population\\
+& $x$ & : book value of a sampled item\\
+\end{tabular*}
+
+\bigskip
+A two-sided prediction interval is given by replacing the estimate of the standard deviation of the audit values $s_y$ in Equation \ref{eq:prediction_interval_MPU} by the regression standard deviation $s_{y, R}$
+\begin{equation}
+	\hat{Y}_R \pm g t_{\alpha/2} s_{y, R}
+\label{eq:pred_interval_regression}
+\end{equation}
+The regression variance is calculated as\marginnote{Both versions of the formula are valid. Recall that $b_1 = \frac{c_{xy}}{s_x^2}$, and use $r = \frac{c_{xy}}{s_x s_y}$ from Equation \ref{eq:correlation}.}
+\begin{equation}
+	s_{y, R}^2 = \frac{n - 1}{n - 2}(s_y^2 - 2 b_1 c_{xy} + b_1^2 s_x^2) = s_y^2 \frac{n - 1}{n - 2} (1 - r^2)
+\label{eq:variance_regression}
+\end{equation}
+where the \emph{covariance}\index{covariance}\marginnote{covariance} $c_{xy}$ between the book values $x$ and audit values $y$ is defined as 
+\begin{equation}
+c_{xy} = \frac{\sum{x y} - n \bar{x} \bar{y}}{n - 1}= \frac{\sum{xy} - \frac{\sum{x}\sum{y}}{n}}{(n - 1)}
+\label{eq:covariance}
+\end{equation}\nomenclature{$c_{xy}$}{covariance between $x$ and $y$}
+Dividing the covariance by the respective standard errors of $x$ and $y$, we get the \emph{correlation coefficient}\index{correlation coefficient}\index{coefficient!correlation}\marginnote{correlation coefficient} between the book and audit values.
+\begin{equation}
+r_{xy} = \frac{c_{xy}}{s_{x} s_{y}}
+\label{eq:correlation}
+\end{equation}\nomenclature{$r^2_{xy}$}{coefficient of determination between $x$ and $y$}
+The square of the correlation coefficient is referred to as the \marginnote{coefficient of determination}\emph{coefficient of determination}\index{coefficient of determination}.
+\begin{equation}
+r^2_{xy} = \left( \frac{c_{xy}}{s_{x} s_{y}} \right)^2
+\label{eq:coefficient_of_determination}
+\end{equation}\nomenclature{$r_{xy}$}{correlation between $x$ and $y$}
+
+If we approximate the regression variance using a factor $n - 1$ in the denominator rather than $n - 2$, we obtain the following equality relationship:
+\begin{equation}
+	s_{y, R}^2 = s_y^2 (1 - r_{xy}^2)
+\end{equation}
+This implies that the precision of the regression estimator is always smaller than that of the MPU estimator because $-1 \leq r_{xy} \leq 1$, and therefore, $0 \leq R_{xy}^2 \leq 1$. Consequently, the factor $1 - r^2$ is always less than 1.
+
+If there is a strong correlation between the book and audit values, the effect on precision achieved could be considerable. If there is perfect correlation and $r^2 = 1$, the precision achieved is reduced to zero. This is a theoretical case implying that all information about the correct value is contained in the auxiliary variable. In such a case, there would no longer be a need for sampling. In \emph{Case: Valuation of Inventories}, we can see from the scatter plot in Figure \ref{fig:H4_scatter_inventory_sample} that there is no perfect correlation, but the correlation appears to be strong. The effect of the correlation coefficient on the precision of the regression estimator, as compared to that of the MPU estimator, is shown in Figure \ref{fig:H4_adjustment_factor}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{H4_adjustment_factor.png}
+	\caption{Effect of the correlation between book and audit values on the precision of the MPU estimate. If there is no correlation, then the precision of the regression estimator is equal to that of the MPU estimator. If there is perfect correlation, the precision of the regression estimator is 0. There is a significant reduction in precision if $R > 0.5$.}
+	\label{fig:H4_adjustment_factor}
+\end{figure}
+
+Using the results summarized in Table \ref{tab:sample_results}, the estimated slope parameter is
+
+\begin{equation*}
+	b_1 = \frac{3,550,437,464 - \frac{863,201.37 \times 864,212.48}{400}}{3,586,086,982 - \frac{(863,201.37)^2}{400}} = 0.9780
+\end{equation*}
+
+The estimated total value of the population is therefore
+\begin{align*}
+ 	\hat{Y}_R &= 3,500 \times 2,160.53 + 0.9780 \times (7,360,816 - 3,500 \times \frac{863,201.37}{400}) \\
+ 	&= 7,373,882
+\end{align*} 
+
+The covariance $c_{xy}$ is then calculated as follows by using the values given in the \emph{Case: Valuation of inventories}
+
+\begin{equation*}
+c_{xy} = \frac{3,550,437,464 - 863,201.347 \times 864,212.48 / 400}{400 - 1} = 4,224,220
+\end{equation*}
+
+This makes the regression variance
+\begin{align*}
+	s_{y, R}^2 &= \frac{400 - 1}{400 - 2}(4,468,220 - 2 \times 0.9780 \times 4,224,220 + 0.9780^2 \times 4,319,036) \\
+	&= 337,580.32
+\label{eq:standard_deviation_regression}
+\end{align*}
+A 95\% two-sided prediction interval on the correct population value is then calculated similar to Equation \ref{eq:prediction_interval_MPU_with_g}, replacing $\hat{Y}_{MPU}$ with $\hat{Y}_R$ and $s_y$ with $s_{y, R}$
+\begin{equation*}
+  7,373,882 \pm 164.6967 \times 1.966 \times \sqrt{337,580.32} = 
+\end{equation*}
+\begin{equation*}
+  7,373,882 \pm 188,123
+\end{equation*}
+which provides the prediction interval [7,185,760; 7,562,005].
+
+The correlation between book and audit values is 0.9616. 
+We therefore see that the adjustment factor
+\begin{equation*}
+	\sqrt{1 - r^2_{x.y}} = \sqrt{1 - 0.9616^2} = 0.2745
+\end{equation*}
+along with the factor $\sqrt{\frac{n - 1}{n - 2}}$ explains the reduction in precision of the MPU estimator
+\begin{equation*}
+	684,415 \times \sqrt{\frac{400 - 1}{400 - 2}} \times 0.2745 = 188,123
+\end{equation*}
+
+We can also conclude that using the correlation between book and audit values reduces the precision of the estimate of the correct population value to below the desired precision of 200,000. Therefore, by using the regression estimator, it is not necessary to extend the sample.
+
+% section regression_estimator (end)
+
+\section{Difference estimator} % (fold)
+\label{sec:difference_estimator}
+
+An alternative estimation technique uses the \emph{difference estimator}\index{difference estimator}\index{estimator!difference}\marginnote{difference estimator}. It has been very popular with auditors because the calculation of the estimate is not as complex as that of the regression estimator and can be performed manually. We later show that the difference estimator is a special case of the regression estimator when the slope coefficient is equal to 1\marginnote{special case for $b_1 = $ 1}. In other words, it assumes that the size of the difference between book and audit values is not related to the size of the book value.
+
+\bigskip
+The difference estimator of the correct value of the population is given by
+\begin{equation}
+\hat{Y}_D = X - N \bar{d}
+\label{eq:difference_estimate}
+\end{equation}
+where $d = x - y$ is the difference between the book value and audit value. A positive difference indicates that the true value of an item is less than the recorded value; that is, the item is \emph{overstated}\index{overstatement}\marginnote{overstatement}. Conversely, if the difference $d$ is negative, it implies that the true value is greater than the recorded value or that the item is \emph{understated}\index{understatement}\marginnote{understatement}.
+
+\bigskip
+A two-sided prediction interval is given by
+\begin{equation}
+  \hat{Y}_D \pm g t_{\alpha/2} s_d
+\end{equation}
+where $s_d^2$ is the variance of the differences $d$
+
+\begin{equation}
+s_d^2 = \frac{\sum{d^2} - (\sum{d})^2/n}{n - 1}
+\label{eq:sd_diff}
+\end{equation}
+
+\bigskip
+Applying these formulas to the results of \emph{Case: Valuation of Inventories} in Table \ref{tab:sample_results} we obtain the following results. The difference estimate is
+
+\begin{equation*}
+\hat{Y}_D = 7,360,816 - 3,500 \times \frac{-1,011.11}{400} = 7,369,663
+%\label{}
+\end{equation*}
+
+The variance of the differences $d$ is
+\begin{equation*}
+s_d^2 = \frac{135,190,038 - (-1,011.11)^2 / 400}{400 - 1} = 338,815.74
+\end{equation*}
+
+The resulting two-sided 95\% prediction interval is
+
+\begin{equation*}
+  7,369,663 \pm 164.6967 \times 1.966 \times \sqrt{338,815.74} =
+%\label{eq:pred_interval_difference}
+\end{equation*}
+
+\begin{equation*}
+  7,369,663 \pm 188,467 
+%\label{eq:pred_interval_difference}
+\end{equation*}
+which provides the prediction interval [7,181,197; 7,558,130]. Similar to the regression estimator, the difference estimator is sufficiently precise.
+
+% section difference_estimator (end)
+
+\section{Ratio estimator} % (fold)
+\label{sec:ratio_estimator}
+
+Another estimation technique popular among auditors is the \emph{ratio estimator}\index{ratio estimator}\marginnote{ratio estimator}. Similar to the difference estimator, the point estimate calculation is straightforward and can be performed manually. This is also a special case of the regression estimator when the intercept coefficient is equal to zero\marginnote{special case for $b_0 = $ 0}. In other words, it assumes that, on average, the size of the difference between the book and audit values is a certain percentage of the book value, but that the size of the difference is not related to the size of the book value.
+
+\bigskip
+The ratio estimator of the correct value of the population is given by
+\begin{equation}
+\hat{Y}_Q = X q
+\label{eq:ratio_estimator}
+\end{equation}
+where $q = \frac{\sum{y}}{\sum{x}}$ is the ratio of the average audit and book values\nomenclature{$q$}{ratio of the average audit and book values}. In \emph{Case: Valuation of inventories}, using the values from Table \ref{tab:sample_results}, $q = \frac{864,212.48}{863,201.37}$ = $1.00117$.
+
+\bigskip
+A two-sided prediction interval is given by
+
+\begin{equation}
+\hat{Y}_Q \pm g t_{\alpha/2} s_q
+\label{eq:pred_interval_ratio}
+\end{equation}
+where $s_q^2$ is the variance of the ratio estimator
+
+\begin{equation}
+s_q^2 = \frac{\sum{y^2} - 2q\sum{xy} + q^2\sum{x^2}}{n - 1}
+\label{eq:sd_ratios}
+\end{equation}
+
+\bigskip
+Applying these formulas to the results of \emph{Case: Valuation of Inventories} in Table \ref{tab:sample_results}, we obtain the following results. The ratio estimate is
+
+\begin{equation*}
+\hat{Y}_Q = 7,360,816 \times 1.00117 = 7,369,438
+%\label{eq:ratio_estimator}
+\end{equation*}
+
+The standard deviation of the ratio estimator is
+
+\begin{align*}
+s_q^2 &= \frac{3,649,977,984 - 2 \times 1.00117 \times 3,550,437,464 + 1.00117^2 \times 3,586,086,982}{400 - 1} \\
+&= 339,043.79
+%\label{eq:sd_ratios}
+\end{align*}
+and as a result the two-sided 95\% prediction interval is
+
+\begin{equation*}
+7,369,438 \pm 164.6967 \times 1.966 \times \sqrt{339,043.79} = 
+%\label{eq:pred_interval_ratio}
+\end{equation*}
+\begin{equation*}
+  7,369,438 \pm 188,530
+%\label{eq:pred_interval_difference}
+\end{equation*}
+which yields the prediction interval [7,180,908; 7,557,968]. Similar to the regression and difference estimators, the ratio estimator yields a precision less than the target precision of 200,000.
+
+% The estimated misstatement in these results is the difference between the book value of the population (7,360,816) and estimated audit value. For example, the estimated misstatement from the MPU estimator is $X - \hat{Y}_{MPU} = 7,360,816 - 7,561,859.20 = -201,043.20$.
+
+% section ratio_estimator (end)
+
+\section{Relationships between the estimators} % (fold)
+\label{sec:relationships_between_the_estimators}
+
+In the previous sections, we evaluated the findings of 400 items using four different techniques. We have shown that regression estimation is always more precise than direct or MPU estimation, particularly when there is a strong correlation between book and audit values. The results obtained using the difference or ratio estimation techniques are fairly close to those of the regression estimation. 
+
+These three estimation techniques are interrelated. We use Equation \ref{eq:regression_estimate} and set the value of the slope parameter $b_1$ to equal 1.
+
+\begin{equation*}
+  \hat{Y}_R \underset{b_1 = 1}{=} N \overline{y} + (X - N \overline{x})
+%  \label{eq:regression_estimate}
+\end{equation*}
+Juggling the terms of this equation, we get
+
+\begin{equation*}
+  \hat{Y}_R \underset{b_1 = 1}{=} X - N \frac{\sum{x} - \sum{y}}{n}
+%%\label{}
+\end{equation*}
+From this emerges
+
+\begin{equation*}
+  \hat{Y}_R \underset{b_1 = 1}{=} X - N \frac{\sum{d}}{n} = \hat{Y}_D
+%\label{}
+\end{equation*}
+
+Therefore, if we set the slope parameter $b_1$ to equal 1,\marginnote{If $b_1 = 1$, then $y = b_0 + x$, or $y - x = b_0$ is constant.} the regression estimator degenerates into the difference estimator. This implies that the difference estimator is designed for situations in which the difference between the book and audit values is not dependent on the size of the book value and, on average, equals the intercept value from the regression equation.
+
+Similarly, we can calculate the slope and intercept parameters.\marginnote{A more elaborate discussion of the calculation of these parameter is deferred to Chapter \ref{cha:introduction_to_regression_analysis}} If we want the regression line to pass through the origin, this effectively means that we set the intercept parameter $b_0$ equal to 0. The result of this is that we get
+
+\begin{equation*}
+b_0 = \overline{y} - b_1 \overline{x} \equiv 0
+%\label{}
+\end{equation*}
+From this we can derive the value of the slope parameter $b_1$
+
+\begin{equation*}
+b_1 = \frac{\overline{y}}{\overline{x}} = \frac{\sum{y}/n}{\sum{x}/n} =\frac{\sum{y}}{\sum{x}} = q
+%\label{}
+\end{equation*}
+If we use $b_1 = q$ in the formula for the regression estimator, we obtain
+
+\begin{equation*}
+  \hat{Y}_R \underset{b_1 = q}{=} N \overline{y} + q(X - N \overline{x})
+%  \label{eq:regression_estimate}
+\end{equation*}
+This evolves into
+
+\begin{equation*}
+  \hat{Y}_R \underset{b_1 = q}{=} qB + N \frac{\sum{y}}{n} - N \frac{\sum{y}}{\sum{x}} \frac{\sum{x}}{n} = qB = \hat{Y}_Q
+%  \label{eq:regression_estimate}
+\end{equation*}
+
+To avoid discussion about which estimator to use, we also note the circumstances under which the ratio and difference estimators yield the same estimate. We first set the two estimates to equal each other
+
+\begin{equation*}
+\hat{Y}_D = \hat{Y}_Q
+%\label{}
+\end{equation*}
+
+\begin{equation*}
+X - N \overline{d} = X \frac{\overline{y}}{\overline{x}}
+%\label{}
+\end{equation*}
+Replace $\overline{y}$ with its equivalent $\overline{x} - \overline{d}$
+
+\begin{equation*}
+X - N \overline{d} = X \frac{\overline{x} - \overline{d}}{\overline{x}}
+%\label{}
+\end{equation*}
+Expand the expression on the right-hand side of the equals sign
+
+\begin{equation*}
+X - N \overline{d} = X - X\frac{\overline{d}}{\overline{x}}
+%\label{}
+\end{equation*}
+Subtract $X$ from both sides of the equation and then divide the result by $-\overline{d}$\marginnote{If $\overline{d} = $ 0, then the two estimators also yield the same result.}
+
+\begin{equation*}
+N = \frac{X}{\overline{x}}
+%\label{}
+\end{equation*}
+Move the terms around and get
+
+\begin{equation*}
+X/N = \overline{x}
+%\label{}
+\end{equation*}
+
+The conclusion is that if $X / N$ equals $\overline{x}$, then the difference estimator yields the same result as the ratio estimator. In other words, if the sample is \emph{balanced}\index{balanced sample}\index{sample!balanced}\marginnote{balanced sample}, which means that the average book value in the sample is equal to the average population book value, there is no difference in whether the ratio estimator or  difference estimator is used.
+
+% section relationships_between_the_estimators (end)
+
+\section{Choice of estimator} % (fold)
+\label{sec:choice_of_estimator}
+
+With four different estimators available, the question arises as to which estimator to choose. The MPU estimator is the least likely candidate because the other three use valuable information from an auxiliary variable to improve the precision of the estimate. Obviously, when there are no auxiliary variables, the MPU estimator is the only estimator available, but auxiliary variables are available in most circumstances, not only in the form of book values; for example, we could use the number of items sold as an auxiliary variable.
+
+There are more practical considerations that help determine which estimator to employ. For example, if a total book value $X$ is available but the number of elements in the population $N$ is not readily available or has to be estimated, the ratio estimator is an obvious choice. Likewise, when we have the number of elements $N$ but not the total book value $X$, difference estimation is the likely candidate, at least for the calculation of the total error amount. Finally, both the ratio and difference estimators are often used in non-statistical sampling because the estimate is easy to calculate manually, and there is no requirement in the auditing standard to calculate precision. That said, it should be noted that both estimators yield the same estimate if the sample is balanced, but this may not be the case in non-statistical sampling, when a manual selection of sampling units is often biased towards elements with a higher book value.
+
+We also consider the performance of the estimators. The ideal estimator: 
+
+\begin{compactitem}
+\item is unbiased -- the average over all possible samples equals the population parameter of interest;
+\item has minimum variance -- the estimator yields more precise estimates than its competitors; and
+\item provides good \emph{coverage}\index{coverage}\marginnote{coverage} -- the estimator yields a precision interval that contains the population parameter with a probability of at least $(1 - \alpha)$. Estimators with bad coverage are referred to as being \emph{anti-conservative}.\index{anti-conservative}\marginnote{anti-conservative}
+\end{compactitem}
+
+\bigskip
+To further clarify these criteria, we seeded the \emph{Inventories} population with different error patterns, with a total error of 260,000. The \emph{constant difference} pattern differences are normally distributed, with a mean of 82 and a standard deviation of 200. The \emph{no intercept} scenario has a difference of 3.7\% in each item plus or minus a difference that is normally distributed with a mean of 0 and a standard deviation of 200. The \emph{slope and intercept} distribution has audit values of .96 $\times$ the book value, plus a constant of 10, and a difference that is normally distributed with a mean 0 and a standard deviation of 200. Finally, we contrast these distributions with \emph{sporadic errors}, where 116 elements have an audit value of 0 and the remaining items are correct. 
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
+\sloppy
+Work in Progress. 
+
+Change axis labels, bv -> x and av -> y. Fourth pane should read "sporadic errors" rather than "rare errors"
+
+\end{mdframed}
+\begin{figure*}[thbp]
+	\centering
+	\includegraphics[width=1\textwidth]{H4_errorDistributions.png}
+	\caption{Error distributions. The total error in each scenario is 260,000.}
+	\label{fig:H4_errorDistributions}
+\end{figure*}
+The scatterplots of each error distribution are shown in Figure \ref{fig:H4_errorDistributions}.
+
+We then repeatedly obtained samples of size $n = 100$ and collected the results. A histogram of the estimates is shown in Figure \ref{fig:H4_samplingDistributions}.
+
+\begin{figure*}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{H4_samplingDistributions.png}
+	\caption{Sampling distribution of the point estimate for three estimators and four error distributions. The total error in each distribution is 260,000.}
+	\label{fig:H4_samplingDistributions}
+\end{figure*}
+
+The first striking observation from this graph is that when errors are sporadic, the three estimates are not normally distributed. We touched on this when discussing Figure \ref{fig:H2sampling_distributions}; apparently, the convergence to a normal distribution is much slower than, for example, sampling from an exponential distribution. This will affect the \emph{coverage}\index{coverage}\marginnote{coverage}, the percentage samples that yield a confidence interval that covers the correct (seeded) error amount.
+
+The differences between the other three distributions are not  pronounced, but as expected, the difference estimator shows the narrowest sampling distribution of the estimate when there is a constant difference in the population elements, the ratio estimator performs best when there is no intercept, and the regression estimator performs best in the `slope and intercept scenario,' for which this estimator is designed.
+
+\bigskip
+From the graphs, we cannot tell how the estimators perform in terms of bias, precision, and coverage, so we provide statistics to help us see further distinctions.
+
+Bias can be measured by taking the average of the estimate over all replications. In addition, statistical literature indicates that the ratio estimator is biased, the difference estimator is unbiased, and the regression estimator is biased when the population book values are skewed, as in our case.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1.3 cm}{Estimator} &
+\parbox[t]{1.8 cm}{\raggedleft Constant difference} &
+\parbox[t]{1.8 cm}{\raggedleft No \\ intercept} &
+\parbox[t]{1.8 cm}{\raggedleft Slope and intercept} &
+\parbox[t]{1.8 cm}{\raggedleft Sporadic errors} \\
+
+\midrule
+
+Difference & 260,061 & 259,469 & 258,983 & 261,954 \\
+Ratio & 262,571 & 259,493 & 255,750 & 262,293 \\
+Regression & 260,227 & 260,002 & 259,453 & 262,544 \\
+
+\bottomrule
+\end{tabular*}
+
+\caption{Average value of estimates. The total error in each distribution is 260,000.}
+\label{tab:average_value_of_estimates}
+\end{table}
+
+The results in Table \ref{tab:average_value_of_estimates} show, that if there is bias in the estimates, its size is not large, possibly with the exception of the ratio estimates in the `slope and intercept' scenario.
+
+Precision is estimated by calculating the standard deviation of  estimates across all replications. A summary of these standard deviations is provided in Table \ref{tab:standard_deviations_of_estimates}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1.3 cm}{Estimator} &
+\parbox[t]{1.8 cm}{\raggedleft Constant difference} &
+\parbox[t]{1.8 cm}{\raggedleft No \\ intercept} &
+\parbox[t]{1.8 cm}{\raggedleft Slope and intercept} &
+\parbox[t]{1.8 cm}{\raggedleft Sporadic errors} \\
+
+\midrule
+
+Difference & 66,480 & 72,079 & 90,768 & 189,442 \\
+Ratio & 71,356 & 67,540 & 77,348 & 187,828 \\
+Regression & 66,827 & 67,194 & 67,731 & 192,016 \\
+
+\bottomrule
+\end{tabular*}
+
+\caption{Standard deviations of estimates.}
+\label{tab:standard_deviations_of_estimates}
+\end{table}
+
+We learn from Table \ref{tab:standard_deviations_of_estimates} that the difference estimator performs better than the ratio and regression estimators when there is a constant difference and the regression estimator performs best when there is a slope and intercept (as expected). However, when no intercept exists, the ratio estimator does not outperform the regression estimator. The sporadic errors pattern is much more difficult to estimate, as evidenced by the much higher standard deviations of the estimates. In this case, the ratio estimator appears slightly more precise than the difference and regression estimators.
+
+Finally, we counted the fraction of samples that yielded a confidence interval that contained the true seeded error of 260,000. Because the confidence level used was 95\%, an ideal estimator would cover the correct value in 95\% of cases. If the coverage is greater than 95\%, the estimator is conservative; if the coverage is less, the estimator is \emph{anti-conservative.}\index{anti-conservative.}\marginnote{anti-conservative.} Table \ref{tab:coverage_of_estimators} summarizes the coverage percentages for each estimator and error distribution.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1.3 cm}{Estimator} &
+\parbox[t]{1.8 cm}{\raggedleft Constant difference} &
+\parbox[t]{1.8 cm}{\raggedleft No \\ intercept} &
+\parbox[t]{1.8 cm}{\raggedleft Slope and intercept} &
+\parbox[t]{1.8 cm}{\raggedleft Sporadic errors} \\
+
+\midrule
+
+Difference & 94.94\% & 94.85\% & 94.94\% & 78.41\% \\
+Ratio & 94.87\% & 95.14\% & 94.51\% & 79.08\% \\
+Regression & 94.78\% & 94.88\% & 94.65\% & 78.07\% \\
+
+\bottomrule
+\end{tabular*}
+
+\caption{Coverage of estimators.}
+\label{tab:coverage_of_estimators}
+\end{table}
+
+The results in Table \ref{tab:coverage_of_estimators} illustrate two important aspects of the application of the Central Limit Theorem: convergence to a normal distribution is from below\sidenote{Convergence from below means that the approximation is anticonservative, with coverage below the nominal 95\%, and nominal coverage is achieved asymptotically as $n$ approaches infinity} and is slow for a distribution with sporadic errors. The coverage of the three estimators is below 80\%, and this is mainly caused by instances where very few (i.e., less than three) differences were found in the sample. In the sporadic errors distribution, there are only 116 differences in the 3500 population elements; therefore, the probability that a sample of 100 reveals less than three differences is approximately 35\%.
+
+% section choice_of_estimator (end)
+
+\section{Using CVS with sporadic errors} % (fold)
+\label{sec:using_cvs_with_sporadic_errors}
+
+% section using_cvs_with_sporadic_errors (end)
+
+In the previous section, we saw that the coverage of the CVS estimators is poor when only a part of the sampling units are in error. In these cases, the standard error of the estimate is understated, leading to confidence intervals that are too narrow.
+
+Roberts (1978) proposed a modification to the calculation of the standard error. If the number of differences $m$\nomenclature{$m$}{number of (non-zero) differences in the sample} is less than three, the standard error of the regression, ratio, and difference estimator should be replaced by that of the MPU estimator.
+
+If the number of differences is between three and 19, the standard error is calculated as follows: all three estimators require the upper bound on the percentage of differences, $M_U(k)$, as defined in Equation \ref{eq:upper_bound}. In addition to alternative calculations of the estimated standard deviations, Roberts proposes the use of a $t$-factor with $m -1$ rather than $n - 1$ degrees of freedom, except when $m < 3$ and the standard deviation of the MPU estimator is employed.
+
+We use an example\marginnote{See Exercise \ref{ex:sporadic}} from a file that will be used in the next Chapter. The \ttblue{accounts\_receivable} data file contains 10,000 invoices, and the total value of the \ttblue{amount} field $X = 13,500,000$. We have added two audit values to the file: \ttblue{av1} reflects that only 122 of the invoices contain errors, and the total error amount is 100,000. Therefore, we would expect that if we select a sample of $n = 100$ sampling units (1\% of the population), we will find less than 20 differences. 
+% We start by setting up a \ttblue{cvs\_obj} object, and filling it with the parameters.
+
+The objective is to determine how precision is calculated for the difference, ratio, and regression estimators. In the calculations that follow, we assume that we found six erroneous items in the sample of 100 items. The total difference between book and audit values of these six items is 1,937.98.
+% We collect the sample data and the audit values in a single data frame, and obtain the summary statistics required for further calculations.
+
+\paragraph{Difference estimator} For the difference estimator, we first calculate the average difference for the differences only.
+\begin{equation}
+	\bar{d}_m = \frac{\sum{d_m}}{m} = \frac{1,937.98}{6} = 322.9967
+	\label{eq:average_difference_m}
+\end{equation}
+Then, we calculate the variance of the differences only.
+\begin{equation}
+	% s_{d, m}^2 = \frac{\sum{d_m^2} - m\bar{d}_m^2}{m - 1} =
+	s_{d, m}^2 = \frac{\sum{d_m^2} - \frac{(\sum{d_m})^2}{m}}{m - 1}	
+	\label{eq:sd_diff_m}
+\end{equation}
+\begin{equation*}
+	s_{d, m}^2 = \frac{2,059,679 - \frac{1,937.98^2}{6}}{6 - 1} = 286,744
+\end{equation*}
+The estimated standard deviation of the population differences is then given by
+\begin{equation}
+	{s'_d}^2 = M_U(m) s_{d, m}^2 + M_U(m)(1 - M_U(m))(\bar{d}_m)^2
+\label{eq:sd_diff_sporadic}
+\end{equation}
+This turns out to be
+\begin{align*}
+	{s'_d}^2 &= 0.1147 \times 286,744 + 0.1147 \times (1 - 0.1147) \times 322.9967^2 \\
+	&= 43,483.25
+\end{align*}
+where we have used $M_U(m) = 0.1147$. 
+Note that $M_U(m)$ is the upper bound on the proportion of errors, given $m = 6$.\marginnote{See Equation \ref{eq:upper_bound}}
+Precision achieved is then calculated as $g t_{\alpha/2} s'_d$, where $g$ is now
+\begin{equation*}
+g = \sqrt{\frac{N(N - n)}{n}} = \sqrt{\frac{10,000 \times (10,000 - 100)}{100}} = 994.9874
+\end{equation*}
+such that the result is\marginnote{The $t$ value of 2.571 is for a two-sided interval with $alpha = 0.05$ and df = 5.}
+\begin{equation*}
+  994.9874 \times 2.571 \times \sqrt{43,483.25} = 533,347.23
+\end{equation*}
+
+\paragraph{Ratio estimator} For the ratio estimator, the variance is calculated similar to Equation \ref{eq:sd_ratios}, but with reference to the number of differences in the denominator.
+
+\begin{equation}
+	s_{q, m}^2 = \frac{\sum{y^2} - 2q\sum{xy} + q^2\sum{x^2}}{m - 1}
+	\label{eq:sd_ratios_m}
+\end{equation}
+
+\begin{align*}
+	s_{q, m}^2 &= \frac{230,244,509 - 2 \times 0.982489 \times 231,280,871 + 0.982489^2 \times 234,376,912}{6 - 1} \\ 
+	&= 404,624
+	\label{eq:sd_ratios_m}
+\end{align*}
+This quantity is then used for the calculation of the estimated standard deviation of population ratios as
+\begin{equation}
+	{s'_Q}^2 = M_U(m) s_{Q, m}^2
+\end{equation}
+\begin{equation*}
+	= 0.1147 \times 404,624 = 46,410.33
+\end{equation*}
+Precision achieved is then calculated with Equation \ref{eq:pred_interval_ratio}
+\begin{equation*}
+  g t_{\alpha/2} s'_Q
+\end{equation*}
+\begin{equation*}
+  994.9874 \times 2.571 \times \sqrt{46,410.33} = 551,006
+\end{equation*}
+
+\paragraph{Regression estimator}
+
+Finally, for the regression estimator, the estimated standard deviation of the population differences is adjusted as follows to obtain the estimated standard deviation of the regression population
+
+\begin{equation}
+	{s'_{r}}^2 = {s'_{d}}^2 - 2(b_1 - 1)(c_{xy} - s_x^2) + (b_1 - 1)^2 s_x^2
+	\label{eq:s_dash_r}
+\end{equation}
+where ${s'_{d}}^2$ is the result obtained for the difference estimator in Equation \ref{eq:sd_diff_sporadic} $b_1$ is the slope coefficient, as defined in Equation \ref{eq:regression_slope}, and $s_x^2$ is the variance of book values. First, we calculate the last two values.
+We then add the results into Equation \ref{eq:s_dash_r}.
+\begin{align*}
+	{s'_{r}}^2 &= 43,483.25 - 2(0.9915 - 1)(1,120,631 - 1,130,239) \\
+	&+ (0.9915 - 1)^2 \times 1,130,239 \\
+	&= 43,401.57
+\end{align*}
+Precision achieved is then calculated with 
+\begin{equation*}
+  g t_{\alpha/2} s'_r
+\end{equation*}
+\begin{equation*}
+  994.9874 \times 2.571 \times \sqrt{43,401.57} = 532,846
+\end{equation*}
+
+\section{Stratification} % (fold)
+\label{sec:stratification}
+
+We looked at one strategy to reduce the standard error of the estimate by employing auxiliary variables. Another strategy is to stratify the population before sampling. These strategies can be combined.
+
+\emph{Stratification}\index{stratification}\marginnote{stratification} is defined as the process of dividing a population into mutually exclusive subpopulations or \emph{strata}\index{stratum}\marginnote{stratum}, usually with the purpose of reaching a more precise estimate. Instead of sampling from the entire population, we take separate samples from the strata and then combine the results.
+
+The philosophy behind stratification is straightforward. If the population elements display a large degree of variability, estimates will necessarily be imprecise. The overall variability can be reduced by assigning elements to different strata, such that the variability within a stratum is small and that between the strata is large.
+
+\bigskip
+Further justification for stratification may be as follows:
+\begin{compactitem}
+\item the populations are recorded at different physical locations;
+\item we use different audit procedures at each stratum; and
+\item we not only want to conclude on the population as a whole, but also on each or some of its parts.
+\end{compactitem}
+
+\bigskip
+In some cases, we test all items in a stratum. This stratum is called the \emph{census stratum}\index{census stratum}\index{stratum!census}\marginnote{census stratum} or \emph{100\% stratum}. Testing all items in a stratum may be the most efficient way to allocate the sample, or may be intentional: if we allocate all potential problematic items to the census stratum, we ensure that they are all tested and that their results will not add to the imprecision of the estimate.
+
+\bigskip
+The remainder of this section is devoted to some choices that arise when we decide that stratification is required.
+\begin{compactitem}
+\item the number of strata;
+\item how stratum boundaries are determined;
+\item determination of the sample size;
+\item allocation of the sample to the strata;
+\item evaluation of the results per stratum; and
+\item combination of the results of the strata.
+\end{compactitem}
+
+\paragraph{Number of strata}
+
+Two effects offset each other when increasing the number of strata: a reduction in variance and a reduction in the number of degrees of freedom. When stratifying, the combined estimate is expected to be more precise than that from an unstratified sample, but only if we manage to reduce the variance within a stratum by increasing the variance among the strata. Therefore, there is nothing to be gained by stratification if the resulting strata have the same properties of the variable of interest. We should also bear in mind that we typically cannot stratify this variable itself (for instance, the audit value of a population item), but on an auxiliary variable (the book value), since it may not be available for all population items. As a result, the positive effect of stratification depends on the correlation between the variable of interest and auxiliary variable. In practice, observing larger than expected differences between the book and audit values of items in a particular stratum may adversely affect the precision.
+
+Apart from an unfortunate distribution of audit differences across strata, as the number of strata increases, we lose degrees of freedom as we make separate estimates of the mean and standard deviation in each stratum. Therefore, we should be careful in limiting the number of strata such that there is a sufficient number of observations per stratum. In practice, this implies that 5-20 strata may be sufficient.
+
+\paragraph{Stratum boundaries}
+
+Three techniques for locating stratum boundaries often used in practice are
+\begin{compactitem}
+\item judgmentally created boundaries;
+\item equal book values\index{stratification!equal book values}; and
+\item cumulative square root of frequencies\index{stratification!cumulative square root of frequencies}.
+\end{compactitem}
+
+We may determine strata boundaries judgmentally\index{stratification!judgmentally determined boundaries}\marginnote{judgmentally determined boundaries} when we believe this is appropriate, for example, if we want to conclude on one or each of the strata separately or if we expect that error patterns are different between the strata.
+
+A straightforward technique to stratify the population is to choose stratum boundaries such that each stratum contains approximately the same book value\index{stratification!equal book values}. To do this, we first exclude all items that have a book value above a certain threshold: the \emph{upper monetary cut-off}\index{upper monetary cut-off}\marginnote{upper monetary cut-off}. Similarly, all items below a certain other value (the \emph{lower monetary cut-off})\index{lower monetary cut-off}\marginnote{lower monetary cut-off} may be excluded. For example, it may make sense to exclude all items with negative book values. The total remaining book value is then divided by the desired number of strata, resulting in the target book value per stratum. Strata boundaries are then set such that each stratum contains approximately the same total book value.
+
+\bigskip
+We apply this method to the population of Inventories. The total population book value is 7,360,816. We assume that we want to create three strata. For the purpose of this example, we will not exclude any high or low book values. The desired total book value per stratum is therefore 7,360,816 / 3 = 2,453,605. The resulting stratification is listed in Table \ref{tab:strat_equal}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1.5 cm}{Stratum} &
+\parbox[t]{2.2 cm}{\raggedleft Number of items $N$} &
+\parbox[t]{2.2 cm}{\raggedleft Book~values} &
+\parbox[t]{2.2 cm}{\raggedleft Cumulative book~value} \\
+
+\midrule
+
+1 & 2,431 & 1.57 - 2,478.93 & 2,452,927.31 \\
+2 & 710 & 2,480.29 - 4,833.28 & 2,453,454.96 \\
+3 & 359 & 4,839.62 - 18,496.21 & 2,454,433.73 \\
+\midrule
+Total & 3,500 & & 7,360,816.00 \\
+\bottomrule
+\end{tabular*}
+
+\caption{Stratification with equal recorded values}
+\label{tab:strat_equal}
+\end{table}
+
+% These results are obtained in \ttblue{R} by running the following code:
+
+Another popular method among auditors is referred to as the \emph{cumulative square root of frequencies}\index{cumulative square root of frequencies}\marginnote{cumulative square root of frequencies} method. Using this method, we first exclude all items above the upper monetary cut-off and below the lower monetary cut-off. The remaining population is then divided into a large number of classes with equal widths. The number of items per class is counted and a running total is produced from the square root of these frequencies. The total square root of frequencies is divided by the desired number of strata, and stratum boundaries are then set such that each stratum contains approximately the same sum of the square root of frequencies.
+
+\bigskip
+We illustrate this method on the same population of Inventories using a simplified example, where we first create ten classes of equal width. The largest book value in the population is 18,496.21, and the smallest is 1.57. The range between the values is thus divided into ten equal parts, each with a width of 1849.46.\marginnote{It is also possible to use cells of unequal length. In that case, the square root of the frequency is multiplied by the square root of the cell length before cumulating.} The class upper boundaries are therefore 1,851.03, 3,700.50, 5,549.96, and so forth.
+
+\bigskip
+A summary of this classification is given in Table \ref{tab:class_inventories}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1 cm}{Class} &
+\parbox[t]{2.2 cm}{\raggedleft Book~values} &
+\parbox[t]{2.2 cm}{\raggedleft Frequency $f$} &
+\parbox[t]{1 cm}{\raggedleft $\sqrt{f}$} &
+\parbox[t]{1.5 cm}{\raggedleft Cum.~sum} \\
+
+\midrule
+
+1 & 1.57 - 1,848.60 & 2,030 & 45.06 & 45.06\\
+2 & 1,851.65 - 3,694.56 & 857 & 29.27 & 74.33 \\
+3 & 3,700.70 - 5,547.71 & 360 & 18.97 & 93.30 \\
+4 & 5,556.67 - 7,398.87 & 154 & 12.41 & 105.71 \\
+5 & 7,406.10 - 9,238.08 & 63 & 7.94 & 113.65 \\
+6 & 9,273.30 - 11,077.31 & 24 & 4.90 & 118.55 \\
+7 & 11,299.53 - 12,723.03 & 7 & 2.65 & 121.20 \\
+8 & 13,131.76 - 14,125.05 & 4 & 2.00 & 123.20 \\
+9 & - & 0 & 0.00 & 123.20 \\
+10 & 18,496.21 & 1 & 1.00 & 124.20 \\
+\midrule
+Total & & 3,500 & 124.20 & \\
+\bottomrule
+\end{tabular*}
+\caption{Classification of Inventories}
+\label{tab:class_inventories}
+\end{table}\nomenclature{$f$}{frequency}
+
+
+The total sum of square roots of frequencies of 124.20 is divided by the desired number of strata 3, resulting in a target sum of 41.40. 
+
+In the example in Table \ref{tab:class_inventories} the first stratum is formed by class 1. The cumulative sum for class 1 is 45.05, which is greater than 41.40. The sum without class 1 is 0. Since 45.05 is closer to 41.40 than 0, stratum 1 is formed by class 1. 
+
+For the second stratum, we add classes 2 and 3 for a subtotal of 48.24, which is closer to 41.40 than the subtotal of 29.27 for class 2 only. Hence, stratum 2 contains classes 2 and 3.
+
+The third stratum contains the remaining classes 4-10.
+
+\bigskip
+Table \ref{tab:strat_cum_sum} presents the resulting stratification for the cumulative square root of frequencies method. 
+% The table is stored in the \ttblue{myStrat} argument \ttblue{stratSumm}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1.4 cm}{Stratum} &
+\parbox[t]{2.2 cm}{\raggedleft Book~values} &
+\parbox[t]{1.8 cm}{\raggedleft Frequency} &
+\parbox[t]{1.5 cm}{\raggedleft Sum} \\
+
+\midrule
+
+1 & 1.57 - 1,848.60 & 2,030 & 45.06 \\
+2 & 1,851.65 - 5,547.71 & 1,217 & 48.25 \\
+3 & 5,556.67 - 18,496.21 & 253 & 30.89 \\
+
+\midrule
+
+Total & & 3,500 & 124.20 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Stratification with the cumulative square root of frequencies}
+\label{tab:strat_cum_sum}
+\end{table}
+
+We continue the example calculations with the results from Table \ref{tab:strat_cum_sum}.
+
+\paragraph{Sample size}
+
+It is difficult to calculate the required sample size for a stratified sample. The following complications are identified:
+\begin{compactitem}
+\item For the MPU estimator, we need an estimate of the variance of the audit values, but before we have tested any items this is not available. As a temporary solution, we can use the variance of the book values.
+\item If, however, the book values have a strong correlation with the audit values, and therefore the variance of the book values is a proxy for that of the audit values, we expect that the estimation techniques that use the book value as an auxiliary variable provide more precise estimates than the MPU estimator. To take advantage of this improved precision in the expected sample size, we need an estimate of the variance of the differences or ratios (in the case of difference or ratio estimation), or the correlation between book and audit values (in the case of regression estimation). Until we tested some items, we could not obtain a reasonable estimate of these variances.
+\item The sample size is needed for the determination of the number of degrees of freedom of the relevant $t$-factor, which is needed to determine the sample size.
+\item The formula to calculate the required sample size assumes normality of the audit values or differences.
+\end{compactitem} 
+
+\bigskip
+Therefore, it is recommended to first obtain a pilot sample of sufficient size (at least 50) to estimate reasonable approximations of these input variables. However, in practice this may not always be possible.
+
+A commonly used formula to assess the required sample size is given by
+
+\begin{equation}
+n = \frac{t^2(\sum{N_h s_{y,h}})^2}{E^2 + t^2\sum{N_h s_{y,h}^2}}
+\label{eq:sample_size_strat}
+\end{equation}
+where $N_h$ denotes the number of population elements in stratum $h$.\nomenclature{$h$}{stratum}
+
+We apply this formula to the stratification results from Table \ref{tab:strat_cum_sum}. We use the standard deviation of the stratum book values as an approximation of the standard deviation of the stratum audit values.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_x$} &
+\parbox[t]{1.5 cm}{\raggedleft $N s_x$} &
+\parbox[t]{1.5 cm}{\raggedleft $N s_x^2$} \\
+
+\midrule
+
+1 & 2,030 & 524.12 & 1,063,964 & 557,644,952 \\
+2 & 1,217 & 1,001.24 & 1,218,515 & 1,220,031,365 \\
+3 & 253 & 1,828.32 & 462,564 & 845,712,351 \\
+
+\midrule
+
+Total & 3,500 & & 2,745,042 & 2,623,388,667 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Sample size calculation for stratified sample. To increase readability, we have omitted the stratum suffix $h$ in the table headers.}
+\label{tab:samp_size_stratified}
+\end{table}
+
+Filling in the intermediate values from Table \ref{tab:samp_size_stratified} into Equation \ref{eq:sample_size_strat} yields the minimum sample size required to achieve a precision of 200,000.
+\marginnote{At this stage, the determination of the mean-per-unit $t$ value is arbitrary. We presume that the calculated sample size is greater than 200, and therefore use a mean-per-unit $t$ value with 200 degrees of freedom.}
+\begin{equation*}
+n = \frac{1.972^2 \times 2,745,042^2} {200,000^2 + 1.972^2 \times 2,623,388,667} = 584
+%\label{eq:sample_size_strat}
+\end{equation*}
+
+
+
+\paragraph{Sample allocation}
+
+Sample allocation is different for the two stratification methods. When we stratify the population by equal recorded value boundaries, the sample is evenly distributed over the strata. With a sample size of $n = 584$, this implies that 195 units are selected from each stratum.
+
+When we stratify the population using the cumulative square root of frequencies method, the calculated sample size is allocated to the strata proportionally to the products of the stratum frequency and stratum (estimated) standard deviation. This method is referred to as \emph{optimum allocation}\index{optimum allocation}\index{allocation!optimum}\marginnote{optimum allocation}, or \emph{Neyman allocation}\index{Neyman allocation}\index{allocation!Neyman}\marginnote{Neyman allocation} after its inventor, Polish mathematician and statistician Jerzy Neyman.
+
+\begin{equation}
+n_h = n \frac{N_h s_{y,h}}{\sum{N_h s_{y,h}}}
+\label{eq:sample_allocation}
+\end{equation}
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_x$} &
+\parbox[t]{1.5 cm}{\raggedleft $N s_x$} &
+\parbox[t]{1 cm}{\raggedleft $n$} \\
+
+\midrule
+
+1 & 2,030 & 524.12 & 1,063,964 & 226 \\
+2 & 1,217 & 1,001.24 & 1,218,515 & 259 \\
+3 & 253 & 1,828.32 & 462,564 & 98 \\
+
+\midrule
+
+Total & 3,500 & & 2,745,042 & 583 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Sample size allocation for stratified sample.}
+\label{tab:sample_allocation}
+\end{table}
+\marginnote{Due to rounding in the sample size allocation process, the total sample size allocated may be slightly different from the minimum sample size calculated.}
+
+For example, when allocating the total sample size of 583 to the three strata, the sample size for stratum 1 is
+
+\begin{equation*}
+n_1 = 584 \times \frac{1,063,964}{2,745,042}= 226
+% \label{eq:sample_allocation}
+\end{equation*}
+
+\paragraph{Sample selection} Next step is to select the sample from the strata. As in unstratified sampling, selection is random, with no regard to the individual book values of the elements within a stratum.
+
+% section stratification (end)
+
+\section{Evaluation of a stratified sample} % (fold)
+\label{sec:evaluation_of_a_stratified_sample}
+
+% As soon as we audited the selected sampling units, we submit their true values to the \ttblue{cvs\_obj} object, and evaluate the sample.
+% \marginnote{In this example, we look up the audit values for the selected sampling units. In practice, we obtain the audit values differently, and store them in the order in which they are stored in the \ttblue{sample} attribute of the \ttblue{cvs\_obj} object.}
+
+In this section, we show how the evaluation results are obtained. 
+
+\paragraph{Mean per unit estimation} We look at the results for MPU estimation first. Note that the values for $s$ in Table \ref{tab:sample_results_strat} are different from those in Table \ref{tab:samp_size_stratified}, as we now use the audit values from the sample. In Table \ref{tab:samp_size_stratified} we calculate $s_x$ using the book values in the population. 
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1.5 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1.5 cm}{\raggedleft $n$} &
+\parbox[t]{2 cm}{\raggedleft $\sum{y}$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_y$} \\
+
+\midrule
+
+1 & 2,030 & 226 & 183,746.92 &   545.26 \\
+2 & 1,217 & 259 & 853,049.17 & 1,302.54 \\
+3 &   253 &  98 & 779,308.12 & 2,824.72 \\
+
+\midrule
+
+Total &  3,500 & 583 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Intermediate results of the three strata}
+\label{tab:sample_results_strat}
+\end{table}
+
+The stratified MPU estimate is the sum of the three MPU estimates per stratum, as shown in Table \ref{tab:stratified_MPU_estimate}. 
+% Note that the estimate matches the \ttblue{audit value} estimate in the \ttblue{mpu} column of the \ttblue{Estimates} attribute.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1.5 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1.5 cm}{\raggedleft $\overline{y}$} &
+\parbox[t]{2.0 cm}{\raggedleft $N \overline{y}$} \\
+
+\midrule
+
+1 & 2,030  &   813.04 & 1,650,470.12 \\
+2 & 1,217  & 3,293.63 & 4,008,343.01 \\
+3 &   253  & 7,952.12 & 2,011,887.29 \\
+
+\midrule
+
+Total &  3,500 & & 7,670,700.42 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Stratified MPU estimate}
+\label{tab:stratified_MPU_estimate}
+\end{table}
+
+We can see from Table \ref{tab:stratified_MPU_estimate} that $\hat{Y}_{MPU} = 7,670,700.42$.
+
+\bigskip
+The estimated variance of $\hat{Y}_{MPU}$ is given by
+
+\begin{equation}
+s^2_{MPU} = \sum_{h = 1}^{L}g_h^2 s_{y,h}^2
+\label{eq:estimated_variance_MPU}
+\end{equation}
+where $L$ is the number of strata \nomenclature{$L$}{number of strata}, and $g_h = \sqrt{\frac{N_h(N_h - n_h)}{n_h}}$.
+
+\bigskip
+The calculations are summarized in Table \ref{tab:intermediate_results_variance}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1 cm}{\raggedleft $N$} &
+\parbox[t]{0.8 cm}{\raggedleft $n$} &
+\parbox[t]{1.2 cm}{\raggedleft $g^2$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_y^2$} &
+\parbox[t]{2 cm}{\raggedleft $g^2 s_y^2$} \\
+
+\midrule
+
+1 & 2,030 & 226 & 16,204.07 &   297,308 & 4,817,605,606 \\
+2 & 1,217 & 259 &  4,501,49 & 1,696,612 & 7,637,282,583 \\
+3 &   253 &  98 &    400.15 & 7,979,066 & 3,192,847,772 \\
+
+\midrule
+
+Total & & & & & 15,647,735,961 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Intermediate results for the calculation of the variance of the MPU estimate}
+\label{tab:intermediate_results_variance}
+\end{table}
+
+\bigskip
+The standard error of the MPU estimate is the square root of its variance $s_{MPU} = \sqrt{15,647,735,961} = 125,090.91.$ This standard error $s_{MPU}$ is then used to obtain the lower and upper bounds of the prediction interval.
+
+\begin{equation}
+\hat{Y}_{MPU} \pm t s_{MPU} 
+\label{eq:pred_interval_strat_MPU}
+\end{equation}
+
+The effective number of degrees of freedom $df_e$ is calculated with
+
+\begin{equation}
+df_e = \frac{(\sum g_h^2 s_{y,h}^2)^2}{\sum \frac{(g_h^2 s_{y,h}^2)^2}{n_h - 1}}
+\label{eq:df_effective}
+\end{equation}
+
+Filling in the values from Table \ref{tab:intermediate_results_variance} we then get
+
+\begin{equation*}
+df_{e, MPU} = \frac{15,647,735,961^2}{\frac{4,817,605,606^2}{225} + \frac{7,637,282,583^2}{258} + \frac{3,192,847,772^2}{97}} = 564
+\end{equation*}
+
+In this case, the effective number of degrees of freedom $df_e = 564$ and the corresponding $t$ value equals $1.9642$. Therefore, using Equation \ref{eq:pred_interval_strat_MPU} 
+
+\begin{equation*}
+7,670,700 \pm 245,704
+\end{equation*}
+leads to a prediction interval of [7,424,999,\hspace{0.5em} 7,916,401]. This result is more precise than that for unstratified sampling but is not sufficiently precise for the target precision of 200,000.
+
+\bigskip
+\paragraph{Regression estimation} For the evaluation of the regression estimator, we start with the covariance\index{covariance}\marginnote{covariance} $c_{xy}$ between the book values $x$ and audit values $y$ from Equation \ref{eq:covariance}. The calculation is
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.8 cm}{\raggedleft $\sum{x y}$} &
+\parbox[t]{1 cm}{\raggedleft $n$} &
+\parbox[t]{1 cm}{\raggedleft $\bar{x}$} &
+\parbox[t]{1 cm}{\raggedleft $\bar{y}$} &
+\parbox[t]{1 cm}{\raggedleft $c_{xy}$} \\
+
+\midrule
+
+1 &   212,652,334 & 226 &   827.20 &   813.04 &   269,587 \\
+2 & 3,067,091,255 & 259 & 3,268.20 & 3,293.63 & 1,082,008 \\
+3 & 6,492,159,030 &  98 & 7,731.59 & 7,952.12 & 4,813,063 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Calculation of the covariance}
+\label{tab:covariance}
+\end{table}
+
+The slope is then calculated as
+
+\begin{equation}
+b_1 = \frac{\sum{g_h^2 c_{xy, h}}}{\sum{g_h^2 s_{x, h}^2}}
+\end{equation}
+
+
+Table \ref{tab:calculation_slope} shows the intermediate results that lead to the calculation of coefficient $b_1 = \frac{11,165,022,188}{10,881,902,823} = 1.026$.
+
+\begin{table*}[htbp]
+\begin{tabular*}{17.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $g^2$} &
+\parbox[t]{1.5 cm}{\raggedleft $c_{xy}$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_x$} &
+\parbox[t]{2.5 cm}{\raggedleft $g^2 c_{xy}$} &
+\parbox[t]{2.5 cm}{\raggedleft $g^2 s_{x}^2$} \\
+
+\midrule
+
+1 & 16,204.07 &   269,587.26 &   528.93 & 4,368,411,054 & 4,533,333,210 \\
+2 &  4,501.49 & 1,082,008.13 & 1,027.37 & 4,870,649,168 & 4,751,253,947 \\
+3 &    400.15 & 4,813,063.18 & 1,997.94 & 1,925,961,966 & 1,597,315,666 \\
+
+\midrule
+
+Total & & & & 11,165,022,188 & 10,881,902,823 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Calculation of the slope coefficient $b_1$}
+\label{tab:calculation_slope}
+\end{table*}
+
+\bigskip
+The equation for the regression estimator for a stratified sample is a slight moderation from the one given by Equation \ref{eq:regression_estimate}
+\begin{equation}
+	\hat{Y}_R = \sum{N \overline{y}} + b_1 (X - \sum{N \overline{x}})
+\label{eq:regression_estimate_stratified}
+\end{equation}
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.8 cm}{\raggedleft $N$} &
+\parbox[t]{1 cm}{\raggedleft $\bar{x}$} &
+\parbox[t]{1 cm}{\raggedleft $N \bar{x}$} \\
+
+\midrule
+
+1 & 2,030 &   827.20 & 1,679,213.22 \\
+2 & 1,217 & 3,268.20 & 3,977,396.35 \\
+3 &   253 & 7,731.59 & 1,956,092.61 \\
+
+\midrule
+
+Total & & & 7,612,702.17 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Calculation of $N \bar{x}$}
+\label{tab:calculation_N_times_bar_x}
+\end{table}
+
+The regression estimate is then
+
+\begin{equation*}
+	\hat{Y}_R = 7,670,700.42 + 1.026 \times (7,360,816.00 - 7,612,702.17) = 7,412,261
+\end{equation*}\marginnote{note that $\sum{N \overline{y}} = 7,670,700.42$ is the MPU estimate from Table \ref{tab:stratified_MPU_estimate}.}
+
+The \emph{standard error of the regression population}\marginnote{standard error of the regression population}\index{standard error!regression population} per stratum is given by
+
+\begin{equation}
+s_{y_{r, h}} = \sqrt{\frac{n_h - 1}{n_h - 2}(s_{y, h}^2 - 2 b_1 c_{xy, h} + b_1^2 s_{x, h}^2)}
+\label{eq:standard_error_regression_population_stratum}
+\end{equation}
+
+The calculations for this quantity are as follows:
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.2 cm}{\raggedleft $n$} &
+\parbox[t]{1.6 cm}{\raggedleft $s_y^2$} &
+\parbox[t]{1.6 cm}{\raggedleft $c_{xy}$} &
+\parbox[t]{1.6 cm}{\raggedleft $s_x^2$} &
+\parbox[t]{1.6 cm}{\raggedleft $s_{y_r}^2$} \\
+
+\midrule
+
+1 & 226 &   297,308 &   269,587 &   279,765 &    38,790 \\
+2 & 259 & 1,696,612 & 1,082,008 & 1,055,485 &   589,700 \\
+3 &  98 & 7,979,066 & 4,813,063 & 3,991,762 & 2,328,674 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Calculation of the estimated variance of the regression population}
+\label{tab:standard_error_regression}
+\end{table}
+
+\bigskip
+The estimated variance of $\hat{Y}_{R}$ is given by
+
+\begin{equation}
+s^2_{R} = \sum_{h = 1}^{L}g_h^2 s_{y_r,h}^2
+\label{eq:estimated_variance_regression}
+\end{equation}
+
+The calculations are summarized in Table \ref{tab:intermediate_results_variance}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1 cm}{\raggedleft $N$} &
+\parbox[t]{0.8 cm}{\raggedleft $n$} &
+\parbox[t]{1.2 cm}{\raggedleft $g^2$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_{\hat{y}_r}^2$} &
+\parbox[t]{2 cm}{\raggedleft $g^2 s_{y_r}^2$} \\
+
+\midrule
+
+1 & 2,030 & 226 & 16,204.07 &    38,790 &   628,560,668 \\
+2 & 1,217 & 259 &  4,501,49 &   589,700 & 2,654,530,513 \\
+3 &   253 &  98 &    400.15 & 2,328,674 &   931,826,118 \\
+
+\midrule
+
+Total &   &     &           &           & 4,214,917,300 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Intermediate results for the calculation of the variance of the regression estimate}
+\label{tab:intermediate_results_variance_reg}
+\end{table}
+
+\bigskip
+The standard error of the regression estimate is the square root of the variance $s_{R} = \sqrt{4,214,917,300} = 64,922.39.$ This standard error $s_{R}$ is then used to obtain the lower and upper bounds of the prediction interval.
+
+\begin{equation}
+\hat{Y}_{R} \pm t s_{R} 
+\label{eq:pred_interval_strat_reg}
+\end{equation}
+
+The effective number of degrees of freedom $df_e$ is calculated with Equation \ref{eq:df_effective}, now using the variances from Table \ref{tab:intermediate_results_variance_reg}
+
+\begin{equation*}
+df_{e, R} = \frac{4,214,917,300^2}{\frac{628,560,668^2}{225} + \frac{2,654,530,513^2}{258} + \frac{931,826,118^2}{97}} = 467
+\end{equation*}
+
+
+In this case, the effective number of degrees of freedom $df_e = 467$, and the corresponding mean-per-unit$t$ value equals $1.9651$. Therefore, using Equation \ref{eq:pred_interval_strat_reg} 
+
+\begin{equation*}
+7,412,261 \pm 1.9651 \times 64,922.39 = 7,412,261 \pm 127.576
+\end{equation*}
+leads to a prediction interval of [7,284,685,\hspace{0.5em} 7,539,837]. The regression estimator yielded an estimate that is sufficiently precise, given the target precision of 200,000.
+
+
+
+\bigskip
+\paragraph{Difference estimation} The stratified difference estimate is the sum of the three difference estimates per stratum, as displayed in Table \ref{tab:stratified_diff_estimate}. 
+
+\begin{equation}
+\hat{Y}_D = X - \sum{N \overline{d}}
+\label{eq:stratified_difference_estimate}
+\end{equation}
+
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrr}
+\toprule
+\parbox[t]{1.5 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1.5 cm}{\raggedleft $n$} &
+\parbox[t]{2 cm}{\raggedleft $\sum{d}$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_d$} \\
+
+\midrule
+
+1 & 2,030 & 226 &   3,199.97 &   194.68 \\
+2 & 1,217 & 259 &  -6,586.02 &   766.86 \\
+3 &   253 &  98 & -21,612.17 & 1,531.24 \\
+
+\midrule
+
+Total &  3,500 & 583 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Intermediate results for difference estimation}
+\label{tab:sample_results_diff}
+\end{table}
+
+
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1.5 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1.5 cm}{\raggedleft $\overline{d}$} &
+\parbox[t]{2.0 cm}{\raggedleft $N \overline{d}$} \\
+
+\midrule
+
+1 & 2,030 &   14.16 &  28,743.09 \\
+2 & 1,217 &  -25.43 & -30,946.67 \\
+3 &   253 & -220.53 & -55,794.68 \\
+
+\midrule
+
+Total &  3,500 & & -57,998.26 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Stratified difference estimate of total misstatement}
+\label{tab:stratified_diff_estimate}
+\end{table}
+
+The difference estimate of the population audit value is $7,360,816 - (-57,998.26) = 7,418,814$. 
+% This matches the \ttblue{audit value} estimate of the \ttblue{diff} column in the \ttblue{Estimates} attribute.
+
+\bigskip
+The estimated variance of $\hat{Y}_D$ is given by
+
+\begin{equation}
+s^2_{D} = \sum_{h = 1}^{L}g_h^2 s_{d,h}^2
+\label{eq:estimated_variance_diff}
+\end{equation}
+
+\bigskip
+The calculations are summarized in Table \ref{tab:intermediate_results_variance_diff}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1 cm}{\raggedleft $N$} &
+\parbox[t]{0.8 cm}{\raggedleft $n$} &
+\parbox[t]{1.2 cm}{\raggedleft $g^2$} &
+\parbox[t]{1.5 cm}{\raggedleft $s_d^2$} &
+\parbox[t]{2 cm}{\raggedleft $g^2 s_d^2$} \\
+
+\midrule
+
+1 & 2,030 & 226 & 16,204.07 &    37,898.92 &   614,116,709 \\
+2 & 1,217 & 259 &  4,501,49 &   588,080.39 & 2,647,238,193 \\
+3 &   253 &  98 &    400.15 & 2,344,701.56 &   938,239,506 \\
+
+\midrule
+
+Total & & & & & 4,199,594,408 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Intermediate results for the calculation of the variance of the difference estimate}
+\label{tab:intermediate_results_variance_diff}
+\end{table}
+
+The standard error of the difference estimate is the square root of its variance $s_D = \sqrt{4,199,594,408} = 64,804.28.$ This standard error $s_D$ is then used to obtain the lower and upper bounds of the prediction interval.
+
+\begin{equation}
+\hat{Y}_D \pm t s_D
+\label{eq:pred_interval_strat_diff}
+\end{equation}
+
+The effective number of degrees of freedom $df_{e, D}$ is calculated using Equation \ref{eq:df_effective}, by substituting the values from Table \ref{tab:intermediate_results_variance_diff}.
+
+\begin{equation*}
+df_{e, D} = \frac{4,199,594,408^2}{\frac{614,116,709^2}{225} + \frac{2,647,238,193^2}{258} + \frac{938,239,506^2}{97}} = 465
+\end{equation*}
+
+For the difference estimator, the effective number of degrees of freedom $df_{e, d} = 465$, and the corresponding mean-per-unit$t$ value equals $1.9651$. Therefore, using Equation \ref{eq:pred_interval_strat_diff} 
+
+\begin{equation*}
+7,418,814 \pm 1.9651 \times 64,804 = 7,418,814 \pm 127,346
+\end{equation*}
+leads to a prediction interval of [7,291,468,\hspace{0.5em} 7,546,160]. This result is more precise than that for unstratified sampling, and sufficiently precise, given the target precision of 200,000.
+
+\bigskip
+\paragraph{Ratio estimation} We finish this section with the calculations for ratio estimation. The ratio $q$ is given by
+\begin{equation}
+q = \frac{\sum{N_h \bar{y}_h}}{\sum{N_h \bar{x}_h}}
+\end{equation}
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.5 cm}{\raggedleft $N$} &
+\parbox[t]{1 cm}{\raggedleft $\bar{x}$} &
+\parbox[t]{1 cm}{\raggedleft $\bar{y}$} &
+\parbox[t]{1 cm}{\raggedleft $N \bar{x}$} &
+\parbox[t]{1 cm}{\raggedleft $N \bar{y}$} \\
+
+\midrule
+
+1 & 2,030 &   827.20 &   813.04 & 1,679,213.22 & 1,650,470.12 \\
+2 & 1,217 & 3,268.20 & 3,293.63 & 3,977,396.35 & 4,008,343.01 \\
+3 &   253 & 7,731.59 & 7,952.12 & 1,956,092.61 & 2,011,887.29\\
+
+\midrule
+
+Total & 3,500 & &               & 7,612,702.17 & 7,670,700.42 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Calculation of the ratio $q$}
+\label{tab:ratio_q}
+\end{table}
+
+Using the results from Table \ref{tab:ratio_q} this yields
+
+\begin{equation*}
+q = \frac{7,670,700.42}{7,612,702.17} = 1.0076
+\end{equation*}
+
+The stratified ratio estimate of the population audit value is then
+
+\begin{equation}
+\hat{Y}_Q = X q = 7,360,816 \times 1.0076 =  7,416,895.23
+\end{equation}
+
+% This matches the \ttblue{audit value} estimate in the \ttblue{ratio} column of the \ttblue{Estimates} attribute.
+
+\bigskip
+The estimated variance of $\hat{Y}_Q$ is given by
+
+\begin{equation}
+s_Q^2 = \sum_{h = 1}^{L}g_h^2 s_{q,h}^2
+\label{eq:estimated_variance_rat}
+\end{equation}
+where $s_{q,h}^2$ is the stratum variance, the square of the stratum standard deviation calculated using Equation \ref{eq:sd_ratios}.
+
+\bigskip
+The calculations are summarized in Table \ref{tab:intermediate_results_variance_rat}.
+
+\begin{table}[htbp]
+\begin{tabular*}{11.2 cm}{lrrr}
+\toprule
+\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.2 cm}{\raggedleft $g^2$} &
+\parbox[t]{2 cm}{\raggedleft $s_q^2$} &
+\parbox[t]{2.5 cm}{\raggedleft $g^2 s_q^2$} \\
+
+\midrule
+
+1 & 16,204.07 &    38,070.24 &   616,892,795 \\
+2 &  4,501,49 &   587,737.51 & 2,645,694,719 \\
+3 &    400.15 & 2,332,418.89 &   933,324,559 \\
+
+\midrule
+
+Total &       &              & 4,195,912,074 \\
+
+\bottomrule
+\end{tabular*}
+\caption{Intermediate results for the calculation of the variance of the difference estimate}
+\label{tab:intermediate_results_variance_rat}
+\end{table}
+
+The standard error of the ratio estimate is the square root of its variance $s_Q = \sqrt{4,195,912,074} = 64,775.86.$ This standard error $s_{\hat{Y}_d}$ is then used to obtain the lower and upper bounds of the prediction interval.
+
+\begin{equation}
+\hat{Y}_Q \pm t s_Q 
+\label{eq:pred_interval_strat_rat}
+\end{equation}
+
+The effective number of degrees of freedom $df_{e, Q}$ is again calculated with Equation \ref{eq:df_effective}, now using the values from Table \ref{tab:intermediate_results_variance_rat}
+
+\begin{equation*}
+df_{e, Q} = \frac{4,195,912,074^2}{\frac{616,892,795^2}{225} + \frac{2,645,694,719^2}{258} + \frac{933,324,559^2}{97}} = 465
+\end{equation*}
+
+The effective number of degrees of freedom $df_{e, Q} = 465$, and the corresponding mean-per-unit $t$ value equals $1.9651$. Therefore, using Equation \ref{eq:pred_interval_ratio} 
+
+\begin{equation*}
+7,416,895 \pm 1.9651 \times 64,776 = 7,416,895 \pm 127,290
+\end{equation*}
+leads to a prediction interval of [7,289,605,\hspace{0.5em} 7,544,185]. This result is more precise than that for unstratified sampling and is sufficiently precise, given the target precision of 200,000.
+
+% section evaluation_of_a_stratified_sample (end)
+
+\section{Workshop} % (fold)
+\label{sec:workshop04}
+
+\input{workshop04_R}
+
+% section workshop_03 (end)
+
+
+
+% chapter stratified_sampling (end)
