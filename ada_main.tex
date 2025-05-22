@@ -27,6 +27,8 @@
 \usepackage{parskip}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{../_PNG_files/}}
 \usepackage{ragged2e}
 \usepackage{tabularx}
 \usepackage{array}
@@ -37,6 +39,7 @@
 \usepackage[framemethod=tikz]{mdframed} 
 % To print stuff in two or more columns
 \usepackage{multicol}
+\usepackage{hyperref}
 
 \usepackage{amsmath}
 
@@ -49,10 +52,22 @@
 \usepackage{amsthm}
 \let\openbox\savedopenbox
 
+% Automatically numbered Exercises
+\usepackage{amsthm}
+\theoremstyle{definition} % Sets font to plain text
+\newtheorem{exercise}{Exercise}[chapter]
+
+
 %% Use different font  
 % %% Build with LaTeX
 \usepackage[T1]{fontenc}
 \usepackage{newpxtext,newpxmath}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\small}
+
 
 %%
 % For nicely typeset tabular material
@@ -117,6 +132,7 @@
   \number\year%
 }
 
+
 \newcommand{\closenomencl}{%
   \closeout\@nomenclaturefile%
 }
@@ -147,12 +163,13 @@
 
 \AtEndDocument{\writenomencl{\jobname}}
 
-
-
+%Bold italic for stochasts
+\newcommand\stoch[1]{\textit{\textbf{#1}}}
 
 % Margin notes like Tufte
 \usepackage{marginnote}
-\renewcommand*{\raggedleftmarginnote}{}
+\renewcommand*{\raggedleftmarginnote}{} % (optional, keeps left-alignment)
+\newcommand{\sidenote}[1]{\marginnote{\footnotesize #1}}
 
 % Tufte-style new thought
 \newcommand{\newthought}[1]{\textsc{#1}}
@@ -209,7 +226,7 @@ Dedicated to
 \mainmatter
 
 \input{chap01}
-% \input{chap02}
+\input{chap02}
 
 \printnomenclature
 \addcontentsline{toc}{chapter}{\nomname}

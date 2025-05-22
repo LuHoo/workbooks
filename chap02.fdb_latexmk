@@ -1,0 +1,19 @@
+# Fdb version 4
+["pdflatex"] 1747903114.40431 "chap02.tex" "chap02.pdf" "chap02" 1747903116.64415 2
+  "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
+  "/usr/local/texlive/2024/texmf-dist/tex/latex/base/omscmr.fd" 1705352648 2469 74341109f164f230581718c66211c718 ""
+  "/usr/local/texlive/2024/texmf-dist/web2c/texmf.cnf" 1708706663 41649 5d6ae549fbbcb850a863f69aa41f3d10 ""
+  "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1725783513.48985 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
+  "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1725783490 8221447 8f43198d58444207e3499125ee839225 ""
+  "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
+  "chap02.aux" 1747903114.40361 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "chap02.tex" 1747903114.21316 57345 12cf1e4dd5d3f216e4324bc82d4f23ff ""
+  "workshop02_Python.tex" 1728390087 8803 aaed9485cd93839eed63146eb4f9bfaf ""
+  "workshop02_R.tex" 1728390209 8988 f4dfc40517cc8455d7c09324db7fb40d ""
+  (generated)
+  "chap02.aux"
+  "chap02.log"
+  "chap02.pdf"
+  (rewritten before read)

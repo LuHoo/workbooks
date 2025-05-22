@@ -312,7 +312,6 @@ The definition of a random sample, provided earlier, applies to simple random sa
 
 Table \ref{tab:example_pop} lists the elements in a small population that is used to explain the selection methods.
 
-% \begin{margintable}[-4cm]
 \begin{table}[htbp]
 \centering
 \begin{tabular*}{6 cm}{llr}
@@ -377,59 +376,6 @@ I = N / n
 We then choose a random starting point within the first interval and skip through the population with steps of $I$, selecting the elements that are hit. 
 
 Applications of this selection method are rare for simple random sampling. A worked-out example is provided in Section \ref{sub:selection_with_probability_proportional_to_size} for selection with a probability proportional to the size, where the method is much more common.
-
-% Table \ref{tab:possible_fixed} shows the possible samples of size $n=2$ with fixed-interval selection.
-
-% \begin{table}[htbp]
-% \raggedright
-% \begin{tabular*}{5.5 cm}{lll}
-% \toprule
-% \parbox[t]{1.5 cm}{Sample} &
-% \parbox[t]{1.5 cm}{Random start} &
-% \parbox[t]{1.5 cm}{Selected elements} \\
-
-% \midrule
-
-% 1 & [0, 0.5) & A, C \\
-% 2 & [0.5, 1) & A, D \\
-% 3 & [1, 1.5) & B, D \\
-% 4 & [1.5, 2) & B, E \\
-% 5 & [2, 2.5) & C, E \\
-
-% \bottomrule
-
-% \end{tabular*}
-
-% \caption{Possible samples of size $n = 2$ with fixed-interval selection}
-% \label{tab:possible_fixed}
-
-% \end{table}
-
-% Table \ref{tab:example_syst_sel} shows how to perform this with the example population from Table \ref{tab:example_pop}. Here we sequentially number the elements in the population. If step (rounded up to the nearest integer) equals the sequential number of an element, that element is selected. The sampling interval $I = N / n = $ 5 / 2 = 2.5, and we assume a random starting point of 1.2. The respective steps are therefore 1.2 and 3.7 (1.2 + 2.5). After rounding up to the nearest integer, this implies the selection of items 2 and 4.
-
-% \begin{table}[htbp]
-% \begin{tabular*}{11.2 cm}{llrrr}
-% \toprule
-% \parbox[t]{1.6 cm}{\raggedright Number} &
-% \parbox[t]{0.8 cm}{\raggedright Item} &
-% \parbox[t]{1.2 cm}{\raggedleft Value} &
-% \parbox[t]{0.8 cm}{\raggedleft Step} &
-% \parbox[t]{1.6 cm}{\raggedleft Selected?} \\
-% \midrule
-
-% 1 & A & 700 &  & \\
-% 2 & B & 750 & 1.2 & yes\\
-% 3 & C & 1,000 &  & \\
-% 4 & D & 900 & 3.7 & yes\\
-% 5 & E & 6,000 &  & \\
-% \bottomrule
-% \end{tabular*}
-
-% \caption{Example fixed-interval selection}
-% \label{tab:example_syst_sel}
-% \end{table}
-
-% Fixed-interval sampling is easy to perform manually, which makes this method very attractive in practice. A disadvantage is that the particular order of the elements within the population has an effect on sampling risk.
 
 \bigskip
 For the \emph{Case: Inventories}, we choose simple random sampling to select elements from the sampling frame that contains the inventory locations at which inventory is located. The frame consisting of all empty locations is tested completely. The test is easy to carry out. Along with testing whether there are misplaced inventory items at locations that are empty according to the inventory registration, we identify empty locations that are not on the listing. This part of the procedure filters all locations that are completely in error. 
@@ -537,36 +483,6 @@ Then, a random monetary unit is selected from the first interval and every conse
 For example, with $X =$ 45 and $n =$ 5, we calculate the interval $I = 45/5 =9$. We choose a random number between 1 and 9, in this example 2. The selected monetary units are 2, 11, 20, 29, and 38, corresponding to elements A, C, D, G, and I, respectively.
 
 The main disadvantage of fixed-interval selection is that the number of possible samples is reduced. In this example, there are only six possible samples. This disadvantage can be overcome by randomizing the order of the sampling units in the population. This method is referred to as the \hlblue{randomized fixed-interval selection}\index{randomized fixed-interval selection}\index{selection!randomized fixed-interval} 
-
-% An ideal selection mechanism would allow each of the 70\marginnote{Taking into account that element D has a 100\% inclusion probability and therefore is part of each of the $\left( \begin{array}{c}8\\4\end{array} \right) =$ 70 sets.} possible combinations of 5 elements. This can be achieved by first randomizing the order of the population elements before drawing the sample.
-
-% \begin{table}[htbp]
-% \begin{tabular*}{11.2 cm}{lrl}
-% \toprule
-% \parbox[t]{2.3 cm}{Random start} &
-% \parbox[t]{2 cm}{\raggedleft Probability} &
-% \parbox[t]{3 cm}{Selected elements} \\
-
-% \midrule
-
-% 0 -- 1 & 0.1111 & A, B, D, G, I \\
-% 1 -- 4 & 0.3333 & A, C, D, G, I \\
-% 4 -- 5 & 0.1111 & A, C, D, G, J \\
-% 5 -- 6 & 0.1111 & A, D, F, H, J \\
-% 6 -- 7 & 0.1111 & A, D, G, H, J \\
-% 7 -- 9 & 0.2222 & B, D, G, I, J \\
-
-% \bottomrule
-% \end{tabular*}
-% \caption{Possible samples with fixed-interval selection}
-% \label{tab:possible_samples}
-% \end{table}
-
-% We can easily derive the inclusion probabilities $\pi_k$ from Table \ref{tab:possible_samples}. For example, the inclusion probability of element A is the sum of the probabilities of the samples in which it is part: $0.1111 + 0.3333 + ... + 0.1111 = 0.7777$, which is equivalent to the calculation using Equation \ref{eq:inclusion_probability}:
-
-% \begin{equation*}
-% \pi_A = \frac{n x_A}{X} = \frac{5 \times 7}{45} \approx 0.7777
-% \end{equation*}
 
 \paragraph{3. Cell selection} An improvement on the fixed-interval selection method is obtained through the \hlblue{cell selection}\index{cell selection}\index{selection!cell} method. Again, we divide the total book value $X$ by the sample size $n$ to obtain cells of width $X / n = 45 / 5 = 9$, but rather than selecting the same monetary unit within each cell, we select a random one.
 
