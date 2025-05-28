@@ -26,7 +26,6 @@ We sample 50 units from the `salaries` dataset by using the `sample()` function.
 RNGkind(sample.kind = "Rounding")
 n <- 50
 set.seed(12345)
-salaries[2, 3]
 sample1 <- salaries[sample(N, n), ]
 head(sample1)
 ```
@@ -35,27 +34,28 @@ head(sample1)
 The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
 
 ```{r}
-sum(sample1$gross)
 (y_bar <- mean(sample1$gross))
 ```
-The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
+We can use the sample mean as an estimate for the total payroll in the population. The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
 ```{r}
 N * y_bar
 ```
 
 ### Exercise 3.3 Confidence intervals around the mean
 
-First, we estimate the variance in the population from the variance of the sample.
+First, we estimate the standard deviation in the population from the standard deviation of the sample.
 
 ```{r}
-(s2 <- var(sample1$gross))
+(s <- sd(sample1$gross))
 ```
 
 The calculation of the standard error is then
 
 ```{r}
-(se <- sqrt(s2 / n))
+(se <- s / sqrt(n))
 ```
+
+For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.095.
 
 ```{r}
 (tval <- qt(0.975, df = (n - 1)))
@@ -84,7 +84,7 @@ N * upperBound
 
 ### Exercise 3.4 Extending the sample
 
-We extend the sample from Exercise 3.1 from 50 to 131 sampling units.
+To achieve the target precision of $E = $ 600,000, we extend the sample from Exercise 3.1 from 50 to 131 sampling units.
 
 ```{r}
 set.seed(12345)
@@ -99,6 +99,10 @@ mean(sample2$gross)
 
 ### Exercise 3.5 Finite populations
 
+We saw in Section 3.2.3 that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = 50$, $N = 2,222$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
+
+The confidence interval incorporating the finite-population correction factor is given by Equation 3.10:
+
 ```{r}
 E <- 300000
 tval <- qt(0.975, df = (n - 1))
@@ -106,10 +110,10 @@ tval <- qt(0.975, df = (n - 1))
 (N / (1 + gamma))
 ```
 
-The total sample size is then 524:
+The total sample size required to obtain an estimate of the mean monthly payroll with a precision of 300,000 at 95% confidence is 424. This is more than 10% of the population size; therefore, we were right to use the finite-population correction factor. If we had not anticipated that the required sample size would have been unnecessarily large, not taking the finite-population correction factor into account would have resulted in a sample size of 524.
 
 ```{r}
-(N^2 * tval^2) * var(sample1$gross)/E^2
+(N^2 * tval^2) * sd(sample1$gross)^2 / E^2
 ```
 
 ### Exercise 3.6 Confidence intervals around the proportion
