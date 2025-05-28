@@ -2,12 +2,18 @@
 title: "Workshop Chapter 3"
 author: "Lucas Hoogduin"
 date: "`r Sys.Date()`"
-output: html_notebook
+output: html_document
 ---
 
 ## 3. Estimating the population mean and proportion
 
-### 3.1 Drawing a sample
+### Exercise 3.1 Drawing a sample
+
+In this Chapter we will use one single data file, so you can get familiar with estimating a mean, a proportion, and their respective confidence intervals without learning the specifics of many different datasets. The `salaries` dataset contains salary details of 2,222 employees of the imaginary town of Winesbury, and is included with the `FSaudit` package. The data file indicates for each employee the Grade, Step within the Grade, and Gross salary, as well as a unique employee ID. The field Gender is coded with a 1 for female and a 0 for male.
+
+In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of `R` we set it to `Rounding`, which was the default prior to version 3.6.
+
+Details of the data file can be obtained using base `R` functionality.
 
 ```{r}
 library(FSaudit)
@@ -24,17 +30,20 @@ salaries[2, 3]
 sample1 <- salaries[sample(N, n), ]
 head(sample1)
 ```
-### 3.2 Point estimation of the mean
+### Exercise 3.2 Point estimation of the mean
+
+The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
 
 ```{r}
 sum(sample1$gross)
 (y_bar <- mean(sample1$gross))
 ```
+The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
 ```{r}
 N * y_bar
 ```
 
-### 3.3 Confidence intervals around the mean
+### Exercise 3.3 Confidence intervals around the mean
 
 First, we estimate the variance in the population from the variance of the sample.
 
@@ -58,6 +67,12 @@ We multiply the $t$-value with the standard error to obtain the precision achiev
 (precAch <- tval * se)
 ```
 
+The resulting lower and upper bounds are
+```{r}
+(lowerBound <- y_bar - precAch)
+(upperBound <- y_bar + precAch)
+```
+
 For a 99\% confidence interval, the calculations are
 
 ```{r}
@@ -67,7 +82,7 @@ N * lowerBound
 N * upperBound
 ```
 
-### 3.4 Extending the sample
+### Exercise 3.4 Extending the sample
 
 We extend the sample from Exercise 3.1 from 50 to 131 sampling units.
 
@@ -82,13 +97,7 @@ The mean of the total sample is:
 mean(sample2$gross)
 ```
 
-```{r}
-var(sample2$gross)
-sd(sample2$gross)
-```
-
-
-### 3.5 Finite populations
+### Exercise 3.5 Finite populations
 
 ```{r}
 E <- 300000
@@ -103,7 +112,7 @@ The total sample size is then 524:
 (N^2 * tval^2) * var(sample1$gross)/E^2
 ```
 
-### 3.6 Confidence intervals around the proportion
+### Exercise 3.6 Confidence intervals around the proportion
 
 These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
 
@@ -120,3 +129,4 @@ upper(k = 31, n = 50, alpha = .025, dist = "binom")
 lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 ```
+Note that the hypergeometric distribution provides a more precise result.
