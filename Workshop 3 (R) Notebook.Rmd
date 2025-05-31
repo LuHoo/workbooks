@@ -2,7 +2,9 @@
 title: "Workshop Chapter 3"
 author: "Lucas Hoogduin"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ## 3. Estimating the population mean and proportion
