@@ -9,7 +9,7 @@ output:
 
 ## Estimation with auxiliary variables and stratification
 
-### Exercise 4.1 The `inventoryData` file
+### Exercise 4.1. The `inventoryData` file
 
 In this Chapter we will work with the `inventoryData` data file, that serves as the sample frame for the *Case: Valuation of inventories*. The data file is included with the `FSaudit` package. The data file indicates for each of the 3,500 elements in the inventories population its `id`, a sequential number from 1 to 3,500, the book value $x$ is `bv`, and we have added an audit value $y =$ `av` to enable running simulations on the file to compare different sampling strategies.
 
@@ -32,7 +32,7 @@ sum(inventoryData$bv)
 head(inventoryData[1:3])
 ```
 
-### Exercise 4.2 Working with the CVS object
+### Exercise 4.2. Working with the CVS object
 
 We first create a Classical Variables Sampling ("CVS") object. An object is a container that gathers all the data relevant to a particular sampling application. The `FSaudit` package recognizes three such objects. We work with the CVS object `cvs_obj` in this chapter, and with the attribute `att_obj` and MUS `mus_obj` objects in Chapter 5.
 
@@ -51,7 +51,6 @@ The CVS object has 19 different attributes attached to it, that will be filled a
 options(width = 70)
 names(mySample)
 ```
-<!-- r38 -->
 Some of these attributes are empty for now, for example `sample`.
 
 ```{r}
@@ -81,12 +80,10 @@ mySample <- evaluate(mySample, av = audit_values)
 The evaluation results are stored in the `evalResults` attribute of the CVS object. This attribute itself is a list of 17 different attributes.
 
 ```{r}
-options(width = 70)
 names(mySample$evalResults)
 ```
 
-### Exercise 4.3 Mean-per-unit estimator
-<!-- r74 -->
+### Exercise 4.3. Mean-per-unit estimator
 In Section 4.1 we found an estimate of the population value $\hat{Y}_{MPU}$ = 7,561,859, and achieved precision of 684,415. These values are stored in the attribute `evalResults` of `mySample`.
 
 ```{r}
@@ -110,9 +107,7 @@ Alternatively, we can refer to the label of the relevant column.
 mySample$evalResults$Estimates$mpu[4:5]
 ```
 
-
-
-### Exercise 4.4 The Regression Estimator
+### Exercise 4.4. The Regression Estimator
 
 The results for the regression estimator are stored in a similar way.
 
@@ -126,10 +121,10 @@ mySample$evalResults$`Achieved precision regression`
 The prediction interval is determined by:
 
 ```{r}
-mySample$evalResults$Estimates[4:5, 4]
+mySample$evalResults$Estimates$regr[4:5]
 ```
-<!-- r109 -->
-### Difference
+
+### Exercise 4.5. The Difference Estimator
 
 The results for the difference estimator are as follows.
 
@@ -144,10 +139,10 @@ mySample$evalResults$`Achieved precision difference`
 The prediction interval is determined by:
 
 ```{r}
-mySample$evalResults$Estimates[4:5, 2]
+mySample$evalResults$Estimates$diff[4:5]
 ```
 
-### Ratio estimator
+### Exercise 4.6. The Ratio Estimator
 
 Finally, the results of the ratio estimator.
 
@@ -160,23 +155,24 @@ mySample$evalResults$`Achieved precision ratio`
 ```
 
 The prediction interval is determined by:
-<!-- r142 -->
+
 ```{r}
-mySample$evalResults$Estimates[4:5, 2]
+mySample$evalResults$Estimates$ratio[4:5]
 ```
-<!-- r144 -->
-### Sporadic errors
+An overview of all estimates is given by
+```{r}
+mySample$evalResults$Estimates
+```
 
-# Using CVS with sporadic errors
+### Exercise 4.7. Using CVS with sporadic errrors
 
-We start with setting up a cvs_obj object, and fill it with the parameters.
+We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
 
 ```{r}
 arSample <- cvs_obj(bv = accounts_receivable$amount,
                     id = accounts_receivable$invoice,
                     n = 100)
 ```
-<!-- r153 -->
 We select the sample, using a seed equal to 1.
 
 ```{r}
@@ -186,82 +182,86 @@ arSample <- select(arSample, seed = 1)
 We look up the audit values of the selected sampling units.
 
 ```{r}
-audit_values <- accounts_receivable[match(arSample$sample$item,
-                                          accounts_receivable$invoice), "av2"]
+audit_values <- accounts_receivable[
+  match(
+    arSample$sample$item,
+    accounts_receivable$invoice
+  ),
+  "av2"
+]
 ```
 
-We then evaluate the sample and look at the Estimates attribute.
+We then evaluate the sample and look at the `Estimates` attribute.
 
 ```{r}
 arSample <- evaluate(arSample, av = audit_values$av2)
 arSample$evalResults$Estimates
 ```
-<!-- r178 -->
-The number of differences is stored in the #_Errors attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error (k = 4 to 19) method, or using the standard CVS method.
+The number of differences is stored in the `#_Errors` attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error (k = 4 to 19) method, or using the standard CVS method.
 
 ```{r}
 arSample$evalResults$`Regression estimation`$`#_Errors`
 ```
-<!-- r184 2x -->
-Most of the calculations presented in Section 4.7 are easy to follow. The value of $M_U$ is obtained as follows.
-<!-- r187 -->
+
+Most of the calculations presented in Section 4.7 are easy to follow, so we will not repeat them all in this workshop. Instead, we zoom in on some specific parts of the overall calculations.
+
+The value of $M_U$ that is used in, for example, Equation 4.23 is obtained as follows.
 ```{r}
 N <- nrow(accounts_receivable)
 m <- 6
 (m_u <- upper(k = m, popn = N, n = 100, alpha = 0.05) / N)
 ```
-The effective degrees of freedom is $m - 1$. This explains the $t$ value used.
-<!-- r192 -->
+The effective degrees of freedom is $m - 1$. This explains the $t$ value used when calculating the confidence intervals.
 ```{r}
 qt(0.975, df = m - 1)
 ```
 
-### Stratification
+### Exercise 4.8. Stratification with equal recorded boundaries
 
-Assign cvs object
-<!-- r201 -->
+We start with creating a CVS object.
 ```{r}
 equal <- cvs_obj(bv = inventoryData$bv,
-                   id = inventoryData$item)
+                 id = inventoryData$item)
 ```
 
-### Stratify population with equal recorded boundaries
+We then stratify with the equal method (`stratMeth = equal`), and view the summary.
 
 ```{r}
-equal <- stratify(myStrat, 
-                    strata = 3,
-                    stratMeth = "equal")
+equal <- stratify(equal,
+                  strata = 3,
+                  stratMeth = "equal")
 equal$stratSumm
 ```
 
-### Stratify population with cumulative method
+### Exercise 4.9. Stratification with the cumulative method
 
 ```{r}
-cumul <- stratify(myStrat,
+cumul <- cvs_obj(bv = inventoryData$bv,
+                 id = inventoryData$item)
+cumul <- stratify(cumul,
                   strata = 3,
                   classes = 10,
                   stratMeth = "cumulative")
 ```
 
-Classes
+The classification in Table 4.6 is stored in the `classSum` attribute.
 
 ```{r}
 cumul$classSumm
 ```
 
-Stratification result
+The stratification summary is then:
 
 ```{r}
 cumul$stratSumm
 ```
 
-Calculate sample size for precision of 200,000.
+We calculate the required sample size for a desired precision of 200,000.
 
 ```{r}
 cumul <- size(cumul, desPrec = 200000)
 cumul$n
 ```
-<!-- r241 -->
 Select sample
 
 ```{r}
@@ -269,18 +269,17 @@ cumul <- select(cumul, seed = 12345)
 head(cumul$sample)
 ```
 
-Obtain audit values
+Obtain the audit values and evaluate the sample.
 
 ```{r}
 true_values <- inventoryData[match(cumul$sample$item,
                                    inventoryData$item), "av"]
-head(true_values)
-```
+cumul <- evaluate(cumul, av = true_values)
 
-Evaluate sample (Table 4.9)
+```
+A summary table of the estimates for each of the estimation methods is stored in the `Estimates` argument, which is part of the `evalResults` argument.
 
 ```{r}
-cumul <- evaluate(cumul,
-                      av = true_values)
 cumul$evalResults$Estimates
 ```
+
