@@ -9,7 +9,13 @@ output:
 
 ## 3. Estimating the population mean and proportion
 
-### 3.1 Drawing a sample
+### Exercise 3.1 Drawing a sample
+
+In this Chapter we will use one single data file, so you can get familiar with estimating a mean, a proportion, and their respective confidence intervals without learning the specifics of many different datasets. The `salaries` dataset contains salary details of 2,222 employees of the imaginary town of Winesbury, and is included with the `FSaudit` package. The data file indicates for each employee the Grade, Step within the Grade, and Gross salary, as well as a unique employee ID. The field Gender is coded with a 1 for female and a 0 for male.
+
+In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of `R` we set it to `Rounding`, which was the default prior to version 3.6.
+
+Details of the data file can be obtained using base `R` functionality.
 
 ```{r}
 library(FSaudit)
@@ -22,33 +28,36 @@ We sample 50 units from the `salaries` dataset by using the `sample()` function.
 RNGkind(sample.kind = "Rounding")
 n <- 50
 set.seed(12345)
-salaries[2, 3]
 sample1 <- salaries[sample(N, n), ]
 head(sample1)
 ```
-### 3.2 Point estimation of the mean
+### Exercise 3.2 Point estimation of the mean
+
+The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
 
 ```{r}
-sum(sample1$gross)
 (y_bar <- mean(sample1$gross))
 ```
+We can use the sample mean as an estimate for the total payroll in the population. The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
 ```{r}
 N * y_bar
 ```
 
-### 3.3 Confidence intervals around the mean
+### Exercise 3.3 Confidence intervals around the mean
 
-First, we estimate the variance in the population from the variance of the sample.
+First, we estimate the standard deviation in the population from the standard deviation of the sample.
 
 ```{r}
-(s2 <- var(sample1$gross))
+(s <- sd(sample1$gross))
 ```
 
 The calculation of the standard error is then
 
 ```{r}
-(se <- sqrt(s2 / n))
+(se <- s / sqrt(n))
 ```
+
+For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.095.
 
 ```{r}
 (tval <- qt(0.975, df = (n - 1)))
@@ -60,6 +69,12 @@ We multiply the $t$-value with the standard error to obtain the precision achiev
 (precAch <- tval * se)
 ```
 
+The resulting lower and upper bounds are
+```{r}
+(lowerBound <- y_bar - precAch)
+(upperBound <- y_bar + precAch)
+```
+
 For a 99\% confidence interval, the calculations are
 
 ```{r}
@@ -69,9 +84,9 @@ N * lowerBound
 N * upperBound
 ```
 
-### 3.4 Extending the sample
+### Exercise 3.4 Extending the sample
 
-We extend the sample from Exercise 3.1 from 50 to 131 sampling units.
+To achieve the target precision of $E = $ 600,000, we extend the sample from Exercise 3.1 from 50 to 131 sampling units.
 
 ```{r}
 set.seed(12345)
@@ -84,13 +99,11 @@ The mean of the total sample is:
 mean(sample2$gross)
 ```
 
-```{r}
-var(sample2$gross)
-sd(sample2$gross)
-```
+### Exercise 3.5 Finite populations
 
+We saw in Section 3.2.3 that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = 50$, $N = 2,222$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
 
-### 3.5 Finite populations
+The confidence interval incorporating the finite-population correction factor is given by Equation 3.10:
 
 ```{r}
 E <- 300000
@@ -99,13 +112,13 @@ tval <- qt(0.975, df = (n - 1))
 (N / (1 + gamma))
 ```
 
-The total sample size is then 524:
+The total sample size required to obtain an estimate of the mean monthly payroll with a precision of 300,000 at 95% confidence is 424. This is more than 10% of the population size; therefore, we were right to use the finite-population correction factor. If we had not anticipated that the required sample size would have been unnecessarily large, not taking the finite-population correction factor into account would have resulted in a sample size of 524.
 
 ```{r}
-(N^2 * tval^2) * var(sample1$gross)/E^2
+(N^2 * tval^2) * sd(sample1$gross)^2 / E^2
 ```
 
-### 3.6 Confidence intervals around the proportion
+### Exercise 3.6 Confidence intervals around the proportion
 
 These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
 
@@ -122,3 +135,4 @@ upper(k = 31, n = 50, alpha = .025, dist = "binom")
 lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 ```
+Note that the hypergeometric distribution provides a more precise result.
