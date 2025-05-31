@@ -48,7 +48,6 @@ mySample <- cvs_obj(n = 400,
 The CVS object has 19 different attributes attached to it, that will be filled as we proceed from sample planning, through stratification and selection to evaluation. The following is a list of all attributes.
 
 ```{r}
-options(width = 70)
 names(mySample)
 ```
 Some of these attributes are empty for now, for example `sample`.
