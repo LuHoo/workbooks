@@ -9,59 +9,26 @@ output:
 
 ## Hypothesis testing
 
-### Effect of the critical region on the sample size
+### Exercise 5.1. Effect of the critical region on the sample size
 
-The results on page 129 are obtained with the `FSaudit` package, first by creating an attribute object, filling it with the parameters of the test, and then applying the `size()` function.
+The results on page 119 are obtained with the `FSaudit` package, first by creating an attribute object, filling it with the parameters of the test, and then applying the `size()` function.
+The relevant parameters are the significanve level `alpha`, the number of deviations in the population $M$ `popdev`, the population size $N$ `popn`, and the critical region `c`.
 
-```{r}
+```{r} 
 library(FSaudit)
 mySample <- att_obj(alpha = .1, popdev = 60, popn = 1200, c = 0)
 mySample <- size(mySample)
 mySample$n
 ```
-The sample size increases as we increase the critical region to `c=2`.
-
+The sample size increases as we increase the critical region to `c = 2`.
 ```{r}
 
 mySample <- size(mySample, c = 2)
 mySample$n
 ```
 
-### Significance levels
+This result is obtained using the default Hypergeometric distribution. To obtain the sample size with the binomial approximation, as in Table 5.3, we specify the distribution when setting up the attribute object.
 
-On page 130 we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in `R` with the following code:
-
-```{r}
-phyper(q = 1, m = 60, n = 1140, k = 45)
-phyper(q = 2, m = 60, n = 1140, k = 102)
-```
-
-### Type II error
-
-On page 130 we also calculated the Type II error.
-
-```{r}
-phyper(0, m = 24, n = 1176, k = 45, lower.tail = FALSE)
-```
-
-### One-sided upper bounds
-
-The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
-
-```{r}
-alpha <- 0.1
-n <- 102
-popn <- 1200
-k <- c(0:3)
-kdivn <- k / n
-Nkdivn <- popn * k / n
-M_U <- c(0, 0, 0, 0)
-for (i in 1:4) {M_U[i] <- upper(i - 1, popn, n, alpha)}
-p_U <- M_U / popn
-(df <- data.frame(k, kdivn, Nkdivn, M_U, p_U))
-```
-
-The examples above show how samples sizes can be calculated for various critical regions. The default distribution to be used is the hypergeometric, but calculations can also be performed with the approximating binomial and Poisson distributions. In that case, the distribution needs to be specifically entered as an argument, and the function does not require a value for $popn$. 
 ```{r}
 mySample2 <- att_obj(alpha = .1,
                 tdr = .05,
@@ -70,26 +37,40 @@ mySample2 <- att_obj(alpha = .1,
 mySample2 <- size(mySample2)
 mySample2$n
 ```
-Same for the Poisson distribution
-```{r}
-mySample3 <- att_obj(alpha = .1,
-                tdr = .05,
-                c = 2,
-                dist = "pois")
-mySample3 <- size(mySample3)
-mySample3$n
-```
-Note that the approximating binomial and Poisson distributions lead to sample sizes that are  larger than those calculated with the hypergeometric distribution.
 
-### Case: European innovation subsidies
+### Exercise 5.2. Significance levels
+
+On page 120 we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in `R` with the following code:
+```{r}
+phyper(q = 1, m = 60, n = 1140, k = 45)
+phyper(q = 2, m = 60, n = 1140, k = 102)
+```
+Refer to Equation 2.1.
+Remember that `R` uses `q` for the number of errors found $k$, `m` for the number of deviations in the population $M$, `n` for the number of correct items $N - M$, and `k` for the sample size $n$.
+
+### Exercise 5.3. Type II error
+
+On page 121 we also calculated the Type II error, for a scenario with no errors allowed in the sample and 24 errors in the population, or a population error rate of $24 / 200 = 0.02$.
+
+```{r}
+phyper(0, m = 24, n = 1176, k = 45, lower.tail = FALSE)
+```
+
+### Exercise 5.4. One-sided upper bounds
+
+The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
+
+```{r}
+upper(popn = 1200, n = 102, k = 0, alpha = 0.10) / 1200
+upper(popn = 1200, n = 102, k = 3, alpha = 0.10) / 1200
+```
+
+### Exercise 5.5. Case: European innovation subsidies
 The sample size in the *Case: European innovation subsidies* depends on the critical region chosen. When the null hypothesis $H_0 : M \geq 120,000$ is rejected when the sample yields no errors, the critical region is $\{k | k = 0\}$. We first create an `mus_obj` object, and load it with the parameters.
 ```{r}
 subsidies <- mus_obj(cl = 0.95, 
                      popBv = 12000000, 
                      pm = 120000)
-```
-Now we calculate the minimum required sample size as follows:
-```{r}
 subsidies <- size(subsidies,
                   ee = 0)
 subsidies$n
@@ -107,22 +88,23 @@ myAttSample <- size(myAttSample, c = 1)
 myAttSample$n
 ```
 
-### Accounts receivable circularization
+In MUS, we increase the critical region by anticipating on the expected error (in monetary terms) in the population. Thus, in applications where selected items are either completely correct or completely incorrect, it is easier to calculate the minimum required sample size using the `att_obj` than using the `mus_obj`.
 
-For the sample on accounts receivable in the *Case: Accounts receivable circularization*, we again start with assigning the `mus_obj` object type to the object `ar`.
+### Exercise 5.6. Case: Accounts receivable circularization
+
+We start by setting up the MUS object `ar` (for Accounts Receivable) in `R` with the `FSaudit` package and first verify that the number of sampling units `popn` and the total book value `popBv` of the sampling frame match those in the population. Notice that these statistics are calculated as soon as the object is loaded with the detail amounts.
+
 ```{r}
 ar <- mus_obj(bv = accounts_receivable$amount,
               id = accounts_receivable$invoice)
-```
-In this first step we have assigned the unique `id` of the sampling units in the sampling frame, the `invoice' field, and the book values `bv' of the sampling units. As soon as these arguments are assigned, `R' calculates the number of sampling units in the sampling frame `popn', and the total book value `popBv', and stores these values in the `ar` object for future purposes.
-```{r}
 ar$popn
 ar$popBv
 ```
-Sample size calculation:
+Sample size calculation is invoked with the relevant values from the *Case: Accounts receivable circularization*.
 
 ```{r}
-ar <- size(ar, cl = 0.95, pm = 450000, ee = 100000, evalMeth = "Stringer")
+ar <- size(ar, cl = 0.95, pm = 450000, ee = 100000, 
+           evalMeth = "Stringer")
 ar$n
 ```
 Compare this with the sample size calculated using fixed-attribute sampling.
@@ -136,11 +118,19 @@ ar2 <- size(ar2, c = 2)
 ar2$n
 ```
 
+We can therefore infer that with an expected error of `ee = 100000`, we can tolerate between one and two 100% errors.
 
-
-### Multiple hits with random selection
+### Exercise 5.7. Multiple hits with random selection
 
 If we draw a sample of size $n = 1,100$ from the `accounts_receivable` population, the largest sampling units have an almost 100% inclusion probability and with a selection method such as `random` are likely to be hit more than once.
+
+For example, the data file `accounts_receivable`, that comes with the `FSaudit` package, has the following six largest amounts:
+
+```{r}
+accounts_receivable[order(-accounts_receivable$amount), ][1:6, 1:3]
+```
+
+We set up a new `mus_obj` and use a materiality of `pm = 36730` to arrive at a sample size of 1100.
 
 ```{r}
 multiple <- mus_obj(bv = accounts_receivable$amount,
@@ -150,20 +140,19 @@ multiple <- size(multiple)
 multiple$n
 ```
 
-We select the sample and order it in decreasing order, displaying the six largest book values.
+We select the sample with the selection method `selMeth = "random"` and order it in decreasing order, displaying the six largest book values.
 
 ```{r}
 multiple <- select(multiple, selMeth = "random", seed = 1)
 sample <- multiple$sample
 head(sample[order(-sample$bv), ])
 ```
-This example demonstrates how invoices 201719763 and 201710344 were selected twice.
+This example demonstrates that invoices 201719763 and 201710344 were selected twice.
 
-### Stringer bound
+### Exercise 5.8. Stringer bound
 
-We continue the case study sample, and select the sample.
+We continue the case study sample, and select the sample, now with the "randomized fixed" selection method.
 
-Selection methods with a probability proportional to size are implemented in the `FSaudit` package with the `select` function. The default method is the randomized fixed interval selection method:
 ```{r}
 ar <- select(ar,
              selMeth = "randomized.fixed",
@@ -171,16 +160,16 @@ ar <- select(ar,
 head(ar$sample)
 ```
 
-Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values.
+Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values into a data frame.
 
 ```{r}
 myResults <- data.frame(item = ar$sample$item, av = ar$sample$bv)
 ```
-Then we replace the book values of the items 16, 52, and 124, that are found to be in error.
-
+Table 5.4. lists the three invoices (items 16, 52, and 124), that are assumed to be in error.
 ```{r}
 myResults[c(16, 52, 124) , ]
 ```
+We update the audit values of the erroneous items.
 ```{r}
 myResults[16, 2] <- 4438.82
 myResults[52, 2] <- 0
@@ -188,30 +177,40 @@ myResults[124, 2] <- 5531.38
 myResults[c(16, 52, 124) , ]
 ```
 
-The list of audit values is then submitted to the MUS object for evaluation.
+The updated list of audit values is then submitted to the MUS object for evaluation.
 
 ```{r}
 ar <- evaluate(ar, av = myResults$av, evalMeth = "stringer")
 ```
 
-The results of the Stringer bound evaluation as presented in Tables 5.6 and 5.7.
+The results of the Stringer bound evaluation as presented in Tables 5.6 and 5.7 are stored in the `Precision calculation` attribute.
 
 ```{r}
 ar$evalResults$Over$`Precision calculation`
 ```
 
-### Cell evaluation
-
-The results of the cell evaluation method, as presented in Table \ref{tab:precision_Cell}, can also be obtained, by changing the evaluation method.
+The upper bounds $M_U$ in Table 5.5 are calculated with the `upper` function from the `FSaudit` package.
 
 ```{r}
+upper(k = 0, popn = 13500000, n = 145, alpha = .05)
+upper(k = 1, popn = 13500000, n = 145, alpha = .05)
+upper(k = 2, popn = 13500000, n = 145, alpha = .05)
+upper(k = 3, popn = 13500000, n = 145, alpha = .05)
+```
+
+### Exercise 5.9. Cell evaluation
+
+The results of the cell evaluation method, as presented in Table 5.8, can also be obtained, by changing the evaluation method.
+
+```{r}
+options(width = 70)
 ar <- evaluate(ar, av = myResults$av, evalMeth = "cell")
 ar$evalResults$Over$`Precision calculation`
 ```
 
-### PPS estimation
+### Exercise 5.10. PPS estimation
 
-We conclude with the results of the `pps` evaluation method.
+Finally, we present results from the `pps` evaluation method. For this purpose, we use audit values stored in the variable `av2`. The total error amount reflected in `av2` is 450,000.
 
 ```{r}
 ar <- evaluate(ar,
