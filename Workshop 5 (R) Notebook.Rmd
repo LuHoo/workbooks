@@ -100,10 +100,11 @@ ar <- mus_obj(bv = accounts_receivable$amount,
 ar$popn
 ar$popBv
 ```
-Sample size calculation:
-<!-- Hoe kom je aan ee = 100.00? -->
+Sample size calculation is invoked with the relevant values from the *Case: Accounts receivable circularization*.
+
 ```{r}
-ar <- size(ar, cl = 0.95, pm = 450000, ee = 100000, evalMeth = "Stringer")
+ar <- size(ar, cl = 0.95, pm = 450000, ee = 100000, 
+           evalMeth = "Stringer")
 ar$n
 ```
 Compare this with the sample size calculated using fixed-attribute sampling.
