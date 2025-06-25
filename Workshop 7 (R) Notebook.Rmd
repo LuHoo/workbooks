@@ -14,7 +14,6 @@ output:
 To run the exercises in this workshop, we need to load a few packages.
 
 ```{r setup}
-options(pillar.sigfig = 4)
 library(ggplot2)
 library(aicpa)      # Contains US SteamCo data
 library(car)
@@ -39,17 +38,22 @@ head(USSteamCo)
 The `summary` command produces summary statistics of all variables in the dataset, the length (number of data points) for character types (such as `month`) and distribution statistics for numeric types.
 
 ```{r}
-options(width = 80)
 summary(USSteamCo)
 ```
+
 We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 7.4.4.
+
 ```{r}
 USSteamCo$summer = c(0,0,0,0,1,1,1,1,1,0,0,0)
 ```
+USSteamCo$date = seq(as.Date("2011-01-01"), by = "month", length.out = 48)
+
+
 We reformat the month variable, that has a character type, into the `date` variable.
 
 ```{r}
-USSteamCo$date = seq(as.Date("2011-01-01"), by = "month", length.out = 48)
+USSteamCo$date = seq(as.Date("2011-01-01"), 
+                     by = "month", length.out = 48)
 ```
 
 We split the data file into an estimation set and a hold-out set.
@@ -110,17 +114,16 @@ ggplot(data = USSteamCoEstim, aes(x = date)) +
 
 Figure 7.1 shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
 
-```{r, echo=FALSE}
-# H7_Basic_scatter_plot
+```{r}
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
 ggplot(USSteamCo, aes(x=production, y=revenue)) + 
-  geom_point(color = "#00338D")
+  geom_point(color = "#00338D") +
+    theme_minimal()
 ```
 
 The enhanced scatter plot in Figure 7.4 is obtained by running the following code.
 
 ```{r}
-# H7_Enhanced_scatterplot
 scatterplot(revenue ~ production, 
             data = USSteamCoEstim,
             smooth = FALSE)
@@ -129,12 +132,16 @@ scatterplot(revenue ~ production,
 
 ### Exercise 7.4. The base model `mod.0`
 
+Figure 7.4 shows that there is a positive (increasing) relationship: as production increases, so does revenue. 
+
 We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 7.1.1. A brief summary of the model is obtained with the function `brief`.
 
 ```{r}
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
 brief(ussteamco.mod.0)
 ```
+The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$, and the estimate of the slope $\beta_1$, $b_1 = 18.99$.
+
 ### Exercise 7.5. The full summary of `mod.0`
 
 A full summary of `mod.0` can be obtained with the `summary` function.
@@ -142,6 +149,8 @@ A full summary of `mod.0` can be obtained with the `summary` function.
 ```{r}
 summary(ussteamco.mod.0)
 ```
+In addition to the statistics produced by `brief`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
+
 ### Exercise 7.6. Correlations and correlogram
 
 The correlations in Table 7.1 are calculated using the `cor` function. 
@@ -161,7 +170,7 @@ corrplot(cor_ussteam,
 
 ### Exercise 7.7. Modelling strategies
 
-The `step` function can be used to implement both backward and forward methods. The direction argument specifies whether the stepwise algorithm should proceed forward (`forward`), backward (`backward`), or both (`both`). The `scope` argument specifies the range of models to be searched, whereas the `k` argument may be used to use BIC instead of the default AIC as a criterion.
+The `step` function can be used to implement both backward and forward methods. The `direction` argument specifies whether the stepwise algorithm should proceed forward (`forward`), backward (`backward`), or both (`both`). The `scope` argument specifies the range of models to be searched, whereas the `k` argument may be used to use BIC instead of the default AIC as a criterion.
 
 We start with the forward method. From a model that only uses the constant (`revenue $\sim$ 1`), we add variables one by one. The variable that the largest effect on the criterion, in this example, the default AIC, is selected for inclusion in the model.
 
@@ -170,6 +179,14 @@ model_forward <- lm(revenue ~ 1, data = USSteamCoEstim)  # Start with intercept-
 model_forward <- step(model_forward, 
                       direction = "forward", 
                       scope = formula(~ production + coolDD + heatDD))  
+```
+Starting with AIC = 1114.66 of a model with only a constant, `R` evaluates the inclusion of each of the available independent variables and their effect on the resulting AIC. In the first step, it appears that including `heatDD` has the best effect on AIC, as it reduces from 1114.66 to 1096.56. 
+
+Using this value of AIC = 1096.56 as the new starting value, `R` evaluates if inclusion of any of the remaining variables has a favorable effect. It finds that including `production` can further reduce the AIC to 1046.11.
+
+In the last step, we see that including `coolDD` does not further reduce the AIC, leading to the final model `revenue $\sim$ heatDD + production`. The summary of this model is:
+
+```{r}
 summary(model_forward)  
 ```
 
@@ -178,11 +195,15 @@ Next, we show an example of the backward method, starting with the full model an
 ```{r}
 model_backward <- lm(revenue ~ production + coolDD + heatDD, 
                      data = USSteamCoEstim)  
-model_backward <- step(model_backward, 
-                      direction = "backward")  
+model_backward <- step(model_backward,
+                       direction = "backward")  
 summary(model_backward)  
 ```
-Run in both directions.
+
+We observe that this strategy results into the exact same model.
+
+To run the stepwise procedure in both directions, we use the following code. 
+
 ```{r}
 fit_both <- lm(revenue ~ 1, data = USSteamCoEstim)  
 fit_both <- step(fit_both, 
@@ -193,23 +214,21 @@ summary(fit_both)
 
 ### Exercise 7.8. Multiple independent variables `mod.1`
 
-We now regress $y$ = `revenue` on $x_1$ = `production`, $x_2$ = `coolDD`, and
-$x_3$ = `heatDD`.
+We now regress $y$ = `revenue` on $x_1$ = `production`, $x_2$ = `coolDD`, and $x_3$ = `heatDD`.
 
 ```{r}
 ussteamco.mod.1 <- lm(revenue ~ production + coolDD + heatDD,
                       data = USSteamCoEstim)
-brief(ussteamco.mod.1)
-```
-```{r}
 summary(ussteamco.mod.1)
 ```
-## Disaggregation
 
-Figure 7.7: Scatter plot with interactions.
+## Exercise 7.9. Interactions
+
+In Section 7.4.4 we developed `mod.2`, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable `summer`.
+
+The scatterplot in Figure 7.6 is prepared using
 
 ```{r}
-# H7_scat_rev2
 scat_rev2 <- scatterplot(revenue ~ production | summer, 
             data = USSteamCoEstim,
             id = list(n = 8, cex = 0.8),
@@ -218,6 +237,8 @@ scat_rev2 <- scatterplot(revenue ~ production | summer,
             )
 ```
 
+Note the special operator `|`, that can be expressed as 'given the value of'. To call this relationship, we use
+
 ```{r}
 ussteamco.mod.2 <- lm(revenue ~ production * summer + 
                         coolDD * summer +
@@ -225,185 +246,138 @@ ussteamco.mod.2 <- lm(revenue ~ production * summer +
                       data = USSteamCoEstim)
 brief(ussteamco.mod.2)
 ```
-## Time lag
+The formula specified in the `lm` function, `revenue $\sim$ production * summer + coolDD * summer + heatDD * summer` can also be written as `revenue $\sim$ (production + coolDD + heatDD) * summer`. 
 
-Use cross correlation function. 
+## Exercise 7.10. Time lag
+
+The cross-correlation plot in Figure \ref{fig:H7_timelag} is created by running:
 
 ```{r}
-# H7_timelag
 with(USSteamCoEstim, 
      ccf(x = production,
          y = revenue,
          lag.max = 4))
 ```
 
+## Exercise 7.11. Residual plots
 
-
-## Transformations
-
-Figure 7.9: Exponential function $y = e^{b_0} \times e^{b_1x}$ and its transformation $ln{y} = b_0 + b_1x$. The slope coefficient $b_1$ is positive.
-
-Exponential function $y = e^{b_0} \times e^{b_1x}$
+The residual plots in Figure \ref{fig:H7_residualPlots_mod2} are obtained by:
 
 ```{r}
-x <- seq(0:100)
-b0 <- 3
-b1 <- .025
-y <- exp(b0 + b1 * x)
-df_exp <- data.frame(x = x, y = y, lny = log(y))
-
-
-exp_line <- ggplot(data = df_exp,
-                   aes(x = x, y = y)) +
-  geom_line(colour = "#00338D") +
-  ggtitle(TeX("Exponential function: $y = e^{b_0} \\times e^{b_1x}$")) 
-
-exp_line2 <- ggplot(data = df_exp,
-                    aes(x = x, y = log(y))) +
-  geom_line(colour = "#00338D") +
-  ggtitle(TeX("Linearized function: $ln(y) = b_0 + b_1x$")) 
-
-grid.arrange(exp_line, exp_line2, ncol=2)
-
-```
-
-## Alternative modeling techniques
-
-# Diagnostics checking
-
-Figure 7.10: Updated residual plots for mod.2.
-
-```{r}
-# H7_residualPlots
 residualPlots(ussteamco.mod.2)
 ```
 
-## Outliers and influential observations
+## Exercise 7.12. Influence statistics
 
-Figure 7.11: Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni 𝑝 values and influential observations.
+Figure 7.10 provides the Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$ values and influential observations.
 
 ```{r}
-# H7-influenceIndexPlot
 influenceIndexPlot(ussteamco.mod.2)
 ```
 
-Leverage points
+## Exercise 7.13. Leverage points
+
+We obtain the hat-values of a model by running the `hatvalues` function on it.
 
 ```{r}
 hatvals.mod.2 <- hatvalues(ussteamco.mod.2)
+```
+
+The three largest hat-values are then summarized by
+
+```{r}
 hatvals.mod.2[order(hatvals.mod.2, decreasing = TRUE)[1:5]]
 ```
+
+The sum of the hat-values is equal to $k + 1$.
 
 ```{r}
 sum(hatvals.mod.2)
 ```
 
-Regression outliers
+## Exercise 7.14. Regression outliers
 
-Figure 7.12: QQ plot for ussteamco.mod.2, with the three largest Studentized residuals identified.
+Figure 7.12 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
 
 ```{r}
-# H7_qqplot
 qqPlot(ussteamco.mod.2, id = list(n = 3))
 ```
 
-The `outlierTest() function identifies the largest absolute Studentized residual and computes the $p$-value with Bonferroni adjustment.
+## Exercise 7.15. Influential observations
 
-```{r}
-outlierTest(ussteamco.mod.2)
-```
+We obtain the Cook's distances of a model by running the `cooks.distance` function on it.
 
 ```{r}
 cooks.mod.2 <- cooks.distance(ussteamco.mod.2)
-cooks.mod.2[order(cooks.mod.2, decreasing = TRUE)[1:5]]
 ```
 
-Figure 7.13: Plot of hat-values, Studen- tized residuals, and Cook’s distances for ussteamco.mod.2. The size of the circles is proportional to the Cook’s distance.
+The three largest Cook's distances are then summarized by
 
 ```{r}
-# H7_influenceplot
+cooks.mod.2[order(cooks.mod.2, decreasing = TRUE)[1:3]]
+```
+
+## Exercise 7.16. Infuence plot
+
+Figure 7.12 shows the hat-values, Studentized residuals, and Cook’s distances for `ussteamco.mod.2`. The size of the circles is proportional to the Cook’s distance.
+
+```{r}
 influencePlot(ussteamco.mod.2, id=list(n=3, cex=0.8))
 ```
 
-Some insights into `id=list(n=n)`. It produces the top-n of all three statistics, so the list contains between `n` and `3*n` items.
+## Exercise 7.17. Winsorizing observation # 22
+
+Define the new estimation set. We replace the original value of observation 22 with its winsorized value.
 
 ```{r}
-USSteamCoEstim[c(22, 30, 34),]
+USSteamCoEstim2 <- USSteamCoEstim
+p5 <- quantile(ussteamco.mod.2$residuals, 0.05)
+fit_22 <- fitted(ussteamco.mod.2)[22]
+USSteamCoEstim2$revenue[22] <- fit_22 + p5
 ```
 
-No reason to remove observation #34, but there are specific circumstances that justify removing #22.
+we then fit a new linear model.
 
-## Multicollinearity
+```{r}
+ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
+                      data = USSteamCoEstim2)
 
-See https://statisticalhorizons.com/multicollinearity/
+summary(ussteamco.mod.3)
+```
+
+## Exercise 7.18. Multicollinearity
+
+To assess multicollinearity for a model without interactions, like `mod.1`, we use the standard `vif()` function.
 
 ```{r}
 vif(ussteamco.mod.1)
 ```
 
-Leave out observation #22
+None of the VIF factors is greater than ten, and therefore we conclude that there is no serious inflation of variance.
 
-```{r}
-USSteamCoEstim2 <- USSteamCoEstim[c(1:21,23:36),] 
-```
-
-```{r}
-ussteamco.mod.3 <- lm(revenue ~ production * summer + 
-                        coolDD * summer +
-                        heatDD * summer,
-                      data = USSteamCoEstim2)
-
-brief(ussteamco.mod.3)
-```
-```{r}
-summary(ussteamco.mod.3)
-```
+For models that include interactions, like like `mod.3`, we use the `vif()` function with the additional option `type = 'predictor'`. It then calculates the GVIF instead of the standard VIF.
 
 ```{r}
 vif(ussteamco.mod.3, type = 'predictor')
 ```
 
+We now assess whether any of the predictors has a value $GVIF_j^{1/(2df)}$ that is greater than 10. Because there are none, this model does not suffer from variance inflation.
 
-Look at the effect on the coefficient estimates.
+## Exercise 7.19. Variance and TSS
 
-```{r}
-compareCoefs(ussteamco.mod.2, ussteamco.mod.3)
-```
-```{r}
-# H7_scat_rev3
-scat_rev3 <- scatterplot(revenue ~ production | summer, 
-            data = USSteamCoEstim2,
-            id = list(n = 3, cex = 0.8),
-            regLine=TRUE,
-            smooth = FALSE
-            )
-```
-The identification of outliers is done through the Mahalanobis distance of the points.
-
+Table 7.5 provides the analysis of variance for `mod.0`. We apply the `anova()` command to perform this analysis.
 
 ```{r}
-# H7_influenceplot2
-influencePlot(ussteamco.mod.3, id=list(n=3, cex=0.8))
+anova(ussteamco.mod.0)
 ```
 
-Identification in this plot with default method "noteworthy": indicates setting labels for points with large Studentized residuals, hat-values or Cook's distances.
+The variance of $y$, $s_y^2 = \frac{\sum(y_i - \bar{y})^2}{n - 1}$, is obtained from
 
 ```{r}
-influencePlot(ussteamco.mod.3, id=list(method = "mahal", n=3, cex=0.8))
+var(USSteamCoEstim$revenue)
 ```
 
-
-```{r}
-USSteamCoEstim2[c(30),]
-```
-
-Not an improvement, so we stick with model 3.
-
-# Analysis of variance
-
-See Fox and Weisberg p. 261 for difference between `anova` and `Anova`.
-
-First we explain what we mean with total variation: it is the sum squared differences between $y_i$ and $\bar{y}$.
+Total Sum of Squares $\sum(y_i - \bar{y})^2$ is calculated as
 
 ```{r}
 (mean_y <- mean(USSteamCoEstim$revenue))
@@ -414,169 +388,98 @@ variation <- USSteamCoEstim$revenue - mean_y
 squared_variation <- variation^2
 (total_sum_of_squares <- sum(squared_variation))
 ```
-This number is the quantity that is analyzed in anova:
 
 ```{r}
-(anova.mod.0 <- anova(ussteamco.mod.0))
-```
-```{r}
-anova.mod.0$`Sum Sq`
+anova.mod.0 <- anova(ussteamco.mod.0)
+anova.mod.0$`Sum Sq`[1]
+anova.mod.0$`Sum Sq`[2]
 anova.mod.0$`Sum Sq`[1]/(anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2])
 ```
-This explains the `Sum Sq` column in anova. It is the sum of squared variation.
+
+Therefore, when we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
 
 ```{r}
-sum(anova.mod.0$`Sum Sq`)
-total_sum_of_squares
-```
-We find that ussteamco.mod.0 explains 39.7% of the variation in revenue.
-
-```{r}
-brief(ussteamco.mod.0)
+total_sum_of_squares / 35
 ```
 
-We now turn to a model with multiple independent variables, for example, ussteamco.mod.1, introduced in Section 7.4.3.
+## Exercise 7.20.anova Type I and Type II
+
+We now turn to a model with multiple independent variables, for example, `mod.1`, introduced in Section 7.4.3.
 
 ```{r}
 (anova.mod.1 <- anova(ussteamco.mod.1))
 ```
 
-Had we called the model in a different order, the sums of the squares of the independent variables would have been different.
+Declaring the independent variables in a different order shows that the calculation of the sum of squares is in sequential order.
 
 ```{r}
 ussteamco.mod.1b <- lm(revenue ~ heatDD + coolDD + production,
                        data = USSteamCoEstim)
 (anova.mod.1b <- anova(ussteamco.mod.1b))
 ```
-To address this issue, an alternative version of the analysis of vari- ance, referred to as Type II tests, is used. 
+To address this issue, an alternative version of the analysis of variance, referred to as Type II tests, is used. Instead of measuring the contribution of each independent variable sequentially, the analysis shows the contribution of each independent variable if it was the last independent variable added to the model. The analysis is obtained using the command `Anova` (with capital A) from the `car` package.
 
 ```{r}
 Anova(ussteamco.mod.1)
 ```
 
-The analysis of variance of mod.3 is as follows:
+We see that the marginal effect of adding `production`, assuming `coolDD` and `heatDD` have already been entered into the model, is 1.8260e+14. This is equal to the result obtained from the earlier `anova` command on `mod.1b`. We also see that the added value of entering `coolDD` into the model is limited: its sum of squares is much lower than that of the other two variables, and its related $F$ value is not significant. 
+
+We have no clear preference for either `anova` or `Anova`, they both have their merits. `anova` decomposes TSS, but that decomposition is dependent on the order in which variables are entered into the equation. `Anova` shows the marginal effect of each independent variable, but these marginal effects do not add to TSS.
+
+## Exercise 7.21. Anova with interactions
+
+The analysis of variance of `mod.3` is as follows:
 
 ```{r}
 (anova.mod.3 <- anova(ussteamco.mod.3))
 ```
 
-The following caluclations not used in ADA.
+## Exercise 7.22. Testing normality
 
-```{r}
-sum(anova.mod.1$`Sum Sq`)
-```
-
-Observe SSR
-
-```{r}
-anova.mod.1$`Sum Sq`[4]
-```
-
-The mean square is SSR/df
-
-```{r}
-anova.mod.1$`Sum Sq`[4]/anova.mod.1$Df[4]
-anova.mod.1$`Mean Sq`[4]
-```
-
-And the square root of this should be equal to the Residual standard error from summary
-
-```{r}
-sqrt(anova.mod.1$`Mean Sq`[4])
-```
-
-Compare with summary
-
-```{r}
-summary(ussteamco.mod.1)
-```
-
-The Residual standard error in summary is 1981000, this quantity has been rounded to the nearest 1000.
-
-```{r}
-head(USSteamCoEstim, 32)
-```
-
-```{r}
-cor(USSteamCoEstim$revenue, USSteamCoEstim$production)
-```
-
-```{r}
-cor(USSteamCoEstim$revenue, USSteamCoEstim$production)^2
-```
-
-This is equal to the R-squared.
-
-```{r}
-anova.mod.0 <- anova(ussteamco.mod.0)
-anova.mod.0$`Sum Sq`
-anova.mod.0$`Sum Sq`[1]/(anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2])
-```
-
-So we see that R-squared is SSR/(SSR + SSE).
-
-```{r}
-summary(ussteamco.mod.0)
-```
-
-And we also see how the F-statistic is calculated.
-
-```{r}
-anova.mod.0$`Mean Sq`
-anova.mod.0$`Mean Sq`[1]/anova.mod.0$`Mean Sq`[2]
-```
-
-Total sum of squares
-
-```{r}
-sum(anova.mod.3$`Sum Sq`)
-USSteamCoEstim$revenue[22]^2
-sum(anova.mod.3$`Sum Sq`) + USSteamCoEstim$revenue[22]^2
-```
-
-
-# Testing model assumptions
-
-## Normality	
-
-Figure 7.15: Histogram of standardized residuals of the ussteamco.mod.3 model.
+We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 7.14 is obtained by:
 
 ```{r}
 nres <- ussteamco.mod.3$residuals / sd(ussteamco.mod.3$residuals)
 model3 <- as.data.frame(nres)
-hist_norm_res <-
+hist_stand_res <-
   ggplot(model3, aes(nres)) + 
   geom_histogram(aes(y = after_stat(density)),
                  breaks = seq(-2, 2, by = 0.5),
                  fill = "#00338D") +
-  stat_function(fun = dnorm, args = list(mean = mean(model3$nres), sd = sd(model3$nres)))
-hist_norm_res
+  stat_function(fun = dnorm, args = list(mean = mean(model3$nres), 
+                                         sd = sd(model3$nres)))
+hist_stand_res
 ```
+
+The QQ plot is produced by:
 
 ```{r}
 qqPlot(ussteamco.mod.3)
 ```
 
+
+The Shapiro-Wilk normality test is executed through the `shapiro.test` function from the `stats` package.
+
 ```{r}
 shapiro.test(ussteamco.mod.3$residuals)
 ```
 
-## Homoskedasticity
+## Exercise 7.23. Testing heteroskedasticity
 
-Figure 7.16: Residual plots for the ussteamco.mod.3 model.
+To test the asumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 7.15. We can construct it as follows.
 
 ```{r}
-residualPlots(ussteamco.mod.3,
-              layout = c(2, 3),
-              quadratic = FALSE,
-              linear = TRUE)
+residualPlots(ussteamco.mod.3, layout = c(2, 3),
+              quadratic = FALSE, linear = TRUE)
 ```
+The formal statistical test is the Breusch-Pagan test.
 
 ```{r}
 bptest(ussteamco.mod.3)
 ```
 
-## Absence of autocorrelation
+## Exercise 7.24. testing autocorrelation
 
 Figure 7.17: Partial autocorrelation plot for ussteamco.mod.3. A significant spike is observed at lag 1.
 
@@ -584,47 +487,92 @@ Figure 7.17: Partial autocorrelation plot for ussteamco.mod.3. A significant spi
 bgtest(ussteamco.mod.3, order = 3, type = "Chisq")
 ```
 ```{r}
-# acf(ussteamco.mod.3$residuals)
-```
-```{r}
 pacf(ussteamco.mod.3$residuals)
 ```
 
-Indication of autocorrelation at lag = 1. We're not addressing this right now, but check back on it later. NOTE FOR SELF: that's weird, because we first remove a variable using a t-test, but that test assumes no autocorrelation? Instead, reduce standard errors first by adding e[-1] to the model.
+The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals. 
 
-Create new df with residuals from t[-1].
+## Exercise 7.25. The Cochrane-Orcutt method
+
+A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation (AR(1)). 
+This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
+The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
+
+We first estimate an AR(1) model to the residuals from `mod.3`
 
 ```{r}
-residuals.1 <- ussteamco.mod.3$residuals[1:34]
-USSteamCoEstim3 <- USSteamCoEstim2[2:35, ]
-USSteamCoEstim3$res1 <- residuals.1
+(rho <- arima(ussteamco.mod.3$residuals, 
+              order = c(1, 0, 0))$coef[1])
+```
+Then we transform all variables using the estimated $\rho$.
+
+```{r}
+# Create lagged variables (dropping first observation)
+n <- nrow(USSteamCoEstim2)
+
+# Lag all necessary variables by 1 time unit
+trans <- USSteamCoEstim2[-1, ]  # t
+lag       <- USSteamCoEstim2[-n, ]  # t-1
+
+# Transform dependent variable
+trans$revenue_adj <- trans$revenue - rho * lag$revenue
+
+# Transform independent variables
+trans$production_adj <- trans$production - rho * lag$production
+trans$heatDD_adj     <- trans$heatDD     - rho * lag$heatDD
+trans$coolDD_adj     <- trans$coolDD     - rho * lag$coolDD
+trans$summer_adj     <- trans$summer     - rho * lag$summer
+
+# Interaction terms
+trans$prod_summer_adj   <- trans$production_adj * trans$summer_adj
+trans$heat_summer_adj   <- trans$heatDD_adj * trans$summer_adj
+trans$cool_summer_adj   <- trans$coolDD_adj * trans$summer_adj
 ```
 
-Now fit again and use residuals.1 as predictor.
+Fit a new model using the Cochrane-Orcutt method
 
 ```{r}
-ussteamco.mod.5 <- lm(revenue ~ production * summer + 
-                        coolDD * summer +
-                        heatDD * summer +
-                        res1,
-                      data = USSteamCoEstim3)
+ussteamco.mod.4 <- lm(revenue_adj ~ production_adj + heatDD_adj + coolDD_adj +
+                                     summer_adj + prod_summer_adj +
+                                     heat_summer_adj + cool_summer_adj,
+                      data = trans)
 
-summary(ussteamco.mod.5)
+summary(ussteamco.mod.4)
+```
+This manual approach closely follows the Cochrane-Orcutt transformation:
+$y_t - \rho y_{t-1} = \beta_0(1 - \rho) + \sum_{j} \beta_j(x_{jt} - \rho x_{j,t-1}) + u_t$
+It discards the first observation (which cannot be differenced).
+After fitting the transformed model, we can check if autocorrelation is reduced:
+
+```{r}
+pacf(ussteamco.mod.4$residuals)
+bgtest(ussteamco.mod.4, order = 3)
 ```
 
-Rerun bgtest
+
+## Exercise 7.26. Testing significance
+
+Significance of each of the independent variables and their interactions can be read from the summary() table.
 
 ```{r}
-bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
+options(scipen = 1)
+summary(ussteamco.mod.4)
 ```
 
+## Exercise 7.27 Manual backward elimination.
 
+We can apply a stepwise model selection procedure (such as BIC-based backward elimination) to simplify our Cochrane-Orcutt–transformed model by removing non-significant predictors.
+However, there’s a caveat: because we have manually transformed the variables (e.g., `production_adj`, `prod_summer_adj`, etc.), stepwise selection must be applied manually to the transformed model — you can’t just call `step()` on `ussteamco.mod.4` without interpreting carefully what it does.
 
-
-
-# Testing significance
 ```{r}
-brief(ussteamco.mod.3)
+library(MASS)
+
+stepwise_model <- stepAIC(ussteamco.mod.3, direction = "both", trace = TRUE, k = log(n))
+summary(stepwise_model)
+```
+```{r}
+pacf(stepwise_model$residuals)
+bgtest(stepwise_model, order = 3)
 ```
 
 
