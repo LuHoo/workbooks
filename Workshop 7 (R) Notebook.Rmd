@@ -112,8 +112,7 @@ ggplot(data = USSteamCoEstim, aes(x = date)) +
 Figure 7.1 shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
 
 ```{r}
-ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
-ggplot(USSteamCo, aes(x=production, y=revenue)) + 
+ggplot(USSteamCoEstim, aes(x=production, y=revenue)) + 
   geom_point(color = "#00338D")
 ```
 
@@ -217,6 +216,8 @@ ussteamco.mod.1 <- lm(revenue ~ production + coolDD + heatDD,
 summary(ussteamco.mod.1)
 ```
 
+Adding the additional variables `coolDD` and `heatDD` has improved the fit of the model. The residual standard deviation decreased from 4,112,487 for `mod.0` to 1,980,698 for `mod.1`. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods.
+
 ## Exercise 7.9. Interactions
 
 In Section 7.4.4 we developed `mod.2`, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable `summer`.
@@ -242,6 +243,8 @@ ussteamco.mod.2 <- lm(revenue ~ production * summer +
 summary(ussteamco.mod.2)
 ```
 The formula specified in the `lm` function, `revenue $\sim$ production * summer + coolDD * summer + heatDD * summer` can also be written as `revenue $\sim$ (production + coolDD + heatDD) * summer`. 
+
+As a result, this further improved the fit of the model. The residual standard deviation decreased to 1,680,711, and $r^2$ improved to 0.917.
 
 ## Exercise 7.10. Time lag
 
@@ -337,7 +340,7 @@ We then fit a new linear model.
 ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
                       data = USSteamCoEstim2)
 
-summary(ussteamco.mod.3)
+brief(ussteamco.mod.3)
 ```
 
 ## Exercise 7.18. Multicollinearity
@@ -388,11 +391,13 @@ anova.mod.0 <- anova(ussteamco.mod.0)
 anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2]
 ```
 
-Therefore, when we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
+When we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
 
 ```{r}
 total_sum_of_squares / 35
 ```
+
+This shows how variance is linked to variation.
 
 ## Exercise 7.20.anova Type I and Type II
 
@@ -427,7 +432,9 @@ The analysis of variance of `mod.3` is as follows:
 (anova.mod.3 <- anova(ussteamco.mod.3))
 ```
 
-## Comparing models
+## Exercise 7.22. Comparing models
+
+We compare the performance of models with four different statistics, the Multiple $r^2$, Adjusted $r^2$ (both obtained from the `summary` function), and the AIC and BIC values. These last two can be called with their own respective commands.
 
 ```{r}
 AIC(ussteamco.mod.0)
@@ -436,6 +443,8 @@ AIC(ussteamco.mod.1)
 AIC(ussteamco.mod.2)
 AIC(ussteamco.mod.3)
 ```
+The AIC value of the `model_backward` does not quite match the output of the `step` function. This can be explained as follows.
+
 The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
 where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters. 
@@ -451,6 +460,7 @@ $n \cdot (\log(2\pi) + 1) + 2$.
 The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors. 
 The additional +2 arises because R’s AIC() function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression. 
 
+Similarly, the BIC values are obtained as follows.
 ```{r}
 BIC(ussteamco.mod.0)
 BIC(model_backward)
@@ -459,7 +469,7 @@ BIC(ussteamco.mod.2)
 BIC(ussteamco.mod.3)
 ```
 
-## Exercise 7.22. Testing normality
+## Exercise 7.23. Testing normality
 
 We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 7.14 is obtained by:
 
@@ -490,7 +500,7 @@ The Shapiro-Wilk normality test is executed through the `shapiro.test` function 
 shapiro.test(ussteamco.mod.3$residuals)
 ```
 
-## Exercise 7.23. Testing heteroskedasticity
+## Exercise 7.24. Testing heteroskedasticity
 
 To test the asumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 7.15. We can construct it as follows.
 
@@ -504,7 +514,7 @@ The formal statistical test is the Breusch-Pagan test.
 bptest(ussteamco.mod.3)
 ```
 
-## Exercise 7.24. testing autocorrelation
+## Exercise 7.25. testing autocorrelation
 
 We use the `pacf` plot from Figure 7.17 to see if autocorrelation is present, and if so, which order is significant.
 
@@ -522,7 +532,7 @@ The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hy
 
 ## Exercise 7.25. The Cochrane-Orcutt method
 
-A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation. 
+A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation ("AR(1)"). 
 This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
 The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
 
@@ -578,6 +588,8 @@ pacf(ussteamco.mod.4$residuals)
 bgtest(ussteamco.mod.4, order = 3)
 ```
 
+## Exercise 7.27. Constructing a refined model
+
 When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base `R` function `step()` enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference.
 
 ```{r}
@@ -587,11 +599,15 @@ ussteamco.mod.5 <- step(ussteamco.mod.5,
                        direction = "backward") 
 ```
 
+## Exercise 7.28. Coefficient test of the refined model
+
 The summary of this model is:
 
 ```{r}
 summary(ussteamco.mod.5)
 ```
+
+## Exercise 7.29. Re-running the model assumptions tests
 
 We re-run the model assumptions tests.
 
