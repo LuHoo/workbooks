@@ -14,14 +14,14 @@ output:
 To run the exercises in this workshop, we need to load a few packages.
 
 ```{r setup}
-library(ggplot2)
-library(aicpa)      # Contains US SteamCo data
-library(car)
-library(gridExtra)  # To create grid of plots
-library(tidyr)
-library(corrplot)
-library(lmtest)
-library(latex2exp)  # Use LaTeX expressions in plots
+library(ggplot2)         # Data visualization
+library(aicpa)           # Contains US SteamCo data
+library(car)             # Companion to Applied Regression
+library(gridExtra)       # Arrange multiple grid-based plots
+library(tidyr)           # Data tidying (reshape and transform)
+library(corrplot)        # Correlation matrix visualization
+library(lmtest)          # Diagnostic tests for linear models
+library(latex2exp)       # Use LaTeX expressions in plots
 ```
 
 ### Exercise 7.2. The US SteamCo data file
@@ -46,8 +46,6 @@ We create a dummy variable to distinguish between heating months and cooling mon
 ```{r}
 USSteamCo$summer = c(0,0,0,0,1,1,1,1,1,0,0,0)
 ```
-USSteamCo$date = seq(as.Date("2011-01-01"), by = "month", length.out = 48)
-
 
 We reformat the month variable, that has a character type, into the `date` variable.
 
@@ -66,7 +64,6 @@ USSteamCoHold  <- USSteamCo[37:48,]
 Figure 7.2 shows the histograms of the data in the US SteamCo estimation set. 
 
 ```{r}
-# H7_Histograms
 hist_revenue <-
   ggplot(USSteamCoEstim, aes(x=revenue)) + 
   geom_histogram(binwidth = 4000000, fill = "#00338D")
@@ -117,8 +114,7 @@ Figure 7.1 shows a scatter plot of the independent variable production ($x$-axis
 ```{r}
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
 ggplot(USSteamCo, aes(x=production, y=revenue)) + 
-  geom_point(color = "#00338D") +
-    theme_minimal()
+  geom_point(color = "#00338D")
 ```
 
 The enhanced scatter plot in Figure 7.4 is obtained by running the following code.
@@ -153,7 +149,7 @@ In addition to the statistics produced by `brief`, it provides insight into the 
 
 ### Exercise 7.6. Correlations and correlogram
 
-The correlations in Table 7.1 are calculated using the `cor` function. 
+The correlations in Table 7.3 are calculated using the `cor` function. 
 
 ```{r}
 (cor_ussteam <- cor(USSteamCoEstim[, 2:5]))
@@ -161,7 +157,6 @@ The correlations in Table 7.1 are calculated using the `cor` function.
 The correlogram in Figure 7.5 is produced by
 
 ```{r echo=FALSE}
-# H7_Correlogram
 corrplot(cor_ussteam, 
          tl.col = "black",
          col=colorRampPalette(c("#bc204b","white","#00348d"))(100),
@@ -175,7 +170,7 @@ The `step` function can be used to implement both backward and forward methods. 
 We start with the forward method. From a model that only uses the constant (`revenue $\sim$ 1`), we add variables one by one. The variable that the largest effect on the criterion, in this example, the default AIC, is selected for inclusion in the model.
 
 ```{r}
-model_forward <- lm(revenue ~ 1, data = USSteamCoEstim)  # Start with intercept-only model
+model_forward <- lm(revenue ~ 1, data = USSteamCoEstim)  
 model_forward <- step(model_forward, 
                       direction = "forward", 
                       scope = formula(~ production + coolDD + heatDD))  
@@ -244,13 +239,13 @@ ussteamco.mod.2 <- lm(revenue ~ production * summer +
                         coolDD * summer +
                         heatDD * summer,
                       data = USSteamCoEstim)
-brief(ussteamco.mod.2)
+summary(ussteamco.mod.2)
 ```
 The formula specified in the `lm` function, `revenue $\sim$ production * summer + coolDD * summer + heatDD * summer` can also be written as `revenue $\sim$ (production + coolDD + heatDD) * summer`. 
 
 ## Exercise 7.10. Time lag
 
-The cross-correlation plot in Figure \ref{fig:H7_timelag} is created by running:
+The cross-correlation plot in Figure 7.7 is created by running:
 
 ```{r}
 with(USSteamCoEstim, 
@@ -261,7 +256,7 @@ with(USSteamCoEstim,
 
 ## Exercise 7.11. Residual plots
 
-The residual plots in Figure \ref{fig:H7_residualPlots_mod2} are obtained by:
+The residual plots in Figure 7.9 are obtained by:
 
 ```{r}
 residualPlots(ussteamco.mod.2)
@@ -286,7 +281,7 @@ hatvals.mod.2 <- hatvalues(ussteamco.mod.2)
 The three largest hat-values are then summarized by
 
 ```{r}
-hatvals.mod.2[order(hatvals.mod.2, decreasing = TRUE)[1:5]]
+hatvals.mod.2[order(hatvals.mod.2, decreasing = TRUE)[1:3]]
 ```
 
 The sum of the hat-values is equal to $k + 1$.
@@ -297,7 +292,7 @@ sum(hatvals.mod.2)
 
 ## Exercise 7.14. Regression outliers
 
-Figure 7.12 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
+Figure 7.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
 
 ```{r}
 qqPlot(ussteamco.mod.2, id = list(n = 3))
@@ -336,7 +331,7 @@ fit_22 <- fitted(ussteamco.mod.2)[22]
 USSteamCoEstim2$revenue[22] <- fit_22 + p5
 ```
 
-we then fit a new linear model.
+We then fit a new linear model.
 
 ```{r}
 ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
@@ -363,7 +358,7 @@ vif(ussteamco.mod.3, type = 'predictor')
 
 We now assess whether any of the predictors has a value $GVIF_j^{1/(2df)}$ that is greater than 10. Because there are none, this model does not suffer from variance inflation.
 
-## Exercise 7.19. Variance and TSS
+## Exercise 7.19. Variance and Total Sum of Squares
 
 Table 7.5 provides the analysis of variance for `mod.0`. We apply the `anova()` command to perform this analysis.
 
@@ -380,20 +375,17 @@ var(USSteamCoEstim$revenue)
 Total Sum of Squares $\sum(y_i - \bar{y})^2$ is calculated as
 
 ```{r}
-(mean_y <- mean(USSteamCoEstim$revenue))
-```
-
-```{r}
+mean_y <- mean(USSteamCoEstim$revenue)
 variation <- USSteamCoEstim$revenue - mean_y
 squared_variation <- variation^2
 (total_sum_of_squares <- sum(squared_variation))
 ```
 
+Total Sum of Squares is the sum of the elements in the `Sum Sq` column of the Analysis of Variance Table.
+
 ```{r}
 anova.mod.0 <- anova(ussteamco.mod.0)
-anova.mod.0$`Sum Sq`[1]
-anova.mod.0$`Sum Sq`[2]
-anova.mod.0$`Sum Sq`[1]/(anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2])
+anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2]
 ```
 
 Therefore, when we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
@@ -435,11 +427,44 @@ The analysis of variance of `mod.3` is as follows:
 (anova.mod.3 <- anova(ussteamco.mod.3))
 ```
 
+## Comparing models
+
+```{r}
+AIC(ussteamco.mod.0)
+AIC(model_backward)
+AIC(ussteamco.mod.1)
+AIC(ussteamco.mod.2)
+AIC(ussteamco.mod.3)
+```
+The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
+$\text{AIC} = -2 \log \hat{L} + 2k$,
+where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters. 
+
+For a linear regression model with normally distributed errors, this log-likelihood takes the form
+$\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right) \right]$,
+leading to the AIC expression
+$\text{AIC} = n \left[\log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
+In contrast, the `step()` function in R reports AIC values based on a deviance-like approximation, that omits constant terms unrelated to model comparison:
+$\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
+The difference between the two expressions is a constant shift of
+$n \cdot (\log(2\pi) + 1) + 2$.
+The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors. 
+The additional +2 arises because R’s AIC() function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression. 
+
+```{r}
+BIC(ussteamco.mod.0)
+BIC(model_backward)
+BIC(ussteamco.mod.1)
+BIC(ussteamco.mod.2)
+BIC(ussteamco.mod.3)
+```
+
 ## Exercise 7.22. Testing normality
 
 We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 7.14 is obtained by:
 
 ```{r}
+# Calculate normalized residuals
 nres <- ussteamco.mod.3$residuals / sd(ussteamco.mod.3$residuals)
 model3 <- as.data.frame(nres)
 hist_stand_res <-
@@ -481,20 +506,23 @@ bptest(ussteamco.mod.3)
 
 ## Exercise 7.24. testing autocorrelation
 
-Figure 7.17: Partial autocorrelation plot for ussteamco.mod.3. A significant spike is observed at lag 1.
+We use the `pacf` plot from Figure 7.17 to see if autocorrelation is present, and if so, which order is significant.
+
+```{r}
+pacf(ussteamco.mod.3$residuals)
+```
+
+The Breusch-Godfrey test is executed through `bgtest`.
 
 ```{r}
 bgtest(ussteamco.mod.3, order = 3, type = "Chisq")
-```
-```{r}
-pacf(ussteamco.mod.3$residuals)
 ```
 
 The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals. 
 
 ## Exercise 7.25. The Cochrane-Orcutt method
 
-A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation (AR(1)). 
+A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation. 
 This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
 The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
 
@@ -512,7 +540,7 @@ n <- nrow(USSteamCoEstim2)
 
 # Lag all necessary variables by 1 time unit
 trans <- USSteamCoEstim2[-1, ]  # t
-lag       <- USSteamCoEstim2[-n, ]  # t-1
+lag   <- USSteamCoEstim2[-n, ]  # t-1
 
 # Transform dependent variable
 trans$revenue_adj <- trans$revenue - rho * lag$revenue
@@ -525,175 +553,278 @@ trans$summer_adj     <- trans$summer     - rho * lag$summer
 
 # Interaction terms
 trans$prod_summer_adj   <- trans$production_adj * trans$summer_adj
-trans$heat_summer_adj   <- trans$heatDD_adj * trans$summer_adj
-trans$cool_summer_adj   <- trans$coolDD_adj * trans$summer_adj
+trans$heat_summer_adj   <- trans$heatDD_adj     * trans$summer_adj
+trans$cool_summer_adj   <- trans$coolDD_adj     * trans$summer_adj
 ```
 
-Fit a new model using the Cochrane-Orcutt method
+We fit a new model using the Cochrane-Orcutt method.
 
 ```{r}
-ussteamco.mod.4 <- lm(revenue_adj ~ production_adj + heatDD_adj + coolDD_adj +
-                                     summer_adj + prod_summer_adj +
-                                     heat_summer_adj + cool_summer_adj,
+ussteamco.mod.4 <- lm(revenue_adj ~ 
+                        production_adj + heatDD_adj + coolDD_adj +
+                        summer_adj + prod_summer_adj +
+                        heat_summer_adj + cool_summer_adj,
                       data = trans)
 
 summary(ussteamco.mod.4)
 ```
-This manual approach closely follows the Cochrane-Orcutt transformation:
+This manual approach follows the Cochrane-Orcutt transformation:
 $y_t - \rho y_{t-1} = \beta_0(1 - \rho) + \sum_{j} \beta_j(x_{jt} - \rho x_{j,t-1}) + u_t$
 It discards the first observation (which cannot be differenced).
-After fitting the transformed model, we can check if autocorrelation is reduced:
+After fitting the transformed model, we check if autocorrelation is reduced, by observing the spikes in the `pacf` plot and running the Breusch-Godfrey test.
 
 ```{r}
 pacf(ussteamco.mod.4$residuals)
 bgtest(ussteamco.mod.4, order = 3)
 ```
 
+When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base `R` function `step()` enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference.
+
+```{r}
+ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD) * summer, 
+                     data = USSteamCoEstim2)  
+ussteamco.mod.5 <- step(ussteamco.mod.5,
+                       direction = "backward") 
+```
+
+The summary of this model is:
+
+```{r}
+summary(ussteamco.mod.5)
+```
+
+We re-run the model assumptions tests.
+
+```{r}
+bptest(ussteamco.mod.5)
+bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
+shapiro.test(ussteamco.mod.5$residuals)
+```
 
 ## Exercise 7.26. Testing significance
 
-Significance of each of the independent variables and their interactions can be read from the summary() table.
+Significance of each of the independent variables and their interactions can be read from the `summary()` table.
 
 ```{r}
-options(scipen = 1)
-summary(ussteamco.mod.4)
-```
-
-## Exercise 7.27 Manual backward elimination.
-
-We can apply a stepwise model selection procedure (such as BIC-based backward elimination) to simplify our Cochrane-Orcutt–transformed model by removing non-significant predictors.
-However, there’s a caveat: because we have manually transformed the variables (e.g., `production_adj`, `prod_summer_adj`, etc.), stepwise selection must be applied manually to the transformed model — you can’t just call `step()` on `ussteamco.mod.4` without interpreting carefully what it does.
-
-```{r}
-library(MASS)
-
-stepwise_model <- stepAIC(ussteamco.mod.3, direction = "both", trace = TRUE, k = log(n))
-summary(stepwise_model)
-```
-```{r}
-pacf(stepwise_model$residuals)
-bgtest(stepwise_model, order = 3)
-```
-
-
-
-```{r}
-summary(ussteamco.mod.3)
-```
-Derivation of adjusted r-squared
-```{r}
-(rsq <- summary(ussteamco.mod.3)$r.squared)
-(k <- 7)
-(adjrsq <- rsq - k * (1 - rsq) / 27)
-```
-
-
-
-Looks like model without `heatDD` works better.
-
-```{r}
-ussteamco.mod.5 <- lm(revenue ~ 
-                        log(production) * summer + 
-                        coolDD * summer,
-                      data = USSteamCoEstim2)
 summary(ussteamco.mod.5)
 ```
-Compare two models with `BIC` values.
+
+
+
+### Exercise 7.28. Visualizing the uncertainty in the model parameters
+
+First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
 
 ```{r}
-BIC(ussteamco.mod.0)
-# BIC(ussteamco.mod.1)
-# BIC(ussteamco.mod.2)
-# BIC(ussteamco.mod.3)
-# BIC(ussteamco.mod.4)
-# BIC(ussteamco.mod.5)
+set.seed(123)    # Set seed for reproducibility
+beta_0 <- 2      # True intercept
+beta_1 <- 1.5    # True slope
+n <- 11          # Number of points to sample
+x_min <- 0       # Minimum value of x
+x_max <- 10      # Maximum value of x
+x_values <- seq(x_min, x_max, length.out = n)  # x values modelled
+sigma <- 5       # Standard deviation of the noise
+rep <- 200       # Number of replications
+alpha <- 0.05    # Significance level for 95% confidence interval
+x_extended_min <- x_min - (x_max - x_min) / 2  # Extended x range minimum
+x_extended_max <- x_max + (x_max - x_min) / 2  # Extended x range maximum
+x_extended <- seq(x_extended_min, x_extended_max, length.out = 100) # Plot range
 ```
-Reconciliation of BIC values
-```{r}
-# Extract number of parameters (including intercept)
-(k <- length(coef(ussteamco.mod.0)))
 
-# Compute SSE (sum of squared errors)
-(sse <- sum(residuals(ussteamco.mod.0)^2))
-
-# Compute manual BIC using SSE-based formula
-(bic_sse <- n * log(sse / n) + k * log(n))
-
-# Compute BIC using R's built-in log-likelihood-based formula
-(bic_r <- BIC(ussteamco.mod.0))
-
-# Estimate of sigma^2 (MLE, not unbiased)
-(sigma2_hat <- sse / n)
-
-# Compute log-likelihood at MLE
-(logL_hat <- -n / 2 * (log(2 * pi) + 1 + log(sse / n)))
-
-# Compute BIC using full log-likelihood
-(bic_logL <- -2 * logL_hat + k * log(n))
-
-
-```
-```{r}
-(n <- length(residuals(ussteamco.mod.0)))
-```
-```{r}
-(k_r <- attr(logLik(ussteamco.mod.0), "df"))
-length(coef(ussteamco.mod.0))   # Your k
-attr(logLik(ussteamco.mod.0), "df")   # What R uses
-```
-```{r}
-(logL_r <- as.numeric(logLik(ussteamco.mod.0)))
-(bic_from_logLik <- -2 * logL_r + k_r * log(n))
-```
-```{r}
-# Sample size used in the model
-n <- length(residuals(ussteamco.mod.0))
-
-# Number of parameters used by R internally
-k_r <- attr(logLik(ussteamco.mod.0), "df")
-
-# SSE
-sse <- sum(residuals(ussteamco.mod.0)^2)
-
-# BIC from your SSE-based formula
-bic_sse <- n * log(sse / n) + k_r * log(n)
-
-# BIC from R's actual log-likelihood
-logL_r <- as.numeric(logLik(ussteamco.mod.0))
-bic_from_logLik <- -2 * logL_r + k_r * log(n)
-
-# Built-in BIC
-bic_r <- BIC(ussteamco.mod.0)
-
-# Compare
-cat("Your SSE-based BIC:         ", bic_sse, "\n")
-cat("BIC from R logLik() formula:", bic_from_logLik, "\n")
-cat("R's BIC():                  ", bic_r, "\n")
-```
-```{r}
-n * (log(2 * pi) + 1)
-bic_from_logLik - bic_sse
-```
-This is the difference between 1105.22 and 1207.383
-
+We first calculate the true regression line, along with its confidence interval.
 
 ```{r}
-Anova(ussteamco.mod.5)
+# Create a data frame for the true line over the extended range
+true_line <- data.frame(x = x_extended, y = beta_0 + beta_1 * x_extended)
+
+# Calculate the standard error of the true regression line
+mean_x <- mean(x_values)                        # Mean of the x values
+S_xx <- sum((x_values - mean_x)^2)              # Sum of squares of x deviations
+se_fit_true <- sigma * sqrt(1/n + (x_extended - mean_x)^2 / S_xx)  # Standard error formula for regression
+
+# Calculate the theoretical confidence intervals based on the true model
+t_value <- qt(1 - alpha / 2, df = n - 2)        # Critical t-value for 95% CI
+ci_upper_true <- (beta_0 + beta_1 * x_extended) + t_value * se_fit_true  # Upper bound
+ci_lower_true <- (beta_0 + beta_1 * x_extended) - t_value * se_fit_true  # Lower bound
+
+# Create a data frame for the confidence interval bounds based on the true regression line
+ci_bounds_true <- data.frame(x = x_extended, ci_lower = ci_lower_true, ci_upper = ci_upper_true)
+```
+
+Next, we sample $n$ points from a normal distribution, to generate $y$ values for each $x$ value and fit the corresponding regression line. We repeat this process $rep$ times.
+
+```{r}
+# Initialize a data frame to store the simulated regression lines
+simulated_lines <- data.frame()
+
+# Repeat the process `rep` times to simulate multiple regression lines
+for (i in 1:rep) {
+  
+  # Sample n points from the relationship y = beta_0 + beta_1 * x + epsilon
+  epsilon <- rnorm(n, mean = 0, sd = sigma)  # Random noise
+  y_values <- beta_0 + beta_1 * x_values + epsilon
+  
+  # Fit a linear model
+  model <- lm(y_values ~ x_values)
+  
+  # Predict fitted values for the extended range of x
+  predicted_values <- predict(model, newdata = data.frame(x_values = x_extended))
+  
+  # Store the fitted line over the extended x range
+  simulated_lines <- rbind(simulated_lines, 
+                           data.frame(x = x_extended, 
+                                      y = predicted_values, 
+                                      rep = i))
+}
+```
+
+All the elements created earlier are now plotted on a single canvas.
+
+```{r}
+ggplot() +
+  geom_line(data = simulated_lines, aes(x = x, y = y, group = rep), 
+            color = "#00338D", alpha = 0.1) +   # Plot the simulated regression lines
+  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", linewidth = .5) +  # Plot the true line
+  geom_line(data = ci_bounds_true, aes(x = x, y = ci_lower), 
+            color = "#E36877", linewidth = .5, linetype = "solid") +  # Lower bound (true line)
+  geom_line(data = ci_bounds_true, aes(x = x, y = ci_upper), 
+            color = "#E36877", linewidth = .5, linetype = "solid") +  # Upper bound (true line)
+  labs(title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),
+       x = "x", y = "y") +
+  theme_minimal() +
+  xlim(x_extended_min, x_extended_max)  # Extend the x-axis limits
 ```
 
 ```{r}
-bgtest(ussteamco.mod.5, order = 24)
+# Calculate the standard error for prediction interval
+alpha_pred <- 0.01  # For 99% prediction interval
+t_value_pred <- qt(1 - alpha_pred / 2, df = n - 2)
+se_pred <- sigma * sqrt(1 + 1/n + (x_extended - mean_x)^2 / S_xx)
+
+# Calculate 99% prediction interval bounds
+pi_upper_true <- (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred
+pi_lower_true <- (beta_0 + beta_1 * x_extended) - t_value_pred * se_pred
+
+# Add to a data frame for plotting
+pi_bounds_true <- data.frame(
+  x = x_extended,
+  pi_lower = pi_lower_true,
+  pi_upper = pi_upper_true
+)
+
+# Plot: true line, 95% CI, 99% PI
+ggplot() +
+  geom_ribbon(
+    data = pi_bounds_true,
+    aes(x = x, ymin = pi_lower, ymax = pi_upper),
+    fill = "#00338D", alpha = 0.15
+  ) +  # 99% prediction interval as a ribbon
+  geom_line(
+    data = ci_bounds_true,
+    aes(x = x, y = ci_lower),
+    color = "#00338D", linewidth = .5, linetype = "dashed"
+  ) +  # 95% CI lower
+  geom_line(
+    data = ci_bounds_true,
+    aes(x = x, y = ci_upper),
+    color = "#00338D", linewidth = .5, linetype = "dashed"
+  ) +  # 95% CI upper
+  geom_line(
+    data = true_line,
+    aes(x = x, y = y),
+    color = "#00338D", linewidth = 1
+  ) +  # True regression line
+  labs(
+    # title = "Regression Line with 95% Confidence and 99% Prediction Intervals",
+    x = "x", y = "y"
+  ) +
+  # theme_minimal() +
+  xlim(x_extended_min, x_extended_max)
 ```
 
-Most of the autocorrelation has vanished when we take `log(production)` and leave out `heatDD`. But testing for up to 12 lags still shows a problem (seasonality?)
+
+# Exercise 7.29. Creating expectations for the hold-out period
+
+The function `predict` creates expectations, when data from `newdata` are evaluated with a certain `object`. The optional `interval` is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The `level` specifies the confidence level of the interval.
+
+```{r echo=FALSE}
+(predictions <- predict(object = ussteamco.mod.5,
+                        newdata = USSteamCoHold,
+                        interval = "prediction",
+                        level = 0.99))
+```
 
 ```{r}
-pacf(ussteamco.mod.5$residuals)
+# Convert predictions to a data frame and add the date column
+pred_df <- data.frame(
+  date = USSteamCoHold$date,
+  recorded = USSteamCoHold$revenue,
+  lwr = predictions[, "lwr"],
+  fit = predictions[, "fit"],
+  upr = predictions[, "upr"]
+)
+pred_df$outside = with(pred_df, recorded < lwr | recorded > upr)
+
+
+# Plot predictions with intervals and actuals with customized legend
+ggplot(pred_df, aes(x = date)) +
+  # Plot the predicted values as a line
+  geom_line(aes(y = fit, color = "Expectation"), size = 1) +  
+  # Add the prediction interval as a shaded area
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = "#00338D", alpha = 0.2) +
+  # Plot the actual values, with conditional coloring for outside interval points
+  geom_line(aes(y = recorded, color = "Recorded"), size = 0.5) +
+  # Highlight points outside interval in red
+  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = "red", size = 1.5) +
+  # Define color for predicted and actual values
+  scale_color_manual(
+    values = c("Expectation" = "#00338D", "Recorded" = "black"), 
+    name = ""
+  ) +
+  labs(
+    # title = "Expectations of Revenue with 99% Prediction Interval and Recorded Values",
+    x = "Date",
+    y = "Revenue"
+  ) +
+  scale_x_date(
+    date_breaks = "1 month",  # Adjusts to one gridline per month
+    date_labels = "%b"  # Optional: shows abbreviated month names
+  ) +
+  # theme_minimal() +
+  theme(legend.position = "bottom")
+
 ```
 
+Combining 12 monthly predictions
 
+```{r}
+# Extract the prediction and standard errors for each monthly prediction
+df_res <- ussteamco.mod.5$df.residual
+monthly_predictions <- pred_df$fit
+monthly_se <- (pred_df$upr - pred_df$fit) / (qt(0.995, df_res))
 
-# Predictions
+# Calculate the sum of the 12 monthly predictions
+annual_prediction <- sum(monthly_predictions)
+
+# Calculate the standard error of the sum of the monthly predictions
+annual_se <- sqrt(sum(monthly_se^2))
+
+# Calculate the t-score for a 99% confidence level
+t_score <- qt(0.995, df = df_res)
+
+# Compute the 99% confidence interval for the annual prediction
+annual_lower <- annual_prediction - t_score * annual_se
+annual_upper <- annual_prediction + t_score * annual_se
+
+# Print results
+cat("99% Confidence Interval for Annual Prediction:\n")
+cat("Lower Bound:", annual_lower, "\n")
+cat("Annual Prediction:", annual_prediction, "\n")
+cat("Upper Bound:", annual_upper, "\n")
+
+```
+
+## Exercise Predictions
 
 ```{r}
 USSteamCoHold$predmod5 <- predict(ussteamco.mod.5, newdata = USSteamCoHold)
