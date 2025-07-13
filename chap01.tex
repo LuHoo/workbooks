@@ -87,7 +87,7 @@ Apply the requirements of Standard 530 for the sampling procedure.
 \end{mdframed}
 
 \begin{table}[htbp]
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrr}
+\begin{tabularx}{\textwidth}{@{\extracolsep{\fill}}lrr}
 \toprule
 
 Item number & \multicolumn{1}{r}{Location} & \multicolumn{1}{r}{Value} \\
@@ -113,42 +113,12 @@ Item number & \multicolumn{1}{r}{Location} & \multicolumn{1}{r}{Value} \\
 Total & & 10,013,432.86\\
 
 \bottomrule
-\end{tabular*}
+\end{tabularx}
 \caption{Inventory listing (partial view)}
 \label{tab:inventory_listing}
 \end{table}
 
-% \begin{table}[htbp]
-% \begin{center}
-% \begin{tabular}{l r r}
 
-% \hline
-
-% \textbf{Item number} & \textbf{Location} & \textbf{Value} \\
-% \hline
-
-% % 7750359 & A1.1002 & 61.54 \\
-% % 555938 & A1.1003 & 515.55 \\ 
-% % 567291 & A1.1005 & 206.20 \\
-% % 7371159 & A1.1009 & 265.22 \\
-% % 8096520 & A1.1010 & 275.70 \\
-% % 1797740 & A1.1011 & 1,503.82 \\
-% % 1827858 & A1.1012 & 1,252.07 \\
-% % 2112299 & A1.1014 & 2,190.70 \\
-% % 4360219 & A1.1018 & 4,121.89 \\
-% % 2611283 & A1.1020 & 631.20 \\
-% % .. & .. \\
-% % .. & .. \\
-% % .. & ...\\
-% \hline
-% % Total & & 10,013,432.86\\
-% \hline
-
-% \end{tabular}
-% \end{center}
-% % \caption{Inventory listing (partial view)}
-% % \label{tab:inventory_listing}
-% \end{table}
 
 \section{Introduction} % (fold)
 \label{sec:H1_introduction}
@@ -243,23 +213,6 @@ In the case of a test of details
 \bigskip
 These erroneous conclusions are in statistical literature typically referred to as \hlblue{Type I error}\index{Type I error}\index{error!Type I} and \hlblue{Type II error}\index{Type II error}\index{error!Type II}. The risk of committing a Type I error is referred to as $\alpha$, and the risk of committing a Type II error is referred to as $\beta$.\footnote{Unfortunately, most auditing literature reverses the null and alternative hypotheses, and therefore $\alpha$ and $\beta$ have opposite meanings.} Both risks are \hlblue{sampling risks}\index{sampling risk}\index{risk!sampling}. 530.5c explains in the definition of \hlblue{sampling risk} that it is the risk of committing a Type I error with which the auditor should primarily be concerned.
 
-% \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=-0.2cm, innerleftmargin=0cm]
-% \section*{The positive and negative approach to testing}
-% \begin{fullwidth}
-% \begin{multicols}{2}
-
-% The first samples ever drawn by auditors were simple random samples evaluated using the \emph{direct estimator} (see Chapter \ref{cha:estimation}). When the population contains no misstatements and the sample is of reasonable size, the projected audit value $\hat{Y}$ follows a normal distribution. We then construct a 95\% prediction interval $(Y_L; Y_U)$ around the projected audit value $\hat{Y}$. This means that if we would take numerous samples of the same size from this population, in 95\% of the cases, the \emph{prediction interval}\index{prediction interval} $(Y_L; Y_U)$ would contain the population book value, and in 5\% of the cases, it would be not. Note that it is typical to denote the confidence level as $(1 - \alpha)$; therefore, the risk of obtaining a sample result such that the population book value is not contained in the prediction interval is $\alpha$.
-
-% Auditors soon realized that the $\alpha$ risk is not the risk they should be focusing on. It may be unfortunate to run into a situation where a `clean' population is rejected and submitted for further testing; a worse situation arises when the population contains a material misstatement and the sample yields a prediction interval $(Y_L; Y_U)$ that contains the population book value. We denote the risk associated with this situation by $\beta$.
-
-% Note that the statement `the population is materially misstated' is ambiguous. The population book value can be either overstated or understated; thus, formally speaking, the \emph{null hypothesis}\index{null hypothesis} (see Chapter \ref{cha:hypothesis_testing}) is that the population is not misstated versus two \emph{alternative hypotheses}\index{alternative hypothesis}. The first hypothesis is that the population is materially overstated and the second is that the population is materially understated.
-
-% It follows that auditors have consistently denoted their most important risk $\beta$, contrary to usage in other sciences. In this book, however, we follow the general scientific custom of sampling risk denoted by $\alpha$, and we do this by reversing the hypotheses.
-
-% \end{multicols}
-% \end{fullwidth}
-% \end{mdframed}
-
 \bigskip
 This leaves us with two questions. The first question arises when we deem controls ineffective or what constitutes a material misstatement. The second question concerns the extent to which risk is acceptable.
 
@@ -270,8 +223,6 @@ The amount of sampling risk that is acceptable is not prescribed by the standard
 The final factor affecting the sample size is the \hlblue{expected rate of deviation}\index{expected rate of deviation} or \hlblue{expected misstatement}\index{expected misstatement}. Sample sizes are minimal when the expected rate of deviation or expected misstatement is zero. As the expected rate of deviation or expected misstatement increases, sample sizes also increase. If the expected deviation rate is greater than the tolerable rate, a test of controls may not be an efficient approach: the test will likely reveal too many control deviations. In such cases, the auditor may be better off not trying to rely on the control at all and obtain substantive evidence from an MUS or CVS sample.
 
 For the \emph{Case: Inventories}, the MUS sample size is calculated using the relevant inputs of sampling risk, based on inherent risk and the assumption that we do not rely on controls, expected misstatement, and tolerable misstatement. These inputs cannot be used for the CVS that addresses completeness. For this test we apply professional judgment and sample 200 locations from the inventory list.
-
-% Include table of influencing factors with the sign of their influence.
 
 % subsection sample_size (end)
 
