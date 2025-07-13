@@ -43,7 +43,7 @@ At the end of this chapter you will be able to
 
 \end{compactitem}
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10, innerleftmargin=0.3cm]
 \section*{Case: Number of students}
 In the Netherlands, universities receive government funding based on the number of new students, master's degrees, and PhD degrees. After a few scandals, when schools were caught claiming too many students in order to receive higher funding, the government required an auditor report on the accuracy of the numbers reported.
 
@@ -118,11 +118,11 @@ Note that $\left( \begin{array}{c}17\\0\end{array} \right) = 1$.
 \end{equation*}
 
 \begin{equation*}
-\frac{314! 271!}{331! 254!} = \frac{314! 271 \times 270 \times ... \times 255 \times 254!}{331 \times 330 \times ... \times 315 \times 314! 254!} =
+\frac{314! 271!}{331! 254!} = \frac{314! 271 \cdot 270 \cdot ... \cdot 255 \cdot 254!}{331 \cdot 330 \cdot ... \cdot 315 \cdot 314! 254!} =
 \end{equation*}
 
 \begin{equation*}
-\frac{271 \times 270 \times ... \times 255 }{331 \times 330 \times ... \times 315} \approx 0.0304
+\frac{271 \cdot 270 \cdot ... \cdot 255 }{331 \cdot 330 \cdot ... \cdot 315} \approx 0.0304
 \end{equation*}
 
 The results are shown in Figure \ref{fig:H2hypergeometric}, where the fourth panel shows the results for a sample size of $n = 60$. We also show the results for different sample sizes to provide an impression of the shape of the distribution.
@@ -144,7 +144,7 @@ The variance is:\nomenclature{$\sigma^2$}{variance, square of the standard devia
 \label{eq:variance_hyper}
 \end{equation}
 
-For \emph{Case: Number of students}, the mean number of errors in the sample is $n M / N =$ 60 $\times$ 17 / 331 $\approx 3.0816$. The variance is $n \pi (1 - \pi) \frac{N - n}{N - 1} = 60 \times \frac{17}{331} \times (1 - \frac{17}{331}) \times \frac{331 - 60}{331 - 1} \approx 2.4007$.
+For \emph{Case: Number of students}, the mean number of errors in the sample is $n M / N =$ 60 $\cdot$ 17 / 331 $\approx 3.0816$. The variance is $n \pi (1 - \pi) \frac{N - n}{N - 1} = 60 \cdot \frac{17}{331} \cdot (1 - \frac{17}{331}) \cdot \frac{331 - 60}{331 - 1} \approx 2.4007$.
 
 The mean value of a random variable is referred to as the \hlblue{expected value}\index{expected value}. It can intuitively be regarded as the long-run average of the results if the experiment is repeated a large number of times.
 
@@ -159,7 +159,6 @@ Although the hypergeometric distribution is the correct approach for calculating
 In the previous section, we observed that the probability of drawing an error depends on the previous results of the draws. The successive probabilities of success were not constant. The probabilities are constant when we \hlblue{replace}\index{sampling!with replacement} a selected item in the population so that it has another chance for selection. We cannot practically imagine why one would do this, other than that it makes  manual calculations much simpler. 
 
 The \emph{binomial distribution}\index{binomial distribution}\index{distribution!binomial} is the discrete probability distribution of the number of successes in a sequence of $n$ independent experiments.
-% , such as the hypergeometric distribution, each asking a yes-no question and each with its own dichotomous outcome: a random variable containing a single bit of information, success or failure, yes or no, or true or false. The probability of success, yes, and true in each trial is $p$\nomenclature{$p$}{probability of success}, and the probability of failure, no, and false is $q = 1 - p$.
 
 \begin{figure*}[thbp]
  \centering
@@ -201,7 +200,7 @@ Using Equation \ref{eq:KansfunctieBinomiaal}, the probability of finding one err
 P(\stoch{k} = 1) = \left(\begin{array}{c}60\\1\end{array}\right)0.0514^{1} (1-0.0514)^{60-1} = 0.1373
 \end{equation*}
 
-The mean number of errors is $\mu =$ 60 $\times$ 0.0514 $\approx 3.0816$, and the variance is $\sigma^2 =$ 60 $\times$ 0.0514 $\times$ (1 - 0.0514) $\approx$ 2.9233.
+The mean number of errors is $\mu =$ 60 $\cdot$ 0.0514 $\approx 3.0816$, and the variance is $\sigma^2 =$ 60 $\cdot$ 0.0514 $\cdot$ (1 - 0.0514) $\approx$ 2.9233.
 
 The probability mass functions of the binomial distribution for different sample sizes are shown in Figure \ref{fig:H2Binomiaal}. If we compare it with that of the hypergeometric distribution in Figure \ref{fig:H2hypergeometric} we see considerable similarity. 
 
@@ -236,7 +235,7 @@ where $e \approx $ 2.718 (the base of the natural logarithm).
 \bigskip
 Let us use the probability mass function to calculate the probability of finding exactly three errors in the sample of 60 PhD students.
 
-First, we calculate the value of parameter $\mu = n \pi = 60 \times 17 / 331 \approx 3.0816$. We then get
+First, we calculate the value of parameter $\mu = n \pi = 60 \cdot 17 / 331 \approx 3.0816$. We then get
 \begin{equation*}
 P(\stoch{k} = 3) = \frac{3.0816^3}{3!}e^{-3.08} \approx 0.2238
 \end{equation*}
@@ -305,7 +304,7 @@ The most important statistics of the three distributions have been summarized in
 
 In the next sections, we work with the \emph{Case: Social security payments}.
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10, innerleftmargin=0.3cm]
 \section*{Case: Social security payments}
 You obtained a large data file with a large number of social security payments. According to the agent, payments were increased from the previous year to adjust for inflation. The mean payment value is 1,030.
 
@@ -488,12 +487,12 @@ t = \frac{1,004 - 1,030}{73.78 / \sqrt{10}} = -1.11
 
 Similar to the normal distribution, there are tables for the $t$ distribution. In Exercise \ref{ex:student} in Section \ref{sec:workshop02r} and Exercise \ref{ex:student_p} in Section \ref{sec:workshop02p}, the probability of finding the $t$-value is 14.7\%.
 
-\begin{marginfigure}
+\begin{figure}
  \centering
  \includegraphics[width=1\textwidth]{H2KansInTVerdeling.png}
  \caption{Probability in the $t$ distribution}
  \label{fig:H2KansInT}
-\end{marginfigure}
+\end{figure}
 
 Therefore, the probability of obtaining a sample mean of 1,004 or less in a sample of 10 items is equal to the probability of $t <$ -1.11. This probability is shown in Figure \ref{fig:H2KansInT} and is approximately equal to 14.7\%. We use this result in \emph{Case: Social Security Payments} to obtain the likelihood that the mean payment in the population equals 1,030. 
 
@@ -521,14 +520,14 @@ The quantity $(n-1)s^2/\sigma^2$ can be used to draw inferences on the populatio
 \bigskip
 The $\chi^2$ distribution can be used to construct a confidence interval of the population variance, for example, for the results of Sample 1 of \emph{Case: Social security payments}. The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is 16.92\footnote{See Exercise \ref{ex:chisq}} and therefore
 \begin{equation*}
-\sigma^2 \geq \frac{(n - 1)s^2}{\chi^2} = \frac{(10 - 1) \times 73.78^2}{16.92} \approx 2,896
+\sigma^2 \geq \frac{(n - 1)s^2}{\chi^2} = \frac{(10 - 1) \cdot 73.78^2}{16.92} \approx 2,896
 \end{equation*}
 is the 95\% lower bound for the population variance.
 
 Similarly, to calculate the upper bound for $\sigma^2$, we begin with the lower bound of a $\chi^2$ distributed variable of 3.33.
 
 \begin{equation*}
-\sigma^2 \leq \frac{(n - 1)s^2}{\chi^2} = \frac{(10 - 1) \times 73.78^2}{3.33} \approx 14,736
+\sigma^2 \leq \frac{(n - 1)s^2}{\chi^2} = \frac{(10 - 1) \cdot 73.78^2}{3.33} \approx 14,736
 %\label{}
 \end{equation*}
 
@@ -688,7 +687,7 @@ Figure \ref{fig:H2_hyp_appr_bin.png} shows a comparison of the probability mass 
 
 The first two panels show situations in which the sample size $n$ is less than 10\% of population size $N$. It can be seen that the approximation is accurate.
 
-The third panel is borderline because $n = 100 = 10\% \times N$. The last two panels show a much larger sample size, and the approximation is not very close: the binomial distribution has fatter tails than the hypergeometric distribution.
+The third panel is borderline because $n = 100 = 10\% \cdot N$. The last two panels show a much larger sample size, and the approximation is not very close: the binomial distribution has fatter tails than the hypergeometric distribution.
 
 % subsection hypergeometric_approximated_by_binomial (end)
 
