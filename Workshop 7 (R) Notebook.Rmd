@@ -607,9 +607,9 @@ The summary of this model is:
 summary(ussteamco.mod.5)
 ```
 
-## Exercise 7.29. Re-running the model assumptions tests
+## Exercise 7.29. Re-running the model assumption tests
 
-We re-run the model assumptions tests.
+We re-run the model assumption tests.
 
 ```{r}
 bptest(ussteamco.mod.5)
@@ -617,17 +617,15 @@ bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
 shapiro.test(ussteamco.mod.5$residuals)
 ```
 
-## Exercise 7.26. Testing significance
+## Exercise 7.30. Testing significance
 
-Significance of each of the independent variables and their interactions can be read from the `summary()` table.
+The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
 
 ```{r}
 summary(ussteamco.mod.5)
 ```
 
-
-
-### Exercise 7.28. Visualizing the uncertainty in the model parameters
+### Exercise 7.31. Visualizing the uncertainty in the model parameters
 
 First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
 
@@ -667,7 +665,7 @@ ci_lower_true <- (beta_0 + beta_1 * x_extended) - t_value * se_fit_true  # Lower
 ci_bounds_true <- data.frame(x = x_extended, ci_lower = ci_lower_true, ci_upper = ci_upper_true)
 ```
 
-Next, we sample $n$ points from a normal distribution, to generate $y$ values for each $x$ value and fit the corresponding regression line. We repeat this process $rep$ times.
+Next, we sample $n$ points from a normal distribution, to generate $y$ values for each $x$ value and fit the corresponding regression line. We repeat this process `rep` times.
 
 ```{r}
 # Initialize a data frame to store the simulated regression lines
@@ -711,6 +709,12 @@ ggplot() +
   xlim(x_extended_min, x_extended_max)  # Extend the x-axis limits
 ```
 
+The resulting graph is shown in Figure 7.20.
+
+## Exercise 7.32. Confidence and prediction intervals
+
+Figure 7.18 shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
+
 ```{r}
 # Calculate the standard error for prediction interval
 alpha_pred <- 0.01  # For 99% prediction interval
@@ -721,14 +725,12 @@ se_pred <- sigma * sqrt(1 + 1/n + (x_extended - mean_x)^2 / S_xx)
 pi_upper_true <- (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred
 pi_lower_true <- (beta_0 + beta_1 * x_extended) - t_value_pred * se_pred
 
-# Add to a data frame for plotting
 pi_bounds_true <- data.frame(
   x = x_extended,
   pi_lower = pi_lower_true,
   pi_upper = pi_upper_true
 )
 
-# Plot: true line, 95% CI, 99% PI
 ggplot() +
   geom_ribbon(
     data = pi_bounds_true,
@@ -751,15 +753,13 @@ ggplot() +
     color = "#00338D", linewidth = 1
   ) +  # True regression line
   labs(
-    # title = "Regression Line with 95% Confidence and 99% Prediction Intervals",
     x = "x", y = "y"
   ) +
-  # theme_minimal() +
   xlim(x_extended_min, x_extended_max)
 ```
 
 
-# Exercise 7.29. Creating expectations for the hold-out period
+# Exercise 7.33. Creating expectations for the hold-out period
 
 The function `predict` creates expectations, when data from `newdata` are evaluated with a certain `object`. The optional `interval` is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The `level` specifies the confidence level of the interval.
 
@@ -769,6 +769,10 @@ The function `predict` creates expectations, when data from `newdata` are evalua
                         interval = "prediction",
                         level = 0.99))
 ```
+
+## Exercise 7.34. Plotting expectations against recorded values
+
+In Figure 7.19 we have plotted expectations against the recorded values of revenue, indicating which individual observations fall outside of the 99% prediction interval. The following code is used to create it.
 
 ```{r}
 # Convert predictions to a data frame and add the date column
@@ -781,11 +785,9 @@ pred_df <- data.frame(
 )
 pred_df$outside = with(pred_df, recorded < lwr | recorded > upr)
 
-
-# Plot predictions with intervals and actuals with customized legend
 ggplot(pred_df, aes(x = date)) +
   # Plot the predicted values as a line
-  geom_line(aes(y = fit, color = "Expectation"), size = 1) +  
+  geom_line(aes(y = fit, color = "Expectation"), linewidth = 1) +  
   # Add the prediction interval as a shaded area
   geom_ribbon(aes(ymin = lwr, ymax = upr), fill = "#00338D", alpha = 0.2) +
   # Plot the actual values, with conditional coloring for outside interval points
@@ -798,7 +800,6 @@ ggplot(pred_df, aes(x = date)) +
     name = ""
   ) +
   labs(
-    # title = "Expectations of Revenue with 99% Prediction Interval and Recorded Values",
     x = "Date",
     y = "Revenue"
   ) +
@@ -806,12 +807,13 @@ ggplot(pred_df, aes(x = date)) +
     date_breaks = "1 month",  # Adjusts to one gridline per month
     date_labels = "%b"  # Optional: shows abbreviated month names
   ) +
-  # theme_minimal() +
   theme(legend.position = "bottom")
 
 ```
 
-Combining 12 monthly predictions
+## Exercise 7.35. Combining 12 monthly predictions
+
+We use Equations 7.29 and 7.30 to construct a prediction interval for total revenue for the year under audit.
 
 ```{r}
 # Extract the prediction and standard errors for each monthly prediction
@@ -837,25 +839,5 @@ cat("99% Confidence Interval for Annual Prediction:\n")
 cat("Lower Bound:", annual_lower, "\n")
 cat("Annual Prediction:", annual_prediction, "\n")
 cat("Upper Bound:", annual_upper, "\n")
-
 ```
 
-## Exercise Predictions
-
-```{r}
-USSteamCoHold$predmod5 <- predict(ussteamco.mod.5, newdata = USSteamCoHold)
-USSteamCoHold$diffmod5 <- USSteamCoHold$revenue - USSteamCoHold$predmod5
-```
-
-```{r echo=FALSE}
-# 
-ggplot(USSteamCoHold, aes(x=production, y=diffmod5)) + 
-  geom_point(color = "#00338D")
-```
-
-Discuss that most differences are negative.
-
-# Auditor response
-## Precision and acceptable diﬀerence
-## Identification, investigation, and evaluation
-## Amount of audit evidence obtained
