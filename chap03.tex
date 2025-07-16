@@ -136,7 +136,7 @@ In the previous section, we obtained an estimate of the mean monthly payroll for
 This is of little practical value because we do not know the actual value of $\mu$. Instead, we use knowledge of the sampling distribution of $\bar{y}$ to make probability statements about the sampling error. Let us assume that 3,014.16 is the true value of the population mean $\mu$. We repeatedly obtain different samples of the same size from the population and draw a histogram of the resulting $\bar{y}$. This is illustrated in Figure \ref{fig:H3best_estimate}.
 
 \begin{figure}[htbp]
-  \includegraphics[width=\linewidth]{H3best_estimate.png}
+  \includegraphics[width=\linewidth]{H3best_estimate.pdf}
   \caption{Sampling distribution of mean monthly payroll, $\mu = 3014.16$}
   \label{fig:H3best_estimate}
 \end{figure}
@@ -144,7 +144,7 @@ This is of little practical value because we do not know the actual value of $\m
 As shown in this figure, the distribution of $\bar{y}$ exhibits a peak at $\mu$. This is a good reason to refer to the sample mean as the \hlblue{best estimate}\index{best estimate}\index{estimate!best} of the population mean. 
 
 \begin{figure}[htbp]
-  \includegraphics[width=\linewidth]{H3low_estimate.png}
+  \includegraphics[width=\linewidth]{H3low_estimate.pdf}
   \caption{Sampling distribution of mean monthly payroll, $\mu = 3200.00$}
   \label{fig:H3low_estimate}
 \end{figure}
@@ -154,7 +154,7 @@ If the true population mean is 3,200.00, as in Figure \ref{fig:H3low_estimate}, 
 As the population mean increases or decreases, the sample mean ends in one of the tails of the distribution. In this manner, we can determine the $\mu$ lower and upper bounds that define the area of reasonable estimates. This range of values is referred to as the \hlblue{confidence interval}\index{confidence interval}\index{interval!confidence}. This is illustrated in Figure \ref{fig:H3two_borderline_sampling_distributions}. 
 We see two borderline sampling distributions, one for samples from a population with a low population mean ($\mu$ = 2,577.19) and one for samples from a population with a high population mean ($\mu$ = 3,451.13).\footnote{We explain later why these two particular values were chosen.} In both cases, the sample mean found of 3,014.16 is just acceptable. If the true population mean is less than 2,577.19, the observed sample mean ends up in the right tail and is distrusted as being exceptionally high, whereas if the true population mean is greater than 3,451.13, the sample mean is in the left tail, in which case it is distrusted as being unexpectedly low. 
 \begin{figure*}
-  \includegraphics[width=\linewidth]{H3two_borderline_sampling_distributions.png}
+  \includegraphics[width=\linewidth]{H3two_borderline_sampling_distributions.pdf}
   \caption{Two sampling distributions for which sample mean of 3,014.16 is just acceptable}
   \label{fig:H3two_borderline_sampling_distributions}
 \end{figure*}
@@ -186,7 +186,7 @@ s^2 = \frac{\sum (y_i - \bar{y})^2}{n-1}
 where $n$ denotes the sample size. 
 
 \begin{figure}[htbp]
-  \includegraphics[width=\linewidth]{twosided.png}
+  \includegraphics[width=\linewidth]{twosided.pdf}
   \caption{Two-sided precision interval}
   \label{fig:twosided}
 \end{figure}
@@ -285,8 +285,8 @@ So far, we have worked with a sample from a large population and have ignored th
 \end{equation}
 
 \begin{figure}[htbp]
-  \includegraphics[width=1\linewidth]{fpcf.png}
-  \caption{Effect of the finite-population correction factor as function of $n/N$.}
+  \includegraphics[width=1\linewidth]{fpcf.pdf}
+  \caption{Effect of the finite-population correction factor as a function of $n/N$.}
   \label{fig:fpcf}
 \end{figure}
 
@@ -531,7 +531,7 @@ and the upper bound as
 
 The interval estimate is reduced to [51.9\%, 72.6\%]. 
 \begin{figure}
-  \includegraphics[width=\linewidth]{old_and_new_intervals_fraction.png}
+  \includegraphics[width=\linewidth]{old_and_new_intervals_fraction.pdf}
   \caption{Confidence intervals of the finite-population women for the initial sample (above) and extended sample (below)}
   \label{fig:old_and_new_intervals_finite-population}
 \end{figure}
