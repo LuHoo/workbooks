@@ -145,14 +145,14 @@ A nonmaterial error rate is required to evaluate this probability. For example, 
 Fig. \ref{fig:typeIIerror} shows the relationship between the number of errors in the population and the probability of committing a Type II error. Type II error is not defined for values of $M \geq 60$; for those values, the population is materially misstated.
 
 \begin{figure}
-  \includegraphics[width=\columnwidth]{TypeIIerror.png}
+  \includegraphics[width=\columnwidth]{TypeIIerror.pdf}
   \caption{Type II error for a sampling plan with $n = 45$ and $N = 1200$ at various numbers of population errors.}
   \label{fig:typeIIerror}
 \end{figure}
 
 This also explains why we cannot claim that the `null hypothesis is true' if it cannot be rejected. The test is not sufficiently powerful to distinguish between material and nonmaterial error rates.
 
-The hypothesis test \marginnote{Testing the hypotheses with a confidence interval} can also be performed using a confidence interval. In \emph{Case: Information provided by the entity} we used a significance level of 10\%, and materiality was set at 5\%. Tolerating up to two errors or applying a critical region $\{\stoch{k} | k \leq 2\}$ led to a sample size $n =$ 102. We use Equations \ref{eq:sample_proportion}, \ref{eq:point_estimate_number} and \ref{eq:upper_bound} to obtain a point estimate of the total number of errors in the population and its 90\% one-sided upper bound. We calculate these estimates for each case when we find zero, one, two, or three errors in the sample. The results are summarized in Table \ref{tab:confidence_intervals}.
+The hypothesis test can also be performed using a confidence interval. In \emph{Case: Information provided by the entity} we used a significance level of 10\%, and materiality was set at 5\%. Tolerating up to two errors or applying a critical region $\{\stoch{k} | k \leq 2\}$ led to a sample size $n =$ 102. We use Equations \ref{eq:sample_proportion}, \ref{eq:point_estimate_number} and \ref{eq:upper_bound} to obtain a point estimate of the total number of errors in the population and its 90\% one-sided upper bound. We calculate these estimates for each case when we find zero, one, two, or three errors in the sample. The results are summarized in Table \ref{tab:confidence_intervals}.
 
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y Y}
@@ -239,7 +239,7 @@ The performance of attribute sampling plans can be visualized using the \hlblue{
 This curve depicts the probability of rejecting the null hypothesis at a certain deviation rate within the population.
 
 \begin{figure}
-  \includegraphics[width=\columnwidth]{three_attribute_occ.png}
+  \includegraphics[width=\columnwidth]{three_attribute_occ.pdf}
   \caption{Operating Characteristics Curves for attribute sampling plans with sample sizes 45, 77 and 107.}
   \label{fig:three_attribute_occ}
 \end{figure}
@@ -325,7 +325,7 @@ The probability of accepting a population with a certain population deviation ra
 We can now compare the OCCs for attribute sampling with those for the double sampling plan. The graph is shown in Fig. \ref{fig:att_double_occ}.
 
 \begin{figure}
-  \includegraphics[width=\columnwidth]{att_double_occ.png}
+  \includegraphics[width=\columnwidth]{att_double_occ.pdf}
   \caption{Operating Characteristics Curves for two attribute sampling plans with sample sizes 45 and 77, and a double sampling plan with $n_0 = n_1 = 49$.}
   \label{fig:att_double_occ}
 \end{figure}
@@ -358,7 +358,7 @@ Conclude with 95\% confidence that the claim is free of material misstatement.
 \paragraph{Sample selection.} Rather than considering the population subject to testing as consisting of 6,400 elements that can be sampled, we will view it as a collection of 12 million monetary units that could be correct (adhering to the conditions for funding) or incorrect. 
 However, it is not possible to test individual monetary units; to assess the appropriateness of a single unit we will test the entire unit that contains it. 
 To enable this, we therefore select the items for testing not randomly but with a \hlblue{probability proportional to size}\index{probability proportional to size}. 
-The image of sampling individual monetary units provides this method with the name of \hlblue{Monetary Unit Sampling}\index{Monetary Unit Sampling}\index{sampling!Monetary Unit} or MUS.
+The image of sampling individual monetary units provides this method with the name of \hlblue{Monetary Unit Sampling}\index{Monetary Unit Sampling}\index{sampling!monetary unit} or MUS.
 
 The most commonly used sampling schemes with probabilities proportional to the size of the elements are discussed in Section \ref{sub:selection_with_probability_proportional_to_size}.
 
