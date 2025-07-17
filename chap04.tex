@@ -149,7 +149,7 @@ In the previous section, we obtained an estimate of the total correct value of t
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=1\textwidth]{H4_scatterplot_bv_av.png}
+	\includegraphics[width=1\textwidth]{H4_scatterplot_bv_av.pdf}
 	\caption{Book values and audit values of a sample of $n =$ 400 inventory items}
 	\label{fig:H4_scatter_inventory_sample}
 \end{figure}
@@ -227,14 +227,14 @@ If we approximate the regression variance using a factor $n - 1$ in the denomina
 \begin{equation}
 	s_{y, R}^2 = s_y^2 (1 - r_{xy}^2)
 \end{equation}
-This implies that the precision of the regression estimator is always smaller than that of the MPU estimator because $-1 \leq r_{xy} \leq 1$, and therefore, $0 \leq R_{xy}^2 \leq 1$. Consequently, the factor $1 - r^2$ is always less than 1.
+This implies that the precision of the regression estimator is always smaller than that of the MPU estimator because $-1 \leq r_{xy} \leq 1$, and therefore, $0 \leq r_{xy}^2 \leq 1$. Consequently, the factor $1 - r^2$ is always less than 1.
 
 If there is a strong correlation between the book and audit values, the effect on precision achieved could be considerable. If there is perfect correlation and $r^2 = 1$, the precision achieved is reduced to zero. This is a theoretical case implying that all information about the correct value is contained in the auxiliary variable. In such a case, there would no longer be a need for sampling. In \emph{Case: Valuation of Inventories}, we can see from the scatter plot in Figure \ref{fig:H4_scatter_inventory_sample} that there is no perfect correlation, but the correlation appears to be strong. The effect of the correlation coefficient on the precision of the regression estimator, as compared to that of the MPU estimator, is shown in Figure \ref{fig:H4_adjustment_factor}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=1\textwidth]{H4_adjustment_factor.png}
-	\caption{Effect of the correlation between book and audit values on the precision of the MPU estimate. If there is no correlation, then the precision of the regression estimator is equal to that of the MPU estimator. If there is perfect correlation, the precision of the regression estimator is 0. There is a significant reduction in precision if $R > 0.5$.}
+	\includegraphics[width=1\textwidth]{H4_adjustment_factor.pdf}
+	\caption{Effect of the correlation between book and audit values on the precision of the MPU estimate. If there is no correlation, then the precision of the regression estimator is equal to that of the MPU estimator. If there is perfect correlation, the precision of the regression estimator is 0. There is a significant reduction in precision if $r > 0.5$.}
 	\label{fig:H4_adjustment_factor}
 \end{figure}
 
@@ -503,18 +503,11 @@ We also consider the performance of the estimators. The ideal estimator:
 \end{compactitem}
 
 \bigskip
-To further clarify these criteria, we seeded the \emph{Inventories} population with different error patterns, with a total error of 260,000. The \emph{constant difference} pattern differences are normally distributed, with a mean of 82 and a standard deviation of 200. The \emph{no intercept} scenario has a difference of 3.7\% in each item plus or minus a difference that is normally distributed with a mean of 0 and a standard deviation of 200. The \emph{slope and intercept} distribution has audit values of .96 $\cdot$ the book value, plus a constant of 10, and a difference that is normally distributed with a mean 0 and a standard deviation of 200. Finally, we contrast these distributions with \emph{sporadic errors}, where 116 elements have an audit value of 0 and the remaining items are correct. 
+To further clarify these criteria, we seeded the \emph{Inventories} population with different error patterns, with a total error of 260,000. The \emph{constant difference} pattern differences are normally distributed, with a mean of 82 and a standard deviation of 200. The \emph{no intercept} scenario has a difference of 3.7\% in each item plus or minus a difference that is normally distributed with a mean of 0 and a standard deviation of 200. The \emph{slope and intercept} distribution has audit values of .96 of the book value, plus a constant of 10, and a difference that is normally distributed with a mean 0 and a standard deviation of 200. Finally, we contrast these distributions with \emph{sporadic errors}, where 116 elements have an audit value of 0 and the remaining items are correct. 
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Work in Progress. 
-
-Change axis labels, bv -> x and av -> y. Fourth pane should read "sporadic errors" rather than "rare errors"
-
-\end{mdframed}
 \begin{figure*}[thbp]
 	\centering
-	\includegraphics[width=1\textwidth]{H4_errorDistributions.png}
+	\includegraphics[width=1\textwidth]{H4_errorDistributions.pdf}
 	\caption{Error distributions. The total error in each scenario is 260,000.}
 	\label{fig:H4_errorDistributions}
 \end{figure*}
@@ -524,8 +517,8 @@ We then repeatedly obtained samples of size $n = 100$ and collected the results.
 
 \begin{figure*}[htbp]
 	\centering
-	\includegraphics[width=1\textwidth]{H4_samplingDistributions.png}
-	\caption{Sampling distribution of the point estimate for three estimators and four error distributions. The total error in each distribution is 260,000.}
+	\includegraphics[width=1\textwidth]{H4_samplingDistributions.pdf}
+	\caption{Sampling distribution of the point estimate for three estimators and four error distributions.}
 	\label{fig:H4_samplingDistributions}
 \end{figure*}
 
@@ -588,7 +581,7 @@ Regression & 66,827 & 67,194 & 67,731 & 192,016 \\
 
 We learn from Table \ref{tab:standard_deviations_of_estimates} that the difference estimator performs better than the ratio and regression estimators when there is a constant difference and the regression estimator performs best when there is a slope and intercept (as expected). However, when no intercept exists, the ratio estimator does not outperform the regression estimator. The sporadic errors pattern is much more difficult to estimate, as evidenced by the much higher standard deviations of the estimates. In this case, the ratio estimator appears slightly more precise than the difference and regression estimators.
 
-Finally, we counted the fraction of samples that yielded a confidence interval that contained the true seeded error of 260,000. Because the confidence level used was 95\%, an ideal estimator would cover the correct value in 95\% of cases. If the coverage is greater than 95\%, the estimator is conservative; if the coverage is less, the estimator is \hlblue{anti-conservative.}\index{anti-conservative}. Table \ref{tab:coverage_of_estimators} summarizes the coverage percentages for each estimator and error distribution.
+Finally, we counted the fraction of samples that yielded a confidence interval that contained the true seeded error of 260,000. Because the confidence level used was 95\%, an ideal estimator would cover the correct value in 95\% of cases. If the coverage is greater than 95\%, the estimator is conservative; if the coverage is less, the estimator is \hlblue{anti-conservative}\index{anti-conservative}. Table \ref{tab:coverage_of_estimators} summarizes the coverage percentages for each estimator and error distribution.
 
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y Y}
