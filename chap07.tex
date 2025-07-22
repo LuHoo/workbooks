@@ -2149,7 +2149,7 @@ H_1 : \text{At least one of the } \beta_j \neq 0
 
 In the previous sections, a regression model was constructed based on data from a baseline period of 36 months, explaining the monthly revenue by accounting for \ttblue{production} and the number of cooling degree days (\ttblue{coolDD}), while taking account for different relationships between summer and winter months. To forecast revenue for the current year, this model can be applied to new data, beginning with a expectation for January.
 
-For the first month of the hold-out set (January 2014), the model can generate an expectation of revenue using the known values of the explanatory variables: production (606,400), coolDD (-121,381), and whether the month is a summer month. Since January is not a summer month, the interaction terms involving \ttblue{summer} will drop out of the equation. Table \ref{tab:expectation_january} shows the detail calculation of the expectation.
+For the first month of the hold-out set (January 2014), the model can generate an expectation of revenue using the known values of the explanatory variables: production (606,400), coolDD (0), and whether the month is a summer month. Since January is not a summer month, the interaction terms involving \ttblue{summer} will drop out of the equation. Table \ref{tab:expectation_january} shows the detail calculation of the expectation.
 
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{2cm}}
@@ -2162,16 +2162,16 @@ result \\
 
 \midrule
 
-intercept                 &   752,767 & 1                 &    752,767 \\
-summer                    & 3,219,526 & 0                 &          0 \\
-production                &     35.87 & 606,400           & 21,752,892 \\
-coolDD                    &  -121,381 & 0                 &          0 \\
-production $\cdot$ summer &    -23.23 & 0 $\cdot$ 606,400 &          0 \\
-coolDD $\cdot$ summer     &   125,064 & 0 $\cdot$ 0       &          0 \\
+intercept           &   752,767 & 1                 &    752,767 \\
+production          &     35.87 & 606,400           & 21,752,892 \\
+summer              & 3,219,526 & 0                 &          0 \\
+coolDD              &  -121,381 & 0                 &          0 \\
+production : summer &    -23.23 & 0 $\cdot$ 606,400 &          0 \\
+coolDD : summer     &   125,064 & 0 $\cdot$ 0       &          0 \\
 
 \midrule
 
-                          &           &                   & 22,505,659 \\
+                    &           &                   & 22,505,659 \\
 
 \bottomrule
 \end{tabularx}
