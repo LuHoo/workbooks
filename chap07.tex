@@ -14,7 +14,7 @@ The key distinction lies in the nature of the target variable—continuous for r
 
 This chapter focuses on regression analysis, beginning with the fundamentals of simple linear regression. 
 In this context, we examine the relationship between a single independent variable and a continuous dependent variable, assuming a linear functional form. 
-Where linearity is untenable, appropriate variable transformations are proposed to better capture the underlying structure.
+Where linearity is untenable, appropriate transformations of variables are proposed to better capture the underlying structure.
 
 Following the discussion on simple regression, we extend our analysis to multiple regression, incorporating several independent variables to model more complex relationships and improve explanatory power.
 
@@ -236,11 +236,11 @@ At the end of this chapter you will be able to
 
 \bigskip
 
-In this Chapter, we continue with \textit{Case: US SteamCo}, introduced in Chapter \ref{cha:analytical_procedures} on page \pageref{case:ussteamco}.
+In this Chapter, we continue with \textit{Case: US SteamCo}, introduced in Chapter \ref{cha:analytical_procedures} on page \pageref{case:ussteamco_ch06}.
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20]
 \section*{Case: US SteamCo}
-\label{case:ussteamco}
+\label{case:ussteamco_ch07}
 
 US SteamCo is a public utility in the northeastern United States. It produces steam and pumps it under high pressure to apartment buildings to provide heat in winter and power for air conditioners in summer. US SteamCo's regulator, the local public service commission, determines pricing, which varies by season and demand, and includes various fees, some fixed, and adjustments for variations in US SteamCo's fuel costs. The schedule is different for November to April (heating season) and for May to October (cooling season). Pricing schedules are revised at least annually.
 
@@ -475,6 +475,7 @@ If observations are not randomly obtained, this can lead to the following proble
 \paragraph{Spurious relationships:} In time-series data or non-random cross-sectional samples, patterns may emerge that are not reflective of true causation but rather of sampling bias or autocorrelation.
 \paragraph{Invalid predictions:} Predictions based on a biased sample may fail to generalize to other populations or contexts.
 
+\bigskip
 To overcome these problems, we may conduct bootstrap or Monte Carlo simulations to assess the robustness of results to potential sampling biases, test the sensitivity of the results to changes in the sample or assumptions about randomness, or transparently report the limitations of the sampling method and the potential impact on results.
 
 % subsection random_sampling (end)
@@ -533,11 +534,6 @@ The significance of this process is highlighted by its critical influence on the
 The next step in our analysis is to summarize and visualize the data. This provides further insights into the accuracy of the data, their usability, and whether the collected data are likely to be useful in the analysis of the dependent variable.
 
 Figure \ref{fig:H7_Histograms} shows the \hlblue{histograms}\index{histogram} of the continuous data in the US SteamCo estimation set. 
-Histograms are a powerful tool for understanding the distribution of data, making them an essential part of exploratory data analysis and statistical inference. 
-A histogram is a graphical representation of the dataset distribution. 
-It is commonly used in statistics and data analysis to visualize the frequency or relative frequency of different values or ranges of values within a dataset. 
-
-The main purpose of a histogram is to provide a visual summary of the underlying data distribution, allowing us to understand the patterns, trends, and characteristics that might not be immediately apparent from the raw data.
 
 \begin{figure}[htbp]
   \includegraphics[width=\columnwidth]{H7_Histograms.pdf}
@@ -545,21 +541,15 @@ The main purpose of a histogram is to provide a visual summary of the underlying
   \label{fig:H7_Histograms}
 \end{figure}
 
-Here, we describe the typical construction of a histogram.
+The histogram is a graphical tool used to summarize the distribution of a dataset. 
+It is constructed by dividing the range of values into a series of intervals, or bins, which are typically of equal width. 
+For each bin, the number of data points that fall within its range is counted, and this frequency is then represented by the height of a vertical bar. 
+The bins are arranged along the horizontal axis, while the frequencies (or relative frequencies) are plotted on the vertical axis. 
+This simple yet effective layout makes it easy to see how data are distributed across the range of values.
 
-\paragraph{Data binning:} The range of data values is divided into several intervals or "bins." These bins are usually of equal width; however, they can be adjusted based on the nature of the data and goals of the analysis.
-\paragraph{Counting observations:} The number of data points falling into each bin is counted. This count is referred to as the frequency or number of occurrences of data points within a bin.
-\paragraph{Vertical bars:} The histogram is created by plotting the bins along the $x$-axis and the frequencies (or relative frequencies) along the $y$-axis. Each bin is represented by a vertical bar, with the height of the bar corresponding to the frequency of data points within that bin.
-
-The main purposes of the histogram are as follows:
-
-\paragraph{Data distribution:} Histograms provide a clear visual representation of the data distribution across various ranges. This can help to identify whether the data are skewed, symmetric, or follow a specific pattern.
-\paragraph{Patterns and trends:} Histograms can reveal patterns, gaps, peaks, and clusters within the data, which can be crucial for making informed decisions or drawing conclusions.
-\paragraph{Outlier detection:} Outliers, which are data points that differ significantly from the rest of the dataset, can be easily spotted in a histogram as they fall outside the typical range of values.
-\paragraph{Data summary:} A histogram provides a succinct summary of the dataset characteristics, including its central tendency, variability, and deviations from a normal distribution.
-\paragraph{Comparison and analysis:} We can compare the distributions of different datasets by overlaying multiple histograms or combining them with other graphical representations such as the box plot to gain insight into relationships or differences.
-\paragraph{Data preprocessing:} Histograms can help determine appropriate data preprocessing steps, such as determining bin widths or identifying data ranges that might require transformation.
-\paragraph{Decision making:} Histograms can aid in decision-making processes by providing a quick and intuitive understanding of the data distribution, which can be valuable in fields such as quality control, market analysis, and scientific research.
+Histograms serve several important purposes in data analysis. They offer a clear visual summary of the shape and spread of a dataset, making it easier to detect skewness, symmetry, or deviations from a normal distribution. Patterns such as clusters, gaps, and peaks become readily apparent, and potential \hlblue{outliers}\index{outlier} (values that fall far outside the main distribution) can often be identified at a glance. 
+Histograms are also useful for comparing datasets, either by overlaying multiple plots or by combining them with other visual tools such as box plots. 
+More generally, they support decision-making and data preprocessing by highlighting important features of the data that may suggest the need for transformations, adjustments in bin width, or other analytical steps.
 
 \begin{figure}[hbt]
   \includegraphics[width=\columnwidth]{H7_time_series_plot2.pdf}
@@ -568,22 +558,17 @@ The main purposes of the histogram are as follows:
 \end{figure}
 
 \bigskip
-Figure \ref{fig:H7_Time_series_plots} shows the \hlblue{time-series plots}\index{time-series plot} for the same dataset. 
-Time-series plots are essential tools for understanding how data change over time. 
-They help in identifying patterns, making predictions, and gaining insight into the underlying dynamics of various phenomena observed in a continuous sequence. 
-A time-series plot is a graphical representation of the data points or observations recorded over a sequence of time intervals. 
-In a time-series plot, time is typically represented along the $x$-axis, whereas the corresponding values of the data are plotted along the $y$-axis. 
-Time-series plots are commonly used to analyze trends, patterns, and fluctuations in data over time.
+Figure~\ref{fig:H7_Time_series_plots} presents \hlblue{time-series plots}\index{time-series plot} for the same dataset. 
+A time-series plot displays observations collected at successive points in time, with time shown on the horizontal axis and the corresponding values plotted on the vertical axis. 
+These plots are especially valuable for visualizing how variables evolve over time. 
+In the present case, the time-series reveal a clear seasonal pattern in both \hlblue{production} and \hlblue{revenue}. 
+A noticeable correlation exists between the two series: as production increases or decreases, revenue tends to follow a similar trend. This correlation appears stronger during the winter months, corresponding to the heating season, than in summer, when there is cooling demand.
 
-Time-series plots are used for the following purposes:
-
-\paragraph{Trend identification:} Time-series plots are excellent for identifying trends and patterns in data over time. These trends can be upward, downward, or cyclical, and understanding them can provide insight into the underlying factors driving these changes.
-\paragraph{Seasonality and cycles:} Time-series plots can reveal recurring patterns or cycles that occur at regular intervals, such as daily, weekly, or seasonal patterns. This information is crucial for planning and decision making.
-\paragraph{Fluctuation analysis:} Time-series plots help visualize the variability and fluctuations in the data over time. This is important for assessing the stability and reliability of a system or process.
-\paragraph{Anomaly detection:} Unusual spikes or drops in data points can indicate anomalies or outliers. Time-series plots make it easier to identify these anomalies, which can be valuable in identifying exceptional events or errors in data collection.
-\paragraph{Forecasting and prediction:} Analyzing historical patterns in a time-series plot allows us to make predictions about future behavior. Techniques such as time-series forecasting use these patterns to predict future values.
-\paragraph{Correlation and relationships:} Time-series plots can be used to explore the relationships between the variables observed over time. Correlations and lead-lag relationships can be identified through these plots.
-\paragraph{Communicating insights:} Time-series plots provide an intuitive way to communicate complex temporal trends to a wide range of audiences, making them an effective tool for data-driven storytelling.
+Time-series plots are widely used to uncover patterns and dynamics in sequential data. 
+They help in identifying trends, such as steady growth or decline, as well as recurring seasonal or cyclical behavior. 
+They are also useful for assessing fluctuations and variability in data over time, detecting anomalies such as unexpected spikes or drops, and forming the basis for forecasting future values. 
+Moreover, they can reveal correlations or lead-lag relationships between multiple time-dependent variables. 
+By presenting complex temporal patterns in a clear and accessible format, time-series plots serve as powerful tools for both analysis and communication.
 
 % subsection summarizing_and_plotting (end)
 
@@ -629,7 +614,7 @@ We list the results of the data quality verification, and if quality problems ex
 
 Data wrangling involves various operations to prepare and refine data for analysis. \hlblue{Constructing data}\index{constructing data}\index{data!constructing} involves creating new attributes (derived attributes) or generating entirely new records with transformed values from the existing attributes. For instance, derived attributes are formed by combining existing attributes within the same record, such as calculating the area using the formula "length times width."
 
-For the \textit{Case: US SteamCo},\footnote{AAG-DATA B.31} we create a \hlblue{dummy variable}\index{dummy variable} to distinguish between heating months and cooling months. 
+For the \textit{Case: US SteamCo},\footnote{AAG-DATA B.31} we create a \hlblue{dummy variable}\index{dummy variable} to distinguish between heating months (October to April) and cooling months (May to September). 
 Such a variable would have the value 1 in heating months and 0 in cooling months. 
 The effect of this variable on the trajectory of the regression line is explained in Section \ref{sub:disaggregation_ch07}.
 
@@ -730,7 +715,7 @@ Starting with a basic specification also facilitates interpretation and helps bu
 In the course of this chapter, we progressively extend the initial model to better accommodate the structure and characteristics of the data. 
 In \ttblue{mod.1}, we introduce multiple independent variables to account for additional explanatory factors. \ttblue{mod.2} builds on this by incorporating interaction terms, allowing for differential effects of predictors across conditions (e.g., between summer and non-summer periods). 
 In \ttblue{mod.3}, we refit the model after addressing an influential outlier, thereby improving robustness. Subsequently, \ttblue{mod.4} adjusts for autocorrelation identified in the residuals, which, if left uncorrected, could compromise the validity of inference. 
-Finally, in \ttblue{mod.5}, we return to a winsorized version of the dataset and apply a stepwise model selection procedure to remove irrelevant predictors, thereby enhancing model parsimony without sacrificing explanatory power. 
+Finally, in \ttblue{mod.5}, we return to a \hlblue{winsorized} version of the dataset and apply a stepwise model selection procedure to remove irrelevant predictors, thereby enhancing model parsimony without sacrificing explanatory power. 
 Table \ref{tab:overview_models} provides an overview of the different models used.
 
 \begin{table}[htbp]
@@ -741,7 +726,7 @@ Table \ref{tab:overview_models} provides an overview of the different models use
 \midrule
 
 \ttblue{mod.0} & Base model, regressing \ttblue{revenue} on \ttblue{production} using simple linear regression. & \ref{sub:simple_linear_regression}\\
-\ttblue{mod.1} & Multiple regression model including additional predictors such as \ttblue{coolDD}, \ttblue{heatDD}, and the seasonal dummy variable \ttblue{summer}. & \ref{sub:multiple_regression}\\
+\ttblue{mod.1} & Multiple regression model including additional predictors such as \ttblue{coolDD}, \ttblue{heatDD}. & \ref{sub:multiple_regression}\\
 \ttblue{mod.2} & Extension of \ttblue{mod.1} that includes interaction terms to capture differential effects in summer and non-summer periods. & \ref{sub:disaggregation_ch07}\\
 \ttblue{mod.3} & Model refitted after addressing an outlying observation, improving robustness to influential data points. & \ref{sub:normality}\\
 \ttblue{mod.4} & Adjustment of \ttblue{mod.3} to account for autocorrelation detected in the residuals, enhancing the reliability of inference. & \ref{sub:absence_of_autocorrelation}\\
@@ -776,13 +761,8 @@ To capture this relationship in a straight line, we need to estimate the two coe
 \noindent where $\beta_0$ is the \hlblue{intercept}\index{intercept}, the place where the regression line crosses the $y$-axis at $x = 0$, and $\beta_1$ is the \hlblue{slope}\index{slope} of the regression line. 
 The coefficients are estimated such that the line best fits the data in the \emph{estimation period}\index{estimation period}. 
 $\hat{y}$ is the estimated value of the conditional mean of the dependent variable $y$, conditional on the realized value of $x$.
-
-% \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-% Work in Progress. 
-
-% Refer to here in paragraph on precision.
-
-% \end{mdframed}
+Because real-world data rarely fall perfectly on a straight line, the regression model includes an error term $\epsilon$, which represents the random variation or noise in $y$ that cannot be explained by the linear relationship with $x$. 
+This term captures all other factors affecting $y$ that are not explicitly included in the model.
 
 Note that the observations are scattered around the (presumed) straight line. Apparently, the relationship between revenue and production is not clear. Numerous factors can lead to this inaccuracy. One factor is the absence of other independent variables in the model; this is something that we expand on in Section \ref{sub:multiple_regression}. The relationship may not be linear but can be better expressed by a curve; this is investigated in Section \ref{sub:transformations}. There could be structural changes to this relationship. The time-series plot in Figure \ref{fig:H7_Time_series_plots} also indicates seasonality in the data. It remains to be seen at this point whether or not all seasonality in the dependent variable can be explained by seasonality in the independent variable, or should be taken care of by other means. 
 
@@ -811,12 +791,11 @@ As a result of this minimization procedure, the regression line always passes th
 This property ensures that the fitted line represents the average relationship between the variables in the dataset.
 
 To establish the equation of the line, both the slope and the constant term need to be calculated. 
-These parameters must be determined in a manner that aligns the line as closely as possible with the sample data from 2011 to 2013 (the estimation period). It is imperative to recognize that the line is derived from sample data, and it can be aptly referred to as a \hlblue{sample line.}\index{sample line}. 
+These parameters must be determined in a manner that aligns the line as closely as possible with the sample data from 2011 to 2013 (the estimation period). It is imperative to recognize that the line is derived from sample data, and it can be aptly referred to as a \hlblue{sample line}\index{sample line}. 
 If the line were to be calculated using data from different years, its trajectory would likely differ. 
-Hence, the slope coefficient $b_1$ is a sample statistic and estimate of the slope coefficient $\beta_0$ of the (unknown) population. 
+Hence, the slope coefficient $b_1$ is a sample statistic and estimate of the slope coefficient $\beta_1$ of the (unknown) population. 
 The population can be conceptualized as encompassing all measurable monthly figures. 
 Similarly, the constant term $b_0$ in the equation represents a sample statistic that is an estimate of the population constant $\beta_0$. 
-Owing to the inherent presence of uncertainty in reality, the regression model must incorporate a term ($\epsilon$) that accounts for this uncertainty, in addition to the linear relationship between production and revenue.
 
 \bigskip
 The values of $b_0$ and $b_1$ obtained with the method of \emph{OLS} are
@@ -867,7 +846,7 @@ $Pr(>|t|)$ \\
 \midrule
 
 intercept  & 4,897,663 & 2,014,855 & 2.431 & 0.0205 \\
-production &        19 &         4 & 4.728 & 0.0000 \\
+production &     18.99 &      4.02 & 4.728 & 0.0000 \\
 
 \bottomrule
 \end{tabularx}
@@ -908,15 +887,9 @@ A graphical strategy is to review the Correlogram in Figure \ref{fig:H7_Correlog
   \label{fig:H7_Correlogram}
 \end{figure}
 
-The correllogram shows correlations between pairs of variables. The colors indicate positive (blue) or negative (pink) correlations, and the size of the circle indicates the correlation value. 
-% In the scatterplot matrix the plots on the main diagonal show the distribution of the individual variables, whereas each of the other plots show a scatterplot with simple regression line for each of the pairs of variables. 
-Table \ref{tab:correlations_USSteamCo} summarizes the correlations between the pairs of variables.
-
-% \begin{figure*}
-%   \includegraphics[width=\columnwidth]{H7_Scatterplotmatrix.png}
-%   \caption{Scatterplot matrix of US SteamCo data in the estimation set.}
-%   \label{fig:H7_Scatterplotmatrix}
-% \end{figure*}
+The correllogram shows correlations between pairs of variables. 
+The colors indicate whether the correlation is positive (blue) or negative (pink), and the size of the circle reflects the strength of the correlation. 
+Table \ref{tab:correlations_USSteamCo} provides the exact correlation values for each pair of variables. 
 
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y Y}
@@ -939,6 +912,11 @@ heatDD     &  0.6541 & -0.0487 & -0.7248 &  1.0000 \\
 \caption{Correlations between the pairs of variables in the \ttblue{USSteamCo} data file. See Exercise \ref{ex:correlogram}.}
 \label{tab:correlations_USSteamCo}
 \end{table}
+
+The highest correlations with \hlblue{revenue} are found for \hlblue{production} and heat degree days (\hlblue{heatDD}). 
+There is also a strong positive correlation between \hlblue{production} and cooling degree days (\hlblue{coolDD}), and a strong negative correlation between \hlblue{coolDD} and \hlblue{heatDD}. 
+This inverse relationship is to be expected: in summer months, \hlblue{coolDD} values are high while \hlblue{heatDD} values are low or zero, and the reverse holds in winter. 
+A high correlation between two predictors, such as between \hlblue{coolDD} and \hlblue{heatDD} or between \hlblue{coolDD} and \hlblue{production}, may suggest that they contain overlapping information, and it can be worth considering whether both are needed in a regression model.
 
 \bigskip
 The \hlblue{enter method}\index{enter method} is the most straightforward approach, in which all candidate independent variables are entered simultaneously into the model. The \emph{enter} method does not involve any variable selection or elimination, and all independent variables are included in the final model. This method is often used when all candidate independent variables are considered important or necessary for predicting the outcome variable. In contrast, \emph{backward} and \emph{forward} methods are stepwise approaches that involve selecting a subset of independent variables from a larger pool of candidate independent variables.
@@ -963,7 +941,7 @@ $Pr(>|t|)$ \\
 \midrule
 
 intercept  & 702,547 & 1,046,713 &  0.6712 & 0.5069 \\
-production &      22 &         3 &  6.8224 & 0.0000 \\
+production &   21.55 &     3.158 &  6.8224 & 0.0000 \\
 coolDD     &  -2,965 &     4,789 & -0.6192 & 0.5402 \\    
 heatDD     &   9,478 &     1,893 &  5.0079 & 0.0000 \\
 
@@ -999,14 +977,14 @@ $Pr(>|t|)$ \\
 
 \midrule
 
-intercept                 &   467,201 &  1,471,889  &  0.3174 & 0.75328 \\
-production                &        34 &          4  &  7.8240 & 0.00000 \\
-summer                    & 4,923,031 &  3,227,574  &  1.5253 & 0.13840 \\
-coolDD                    &  -120,941 &     43,614  & -2.7730 & 0.00977 \\
-heatDD                    &     1,495 &      3,047  &  0.4906 & 0.62754 \\
-production $\cdot$ summer &       -24 &          7  & -3.4460 & 0.00181 \\      
-coolDD $\cdot$ summer     &   124,446 &     43,928  &  2.8329 & 0.00846 \\   
-heatDD  $\cdot$  summer   &   -13,340 &     21,899  & -0.6091 & 0.54734 \\
+intercept           &   467,201 &  1,471,889  &  0.3174 & 0.75328 \\
+production          &     34.26 &      4.379  &  7.8240 & 0.00000 \\
+summer              & 4,923,031 &  3,227,574  &  1.5253 & 0.13840 \\
+coolDD              &  -120,941 &     43,614  & -2.7730 & 0.00977 \\
+heatDD              &     1,495 &      3,047  &  0.4906 & 0.62754 \\
+production : summer &    -23.63 &      6.858  & -3.4460 & 0.00181 \\      
+coolDD : summer     &   124,446 &     43,928  &  2.8329 & 0.00846 \\   
+heatDD  :  summer   &   -13,340 &     21,899  & -0.6091 & 0.54734 \\
 
 \bottomrule
 \end{tabularx}
@@ -1023,13 +1001,13 @@ Remember that the interaction variable \ttblue{summer} takes on values of 0 or 1
 Filling in the estimated coefficients gives us the regression plane
 
 \begin{equation*}
-\text{revenue} = 467,201 + 34 \cdot \text{production} -120,941 \cdot \text{coolDD} + 1,494 \cdot \text{heatDD}
+\text{revenue} = 467,201 + 34.26 \cdot \text{production} -120,941 \cdot \text{coolDD} + 1,495 \cdot \text{heatDD}
 \end{equation*}
 
-For the summer months, when \ttblue{summer = 1}, the interaction terms apply, and they adjust the intercept and the predictors. The \ttblue{intercept} of 467,201 is adjusted upward by 4,923,031 to 5,390,232, the production slope of 34 is reduced by 23 to 11, the coolDD slope of -120,941 is adjusted by 124,446 to 3,505, and the heatDD of 1,494 is reduced by -13,340 to -11,845.
+For the summer months, when \ttblue{summer = 1}, the interaction terms apply, and they adjust the intercept and the predictors. The \ttblue{intercept} of 467,201 is adjusted upward by 4,923,031 to 5,390,232, the production slope of 34.26 is reduced by 23.63 to 10.63, the coolDD slope of -120,941 is adjusted by 124,446 to 3,505, and the heatDD of 1,495 is reduced by 13,340 to -11,845.
 
 \begin{equation*}
-\text{revenue} = 5,390,232 + 11 \cdot \text{production} + 3,505 \cdot \text{coolDD} -11,845 \cdot \text{heatDD}
+\text{revenue} = 5,390,232 + 10.63 \cdot \text{production} + 3,505 \cdot \text{coolDD} -11,845 \cdot \text{heatDD}
 \end{equation*}
 
 As a result, this further improved the fit of the model. The residual standard deviation decreased to 1,680,711, and $r^2$ improved to 0.917.\footnote{See Exercise \ref{ex:interactions}} 
@@ -1354,11 +1332,12 @@ The largest outliers in $x$ are observations 22, 34, and 36, and the three large
 The three largest influential observations have indices of 34, 22, and 30, respectively. 
 Because not all top three are similar, a total of five observations are listed.
 
-There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Standardized residual of approximately $-4.1$, marking it as a clear outlier in the dataset.
+There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Standardized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
 
-Since we are working with time-series data, we cannot simply remove the observation without disrupting the temporal structure of the analysis. Instead, we applied Winsorization to reduce the influence of this extreme value while retaining its presence in the series. Specifically, the response variable in October 2012 was adjusted to match the value at the 5th percentile of the response distribution.
+Since we are working with time-series data, we cannot simply remove the observation without disrupting the temporal structure of the analysis. Instead, we applied winsorization to reduce the influence of this extreme value while retaining its presence in the series. Specifically, the response variable in October 2012 was adjusted to match the value at the 5th percentile of the response distribution.
 
-Mathematically, Winsorization replaces extreme values beyond a chosen threshold with the value at that threshold. For a lower Winsorization bound $\tau_L$ (e.g., the 5th percentile), the transformed value $y_t^\ast$ is given by:
+Mathematically, \hlblue{winsorization}\index{winsorization} replaces extreme values beyond a chosen threshold with the value at that threshold. 
+For a lower winsorization bound $\tau_L$ (e.g., the 5th percentile), the transformed value $y_t^\ast$ is given by:
 
 \begin{equation}
 y_t^\ast =
@@ -1385,7 +1364,7 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
     grid=major,
     yticklabel style={
       /pgf/number format/fixed,
-      /pgf/number format/precision=0
+      /pgf/number format/precision=1
     },
     xticklabel style={rotate=45},
     title={Winsorization of Observation 22 (October 2012)},
@@ -1394,7 +1373,7 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
     clip=false
   ]
     % Plot all residuals
-    \addplot+[only marks, mark=*, mark size=2pt, blue] coordinates {
+    \addplot+[only marks, mark=*, mark size=2pt, KPMG_blue] coordinates {
       (1,-1288215) (2,-608990) (3,-1002086) (4,-725783) (5,47735)
       (6,-894259) (7,-1005443) (8,180658) (9,206435) (10,618143)
       (11,394919) (12,1341802) (13,1334097) (14,338355) (15,-600937)
@@ -1406,18 +1385,18 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
     };
 
     % Highlight original outlier (obs 22)
-    \addplot+[only marks, mark=*, mark size=3pt, red] coordinates {(22, -4830879)};
-    \node[align=center, below, red] at (axis cs:22, -4830879) {Original};
+    \addplot+[only marks, mark=*, mark size=3pt, KPMG_light_pink] coordinates {(22, -4830879)};
+    \node[align=center, below, KPMG_light_pink] at (axis cs:22, -4830879) {Original};
 
     % Winsorized value (5th percentile residual)
-    \addplot+[only marks, mark=*, mark size=3pt, orange] coordinates {(22, -2421841)};
-    \node[align=center, above, orange] at (axis cs:22, -2421841) {Winsorized};
+    \addplot+[only marks, mark=*, mark size=3pt, KPMG_light_blue] coordinates {(22, -2421841)};
+    \node[align=center, above, KPMG_light_blue] at (axis cs:22, -2421841) {Winsorized};
 
     % Dotted line connecting original to winsorized point
     \draw[dashed, thick, gray] (axis cs:22,-4830879) -- (axis cs:22,-2421841);
   \end{axis}
 \end{tikzpicture}
-\caption{Winsorization of observation 22 (October 2012) residual to 5th percentile}
+\caption{Winsorization of observation 22 (October 2012) residual to 5th percentile} 
 \label{fig:winsor_obs22}
 \end{figure}
 
@@ -1434,14 +1413,14 @@ $Pr(>|t|)$ \\
 
 \midrule
 
-intercept                 &   580,713 & 1,299,338 &  0.4469 & 0.65836 \\
-production                &        35 &         8 &  9.0211 & 0.00000 \\
-heatDD                    &       933 &     2,690 &  0.3467 & 0.73142 \\
-coolDD                    &  -111,458 &    38,501 & -2.8950 & 0.00727 \\
-summer                    & 4,809,519 & 2,849,202 &  1.6880 & 0.10252 \\
-production $\cdot$ summer &       -24 &         6 & -4.0046 & 0.00042 \\
-heatDD  $\cdot$  summer   &   -12,777 &    19,331 & -0.6610 & 0.51404 \\
-coolDD $\cdot$ summer     &   114,963 &    38,779 &  2.9646 & 0.00613 \\
+intercept           &   580,713 & 1,299,338 &  0.4469 & 0.65836 \\
+production          &     34.87 &      3.87 &  9.0211 & 0.00000 \\
+summer              & 4,809,519 & 2,849,202 &  1.6880 & 0.10252 \\
+coolDD              &  -111,458 &    38,501 & -2.8950 & 0.00727 \\
+heatDD              &       933 &     2,690 &  0.3467 & 0.73142 \\
+production : summer &    -24.24 &      6.05 & -4.0046 & 0.00042 \\
+coolDD : summer     &   114,963 &    38,779 &  2.9646 & 0.00613 \\
+heatDD : summer     &   -12,777 &    19,331 & -0.6610 & 0.51404 \\
 
 \bottomrule
 \end{tabularx}
@@ -1626,7 +1605,7 @@ Total      & 9.5307e+14 & 35 &  \\
 \end{table}
 
 \bigskip
-The analysis shows that the sum of squares of the regression is 3.7804e+14, and the sum of squares of the residuals is 5.7503e+14. The total sum of squares is 3.7804e+14 + 5.7503e+14 = 9.5307e+14. 
+The analysis shows that the sum of squares of the regression is $3.7804 \cdot 10^{14}$, and the sum of squares of the residuals is $5.7503 \cdot 10^{14}$. The total sum of squares is $3.7804 \cdot 10^{14} + 5.7503 \cdot 10^{14} = 9.5307 \cdot 10^{14}$. 
 
 The variances are given by the mean squares, which are calculated by dividing the sum of the squares by the respective number of degrees of freedom.
 
@@ -1634,7 +1613,7 @@ The variances are given by the mean squares, which are calculated by dividing th
   MS = \frac{SS}{df}
 \end{equation}
 
-Thus, $MSR = SSR / df_R = 3.7804e+14 / 1 = 3.7804e+14$, and $MSE = SSe / df_E = 5.7503e+14 / 34 = 1.6913e+13$.
+Thus, $MSR = SSR / df_R = 3.7804 \cdot 10^{14} / 1 = 3.7804 \cdot 10^{14}$, and $MSE = SSE / df_E = 5.7503 \cdot 10^{14} / 34 = 1.6913  \cdot 10^{13}$.
 
 The coefficient of determination for \ttblue{mod.0} is then
 
@@ -1702,7 +1681,7 @@ To make a fair comparison, the \hlblue{adjusted $r^2$}\index{adjusted $r^2$} was
 \end{equation}
 The adjusted $r^2$ for \ttblue{mod.0} with $n = 36$ and $k = 1$ is then
 \begin{equation*}
-  \text{adjusted } r^2 = 0.3967 - \frac{1 - 0.3967}{34} = 0.3987
+  \text{adjusted } r^2 = 0.3967 - \frac{1 - 0.3967}{34} = 0.3789
 \end{equation*}
 For example, when we compare \ttblue{mod\_forward} from Exercise \ref{ex:modelling strategies} with \ttblue{mod.1} from Exercise \ref{ex:modelling_mod.1} we observe that the latter has a higher $r^2$ (0.8683) than the former (0.8667). The only difference between the two models is that \ttblue{mod.1} includes the variable \ttblue{coolDD}, whereas \ttblue{mod\_forward} does not. The penalty of including this non-significant variable is visible in the comparison of the adjusted $r^2$: 0.8559 for \ttblue{mod.1} versus 0.8586 for \ttblue{mod\_forward}.
 
@@ -1724,7 +1703,7 @@ Similar to the adjusted $r^2$, both the AIC and BIC penalize models for the incl
 The penalty for adding more independent variables is linear with $k$ for the AIC, and proportional to $k \cdot \ln(n)$ for the BIC, where $k$ is the number of predictors and $n$ is the sample size. 
 Thus, while a lower Sum of Squared Errors (SSE) reduces the AIC and BIC, adding too many predictors can increase them due to the penalty term. 
 This ensures that the model balances goodness-of-fit with \hlblue{parsimony}\index{parsimony}, selecting the simplest model that adequately explains or predicts the data, avoiding unnecessary complexity that does not significantly improve model performance. 
-Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models discussed so far in terms of their multiple $r^2$, adjusted $r^2$, and BIC\footnote{The \ttblue{BIC()} function in \ttblue{R} computes the Bayesian Information Criterion using the general formula $\text{BIC} = -2 \log \hat{L} + k \log n$, where $\log \hat{L} = -\frac{n}{2} \left[\log (2 \pi) + 1 + \log (\frac{SSE}{n}) \right]$ is the log maximized likelihood of the fitted model, $k$ is the number of estimated parameters, and $n$ is the sample size. In the special case of a linear model with normally distributed errors, this simplifies - up to a constant - to $\text{BIC} = n \log(\text{SSE}/n) + k \log n$, where $SSE$ is the sum of squared errors. \ttblue{R} includes all constant terms in its calculation, so BIC values may differ by a constant shift even when formulas appear algebraically similar.}.
+Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models discussed so far in terms of their multiple $r^2$, adjusted $r^2$, and BIC\footnote{The \ttblue{BIC()} function in \ttblue{R} computes the Bayesian Information Criterion using the general formula $\text{BIC} = -2 \ln \hat{L} + k \ln n$, where $\ln \hat{L} = -\frac{n}{2} \left[\ln (2 \pi) + 1 + \ln (\frac{SSE}{n}) \right]$ is the log maximized likelihood of the fitted model, $k$ is the number of estimated parameters, and $n$ is the sample size. In the special case of a linear model with normally distributed errors, this simplifies - up to a constant - to $\text{BIC} = n \ln(\text{SSE}/n) + k \ln n$, where $SSE$ is the sum of squared errors. \ttblue{R} includes all constant terms in its calculation, so BIC values may differ by a constant shift even when formulas appear algebraically similar.}.
 
 \begin{table}[thbp]
 
@@ -1750,7 +1729,7 @@ mod.3          & 0.9329 & 0.9161 & 1134.239 & 1148.490 \\
 
 \end{tabularx}
 
-\caption{Comparison of \ttblue{mod.0}, \ttblue{model\_forward}, \ttblue{mod.1}, and \ttblue{mod.2}}
+\caption{Comparison of the various models discussed}
 \label{tab:comparison_mod_0_2}
 \end{table}
 
@@ -1759,7 +1738,11 @@ The assessment of regression model precision relies not only on overall goodness
 While \ttblue{mod.0} serves as a basic benchmark with an adjusted $r^2$ of 0.3789 and a high BIC of 1207.383, the other four models all achieve substantial improvements in explanatory power (adjusted $r^2$ values above 0.85). 
 Among these, \ttblue{model.3} has the lowest BIC (1148.490), suggesting the best balance between model complexity and goodness-of-fit. This makes \ttblue{mod.3} the leading candidate from a statistical perspective. Although \ttblue{mod.2} also delivers a high adjusted $r^2$ (0.8963), its BIC is slightly higher than that of \ttblue{mod.3}. The only difference between these two models is that, in \ttblue{mod.3}, an outlier was winsorized, which led to both a higher adjusted $r^2$ and a lower BIC. This suggests that the improved performance of \ttblue{mod.3} is primarily due to the treatment of the outlier rather than an increase in model complexity. Similarly, \ttblue{model\_forward} and \ttblue{mod.1} improve substantially over \ttblue{mod.0}, but are outperformed by \ttblue{mod.3} in both fit and parsimony.
 
-Following the AAG guidance (AAG A.63), we also consider standard errors and $t$ statistics from the individual model summaries (not shown in Table~\ref{tab:comparison_mod_0_2}, but available from the regression output). In \ttblue{mod.2}, for instance, most predictors have statistically significant $t$ statistics above 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. This supports confidence in the reliability of the regression coefficients. However, one or two variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics\footnote{See Table \ref{tab:summary_mod_2}.}, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04).
+Following the AAG guidance (AAG A.63), we also consider standard errors and $t$ statistics from the individual model summaries (for example, Table \ref{tab:summary_mod_3}). 
+In \ttblue{mod.3}, for instance, most predictors have statistically significant $t$ statistics above 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. 
+This supports confidence in the reliability of the regression coefficients. 
+However, some variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04). 
+Although \ttblue{summer} also has a low $t$ value, caution is advised before removing it, as it interacts with both \ttblue{production} and \ttblue{coolDD}, potentially influencing their effects.
 
 The standard error of the regression, although not tabulated, should also be interpreted in light of materiality. For example, AAG A.64 notes that if the standard error is less than about 75\% of materiality, the model may be considered reliable for audit purposes. In our case, if the standard error of the best-fitting models falls within this range, it would further support reliance on the regression. Moreover, as we discuss in Section \ref{sec:auditor_response}, we use statistical theory to translate the standard error to the level of assurance that is obtained form the model, by specifically incorporating materiality.
 
@@ -1823,20 +1806,20 @@ $H_1 : $ The residuals $\epsilon$ are not normally distributed.
 
 \paragraph{Assumptions} There are no assumptions underlying the test.
 
-\paragraph{Test statistic} We use the \hlblue{$W$ statistic}\index{$W$ statistic}. 
+\paragraph{Test statistic} We use the \hlblue{$W$ statistic}\index{W statistic}. 
 Its calculation is quite complicated and based on order statistics. The $W$ statistic takes values between 0 and 1, with 1 being a perfect match with the normal distribution. 
 
 \paragraph{Distribution} The $W$ statistic's distribution cannot be described by means of a familiar distribution.
 
-\paragraph{Significance level} In regression analysis, we deviate from the standard approach of committing to a significance level ahead of time and then using a critical region. Instead, it is more informative to answer the following question: given the observed value of the $W$ statistic, what is the smallest significance level at which the null hypothesis would be rejected? This level is referred to as the \hlblue{$p$ value}\index{$p$ value} for the test. The significance level for the $W$ statistic is calculated using approximations.
+\paragraph{Significance level} In regression analysis, we deviate from the standard approach of committing to a significance level ahead of time and then using a critical region. Instead, it is more informative to answer the following question: given the observed value of the $W$ statistic, what is the smallest significance level at which the null hypothesis would be rejected? This level is referred to as the \hlblue{$p$ value}\index{p value} for the test. The significance level for the $W$ statistic is calculated using approximations.
 
 \paragraph{Value of test statistic} We use the Shapiro-Wilk
 % \ttblue{shapiro.test} function 
-test to obtain the values of the $W$ statistic, and its related $p$ value. For \ttblue{mod.3}, the value of the \emph{W} statistic is 0.9480, with a \emph{p} value of 0.0904.\footnote{See Exercise \ref{ex:normality_test}}
+test to obtain the values of the $W$ statistic, and its related $p$ value. For \ttblue{mod.3}, the value of the \emph{W} statistic is 0.9480, with a \emph{p} value of 0.09045.\footnote{See Exercise \ref{ex:normality_test}}
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.0904. Therefore, we fail to reject the null hypothesis at levels below 0.0904. The residuals appear to be normally distributed.
+The $p$ value of the test statistic is 0.09045. Therefore, we fail to reject the null hypothesis at levels below 0.09045. The residuals appear to be normally distributed.
 
 \bigskip
 In our experience, many situations involving non-normality of the residuals are caused by data-input errors. Hence, we recommend performing diagnostic checking and/or reviewing the necessity of transformations prior to testing the model assumptions. If non-normality is not remedied by these procedures, Weighted Least Squares (see Section \ref{sub:homoskedasticity}) may help. Other remedies include nonparametric regression models such as kernel regression and spline regression, or generalized linear models. These remedies are beyond the scope of this book.
@@ -1907,7 +1890,7 @@ In cases where the null hypothesis is rejected, and the residuals show non-const
 
 Finally, in time-series applications of linear regression, it is assumed that the disturbance term $\epsilon_t$ in period $t$ is not correlated with the disturbance terms from any preceding periods. Violations of this assumption —- known as autocorrelation -— can arise, for example, due to seasonal effects. In monthly data, this might manifest as $\epsilon_t$ being correlated with $\epsilon_{t-12}$, reflecting a yearly seasonal cycle.
 
-To detect such autocorrelation, we use a \ttblue{pacf} plot. Figure \ref{fig:H7_pacf} shows an example for the model \ttblue{mod.3}.\footnote{Note that \ttblue{mod.3} was obtained by removing observation 22. Theoretically, this affects the computation of the PACF and related tests. We include it here for illustrative purposes.} 
+To detect such autocorrelation, we use a \ttblue{pacf} plot. Figure \ref{fig:H7_pacf} shows an example for the model \ttblue{mod.3}.
 The abbreviation \hlblue{PACF}\index{PACF} stands for the \textbf{P}artial \textbf{A}uto\textbf{C}orrelation \textbf{F}unction.
 
 The PACF plot helps us identify the order of autocorrelation, where the term \emph{order} refers to the number of time lags between observations. 
@@ -1971,7 +1954,7 @@ In time-series regression, residual autocorrelation violates the assumption of i
 One commonly suggested workaround is to include lagged residuals as predictors in the model. 
 This approach can be effective for addressing first-order autocorrelation, but it comes with a caveat: since residuals are themselves estimates derived from the data, treating them as fixed predictors introduces a layer of uncertainty that is typically not accounted for. As a result, the method lacks a rigorous statistical foundation and may lead to biased or inefficient estimates if used uncritically.
 
-A more principled solution is to apply \hlblue{Generalized Least Squares}\index{Generalized Least Squares} (GLS), which adjusts the estimation procedure by explicitly modeling the covariance structure of the residuals. However, GLS is beyond the scope of this book.
+A more principled solution is to apply \hlblue{Generalized Least Squares}\index{generalized least squares} (GLS), which adjusts the estimation procedure by explicitly modeling the covariance structure of the residuals. However, GLS is beyond the scope of this book.
 
 Instead, a practical and widely used alternative is the \hlblue{Cochrane-Orcutt method}\index{Cochrane-Orcutt method}, designed specifically to correct for first-order autocorrelation (AR(1)). 
 This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
@@ -1999,11 +1982,11 @@ $Pr(>|t|)$ \\
 \midrule
 
 intercept         &   199,459 &   773,625 &  0.258 & 0.798498 \\
-production\_adj   &        31 &         3 & 10.463 & 0.000000 \\
+production\_adj   &     31.86 &     3.045 & 10.463 & 0.000000 \\
 summer\_adj       & 1,646,049 & 1,062,804 &  1.549 & 0.133078 \\ 
 coolDD\_adj       &    25,316 &    17,740 &  1.427 & 0.165033 \\
 heatDD\_adj       &     3,804 &     2,049 &  1.856 & 0.074368 \\
-prod\_summer\_adj &       -24 &         6 & -3.721 & 0.000923 \\        
+prod\_summer\_adj &    -24.06 &     6.468 & -3.721 & 0.000923 \\        
 cool\_summer\_adj &   -48,824 &    32,388 & -1.507 & 0.143311 \\      
 heat\_summer\_adj &   -18,375 &    21,459 & -0.856 & 0.399379 \\
 
@@ -2024,8 +2007,48 @@ Additionally, we must account for the presence of an outlier in observation 22, 
 Another limitation of the earlier stepwise model (\ttblue{model\_forward}) is that it did not consider the inclusion of the dummy variable \ttblue{summer}, which we now believe to be theoretically relevant. 
 To address these issues, we initiate a new stepwise model selection procedure -— this time based on the modified dataset USSteamCoEstim2 -— with the goal of identifying a model that is both statistically robust and more interpretable. 
 The resulting model will be referred to as \ttblue{mod.5}, and we work with this model for the remainder of this chapter.
+A summary of the coefficients of the resulting \ttblue{mod.5} is provided in Table \ref{tab:summary_mod_5}.
 
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
+\toprule
+\parbox[t]{4.5 cm}{Variable} &
+Estimate &
+Std. Error &
+$t$ value &
+$Pr(>|t|)$ \\
 
+\midrule
+
+intercept           &   752,767 & 1,170,485 &  0.643 & 0.525029 \\
+production          &     35.87 &      2.50 & 14.327 & 0.000000 \\
+summer              & 3,219,526 & 1,577,708 &  2.040 & 0.050173 \\ 
+coolDD              &  -121,381 &    25,102 & -4.835 & 0.000037 \\
+production : summer &    -23.23 &      4.10 & -5.661 & 0.000004 \\        
+coolDD : summer     &   125,064 &    25,504 &  4.904 & 0.000031 \\    
+
+\bottomrule
+\end{tabularx}
+\caption{Estimated coefficient values of \ttblue{mod.5}, with their standard errors, $t$ values, and $p$ values.}
+\label{tab:summary_mod_5}
+\end{table}
+
+The regression lines for winter months is
+
+\begin{equation*}
+  \text{revenue} = 752,767 + 35.87 \cdot \text{production} - 121,381 \cdot \text{coolDD} 
+\end{equation*}
+Because in winter the values for \ttblue{coolDD} are equal to zero, the last term in the equation is of little importance.
+The regression lines for summer months is
+
+\begin{equation*}
+  \text{revenue} = 3,972,293 + 12.64 \cdot \text{production} + 3,683 \cdot \text{coolDD}
+\end{equation*}
+The coefficient values take the interactions into account. Therefore, the intercept value is equal to $752,767 + 3,219,526 = 3,972,293$, the slope value for \ttblue{production} is equal to $35.87 - 23.23 = 12.64$, and the marginal effect of \ttblue{coolDD} is given by $-121,381 + 125,064 = 3,683$.
+
+Although a backward procedure was applied to remove non-significant predictors, some variables may still merit inclusion for reasons beyond statistical significance. 
+These include theoretical relevance, potential interaction effects, or roles as control variables. 
+In some cases, variables may remain due to data availability or to support future research and replication, even if their individual contributions appear limited in the current model.
 
 % section testing_model_assumptions (end)
 
@@ -2055,7 +2078,7 @@ H_1 : \beta_j \neq 0
 
 \paragraph{Assumptions} Both sets of assumptions (see Sections \ref{sec:assumptions_underlying_regression_results} and \ref{sec:testing_model_assumptions}) are relevant for the test, as we want to start from an unbiased estimate and the particular traits of the residuals.
 
-\paragraph{Test statistic} We use the \hlblue{$t$ statistic}\index{$t$ statistic}, defined as
+\paragraph{Test statistic} We use the \hlblue{$t$ statistic}\index{t statistic}, defined as
 
 \begin{equation}
   t_{\hat{\beta}_j} = \frac{\hat{\beta}_j}{s_{\hat{\beta}_j}}
@@ -2067,88 +2090,16 @@ There is a different $t$ statistic for every coefficient in the regression model
 
 \paragraph{Significance level} As before, we will deviate from the standard approach of committing to a significance level and draw our conclusions based on the \emph{$p$ value} for the test.
 
-\paragraph{Value of test statistic} We obtain estimates of the coefficients, their related standard errors, $t$ values, and $p$ values from Table \ref{tab:summary_mod_3}.
-
-\begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
-\toprule
-\parbox[t]{4.5 cm}{Variable} &
-Estimate &
-Std. Error &
-$t$ value &
-$Pr(>|t|)$ \\
-
-\midrule
-
-intercept                 &   580,713 & 1,299,338 &  0.447 & 0.658364 \\
-production                &        34 &         4 &  9.021 & 8.89e-10 \\
-summer                    &       932 &     2,690 &  0.347 & 0.731416 \\ 
-coolDD                    &  -111,458 &    38,501 & -2.895 & 0.007272 \\
-heatDD                    & 4,809,518 & 2,849,202 &  1.688 & 0.102516 \\
-production $\cdot$ summer &       -24 &         6 & -4.005 & 0.000415 \\        
-coolDD $\cdot$ summer     &   -12,777 &    19,331 & -0.661 & 0.514042 \\      
-heatDD  $\cdot$  summer   &   114,963 &    38,779 &  2.965 & 0.006130 \\
-
-\bottomrule
-\end{tabularx}
-\caption{Estimated coefficient values of \ttblue{mod.3}, with their standard errors, $t$ values, and $p$ values.}
-\label{tab:summary_mod_3}
-\end{table}
+\paragraph{Value of test statistic} We obtain estimates of the coefficients, their related standard errors, $t$ values, and $p$ values from Table \ref{tab:summary_mod_5}.
 
 \paragraph{Conclusion}
 
-The independent variable \ttblue{heatDD} has no significant explanatory power. Therefore, we can consider its removal. The independent variable \ttblue{summer}, with $p$ value of 0.0849, may not seem significant; however, removing it will also remove its interactions with \ttblue{production} and \ttblue{coolDD}, which would be undesirable. The interpretation of the coefficient of \ttblue{summer} is that it adjusts the constant \ttblue{(Intercept)} by 4.589 million if \ttblue{summer = 1}. Therefore, we should be careful not to remove either the constant \ttblue{(Intercept)} or the dummy variable \ttblue{summer}, since the two regression lines (for summer and not-summer) have different intercepts. Likewise, the coefficient of \ttblue{production:summer} reduces the slope of \ttblue{production} of 36.06 by 25.43 if \ttblue{summer = 1}, and the coefficient of \ttblue{summer:coolDD} increases the slope of \ttblue{coolDD} of -93,010 by 96,520  if \ttblue{summer = 1}.
-
-\bigskip
-Reasons for including a non-significant independent variable in a linear regression model are the following:
-\paragraph{Theoretical importance:} The variable may be theoretically important or have a known relationship with the dependent variable, even if it does not have a statistically significant relationship in the current sample or dataset.
-\paragraph{Interaction effects:} The variable may have an interaction effect with other independent variables in the model. However, this may not be apparent when the variable is considered alone.
-\paragraph{Control variable:} The variable may be included as a control variable to control for the effects of other variables known to affect the dependent variable.
-\paragraph{Data availability:} The variable may be included in the model because of data availability, even if it is not expected to have a significant effect on the dependent variable.
-\paragraph{Future research:} The variable may be included in the model as a potential independent variable for future research or replication purposes.
+The predictor \ttblue{heatDD} and its interaction with \ttblue{summer} were removed during the backward elimination procedure. 
+Among the remaining predictors, only the intercept shows a high $p$ value ($p = 0.525$), yet its inclusion is essential for defining the baseline level of the dependent variable when all predictors equal zero. 
+Similarly, while the variable \ttblue{summer} may seem a borderline candidate for exclusion based on significance, its role as an interaction partner is critical: removing it would also eliminate the associated interaction terms with \ttblue{production} and \ttblue{coolDD}, both of which are statistically and substantively significant. 
+The variable \ttblue{summer} enables the regression model to differentiate behavior between summer and non-summer periods, affecting both the intercept and the slopes of other predictors in meaningful ways.
 
 
-\bigskip
-It is important to note that even if a variable is non-significant, it should be reported and discussed in the context of the results as it can provide insight into the nature of the relationship between the variables.
-
-\bigskip
-We decide to leave out \ttblue{heatDD} from the regression model. This decision is supported by our findings of the step-wise procedures in Section \ref{sub:multiple_regression}. A summary of the coefficients of the resulting \ttblue{mod.5} is provided in Table \ref{tab:summary_mod_5}.
-
-\begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
-\toprule
-\parbox[t]{4.5 cm}{Variable} &
-Estimate &
-Std. Error &
-$t$ value &
-$Pr(>|t|)$ \\
-
-\midrule
-intercept                 &   752,767 & 1,170,484 &  0.643 & 0.5250 \\   
-production                &        36 &         2 & 14.327 & 0.0000 \\
-coolDD                    &  -121,381 &    25,102 & -4.835 & 0.0000 \\
-summer                    & 3,219,526 & 1,577,708 &  2.041 & 0.0502 \\
-production $\cdot$ summer &       -23 &         4 & -5.661 & 0.0000 \\
-coolDD $\cdot$ summer     &   125,064 &    25,503 &  4.904 & 0.0000 \\
-
-\bottomrule
-\end{tabularx}
-\caption{Estimated coefficient values of \ttblue{mod.5}, with their standard errors, $t$ values, and $p$ values.}
-\label{tab:summary_mod_5}
-\end{table}
-
-The regression lines for winter months is
-
-\begin{equation*}
-  \text{revenue} = 752,767 + 35.87 \cdot \text{production} - 121,381 \cdot \text{coolDD} 
-\end{equation*}
-Because in winter the values for \ttblue{coolDD} are equal to zero, the last term in the equation is of little importance.
-The regression lines for summer months is
-
-\begin{equation*}
-  \text{revenue} = 3,972,700 + 12.64 \cdot \text{production} + 3,680 \cdot \text{coolDD}
-\end{equation*}
-The coefficient values take the interactions into account. Therefore, the intercept value is equal to $752,767 + 3,219,526 = 3,972,700$, the slope value for \ttblue{production} is equal to $3.589 \cdot 10^1 - 2.325 \cdot 10^1 = 12.64$, and the marginal effect of \ttblue{coolDD} is given by $-9.141 \cdot 10^4 + 9.509 \cdot 10^4 = 3,680$.
 
 % subsection testing_significance_of_independent_variables (end)
 
@@ -2175,7 +2126,7 @@ H_1 : \text{At least one of the } \beta_j \neq 0
 
 \paragraph{Assumptions} There are again several assumptions that need to be satisfied for the test statistic, including linearity, randomness, homoskedasticity, normality, and the absence of autocorrelation.
 
-\paragraph{Test statistic} We use the \hlblue{$F$ statistic}\index{$F$ statistic}, which is defined as the ratio between the explained  and unexplained variances. The explained variance is measured by the \hlblue{Mean Square of the Regression}\index{Mean Square of the Regression} or \hlblue{MSR}\index{MSR}, and the unexplained variance by the \hlblue{Mean Square of the Residuals}\index{Mean Square of the Residuals} or \hlblue{MSE}\index{MSE}.
+\paragraph{Test statistic} We use the \hlblue{$F$ statistic}\index{F statistic}, which is defined as the ratio between the explained  and unexplained variances. The explained variance is measured by the \hlblue{Mean Square of the Regression}\index{Mean Square of the Regression} or \hlblue{MSR}\index{MSR}, and the unexplained variance by the \hlblue{Mean Square of the Residuals}\index{Mean Square of the Residuals} or \hlblue{MSE}\index{MSE}.
 
 \begin{equation}
   F = \frac{MSR}{MSE}
@@ -3333,18 +3284,18 @@ We compare the performance of models with four different statistics, the Multipl
 The AIC value of the \ttblue{model\_backward} does not quite match the output of the \ttblue{step} function. This can be explained as follows.
 
 The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
-$\text{AIC} = -2 \log \hat{L} + 2k$,
-where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters. 
+$\text{AIC} = -2 \ln \hat{L} + 2k$,
+where $\ln \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters. 
 
 For a linear regression model with normally distributed errors, this log-likelihood takes the form
-$\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right) \right]$,
+$\ln \hat{L} = -\frac{n}{2} \left[ \ln(2\pi) + 1 + \ln\left(\frac{\text{SSE}}{n}\right) \right]$,
 leading to the AIC expression
-$\text{AIC} = n \left[\log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
+$\text{AIC} = n \left[\ln(2\pi) + 1 + \ln\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
 In contrast, the \ttblue{step} function in R reports AIC values based on a deviance-like approximation, that omits constant terms unrelated to model comparison:
-$\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
+$\text{AIC}_{\text{step}} = n \ln\left(\frac{\text{SSE}}{n}\right) + 2k$.
 The difference between the two expressions is a constant shift of
-$n \cdot (\log(2\pi) + 1) + 2$.
-The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors. 
+$n \cdot (\ln(2\pi) + 1) + 2$.
+The term $n \cdot (\ln(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors. 
 The additional +2 arises because R’s \ttblue{AIC} function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression. 
 
 Similarly, the BIC values are obtained as follows.
