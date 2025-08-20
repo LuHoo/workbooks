@@ -31,7 +31,10 @@
 \graphicspath{{../_PNG_files/}}
 \usepackage{ragged2e}
 \usepackage{tabularx}
-\usepackage{array}
+\usepackage{array}  % Required for defining new column types
+\newcolumntype{Z}[1]{>{\raggedleft\arraybackslash}p{#1}}  % Right-aligned column with fixed width
+
+\usepackage{rotating}
 \usepackage{caption}
 % \usepackage{setspace}
 \usepackage{paralist}
@@ -102,6 +105,10 @@
 \tikzstyle{line} = [draw, -latex']
 \tikzstyle{cloud} = [draw, circle, fill=red!20, node distance=3 cm,
     minimum height=2 em]
+
+\usepackage{pgfplots}    % For axis environment and plotting
+\pgfplotsset{compat=1.18} % Set compatibility level (adjust if needed)
+
 
 % Macros for typesetting the documentation
 \definecolor{KPMG_blue}{RGB}{0, 51, 141}
@@ -227,6 +234,11 @@ Dedicated to
 
 \input{chap01}
 \input{chap02}
+\input{chap03}
+\input{chap04}
+\input{chap05}
+\input{chap06}
+\input{chap07}
 
 \printnomenclature
 \addcontentsline{toc}{chapter}{\nomname}
