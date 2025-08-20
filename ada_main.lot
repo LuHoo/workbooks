@@ -1,9 +1,0 @@
-\babel@toc {english}{}\relax 
-\addvspace {10pt}
-\contentsline {table}{\numberline {1.1}{\ignorespaces Inventory listing (partial view)}}{4}{}%
-\contentsline {table}{\numberline {1.2}{\ignorespaces Example sampling frame}}{10}{}%
-\contentsline {table}{\numberline {1.3}{\ignorespaces Possible samples of size $n = 2$ with simple random sampling without replacement}}{10}{}%
-\contentsline {table}{\numberline {1.4}{\ignorespaces Example population}}{12}{}%
-\contentsline {table}{\numberline {1.5}{\ignorespaces Example cell selection}}{15}{}%
-\contentsline {table}{\numberline {1.6}{\ignorespaces Example sieve selection}}{16}{}%
-\contentsline {table}{\numberline {1.7}{\ignorespaces Example modified sieve selection. The table is sorted on descending sieve number $sn$. Note that element D is individually significant when $n = $ 5 and is automatically selected even before element H with a higher sieve number.}}{17}{}%
