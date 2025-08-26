@@ -14,10 +14,12 @@ Throughout the exercises, we encourage you to refer back to the corresponding th
 
 Let's dive into the exercises and explore the practical applications of the concepts covered in this chapter.
 
+\subsection{Section \ref{sec:hypergeometric_distribution}}
+
 \begin{exercise}
 \label{ex:hyper_p}
 
-\textbf{Hypergeometric distribution} \marginnote{Section \ref{sec:hypergeometric_distribution}}
+\textbf{Hypergeometric distribution} 
 
 The \ttblue{Python} function \ttblue{hypergeom.pmf} requires four arguments: $k, N, M$, and $n$. The extension \ttblue{pmf} indicates that the function is a probability mass (density) function.
 
@@ -48,10 +50,12 @@ Probabilities in the right-hand tail $P(\stoch{k} > k)$ can be calculated using 
 
 \end{exercise}
 
+\subsection{Section \ref{sec:binomial_distribution}}
+
 \begin{exercise}
 \label{ex:binom_p}
 
-\textbf{Binomial distribution} \marginnote{Section \ref{sec:binomial_distribution}}
+\textbf{Binomial distribution} 
 
 The relevant \ttblue{Python} functions are \ttblue{binom.pmf} for the probabilities $P(\stoch{k} = k)$ and \ttblue{binom.cdf} for cumulative probabilities $P(\stoch{k} \leq k)$. Both functions use the parameters \ttblue{k}, \ttblue{n} and \ttblue{$\pi$ = M / N}.
 
@@ -63,10 +67,12 @@ The relevant \ttblue{Python} functions are \ttblue{binom.pmf} for the probabilit
 \end{Verbatim}
 \end{exercise}
 
+\subsection{Section \ref{sec:poisson_distribution}}
+
 \begin{exercise}
 \label{ex:poiss_p}
 
-\textbf{Poisson distribution} \marginnote{Section \ref{sec:poisson_distribution}}
+\textbf{Poisson distribution} 
 
 The functions \ttblue{poisson.pmf} and \ttblue{poisson.cdf} are used for the calculation of probabilities from the Poisson distribution. They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$. For the \emph{Case: Number of students} remember that $n = 60$ and $\pi = 17 / 331$.
 
@@ -88,10 +94,12 @@ To calculate the probability of finding no more than one error in the sample of 
 
 \end{exercise}
 
+\subsection{Section \ref{sec:normal_distribution}}
+
 \begin{exercise}
 \label{ex:norm_p}
 
-\textbf{Normal distribution} \marginnote{Section \ref{sec:normal_distribution}}
+\textbf{Normal distribution} 
 
 In \ttblue{Python} we use the function \ttblue{norm.cdf}, that uses the arguments \ttblue{x} for the sampling result that we evaluate, \ttblue{loc} for the population mean, and \ttblue{scale} for the standard deviation of the mean.
 
@@ -115,10 +123,12 @@ There are two advantages to using argument names and values. First, the command 
 
 \end{exercise}
 
+\subsection{Section \ref{sec:student_t_distribution}}
+
 \begin{exercise}
 \label{ex:student_p}
 
-\textbf{Student's t distribution} \marginnote{Section \ref{sec:student_t_distribution}}
+\textbf{Student's t distribution} 
 
 To calculate the probability found of 14.7\%, we use the function \ttblue{pt.cdf} with arguments \ttblue{x} for the boundary value and \ttblue{df} for the number of degrees of freedom.
 
@@ -132,10 +142,12 @@ The probability is 14.7\%.
 
 \end{exercise}
 
+\subsection{Section \ref{sec:chi_squared_distribution}}
+
 \begin{exercise}
 \label{ex:chisq_p}
 
-\textbf{\texorpdfstring{$\chi^2$}{chi-squared} distribution} \marginnote{Section \ref{sec:chi_squared_distribution}}
+\textbf{\texorpdfstring{$\chi^2$}{chi-squared} distribution} 
 
 The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
 
@@ -153,10 +165,12 @@ Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower 
 
 \end{exercise}
 
+\subsection{Section \ref{sec:f_distribution}}
+
 \begin{exercise}
 \label{ex:fdist_p}
 
-\textbf{F distribution} \marginnote{Section \ref{sec:f_distribution}}
+\textbf{F distribution} 
 
 Hypothesis testing is done with the function \ttblue{f.ppf}.
 

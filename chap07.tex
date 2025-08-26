@@ -2517,6 +2517,8 @@ To run the exercises in this workshop, we need to load a few packages.
 
 \end{exercise}
 
+\subsection{Case: USSteamCo}
+
 \begin{exercise}
   \label{ex:cell_evaluation}
 
@@ -2542,6 +2544,8 @@ The \ttblue{head} function shows the values of the variables (columns) in the fi
 \paragraph{Summer} is a dummy variable created to distinguish between heating and cooling months.\footnote{Section \ref{sub:data_wrangling}}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:obtaining_and_testing_data}}
 
 \begin{exercise}
 \label{ex:summarizing_and_plotting}
@@ -2649,6 +2653,8 @@ The enhanced scatter plot in Figure \ref{fig:H7_Enhanced_scatterplot} is obtaine
 \end{Verbatim}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:modeling}}
 
 \begin{exercise}
 \label{ex:modelling_mod0}
@@ -2946,6 +2952,8 @@ The cross-correlation plot in Figure \ref{fig:H7_timelag} is created by running:
 
 \end{exercise}
 
+\subsection{Section \ref{sec:diagnostics_checking}}
+
 \begin{exercise}
 \label{ex:residual_plots}
 
@@ -2956,7 +2964,6 @@ The residual plots in Figure \ref{fig:H7_residualPlots_mod2} are obtained by:
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{residualPlots(ussteamco.mod.2)}
 \end{Verbatim}
-
 
 \end{exercise}
 
@@ -3117,6 +3124,8 @@ For models that include interactions, like like \ttblue{mod.3}, we use the \ttbl
 We now assess whether any of the predictors has a value $GVIF^(1/(2*Df))$ that is greater than 10. Because there are none (see the column \ttblue{GVIF\^{}(1/(2*Df)}), this model does not suffer from variance inflation.
 
 \end{exercise}
+
+\subsection{Section \ref{sec:analysis_of_variance}}
 
 \begin{exercise}
 \label{ex:anova}
@@ -3314,6 +3323,8 @@ Similarly, the BIC values are obtained as follows.
 \end{Verbatim}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:testing_model_assumptions}}
 
 \begin{exercise}
 \label{ex:normality_test}
@@ -3579,6 +3590,8 @@ The residuals seem to be normally distributed.
 
 \end{exercise}
 
+\subsection{Section \ref{sec:testing_significance}}
+
 \begin{exercise}
 \label{ex:f_test}
 
@@ -3698,6 +3711,8 @@ All the elements created earlier are now plotted on a single canvas.
 The resulting graph is shown in Figure \ref{fig:H7_200_regression_lines}.
 
 \end{exercise}
+
+\subsection{Section \ref{sec:expectations}}
 
 \begin{exercise}
 \label{ex:Confidence_and_prediction_intervals}
@@ -3821,6 +3836,8 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 \end{Verbatim}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:auditor_interpretation}}
 
 \begin{exercise}
 \label{ex:Combining_12_monthly_predictions}
