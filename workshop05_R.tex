@@ -1,3 +1,5 @@
+\subsection{Section \ref{sec:the_nine_step_approach}}
+
 \begin{exercise}
 \label{ex:critical_region}
 
@@ -70,6 +72,8 @@ The one-sided upper bounds $p_U$ in Table \ref{tab:confidence_intervals} are obt
 
 \end{exercise}
 
+\subsection{Section \ref{sec:monetary_unit_sampling}}
+
 \begin{exercise}
 \label{ex:subsidies}
 
@@ -105,6 +109,8 @@ To build a margin for one error, we may increase the critical region to $\{k | k
 \index[FSaudit]{\ttblue{size}}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:partial_errors}}
 
 \begin{exercise}
 \label{ex:accounts_receivable}
@@ -154,11 +160,6 @@ Compare this with the sample size calculated using fixed-attribute sampling.
 
 If we draw a sample of size $n = 1,100$ from the \ttblue{accounts\_receivable} population, the largest sampling units have an almost 100\% inclusion probability and with a selection method such as \ttblue{random} are likely to be hit more than once.
  
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{max(accounts\_receivable\$amount)}
-% \textcolor{KPMG_light_blue}{12,049.70}
-% \end{Verbatim}
-
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{multiple <- mus_obj(bv = accounts_receivable$amount,}
 \textcolor{KPMG_blue}{                    id = accounts_receivable$invoice,}
@@ -300,93 +301,7 @@ A two-sided prediction interval around the PPS estimate is calculated according 
 
 \end{exercise}
 
-% \begin{exercise}
-% \label{ex:sample_sizes}
 
-% \textbf{Sample sizes for various critical regions}
-
-% For example, for $k = 2$
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{ar_size <- att_obj(popn = 13500000, popdev = 450000)}
-% \textcolor{KPMG_blue}{ar_size <- size(ar_size, alpha = 0.05, c = 2)}
-% \textcolor{KPMG_blue}{ar_size$n}
-% \textcolor{KPMG_light_blue}{[1] 187}
-% \end{Verbatim}
-% \index[FSaudit]{\ttblue{att\_obj}}\index[FSaudit]{\ttblue{size}}
-
-% \end{exercise}
-
-% \begin{exercise}
-% \label{ex:sample_size_mus}
-
-% \textbf{Sample size MUS for given expected error}
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{ar <- size(ar, cl = 0.95, pm = 450000, ee = 100000)}
-% \textcolor{KPMG_blue}{ar$n}
-% \textcolor{KPMG_light_blue}{[1] 145}
-% \end{Verbatim}
-% \index[FSaudit]{\ttblue{size}}
-
-% Let us now assume that all audit values are equal to the book values, apart from one sampling unit with 100\% tainting, and one with 9.887\% tainting.
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{av <- ar$sample$bv}
-% \textcolor{KPMG_blue}{av[1] <- 0}
-% \textcolor{KPMG_blue}{av[2] <- (1 - .09887) * av[2]}
-% \end{Verbatim}
-% We evaluate the sample using these two errors.
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{ar <- evaluate(ar, av = av, evalMeth = "stringer")}
-% \textcolor{KPMG_blue}{ar$evalResults$Over$`Upper confidence bound`}
-% \textcolor{KPMG_light_blue}{[1] 449999.9}
-% \end{Verbatim}
-% \index[FSaudit]{\ttblue{evaluate}}
-
-% The difference between the upper confidence bound and performance materiality is caused by the fact that the sample size must be rounded upward to the nearest integer. This difference is even larger for the cell evaluation method, as in that method, smaller taintings do not add to the calculated precision.
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{ar <- evaluate(ar, av = av, evalMeth = "cell")}
-% \textcolor{KPMG_blue}{ar$evalResults$Over$`Upper confidence bound`}
-% \textcolor{KPMG_light_blue}{[1] 445212.1}
-% \end{Verbatim}
-% \index[FSaudit]{\ttblue{evaluate}}
-
-% The difference between the two evaluation methods is even larger if instead of two errors with taintings of 100\% and 9.887\%, there are three errors with taintings of 50\%, 40\%, and 19.887\%. Note that the sum of the taintings, and therefore the point estimate, does not change.
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{av3 <- ar$sample$bv}
-% \textcolor{KPMG_blue}{av3[1] <- av3[1] * (1 - 0.5)}
-% \textcolor{KPMG_blue}{av3[2] <- av3[2] * (1 - 0.4)}
-% \textcolor{KPMG_blue}{av3[3] <- av3[3] * (1 - 0.19887)}
-% \textcolor{KPMG_blue}{ar <- evaluate(ar, av = av3, evalMeth = "stringer")}
-% \textcolor{KPMG_blue}{ar$evalResults$Over$`Upper confidence bound`}
-% \textcolor{KPMG_light_blue}{[1] 439009.3}
-% \textcolor{KPMG_blue}{ar <- evaluate(ar, av = av3, evalMeth = "cell")}
-% \textcolor{KPMG_blue}{ar$evalResults$Over$`Upper confidence bound`}
-% \textcolor{KPMG_light_blue}{[1] 378358.6}
-% \end{Verbatim}
-% \index[FSaudit]{\ttblue{evaluate}}
-
-% In addition to the difference between the two evaluation methods, we also see that the distribution of total tainting affects the evaluation. This is because, as the number of errors increases, taintings are applied to lower PGW factors. In addition, the cell method is more lenient toward lower taintings, as previously noted.
-
-% \end{exercise}
-
-% \begin{exercise}
-% \label{ex:increasing expected error}
-
-% \textbf{Increasing the expected error}
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{KPMG_blue}{ar <- size(ar, cl = 0.95, pm = 450000, ee = 300000)}
-% \textcolor{KPMG_blue}{ar$n}
-% \textcolor{KPMG_light_blue}{[1] 746}
-% \end{Verbatim}
-% \index[FSaudit]{\ttblue{size}}
-
-% \end{exercise}
 
 
 

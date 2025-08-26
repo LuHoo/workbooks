@@ -1,9 +1,11 @@
+\subsection{Case: Valuation of inventories}
+
 \begin{exercise}
 \label{ex:inventoryData}
 
 \textbf{The \ttblue{inventoryData} file}
 
-In this Chapter we will work with the \ttblue{inventoryData}\marginnote{Try the command \ttblue{?inventoryData}. It produces detail information of the file and the variables contained therein.} data file, that serves as the sample frame for the \emph{Case: Valuation of inventories}. The data file is included with the \ttblue{FSaudit} package. The data file indicates for each of the 3,500 elements in the inventories population its \ttblue{id}, a sequential number from 1 to 3,500, the book value $x$ is \ttblue{bv}, and we have added an audit value $y =$ \ttblue{av} to enable running simulations on the file to compare different sampling strategies.
+In this Chapter we will work with the \ttblue{inventoryData}\footnote{Try the command \ttblue{?inventoryData}. It produces detail information of the file and the variables contained therein.} data file, that serves as the sample frame for the \emph{Case: Valuation of inventories}. The data file is included with the \ttblue{FSaudit} package. The data file indicates for each of the 3,500 elements in the inventories population its \ttblue{id}, a sequential number from 1 to 3,500, the book value $x$ is \ttblue{bv}, and we have added an audit value $y =$ \ttblue{av} to enable running simulations on the file to compare different sampling strategies.
 
 Details of the data file can be obtained using base \ttblue{R} functionality.
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -25,6 +27,8 @@ Details of the data file can be obtained using base \ttblue{R} functionality.
 \end{Verbatim}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:mpu_estimator}}
 
 \begin{exercise}
 \label{ex:working_with_objects}
@@ -141,6 +145,8 @@ In this call, the number in brackets refer to the 4th and 5th row of the \ttblue
 
 \end{exercise}
 
+\subsection{Section \ref{sec:regression_estimator}}
+
 \begin{exercise}
 \label{ex:regression_estimator}
 
@@ -167,6 +173,8 @@ The prediction interval is determined by:
 
 \end{exercise}
 
+\subsection{Section \ref{sec:difference_estimator}}
+
 \begin{exercise}
 \label{ex:difference_estimator}
 
@@ -191,8 +199,10 @@ The results for the difference estimator are as follows.
 
 \end{exercise}
 
+\subsection{Section \ref{sec:ratio_estimator}}
+
 \begin{exercise}
-\label{ex:ex:ratio_estimator}
+\label{ex:ratio_estimator}
 
 \textbf{The Ratio Estimator}
 
@@ -221,6 +231,8 @@ An overview of all estimates is given by
 \end{Verbatim}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:using_cvs_with_sporadic_errors}}
 
 \begin{exercise}
 \label{ex:sporadic}
@@ -281,6 +293,8 @@ The effective degrees of freedom is $m - 1$. This explains the $t$ value used.
 \end{Verbatim}
 
 \end{exercise}
+
+\subsection{Section \ref{sec:stratification}}
 
 \begin{exercise}
 \label{ex:stratification_equal}
@@ -373,6 +387,8 @@ Select the sample.
 \textcolor{KPMG_light_blue}{337   536  207.02     1}
 \end{Verbatim}
 \index[FSaudit]{\ttblue{select}}
+
+\subsection{Section \ref{sec:evaluation_of_a_stratified_sample}}
 
 Obtain the audit values and evaluate the sample.
 
