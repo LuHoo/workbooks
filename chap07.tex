@@ -10,7 +10,7 @@ Niels Bohr (1885-1962)
 
 Analytical procedures play a crucial role in obtaining substantive audit evidence, as outlined in the preceding chapter on auditing standards. 
 These procedures are generally categorized into two methodological classes: regression and classification. 
-The key distinction lies in the nature of the target variable—continuous for regression (e.g., monetary amounts) and categorical for classification (e.g., binary outcomes or class membership).
+The key distinction lies in the nature of the target variable, continuous for regression (e.g., monetary amounts) and categorical for classification (e.g., binary outcomes or class membership).
 
 This chapter focuses on regression analysis, beginning with the fundamentals of simple linear regression. 
 In this context, we examine the relationship between a single independent variable and a continuous dependent variable, assuming a linear functional form. 
@@ -18,7 +18,7 @@ Where linearity is untenable, appropriate transformations of variables are propo
 
 Following the discussion on simple regression, we extend our analysis to multiple regression, incorporating several independent variables to model more complex relationships and improve explanatory power.
 
-Regression-based analytical procedures are used to evaluate financial data by identifying unusual or unexpected items—those that deviate significantly from predicted values based on historical patterns or relationships. 
+Regression-based analytical procedures are used to evaluate financial data by identifying unusual or unexpected items, those that deviate significantly from predicted values based on historical patterns or relationships. 
 Such anomalies may warrant further investigation to determine their nature and cause. 
 In the absence of notable deviations, auditors assess the overall fit of the model and the precision of its predictions to establish the level of assurance provided, thereby forming a basis for concluding on the reasonableness of the financial data.
 
@@ -208,7 +208,7 @@ At the end of this chapter you will be able to
 % - **Understand**: 
 \item describe\marginnote{understand} how assurance quantifies the probability of correctly concluding that the account is not misstated.
 % - **Apply**: 
-\item calculate\marginnote{apply} assurance levels based on prediction intervals and performance materiality.
+\item calculate\marginnote{apply} assurance levels based on prediction intervals and (performance) materiality.
 % - **Analyze**: 
 \item examine\marginnote{analyze} how assurance levels change with different significance levels and data variability.
 % - **Evaluate**: 
@@ -535,7 +535,7 @@ The next step in our analysis is to summarize and visualize the data. This provi
 
 Figure \ref{fig:H7_Histograms} shows the \hlblue{histograms}\index{histogram} of the continuous data in the US SteamCo estimation set. 
 
-\begin{figure}[htbp]
+\begin{figure}[thbp]
   \includegraphics[width=\columnwidth]{H7_Histograms.pdf}
   \caption{Histograms of US SteamCo data.}
   \label{fig:H7_Histograms}
@@ -748,7 +748,7 @@ Table \ref{tab:overview_models} provides an overview of the different models use
 First, we focus on the linear relationship between revenue and production. Figure \ref{fig:H7_Enhanced_scatterplot} shows that there is a positive (increasing) relationship: as production increases, so does revenue. 
 
 \begin{figure}[htb]
-  \includegraphics[width=\columnwidth]{H7_enhanced_scatter_plot2.pdf}
+  \includegraphics[width=\columnwidth]{H7_enhanced_scatterplot2.pdf}
   \caption{Enhanced scatterplot of the data in the estimation set of US SteamCo.}
   \label{fig:H7_Enhanced_scatterplot}
 \end{figure}
@@ -1044,33 +1044,6 @@ Transforming variables in linear regression serves several key purposes, each ai
 
 Transformations offer a practical solution to address these issues. They can adjust the variables to meet the assumptions required for linear regression, ensuring the model is suitable for robust analysis. In Section \ref{sec:testing_model_assumptions}, these assumptions are systematically tested, and the role of transformations in satisfying them is evaluated. Below, we outline the primary purposes of transforming variables in linear regression. Each purpose aligns with specific model assumptions and aims to improve model reliability and interpretability.
 
-Table \ref{tab:list_of_common_transformation_methods} summarizes commonly used transformations.
-
-\begin{sidewaystable}[htbp]
-\begin{tabularx}{\textheight}{X Y Y Y}
-\toprule
-\parbox[t]{3 cm}{Method} &
-Transform &
-Regression equation &
-Predicted value ($(\hat{y}$)  \\
-
-\midrule
-
-Standard linear regression & -- & $y = b_0 + b_1x$ & $\hat{y} = b_0 + b_1x$ \\
-Exponential & log(y) & $log(y) = b_0 + b_1x$ & $\hat{y} = 10^{b_0 + b_1x}$ \\
-Quadratic & sqrt(y) & $\sqrt{y} = b_0 + b_1x$ & $\hat{y} = (b_0 + b_1x)^2$ \\
-Inverse & 1/y & $1/y = b_0 + b_1x$ & $\hat{y} = 1 / (b_0 + b_1x)$ \\
-Logarithmic & log(x) & $y = b_0 + b_1log(x)$ & $\hat{y} = b_0 + b_1log(x)$ \\
-Power & log(y), log(x) & $log(y) = b_0 + b_1log(x)$ & $\hat{y} = 10^{b_0} \cdot x^{b_1}$ \\
-
-\bottomrule
-\end{tabularx}
-\caption{List of common transformation methods}
-\label{tab:list_of_common_transformation_methods}
-\end{sidewaystable}
-
-
-
 \bigskip
 Both the dependent variable $y$ and independent variables $x_1 \ldots x_k$ can be transformed. The transformation of the dependent variable $y$ is referred to as the \hlblue{Box-Cox transformation}\index{Box-Cox transformation}\index{transformation!Box-Cox}, a mathematical technique using parameter lambda ($\lambda$), which can take different values to achieve various transformations. The general formula for the Box-Cox transformation is:
 
@@ -1100,8 +1073,33 @@ The interpretation of some values of $\lambda$ is as follows.
   \label{fig:H7_exponential_function_pos}
 \end{figure}
 
-% Choosing an appropriate $\lambda$ involves identifying the transformation that best stabilizes the variance, normalizes the distribution, and achieves linearity for the specific dataset. One common approach is to search for the value of $\lambda$ that maximizes the likelihood function of the transformed data.
+\bigskip
+Table \ref{tab:list_of_common_transformation_methods} on page \pageref{tab:list_of_common_transformation_methods} summarizes commonly used transformations.
 
+\begin{sidewaystable}[htbp]
+\begin{tabularx}{\textheight}{X Y Y Y}
+\toprule
+\parbox[t]{3 cm}{Method} &
+Transform &
+Regression equation &
+Predicted value ($(\hat{y}$)  \\
+
+\midrule
+
+Standard linear regression & -- & $y = b_0 + b_1x$ & $\hat{y} = b_0 + b_1x$ \\
+Exponential & log(y) & $log(y) = b_0 + b_1x$ & $\hat{y} = 10^{b_0 + b_1x}$ \\
+Quadratic & sqrt(y) & $\sqrt{y} = b_0 + b_1x$ & $\hat{y} = (b_0 + b_1x)^2$ \\
+Inverse & 1/y & $1/y = b_0 + b_1x$ & $\hat{y} = 1 / (b_0 + b_1x)$ \\
+Logarithmic & log(x) & $y = b_0 + b_1log(x)$ & $\hat{y} = b_0 + b_1log(x)$ \\
+Power & log(y), log(x) & $log(y) = b_0 + b_1log(x)$ & $\hat{y} = 10^{b_0} \cdot x^{b_1}$ \\
+
+\bottomrule
+\end{tabularx}
+\caption{List of common transformation methods}
+\label{tab:list_of_common_transformation_methods}
+\end{sidewaystable}
+
+\bigskip
 Choosing an appropriate $\lambda$ involves finding the transformation that best stabilizes the variance, normalizes the distribution, and achieves linearity for the specific dataset. This process typically requires maximizing the likelihood function of the transformed data, which can be accomplished using computer software such as \ttblue{R}. For instance, \ttblue{R} provides functions like \ttblue{boxcox} from the \ttblue{MASS} package, which automates the estimation of the optimal $\lambda$ value based on the given data and regression model. These tools simplify the search for the $\lambda$ that optimizes the model's fit, ensuring the process is efficient and user-friendly.
 
 The Box-Cox transformation assumes that the data values are positive. If the data contain zeros or negative values, alternative transformations like the \hlblue{Yeo-Johnson transformation}\index{Yeo-Johnson transformation} can be used, which can accommodate a wider range of data distributions.
@@ -1435,7 +1433,7 @@ heatDD : summer     &   -12,777 &    19,331 & -0.6610 & 0.51404 \\
 
 Multicollinearity is a phenomenon in linear regression models in which independent variables are highly correlated with each other, leading to unstable and unreliable results. This can be particularly problematic when interaction terms are present, as they tend to increase the correlation between variables.
 
-Multicollinearity should be checked using variance inflation factor (VIF) calculations for each predictor. This factor quantifies how much the variance of the estimated coefficient is inflated due to multicollinearity with other predictors. For a predictor $x_j$, VIF is calculated as:
+Multicollinearity should be checked using \hlblue{Variance Inflation Factor}\index{Variance Inflation Factor} (VIF) calculations for each predictor. This factor quantifies how much the variance of the estimated coefficient is inflated due to multicollinearity with other predictors. For a predictor $x_j$, VIF is calculated as:
 
 \begin{equation}
   VIF(x_j) = \frac{1}{1 - r_j^2}
@@ -1543,9 +1541,10 @@ Total & Total (TSS) & $\sum{(y_i - \bar{y})^2}$ & $n - 1$ \\
 \caption{Decomposition of total variation into explained variation and unexplained variation, with the relavant degrees of freedom.}
 \label{tab:anova_decomposition}
 \end{table}
-Note that $s^2_y = TSS/(n-1)$, and that therefore $TSS = s^2_y (n - 1)$
 
-\bigskip
+\newpage
+Note that $s^2_y = TSS/(n-1)$, and that therefore $TSS = s^2_y (n - 1)$.
+
 We can now try to make statements about the quality of the relationship. One way of doing this is by means of the correlation between $x$ and $y$, expressed in the \hlblue{correlation coefficient}\index{correlation coefficient}, that we introduced in Equation \ref{eq:correlation}
 
 \begin{equation*}
@@ -1566,7 +1565,7 @@ In the context of regression analysis, this quantity has a special interpretatio
 The coefficient of determination can therefore also be expressed as the ratio between explained and total variation of the dependent variable $y$
 
 \begin{equation}
-  r^2 = \frac{SSR}{TSS} 
+  r^2 = \frac{\text{SSR}}{\text{TSS}} 
   % = \frac{\sum{(\hat{y}_i - \bar{y})^2}}{\sum{(y_i - \bar{y})^2}}
 \end{equation}
 
@@ -1610,7 +1609,7 @@ The analysis shows that the sum of squares of the regression is $3.7804 \cdot 10
 The variances are given by the mean squares, which are calculated by dividing the sum of the squares by the respective number of degrees of freedom.
 
 \begin{equation}
-  MS = \frac{SS}{df}
+  MS = \frac{\text{SS}}{\text{df}}
 \end{equation}
 
 Thus, $MSR = SSR / df_R = 3.7804 \cdot 10^{14} / 1 = 3.7804 \cdot 10^{14}$, and $MSE = SSE / df_E = 5.7503 \cdot 10^{14} / 34 = 1.6913  \cdot 10^{13}$.
@@ -1624,7 +1623,7 @@ The coefficient of determination for \ttblue{mod.0} is then
 This result is similar to that reported in the brief summary of the model. We find that \ttblue{mod.0} explains 39.7\% of the revenue variation. Similarly, the \hlblue{residual standard deviation}\index{residual standard deviation} in the model's summary of 4,112,487 can be derived from the ANOVA table, which is the square root of the mean square of the residuals.
 
 \begin{equation}
-  s_e = \sqrt{\frac{SSE}{n-k-1}} = \sqrt{\frac{5.7503 \cdot 10^{14}}{34}} = 4,112,487
+  \text{MSE} = s_e = \sqrt{\frac{\text{SSE}}{n-k-1}} = \sqrt{\frac{5.7503 \cdot 10^{14}}{34}} = 4,112,487
 \end{equation}
 
 Expanding \ttblue{mod.0} by adding the independent variables \ttblue{coolDD} and \ttblue{heatDD}, we get \ttblue{mod.1}. Its analysis of variance is summarized in Table \ref{tab:anova_mod1}.
@@ -1662,7 +1661,7 @@ Total      & 9.5307e+14 & 35 &            \\
 For \ttblue{mod.1}, the sum of squares regression, $SSR$, is the sum of the sum of squares of the three independent variables.
 
 \begin{equation*}
-  r^2 = \frac{SSR}{TSS} = \frac{3.7804 * 10^{14} + 3.5110 * 10^{14} + 9.8390 * 10^{13}}{9.5307 * 10^{14}} = 0.8683
+  r^2 = \frac{\text{SSR}}{\text{TSS}} = \frac{3.7804 * 10^{14} + 3.5110 * 10^{14} + 9.8390 * 10^{13}}{9.5307 * 10^{14}} = 0.8683
 \end{equation*}
 
 Note the increase in explained variation by adding the two additional variables to the model, \ttblue{coolDD} and \ttblue{heatDD}. Explained variance has increased from 39.67\% for \ttblue{mod.0} to 86.83\% for \ttblue{mod.1}.
@@ -1736,10 +1735,10 @@ mod.3          & 0.9329 & 0.9161 & 1134.239 & 1148.490 \\
 The assessment of regression model precision relies not only on overall goodness-of-fit statistics such as multiple $r^2$ and adjusted $r^2$, but also on measures of individual predictor strength and the overall standard error of the estimate, as emphasized in AAG A.62–B.04. In this context, we evaluated the five competing models listed in Table \ref{tab:comparison_mod_0_2}.
 
 While \ttblue{mod.0} serves as a basic benchmark with an adjusted $r^2$ of 0.3789 and a high BIC of 1207.383, the other four models all achieve substantial improvements in explanatory power (adjusted $r^2$ values above 0.85). 
-Among these, \ttblue{model.3} has the lowest BIC (1148.490), suggesting the best balance between model complexity and goodness-of-fit. This makes \ttblue{mod.3} the leading candidate from a statistical perspective. Although \ttblue{mod.2} also delivers a high adjusted $r^2$ (0.8963), its BIC is slightly higher than that of \ttblue{mod.3}. The only difference between these two models is that, in \ttblue{mod.3}, an outlier was winsorized, which led to both a higher adjusted $r^2$ and a lower BIC. This suggests that the improved performance of \ttblue{mod.3} is primarily due to the treatment of the outlier rather than an increase in model complexity. Similarly, \ttblue{model\_forward} and \ttblue{mod.1} improve substantially over \ttblue{mod.0}, but are outperformed by \ttblue{mod.3} in both fit and parsimony.
+Among these, \ttblue{mod.3} has the lowest BIC (1148.490), suggesting the best balance between model complexity and goodness-of-fit. This makes \ttblue{mod.3} the leading candidate from a statistical perspective. Although \ttblue{mod.2} also delivers a high adjusted $r^2$ (0.8963), its BIC is slightly higher than that of \ttblue{mod.3}. The only difference between these two models is that, in \ttblue{mod.3}, an outlier was winsorized, which led to both a higher adjusted $r^2$ and a lower BIC. This suggests that the improved performance of \ttblue{mod.3} is primarily due to the treatment of the outlier rather than an increase in model complexity. Similarly, \ttblue{model\_forward} and \ttblue{mod.1} improve substantially over \ttblue{mod.0}, but are outperformed by \ttblue{mod.3} in both fit and parsimony.
 
 Following the AAG guidance (AAG A.63), we also consider standard errors and $t$ statistics from the individual model summaries (for example, Table \ref{tab:summary_mod_3}). 
-In \ttblue{mod.3}, for instance, most predictors have statistically significant $t$ statistics above 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. 
+In \ttblue{mod.3}, for instance, most predictors have statistically significant $t$ statistics whose absolute values exceed 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. 
 This supports confidence in the reliability of the regression coefficients. 
 However, some variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04). 
 Although \ttblue{summer} also has a low $t$ value, caution is advised before removing it, as it interacts with both \ttblue{production} and \ttblue{coolDD}, potentially influencing their effects.
@@ -1861,8 +1860,9 @@ $H_1 : $ The residuals $\epsilon$ do not have constant variance.
 \begin{equation}
   e_i^2 = \alpha_0 + \alpha_1x_{1, i} + \alpha_2x_{2, i} + \ldots + \alpha_kx_{k, i} + u_i
 \end{equation}
-where $e_i^2$ is the squared residual of observation $i$, and $x_{1, i}, x_{2, i}, \ldots x_{k, i}$ are the values of the $k$ independent variables for observation $i$. If any of the $k$ independent variables is responsible for non-constant variance, its related coefficient $\alpha$ will be significant, and $r^2$ will increase.
+where $e_i^2$ is the squared residual of observation $i$, and $x_{1, i}, x_{2, i}, \ldots x_{k, i}$ are the values of the $k$ independent variables for observation $i$. 
 
+If any of the $k$ independent variables is responsible for non-constant variance, its related coefficient $\alpha$ will be significant, and $r^2$ will increase.
 The Breusch-Pagan test statistic is then given by
 
 \begin{equation}
@@ -1888,7 +1888,7 @@ In cases where the null hypothesis is rejected, and the residuals show non-const
 \subsection{Absence of autocorrelation} % (fold)
 \label{sub:absence_of_autocorrelation}
 
-Finally, in time-series applications of linear regression, it is assumed that the disturbance term $\epsilon_t$ in period $t$ is not correlated with the disturbance terms from any preceding periods. Violations of this assumption —- known as autocorrelation -— can arise, for example, due to seasonal effects. In monthly data, this might manifest as $\epsilon_t$ being correlated with $\epsilon_{t-12}$, reflecting a yearly seasonal cycle.
+Finally, in time-series applications of linear regression, it is assumed that the disturbance term $\epsilon_t$ in period $t$ is not correlated with the disturbance terms from any preceding periods. Violations of this assumption, known as autocorrelation, can arise, for example, due to seasonal effects. In monthly data, this might manifest as $\epsilon_t$ being correlated with $\epsilon_{t-12}$, reflecting a yearly seasonal cycle.
 
 To detect such autocorrelation, we use a \ttblue{pacf} plot. Figure \ref{fig:H7_pacf} shows an example for the model \ttblue{mod.3}.
 The abbreviation \hlblue{PACF}\index{PACF} stands for the \textbf{P}artial \textbf{A}uto\textbf{C}orrelation \textbf{F}unction.
@@ -1904,9 +1904,10 @@ In the PACF plot, each vertical bar corresponds to the partial autocorrelation a
 The horizontal dashed lines indicate approximate 95\% confidence bounds. 
 If a bar extends beyond these bounds, the partial autocorrelation at that lag is considered statistically significant.
 
+\bigskip
 For example, in Figure \ref{fig:H7_pacf}, we observe that only the bar at lag 1 exceeds the critical boundary. 
 This suggests that the residuals exhibit first-order autocorrelation (AR(1)), with no strong evidence of correlation at higher lags. 
-If multiple bars exceeded the bounds—say, at lags 1 and 2, it could point to an AR(2) process. If all bars fall within the bounds, we conclude that the residuals are not significantly autocorrelated.
+If multiple bars exceeded the bounds, say, at lags 1 and 2, it could point to an AR(2) process. If all bars fall within the bounds, we conclude that the residuals are not significantly autocorrelated.
 
 \begin{figure}[htbp]
   \includegraphics[width=\columnwidth]{H7_pacf.pdf}
@@ -1956,6 +1957,7 @@ This approach can be effective for addressing first-order autocorrelation, but i
 
 A more principled solution is to apply \hlblue{Generalized Least Squares}\index{generalized least squares} (GLS), which adjusts the estimation procedure by explicitly modeling the covariance structure of the residuals. However, GLS is beyond the scope of this book.
 
+\bigskip
 Instead, a practical and widely used alternative is the \hlblue{Cochrane-Orcutt method}\index{Cochrane-Orcutt method}, designed specifically to correct for first-order autocorrelation (AR(1)). 
 This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
 The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
@@ -1968,6 +1970,7 @@ The transformed model under the Cochrane-Orcutt method is given by:
 
 where $\rho$ is the estimated autocorrelation coefficient, and $u_t$ is the new error term with no autocorrelation.
 
+\bigskip
 This formula shows how each variable is transformed by subtracting $\rho$ times its lagged value, effectively filtering out the AR(1) structure in the residuals. The resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and $t$ and $p$ values are summarized in Table \ref{tab:summary_mod_4}.
 
 \begin{table}[htbp]
@@ -2005,7 +2008,7 @@ The previously obtained model proves difficult to interpret, and more importantl
 We therefore seek to return to a simpler, more parsimonious specification, building on the approach used in Section~\ref{sub:model_selection}. 
 Additionally, we must account for the presence of an outlier in observation 22, which we address through winsorization. 
 Another limitation of the earlier stepwise model (\ttblue{model\_forward}) is that it did not consider the inclusion of the dummy variable \ttblue{summer}, which we now believe to be theoretically relevant. 
-To address these issues, we initiate a new stepwise model selection procedure -— this time based on the modified dataset USSteamCoEstim2 -— with the goal of identifying a model that is both statistically robust and more interpretable. 
+To address these issues, we initiate a new stepwise model selection procedure, this time based on the modified dataset USSteamCoEstim2, with the goal of identifying a model that is both statistically robust and more interpretable. 
 The resulting model will be referred to as \ttblue{mod.5}, and we work with this model for the remainder of this chapter.
 A summary of the coefficients of the resulting \ttblue{mod.5} is provided in Table \ref{tab:summary_mod_5}.
 
@@ -2188,7 +2191,7 @@ To measure the uncertainty around a expectation in regression, we use two types 
 \paragraph{Confidence Interval} This interval estimates the range where the average value of the dependent variable is expected to lie, given a certain value of the independent variable. It accounts for the uncertainty in estimating the coefficients of the model but does not account for the random variation around individual observations. 
 The confidence interval for a model with one independent variable is given by\footnote{The formula for confidence intervals for multiple linear regression models is more complicated and is best rendered using matrix algebra notation.}
 \begin{equation}
-y_* \pm t_{\alpha / 2} \cdot s_e \sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
+\hat{y}_* \pm t_{\alpha / 2} \cdot s_e \sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
 \end{equation}
 
 The confidence interval thus predicts the average value of $y$ for a given set of values of independent variables, based solely on the model's estimation uncertainty.
@@ -2202,7 +2205,7 @@ a 99\% confidence interval around this estimate is then
   16,414,429 \pm 2.728 \cdot 4,112,487 \sqrt{\frac{1}{36} + \frac{(606,400 - 471,663)^2}{35 \cdot 29,945,297,385}} =
 \end{equation*}
 \begin{equation*}
-16,414,429 \pm 2,382,839
+16,414,429 \pm 11,470,711
 \end{equation*}
 \paragraph{Prediction Interval} This interval gives the range in which an individual observation of $y$ is expected to fall, for a certain value of the independent variable. In addition to model uncertainty (accounted for by the confidence interval), the prediction interval includes random data variation, capturing the natural scatter of data around the regression line. The formula for the prediction interval is:
 \begin{equation}
@@ -2279,7 +2282,7 @@ For example, one notable deviation occurred in March, when the recorded revenue 
 Such cases illustrate real-world events that can impact financial outcomes even when an effective predictive model is in place. 
 
 With these monthly predictions established, the next critical step is to assess whether the cumulative revenue results for the year suggest a material misstatement. 
-This final assessment involves combining the 12 monthly expectations into a single yearly expectation and constructing the acceptable difference range, a 99\% prediction interval around it. 
+This final assessment involves combining the 12 monthly expectations into a single yearly expectation and constructing the \emph{hlblue}\index{Acceptable Difference Range}\index{Acceptable Difference Range}, a 99\% prediction interval around it. 
 This interval represents the range within which true revenue is expected to fall if the account is free of material misstatement, serving as the basis for our null hypothesis. 
 
 We then determine whether the recorded revenue falls within this range. 
@@ -2296,7 +2299,7 @@ These intervals are calculated independently, but because each prediction uses t
 In addition, the coefficients are fixed for all predictions and estimated from the same sample. 
 Therefore, any inaccuracies in the model parameters (such as systematic bias) affect all the predictions in the same manner.
 
-For cumulative predictions (e.g., predicting total revenue over 12 months), we can combine individual prediction intervals using the root-sum-of-squares formula:
+For cumulative predictions (e.g., predicting total revenue over 12 months), we can combine individual prediction intervals using the root-sum-of-squares formula. We first create the standard error of the combined prediction:
 
 \begin{equation}
 \label{eq:s_combined}
@@ -2382,7 +2385,7 @@ The non-central $t$~distribution under $H_1$ allows us to quantify the risk that
 A 99\% prediction interval corresponds to a significance level $\alpha = 0.01$. As explained in Section \ref{sub:acceptable_difference}, this choice reflects control for the efficiency risk.
 
 \paragraph{Step 7. Determine the critical region}
-The critical region or acceptable difference range is defined by the 99\% prediction interval bounds around the expected difference between the expectation of $y$ and its recorded value:
+The critical region or Acceptable Difference Range $(ADR)$ is defined by the 99\% prediction interval bounds around the expected difference between the expectation of $y$ and its recorded value:
 
 \begin{equation}
 \label{eq:acceptable_difference_range}
@@ -2390,6 +2393,7 @@ The critical region or acceptable difference range is defined by the 99\% predic
 \end{equation}
 where $t_{0.005}$ represents the critical value for a 99\% confidence level with $n-k-1$ degrees of freedom.
 
+\bigskip
 If the observed revenue lies outside this interval, we reject $H_0$, suggesting a potential material misstatement.
 
 \paragraph{Step 8. Compute the value of the test statistic from the sample}
@@ -2430,7 +2434,7 @@ AAG A.69 Once the stores have been identified, the auditor begins a further anal
 As highlighted in Step 9, the final conclusion of the hypothesis test hinges on whether the observed revenue total for the hold-out year falls inside or outside the critical region. 
 If the test statistic lies within this region, the recorded value is considered consistent with expectations and no further action is required. 
 However, if the test statistic falls outside the critical region, this does not immediately imply that a material misstatement has occurred. 
-Instead, it serves as a prompt for further examination—initiating the identification, investigation, and evaluation process described in Section \ref{sub:identification_investigation_and_evaluation}. 
+Instead, it serves as a prompt for further examination, initiating the identification, investigation, and evaluation process described in Section \ref{sub:identification_investigation_and_evaluation}. 
 This additional scrutiny helps determine whether the deviation reflects a genuine misstatement, a model limitation, or other contextual factors.
 
 When the hypothesis test does not lead to rejection of the null, a more detailed assessment of the evidence is required to determine whether the recorded amount can be considered free from material misstatement.
@@ -2455,14 +2459,15 @@ and let
 
 be the non-centrality parameter, where $M$ is the materiality threshold and $s_{comb}$ is the combined prediction standard error.
 
+\bigskip
 The distribution of $T$ under the alternative hypotheses reflects the expected behaviour of the test statistic if the recorded revenue deviates from the true value by more than $M$.
 
 It is crucial to understand that material overstatements and understatements are directional claims. 
 As such, they require directional tests:
-If we are evaluating the risk of a \emph{material overstatement}, we focus on the lower tail of the distribution—because the assumption is that the observed revenue should be significantly lower than expected if no overstatement occurred.
-If we are evaluating the risk of a \emph{material understatement}, we focus on the upper tail—because the assumption is that the observed revenue should be significantly higher than expected if no understatement occurred.
+If we are evaluating the risk of a \emph{material overstatement}, we focus on the lower tail of the distribution, because the assumption is that the observed revenue should be significantly lower than expected if no overstatement occurred.
+If we are evaluating the risk of a \emph{material understatement}, we focus on the upper tail, because the assumption is that the observed revenue should be significantly higher than expected if no understatement occurred.
 
-Using this framework, the assurance level is interpreted as the probability that a materially misstated value could fall within the acceptance region defined by the null hypothesis—thereby escaping detection.
+Using this framework, the assurance level is interpreted as the probability that a materially misstated value could fall within the acceptance region defined by the null hypothesis, thereby escaping detection.
 
 Let $t_{\alpha/2}$ be the critical value corresponding to the desired confidence level (e.g., $99\%$), such that the acceptance region is given by $[-t_{\alpha/2}, +t_{\alpha/2}]$.
 
@@ -3516,7 +3521,7 @@ After fitting the transformed model, we check if autocorrelation is reduced, by 
 
 \textbf{Constructing a refined model}
 
-When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base \ttblue{R} function \ttblue{step} enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference. 
+When a model includes interaction terms, it is important to respect the hierarchical structure, interaction terms should not be included without their corresponding main effects. The base \ttblue{R} function \ttblue{step} enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference. 
 On the winsorized historical data, we fit a new model using the \ttblue{backward} step procedure.
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -3638,7 +3643,7 @@ First, we set the values of the parameters. Play around with these to see the ef
 \textcolor{KPMG_blue}{x_extended <- seq(x_extended_min, x_extended_max, length.out = 100)}
 \end{Verbatim}
 
-We first calculate the true regression line, along with its confidence interval.
+We then calculate the true regression line, along with its confidence interval.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{# Create a data frame for the true line over the extended range}
@@ -3837,7 +3842,7 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 
 \end{exercise}
 
-\subsection{Section \ref{sec:auditor_interpretation}}
+\subsection{Section \ref{sec:auditor_response}}
 
 \begin{exercise}
 \label{ex:Combining_12_monthly_predictions}
