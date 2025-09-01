@@ -417,7 +417,7 @@ Calculate the minimum required sample size that allows you, at a significance le
 
 In the previous case study, the \emph{Case: European innovation subsidies}, we observed that the choice of the critical region had a dramatic effect on the sample size; increasing the critical region from $\{k | k = 0\}$ to $\{k | k \leq 1\}$ increased the sample size from $n = 299$ to $n = 473$. in \emph{Case: Accounts receivable circularization}, errors can be partial, and this has an effect on the evaluation, and therefore also on the sample size calculation.
 
-A sample size of $n = 145$ is then calculated using a \hlblue{performance materiality}\index{performance materiality}\index{materiality!performance} ($PM$) of 450,000, and the expected error of 100,000 as specified in the case study.
+A sample size of $n = 145$ is then calculated using a \hlblue{performance materiality}\index{performance materiality}\index{materiality!performance} ($M$)\nomenclature{$M$}{(performance) materiality} of 450,000, and the expected error of 100,000 as specified in the case study.
 
 The MUS sample size lies between the fixed attribute sample sizes of 141 (for $k = 1$) and 187 (for $k = 2$).\footnote{The calculation of the sample size is explained on page~\pageref{par:sample_size_calculation}} Before we can explain how this sample size is calculated, we first need to turn to the evaluation of the sample. 
 
@@ -464,7 +464,7 @@ Most selection methods allow for the determination of selected monetary units wi
 
 \paragraph{Stringer Bound} This evaluation method is named after its inventor, Kenneth W. Stringer.\index{Stringer Bound}. 
 It uses all available information of the sampled elements to calculate an \hlblue{upper confidence bound}\index{confidence bound}\index{bound!confidence} of the error amount. 
-The null hypothesis is rejected if this upper bound is less than performance materiality $PM$.
+The null hypothesis is rejected if this upper bound is less than performance materiality $M$.
 
 Let us assume that three errors were found, as summarized in Table~\ref{tab:three_errors}.
 
@@ -700,7 +700,7 @@ s_{t} = \sqrt{\frac{\sum{t_j^2} - (\sum{t_j})^2/n}{n - 1}}
 Now that we know how an MUS sample is evaluated, we can calculate the required sample size given a certain expected error. Previously, in attribute sampling, we chose a certain critical region and the sample size was determined based on the number of errors that could be tolerated in the sample. In MUS, the errors are integer numbers or fractions. As a result, sample sizes do not increase in large steps as we increase the critical region, but for every sample size chosen we can tolerate a number of 100\% errors plus an additional partial error.
 
 \bigskip
-We turn to the parameters from the \emph{Case: Accounts receivable circularization}. The total book value of the population $X =$ 13,500,000, performance materiality $PM =$ 450,000, and we expect a total misstatement in the population of 100,000. 
+We turn to the parameters from the \emph{Case: Accounts receivable circularization}. The total book value of the population $X =$ 13,500,000, performance materiality $M = 450,000$, and we expect a total misstatement in the population of 100,000. 
 
 With only 100\% errors, Table \ref{tab:attribute_sample_sizes} shows the sample sizes $n_k$, sampling intervals $SI_k$ and expected errors $k \cdot SI_k$ for the various critical regions. Sample size $n_k$ is calculated using Equation \ref{eq:sample_size _calculation_att}. 
 
