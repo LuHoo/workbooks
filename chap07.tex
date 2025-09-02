@@ -1702,7 +1702,10 @@ Similar to the adjusted $r^2$, both the AIC and BIC penalize models for the incl
 The penalty for adding more independent variables is linear with $k$ for the AIC, and proportional to $k \cdot \ln(n)$ for the BIC, where $k$ is the number of predictors and $n$ is the sample size. 
 Thus, while a lower Sum of Squared Errors (SSE) reduces the AIC and BIC, adding too many predictors can increase them due to the penalty term. 
 This ensures that the model balances goodness-of-fit with \hlblue{parsimony}\index{parsimony}, selecting the simplest model that adequately explains or predicts the data, avoiding unnecessary complexity that does not significantly improve model performance. 
-Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models discussed so far in terms of their multiple $r^2$, adjusted $r^2$, and BIC\footnote{The \ttblue{BIC()} function in \ttblue{R} computes the Bayesian Information Criterion using the general formula $\text{BIC} = -2 \ln \hat{L} + k \ln n$, where $\ln \hat{L} = -\frac{n}{2} \left[\ln (2 \pi) + 1 + \ln (\frac{SSE}{n}) \right]$ is the log maximized likelihood of the fitted model, $k$ is the number of estimated parameters, and $n$ is the sample size. In the special case of a linear model with normally distributed errors, this simplifies - up to a constant - to $\text{BIC} = n \ln(\text{SSE}/n) + k \ln n$, where $SSE$ is the sum of squared errors. \ttblue{R} includes all constant terms in its calculation, so BIC values may differ by a constant shift even when formulas appear algebraically similar.}.
+For the models considered in this chapter, the difference between using AIC and BIC is not substantial, and both criteria lead to similar conclusions. In practice, researchers typically prefer AIC when the goal is better predictive accuracy, whereas BIC is favored when identifying the most plausible model structure from the data.
+
+Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models discussed so far in terms of their multiple $r^2$, adjusted $r^2$, and BIC.
+
 
 \begin{table}[thbp]
 
@@ -3295,22 +3298,9 @@ We compare the performance of models with four different statistics, the Multipl
 \textcolor{KPMG_light_blue}{[1] 1134.239}
 \end{Verbatim}
 
-The AIC value of the \ttblue{model\_backward} does not quite match the output of the \ttblue{step} function. This can be explained as follows.
+The AIC and BIC values for \ttblue{model\_backward} may differ from those produced by R’s \ttblue{step} function. This is because \ttblue{AIC()} and \ttblue{BIC()} in \ttblue{R} compute the criteria using the full formulas $\text{AIC} = -2 \ln \hat{L} + 2k$ and $\text{BIC} = -2 \ln \hat{L} + k \ln n$, where $\ln \hat{L}$ is the maximized log-likelihood and $k$ is the number of estimated parameters. For linear regression with normally distributed errors, $\ln \hat{L} = -\frac{n}{2} \left[\ln (2\pi) + 1 + \ln \left(\frac{\text{SSE}}{n}\right) \right]$, which simplifies the criteria (up to a constant) to $\text{AIC} = n \ln(\text{SSE}/n) + 2k$ and $\text{BIC} = n \ln(\text{SSE}/n) + k \ln n$, where $SSE$ is the sum of squared errors.
 
-The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
-$\text{AIC} = -2 \ln \hat{L} + 2k$,
-where $\ln \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters. 
-
-For a linear regression model with normally distributed errors, this log-likelihood takes the form
-$\ln \hat{L} = -\frac{n}{2} \left[ \ln(2\pi) + 1 + \ln\left(\frac{\text{SSE}}{n}\right) \right]$,
-leading to the AIC expression
-$\text{AIC} = n \left[\ln(2\pi) + 1 + \ln\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
-In contrast, the \ttblue{step} function in R reports AIC values based on a deviance-like approximation, that omits constant terms unrelated to model comparison:
-$\text{AIC}_{\text{step}} = n \ln\left(\frac{\text{SSE}}{n}\right) + 2k$.
-The difference between the two expressions is a constant shift of
-$n \cdot (\ln(2\pi) + 1) + 2$.
-The term $n \cdot (\ln(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors. 
-The additional +2 arises because R’s \ttblue{AIC} function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression. 
+However, the \ttblue{step} function omits constant terms that do not affect model comparison, reporting AIC as $n \ln(\text{SSE}/n) + 2k$. The difference between the full and simplified expressions is a constant shift of $n (\ln(2\pi) + 1) + 2$. Here, $n (\ln(2\pi) + 1)$ arises from assumptions about normal errors and sample size, while the extra $+2$ is due to R’s \ttblue{AIC} counting the estimated variance parameter $\sigma^2$ as an additional parameter, increasing the penalty accordingly. As a result, AIC and BIC values in R may differ by a constant even when the underlying formulas appear similar.
 
 Similarly, the BIC values are obtained as follows.
 
