@@ -336,11 +336,42 @@ For the \emph{Case: Inventories}, we choose simple random sampling to select ele
 \subsection{Selection with probability proportional to size} % (fold)
 \label{sub:selection_with_probability_proportional_to_size}
 
-\begin{figure}
-\includegraphics[width=\textwidth]{../_PNG_files/H5_pps_selection_population.png}
+\begin{figure}[bthp]
+
+\begin{center}
+
+\begin{tikzpicture}[scale=1.1]
+% Define the custom color
+  \definecolor{myblue}{RGB}{0,51,141}
+  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (0,0) rectangle (1.75,0.8);
+  \node at (0.875, 0.4) {A};
+  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (1.75,0) rectangle (2.5,0.8);
+  \node at (2.125, 0.4) {B};
+  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (2.5,0) rectangle (3.5,0.8);
+  \node at (3, 0.4) {C};
+  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (3.5,0) rectangle (5.75,0.8);
+  \node at (4.625, 0.4) {D};
+  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (5.75,0) rectangle (6,0.8);
+  \node at (5.875, 0.4) {F};
+  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (6,0) rectangle (8,0.8);
+  \node at (7, 0.4) {G};
+  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (8,0) rectangle (8.5,0.8);
+  \node at (8.25, 0.4) {H};
+  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (8.5,0) rectangle (10,0.8);
+  \node at (9.25, 0.4) {I};
+  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (10,0) rectangle (11.25,0.8);
+  \node at (10.625, 0.4) {J};
+ 
+\end{tikzpicture}
 \caption{Visual representation of a population with ten elements and a total book value of 45. Note that element \emph{E} has a book value of 0 and therefore has an inclusion probability of 0}
 \label{fig:H5_pps_selection_population}
+
+\end{center}
 \end{figure}
+
+% \begin{figure}
+% \includegraphics[width=\textwidth]{../_PNG_files/H5_pps_selection_population.png}
+% \end{figure}
 
 Figure \ref{fig:H5_pps_selection_population} shows a stylized population with ten elements and a total book value of 45. This is used to show how the selection methods in this section work. The sample size $n =$ 5. The population is summarized in Table \ref{tab:example_pop_2}. Note that the population contains element E with a value $x_E = 0$. Probability proportional to size selection methods assign zero inclusion probability to this element, in other words, there is no possibility of selecting it. When applying these methods, we should be aware of this fact. If the population contains elements with a zero book value, these elements may require special care.
 
