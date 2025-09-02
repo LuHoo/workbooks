@@ -440,20 +440,34 @@ If the elements can only be correct or incorrect, both monetary units are evalua
 
 What happens if the logical unit is partially correct and partially incorrect? For example, if its book value is 7 and its audit value is 5, then we can regard the first five monetary units to be correct and the last two monetary units to be incorrect. Therefore, the first selected monetary unit, connected to random number 2, is evaluated as a correct unit, and the second one, connected to random number 7, is treated as an error.
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Work in Progress. 
 
-Plaatje kan mooier.
+\begin{figure}[bthp]
 
-\end{mdframed}
+\begin{center}
 
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=1\textwidth]{Partially_correct_item.png}
+\begin{tikzpicture}[scale=1.13]
+% Define the custom color
+  \definecolor{myblue}{RGB}{0,51,141}
+  \filldraw[fill=KPMG_blue, fill opacity=0.1, draw=black] (0,0) rectangle (1.6,0.8);
+  \node at (0.8, 0.4) {$\checkmark$};
+  \filldraw[fill=KPMG_blue, fill opacity=0.6, draw=black] (1.6,0) rectangle (3.2,0.8);
+  \node at (2.4, 0.4) {$\checkmark$};
+  \filldraw[fill=KPMG_blue, fill opacity=0.1, draw=black] (3.2,0) rectangle (4.8,0.8);
+  \node at (4, 0.4) {$\checkmark$};
+  \filldraw[fill=KPMG_blue, fill opacity=0.1, draw=black] (4.8,0) rectangle (6.4,0.8);
+  \node at (5.6, 0.4) {$\checkmark$};
+  \filldraw[fill=KPMG_blue, fill opacity=0.1, draw=black] (6.4,0) rectangle (8,0.8);
+  \node at (7.2, 0.4) {$\checkmark$};
+  \filldraw[fill=KPMG_light_pink, fill opacity=0.1, draw=black] (8,0) rectangle (9.6,0.8);
+  \node at (8.8, 0.4) {$\times$};
+  \filldraw[fill=KPMG_light_pink, fill opacity=0.6, draw=black] (9.6,0) rectangle (11.2,0.8);
+  \node at (10.4, 0.4) {$\times$};
+   
+\end{tikzpicture}
 \caption{Element A contains 5 correct  and 2 incorrect monetary units.}
 \label{fig:Partially_correct_item}
+
+\end{center}
 \end{figure}
 
 This evaluation method is referred to as the \hlblue{all-or-nothing-approach}\index{all-or-nothing-approach}. 
