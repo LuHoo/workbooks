@@ -284,7 +284,7 @@ The scatter plot reveals a clear positive (ascending) relationship between produ
 \end{figure}
 
 
-We capture the relationship between the dependent variable $y$ and independent variable $x$ as follows:
+We capture the relationship between the dependent variable $y$\nomenclature{$y$}{dependent variable} and independent variable $x$\nomenclature{$x$}{independent variable} as follows:
 
 \begin{equation}
   y = \beta_0 + \beta_1x + \epsilon
@@ -292,7 +292,7 @@ We capture the relationship between the dependent variable $y$ and independent v
 \end{equation}
 
 Equation \ref{eq:simple_linear_regression_model} defines a \hlblue{simple linear regression model}\index{simple linear regression model}\index{regression model!simple linear}. 
-Variable $y$ on the left-hand side of the equation is the conditional mean of the variable under analysis, or the dependent variable. Variable $x$ on the right side represents the independent variable. The relationship between $y$ and $x$ is \hlblue{linear}\index{linear relationship}, meaning that a change of one unit in $x$ has an effect of $\beta_1$ on $y$, regardless of the number of units $x$. We call  $\beta_1$ the \hlblue{slope coefficient}\index{slope coefficient}\index{slope} in the relationship between $y$ and $x$. The \hlblue{intercept coefficient}\index{intercept coefficient}\index{intercept} $\beta_0$, sometimes referred to as the \hlblue{constant}\index{constant}, is required for mathematical purposes. The \hlblue{error}\index{error} or \hlblue{disturbance}\index{disturbance} term $\epsilon$ indicates that this is not an exact equality relationship.
+Variable $y$ on the left-hand side of the equation is the conditional mean of the variable under analysis, or the dependent variable. Variable $x$ on the right side represents the independent variable. The relationship between $y$ and $x$ is \hlblue{linear}\index{linear relationship}, meaning that a change of one unit in $x$ has an effect of $\beta_1$ on $y$, regardless of the number of units $x$. We call  $\beta_1$ the \hlblue{slope coefficient}\index{slope coefficient}\index{slope} in the relationship between $y$ and $x$. The \hlblue{intercept coefficient}\index{intercept coefficient}\index{intercept}, sometimes referred to as the \hlblue{constant}\index{constant}, is required for mathematical purposes. The \hlblue{error}\index{error} or \hlblue{disturbance}\index{disturbance} term $\epsilon$ \nomenclature{$\epsilon$}{error or disturbance term} indicates that this is not an exact equality relationship.
 
 Because the data in \textit{Case: US SteamCo} incorporate a time dimension, we refer to the regression analysis as a \hlblue{time-series analysis}\index{time-series analysis}. 
 In this case, additional analyses must be performed. Otherwise, the analysis is referred to as a \hlblue{cross-sectional analysis}\index{cross-sectional analysis}. 
@@ -455,7 +455,9 @@ The linearity assumption implies that the relationship between the dependent var
 \begin{equation*}
 y = \beta_0 + \beta_1x + \epsilon
 \end{equation*}
-where $\beta_0$ is the intercept coefficient, $\beta_1$ is the slope parameter, and $\epsilon$ represents the error or disturbance term.
+where $\beta_0$ is the intercept coefficient, $\beta_1$ is the slope coefficient, and $\epsilon$ represents the error or disturbance term.
+\nomenclature{$\beta_0$}{intercept coefficient}
+\nomenclature{$\beta_1$}{slope coefficient}
 
 This linearity ensures that the change in the dependent variable is directly proportional to the change in the independent variable, with a constant rate of change represented by the coefficient. 
 
@@ -675,7 +677,7 @@ By splitting the data this way, you ensure that the model is evaluated on entiti
 In situations where the entities are not comparable or not enough similar entities are available (e.g., unique real estate properties in a housing corporation), we need to adopt alternative approaches.
 
 For example, we can use cross-validation to assess the model’s accuracy, such as \hlblue{K-fold cross-validation}\index{K-fold cross-validation}. 
-In this technique, the dataset is split into $K$ equal parts. 
+In this technique, the dataset is split into $K$ equal parts.\nomenclature{$K$}{number of parts in K-fold cross-validation}
 The model is trained on $K-1$ parts and validated on the remaining part. 
 This process is repeated $K$ times with different parts as the hold-out set each time. 
 This method allows you to evaluate the model's performance without needing comparable entities.
@@ -779,15 +781,15 @@ We want to minimize this residual when estimating the coefficients from the samp
 \hspace*{1.2cm}\=\hspace*{0.4cm}\=\hspace*{0.2cm}\= \kill
 where \> $\hat{y}$ \> : \> estimate of the conditional mean $y$ of the dependent variable \\
       \> $x$     \> : \> value of the independent variable \\
-      \> $b_0$     \> : \> estimate of intercept \\
-      \> $b_1$     \> : \> estimate of slope
+      \> $b_0$     \> : \> estimated intercept \\
+      \> $b_1$     \> : \> estimated slope
 \end{tabbing}
 
 The coefficients are estimated such that the line best fits the data in the \hlblue{estimation period}\index{estimation period}. 
 
 The method of estimating the coefficients is referred to as \hlblue{Ordinary Least Squares}\index{ordinary least squares} or \hlblue{OLS}\index{OLS}. 
 In this method, the regression line is positioned between the points in the scatter plot such that the quadratic vertical distance between the line ($\hat{y}$) and each of the observations ($y_i$), aggregated over all observations, is minimized. 
-As a result of this minimization procedure, the regression line always passes through the point ($\bar{x}, \bar{y}$), where $\bar{x}$ and $\bar{y}$ are the means of the independent and dependent variables, respectively. 
+As a result of this minimization procedure, the regression line always passes through the point ($\bar{x}, \bar{y}$), where $\bar{x}$\nomenclature{$\bar{x}$}{mean value of the independent variable $x$} and $\bar{y}$\nomenclature{$\bar{y}$}{mean value of the dependent variable $y$} are the means of the independent and dependent variables, respectively. 
 This property ensures that the fitted line represents the average relationship between the variables in the dataset.
 
 To establish the equation of the line, both the slope and the constant term need to be calculated. 
@@ -804,23 +806,27 @@ The values of $b_0$ and $b_1$ obtained with the method of \emph{OLS} are
 b_1 = \frac{\sum{xy} - n \bar{x} \bar{y}}{(n - 1) s^2_x}
 \label{eq:slope_coefficient}
 \end{equation}
-and
+
+\noindent and
+
 \begin{equation}
 b_0 = \bar{y} - b_1 \bar{x}
 \label{eq:intercept_coefficient}
 \end{equation}
-% \begin{tabular}{p{1.3 cm}p{0.3 cm}p{10 cm}}
-% where: &$\bar{x}$ & : mean value of the independent variable $x$\\
-% & $\bar{y}$ & : mean value of the dependent variable $y$\\
-% & $s_x$ & : standard deviation of $x$\\
-% \end{tabular}
+
 \noindent
-\begin{tabbing}
-\hspace*{1.2cm}\=\hspace*{0.4cm}\=\hspace*{0.2cm}\= \kill
-where \> $\bar{x}$ \> : \> mean value of the independent variable $x$ \\
-      \> $\bar{y}$ \> : \> mean value of the dependent variable $y$ \\
-      \> $s_x$     \> : \> standard deviation of $x$
-\end{tabbing}
+% \begin{tabbing}
+% \hspace*{1.2cm}\=\hspace*{0.4cm}\=\hspace*{0.2cm}\= \kill
+% where \> $\bar{x}$ \> : \> mean value of the independent variable $x$ \\
+%       \> $\bar{y}$ \> : \> mean value of the dependent variable $y$ \\
+%       \> $s_x$     \> : \> standard deviation of $x$
+% \end{tabbing}
+
+\begin{tabular}{ll}
+$\bar{x}$ & mean value of the independent variable $x$ \\
+$\bar{y}$ & mean value of the dependent variable $y$ \\
+$s_x$     & standard deviation of $x$
+\end{tabular}
 
 For the \emph{Case: US SteamCo}, we use \ttblue{production} in 1,000 lb for the $x$-values, and \ttblue{revenue} in \$ for $y$ to construct our first model \ttblue{mod.0}.
 The estimated values are $b_0 = 4,897,663$ for the intercept and $b_1 = 18.99$ for the slope.\footnote{The calculation of the coefficients is shown in Exercise \ref{ex:modelling_mod0}.} Replacing the coefficients in Equation \ref{eq:regression_line} with their estimates we obtain the regression line
@@ -837,17 +843,14 @@ A summary of the coefficient estimates, their standard errors, $t$ values and $p
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
 \toprule
-\parbox[t]{4.5 cm}{Variable} &
+Variable &
 Estimate &
 Std. Error &
 $t$ value &
 $Pr(>|t|)$ \\
-
 \midrule
-
 intercept  & 4,897,663 & 2,014,855 & 2.431 & 0.0205 \\
 production &     18.99 &      4.02 & 4.728 & 0.0000 \\
-
 \bottomrule
 \end{tabularx}
 \caption{Coefficient estimates of \ttblue{mod.0}, with their standard errors, $t$ values, and $p$ values.}
@@ -921,11 +924,11 @@ A high correlation between two predictors, such as between \hlblue{coolDD} and \
 \bigskip
 The \hlblue{enter method}\index{enter method} is the most straightforward approach, in which all candidate independent variables are entered simultaneously into the model. The \emph{enter} method does not involve any variable selection or elimination, and all independent variables are included in the final model. This method is often used when all candidate independent variables are considered important or necessary for predicting the outcome variable. In contrast, \emph{backward} and \emph{forward} methods are stepwise approaches that involve selecting a subset of independent variables from a larger pool of candidate independent variables.
 
-The \hlblue{backward method}\index{backward method} starts with a model that contains all potential independent variables and then systematically removes independent variables individually that do not contribute significantly to the model's prediction power. This process continues until all remaining variables are statistically significant, based on a predetermined criterion. Common criteria include $p$-value thresholds, $F$ statistics, or information-based metrics such as the \hlblue{Akaike Information Criterion}\index{Akaike Information Criterion}\index{AIC} (AIC) or \hlblue{Bayesian Information Criterion}\index{Bayesian Information Criterion}\index{BIC} (BIC). These criteria are under the control of the data scientist, who selects thresholds or metrics appropriate for the analysis. For example, a $p$-value threshold of 0.05 might be chosen to ensure that only variables with strong evidence of association remain in the model. These criteria are discussed in detail in Sections \ref{sec:analysis_of_variance} and \ref{sec:testing_significance}.
+The \hlblue{backward method}\index{backward method} starts with a model that contains all potential independent variables and then systematically removes independent variables individually that do not contribute significantly to the model's prediction power. This process continues until all remaining variables are statistically significant, based on a predetermined criterion. Common criteria include $p$ value thresholds, $F$ statistics, or information-based metrics such as the \hlblue{Akaike Information Criterion}\index{Akaike information criterion}\index{AIC} (AIC) or \hlblue{Bayesian Information Criterion}\index{Bayesian information criterion}\index{BIC} (BIC). These criteria are under the control of the data scientist, who selects thresholds or metrics appropriate for the analysis. For example, a $p$ value threshold of 0.05 might be chosen to ensure that only variables with strong evidence of association remain in the model. These criteria are discussed in detail in Sections \ref{sec:analysis_of_variance} and \ref{sec:testing_significance}.
 
 The \hlblue{forward method}\index{forward method} starts with an empty model and adds independent variables one by one based on a statistical criterion such as the highest correlation coefficient, the largest $F$ statistic, or the lowest BIC. The process stops when no additional variable significantly improves the model’s prediction power, according to the chosen criterion. Similar to the backward method, the choice of criterion is controlled by the data scientist and tailored to the specific context of the analysis.
 
-The combination of these two methods, often referred to as \hlblue{stepwise selection}, alternates between adding and removing variables to refine the model. In stepwise selection, the data scientist must define both inclusion and exclusion thresholds based on statistical criteria. For example, a variable might be added to the model if its $p$-value is below 0.05 and removed if its $p$-value rises above 0.10 after subsequent adjustments. 
+The combination of these two methods, often referred to as \hlblue{stepwise selection}, alternates between adding and removing variables to refine the model. In stepwise selection, the data scientist must define both inclusion and exclusion thresholds based on statistical criteria. For example, a variable might be added to the model if its $p$ value is below 0.05 and removed if its $p$ value rises above 0.10 after subsequent adjustments. 
 
 Adding the additional variables \texttt{coolDD} and \texttt{heatDD} has improved the fit of the model. The residual standard deviation decreased from \footnote{See Exercises \ref{ex:modelling_mod0} and \ref{ex:modelling_mod.1}} 4,112,487 for \texttt{mod.0} to 1,980,698 for \texttt{mod.1}. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods. A summary of the estimated coefficients for \ttblue{mod.1}, their standard errors, and $t$ and $p$ values is given in \ref{tab:summary_mod_1}.
 
@@ -1045,7 +1048,7 @@ Transforming variables in linear regression serves several key purposes, each ai
 Transformations offer a practical solution to address these issues. They can adjust the variables to meet the assumptions required for linear regression, ensuring the model is suitable for robust analysis. In Section \ref{sec:testing_model_assumptions}, these assumptions are systematically tested, and the role of transformations in satisfying them is evaluated. Below, we outline the primary purposes of transforming variables in linear regression. Each purpose aligns with specific model assumptions and aims to improve model reliability and interpretability.
 
 \bigskip
-Both the dependent variable $y$ and independent variables $x_1 \ldots x_k$ can be transformed. The transformation of the dependent variable $y$ is referred to as the \hlblue{Box-Cox transformation}\index{Box-Cox transformation}\index{transformation!Box-Cox}, a mathematical technique using parameter lambda ($\lambda$), which can take different values to achieve various transformations. The general formula for the Box-Cox transformation is:
+Both the dependent variable $y$ and independent variables $x_1 \ldots x_k$ can be transformed. The transformation of the dependent variable $y$ is referred to as the \hlblue{Box-Cox transformation}\index{Box-Cox transformation}\index{transformation!Box-Cox}, a mathematical technique using parameter lambda ($\lambda$)\nomenclature{$\lambda$}{parameter of the Box-Cox or Box-Tidwell transformation}, which can take different values to achieve various transformations. The general formula for the Box-Cox transformation is:
 
 \begin{equation}
 y(\lambda) =    
@@ -1129,7 +1132,7 @@ Create literature list.
 \paragraph{Weighted Least Squares} % (fold)
 \label{par:weighted_least_squares}
 
-\index{Weighted Least Squares}  (WLS)\index{WLS} is a modeling technique in which each observation is assigned a weight that is proportional to the inverse of its variance. The weights adjust the contribution of each observation to the regression line and assign more weight to observations with smaller variances. WLS assumes that the errors follow a normal distribution with constant variance, and the method is most effective when the variance of the errors is related to a known variable.
+\index{weighted least squares}  (WLS)\index{WLS} is a modeling technique in which each observation is assigned a weight that is proportional to the inverse of its variance. The weights adjust the contribution of each observation to the regression line and assign more weight to observations with smaller variances. WLS assumes that the errors follow a normal distribution with constant variance, and the method is most effective when the variance of the errors is related to a known variable.
 
 % paragraph weighted_least_squares (end)
 
@@ -1150,16 +1153,16 @@ Create literature list.
 \paragraph{Autoregressive Integrated Moving Average} % (fold)
 \label{par:autoregressive_integrated_moving_average}
 
-\index{Autoregressive Integrated Moving Average} (ARIMA)\index{ARIMA} models are univariate time-series models that use the past values of a single variable to predict future values. They assume that the future values of a time series are a function of its past values and error terms. ARIMA models consist of three components: autoregressive (AR), integrated (I), and moving average (MA) components. The AR component captures the relationship between past and future values, the I component deals with nonstationary data, and the MA component deals with the error term. ARIMA models are best suited to stationary data and are commonly used for short-term forecasting.
+\index{autoregressive integrated moving average} (ARIMA)\index{ARIMA} models are univariate time-series models that use the past values of a single variable to predict future values. They assume that the future values of a time series are a function of its past values and error terms. ARIMA models consist of three components: autoregressive (AR), integrated (I), and moving average (MA) components. The AR component captures the relationship between past and future values, the I component deals with nonstationary data, and the MA component deals with the error term. ARIMA models are best suited to stationary data and are commonly used for short-term forecasting.
 
-Extensions of ARIMA are \hlblue{Seasonal ARIMA}\index{Seasonal ARIMA} (SARIMA)\index{SARIMA} models, that incorporate seasonal effects, and \hlblue{eXogenous ARIMA}\index{eXogenous ARIMA} (X-ARIMA)\index{X-ARIMA} models, that incorporate values of one or more independent variables.
+Extensions of ARIMA are \hlblue{Seasonal ARIMA}\index{seasonal ARIMA} (SARIMA)\index{SARIMA} models, that incorporate seasonal effects, and \hlblue{eXogenous ARIMA}\index{exogenous ARIMA} (X-ARIMA)\index{X-ARIMA} models, that incorporate values of one or more independent variables.
 
 % paragraph autoregressive_integrated_moving_average (end)
 
 \paragraph{Vector Autoregressive} % (fold)
 \label{par:vector_autoregression}
 
-\index{Vector Autoregressive} (VAR)\index{VAR} models are multivariate time series models that use the past values of multiple variables to make predictions about future values. VAR models assume that each variable in the system is a function of its past values and the past values of the other variables in the system. VAR models do not require data to be stationary and are useful for modeling the dynamic interrelationships between multiple variables over time.
+\index{vector autoregressive} (VAR)\index{VAR} models are multivariate time series models that use the past values of multiple variables to make predictions about future values. VAR models assume that each variable in the system is a function of its past values and the past values of the other variables in the system. VAR models do not require data to be stationary and are useful for modeling the dynamic interrelationships between multiple variables over time.
 
 Unlike the X-ARIMA models, VAR models do not explicitly incorporate exogenous variables. Instead, they assume that each variable in the system is influenced by past values of all other variables in the system. VAR models are best suited to time-series data with multiple variables that may influence each other over time.
 
@@ -1168,7 +1171,7 @@ Unlike the X-ARIMA models, VAR models do not explicitly incorporate exogenous va
 \paragraph{Robust regression} % (fold)
 \label{par:robust_regression}
 
-\index{Robust regression} techniques, such as GLS, address issues such as heteroskedasticity and regression outliers in the data; however, it is a non-parametric method that does not assume any specific form for the distribution of the errors or the covariance structure. It is based on a robust estimator of the regression coefficients, such as the M-estimator or the S-estimator, which downweights the influence of outliers in the data. Robust regression is a more flexible method than GLS and can be useful when the data contain influential observations (see Section \ref{sub:outliers_and_influential_observations}).
+\index{robust regression} techniques, such as GLS, address issues such as heteroskedasticity and regression outliers in the data; however, it is a non-parametric method that does not assume any specific form for the distribution of the errors or the covariance structure. It is based on a robust estimator of the regression coefficients, such as the M-estimator or the S-estimator, which downweights the influence of outliers in the data. Robust regression is a more flexible method than GLS and can be useful when the data contain influential observations (see Section \ref{sub:outliers_and_influential_observations}).
 
 % paragraph robust_regression (end)
 
@@ -1177,7 +1180,7 @@ Unlike the X-ARIMA models, VAR models do not explicitly incorporate exogenous va
 \paragraph{Bayesian Structural Time Series} % (fold)
 \label{par:bayesian_structural_time_series}
 
-\index{Bayesian Structural Time Series}  (BSTS)\index{BSTS} is a Bayesian approach to time-series analysis that can be used for forecasting, decomposition of time series into components, and causal inference.
+\index{Bayesian structural time series}  (BSTS)\index{BSTS} is a Bayesian approach to time-series analysis that can be used for forecasting, decomposition of time series into components, and causal inference.
 
 BSTS models can adjust for heteroskedasticity, autocorrelation, and non-normality of the regression residuals by modeling the errors as a combination of both autoregressive process and stochastic volatility processes. The autoregressive process models autocorrelation in the residuals, whereas the stochastic volatility process models the time-varying variance of the residuals.
 
@@ -1227,7 +1230,7 @@ Figure \ref{fig:H7-influenceIndexPlot} summarizes the influence statistics. It s
 \end{figure}
 
 
-\paragraph{Leverage points} Leverage points or outliers in $x$ have an extreme value on a combination of independent variables. The effect of these points is that they may have an outsized influence on the position or slope of the regression line. Leverage is measured by the \hlblue{hat values}\index{hat value}, that indicate how far a data point is from the average of all the other points in the dataset. Specifically, the hat values represent the diagonal elements of the \hlblue{hat matrix}\index{hat matrix}, which is used to compute the predicted values of the dependent variable $y$ based on the values of the independent variable(s) $x$. 
+\paragraph{Leverage points} Leverage points or outliers in $x$ have an extreme value on a combination of independent variables. The effect of these points is that they may have an outsized influence on the position or slope of the regression line. Leverage is measured by the \hlblue{hat values}\index{hat value}\nomenclature{$h_i$}{hat value for observation $i$}, that indicate how far a data point is from the average of all the other points in the dataset. Specifically, the hat values represent the diagonal elements of the \hlblue{hat matrix}\index{hat matrix}, which is used to compute the predicted values of the dependent variable $y$ based on the values of the independent variable(s) $x$. 
 
 In case of one single independent variable,\footnote{The formula for hat-values for models with multiple predictors is more convoluted, but can be elegantly written with matrix algebra. This is beyond the scope of this book.} for example in \newline \noindent \ttblue{mod.0}, the hat-values are calculated as
 
@@ -1235,8 +1238,9 @@ In case of one single independent variable,\footnote{The formula for hat-values 
 \label{eq:hat_value}
   h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2}
 \end{equation}
+\nomenclature{$j$}{index}
 
-Equation \ref{eq:hat_value} shows that $h_i$ increases as the distance between $x_i$ and $\bar{x}$ increases. Therefore, in simple linear regression high-leverage observations lie outside the normal range of observations. An extension of Equation \ref{eq:hat_value} to cases with $k$ independent variables requires matrix algebra, and we do not provide the formula here. The leverage statistic $h_i$ is always greater than $1 / n$ (if $x_i = \bar{x}$) and less than 1, and the sum of all hat values $\sum h_i = k + 1 $. As a result, hat values that are much greater than the average, $(k + 1) / n$, may require further investigation.
+Equation \ref{eq:hat_value} shows that $h_i$ increases as the distance between $x_i$ and $\bar{x}$ increases. Therefore, in simple linear regression high-leverage observations lie outside the normal range of observations. An extension of Equation \ref{eq:hat_value} to cases with $k$\nomenclature{$k$}{number of independent variables} independent variables requires matrix algebra, and we do not provide the formula here. The leverage statistic $h_i$ is always greater than $1 / n$ (if $x_i = \bar{x}$) and less than 1, and the sum of all hat values $\sum h_i = k + 1 $. As a result, hat values that are much greater than the average, $(k + 1) / n$, may require further investigation.
 
 \paragraph{Regression outliers} A regression outlier, or outlier in $y$, is an observation in which the value of the dependent variable is conditionally unusual, given the value of the independent variable. Given that the distance to the regression line is much shorter for the other variables, it should cause us to wonder why this observation is different. The most serious problem related to regression outliers is that they violate the assumption that residuals are normally distributed.
 
@@ -1257,6 +1261,8 @@ where: &$e_i^*$ & : the Studentized residual of observation $i$\\
 & $s_{e(-i)}$ & : the standard deviation of all observations except $i$\\
 & $h_i$ & : the leverage of observation $i$\\
 \end{tabular}
+\nomenclature{$e_i$}{the residual of observation $i$}
+\nomenclature{$e_i^*$}{the Studentized residual of observation $i$}
 
 \bigskip
 The Studentized residual $e_i^*$ follows a $t$ distribution with $n - k - 2$ degrees of freedom. Be careful, however, to simply look up all observations with a Studentized residual greater than 2. First, we expect to find approximately 5\% of the observations above this boundary. Secondly, when we want to identify the largest Studentized residual, we employ the $t$-test $n$ times, thereby heavily capitalizing the test probabilities.\footnote{For example, if we carry out a hypothesis test 20 times with an $\alpha$ risk of 5\%, the effective $\alpha$ risk will be $1 - 0.95^{20} = 0.64.$} A solution to this is to consider the number of tests. This procedure is referred to as the \hlblue{Bonferroni adjustment}\index{Bonferroni adjustment}. It takes the $p$ value for the largest absolute Studentized residual and multiplies it with the number of tests $n$, in the \emph{Case: US SteamCo} $n = 36$. 
@@ -1278,7 +1284,7 @@ We can observe in Figure \ref{fig:H7_qqplot} that the unadjusted $p$ value of th
 
 \paragraph{Influential observations} An observation that has a disproportionate influence on regression coefficients is referred to as an influential observation. These observations have a combination of high leverage and high Studentized residuals.
 
-We accommodate influential observations by either applying robust regression, or leaving these observations out when estimating the regression coefficients. \hlblue{Cook's distance}\index{Cook's distance} is an influence statistic that combines leverage and the level of outlyingness. It measures the shift in the coefficient estimate by fitting a regression model when that particular observation is omitted. The statistic is defined for the $i$th observation as
+We accommodate influential observations by either applying robust regression, or leaving these observations out when estimating the regression coefficients. \hlblue{Cook's distance}\index{Cook's distance} $D$ is an influence statistic that combines leverage and the level of outlyingness. It measures the shift in the coefficient estimate by fitting a regression model when that particular observation is omitted. The statistic is defined for the $i$th observation as
 
 \begin{equation}
 D_i = \frac{e_i^{*2}}{k+1}\frac{h_i}{1-h_i}
@@ -1289,6 +1295,7 @@ where: &$D_i$ & : Cook's distance for observation $i$\\
 & $k$ & : the number of independent variables in the model\\
 & $h_i$ & : the leverage of observation $i$\\
 \end{tabular}
+\nomenclature{$D_i$}{Cook's distance for observation $i$}
 
 \bigskip
 Cook's distance follows an $F$ distribution with $k$ and $n - k$ degrees of freedom. However, some caution should be exercised in finding an appropriate cut-off value to identify influential observations: if the cut-off is chosen too low (for example, $D < \frac{4}{n - k -1}$), points that exercise only mild influence are highlighted for further scrutiny, thereby underestimating the precision of the model. This results in a higher occurrence of observations in the current audit period that have an unacceptable difference, leading to additional work for the auditor. If the cut-off is chosen too high (for example $D > 1$), the model coefficients are distorted, with ultimately the same effect. 
@@ -1335,7 +1342,7 @@ There are no specific explanations for the unusually low values in June 2013 and
 Since we are working with time-series data, we cannot simply remove the observation without disrupting the temporal structure of the analysis. Instead, we applied winsorization to reduce the influence of this extreme value while retaining its presence in the series. Specifically, the response variable in October 2012 was adjusted to match the value at the 5th percentile of the response distribution.
 
 Mathematically, \hlblue{winsorization}\index{winsorization} replaces extreme values beyond a chosen threshold with the value at that threshold. 
-For a lower winsorization bound $\tau_L$ (e.g., the 5th percentile), the transformed value $y_t^\ast$ is given by:
+For a lower winsorization bound $\tau_L$ \nomenclature{$\tau_L$, $\tau_U$}{lower and upper winsorization bound} (e.g., the 5th percentile), the transformed value $y_t^\ast$ is given by:
 
 \begin{equation}
 y_t^\ast =
@@ -1433,7 +1440,7 @@ heatDD : summer     &   -12,777 &    19,331 & -0.6610 & 0.51404 \\
 
 Multicollinearity is a phenomenon in linear regression models in which independent variables are highly correlated with each other, leading to unstable and unreliable results. This can be particularly problematic when interaction terms are present, as they tend to increase the correlation between variables.
 
-Multicollinearity should be checked using \hlblue{Variance Inflation Factor}\index{Variance Inflation Factor} (VIF) calculations for each predictor. This factor quantifies how much the variance of the estimated coefficient is inflated due to multicollinearity with other predictors. For a predictor $x_j$, VIF is calculated as:
+Multicollinearity should be checked using \hlblue{Variance Inflation Factor}\index{variance inflation factor} (VIF) calculations for each predictor. This factor quantifies how much the variance of the estimated coefficient is inflated due to multicollinearity with other predictors. For a predictor $x_j$, VIF is calculated as:
 
 \begin{equation}
   VIF(x_j) = \frac{1}{1 - r_j^2}
@@ -1451,7 +1458,7 @@ In some cases, if multicollinearity persists as a significant problem, we may ex
 Ignoring multicollinearity can lead to serious issues in linear regression models. First, the coefficients become unreliable and challenging to interpret, as they can change drastically with minor adjustments to the model or data. Incorrect standard errors may also be estimated, affecting the computation of confidence intervals and hypothesis tests, leading to misleading conclusions regarding the significance of independent variables. Moreover, multicollinearity can increase the risk of overfitting the model, causing it to perform poorly on data from the hold-out set.
 
 \bigskip
-In regression models that include interaction terms, the \hlblue{Generalized Variance Inflation Factor}\index{Generalized Variance Inflation Factor} (GVIF) is a diagnostic tool to assess multicollinearity in a more nuanced way than the standard VIF. The GVIF accounts for the effects of interaction terms on multicollinearity among predictors.
+In regression models that include interaction terms, the \hlblue{Generalized Variance Inflation Factor}\index{generalized variance inflation factor} (GVIF) is a diagnostic tool to assess multicollinearity in a more nuanced way than the standard VIF. The GVIF accounts for the effects of interaction terms on multicollinearity among predictors.
 The GVIF effectively adjusts the standard VIF by accounting for the dimensionality of the predictor space, particularly when interactions are involved.
 
 Like the standard VIF, any predictor that has $GVIF_j^{1/(2df)}~>~10$ indicates significant multicollinearity. The exponent $1/(2df)$ in the Generalized Variance Inflation Factor (GVIF) formula normalizes the GVIF to account for the degrees of freedom of predictors, especially categorical variables, ensuring that predictors with more levels do not disproportionately affect the multicollinearity measure. This adjustment allows for a fair comparison across continuous and categorical variables.
@@ -1808,12 +1815,12 @@ $H_1 : $ The residuals $\epsilon$ are not normally distributed.
 
 \paragraph{Assumptions} There are no assumptions underlying the test.
 
-\paragraph{Test statistic} We use the \hlblue{$W$ statistic}\index{W statistic}. 
+\paragraph{Test statistic} We use the \hlblue{$W$ statistic}\index{W statistic}\nomenclature{$W$}{Shapiro-Wilk test statistic}. 
 Its calculation is quite complicated and based on order statistics. The $W$ statistic takes values between 0 and 1, with 1 being a perfect match with the normal distribution. 
 
 \paragraph{Distribution} The $W$ statistic's distribution cannot be described by means of a familiar distribution.
 
-\paragraph{Significance level} In regression analysis, we deviate from the standard approach of committing to a significance level ahead of time and then using a critical region. Instead, it is more informative to answer the following question: given the observed value of the $W$ statistic, what is the smallest significance level at which the null hypothesis would be rejected? This level is referred to as the \hlblue{$p$ value}\index{p value} for the test. The significance level for the $W$ statistic is calculated using approximations.
+\paragraph{Significance level} In regression analysis, we deviate from the standard approach of committing to a significance level ahead of time and then using a critical region. Instead, it is more informative to answer the following question: given the observed value of the $W$ statistic, what is the smallest significance level at which the null hypothesis would be rejected? This level is referred to as the \hlblue{$p$ value}\index{p value}\nomenclature{$p$}{significance level} for the test. The significance level for the $W$ statistic is calculated using approximations.
 
 \paragraph{Value of test statistic} We use the Shapiro-Wilk
 % \ttblue{shapiro.test} function 
@@ -1866,7 +1873,7 @@ $H_1 : $ The residuals $\epsilon$ do not have constant variance.
 where $e_i^2$ is the squared residual of observation $i$, and $x_{1, i}, x_{2, i}, \ldots x_{k, i}$ are the values of the $k$ independent variables for observation $i$. 
 
 If any of the $k$ independent variables is responsible for non-constant variance, its related coefficient $\alpha$ will be significant, and $r^2$ will increase.
-The Breusch-Pagan test statistic is then given by
+The Breusch-Pagan test statistic $BP$ \nomenclature{$BP$}{Breusch-Pagan test statistic} is then given by
 
 \begin{equation}
   BP = nr^2
@@ -1935,7 +1942,7 @@ $H_1 : $ The residuals $\epsilon$ are autocorrelated.
 
 \paragraph{Assumptions} The test assumes that the residuals $\epsilon$ are normally distributed.
 
-\paragraph{Test statistic} The test statistic is obtained by fitting an autoregressive model of order $p$.\footnote{The order $p$ of the autoregressive model should not be confused with the $p$ generally used as probability of success.} The Breusch-Godfrey test statistic is then given by
+\paragraph{Test statistic} The test statistic is obtained by fitting an autoregressive model of order $p$.\footnote{The order $p$ of the autoregressive model should not be confused with the $p$ generally used as probability of success.} The Breusch-Godfrey test statistic $BG$ \nomenclature{$BG$}{Breusch-Godfrey test statistic} is then given by
 
 \begin{equation}
   BG = nr^2
@@ -1971,7 +1978,7 @@ The transformed model under the Cochrane-Orcutt method is given by:
   y_t - \rho y_{t-1} = \beta_0(1 - \rho) + \beta_1(x_{1,t} - \rho x_{1,t-1}) + \ldots + \beta_k(x_{k,t} - \rho x_{k,t-1}) + u_t
 \end{equation}
 
-where $\rho$ is the estimated autocorrelation coefficient, and $u_t$ is the new error term with no autocorrelation.
+where $\rho$ \nomenclature{$\rho$}{estimated autocorrelation coefficient} is the estimated autocorrelation coefficient, and $u_t$\nomenclature{$u_t$}{error or disturbance term} is the new error term with no autocorrelation.
 
 \bigskip
 This formula shows how each variable is transformed by subtracting $\rho$ times its lagged value, effectively filtering out the AR(1) structure in the residuals. The resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and $t$ and $p$ values are summarized in Table \ref{tab:summary_mod_4}.
@@ -2089,6 +2096,7 @@ H_1 : \beta_j \neq 0
 \begin{equation}
   t_{\hat{\beta}_j} = \frac{\hat{\beta}_j}{s_{\hat{\beta}_j}}
 \end{equation}
+where $\hat{\beta}_j$ is the estimate of slope coefficient $j$ \nomenclature{$\hat{\beta}_j$}{estimate of slope coefficient $j$}, and $s_{\hat{\beta}_j}$ is its standard deviation.
 
 There is a different $t$ statistic for every coefficient in the regression model.
 
@@ -2132,7 +2140,7 @@ H_1 : \text{At least one of the } \beta_j \neq 0
 
 \paragraph{Assumptions} There are again several assumptions that need to be satisfied for the test statistic, including linearity, randomness, homoskedasticity, normality, and the absence of autocorrelation.
 
-\paragraph{Test statistic} We use the \hlblue{$F$ statistic}\index{F statistic}, which is defined as the ratio between the explained  and unexplained variances. The explained variance is measured by the \hlblue{Mean Square of the Regression}\index{Mean Square of the Regression} or \hlblue{MSR}\index{MSR}, and the unexplained variance by the \hlblue{Mean Square of the Residuals}\index{Mean Square of the Residuals} or \hlblue{MSE}\index{MSE}.
+\paragraph{Test statistic} We use the \hlblue{$F$ statistic}\index{F statistic}, which is defined as the ratio between the explained  and unexplained variances. The explained variance is measured by the \hlblue{Mean Square of the Regression}\index{mean square of the regression} or \hlblue{MSR}\index{MSR}, and the unexplained variance by the \hlblue{Mean Square of the Residuals}\index{mean square of the residuals} or \hlblue{MSE}\index{MSE}.
 
 \begin{equation}
   F = \frac{MSR}{MSE}
@@ -2196,6 +2204,7 @@ The confidence interval for a model with one independent variable is given by\fo
 \begin{equation}
 \hat{y}_* \pm t_{\alpha / 2} \cdot s_e \sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
 \end{equation}
+\nomenclature{$x_*$}{given value of the independent variable}
 
 The confidence interval thus predicts the average value of $y$ for a given set of values of independent variables, based solely on the model's estimation uncertainty.
 
@@ -2285,7 +2294,7 @@ For example, one notable deviation occurred in March, when the recorded revenue 
 Such cases illustrate real-world events that can impact financial outcomes even when an effective predictive model is in place. 
 
 With these monthly predictions established, the next critical step is to assess whether the cumulative revenue results for the year suggest a material misstatement. 
-This final assessment involves combining the 12 monthly expectations into a single yearly expectation and constructing the \emph{hlblue}\index{Acceptable Difference Range}\index{Acceptable Difference Range}, a 99\% prediction interval around it. 
+This final assessment involves combining the 12 monthly expectations into a single yearly expectation and constructing the \emph{hlblue}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR}, a 99\% prediction interval around it. 
 This interval represents the range within which true revenue is expected to fall if the account is free of material misstatement, serving as the basis for our null hypothesis. 
 
 We then determine whether the recorded revenue falls within this range. 
@@ -2298,11 +2307,11 @@ If it does, we calculate the level of assurance obtained from the analysis, whic
 When creating predictions over multiple periods (e.g., 12 months), combining the prediction intervals requires careful consideration of both individual prediction uncertainty and dependencies between predictions.
 
 Each individual prediction interval (Equation \ref{eq:prediction_interval} provides a range within which the actual value for a single month is expected to fall, given the model's parameters and error variance. 
-These intervals are calculated independently, but because each prediction uses the same model (and thus the same residual standard error $s_e$), they are not statistically independent.
+These intervals are calculated independently, but because each prediction uses the same model (and thus the same residual standard error $s_e$\nomenclature{$s_e$}{residual standard error}), they are not statistically independent.
 In addition, the coefficients are fixed for all predictions and estimated from the same sample. 
 Therefore, any inaccuracies in the model parameters (such as systematic bias) affect all the predictions in the same manner.
 
-For cumulative predictions (e.g., predicting total revenue over 12 months), we can combine individual prediction intervals using the root-sum-of-squares formula. We first create the standard error of the combined prediction:
+For cumulative predictions (e.g., predicting total revenue over 12 months), we can combine individual prediction intervals using the root-sum-of-squares formula. We first create the \hlblue{standard error of the combined prediction}:\nomenclature{$s_{comb}$}{standard error of the combined prediction}
 
 \begin{equation}
 \label{eq:s_combined}
@@ -2357,7 +2366,7 @@ This test relies on several assumptions about the data:
 These assumptions ensure that the test’s distribution and the interval calculations are valid, providing a reliable assessment of the recorded revenue.
 
 \paragraph{Step 4. Choose an appropriate test and its test statistic}
-Given that we are testing whether the observed revenue total significantly deviates from its expected range, we use a \emph{one-sample test for the total revenue}, comparing it to the predicted total. The test statistic $T$ for this assessment is calculated as:
+Given that we are testing whether the observed revenue total significantly deviates from its expected range, we use a \emph{one-sample test for the total revenue}, comparing it to the predicted total. The test statistic $T$\nomenclature{$T$}{test statistic for combined prediction} for this assessment is calculated as:
 
 \begin{equation}
 \label{eq:test_statistic}
@@ -2457,10 +2466,10 @@ T = \frac{\hat{y}_{\text{total}} - y_{\text{recorded}}}{s_{comb}}
 and let
 
 \begin{equation}
-\lambda = \frac{M}{s_{\text{comb}}}
+\delta = \frac{M}{s_{\text{comb}}}
 \end{equation}
 
-be the non-centrality parameter, where $M$ is the materiality threshold and $s_{comb}$ is the combined prediction standard error.
+be the non-centrality parameter\nomenclature{$\delta$}{non-centrality parameter of the non-central $t$ distribution}, where $M$ is the materiality threshold and $s_{comb}$ is the combined prediction standard error.
 
 \bigskip
 The distribution of $T$ under the alternative hypotheses reflects the expected behaviour of the test statistic if the recorded revenue deviates from the true value by more than $M$.
@@ -2477,14 +2486,14 @@ Let $t_{\alpha/2}$ be the critical value corresponding to the desired confidence
 Then the assurance level is calculated as:
 
 \begin{itemize}
-  \item For material \textbf{overstatement}, using the non-central $t$ distribution with positive shift $\lambda$:
+  \item For material \textbf{overstatement}, using the non-central $t$ distribution with positive shift $\delta $:
   \begin{equation}
-  \text{Assurance level} = P(T > t_{\alpha/2} \mid T \sim t_{\lambda, df})
+  \text{Assurance level} = P(T > t_{\alpha/2} \mid T \sim t_{\delta , df})
   \end{equation}
 
-  \item For material \textbf{understatement}, using the non-central $t$ distribution with negative shift $-\lambda$:
+  \item For material \textbf{understatement}, using the non-central $t$ distribution with negative shift $-\delta $:
   \begin{equation}
-  \text{Assurance level} = P(T < -t_{\alpha/2} \mid T \sim t_{-\lambda, df})
+  \text{Assurance level} = P(T < -t_{\alpha/2} \mid T \sim t_{-\delta , df})
   \end{equation}
 \end{itemize}
 
@@ -3298,7 +3307,7 @@ We compare the performance of models with four different statistics, the Multipl
 \textcolor{KPMG_light_blue}{[1] 1134.239}
 \end{Verbatim}
 
-The AIC and BIC values for \ttblue{model\_backward} may differ from those produced by R’s \ttblue{step} function. This is because \ttblue{AIC()} and \ttblue{BIC()} in \ttblue{R} compute the criteria using the full formulas $\text{AIC} = -2 \ln \hat{L} + 2k$ and $\text{BIC} = -2 \ln \hat{L} + k \ln n$, where $\ln \hat{L}$ is the maximized log-likelihood and $k$ is the number of estimated parameters. For linear regression with normally distributed errors, $\ln \hat{L} = -\frac{n}{2} \left[\ln (2\pi) + 1 + \ln \left(\frac{\text{SSE}}{n}\right) \right]$, which simplifies the criteria (up to a constant) to $\text{AIC} = n \ln(\text{SSE}/n) + 2k$ and $\text{BIC} = n \ln(\text{SSE}/n) + k \ln n$, where $SSE$ is the sum of squared errors.
+The AIC and BIC values for \ttblue{model\_backward} may differ from those produced by R’s \ttblue{step} function. This is because \ttblue{AIC()} and \ttblue{BIC()} in \ttblue{R} compute the criteria using the full formulas $\text{AIC} = -2 \ln \hat{L} + 2k$ and $\text{BIC} = -2 \ln \hat{L} + k \ln n$, where $\ln \hat{L}$\nomenclature{$\hat{L}$}{maximized likelihood for the fitted model, used in AIC and BIC calculations} is the maximized log-likelihood and $k$ is the number of estimated parameters. For linear regression with normally distributed errors, $\ln \hat{L} = -\frac{n}{2} \left[\ln (2\pi) + 1 + \ln \left(\frac{\text{SSE}}{n}\right) \right]$, which simplifies the criteria (up to a constant) to $\text{AIC} = n \ln(\text{SSE}/n) + 2k$ and $\text{BIC} = n \ln(\text{SSE}/n) + k \ln n$, where $SSE$ is the sum of squared errors.
 
 However, the \ttblue{step} function omits constant terms that do not affect model comparison, reporting AIC as $n \ln(\text{SSE}/n) + 2k$. The difference between the full and simplified expressions is a constant shift of $n (\ln(2\pi) + 1) + 2$. Here, $n (\ln(2\pi) + 1)$ arises from assumptions about normal errors and sample size, while the extra $+2$ is due to R’s \ttblue{AIC} counting the estimated variance parameter $\sigma^2$ as an additional parameter, increasing the penalty accordingly. As a result, AIC and BIC values in R may differ by a constant even when the underlying formulas appear similar.
 
