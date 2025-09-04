@@ -836,7 +836,7 @@ The estimated values are $b_0 = 4,897,663$ for the intercept and $b_1 = 18.99$ f
 \label{eq:regression_model_0}
 \end{equation}
 
-This shows that the company earns \$18.99 in revenue for every additional thousand pounds of steam produced. We also observe that the \hlblue{coefficient of determination}\index{coefficient of determination} $r^2$ is equal to 0.397.\footnote{See Exercise \ref{ex:summary.mod.0}} We already encountered this statistic in Equation \ref{eq:coefficient_of_determination}. 
+This shows that the company earns \$18.99 in revenue for every additional thousand pounds of steam produced. We also observe that the \hlblue{coefficient of determination}\index{coefficient of determination} $r^2$\nomenclature{$r^2$}{coefficient of determination} is equal to 0.397.\footnote{See Exercise \ref{ex:summary.mod.0}} We already encountered this statistic in Equation \ref{eq:coefficient_of_determination}. 
 It is a measure of how well the model explains the variance of the dependent variable $y$, and is further explained in Section \ref{sec:analysis_of_variance}. 
 A summary of the coefficient estimates, their standard errors, $t$ values and $p$ values, is given in Table \ref{tab:summary_mod_0}.
 
@@ -3723,7 +3723,7 @@ The resulting graph is shown in Figure \ref{fig:H7_200_regression_lines}.
 
 \textbf{Confidence and prediction intervals}
 
-Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
+Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.\footnote{Starting from ggplot2 version 3.3.0 (released April 2020), the preferred aesthetic name for controlling line thickness in geoms like \ttblue{geom_line()} and \ttblue{geom_path()} was changed from \ttblue{size} to \ttblue{linewidth} to better distinguish it from point size. If you use an older version of ggplot2, for example in the Binder notebooks that accompany this book, use \ttblue{size} instead of \ttblue{linewidth}.}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 
