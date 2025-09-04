@@ -2630,7 +2630,8 @@ Figure \ref{fig:H7_Histograms} shows the histograms of the data in the US SteamC
 \textcolor{KPMG_blue}{   ggplot(USSteamCoEstim, aes(x=heatDD)) + }
 \textcolor{KPMG_blue}{  geom_histogram(binwidth = 100, fill = "#00338D")}
 \textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{grid.arrange(hist_revenue, hist_production, hist_coolDD, hist_heatDD, ncol=2)}
+\textcolor{KPMG_blue}{grid.arrange(hist_revenue, hist_production, }
+\textcolor{KPMG_blue}{             hist_coolDD, hist_heatDD, ncol=2)}
 \end{Verbatim}
 
 Figure \ref{fig:H7_Time_series_plots} shows the time-series plots for the same dataset. 
@@ -2644,11 +2645,10 @@ Figure \ref{fig:H7_Time_series_plots} shows the time-series plots for the same d
 \textcolor{KPMG_blue}{            colour = "#BC204B") +            }                 
 \textcolor{KPMG_blue}{  scale_y_continuous(}
 \textcolor{KPMG_blue}{    name = "Revenue",      }                                   
-\textcolor{KPMG_blue}{    sec.axis = sec_axis(~scales::rescale(., from = rev_range, to = prod_range), }
-\textcolor{KPMG_blue}{                        name = "Production")             }     
-\textcolor{KPMG_blue}{  ) +}
+\textcolor{KPMG_blue}{    sec.axis = sec_axis(~scales::rescale(., from = rev_range,  }
+\textcolor{KPMG_blue}{                        to = prod_range), name = "Production")) +    }     
 \textcolor{KPMG_blue}{  theme(}
-\textcolor{KPMG_blue}{    axis.title.x = element_blank(),}
+\textcolor{KPMG_blue}{   axis.title.x = element_blank(),}
 \textcolor{KPMG_blue}{   axis.title.y.left = element_text(color = "#00338D"),}
 \textcolor{KPMG_blue}{   axis.title.y.right = element_text(color = "#BC204B")}
 \textcolor{KPMG_blue}{ )}
@@ -3524,8 +3524,8 @@ When a model includes interaction terms, it is important to respect the hierarch
 On the winsorized historical data, we fit a new model using the \ttblue{backward} step procedure.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD) * summer, }
-\textcolor{KPMG_blue}{                      data = USSteamCoEstim2)  }
+\textcolor{KPMG_blue}{ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD)}
+\textcolor{KPMG_blue}{                       * summer, data = USSteamCoEstim2)  }
 \textcolor{KPMG_blue}{ussteamco.mod.5 <- step(ussteamco.mod.5,}
 \textcolor{KPMG_blue}{                        direction = "backward") }
 \end{Verbatim}
@@ -3701,12 +3701,14 @@ All the elements created earlier are now plotted on a single canvas.
 \textcolor{KPMG_blue}{ggplot() +}
 \textcolor{KPMG_blue}{  geom_line(data = simulated_lines, aes(x = x, y = y, group = rep), }
 \textcolor{KPMG_blue}{            color = "#00338D", alpha = 0.1) +   }
-\textcolor{KPMG_blue}{  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", size = .5) +  }
+\textcolor{KPMG_blue}{  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", }
+\textcolor{KPMG_blue}{                                  size = .5) +  }
 \textcolor{KPMG_blue}{  geom_line(data = ci_bounds_true, aes(x = x, y = ci_lower), }
 \textcolor{KPMG_blue}{            color = "#E36877", size = .5, linetype = "solid") +}
 \textcolor{KPMG_blue}{  geom_line(data = ci_bounds_true, aes(x = x, y = ci_upper), }
 \textcolor{KPMG_blue}{            color = "#E36877", size = .5, linetype = "solid") +}
-\textcolor{KPMG_blue}{  labs(title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),}
+\textcolor{KPMG_blue}{  labs(title = paste(rep, " Regression Lines with Confidence}
+\textcolor{KPMG_blue}{                            Interval Based on True Model"),}
 \textcolor{KPMG_blue}{       x = "x", y = "y") +}
 \textcolor{KPMG_blue}{  theme_minimal() +}
 \textcolor{KPMG_blue}{  xlim(x_extended_min, x_extended_max)}
@@ -3723,7 +3725,8 @@ The resulting graph is shown in Figure \ref{fig:H7_200_regression_lines}.
 
 \textbf{Confidence and prediction intervals}
 
-Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.\footnote{Starting from ggplot2 version 3.3.0 (released April 2020), the preferred aesthetic name for controlling line thickness in geoms like \ttblue{geom_line()} and \ttblue{geom_path()} was changed from \ttblue{size} to \ttblue{linewidth} to better distinguish it from point size. If you use an older version of ggplot2, for example in the Binder notebooks that accompany this book, use \ttblue{size} instead of \ttblue{linewidth}.}
+Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
+\footnote{Starting from ggplot2 version 3.3.0 (released April 2020), the preferred aesthetic name for controlling line thickness in geoms like \ttblue{geom\_line()} and \ttblue{geom\_path()} was changed from \ttblue{size} to \ttblue{linewidth} to better distinguish it from point size. If you use an older version of ggplot2, for example in the Binder notebooks that accompany this book, use \ttblue{size} instead of \ttblue{linewidth}.}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 
