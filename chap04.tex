@@ -168,13 +168,13 @@ Coefficients $b_0$ and $b_1$ are estimated using a technique called \hlblue{leas
 \begin{equation}
 b_0 = \bar{y} - b_1 \bar{x}
 \label{eq:regression_intercept}
-\end{equation}\nomenclature{$b_0$}{regression intercept}
+\end{equation}\nomenclature{$b_0$}{estimated regression intercept}
 and the \hlblue{regression slope}\index{regression slope}\index{slope!regression} $b_1$ is found with
 \begin{equation}
 b_1 = \frac{\sum{xy - n \bar{x} \bar{y}}}{\sum{x^2} - n \bar{x}^2} 
  = \frac{\sum{x y} - \frac{\sum{x}\sum{y}}{n}}{\sum{x^2} - \frac{(\sum{x})^2}{n}}
 \label{eq:regression_slope}
-\end{equation}\nomenclature{$b_1$}{regression slope}
+\end{equation}\nomenclature{$b_1$}{estimated regression slope}
 Filling in the value of the intercept coefficient the regression estimate for a single observation reduces to
 \begin{equation*}
 \hat{y} = \bar{y} - b_1 \bar{x} + b_1 x = \bar{y} + b_1(x - \bar{x})
