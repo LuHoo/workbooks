@@ -45,6 +45,7 @@ After studying this chapter, you will be able to:
 \end{compactitem}
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=0cm, innerleftmargin=0.3cm]
+\sloppy
 \section*{Case: Salaries}
 Winesburg (OH) employs 2,222 civil servants. A full list of employee IDs is available. To perform a substantive analysis of the monthly personnel expenses, you want to make a substantive test of the charge for one month and then perform a trend analysis over all 12 months. In addition, you want to know if Winesburg prefers hiring men over women, and therefore, you want an estimate of the proportion of men and women.
 
@@ -56,33 +57,26 @@ Estimate, with 95\% confidence, the total monthly payroll for January 20XX, and 
 
 \begin{table}[htbp]
 
-\begin{tabularx}{\textwidth}{X Y Y Y Y Y}
-
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYYY@{}}
 \toprule
-
-\parbox[t]{2.3 cm}{Item number} & 
+\parbox[t]{2.3cm}{Item number} &
 Grade &
 Step &
 Gross &
 ID &
 Gender \\
-
 \midrule
-
-1602  &    6  &   1 &  1,612 & 910046  &  0 \\
-1946  &   13  &   8 &  4,818 & 536825  &  1 \\
-1690  &    4  &   0 &  1,399 & 468652  &  0 \\
-1967  &   10  &   4 &  2,845 & 890951  &  0 \\
-1013  &    8  &   6 &  2,486 & 688734  &  0 \\
-369   &   15  &   7 &  5,585 & 798493 &   0 \\
+1602  & 6  & 1 & 1,612 & 910046 & 0 \\
+1946  & 13 & 8 & 4,818 & 536825 & 1 \\
+1690  & 4  & 0 & 1,399 & 468652 & 0 \\
+1967  & 10 & 4 & 2,845 & 890951 & 0 \\
+1013  & 8  & 6 & 2,486 & 688734 & 0 \\
+369   & 15 & 7 & 5,585 & 798493 & 0 \\
 \dots & \dots & \dots & \dots & \dots & \dots \\
-
 \midrule
-
-Totals & & & 150,708 & & 31 \\
-
+Totals &   &   & 150,708 &   & 31 \\
 \bottomrule
-
 \end{tabularx}
 
 \caption{Sample of 50 employees (top 6 records). The variable Gender is coded with 1 = female, 0 = male.}

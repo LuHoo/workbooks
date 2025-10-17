@@ -187,13 +187,14 @@ N \hat{y} &= N \bar{y} + N b_1(x - \bar{x}) \\
 \label{eq:regression_estimate}
 \end{align}
 
-\begin{tabularx}{\textwidth}{lll}
-where: &$\hat{Y}_R$ & : estimated correct value of the population\\
-& $N$ & : number of elements in the population\\
-& $y$ & : audit value of a sampled item\\
-& $b_1$ & : slope of the regression line\\
-& $X$ & : total book value of the population\\
-& $x$ & : book value of a sampled item\\
+\noindent
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+where: & $\hat{Y}_R$ : & estimated correct value of the population\\
+       & $N$         : & number of elements in the population\\
+       & $y$         : & audit value of a sampled item\\
+       & $b_1$       : & slope of the regression line\\
+       & $X$         : & total book value of the population\\
+       & $x$         : & book value of a sampled item\\
 \end{tabularx}
 
 \bigskip
@@ -376,7 +377,7 @@ Applying these formulas to the results of \emph{Case: Valuation of Inventories} 
 The standard deviation of the ratio estimator is
 
 \begin{align*}
-s_q^2 &= \frac{3,649,977,984 - 2 \cdot 1.00117 \cdot 3,550,437,464 + 1.00117^2 \cdot 3,586,086,982}{400 - 1} \\
+s_q^2 &= \frac{3,649,977,984 - 2\!\cdot 1.00117\!\cdot\!3,550,437,464 + 1.00117^2\!\cdot\!3,586,086,982}{400 - 1} \\
 &= 339,043.79
 %\label{eq:sd_ratios}
 \end{align*}
@@ -532,23 +533,20 @@ From the graphs, we cannot tell how the estimators perform in terms of bias, pre
 Bias can be measured by taking the average of the estimate over all replications. In addition, statistical literature indicates that the ratio estimator is biased, the difference estimator is unbiased, and the regression estimator is biased when the population book values are skewed, as in our case.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{1.3 cm}{Estimator} &
-Constant difference &
-No intercept &
-Slope and intercept &
-Sporadic errors \\
-
+\parbox[t]{2cm}{Estimator} &
+\parbox[t]{2cm}{\raggedleft Constant difference} &
+\parbox[t]{2cm}{\raggedleft No intercept} &
+\parbox[t]{2cm}{\raggedleft Slope and\\intercept} &
+\parbox[t]{2cm}{\raggedleft Sporadic errors} \\
 \midrule
-
 Difference & 260,061 & 259,469 & 258,983 & 261,954 \\
-Ratio & 262,571 & 259,493 & 255,750 & 262,293 \\
+Ratio      & 262,571 & 259,493 & 255,750 & 262,293 \\
 Regression & 260,227 & 260,002 & 259,453 & 262,544 \\
-
 \bottomrule
 \end{tabularx}
-
 \caption{Average value of estimates. The total error in each distribution is 260,000.}
 \label{tab:average_value_of_estimates}
 \end{table}
@@ -558,14 +556,14 @@ The results in Table \ref{tab:average_value_of_estimates} show, that if there is
 Precision is estimated by calculating the standard deviation of  estimates across all replications. A summary of these standard deviations is provided in Table \ref{tab:standard_deviations_of_estimates}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{1.3 cm}{Estimator} &
-Constant difference &
-No intercept &
-Slope and intercept &
-Sporadic errors \\
-
+\parbox[t]{2cm}{Estimator} &
+\parbox[t]{2cm}{\raggedleft Constant difference} &
+\parbox[t]{2cm}{\raggedleft No intercept} &
+\parbox[t]{2cm}{\raggedleft Slope and\\intercept} &
+\parbox[t]{2cm}{\raggedleft Sporadic errors} \\
 \midrule
 
 Difference & 66,480 & 72,079 & 90,768 & 189,442 \\
@@ -584,14 +582,14 @@ We learn from Table \ref{tab:standard_deviations_of_estimates} that the differen
 Finally, we counted the fraction of samples that yielded a confidence interval that contained the true seeded error of 260,000. Because the confidence level used was 95\%, an ideal estimator would cover the correct value in 95\% of cases. If the coverage is greater than 95\%, the estimator is conservative; if the coverage is less, the estimator is \hlblue{anti-conservative}\index{anti-conservative}. Table \ref{tab:coverage_of_estimators} summarizes the coverage percentages for each estimator and error distribution.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{1.3 cm}{Estimator} &
-Constant difference &
-No intercept &
-Slope and intercept &
-Sporadic errors \\
-
+\parbox[t]{2cm}{Estimator} &
+\parbox[t]{2cm}{\raggedleft Constant difference} &
+\parbox[t]{2cm}{\raggedleft No intercept} &
+\parbox[t]{2cm}{\raggedleft Slope and\\intercept} &
+\parbox[t]{2cm}{\raggedleft Sporadic errors} \\
 \midrule
 
 Difference & 94.94\% & 94.85\% & 94.94\% & 78.41\% \\
@@ -671,7 +669,6 @@ such that the result is\footnote{The $t$ value of 2.571 is for a two-sided inter
 \begin{align*}
 	s_{q, m}^2 &= \frac{230,244,509 - 2 \cdot 0.982489 \cdot 231,280,871 + 0.982489^2 \cdot 234,376,912}{6 - 1} \\ 
 	&= 404,624
-	\label{eq:sd_ratios_m}
 \end{align*}
 This quantity is then used for the calculation of the estimated standard deviation of population ratios as
 \begin{equation}
@@ -814,10 +811,10 @@ The range between the values is thus divided into ten equal parts, each with a w
 A summary of this classification is given in Table \ref{tab:class_inventories}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X >{\raggedright\arraybackslash}p{4.5cm} >{\raggedleft\arraybackslash}p{2cm} Y Y}
+\begin{tabularx}{\textwidth}{@{}llYYY@{}}
 \toprule
 Class &
-Book~values &
+\parbox[t]{4cm}{Book~values} &
 Frequency $f$ &
 $\sqrt{f}$ &
 Cum.~sum \\
@@ -905,9 +902,9 @@ where $N_h$ denotes the number of population elements in stratum $h$.\nomenclatu
 We apply this formula to the stratification results from Table \ref{tab:strat_cum_sum}. We use the standard deviation of the stratum book values as an approximation of the standard deviation of the stratum audit values.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{2 cm}{Stratum} &
 $N$ &
 $s_x$ &
 $N s_x$ &
@@ -951,9 +948,9 @@ n_h = n \frac{N_h s_{y,h}}{\sum{N_h s_{y,h}}}
 \end{equation}
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{2 cm}{Stratum} &
 $N$ &
 $s_x$ &
 $N s_x$ &
@@ -1061,14 +1058,14 @@ where $L$ is the number of strata \nomenclature{$L$}{number of strata}, and $g_h
 The calculations are summarized in Table \ref{tab:intermediate_results_variance}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y >{\raggedleft\arraybackslash}p{2.3cm}}
+\begin{tabularx}{\textwidth}{@{}lrrYYr@{}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
-$N$ &
-$n$ &
-$g^2$ &
-$s_y^2$ &
-$g^2 s_y^2$ \\
+\parbox[t]{1.34 cm}{Stratum} &
+\parbox[t]{1.34 cm}{\raggedleft $N$} &
+\parbox[t]{1.34 cm}{\raggedleft $n$} &
+\parbox[t]{2cm}{\raggedleft $g^2$} &
+\parbox[t]{2cm}{\raggedleft $s_y^2$} &
+\parbox[t]{2.4cm}{\raggedleft $g^2 s_y^2$} \\
 
 \midrule
 
@@ -1118,11 +1115,11 @@ leads to a prediction interval of [7,424,999,\hspace{0.5em} 7,916,401]. This res
 \paragraph{Regression estimation} For the evaluation of the regression estimator, we start with the \hlblue{covariance}\index{covariance} $c_{xy}$ between the book values $x$ and audit values $y$ from Equation \ref{eq:covariance}. The calculation is
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y Y}
+\begin{tabularx}{\textwidth}{@{}lrrYYY@{}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
-$\sum{x y}$ &
-$n$ &
+\parbox[t]{2cm}{Stratum} &
+\parbox[t]{2cm}{\raggedleft $\sum{x y}$} &
+\parbox[t]{1cm}{\raggedleft $n$} &
 $\bar{x}$ &
 $\bar{y}$ &
 $c_{xy}$ \\
@@ -1148,31 +1145,26 @@ b_1 = \frac{\sum{g_h^2 c_{xy, h}}}{\sum{g_h^2 s_{x, h}^2}}
 
 Table \ref{tab:calculation_slope} shows the intermediate results that lead to the calculation of coefficient $b_1 = \frac{11,165,022,188}{10,881,902,823} = 1.026$.
 
-\begin{table*}[htbp]
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.3cm} Y Y Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm}}
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{@{}lrrrrr@{}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
-$g^2$ &
-$c_{xy}$ &
-$s_x$ &
-$g^2 c_{xy}$ &
-$g^2 s_{x}^2$ \\
-
+\parbox[t]{1 cm}{Str.} &
+\parbox[t]{1.5cm}{\raggedleft $g^2$} &
+\parbox[t]{1.5cm}{\raggedleft $c_{xy}$} &
+\parbox[t]{1.5cm}{\raggedleft $s_x$} &
+\parbox[t]{2cm}{\raggedleft $g^2 c_{xy}$} &
+\parbox[t]{2cm}{\raggedleft $g^2 s_{x}^2$} \\
 \midrule
-
 1 & 16,204.07 &   269,587 &   528.93 & 4,368,411,054 & 4,533,333,210 \\
 2 &  4,501.49 & 1,082,008 & 1,027.37 & 4,870,649,168 & 4,751,253,947 \\
 3 &    400.15 & 4,813,063 & 1,997.94 & 1,925,961,966 & 1,597,315,666 \\
-
 \midrule
-
 Total & & & & 11,165,022,188 & 10,881,902,823 \\
-
 \bottomrule
 \end{tabularx}
 \caption{Calculation of the slope coefficient $b_1$}
 \label{tab:calculation_slope}
-\end{table*}
+\end{table}
 
 \bigskip
 The equation for the regression estimator for a stratified sample is a slight moderation from the one given by Equation \ref{eq:regression_estimate}
@@ -1182,9 +1174,9 @@ The equation for the regression estimator for a stratified sample is a slight mo
 \end{equation}
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y}
+\begin{tabularx}{\textwidth}{@{}lYYY@{}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.4 cm}{Stratum} &
 $N$ &
 $\bar{x}$ &
 $N \bar{x}$ \\
@@ -1223,7 +1215,7 @@ The calculations for this quantity are as follows:
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y Y Y}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.4 cm}{Stratum} &
 $n$ &
 $s_y^2$ &
 $c_{xy}$ &
@@ -1255,7 +1247,7 @@ The calculations are summarized in Table \ref{tab:intermediate_results_variance}
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y Y >{\raggedleft\arraybackslash}p{2.3cm}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.4 cm}{Stratum} &
 $N$ &
 $n$ &
 $g^2$ &
@@ -1376,11 +1368,11 @@ s^2_{D} = \sum_{h = 1}^{L}g_h^2 s_{d,h}^2
 The calculations are summarized in Table \ref{tab:intermediate_results_variance_diff}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm}}
+\begin{tabularx}{\textwidth}{X r r Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.5cm}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
-$N$ &
-$n$ &
+\parbox[t]{1.4 cm}{Stratum} &
+\parbox[t]{1cm}{\raggedleft $N$} &
+\parbox[t]{1cm}{\raggedleft $n$} &
 $g^2$ &
 $s_d^2$ &
 $g^2 s_d^2$ \\
@@ -1388,7 +1380,7 @@ $g^2 s_d^2$ \\
 \midrule
 
 1 & 2,030 & 226 & 16,204.07 &    37,898.92 &   614,116,709 \\
-2 & 1,217 & 259 &  4,501,49 &   588,080.39 & 2,647,238,193 \\
+2 & 1,217 & 259 &  4,501.49 &   588,080.39 & 2,647,238,193 \\
 3 &   253 &  98 &    400.15 & 2,344,701.56 &   938,239,506 \\
 
 \midrule
@@ -1428,10 +1420,10 @@ q = \frac{\sum{N_h \bar{y}_h}}{\sum{N_h \bar{x}_h}}
 \end{equation}
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm}}
+\begin{tabularx}{\textwidth}{X r Y Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm}}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
-$N$ &
+\parbox[t]{1.4 cm}{Stratum} &
+\parbox[t]{1cm}{\raggedleft $N$} &
 $\bar{x}$ &
 $\bar{y}$ &
 $N \bar{x}$ &
@@ -1482,7 +1474,7 @@ The calculations are summarized in Table \ref{tab:intermediate_results_variance_
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y}
 \toprule
-\parbox[t]{1 cm}{Stratum} &
+\parbox[t]{1.4 cm}{Stratum} &
 $g^2$ &
 $s_q^2$ &
 $g^2 s_q^2$ \\

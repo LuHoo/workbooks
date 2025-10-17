@@ -160,7 +160,7 @@ At the end of this chapter you will be able to
 % - **Understand**: 
 \item explain\marginnote{understand} the implications of violations of assumptions on regression results.
 % - **Apply**: 
-\item perform\marginnote{apply} statistical tests (e.g., Shapiro-Wilk for normality, Breusch-Pagan for heteroskedasticity, Breusch-Godfrey for autocorrelation).
+\item perform\marginnote{apply} statistical tests for normality, heteroskedasticity, and autocorrelation.
 % - **Analyze**: 
 \item interpret\marginnote{analyze} diagnostic plots (e.g., residuals vs. fitted values) to evaluate assumptions visually.
 % - **Evaluate**: 
@@ -364,7 +364,7 @@ In Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we p
 \paragraph{Assumptions underlying regression results} % (fold)
 \label{par:assumptions_underlying_regression_results}
 
-Section \ref{sec:assumptions_underlying_regression_results} discusses the specific assumptions that underlie the regression results. These considerations should play a role in the back of our minds when engaging in predictive analytic methods such as regression analysis.
+Section \ref{sec:assumptions_underlying_regression_results} discusses the specific assumptions that underlie the regression results. These consi\-derations should play a role in the back of our minds when engaging in predictive analytic methods such as regression analysis.
 
 % paragraph assumptions_underlying_regression_results (end)
 
@@ -721,7 +721,7 @@ Finally, in \ttblue{mod.5}, we return to a \hlblue{winsorized} version of the da
 Table \ref{tab:overview_models} provides an overview of the different models used.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{>{\hsize=1\hsize}p{1.5cm} X >{\hsize=0.8\hsize}p{1.5cm}}
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
 \toprule
 \textbf{Model} & \textbf{Description} & \textbf{Section} \\
 
@@ -933,9 +933,9 @@ The combination of these two methods, often referred to as \hlblue{stepwise sele
 Adding the additional variables \texttt{coolDD} and \texttt{heatDD} has improved the fit of the model. The residual standard deviation decreased from \footnote{See Exercises \ref{ex:modelling_mod0} and \ref{ex:modelling_mod.1}} 4,112,487 for \texttt{mod.0} to 1,980,698 for \texttt{mod.1}. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods. A summary of the estimated coefficients for \ttblue{mod.1}, their standard errors, and $t$ and $p$ values is given in \ref{tab:summary_mod_1}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{4.5 cm}{Variable} &
+\parbox[t]{3 cm}{Variable} &
 Estimate &
 Std. Error &
 $t$ value &
@@ -970,7 +970,7 @@ Closer inspection of the data reveals two distinct groups, identified by the \tt
 This gives rise to building a new model (\ttblue{mod.2}), incorporating \ttblue{summer} as an \hlblue{interaction}\index{interaction} term. As can be seen from the model form \ttblue{revenue $\sim$ (production + coolDD + heatDD) * summer}, it interacts with the three other independent variables. A summary of this model is given in Table \ref{tab:summary_mod_2}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{4.5 cm}{Variable} &
 Estimate &
@@ -1153,7 +1153,7 @@ Create literature list.
 \paragraph{Autoregressive Integrated Moving Average} % (fold)
 \label{par:autoregressive_integrated_moving_average}
 
-\index{autoregressive integrated moving average} (ARIMA)\index{ARIMA} models are univariate time-series models that use the past values of a single variable to predict future values. They assume that the future values of a time series are a function of its past values and error terms. ARIMA models consist of three components: autoregressive (AR), integrated (I), and moving average (MA) components. The AR component captures the relationship between past and future values, the I component deals with nonstationary data, and the MA component deals with the error term. ARIMA models are best suited to stationary data and are commonly used for short-term forecasting.
+\index{autoregressive integrated moving average} (ARIMA)\index{ARIMA} models are uni\-variate time-series models that use the past values of a single variable to predict future values. They assume that the future values of a time series are a function of its past values and error terms. ARIMA models consist of three components: autoregressive (AR), integrated (I), and moving average (MA) components. The AR component captures the relationship between past and future values, the I component deals with nonstationary data, and the MA component deals with the error term. ARIMA models are best suited to stationary data and are commonly used for short-term forecasting.
 
 Extensions of ARIMA are \hlblue{Seasonal ARIMA}\index{seasonal ARIMA} (SARIMA)\index{SARIMA} models, that incorporate seasonal effects, and \hlblue{eXogenous ARIMA}\index{exogenous ARIMA} (X-ARIMA)\index{X-ARIMA} models, that incorporate values of one or more independent variables.
 
@@ -1255,12 +1255,14 @@ The Studentized residual is calculated as
 \end{equation}
 
 \noindent
-\begin{tabular}{>{\raggedright}p{1 cm}p{0.4 cm}p{10 cm}}
-where: &$e_i^*$ & : the Studentized residual of observation $i$\\
-& $e_i$ & : the residual of observation $i$\\
-& $s_{e(-i)}$ & : the standard deviation of all observations except $i$\\
-& $h_i$ & : the leverage of observation $i$\\
-\end{tabular}
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+
+% \begin{tabular}{>{\raggedright}p{1.2 cm}p{1cm}p{9.3 cm}}
+where: & $e_i^*$ : & the Studentized residual of observation $i$\\
+& $e_i$ : & the residual of observation $i$\\
+& $s_{e(-i)}$ : & the standard deviation of all observations except $i$\\
+& $h_i$ : & the leverage of observation $i$\\
+\end{tabularx}
 \nomenclature{$e_i$}{the residual of observation $i$}
 \nomenclature{$e_i^*$}{the Studentized residual of observation $i$}
 
@@ -1289,12 +1291,12 @@ We accommodate influential observations by either applying robust regression, or
 \begin{equation}
 D_i = \frac{e_i^{*2}}{k+1}\frac{h_i}{1-h_i}
 \end{equation}
-\begin{tabular}{>{\raggedright}p{1 cm}p{0.4 cm}p{10 cm}}
+\begin{tabularx}{\textwidth}{@{}llX@{}}
 where: &$D_i$ & : Cook's distance for observation $i$\\
 &$e_i^*$ & : the Studentized residual of observation $i$\\
 & $k$ & : the number of independent variables in the model\\
 & $h_i$ & : the leverage of observation $i$\\
-\end{tabular}
+\end{tabularx}
 \nomenclature{$D_i$}{Cook's distance for observation $i$}
 
 \bigskip
@@ -1408,7 +1410,7 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
 We fit a new model, \ttblue{mod.3}, on the winsorized data. The coefficient estimates of this model are summarized in \ref{tab:summary_mod_3}. The remaining analyses in this section are executed on the results of this model.
 
 \begin{table}[thbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{4.5 cm}{Variable} &
 Estimate &
@@ -1557,12 +1559,11 @@ We can now try to make statements about the quality of the relationship. One way
 \begin{equation*}
 r = b_1 \frac{s_x}{s_y}
 \end{equation*}
-\begin{tabular}{>{\raggedright}p{1 cm}p{0.4 cm}p{10 cm}}
-where: &$b_1$ & : the slope coefficient of the regression line\\
-& $s_x$ & : the estimated standard deviation of the independent\\
-&       & \quad variable $x$\\
-& $s_y$ & : the estimated standard deviation of the dependent $y$\\
-\end{tabular}
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+where: &$b_1$ : & the slope coefficient of the regression line\\
+& $s_x$ : & the estimated standard deviation of the independent variable $x$\\
+& $s_y$ : & the estimated standard deviation of the dependent variable $y$\\
+\end{tabularx}
 
 \bigskip
 The correlation coefficient $r$ takes values between -1 and +1. The sign of the coefficient indicates the direction of the relationship and the numerical value indicates the strength. The correlation is perfect when the coefficient equals -1 or +1. Values close to these values suggest a strong relationship, whereas those values close to zero do not support an assumed linear relationship. 
@@ -1716,11 +1717,11 @@ Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models disc
 
 \begin{table}[thbp]
 
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 
 \toprule
 
-\parbox[t]{1.6 cm}{Model} &
+\parbox[t]{2.2 cm}{Model} &
 Multiple $r^2$ &
 Adjusted $r^2$ & 
 AIC &
@@ -1880,7 +1881,7 @@ The Breusch-Pagan test statistic $BP$ \nomenclature{$BP$}{Breusch-Pagan test sta
 \end{equation}
 where $n$ is the number of observations and $r^2$ is the coefficient of determination from the regression of $e_i^2$ on the independent variables.
 
-\paragraph{Distribution} Under the null hypothesis of constant variance or homoskedasticity, the test statistic $BP$ follows a chi-squared distribution with $k$ degrees of freedom.
+\paragraph{Distribution} Under the null hypothesis of constant variance or homo\-skedasticity, the test statistic $BP$ follows a chi-squared distribution with $k$ degrees of freedom.
 
 \paragraph{Significance level} Again, we typically conclude based on the $p$ value of the test.
 
@@ -1984,9 +1985,9 @@ where $\rho$ \nomenclature{$\rho$}{estimated autocorrelation coefficient} is the
 This formula shows how each variable is transformed by subtracting $\rho$ times its lagged value, effectively filtering out the AR(1) structure in the residuals. The resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and $t$ and $p$ values are summarized in Table \ref{tab:summary_mod_4}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{4.5 cm}{Variable} &
+\parbox[t]{3 cm}{Variable} &
 Estimate &
 Std. Error &
 $t$ value &
@@ -2023,9 +2024,9 @@ The resulting model will be referred to as \ttblue{mod.5}, and we work with this
 A summary of the coefficients of the resulting \ttblue{mod.5} is provided in Table \ref{tab:summary_mod_5}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{1.5cm} Z{1.5cm}}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{4.5 cm}{Variable} &
+\parbox[t]{3 cm}{Variable} &
 Estimate &
 Std. Error &
 $t$ value &
@@ -2166,10 +2167,10 @@ In the previous sections, a regression model was constructed based on data from 
 For the first month of the hold-out set (January 2014), the model can generate an expectation of revenue using the known values of the explanatory variables: production (606,400), coolDD (0), and whether the month is a summer month. Since January is not a summer month, the interaction terms involving \ttblue{summer} will drop out of the equation. Table \ref{tab:expectation_january} shows the detail calculation of the expectation.
 
 \begin{table}[thbp]
-\begin{tabularx}{\textwidth}{X Z{2cm} Z{2cm} Z{2cm}}
+\begin{tabularx}{\textwidth}{@{}lYYY@{}}
 
 \toprule
-\parbox[t]{6.5 cm}{variable} &
+\parbox[t]{3 cm}{variable} &
 coefficient &
 value &
 result \\
@@ -2360,7 +2361,7 @@ Here we define $M$, the \hlblue{materiality}\index{materiality} threshold, repre
 This test relies on several assumptions about the data:
 \begin{itemize}
     \item \emph{Independence:} Monthly revenue figures should ideally be independent. If dependencies exist (e.g., seasonality or trends), they should be accounted for in the model.
-    \item \emph{Normality:} The errors in the revenue predictions should be approximately normally distributed.
+    \item \emph{Normality:} The errors in the revenue predictions should be ap\-prox\-i\-mate\-ly normally distributed.
     \item \emph{Consistency in model parameters:} The model’s parameters and residual variance are assumed to hold for the combined predictions over the year.
 \end{itemize}
 These assumptions ensure that the test’s distribution and the interval calculations are valid, providing a reliable assessment of the recorded revenue.
@@ -2431,7 +2432,7 @@ Consider including:
 
 AAG A.67 To examine the stores for the completeness and existence of sales, the auditor first identifies stores with large prediction errors (labeled the residuals in the regression output), that is, the difference between the actual sales and predicted sales for each store. A common approach is to identify and focus on the largest few residuals. In particular, the auditor may choose all stores that have residuals greater than the standard error. The total number of stores to pick depends on the number of large residuals. The more stores with large residuals, the more stores should be selected to achieve the desired level of assurance.
 
-AAG A.68 Because the auditor in this case is looking for overstatements, the positive residuals are important; stores with positive residuals are those for which the regression predicts a lower level of sales than the actual number, a potential overstatement. Exhibit A-10 shows that the largest positive residuals are at Store Nos. 4, 8, and 18. The analysis points to beginning further investigation (if any) at stores 4, 8, and 18, because the regression shows them to be the most out of line with the other stores, based on the relationships in the data for these 4 independent variables.
+AAG A.68 Because the auditor in this case is looking for over\-state\-ments, the positive residuals are important; stores with positive residuals are those for which the regression predicts a lower level of sales than the actual number, a potential overstatement. Exhibit A-10 shows that the largest positive residuals are at Store Nos. 4, 8, and 18. The analysis points to beginning further investigation (if any) at stores 4, 8, and 18, because the regression shows them to be the most out of line with the other stores, based on the relationships in the data for these 4 independent variables.
 
 AAG A.69 Once the stores have been identified, the auditor begins a further analytical investigation. The goal of the additional analysis is to explain why these four stores are out of line in comparison with the others. The further analytics can be based on product line analysis or more detailed analysis of the predictor factors (that is, for new stores, how many months they were open). For example, On the Go Stores sales can be divided into the product lines: grocery and other merchandise, beer and wine, lottery, and gasoline. A more detailed analytical study can help explain why a store is out of line. For example, the analytics might show that Store No. 8's sales are unusual because of an unusually large amount of sales of beer and wine. The explanations derived in this manner are then taken to management as a basis for inquiry, to corroborate the explanations found in the analytics or to discover new explanations. For example, management might respond that the unusual sales for Store No. 8 are not likely due to beer and wine sales, but rather to a construction project near the store, which increased traffic at the store and increased sales significantly. Management's explanations should be corroborated by further analytics, inquiry, or testing.
 
@@ -2474,7 +2475,7 @@ be the non-centrality parameter\nomenclature{$\delta$}{non-centrality parameter 
 \bigskip
 The distribution of $T$ under the alternative hypotheses reflects the expected behaviour of the test statistic if the recorded revenue deviates from the true value by more than $M$.
 
-It is crucial to understand that material overstatements and understatements are directional claims. 
+It is crucial to understand that material overstatements and under\-statements are directional claims. 
 As such, they require directional tests:
 If we are evaluating the risk of a \emph{material overstatement}, we focus on the lower tail of the distribution, because the assumption is that the observed revenue should be significantly lower than expected if no overstatement occurred.
 If we are evaluating the risk of a \emph{material understatement}, we focus on the upper tail, because the assumption is that the observed revenue should be significantly higher than expected if no understatement occurred.
@@ -2537,7 +2538,7 @@ To run the exercises in this workshop, we need to load a few packages.
 \subsection{Case: USSteamCo}
 
 \begin{exercise}
-  \label{ex:cell_evaluation}
+  \label{ex:the_us_steamco_data_file}
 
 \textbf{The US SteamCo data file}
 
@@ -2742,6 +2743,8 @@ In addition to the statistics produced by \ttblue{brief}, it provides insight in
 
 The correlations in Table \ref{tab:correlations_USSteamCo} are calculated using the \ttblue{cor} function.
 
+\bigskip
+\noindent
 \begin{minipage}{\textwidth}
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{(cor_ussteam <- cor(USSteamCoEstim[, 2:5]))}
@@ -3044,7 +3047,7 @@ Figure \ref{fig:H7_qqplot} provides the QQ plot for \ttblue{ussteamco.mod.2}, wi
 
 \textbf{Influential observations}
 
-We obtain the Cook's distances of a model by running the \ttblue{cooks.distance} function on it.
+Cook’s distances for a model can be obtained using the \ttblue{cooks.distance} function.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{cooks.mod.2 <- cooks.distance(ussteamco.mod.2)}

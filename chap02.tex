@@ -79,26 +79,35 @@ In this section, we assume that we sample without replacement. We sample 60 item
 The probability distribution that describes the probability of `success' (erroneous item) or `failure' (correct item) in a number of draws without replacement from a finite population is the hypergeometric distribution\index{distribution!hypergeometric}\index{hypergeometric distribution}. Its probability mass function is given by
 
 \begin{equation}
-P(\stoch{k} = k) = \frac{
-\left( \begin{array}{c}M\\k\end{array} \right)
-\left( \begin{array}{c}N-M\\n-k\end{array} \right)}
-{\left( \begin{array}{c}N\\n\end{array} \right)}
+P(\stoch{k}=k)
+= \frac{\binom{M}{k}\!\binom{N-M}{n-k}}{\binom{N}{n}}
 \label{eq:hypergeometric}
 \end{equation}
+
 \begin{figure*} 
  \centering
  \includegraphics[width=1\textwidth]{H2hypergeometric.pdf}
  \caption{Hypergeometric distribution ($N =$ 331; $M =$ 17) with sample size $n$ = \hlblue{10}, \hlblue{20}, \hlblue{40}, \hllblue{60}, \hlblue{90}, and \hlblue{120}}
  \label{fig:H2hypergeometric}
 \end{figure*}
-\begin{tabular}{p{1 cm}p{1 cm}p{12 cm}}
-with: & $M$ & : \nomenclature{$M$}{number of `successes' in the population}number of errors in the population\\ 
-& $k$ & : \nomenclature{$k$}{number of `successes' in the sample}number of errors in the sample\\
-& $N$ & : population size\\
-& $n$ & : sample size\\
-\end{tabular}
+
+% \noindent
+% \begin{tabular}{p{1 cm}p{1 cm}p{12 cm}}
+% with: & $M$ & : \nomenclature{$M$}{number of `successes' in the population}number of errors in the population\\ 
+% & $k$ & : \nomenclature{$k$}{number of `successes' in the sample}number of errors in the sample\\
+% & $N$ & : population size\\
+% & $n$ & : sample size\\
+% \end{tabular}
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+with: & $M$\nomenclature{$M$}{number of `successes' in the population} : &  number of errors in the population\\
+      & $k$\nomenclature{$k$}{number of `successes' in the sample} : &  number of errors in the sample\\
+      & $N$ : & population size\\
+      & $n$ : & sample size\\
+\end{tabularx}
 and the \hlblue{binomial coefficient}\index{binomial coefficient}\index{coefficient!binomial} is defined as
-\begin{equation*}\left( \begin{array}{c}a\\b\end{array} \right) = \frac{a!}{b!(a-b)!}\end{equation*}
+\begin{equation*}\binom{a}{b} = \frac{a!}{b!(a-b)!}\end{equation*}
 
 The hypergeometric distribution has three parameters: population size $N$, number of errors in the population $M$ and sample size $n$. Once we obtain the correct values for these three parameters, we can calculate the probability of each particular result.
 
@@ -469,12 +478,21 @@ Similar to the standard normal distribution of the statistic $z$, we can use the
 t = \frac{\overline{x}-\mu}{s/\sqrt{n}}
 \label{eq:omrekening}
 \end{equation}
-\begin{tabular}{p{1 cm}p{0.3 cm}p{10 cm}}
-where: &$\overline{x}$ & : sample mean\\
-& $\mu$ & : population mean\\
-& $s$ & : sample standard deviation\\
-& $n$ & : sample size\\
-\end{tabular}
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+with: &$\overline{x}$ : & sample mean\\
+& $\mu$ : & population mean\\
+& $s$ : & sample standard deviation\\
+& $n$ : & sample size\\
+\end{tabularx}
+
+% \begin{tabular}{p{1.2 cm}p{0.5 cm}p{10 cm}}
+% where: &$\overline{x}$ & : sample mean\\
+% & $\mu$ & : population mean\\
+% & $s$ & : sample standard deviation\\
+% & $n$ & : sample size\\
+% \end{tabular}
 
 \bigskip
 Note that Equation \ref{eq:omrekening} is exact for all sample sizes $n$, unlike Equation \ref{eq:vanTnaarZ}, which yields valid results only when $n \geq 200$.
@@ -645,13 +663,13 @@ The practical difference between the use of the hypergeometric distribution and 
 If we compare the expected value and variance of both distributions, we observe that the effect of the approximation is not on the expected value but on the variance only. Table \ref{tab:vergHyperBinom} summarizes the expected values and variances.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y}
+\begin{tabularx}{\textwidth}{p{4cm} Y Y}
 \toprule
-\parbox[t]{4cm}{Probability distribution} &
+Probability distribution &
 Expected value &
 Variance \\
 \midrule
-Hypergeometric & $n\pi$ & $n\pi (1-\pi) \dfrac{N - n}{N - 1}$ \\
+Hypergeometric & $n\pi$ & $n\pi (1-\pi) \frac{N - n}{N - 1}$ \\
 Binomial       & $n\pi$ & $n\pi (1-\pi)$ \\
 \bottomrule
 \end{tabularx}
@@ -667,7 +685,8 @@ Factor $(N - n) / (N - 1)$ is the \hlblue{finite-population correction factor}\i
 \label{eq:eindigheidApprox}
 \end{equation}
 
-We can now easily see that this factor has very little effect when $N$ is very large, as long as $n$ is reasonably small. As a result, we formulate the condition for binomial approximation:
+This shows that this factor has very little effect when $N$ is very large, as long as $n$ is reasonably small compared to $N$. 
+As a result, we formulate the condition for binomial approximation:
 
 \begin{equation}
 \frac{n}{N} < 0.10
@@ -788,7 +807,8 @@ n \geq 200
 therefore seems reasonable for the approximation of the $t$ distribution by the normal distribution.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{3.2cm}{Significance level $\alpha$} &
 $t[49]$ &
@@ -796,14 +816,11 @@ $t[99]$ &
 $t[199]$ &
 $z = t[\infty]$ \\
 \midrule
-1\% & 2.405 & 2.365 & 2.345 & 2.326 \\
-5\% & 1.677 & 1.660 & 1.653 & 1.645 \\
+1\%  & 2.405 & 2.365 & 2.345 & 2.326 \\
+5\%  & 1.677 & 1.660 & 1.653 & 1.645 \\
 10\% & 1.299 & 1.290 & 1.286 & 1.282 \\
-
 \bottomrule
-
 \end{tabularx}
-
 \caption{Comparison of $t$-values at $n = 50, 100$, and $200$ with the $z$-value from the normal distribution}
 \label{tab:vergPoissNorm}
 \end{table}

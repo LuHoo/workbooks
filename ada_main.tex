@@ -1,3 +1,4 @@
+%!TEX root = ada_main.tex
 \documentclass[11pt, showtrims]{memoir}
 
 % Book metadata
@@ -85,8 +86,8 @@
 \def\pagedeclaration#1{, \hyperlink{page.#1}{\nobreakspace#1}}
 \makenomenclature
 
-\usepackage[toc]{glossaries}
-\makeglossaries
+% \usepackage[toc]{glossaries}
+% \makeglossaries
 
 % To embed flowcharts
 \usepackage{tikz} 
@@ -94,16 +95,12 @@
 % Define block styles
 \tikzstyle{decision} = [diamond, draw, fill=KPMG_blue!20, 
     text width=4.5 em, text badly centered, node distance=3 cm, inner sep = 0 pt]
-\tikzstyle{whiteblock} = [rectangle, draw, node distance=2.5 cm,
-    text width=7.2 em, text centered, rounded corners, minimum height=4 em]
-\tikzstyle{widewhiteblock} = [rectangle, draw, node distance=2.5 cm,
-    text width=15.4 em, text centered, rounded corners, minimum height=4 em]
-\tikzstyle{blueblock} = [rectangle, draw, fill=KPMG_blue!20, 
-    text width=7.2 em, text centered, rounded corners, minimum height=4 em,
-  node distance=3 cm]  
+\tikzstyle{whiteblock} = [rectangle, draw, node distance=2.5 cm, text width=7.2 em, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{widewhiteblock} = [rectangle, draw, node distance=2.5 cm, text width=4cm, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{blueblock} = [rectangle, draw, fill=KPMG_blue!20, text width=7.2 em, text centered, rounded corners, minimum height=4 em, node distance=3 cm]  
 \tikzstyle{wideblueblock} = [rectangle, draw, fill=KPMG_blue!20, 
-    text width=15.4 em, text centered, rounded corners, minimum height=4 em,
-  node distance=3 cm]  
+    text width=4cm, text centered, rounded corners, minimum height=4 em,
+    node distance=3 cm]  
 \tikzstyle{line} = [draw, -latex']
 \tikzstyle{cloud} = [draw, circle, fill=red!20, node distance=3 cm,
     minimum height=2 em]
@@ -241,6 +238,8 @@ Dedicated to
 \input{chap05}
 \input{chap06}
 \input{chap07}
+\input{chap09}
+\input{chap10}
 
 \printnomenclature
 \addcontentsline{toc}{chapter}{\nomname}
