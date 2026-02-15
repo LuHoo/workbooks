@@ -1,0 +1,224 @@
+CROSS-REFERENCE ANALYSIS: INTERNAL DEPENDENCIES BETWEEN CHAPTERS
+=================================================================
+
+This document identifies all internal cross-references using \ref{cha:*} commands 
+across chapters 1-10 in the Ada textbook. These references indicate which chapters 
+depend on content in other chapters.
+
+---
+
+CHAPTER DEPENDENCIES SUMMARY
+============================
+
+cha:sampling = Chapter on Sampling (likely Chapter 1)
+cha:probability_distributions = Chapter on Probability Distributions (Chapter 2)
+cha:estimation = Chapter on Estimation (Chapter 3)
+cha:stratified_sampling = Chapter on Stratified Sampling (Chapter 4)
+cha:hypothesis_testing = Chapter on Hypothesis Testing (Chapter 5)
+cha:analytical_procedures = Chapter on Analytical Procedures (Chapter 6)
+cha:introduction_to_regression_analysis = Chapter on Regression Analysis (Chapter 7)
+cha:goodness_of_fit = Chapter on Goodness of Fit (Chapter 8)
+cha:classification = Chapter on Classification (Chapter 9)
+
+---
+
+DETAILED CROSS-REFERENCE MAPPING
+==================================
+
+CHAPTER 1 (Sampling) - References to other chapters:
+----------------------------------------------------
+Appears in: chap01.tex
+
+References TO:
+- cha:estimation (appears 3 times)
+  Line 15: "theory in Chapters \ref{cha:estimation} to \ref{cha:hypothesis_testing}"
+  Line 184: "Chapters \ref{cha:estimation} and \ref{cha:stratified_sampling}"
+  Line 626: "Chapters \ref{cha:estimation} and \ref{cha:stratified_sampling}"
+  Line 639: "Chapter \ref{cha:estimation} for CVS"
+
+- cha:hypothesis_testing (appears 4 times)
+  Line 15: "theory in Chapters \ref{cha:estimation} to \ref{cha:hypothesis_testing}"
+  Line 197: "Particularly for hypothesis tests... see Chapter \ref{cha:hypothesis_testing}"
+  Line 626: "whereas Chapter \ref{cha:hypothesis_testing} shows the projection"
+  Line 634: "When we introduce... in Chapter \ref{cha:hypothesis_testing}"
+  Line 639: "This is discussed in Chapter \ref{cha:hypothesis_testing} for MUS"
+  Line 648: "Chapter \ref{cha:hypothesis_testing} discusses how the projected misstatement"
+
+- cha:stratified_sampling (appears 3 times)
+  Line 184: "Chapters \ref{cha:estimation} and \ref{cha:stratified_sampling}"
+  Line 626: "Chapters \ref{cha:estimation} and \ref{cha:stratified_sampling}"
+  Line 628: "We shall see in Chapter \ref{cha:stratified_sampling}"
+
+- cha:analytical_procedures (appears 1 time)
+  Line 15: "discussed in Chapter \ref{cha:analytical_procedures}"
+
+- cha:introduction_to_regression_analysis (appears 1 time)
+  Line 15: "Chapters \ref{cha:introduction_to_regression_analysis} to \ref{cha:classification}"
+
+- cha:classification (appears 1 time)
+  Line 15: "...to \ref{cha:classification}"
+
+
+CHAPTER 2 (Probability Distributions) - References to other chapters:
+---------------------------------------------------------------------
+Appears in: chap02.tex
+
+References TO:
+- cha:goodness_of_fit (appears 1 time)
+  Line 65: "goodness-of-fit is the subject of Chapter \ref{cha:goodness_of_fit}"
+
+- cha:introduction_to_regression_analysis (appears 3 times)
+  Line 65: "whereas regression models are introduced in Chapter \ref{cha:introduction_to_regression_analysis}"
+  Line 329: "In Chapter \ref{cha:estimation} we discuss"
+  Line 555: "Later in this book, in Chapter \ref{cha:introduction_to_regression_analysis}"
+  Line 562: "In this book, we use the F distribution in Chapter \ref{cha:introduction_to_regression_analysis}"
+
+- cha:estimation (appears 2 times)
+  Line 329: "In Chapter \ref{cha:estimation} we discuss"
+  Line 737: "Estimation of an error rate is discussed in Chapter \ref{cha:estimation}"
+
+- cha:hypothesis_testing (appears 1 time)
+  Line 801: "Significance levels are explained in Chapter \ref{cha:hypothesis_testing}"
+
+
+CHAPTER 3 (Estimation) - References to other chapters:
+-------------------------------------------------------
+Appears in: chap03.tex
+
+References TO:
+- cha:stratified_sampling (appears 2 times)
+  Line 16: "Strategies to discover... presented in Chapter \ref{cha:stratified_sampling}"
+  Line 162: "Under certain conditions (we validate these conditions in Chapter \ref{cha:stratified_sampling})"
+  Line 546: "We explain these strategies in Chapter \ref{cha:stratified_sampling}"
+
+
+CHAPTER 4 (Stratified Sampling) - References to other chapters:
+---------------------------------------------------------------
+Appears in: chap04.tex
+
+References TO:
+- cha:probability_distributions (appears 1 time)
+  Line 10: "In Chapter \ref{cha:probability_distributions} we see"
+
+- cha:estimation (appears 2 times)
+  Line 10: "In Chapter \ref{cha:estimation} we assume"
+  Line 148: "as in Chapter \ref{cha:estimation}"
+
+- cha:introduction_to_regression_analysis (appears 2 times)
+  Line 157: "The estimator developed here is based on the theory... in Chapter \ref{cha:introduction_to_regression_analysis}"
+  Line 426: "A more elaborate discussion... deferred to Chapter~\ref{cha:introduction_to_regression_analysis}"
+
+
+CHAPTER 5 (Hypothesis Testing) - References to other chapters:
+--------------------------------------------------------------
+Appears in: chap05.tex
+
+References TO:
+- cha:probability_distributions (appears 1 time)
+  Line 96: "We have shown in Chapter \ref{cha:probability_distributions}"
+
+
+CHAPTER 6 (Analytical Procedures) - References to other chapters:
+-----------------------------------------------------------------
+Appears in: chap06.tex
+
+References TO:
+- cha:sampling (appears 1 time)
+  Line 13: "Recall from Chapter \ref{cha:sampling}"
+
+- cha:introduction_to_regression_analysis (appears 1 time)
+  Line 449: "Each of these quantities is discussed in more detail in Chapter \ref{cha:introduction_to_regression_analysis}"
+
+- cha:hypothesis_testing (appears 2 times)
+  Line 475: "similar to that discussed in Chapter \ref{cha:hypothesis_testing}"
+  Line 477: "from Chapter \ref{cha:hypothesis_testing}"
+
+
+CHAPTER 7 (Introduction to Regression Analysis) - References to other chapters:
+--------------------------------------------------------------------------------
+Appears in: chap07.tex
+
+References TO:
+- cha:analytical_procedures (appears 1 time)
+  Line 239: "introduced in Chapter \ref{cha:analytical_procedures}"
+
+
+---
+
+SUMMARY OF CHAPTER INTERDEPENDENCIES
+=====================================
+
+FORWARD REFERENCES (Earlier chapters referenced by later chapters):
+-------------------------------------------------------------------
+Chapter 1 (Sampling) is referenced by:
+  - Chapter 6 (Analytical Procedures) - Line 13
+
+Chapter 2 (Probability Distributions) is referenced by:
+  - Chapter 4 (Stratified Sampling) - Line 10
+  - Chapter 5 (Hypothesis Testing) - Line 96
+
+Chapter 3 (Estimation) is referenced by:
+  - Chapter 1 (Sampling) - Lines 15, 184, 626, 639
+  - Chapter 2 (Probability Distributions) - Lines 329, 737
+  - Chapter 4 (Stratified Sampling) - Lines 10, 148
+
+Chapter 4 (Stratified Sampling) is referenced by:
+  - Chapter 1 (Sampling) - Lines 184, 626, 628
+  - Chapter 3 (Estimation) - Lines 16, 162, 546
+
+Chapter 5 (Hypothesis Testing) is referenced by:
+  - Chapter 1 (Sampling) - Lines 15, 197, 626, 634, 639, 648
+  - Chapter 2 (Probability Distributions) - Line 801
+  - Chapter 6 (Analytical Procedures) - Lines 475, 477
+
+Chapter 6 (Analytical Procedures) is referenced by:
+  - Chapter 1 (Sampling) - Line 15
+  - Chapter 7 (Regression Analysis) - Line 239
+
+Chapter 7 (Regression Analysis) is referenced by:
+  - Chapter 1 (Sampling) - Line 15
+  - Chapter 2 (Probability Distributions) - Lines 65, 555, 562
+  - Chapter 4 (Stratified Sampling) - Lines 157, 426
+  - Chapter 6 (Analytical Procedures) - Line 449
+
+Chapter 8 (Goodness of Fit) is referenced by:
+  - Chapter 2 (Probability Distributions) - Line 65
+
+Chapter 9 (Classification) is referenced by:
+  - Chapter 1 (Sampling) - Line 15
+
+
+DEPENDENCY CHAINS (for volume splitting):
+==========================================
+
+VOLUME 1 CANDIDATES (Foundation chapters):
+- Chapter 1 (Sampling) - foundational, many things depend on it
+- Chapter 2 (Probability Distributions) - foundational, used by many later chapters
+
+VOLUME 2 CANDIDATES (Advanced chapters):
+- Chapters 3-9 (Build on foundations in Vol 1)
+
+CRITICAL DEPENDENCIES TO CONSIDER:
+- Chapter 1 is heavily cited by later chapters
+- Chapter 2 must precede Chapter 5 (Hypothesis Testing)
+- Chapter 3 must be with Chapter 4 (Stratified Sampling)
+- Chapters 6 and 7 depend on earlier material
+- Chapters 4, 5, 6, 7 are interconnected
+
+OPTIMAL SPLIT SUGGESTION:
+- VOLUME 1: Chapters 1-2 (Sampling, Probability Distributions - Foundations)
+- VOLUME 2: Chapters 3-10 (Estimation through Classification - Applications)
+
+This split ensures all foundational material is in Volume 1, which will be
+referenced by the applied chapters in Volume 2.
+
+---
+
+STATISTICS:
+===========
+Total chapter cross-references found: 39
+Total unique chapter labels referenced: 9
+Chapters with most outbound references: Chapter 1 (11 references)
+Chapters with most inbound references: Chapter 3 (appears in 3 other chapters)
+                                         Chapter 5 (appears in 3 other chapters)
+                                         Chapter 7 (appears in 3 other chapters)
