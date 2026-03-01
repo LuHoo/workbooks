@@ -1,0 +1,21 @@
+{
+  "files.exclude": {
+    "**/*.aux": true,
+    "**/*.idx": true,
+    "**/*.ilg": true,
+    "**/*.ind": true,
+    "**/*.lof": true,
+    "**/*.lot": true,
+    "**/*.nlg": true,
+    "**/*.nlo": true,
+    "**/*.nls": true,
+    "**/*.toc": true,
+    "**/*.out": true,
+    "**/*.synctex.gz": true,
+    "**/*.log": true,
+    "**/*.fdb_latexmk": true,
+    "**/*.fls": true,
+    "**/*.glo": true,
+    "**/*.ist": true
+  }
+}
