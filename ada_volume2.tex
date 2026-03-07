@@ -6,14 +6,27 @@
 \author{Lucas Hoogduin, Paul Touw}
 % \publisher{Boom}
 
-% Page dimensions
-\setstocksize{11in}{8.5in}        % Actual paper size
-\settrimmedsize{10in}{7in}{*}     % Final trimmed size
-\settrims{0.75in}{0.75in}         % Trim amounts
-\settypeblocksize{8in}{5in}{*}    % Typeblock
-\setlrmargins{*}{*}{1.5}          % Left/right margins
-\setulmargins{*}{*}{1.5}          % Upper/lower margins
-\checkandfixthelayout             % Finalize layout
+% % Page dimensions
+% \setstocksize{11in}{8.5in}        % Actual paper size
+% \settrimmedsize{10in}{7in}{*}     % Final trimmed size
+% \settrims{0.75in}{0.75in}         % Trim amounts
+% \settypeblocksize{8in}{5in}{*}    % Typeblock
+% \setlrmargins{*}{*}{1.5}          % Left/right margins
+% \setulmargins{*}{*}{1.5}          % Upper/lower margins
+% \checkandfixthelayout             % Finalize layout
+
+% Page dimensions voor 6x9 inch boek
+\setstocksize{236mm}{156mm}       % Papierformaat (6.125 x 9.25 inch, inclusief trim)
+\settrimmedsize{229mm}{152mm}{*}  % Eindformaat (6 x 9 inch)
+\settrims{3.5mm}{2mm}             % Snijmarges (aanpassen aan drukkerseisen)
+\settypeblocksize{195mm}{120mm}{*} % Typeblock (hoogte x breedte)
+\setlrmargins{*}{*}{1.2}          % Linker/rechter marges (ratio)
+\setulmargins{*}{*}{1.3}          % Boven/onder marges (ratio)
+
+% Optioneel: voor betere leesbaarheid en ruimte voor grafieken
+\setheadfoot{14pt}{18pt}          % Kop- en voettekstmarges
+\setheaderspaces{*}{15pt}{*}      % Ruimte voor koptekst
+\checkandfixthelayout             % Finaliseer de lay-out
 
 \usepackage[english]{babel}  % or your preferred language
 
@@ -45,7 +58,6 @@
 \usepackage[framemethod=tikz]{mdframed} 
 % To print stuff in two or more columns
 \usepackage{multicol}
-\usepackage{hyperref}
 
 \usepackage{amsmath}
 
@@ -154,7 +166,9 @@
   }{\typeout{Nothing there}}%
 }
 
-\setcounter{secnumdepth}{3}
+\setcounter{secnumdepth}{4}
+\setsecnumdepth{subsubsection}
+
 
 % Creates watermark
 \usepackage[hpos=0.782\paperwidth, vpos=0.07\paperheight, color=KPMG_light_pink]{draftwatermark}
@@ -184,6 +198,11 @@
 \chapterstyle{ell}
 \pagestyle{ruled}
 
+\usepackage{xr}
+\externaldocument{ada_volume1}
+
+% This should be loaded after setting secnumdepth to 4, otherwise it will mess up the hyperlinks in the table of contents.
+\usepackage{hyperref}
 
 
 

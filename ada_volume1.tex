@@ -45,7 +45,6 @@
 \usepackage[framemethod=tikz]{mdframed} 
 % To print stuff in two or more columns
 \usepackage{multicol}
-\usepackage{hyperref}
 
 \usepackage{amsmath}
 
@@ -155,6 +154,8 @@
 }
 
 \setcounter{secnumdepth}{3}
+\setsecnumdepth{subsubsection}
+
 
 % Creates watermark
 \usepackage[hpos=0.782\paperwidth, vpos=0.07\paperheight, color=KPMG_light_pink]{draftwatermark}
@@ -184,7 +185,10 @@
 \chapterstyle{ell}
 \pagestyle{ruled}
 
+\usepackage{xr}
+\externaldocument{ada_volume2}
 
+\usepackage{hyperref}
 
 
 \begin{document}
