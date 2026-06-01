@@ -6,7 +6,7 @@
 Andrew Lang (1844-1912)
 \end{quote}
 
-The International Federation of Accountants (IFAC) issues International Standards on Auditing (ISA) through the International Auditing and Assurance Standards Board (IAASB). These ISAs are standards to be applied by auditors when auditing historical financial information. In this chapter, our focus is mainly on ISA 530, Audit Sampling, and its US counterpart.
+The International Federation of Accountants (IFAC) issues In\-ter\-na\-tional Standards on Auditing (ISA) through the International Auditing and Assurance Standards Board (IAASB). These ISAs are standards to be applied by auditors when auditing historical financial information. In this chapter, our focus is mainly on ISA 530, Audit Sampling, and its US counterpart.
 
 The IAASB aims for the voluntary international acceptance of its guidelines. ISAs are not intended to override national regulations or pronouncements relating to audits of financial information. They are designed to be in harmony with national regulations and pronouncements concerning audits of financial information. This means that while ISAs provide a global framework and guidelines for auditing practices, they are not meant to supersede or replace the specific regulations and requirements set by individual countries or jurisdictions.
 
@@ -65,7 +65,7 @@ At the end of this chapter you will be able to
 \end{compactitem}
 
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10, innerleftmargin=0.3cm]
+\begin{mdframed}[hidealllines=true,backgroundcolor=gray!10, innerleftmargin=0.3cm]
 \section*{Case: Inventories}
 % \begin{fullwidth}
 % \begin{multicols}{2}
@@ -142,7 +142,7 @@ The standard is set up as follows. After introducing the scope and effective dat
 Paragraph 530.5 provides definitions, and paragraphs 530.6 to 530.15 provide the requirements. These are followed by application and other explanatory materials, at 530.A1 to 530.A23. There are four appendices.
 
 \bigskip
-The standard indicates five consecutive phases of sampling applications:
+The standard indicates five consecutive phases of sampling ap\-pli\-cations:
 \begin{compactitem}
 \item Sample design, sample size, and selection of items for testing (Section \ref{sec:sample_design_size_and_selection_of_items_for_testing});
 \item Performing audit procedures (Section \ref{sec:performing_audit_procedures}); 
@@ -151,7 +151,7 @@ The standard indicates five consecutive phases of sampling applications:
 \item Evaluating results of audit sampling (Section \ref{sec:evaluating_results_of_audit_sampling}).
 \end{compactitem}
 
-These phases are discussed in the following sections. 
+\noindent These phases are discussed in the following sections. 
 
 \section{Sample design, sample size, and selection of items for testing} % (fold)
 \label{sec:sample_design_size_and_selection_of_items_for_testing}
@@ -159,32 +159,38 @@ These phases are discussed in the following sections.
 \subsection{Sample design} % (fold)
 \label{sub:sampling_method}
 
-The first question that arises when designing a sample concerns the audit procedure. Figure \ref{fig:H1Method} shows the thought process leading to the appropriate sampling method. \textbf{Attribute sampling}\index{attribute sampling}\index{sampling!attribute} is a technique to assess whether an element either does or does not possess a certain attribute. The outcome of the test is dichotomous. This technique is commonly used for tests of controls and for tests on \textbf{relevant data elements}\index{relevant data elements} (RDEs) in accordance with Standard 500.11, although auditors rarely perform these tests statistically. If performed statistically, we follow the nine-step approach discussed in Volume 1, Section \ref{sec:attribute_sampling}.
+The first question that arises when designing a sample concerns the audit procedure. Figure \ref{fig:H1Method} shows the thought process leading to the appropriate sampling method. \textbf{Attribute sampling}\index{attribute sampling}\index{sampling!attribute} is a technique to assess whether an element either does or does not possess a certain attribute. The outcome of the test is dichotomous. This technique is commonly used for tests of controls and for tests on \textbf{relevant data elements}\index{relevant data elements} (RDEs) in accordance with Standard 500.11, although auditors rarely perform these tests statistically. If performed statistically, we follow the nine-step approach discussed in Volume 1, Section \ref{sec:the_nine_step_approach}.
 
-\begin{figure}[bthp] 
+\begin{figure}[bthp]
 \begin{center}
   \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
-% Place nodes
-	\node[wideblueblock] (comp) {Test Attributes or Values?};
-	\node[wideblueblock, below = 1 cm of comp] (test) {Many errors expected?};
-	\node[widewhiteblock, right = 1.5 cm of comp] (attr) {Attribute sampling};
-	\node[widewhiteblock, below = 1 cm of test] (cvs) {Test of details: CVS};
-	\node[widewhiteblock, right = 1.5 cm of test] (mus) {Test of details: MUS};
-  
-% Draw edges
-	\path [line] (comp) -- node {val} (test);
-	\path [line] (comp) -- node {att} (attr);
-	\path [line] (test) -- node {no} (mus);
-	\path [line] (test) -- node {yes} (cvs);
 
-\end{tikzpicture}
+    % Stijl voor de ruitvormige keuze-nodes
+    \tikzset{
+      decision/.style={diamond, draw, fill=gray!20, text width=6em, text badly centered, inner sep=2pt, aspect=2},
+      block/.style={rectangle, draw, fill=white, text width=7.2em, text centered, rounded corners, minimum height=4em},
+      line/.style={draw, -latex'}
+    }
 
-\caption{Choice of sampling method}
-% \setfloatalignment{b}
-\label{fig:H1Method}
+    % Place nodes
+    \node[decision] (comp) {Test Attributes or Values?};
+    \node[decision, below = 1 cm of comp] (test) {Many errors expected?};
+    \node[block, right = 1.5 cm of comp] (attr) {Attribute sampling};
+    \node[block, below = 1 cm of test] (cvs) {Test of details: CVS};
+    \node[block, right = 1.5 cm of test] (mus) {Test of details: MUS};
 
+    % Draw edges
+    \path [line] (comp) -- node {val} (test);
+    \path [line] (comp) -- node {att} (attr);
+    \path [line] (test) -- node {no} (mus);
+    \path [line] (test) -- node {yes} (cvs);
+
+  \end{tikzpicture}
+  \caption{Choosing an appropriate sampling method.}
+  \label{fig:H1Method}
 \end{center}
 \end{figure}
+
 
 For tests of details, we choose between \textbf{monetary unit sampling}\index{monetary unit sampling}\index{sampling!monetary unit} (MUS) and \textbf{classical variables sampling}\index{classical variables sampling}\index{sampling!classical variables} (CVS).\footnote{CVS is classical in the sense that it uses classical normal distribution theory in the development of the sample statistics.} MUS is the sampling method most commonly used by auditors. It is designed for situations where most of the elements in a population are correct and the auditor wants to test for the occurrence of a \textbf{material misstatement}\index{material misstatement}\index{misstatement!material}, the difference between the true value of an element in the population (its \textbf{audit value}\index{audit value}), and its recorded value (commonly referred to as the \textbf{book value}\index{book value}). The audited sampling units are evaluated statistically, and a point estimate of the total misstatement is provided as well as an upper bound on the total amount of overstatement. MUS is explained in detail in Volume 1, in Chapter \ref{cha:hypothesis_testing} on hypothesis testing.
 
@@ -347,26 +353,28 @@ For the \emph{Case: Inventories}, we choose simple random sampling to select ele
 
 \begin{center}
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}[scale=0.9]
 % Define the custom color
-  \definecolor{myblue}{RGB}{0,51,141}
-  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (0,0) rectangle (1.75,0.8);
+  % \definecolor{myblue}{RGB}{0,51,141}
+  \definecolor{mylightgrey}{RGB}{200,200,200}
+
+  \filldraw[fill=mylightgrey, fill opacity=0.2, draw=black] (0,0) rectangle (1.75,0.8);
   \node at (0.875, 0.4) {A};
-  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (1.75,0) rectangle (2.5,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.4, draw=black] (1.75,0) rectangle (2.5,0.8);
   \node at (2.125, 0.4) {B};
-  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (2.5,0) rectangle (3.5,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.2, draw=black] (2.5,0) rectangle (3.5,0.8);
   \node at (3, 0.4) {C};
-  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (3.5,0) rectangle (5.75,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.4, draw=black] (3.5,0) rectangle (5.75,0.8);
   \node at (4.625, 0.4) {D};
-  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (5.75,0) rectangle (6,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.2, draw=black] (5.75,0) rectangle (6,0.8);
   \node at (5.875, 0.4) {F};
-  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (6,0) rectangle (8,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.4, draw=black] (6,0) rectangle (8,0.8);
   \node at (7, 0.4) {G};
-  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (8,0) rectangle (8.5,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.2, draw=black] (8,0) rectangle (8.5,0.8);
   \node at (8.25, 0.4) {H};
-  \filldraw[fill=myblue, fill opacity=0.4, draw=black] (8.5,0) rectangle (10,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.4, draw=black] (8.5,0) rectangle (10,0.8);
   \node at (9.25, 0.4) {I};
-  \filldraw[fill=myblue, fill opacity=0.2, draw=black] (10,0) rectangle (11.25,0.8);
+  \filldraw[fill=mylightgrey, fill opacity=0.2, draw=black] (10,0) rectangle (11.25,0.8);
   \node at (10.625, 0.4) {J};
  
 \end{tikzpicture}
@@ -546,7 +554,7 @@ The advantages of the sieve method are that elements can be hit no more than onc
 
 \paragraph{4b. Modified sieve selection} In the sieve method an element is selected if $x_i \geq I \times RN_i$. This is equivalent to $x_i / RN_i \geq I$. Instead of multiplying the sampling interval $I$ by a random number $RN_i$ and comparing it to the book value of the element, we divide the book value by a random number and compare the resulting sieve number $sn_i = x_i / RN_i$ to $I$.\nomenclature{$sn$}{sieve number} We select exactly $n$ elements with the largest sieve numbers $sn_i$.\index{modified sieve selection}\index{selection!modified sieve} 
 
-We apply this logic to the example population and obtain the results in Table \ref{tab:example_modified_sieve_selection}.
+We apply this logic to the example population and obtain the results in Table \ref{tab:example_modified_sieve_selection}. The table is sorted on descending sieve number $sn$. Note that element D is individually significant when $n = $ 5 and is automatically selected even before element H with a higher sieve number.
 
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{lYYYY}
@@ -564,14 +572,14 @@ B & 3 & 0.9565 & 3.14 & No \\
 F & 1 & 0.4815 & 2.08 & No \\
 \bottomrule
 \end{tabularx}
-\caption{Example modified sieve selection. The table is sorted on descending sieve number $sn$. Note that element D is individually significant when $n = $ 5 and is automatically selected even before element H with a higher sieve number.}
+\caption{Example modified sieve selection.}
 \label{tab:example_modified_sieve_selection}
 \end{table}
 
 We need to devote special attention to individually significant items: an element with a large book value may not be among the $n$ elements with the largest sieve numbers. The easiest way to achieve this is by eliminating individually significant items before starting the selection procedure; however, if the sample size is not known in advance, we do not know which items are individually significant. The modified sieve method adjusts the order of element selection by considering the sample size at which they become individually significant.
 
-\bigskip
-A final word on the rationale for treating individually significant items separately. Because these elements have a 100\% inclusion probability, they are not part of the sample, but are part of the so-called \textbf{census stratum}\index{census stratum}\index{stratum!census}, a collection of all elements that are removed from the population. All elements in the census stratum are tested, but the findings of these tests are not extrapolated to the population.
+\newpage
+A final word on the rationale for treating individually significant items separately. Because these elements have a 100\% inclusion pro\-ba\-bi\-lity, they are not part of the sample, but are part of the so-called \textbf{census stratum}\index{census stratum}\index{stratum!census}, a collection of all elements that are removed from the population. All elements in the census stratum are tested, but the findings of these tests are not extrapolated to the population.
 
 For example, for the \emph{Case: Inventories}, we use modified sieve selection to select sampling units. The method identifies individually significant items automatically, and, if needed, it is easy to extend the sample.
 
@@ -634,7 +642,7 @@ Even though we have a choice as to which projection method to use, one can prove
 
 Paragraph 530.A20 mentions that the `projection may not be sufficient to determine an amount to be recorded'. We assume that with `sufficient' the standard means `sufficiently precise.' This statement raises two questions. If samples yield sufficiently precise projections, should we not incorporate this into the calculation of the sample size? In particular, when the expected misstatement is less than performance materiality, this could result in significantly lower sample sizes. Second, can the client adjust their financial statements based on \emph{our} projection of misstatements from a sampling procedure? Does this affect our independence?\footnote{These questions arise in general at the application of estimation methods like CVS, and also the projections from MUS.}
 
-We agree that projection of deviations is not necessary, but not for the reason stated in paragraph 530.A20. The chapter on hypothesis testing in Volume 1 explains that these samples are evaluated by comparing the number of deviations found with the expected number of deviations used in the calculation of the sample size. Hence, the projected deviation rate does not play a role in the evaluation of the sample. 
+We agree that projection of deviations is not necessary, but not for the reason stated in paragraph 530.A20. Chapter \ref{cha:hypothesis_testing} on hypothesis testing in Volume 1 explains that these samples are evaluated by comparing the number of deviations found with the expected number of deviations used in the calculation of the sample size. Hence, the projected deviation rate does not play a role in the evaluation of the sample. 
 
 \bigskip
 For the \emph{Case: Inventories}, we exercise care when evaluating differences found. Because the procedure to test empty locations finds all 100\% differences (locations where no inventory is present where it should be, or where inventory is present where the inventory registration indicates that the location is present,) this part of the inventory observation is not a sample but a census test, and the findings do not need to be projected. This is true in particular locations that are part of the MUS sample. Similarly, inventory items that have nonzero quantities and a zero price are investigated separately.

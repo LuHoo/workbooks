@@ -1,0 +1,213 @@
+\documentclass[12pt,a4paper]{memoir}
+
+% Basic setup for a handout
+\usepackage[T1]{fontenc}
+\usepackage{newpxtext,newpxmath}
+% To enable compactitem
+\usepackage{paralist}
+\usepackage{tabularx}
+\usepackage{nomencl} % For \nomenclature
+\usepackage{makeidx} % For \index
+\usepackage{ragged2e} % For \RaggedRight
+\makeindex
+\makenomenclature
+\setsecnumdepth{subsection} % Number sections and subsections
+
+% Allows background color to paragraphs
+\usepackage[framemethod=tikz]{mdframed} 
+
+
+
+% Page layout
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{0.5in}
+\setlength{\headsep}{0.25in}
+
+% To embed flowcharts
+\usepackage{tikz} 
+  \usetikzlibrary{shapes, arrows, positioning, calc, math, arrows.meta}
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=gray, 
+    text width=4.5 em, text badly centered, node distance=3 cm, inner sep = 0 pt]
+\tikzstyle{whiteblock} = [rectangle, draw, node distance=2.5 cm, text width=7.2 em, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{widewhiteblock} = [rectangle, draw, node distance=2.5 cm, text width=4cm, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{blueblock} = [rectangle, draw, fill=gray!20, text width=7.2 em, text centered, rounded corners, minimum height=4 em, node distance=3 cm]  
+\tikzstyle{wideblueblock} = [rectangle, draw, fill=gray!20, 
+    text width=4cm, text centered, rounded corners, minimum height=4 em,
+    node distance=3 cm]  
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, circle, fill=red!20, node distance=3 cm,
+    minimum height=2 em]
+
+
+\begin{document}
+
+% Title page
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{2in}
+    {\Huge \textbf{Data analysis}} \\
+    \vspace{0.5in}
+    {\Large Lucas Hoogduin} \\
+    \vspace{0.5in}
+    {\large \today}
+\end{center}
+\newpage
+
+\chapter{Comprehensive Examination: Data Science for Auditors (Standards 530 \& 520)}
+
+\section{Examination Framework and Objectives}
+
+The strategic alignment of audit sampling and analytical procedures with International Standards on Auditing (ISA) 530 and 520 is the cornerstone of a modern, defensible audit. As the profession shifts toward a data-centric paradigm, integrating statistical rigor into audit workflows is no longer optional; it is the primary mechanism for mitigating sampling and non-sampling risks. By adopting these standards, auditors transition from haphazard, intuitive testing to a methodology where every conclusion is backed by quantifiable evidence.
+
+The "So What?" layer of this methodology lies in the transformation of audit reliability and the firm's competitive positioning. A data-driven approach allows for the implementation of a "census stratum," where individually significant items are identified and tested with 100\% certainty, while the remaining population is addressed through mathematically optimized sampling. This fundamentally changes workload management, allowing firms to provide higher levels of assurance with greater efficiency. The following questions will test your theoretical comprehension of these standards and your ability to apply them to complex, real-world audit scenarios.
+
+\section{Module 1: Audit Sampling Theory and Selection Mechanics}
+
+Audit Sampling (Standard 530) provides the technical framework for substantive tests of detail. It is the auditor's primary tool for drawing conclusions about a population without examining every item, with the explicit goal of reducing sampling risk to an acceptably low level. To maintain the integrity of the audit opinion, auditors must master the mechanics of selection and the mathematical projection of misstatements.
+
+\subsection{Risk Classification}
+
+In the context of ISA 530, differentiate between Type I ($\alpha$) and Type II ($\beta$) errors. Explicitly address how audit literature typically treats these risks compared to standard statistical theory, and identify which risk is the primary concern per 530.5c.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Terminology Reversal: In standard statistics, $\alpha$ is the risk of a false positive. However, ISA 530 literature typically reverses the null and alternative hypotheses. Therefore, in an audit context, a Type I error ($\alpha$) is the risk that the auditor concludes a material misstatement does not exist when it actually does (Effectiveness Risk).
+\item Type II error ($\beta$): The risk that the auditor concludes a material misstatement exists when it actually does not (Efficiency Risk).
+\item Primary Concern: Per 530.5c, the auditor is primarily concerned with the Type I error ($\alpha$) because it leads to an inappropriate audit opinion, directly impacting audit effectiveness. (2 points)
+\end{itemize}
+
+\subsection{Selection Methodology -- Monetary Unit Sampling (MUS)}
+
+Critique the impact of zero and negative book values on the selection process in Monetary Unit Sampling (MUS). Detail the required auditor response for these items.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Zero Values: Because MUS selects items with probability proportional to size (PPS), an item with a zero book value has an inclusion probability of zero ($P_i = 0$). These must be investigated separately (e.g., investigating inventory locations with zero value for potential understatements).
+\item Negative Values: Negative items cannot be selected in a positive-value PPS sample. Per the source context, they must be "cancelled" against specific positive elements before calculating sample size, or audited separately as a distinct class of transactions with different control objectives. (3 points)
+\end{itemize}
+
+\subsection{Terminology \& Concepts}
+
+Contrast the "Sampling Frame" with the "Population" using the "Inventories" case. Explain the specific risk associated with an ill-defined frame regarding the "completeness" assertion.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Definitions: The Population is the object of the audit (e.g., physical inventory). The Sampling Frame is the list representing that population (e.g., the inventory listing).
+\item Case Application: For "existence," the auditor tests Book to Floor (Frame = Listing). For "completeness," the auditor must test Floor to Book (Frame = Physical Locations).
+\item Risk: An ill-defined frame (e.g., using only the listing to test completeness) creates a risk that items omitted from the list are never subjected to the probability mechanism, failing to detect unrecorded items. (2 points)
+\end{itemize}
+
+\subsection{Technical Selection Methods}
+
+Compare and contrast "Sieve Selection" with "Modified Sieve Selection," specifically referencing the formula for determining selection.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Sieve Selection: Uses a sampling interval $I = B/n$ to calculate a sieve opening $B_{si} = I \times u_i$ (where $u_i$ is a random number). If the book value $G_i \geq B_{si}$, the item is selected. The disadvantage is that the final sample size is unknown in advance.
+\item Modified Sieve Selection: Fixes the sample size by selecting the $n$ elements with the largest "sieve numbers," defined by the relationship: $B_{si} = G_i / u_i$.
+\item Individually Significant Items: Modified sieve selection ensures that all items in the "census stratum" (where $G_i$ exceeds the interval) are automatically selected, even if the final sample size needs to be extended. (3 points)
+\end{itemize}
+
+\subsection{Misstatement Projection}
+
+In nonstatistical sampling, auditors evaluate results using "mean misstatement" and "ratio estimation." Describe both and explain what a significant difference between these two projections indicates about the sampling units.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Mean Misstatement: Consistent with "difference estimation"; it calculates the average error per unit and multiplies by total population units.
+\item Ratio Estimation: Consistent with techniques used in MUS; it applies the sample's misstatement percentage to the total population book value.
+\item Interpretation: A significant difference between these methods indicates the sampling units were drawn with a bias for higher book values (non-random preference), which may result in an upward or downward bias in the final projection. (3 points)
+\end{itemize}
+
+\section{Module 2: Substantive Analytical Procedures (SAP) and Predictive Modeling}
+
+ISA 520 governs the transformation of data into audit evidence through the assessment of plausibility. While Module 1 focused on the mechanical selection of specific items, Module 2 evaluates the relationships between financial and non-financial data. SAPs allow auditors to form an expectation and compare it against recorded values to identify risks through business logic.
+
+\subsection{Plausibility Assessment}
+
+Using the "US SteamCo" or "On the Go Stores" cases, identify three specific plausible relationships an auditor should test, incorporating case-specific variables.
+
+\subsubsection{Solution \& Scoring}
+\begin{enumerate}
+\item US SteamCo (Seasonality): Revenue should correlate to the season-specific pricing schedules (November--May for heating; June--October for cooling) and seasonal adjustments for fuel costs.
+\item On the Go Stores (Product Mix): Payroll expenses and customer volume should correlate to specific store features, such as those selling gasoline (Store Nos. 5, 6, 7, 8, etc.) or offering check-cashing.
+\item On the Go Stores (Location): Revenue should correlate to store classification (e.g., Store Nos. 2, 4, 6, 8, etc., are in "favorable" locations) and square footage. (3 points)
+\end{enumerate}
+
+\subsection{Model Precision}
+
+Critique the three primary factors that influence the precision of an expectation in a regression model for an SAP.
+
+\subsubsection{Solution \& Scoring}
+\begin{enumerate}
+\item Nature of the Account: Predictability varies; revenue is generally more predictable than accounts like fixed asset additions.
+\item Data Reliability: "Garbage in, garbage out"--inaccurate inputs (internal or external) lead to inaccurate expectations.
+\item Inherent Method Precision: Influenced by the choice of model (linear vs. non-linear) and the level of disaggregation (e.g., using monthly data rather than annual data to identify patterns). (3 points)
+\end{enumerate}
+
+\subsection{Managing Audit Risk}
+
+Explain the impact on "Efficiency Risk" when an auditor narrows the "Acceptable Difference" interval to maintain a 95\% level of assurance (Effectiveness) in a model with poor precision. Reference the relationship between precision and investigation.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Analysis: Per Figures 2.4 and 2.5, as expectation precision deteriorates, the range of acceptable differences must become narrower to maintain a 5\% effectiveness risk (95\% assurance).
+\item Efficiency Risk: This narrowing increases the probability that a correct recorded amount will fall outside the interval. This leads to "Efficiency Risk," where the auditor is forced to investigate a large portion of differences that are not actually misstated, potentially requiring every difference to be investigated. (3 points)
+\end{itemize}
+
+\subsection{Data Reliability}
+
+Contrast the requirements of Standard 500 when assessing the reliability of internal client data versus external data for forming audit expectations.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Internal Data: The auditor must evaluate the effectiveness of internal controls over the preparation, completeness, and accuracy of the data.
+\item External Data: Reliability is a function of the source's authority and independence. For example, government-sourced statistics are generally considered to have higher reliability than data scraped from social media. (2 points)
+\end{itemize}
+
+\subsection{Evaluation and Response}
+
+Outline the required audit actions and the specific quantitative threshold for concluding on an identified significant unexpected difference.
+
+\subsubsection{Solution \& Scoring}
+\begin{itemize}
+\item Process: Inquire with management and corroborate responses with independent sources (e.g., third parties or documentary evidence).
+\item Threshold: The auditor must quantify the portion of the difference for which plausible explanations are obtained. They must then determine if the remaining unexplained portion is "back inside the acceptable difference" range to conclude there is no material misstatement. (3 points)
+\end{itemize}
+
+\section{Final Assessment Summary and Scoring Rubric}
+
+\subsection{Question Mapping}
+
+\begin{tabular}{@{}ll@{}}
+\toprule
+Question Number & Core Learning Objective Addressed \\
+\midrule
+1 & Distinction between $\alpha$ and $\beta$ risks in ISA 530 \\
+2 & Impact of Zero/Negative values in MUS selection \\
+3 & Sampling Frame vs. Population (Inventories Case) \\
+4 & Sieve vs. Modified Sieve Mechanics and Formulas \\
+5 & Misstatement Projection Bias (Mean vs. Ratio) \\
+6 & Plausible Relationship Identification (Case-Specific) \\
+7 & Factors influencing Expectation Precision \\
+8 & Effectiveness vs. Efficiency Risk in Predictive Modeling \\
+9 & Reliability of Internal vs. External Data (Standard 500) \\
+10 & Evaluation and Quantifying Unexplained Differences \\
+\bottomrule
+\end{tabular}
+
+\subsection{Master Scoring Breakdown}
+
+\begin{itemize}
+\item 23 - 27 Points: Expert Demonstrates strategic analytical depth and mastery of both statistical sampling mechanics and predictive modeling precision.
+\item 16 - 22 Points: Proficient Understand the core mechanics and requirements of Standards 530 and 520; capable of standard application.
+\item 0 - 15 Points: Inadequate Requires remediation in statistical standards and the application of data science to audit workflows.
+\end{itemize}
+
+
+\end{document}

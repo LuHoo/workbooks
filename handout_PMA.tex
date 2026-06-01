@@ -1,0 +1,399 @@
+\documentclass[11pt,a4paper,openany]{memoir}
+
+% Basic setup for a handout
+\usepackage[T1]{fontenc}
+\usepackage{newpxtext,newpxmath}
+% To enable compactitem
+\usepackage{paralist}
+\usepackage{tabularx}
+\usepackage{nomencl} % For \nomenclature
+\usepackage{makeidx} % For \index
+\usepackage{ragged2e} % For \RaggedRight
+\makeindex
+\makenomenclature
+\setsecnumdepth{subsection} % Number sections and subsections
+
+% Allows background color to paragraphs
+\usepackage[framemethod=tikz]{mdframed} 
+
+
+% Rename "Chapter" to "Exercise"
+\renewcommand{\chaptername}{Exercise}
+
+% Page layout
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{0.5in}
+\setlength{\headsep}{0.25in}
+
+% To embed flowcharts
+\usepackage{tikz} 
+  \usetikzlibrary{shapes, arrows, positioning, calc, math, arrows.meta}
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=gray, 
+    text width=4.5 em, text badly centered, node distance=3 cm, inner sep = 0 pt]
+\tikzstyle{whiteblock} = [rectangle, draw, node distance=2.5 cm, text width=7.2 em, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{widewhiteblock} = [rectangle, draw, node distance=2.5 cm, text width=4cm, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{blueblock} = [rectangle, draw, fill=gray!20, text width=7.2 em, text centered, rounded corners, minimum height=4 em, node distance=3 cm]  
+\tikzstyle{wideblueblock} = [rectangle, draw, fill=gray!20, 
+    text width=4cm, text centered, rounded corners, minimum height=4 em,
+    node distance=3 cm]  
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, circle, fill=red!20, node distance=3 cm,
+    minimum height=2 em]
+
+
+\begin{document}
+
+% Title page
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{2in}
+    {\Huge \textbf{Data analysis}} \\
+    \vspace{0.5in}
+    {\Large Lucas Hoogduin} \\
+    \vspace{0.5in}
+    {\large \today}
+\end{center}
+\newpage
+
+% Table of contents (optional for handout)
+\tableofcontents
+\newpage
+
+% Main content
+\chapter{Sample selection}
+
+In this exercise, you are given a population of 20 items. Your task is to select a sample of \textbf{four items} using one of the selection methods described in sections 1.2.4 and 1.2.5 of \emph{Audit Data Analysis -- Volume 2}.
+
+\begin{table}[htbp]
+\centering
+\caption{Population of 20 Items}
+\label{tab:population_20_items}
+\begin{tabularx}{\textwidth}{@{}ccc@{}}
+\toprule
+\textbf{Item} & \textbf{Value} & \textbf{Random} \\
+\midrule
+1  & 54 & 0.621 \\
+2  & 39 & 0.397 \\
+3  & 77 & 0.707 \\
+4  & 82 & 0.926 \\
+5  & 56 & 0.758 \\
+6  & 25 & 0.979 \\
+7  & 46 & 0.613 \\
+8  & 92 & 0.044 \\
+9  & 82 & 0.336 \\
+10 & 79 & 0.179 \\
+11 & 23 & 0.356 \\
+12 & 47 & 0.849 \\
+13 & 83 & 0.853 \\
+14 & 28 & 0.039 \\
+15 & 97 & 0.781 \\
+16 & 61 & 0.600 \\
+17 & 41 & 0.772 \\
+18 & 95 & 0.756 \\
+19 & 68 & 0.629 \\
+20 & 79 & 0.403 \\
+\midrule
+Total & 1254 & \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\chapter{Floor to Book vs. Book to Floor}
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=gray!10, innerleftmargin=0.3cm]
+\section*{Case: Inventories}
+% \begin{fullwidth}
+% \begin{multicols}{2}
+\RaggedRight
+
+As part of a financial statement audit, you want to test the existence and completeness of inventories by applying statistical samples. 
+
+You have obtained from your client 
+\begin{compactitem}
+	\item a listing of inventories per location; and
+	\item a listing of empty inventory locations.
+\end{compactitem}
+
+\bigskip
+You intend to sample a sufficiently large number of these locations, and for each selected location compare the quantity of inventory items at the location with the quantity as per the inventory registration. To address the completeness assertion, items for testing are selected from randomly selected inventory locations ('floor to book'). To address the existence assertion, a sample of inventory items is drawn from the inventory listing ('book to floor'), with a preference for sampling units that have a higher value.
+
+You want to address locations with a zero value (zero quantity or zero price) separately. For this purpose, one warehouse employee travels the entire warehouse checking that all empty locations do not contain any goods, and making sure that all empty locations are listed. There are two reasons to do this: both samples are sensitive to sampling units that either have a zero book value or a zero audit value. 
+
+You want to project your findings to the entire population and evaluate the results. 
+
+% \end{multicols}
+
+\section*{Objective}
+Apply the requirements of Standard 530 for the sampling procedure.
+% \end{fullwidth}
+\end{mdframed}
+
+\newpage
+\subsection*{Case Study (60 Minutes)}
+In the \emph{Case: Inventories}, your task is to map out the \textbf{sampling frame} for two key assertions:
+\begin{compactitem}
+    \item \textbf{Existence}: Verify that recorded inventory items physically exist.
+    \item \textbf{Completeness}: Ensure all physical inventory items are recorded in the system.
+\end{compactitem}
+
+\subsection*{Exercise: Sampling Frame for Assertions}
+\begin{enumerate}
+    \item \textbf{Define the Population and Sampling Frame}:
+    Explain the difference between the \textbf{population} (all inventory locations) and the \textbf{sampling frame} (the list of locations used for sampling) in this context. Address how the sampling frame is derived from the population and why it may differ.
+
+    \item \textbf{Handle Zero-Value Locations}:
+    Decide how to treat inventory locations with a \textbf{zero book value}. Should they be:
+    \begin{compactitem}
+        \item Excluded from the sampling frame?
+        \item Included but flagged for separate testing?
+        \item Treated as part of the census stratum?
+    \end{compactitem}
+    Justify your approach based on audit objectives and statistical validity.
+
+    \item \textbf{Map the Sampling Frame}:
+    Create a clear representation (e.g., table or diagram) of the sampling frame for both assertions, ensuring it aligns with the chosen method for zero-value locations.
+\end{enumerate}
+
+\chapter{Projection Using Ratio and Difference Estimation}
+
+\subsection*{Assignment}
+In your earlier exercise, suppose the following misstatement was identified during the sampling of inventory locations:
+
+\begin{compactitem}
+    \item Sample size: $n = 10$ locations.
+    \item Number of items in the population: $N = 1200$.
+    \item Total book value of sample: $B_s = \$5,000$.
+    \item Total audited value of sample: $A_s = \$4,850$.
+    \item Misstatement in sample: $M_s = \$150$ (understatement).
+\end{compactitem}
+
+The total book value of the population is $B_p = \$500,000$.
+
+\subsection*{Task}
+Calculate the projected misstatement for the entire population using both the Ratio Estimation and Difference Estimation methods.
+
+\subsubsection*{Ratio Estimation}
+\begin{enumerate}
+    \item Compute the ratio of audited value to book value in the sample: $\frac{A_s}{B_s}$.
+    \item Apply this ratio to the total book value of the population to estimate the projected audited value: $\frac{A_s}{B_s} \times B_p$.
+    \item Determine the projected misstatement: $B_p - \left( \frac{A_s}{B_s} \times B_p \right)$.
+\end{enumerate}
+
+\subsubsection*{Difference Estimation}
+\begin{enumerate}
+    \item Calculate the average misstatement per unit in the sample: $\frac{M_s}{n}$.
+    \item Multiply the average misstatement by the population size to estimate the projected misstatement: $\frac{M_s}{n} \times N$.
+\end{enumerate}
+
+\subsection*{Symbol Definitions}
+\begin{table}[htbp]
+\centering
+\caption{Symbol Definitions}
+\label{tab:symbol_definitions}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} \\
+\midrule
+$n$ & Sample size (number of locations selected) \\
+$B_s$ & Total book value of the sample \\
+$A_s$ & Total audited value of the sample \\
+$M_s$ & Misstatement in the sample \\
+$B_p$ & Total book value of the population \\
+$N$ & Population size (total number of locations) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Questions for Reflection}
+\begin{compactitem}
+    \item Compare the results from both methods. Which method provides a more conservative estimate of the misstatement, and why?
+    \item How would the projected misstatement change if the sample contained an overstatement instead of an understatement?
+    \item What are the advantages and limitations of each estimation method in the context of auditing?
+    \item Under which circumstance do both methods yield the same projected misstatement?
+\end{compactitem}
+
+\chapter{The Plausibility Matrix}
+
+\section*{Group Exercise (60 Minutes)}
+
+\subsection*{Task}
+For this exercise, consider the following industries:
+\begin{compactitem}
+    \item \textbf{Retail}: E.g., supermarkets, clothing stores.
+    \item \textbf{Manufacturing}: E.g., automotive, electronics.
+    \item \textbf{Service}: E.g., consulting firms, healthcare providers.
+    \item \textbf{Banking}: E.g., commercial banks, investment banks.
+    \item \textbf{Insurance}: E.g., life insurance, property insurance.
+    \item \textbf{Oil \& Gas}: E.g., gas stations.
+\end{compactitem}
+
+\subsection*{Activity}
+In groups, perform the following:
+\begin{enumerate}
+    \item \textbf{Select an Industry and Relationship}:
+    Choose one of the industries above and identify a \textbf{plausible relationship} between two variables. 
+    % Examples:
+    % \begin{compactitem}
+    %     \item Retail: \textit{Square Footage vs. Sales}
+    %     \item Manufacturing: \textit{Raw Material Costs vs. Production Volume}
+    %     \item Service: \textit{Employee Count vs. Payroll Expenses}
+    % \end{compactitem}
+
+    \item \textbf{Justify the Relationship}:
+    Explain why this relationship is logically expected to hold under normal circumstances. Use industry-specific reasoning (e.g., larger retail spaces typically generate higher sales due to increased product visibility).
+
+    \item \textbf{Identify Potential Breakdowns}:
+    Describe \textbf{one scenario} where this relationship might break down. 
+    % For example:
+    % \begin{compactitem}
+    %     \item Retail: A store introduces a high-margin online-exclusive product line, reducing in-store sales per square foot.
+    %     \item Manufacturing: A shift to automation reduces raw material costs but increases fixed costs, disrupting the proportional relationship.
+    %     \item Service: A consulting firm hires senior experts at higher salaries, skewing the payroll-to-employee ratio.
+    % \end{compactitem}
+
+    \item \textbf{Present Your Findings}:
+    Prepare a 5-minute presentation summarizing your chosen relationship, its plausibility, and the breakdown scenario. Include visual aids (e.g., a simple graph or table) if helpful.
+\end{enumerate}
+
+\subsection*{Deliverables}
+Each group must submit:
+\begin{compactitem}
+    \item A written summary (1 page max) of the relationship, justification, and breakdown scenario.
+    \item A list of \textbf{3 additional variables} that could influence the relationship (e.g., seasonality, economic conditions, regulatory changes).
+\end{compactitem}
+
+\subsection*{Evaluation Criteria}
+\begin{compactitem}
+    \item Clarity and logic of the chosen relationship.
+    \item Depth of justification for plausibility.
+    \item Creativity and realism of the breakdown scenario.
+    \item Quality of presentation and deliverables.
+\end{compactitem}
+
+
+\chapter{Managing Risk and Precision in Analytical Procedures}
+
+\section*{Interactive Deep Dive (60 Minutes)}
+
+\subsection*{Visual Analysis (15 Minutes)}
+\begin{enumerate}
+    \item Use \textbf{Figures 2.2 through 2.7} from the textbook.
+    \item In small groups, analyze the figures and discuss:
+    \begin{compactitem}
+        \item How do the ranges of acceptable differences change between \textbf{precise} and \textbf{less precise} models?
+        \item What happens to the \textbf{efficiency risk} and \textbf{effectiveness risk} as model precision deteriorates?
+        \item How do the intervals \( C_{.005} \) to \( C_{.995} \), \( U_{.05} \) to \( U_{.95} \), and \( O_{.05} \) to \( O_{.95} \) overlap or diverge in each figure?
+    \end{compactitem}
+    \item Each group prepares a 2-minute summary of their observations to share with the class.
+\end{enumerate}
+
+\subsection*{The Debate: Effectiveness Risk vs. Efficiency Risk (30 Minutes)}
+Split the class into two halves:
+\begin{description}
+    \item[Half A: Defend Effectiveness Risk] Argue that the primary goal of an audit is to \textbf{ensure no material misstatement is missed}. Your position should emphasize:
+    \begin{compactitem}
+        \item The consequences of failing to detect a material misstatement (e.g., reputational damage, legal liability).
+        \item Why controlling \textbf{effectiveness risk} (Type II error) is critical, even if it means investigating more differences.
+        \item How poor precision in a model justifies a \textbf{narrower acceptable difference} to maintain high assurance.
+    \end{compactitem}
+
+    \item[Half B: Defend Efficiency Risk] Argue that audits must balance rigor with \textbf{practicality} to avoid unnecessary work. Your position should emphasize:
+    \begin{compactitem}
+        \item The cost and time constraints of audits, and the risk of "audit fatigue" if too many differences are investigated.
+        \item Why controlling \textbf{efficiency risk} (Type I error) is important to avoid wasting resources on immaterial differences.
+        \item How poor precision in a model might justify a \textbf{wider acceptable difference} to focus on truly significant misstatements.
+    \end{compactitem}
+\end{description}
+
+\subsubsection*{Debate Structure}
+\begin{enumerate}
+    \item Each half has 5 minutes to present their opening arguments.
+    \item 10 minutes of rebuttals: Each side gets 2 minutes to respond to the other’s points.
+    \item 10 minutes of open discussion: Students from both sides can ask questions or challenge arguments.
+    \item 5 minutes for closing statements: Each half summarizes their position.
+\end{enumerate}
+
+\subsection*{Scenario: US SteamCo (15 Minutes)}
+Using the \textbf{US SteamCo} context (a public utility with seasonal revenue and regulated pricing), address the following as a class:
+
+\begin{enumerate}
+    \item If US SteamCo’s analytical model for revenue has \textbf{poor precision} (e.g., due to volatile fuel costs or seasonal demand fluctuations), should the auditor:
+    \begin{compactitem}
+        \item Investigate \textbf{every difference} between recorded revenue and the expectation?
+        \item Set a \textbf{wider acceptable difference} to account for model imprecision?
+        \item Adjust the model or gather more data to improve precision?
+    \end{compactitem}
+
+    \item \textbf{Decide on an Acceptable Difference}:
+    As a class, vote on a specific acceptable difference for US SteamCo’s revenue assertion (e.g., \$X or Y\% of performance materiality). Justify your choice based on:
+    \begin{compactitem}
+        \item The company’s \textbf{inherent risk} (e.g., regulated industry, stable demand).
+        \item The \textbf{precision of the model} (e.g., high/low standard error).
+        \item The \textbf{desired level of assurance} (e.g., 95\% for significant risk).
+    \end{compactitem}
+
+    \item \textbf{Reflection}: How might your decision change if US SteamCo’s model precision improves in the next audit cycle?
+\end{enumerate}
+
+\subsection*{Deliverables}
+Each student must submit a 1-page reflection answering:
+\begin{compactitem}
+    \item Which side of the debate (Effectiveness Risk or Efficiency Risk) did you find more convincing, and why?
+    \item For US SteamCo, what acceptable difference would you recommend, and how does it align with the figures (5.1–5.4)?
+    \item How would you communicate your decision to US SteamCo’s management?
+\end{compactitem}
+
+\section*{Textbook reference}
+
+Refer to Section 2.4.3 from \textit{Audit Data Analysis -- Volume 2} by Lucas Hoogduin and Paul Touw. It provides a detailed discussion on how to determine an acceptable difference when performing substantive analytical procedures in an audit.
+
+\chapter{Documentation requirements for substantive analytical procedures}
+
+\section*{Closing Assignment (15 Minutes)}
+
+\subsection*{Task}
+Under \textbf{US Standard AU-C 520}, auditors are required to document specific elements of substantive analytical procedures (SAPs). Your task is to:
+
+\begin{enumerate}
+    \item List the \textbf{four mandatory documentation items} required by AU-C 520 for SAPs.
+    \item For each item, provide a \textbf{1-sentence explanation} of its purpose in the audit process.
+\end{enumerate}
+
+% \subsection*{Answer Template}
+% Complete the table below:
+
+% \begin{table}[htbp]
+% \centering
+% \caption{AU-C 520 Documentation Requirements}
+% \label{tab:auc520_docs}
+% \begin{tabularx}{\textwidth}{@{}lX@{}}
+% \toprule
+% \textbf{Documentation Item} & \textbf{Purpose} \\
+% \midrule
+% 1. Expectation formation & \\
+% 2. Comparison & \\
+% 3. Calculation & \\
+% 4. Follow-up procedures & \\
+% \bottomrule
+% \end{tabularx}
+% \end{table}
+
+% \subsection*{Example}
+% \begin{compactitem}
+%     \item \textbf{Expectation formation}: Document how the auditor developed the expected value (e.g., using prior-year data, industry benchmarks, or regression models) to provide evidence of the basis for the SAP.
+% \end{compactitem}
+
+\subsection*{Discussion}
+After completing the table, discuss with a partner:
+\begin{compactitem}
+    \item Why is each of these items critical for \textbf{audit defensibility}?
+    \item How might missing documentation for one of these items impact the audit opinion?
+\end{compactitem}
+
+\end{document}

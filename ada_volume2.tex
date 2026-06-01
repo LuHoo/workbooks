@@ -1,38 +1,31 @@
 %!TEX root = ada_volume2.tex
-\documentclass[11pt, showtrims]{memoir}
+\documentclass[11pt]{memoir}
 
 % Book metadata
 \title{Audit Data Analysis: Volume 2}
 \author{Lucas Hoogduin, Paul Touw}
-% \publisher{Boom}
+% \publisher{StatsPress}
 
-% % Page dimensions
-% \setstocksize{11in}{8.5in}        % Actual paper size
-% \settrimmedsize{10in}{7in}{*}     % Final trimmed size
-% \settrims{0.75in}{0.75in}         % Trim amounts
-% \settypeblocksize{8in}{5in}{*}    % Typeblock
-% \setlrmargins{*}{*}{1.5}          % Left/right margins
-% \setulmargins{*}{*}{1.5}          % Upper/lower margins
-% \checkandfixthelayout             % Finalize layout
 
-% Page dimensions voor 6x9 inch boek
-\setstocksize{236mm}{156mm}       % Papierformaat (6.125 x 9.25 inch, inclusief trim)
-\settrimmedsize{229mm}{152mm}{*}  % Eindformaat (6 x 9 inch)
-\settrims{3.5mm}{2mm}             % Snijmarges (aanpassen aan drukkerseisen)
-\settypeblocksize{195mm}{120mm}{*} % Typeblock (hoogte x breedte)
-\setlrmargins{*}{*}{1.2}          % Linker/rechter marges (ratio)
-\setulmargins{*}{*}{1.3}          % Boven/onder marges (ratio)
+% Page dimensions
+\setstocksize{240mm}{162mm}        % Actual paper size
+\settrimmedsize{234mm}{156mm}{*}     % Final trimmed size
+\settrims{3mm}{3mm}         % Trim amounts
+\settypeblocksize{177mm}{111mm}{*}    % Typeblock
+\setlrmargins{*}{*}{1.5}          % Left/right margins
+\setulmargins{30mm}{*}{*}          % Upper/lower margins
+\checkandfixthelayout             % Finalize layout
 
-% Optioneel: voor betere leesbaarheid en ruimte voor grafieken
-\setheadfoot{14pt}{18pt}          % Kop- en voettekstmarges
-\setheaderspaces{*}{15pt}{*}      % Ruimte voor koptekst
-\checkandfixthelayout             % Finaliseer de lay-out
+% Voor het insluiten van lettertypes
+\pdfinclusioncopyfonts=1
+\pdfgentounicode=1
 
 \usepackage[english]{babel}  % or your preferred language
 
 \hyphenpenalty=3000      % discourage hyphenation globally
 % \exhyphenpenalty=1000    % discourage hyphenation at explicit hyphens
 \sloppy                  % allow slightly looser spacing to avoid hyphenation
+\raggedbottom            % allow pages to have variable bottom margins
 
 % Typographic enhancements
 \usepackage{lmodern}
@@ -105,12 +98,12 @@
 \usepackage{tikz} 
   \usetikzlibrary{shapes, arrows, positioning, calc, math, arrows.meta}
 % Define block styles
-\tikzstyle{decision} = [diamond, draw, fill=KPMG_blue!20, 
+\tikzstyle{decision} = [diamond, draw, fill=gray, 
     text width=4.5 em, text badly centered, node distance=3 cm, inner sep = 0 pt]
 \tikzstyle{whiteblock} = [rectangle, draw, node distance=2.5 cm, text width=7.2 em, text centered, rounded corners, minimum height=4 em]
 \tikzstyle{widewhiteblock} = [rectangle, draw, node distance=2.5 cm, text width=4cm, text centered, rounded corners, minimum height=4 em]
-\tikzstyle{blueblock} = [rectangle, draw, fill=KPMG_blue!20, text width=7.2 em, text centered, rounded corners, minimum height=4 em, node distance=3 cm]  
-\tikzstyle{wideblueblock} = [rectangle, draw, fill=KPMG_blue!20, 
+\tikzstyle{blueblock} = [rectangle, draw, fill=gray!20, text width=7.2 em, text centered, rounded corners, minimum height=4 em, node distance=3 cm]  
+\tikzstyle{wideblueblock} = [rectangle, draw, fill=gray!20, 
     text width=4cm, text centered, rounded corners, minimum height=4 em,
     node distance=3 cm]  
 \tikzstyle{line} = [draw, -latex']
@@ -122,16 +115,16 @@
 
 
 % Macros for typesetting the documentation
-\definecolor{KPMG_blue}{RGB}{0, 51, 141}
-\definecolor{KPMG_light_blue}{RGB}{0, 145, 218}
-\definecolor{KPMG_light_pink}{RGB}{227,104,119}
+% \definecolor{KPMG_blue}{RGB}{0, 51, 141}
+% \definecolor{KPMG_light_blue}{RGB}{0, 145, 218}
+% \definecolor{KPMG_light_pink}{RGB}{227,104,119}
 
-\newcommand{\hlblue}[1]{\textcolor{KPMG_blue}{#1}} % prints in KPMG blue
-\newcommand{\hllblue}[1]{\textcolor{KPMG_light_blue}{#1}} % prints in KPMG light blue
-\newcommand{\hlred}[1]{\textcolor{KPMG_light_pink}{#1}} % prints in KPMG pink
-\newcommand{\ttblue}[1]{\texttt{\hlblue{#1}}}
-\newcommand{\ttlblue}[1]{\texttt{\hllblue{#1}}}
-\newcommand{\ttred}[1]{\texttt{\hlred{#1}}}
+% \newcommand{\hlblue}[1]{\textcolor{KPMG_blue}{#1}} % prints in KPMG blue
+% \newcommand{\hllblue}[1]{\textcolor{KPMG_light_blue}{#1}} % prints in KPMG light blue
+% \newcommand{\hlred}[1]{\textcolor{KPMG_light_pink}{#1}} % prints in KPMG pink
+% \newcommand{\ttblue}[1]{\texttt{\hlblue{#1}}}
+% \newcommand{\ttlblue}[1]{\texttt{\hllblue{#1}}}
+% \newcommand{\ttred}[1]{\texttt{\hlred{#1}}}
 
 % Prints the month name (e.g., January) and the year (e.g., 2008)
 \newcommand{\monthyear}{%
@@ -169,12 +162,8 @@
 \setcounter{secnumdepth}{4}
 \setsecnumdepth{subsubsection}
 
-
-% Creates watermark
-\usepackage[hpos=0.782\paperwidth, vpos=0.07\paperheight, color=KPMG_light_pink]{draftwatermark}
-\SetWatermarkText{DRAFT \today}
-\SetWatermarkScale{0.1}
-\SetWatermarkAngle{0}
+% Adds subsections to the table of contents, but not subsubsections
+\settocdepth{subsection}
 
 % Generates the index
 \usepackage{imakeidx}
@@ -217,15 +206,27 @@
 % Copyrights
 \cleardoublepage
 \thispagestyle{empty}
-\begin{center}
+\begin{raggedright}
 \vspace*{\fill}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{\baselineskip}
 Copyright \copyright\ \the\year\ Lucas Hoogduin and Paul Touw
 
 \textit{First printing, \monthyear}
+
+ISBN: 978 90 836 9101 5 
+
+NUR: 123 / 916
+
+\bigskip
+All rights reserved. All copyrights and database rights in this publication are expressly reserved by the authors, Drs. Lucas A. Hoogduin RA and Ir. Paul Touw. No part of this publication may be reproduced, stored in a retrieval system, or transmitted in any form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the prior written permission of the authors.
+
+Where the reproduction of extracts from this publication is permitted under the Dutch Copyright Act (Auteurswet), the statutory fees must be paid to Stichting Reprorecht (www.reprorecht.nl). For the reproduction of parts of this publication in anthologies, readers, or other compilations (Article 16 of the Dutch Copyright Act), permission must be obtained from Stichting PRO (www.cedar.nl/pro). For the reproduction of parts of this publication for commercial purposes, permission must be obtained directly from the authors.
+
+While every effort has been made to ensure the accuracy of the information in this publication, the authors and compilers accept no liability for any errors, omissions, or their consequences. The contents of this book reflect the personal opinions of the authors and do not represent the views, policies, or positions of KPMG or any of its affiliated organizations.
+
 \vspace*{\fill}
-\end{center}
+\end{raggedright}
 
 % Table of contents, list of figures, and list of tables
 \cleardoublepage
@@ -244,16 +245,66 @@ Copyright \copyright\ \the\year\ Lucas Hoogduin and Paul Touw
 \begin{center}
 \DoubleSpacing
 \fontsize{18}{22}\selectfont\itshape
-Dedicated to
+
+To the next generation of auditors,\\
+who dare to ask the right questions,\\
+embrace the power of data,\\
+and strive for integrity in every number.\\
+May this book be a compass on your journey.
+
 \SingleSpacing
 \end{center}
 \vspace*{\fill}
 
 % Preface
 \cleardoublepage
-\chapter*{Preface}
+\chapter*{Foreword}
+\addcontentsline{toc}{chapter}{Foreword}
+\markboth{Foreword}{Foreword}
 
-Volume 2 contains Chapters 1 and 6 of Audit Data Analysis.
+Statistics has become an indispensable tool in auditing and controlling. This shift is driven by the increasing complexity of financial systems, regulatory demands, and the rise of data-driven decision-making. Building on the foundation of the three Dutch editions of \textit{Statistiek voor Accountants}, this book is a completely revised and expanded work, designed to meet the evolving needs of students and professionals in audit and controlling.\\[0.5em]
+
+The material has been restructured into \textbf{two volumes} to better serve readers at different stages of their education and careers:
+
+\begin{itemize}
+    \item \textbf{Volume 1} provides a foundational introduction to \textbf{probability distributions, estimation theory, hypothesis testing, regression analysis, and goodness-of-fit tests}. It is designed for \textbf{Bachelor students}, offering a rigorous yet accessible treatment of the statistical principles that underpin modern audit and controlling practices.
+    \item \textbf{Volume 2} focuses on the \textbf{practical application of auditing standards}, specifically \textbf{ISA 520 (Analytical Procedures)} and \textbf{ISA 530 (Audit Sampling)}. This volume is tailored for \textbf{(post-)Master students and practitioners}, bridging the gap between theory and real-world audit challenges.
+\end{itemize}
+
+\subsection*{Key Features of This Edition}
+\begin{itemize}
+    \item \textbf{Language and Accessibility}: To reflect the global nature of audit and accounting, this edition is published in \textbf{English}, making it accessible to an international audience.
+    \item \textbf{Modern Tools}: Recognizing the shift toward data-driven auditing, this edition integrates \textbf{R and Python}---two of the most powerful and widely used programming languages for statistical analysis. These tools enable auditors to perform sophisticated analyses, automate repetitive tasks, and gain deeper insights from data.
+    \item \textbf{Companion Website}: To support hands-on learning, we have launched a \textbf{companion website} where students and practitioners can \textbf{practice with R and Python directly in their browsers}, without the need to install any software. The website includes interactive exercises, datasets, and step-by-step tutorials to reinforce the concepts covered in the books.
+\end{itemize}
+
+\subsection*{Why This Book Matters}
+The audit profession is undergoing rapid change. Regulators, standard-setters, and firms increasingly expect auditors to leverage data analytics and statistical methods to enhance audit quality and efficiency. This book equips readers with the knowledge and tools to:
+\begin{itemize}
+    \item Apply statistical techniques to \textbf{audit sampling, risk assessment, and analytical procedures}.
+    \item Critically evaluate the strengths and limitations of different statistical approaches.
+    \item Use \textbf{R and Python} to implement advanced audit techniques, from basic sampling to machine learning-assisted anomaly detection.
+\end{itemize}
+
+The \textbf{cases and examples} in this book are drawn from contemporary practice, reflecting the challenges and opportunities of auditing in a digital age. We have also incorporated feedback from educators and practitioners to ensure the content remains relevant and practical.
+
+\subsection*{Acknowledgments}
+We are grateful to the many colleagues, students, and professionals who have contributed to this book. Special thanks to the reviewers who provided invaluable feedback, and to the teams at KPMG and other firms who shared real-world insights that shaped the practical applications in this book.
+
+\subsection*{Disclaimer}
+The materials in this book reflect the authors' personal opinions and do not in any way represent the views, policies, or positions of KPMG or any of its member firms.
+
+\subsection*{Closing}
+We hope this book will inspire a new generation of auditors and accountants to embrace statistics not as a technical hurdle, but as a powerful ally in their professional toolkit.
+
+\begin{flushright}
+\textbf{April 2026}\\
+\textbf{Drs. Lucas Hoogduin RA}\\
+\textbf{Ir. Paul Touw}
+\end{flushright}
+
+\subsection*{Note to Readers}
+The companion website for this book is available at \texttt{https://luhoo.github.io/audit-data-analysis/}. There, you will find additional resources, including code snippets, datasets, and interactive exercises to deepen your understanding of the material. We encourage you to explore these tools and apply them to your studies or practice.
 
 \mainmatter
 
@@ -269,8 +320,5 @@ Volume 2 contains Chapters 1 and 6 of Audit Data Analysis.
 % \bibliographystyle{plainnat}
 
 \printindex
-
-\printindex[FSaudit]
-
 
 \end{document}

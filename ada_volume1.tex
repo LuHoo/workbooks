@@ -7,12 +7,12 @@
 % \publisher{Boom}
 
 % Page dimensions
-\setstocksize{11in}{8.5in}        % Actual paper size
-\settrimmedsize{10in}{7in}{*}     % Final trimmed size
-\settrims{0.75in}{0.75in}         % Trim amounts
-\settypeblocksize{8in}{5in}{*}    % Typeblock
+\setstocksize{240mm}{162mm}        % Actual paper size
+\settrimmedsize{234mm}{156mm}{*}     % Final trimmed size
+\settrims{3mm}{3mm}         % Trim amounts
+\settypeblocksize{177mm}{111mm}{*}    % Typeblock
 \setlrmargins{*}{*}{1.5}          % Left/right margins
-\setulmargins{*}{*}{1.5}          % Upper/lower margins
+\setulmargins{*}{*}{2.34}          % Upper/lower margins
 \checkandfixthelayout             % Finalize layout
 
 \usepackage[english]{babel}  % or your preferred language
@@ -43,6 +43,16 @@
 \usepackage{paralist}
 % Allows background color to paragraphs
 \usepackage[framemethod=tikz]{mdframed} 
+\usepackage{needspace}
+
+\mdfsetup{
+  nobreak=false,
+  splittopskip=\baselineskip,
+  splitbottomskip=\baselineskip,
+  skipabove=\baselineskip,
+  skipbelow=\baselineskip
+}
+
 % To print stuff in two or more columns
 \usepackage{multicol}
 
