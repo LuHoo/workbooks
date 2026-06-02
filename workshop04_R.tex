@@ -67,7 +67,9 @@ Some of these attributes are empty for now.
 
 
 We sample 400 units from the \ttblue{inventoryData} dataset with the \ttblue{select()} function. This effectively fills the \ttblue{sample} attribute in \ttblue{mySample}.
-\marginnote{In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of \ttblue{R} we set it to \ttblue{Rounding}, which was the default prior to version 3.6.}
+\begin{mdframed}
+In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of \ttblue{R} we set it to \ttblue{Rounding}, which was the default prior to version 3.6.
+\end{mdframed}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{RNGkind(sample.kind = "Rounding")}
@@ -90,7 +92,8 @@ We audit the sampling units selected, and submit the audit values to the CVS obj
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{audit_values <- }
-\textcolor{KPMG_blue}{  inventoryData[match(mySample$sample$item, inventoryData$item), "av"]}
+\textcolor{KPMG_blue}{  inventoryData[match(mySample$sample$item, }
+\textcolor{KPMG_blue}{                      inventoryData$item), "av"]}
 \textcolor{KPMG_blue}{mySample <- evaluate(mySample, av = audit_values)}
 \end{Verbatim}
 \index[FSaudit]{\ttblue{evaluate}}
@@ -99,14 +102,14 @@ The evaluation results are stored in the \ttblue{evalResults} attribute of the C
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{names(mySample$evalResults)}
-\textcolor{KPMG_light_blue}{ [1] "Estimates"                                   "Mean per unit estimation"                 }  
-\textcolor{KPMG_light_blue}{ [3] "Most likely total audited amount mpu"        "Most likely total error mpu"                }
-\textcolor{KPMG_light_blue}{ [5] "Achieved precision mpu"                      "Difference estimation"                     } 
-\textcolor{KPMG_light_blue}{ [7] "Most likely total audited amount difference" "Most likely total error difference"         }
-\textcolor{KPMG_light_blue}{ [9] "Achieved precision difference"               "Ratio estimation"                           }
-\textcolor{KPMG_light_blue}{[11] "Most likely total audited amount ratio"      "Most likely total error ratio"              }
-\textcolor{KPMG_light_blue}{[13] "Achieved precision ratio"                    "Regression estimation"                     } 
-\textcolor{KPMG_light_blue}{[15] "Most likely total audited amount regression" "Most likely total error regression"         }
+\textcolor{KPMG_light_blue}{ [1] "Estimates"                                   "Mean per unit ...}  
+\textcolor{KPMG_light_blue}{ [3] "Most likely total audited amount mpu"        "Most likely to...}
+\textcolor{KPMG_light_blue}{ [5] "Achieved precision mpu"                      "Difference est...} 
+\textcolor{KPMG_light_blue}{ [7] "Most likely total audited amount difference" "Most likely to...}
+\textcolor{KPMG_light_blue}{ [9] "Achieved precision difference"               "Ratio estimati...}
+\textcolor{KPMG_light_blue}{[11] "Most likely total audited amount ratio"      "Most likely to...}
+\textcolor{KPMG_light_blue}{[13] "Achieved precision ratio"                    "Regression est...} 
+\textcolor{KPMG_light_blue}{[15] "Most likely total audited amount regression" "Most likely to...}
 \textcolor{KPMG_light_blue}{[17] "Achieved precision regression"         }
 \end{Verbatim}
 
@@ -253,7 +256,7 @@ We select the sample, using the \ttblue{seed} equal to 1.
 We look up the audit values of the selected sampling units.
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{audit_values <- accounts_receivable[match(arSample$sample$item,}
-\textcolor{KPMG_blue}{                                          accounts_receivable$invoice), "av2"]}
+\textcolor{KPMG_blue}{                           accounts_receivable$invoice), "av2"]}
 \end{Verbatim}
 We then evaluate the sample and look at the \ttblue{Estimates} attribute.
 \begin{Verbatim}[commandchars=\\\{\}]

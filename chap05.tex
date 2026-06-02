@@ -14,30 +14,53 @@ In auditing, hypothesis testing is the preferred technique for attribute samplin
 \section*{Learning objectives}
 After studying this chapter, you will be able to:
 
-\begin{compactitem}
+\bigskip
+\noindent \textsc{remember}
 
-\item define\marginnote{remember} the purpose of a hypothesis test and describe the steps involved in carrying it out.
+\begin{itemize}
+
+\item define the purpose of a hypothesis test and describe the steps involved in carrying it out.
 \item distinguish between Type I and Type II errors, including their defi\-nitions and implications.
 \item list the conditions under which hypothesis tests are valid.
+\end{itemize}
 
-\item explain\marginnote{understand} how the required sample size is determined for a hypothesis test, taking into account factors like significance level, effect size, and power.
+\noindent \textsc{understand}
+\begin{itemize}
+
+\item explain how the required sample size is determined for a hypothesis test, taking into account factors like significance level, effect size, and power.
 \item identify scenarios where hypothesis testing is feasible and appropriate.
 \item describe how the theory of hypothesis testing is applied within the context of Monetary Unit Sampling (MUS).
+\end{itemize}
 
-\item conduct\marginnote{apply} a hypothesis test using sample data, including interpreting the results in the context of an audit.
+\noindent \textsc{apply}
+\begin{itemize}
+
+\item conduct a hypothesis test using sample data, including interpreting the results in the context of an audit.
 \item implement selection methods for a Monetary Unit Sample, ensuring adherence to best practices and auditing standards.
 \item use MUS to evaluate the sufficiency and reliability of audit evidence.
+\end{itemize}
 
-\item assess\marginnote{analyze} the role of sample size, selection methods, and assumptions in determining the validity and reliability of a hypothesis test.
+\noindent \textsc{analyze}
+\begin{itemize}
+
+\item assess the role of sample size, selection methods, and assumptions in determining the validity and reliability of a hypothesis test.
 \item compare the pros and cons of different selection methods in Monetary Unit Sampling, such as random sampling versus systematic selection.
+\end{itemize}
 
-\item evaluate\marginnote{evaluate} the results of a Monetary Unit Sample to determine whether audit objectives have been met.
+\noindent \textsc{evaluate}
+\begin{itemize}
+
+\item evaluate the results of a Monetary Unit Sample to determine whether audit objectives have been met.
 \item critically appraise the robustness of a hypothesis test or MUS procedure, identifying potential limitations or areas for improvement.
+\end{itemize}
 
-\item develop\marginnote{create} a step-by-step plan for carrying out a hypothesis test tailored to a specific audit scenario.
+\noindent \textsc{create}
+\begin{itemize}
+
+\item develop a step-by-step plan for carrying out a hypothesis test tailored to a specific audit scenario.
 \item design a Monetary Unit Sampling procedure, including sample selection and evaluation methods, to achieve audit objectives effectively.
 
-\end{compactitem}
+\end{itemize}
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10]
 \section*{Case: Information provided by the entity}
@@ -62,7 +85,7 @@ Hypothesis testing is presented in later chapters related to statistical modelin
 
 \bigskip 
 When carrying out a hypothesis test, we apply a nine-step approach:
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*,labelsep=.5em]
 \item Develop the research question.
 \item State the null and alternative hypotheses.
 \item Consider statistical assumptions about the sample used to do the test.
@@ -259,9 +282,10 @@ The problem described in the last paragraph of the previous section can be addre
 Rather than building error tolerance using a fixed attribute sampling plan, \hlblue{double sampling}\index{double sampling}\index{sampling!double} allows evaluation of the sample at an intermediate stage. 
 If the sample is inconclusive at this stage, the second stage is executed. 
 
+\bigskip
 The procedure is as follows:
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*,labelsep=.5em]
 	\item Draw an initial sample of size $n_0$.
 	\item If the sample reveals no deviations, accept the population.
 	\item If the sample reveals one deviation, extend the sample with size $n_1$.
@@ -299,10 +323,10 @@ Auditors often use double sampling to test manually recurring controls. Then, th
 
 \bigskip
 Typically, the size of an incremental sample is equal to that of an initial sample. The probability of accepting the population (the probability of rejecting the null hypothesis) is the sum of 
-\begin{compactitem}
+\begin{itemize}
 	\item The probability of finding no deviations in the initial sample of size $n_0$\footnote{$P(k = 0 | n_0) = (1 - \pi)^{n_0}$}; plus
 	\item The probability of finding one deviation in the initial sample of size $n_0$ and then finding one deviation in the extension of size $n_1$.\footnote{$P(k = 1 | n_0) \cdot P(k = 0 | n_1) = n \pi (1 - \pi)^{n_0 - 1} (1 - \pi)^{n_1}$}
-\end{compactitem}
+\end{itemize}
 
 The sum of these probabilities is
 
@@ -424,7 +448,7 @@ The MUS sample size lies between the fixed attribute sample sizes of 141 (for $k
 
 \bigskip
 Four methods allow the evaluation of partially correct elements.
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*,labelsep=.5em]
 \item All-or-Nothing-Approach;
 \item Stringer bound; 
 \item Cell bounds; and
@@ -446,7 +470,7 @@ What happens if the logical unit is partially correct and partially incorrect? F
 
 \begin{center}
 
-\begin{tikzpicture}[scale=1.13]
+\begin{tikzpicture}[scale=1]
 % Define the custom color
   \definecolor{myblue}{RGB}{0,51,141}
   \filldraw[fill=KPMG_blue, fill opacity=0.1, draw=black] (0,0) rectangle (1.6,0.8);
@@ -606,15 +630,13 @@ The \emph{upper confidence bound}\index{confidence bound}\index{bound!confidence
 \paragraph{Cell bounds} The \hlblue{cell bounds}\index{cell bounds} evaluation method is a further refinement of the Stringer bound method. 
 The philosophy behind this is that if a partial misstatement is encountered, it can be proven that the most conservative evaluation approach is either
 
-\begin{description}
+\begin{description}[leftmargin=*]
 \item[Load and Spread.] In addition to the partial error, all other errors in the population are 100\% errors. As a result, the upper bound $M_U[k]$ for error $k$ is the sum of the previous upper bound $M_U[k-1]$ and the point estimate $t_k X / n$ for error $k$; or\footnote{$M_{U,LS}[k] = M_U[k-1] + t X / n$}
 
 \item[Simple Spread.] All partial errors in the population exhibit the same tainting. This results in applying the average tainting $\bar{t}$ to the upper bound $M_U$.\footnote{$M_{U,SS}[k] = M_U[k] \bar{t}$}
 
-%\label{}
 \end{description}
 
-\bigskip
 The sample is evaluated according to both approaches, and at each stage in the evaluation, the most conservative upper bound is chosen. Table \ref{tab:precision_Cell} shows the calculations involved in the cell bounds evaluation method executed on the same three errors found. These numbers can be explained as follows:
 
 
@@ -652,27 +674,27 @@ Total & & & 115,448.28 \\
 
 \paragraph{Step 2.} The first error is a 100\% error; therefore, $t_1 = 1.00$ and $\bar{t} = 1.00$.
 
-\begin{compactitem}
+\begin{itemize}
 \item \emph{Simple spread}: $M_U[1] \bar{t} = 436,007 \cdot 1.00 = 436,007$.
 \item \emph{Load and spread}: Stage $M_U[0] + t_1 \frac{X}{n} = 276,050 + 1.00 \cdot 93,103.45 = 369,153.45$.
 \item \emph{Stage} $M_U$: The largest of these two values (436,007 and 369,153.45) is 436,007.
-\end{compactitem}
+\end{itemize}
 
 \paragraph{Step 3.} The second error is a 20\% error; therefore, $t_2 = 0.20$ and $\bar{t} = 1.20 / 2 = 0.60$.
 
-\begin{compactitem}
+\begin{itemize}
 \item \emph{Simple spread}: $M_U[2] \bar{t} = 577,535 \cdot 0.60 = 346,521$.
 \item \emph{Load and spread}: Stage $M_U[1] + t_3 \frac{X}{n} = 436,007 + 0.20 \cdot 93,103.45 = 454,627.69$.
 \item \emph{Stage} $M_U$: The largest of these two values (346,521 and 454,627.69) is 454,627.69.
-\end{compactitem}
+\end{itemize}
 
 \paragraph{Step 4.} The third error is a 4\% error; $t_3 = 0.04$ and $\bar{t} = 1.24 / 3 = 0.4133$.
 
-\begin{compactitem}
+\begin{itemize}
 \item \emph{Simple spread}: $M_U[3] \bar{t} = 710,132 \cdot 0.4133 = 293,521.23$.
 \item \emph{Load and spread}: Stage $M_U[2] + t_2 \frac{X}{n} = 454,627.69 + 0.04 \cdot 93,103.45 = 458,351.83$.
 \item \emph{Stage} $M_U$: The largest of these two values (293,521.23 and 458,351.83) is 458,351.83.
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 The conclusion is that we may assert, with 95\% confidence, that the total misstatement does not exceed the \emph{upper confidence bound} of 458,351.83. Note that the projected misstatement of 115,448.28 is not different from that calculated using the Stringer-bound evaluation method.

@@ -6,92 +6,99 @@
 Albert Einstein (1879-1955)
 \end{quote}
 
-% Whenever duplication of numbers occurs, the distribution of digits may deviate from Benford’s Law. Identifying these anomalies constitutes Dr. Nigrini’s life's work and epitomizes his legacy aspirations. He expressed his desire for his tombstone inscription to read, "He found abnormal duplications."
+In the previous chapter, we used regression analysis to study relationships between variables and to evaluate how well statistical models described observed data. An important question that arose throughout that discussion was whether a proposed model provided an adequate representation of reality. Measures such as the coefficient of determination and analyses of residuals offered ways to assess the quality of a model's fit. More generally, statisticians often need methods for determining whether observed data are consistent with an expected pattern or distribution. This is the central idea behind goodness-of-fit analysis.
 
-% \subsection{Introduction}
+Goodness-of-fit techniques compare observed outcomes with those predicted by a theoretical model. When the observed and expected values are sufficiently close, the model may be considered plausible. Large discrepancies, however, may indicate that the model is inappropriate, that important factors have been overlooked, or that the data contain unusual observations. As a result, goodness-of-fit methods are widely used in fields ranging from scientific research and quality control to economics and public policy.
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Update references
-\end{mdframed}
-
-In Chapter 9 (Section 9.6.5), the question was raised regarding whether the residuals were normally distributed, or in testing terms, whether the residuals significantly deviated from the normal distribution. Normality testing could be performed using Kolmogorov-Smirnov or Shapiro-Wilk tests depending on the sample size, utilizing SPSS. This chapter introduces a novel statistical method for assessing whether observations conform to a particular distribution or not. This is accomplished through the Chi-square goodness-of-fit test. This test enables the assessment of whether observations significantly depart from a random probability distribution. An advantage of the Chi-square test over the aforementioned tests is its broader applicability, allowing for the analysis of nominal data. Kolmogorov-Smirnov is limited to continuous variables, while Shapiro-Wilk is applicable only to normal distributions.
-
-Section 11.1\marginnote{\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Update references
-\end{mdframed}} provides background information on the Chi-square distribution and the associated test statistic. Subsequent sections discuss various applications. Section 11.2 addresses a newspaper article where the Benford distribution can be employed to test for irregularities in numerical data. Section 11.3 applies the Chi-square test to two commonly used distribution functions, namely the (discrete) uniform distribution and the normal distribution. The discriminatory power of the Chi-square test on the normal distribution is compared with the Kolmogorov-Smirnov test.
-
-
+One particularly interesting application involves the detection of fraud. Auditors and forensic accountants often examine whether numerical data conform to patterns that commonly occur in naturally generated datasets. A well-known example is Benford’s Law, which predicts the frequency with which different digits appear as the leading digit in many real-world collections of numbers. Although deviations from Benford’s Law do not prove wrongdoing, they can serve as useful warning signals that warrant further investigation. In this chapter, we introduce the concepts and methods of goodness-of-fit testing, with special attention to Benford’s Law and its role in auditing and fraud detection.
 
 \section*{Learning objectives}
 At the end of this chapter you will be able to
-\begin{compactitem}
-\item Perform a Chi-square goodness-of-fit test to check adherence to Benford’s Law, the uniform distribution, and the normal distribution;
-\item Verify whether the assumptions of the Chi-square test have been met;
-\item Determine the degrees of freedom of the Chi-square test;
-\item Determine the required sample size to perform a Chi-square test;
-\item Merge cells if necessary and re-run the test with adjusted critical values and test statistics.
-\end{compactitem}
-
-
-
-
-
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20,nobreak=true]
-\section*{Number one is number one}
-\sloppy
-
-\textbf{Benford's Law Determines First Digits of Number Series}
-In an astonishing number of 'ordinary' numerical series, 1 appears more frequently than 2, and 2 more frequently than 3. Why? For no particular reason.
-
-\begin{multicols}{2}
-
-When American physicist Frank Benford was browsing through a logarithm table in the library in the early 1930s, he noticed something peculiar. The pages at the beginning of the book were much more worn than those at the end. Apparently, his predecessors needed the logarithm more frequently for numbers starting with 1, 2, or 3 than with 9. Unbeknownst to Benford, a compatriot of his, the astronomer Newcomb, had observed the same phenomenon about fifty years earlier. Newcomb had even published about it in the American Journal of Mathematics, where he derived an (logarithmic) equation for the probability of a number starting with a certain digit (see inset). Unfortunately for Newcomb, his work went unnoticed. Benford became greatly intrigued by the 'skewed' and counterintuitive distribution, and embarked on a quest for other examples. The list he eventually published in 1937, after years of research, was impressive. He encountered the logarithmic distribution everywhere: in river surfaces, baseball statistics, atomic weights, Reader’s Digest articles, natural constants, totaling no less than 20,000 observations! Wherever he looked, 1 invariably appeared first in a number, followed by two, and so on. Benford's Law was born.
-
-\textit{Scale Invariance}
-
-It proved to be a law with several remarkable properties, applicable to random sequences of individual numbers, for example, not to the decimals of the number pi. Firstly, it is scale invariant. This means that it is independent of the unit in which the numbers are expressed. Take a random list of stocks, with prices expressed in guilders, and convert them into dollars. Benford holds true and continues to hold true...
-
-\textit{Nothing Mysterious}
-
-In an article published three years ago (Statistical Science, vol. 10 (1995), pp. 354-363), Ted Hill, a mathematician affiliated with the Georgia Institute of Technology, demonstrated that Benford's law will always apply when numbers are randomly chosen from random collections. This is sufficient to obtain the logarithmic distribution. And this happens even when the distributions individually do not comply. Benford himself stated: "the variety of subjects I have studied was as broad as time and energy allowed." Nothing mysterious, therefore, no 'universal table of constants', just a mathematical phenomenon...
-
-\end{multicols}
-
-\end{mdframed}
-
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20,nobreak=true]
-\section*{Number one is number one}
-
-\sloppy
-
-\begin{multicols}{2}
-
-
-\textit{Triumphal March}
-
-However, the main application of Benford's law lies in the detection of fraud in financial documents. Mark Nigrini, former professor at St. Mary's University in Canada, developed a method for this in the early nineties. He first reported on it in his 1992 thesis, titled 'The detection of income tax evasion through an analysis of digital distributions' (University of Cincinnati, 1993). Since then, his digital analysis technique has made a triumphant march. Nigrini has since left the academic world and joined the accounting firm Ernst \& Young. There, he developed DATAS (Digital Analysis Tests And Statistics), with which he -- according to the Wall Street Journal of July 11, 1995 -- detected cases of tax evasion at various firms, unmasked check forgers, and even subjected President Clinton's tax return to a thorough examination. (There was nothing wrong with that.) And all this by searching for anomalous patterns in rows of numbers. When certain digits or digit combinations occur more frequently than expected, alarm bells ring. Someone who commits fraud and invents fictitious entries almost never succeeds in distributing the numbers truly randomly, let alone mimicking the Benford distribution. But much more can be brought to light. Some managers in the business world evade their spending authority by dividing large amounts into a number of smaller ones. But inefficient procedures can also be uncovered, for example, when a company orders the same item from the same supplier two hundred times in one year. Digital analysis -- based on an obscure mathematical law on digit distributions -- helps to detect such phenomena...
-
-
-
-\end{multicols}
-
-\textsc{Logarithmic Series.} 
-Both Benford and Newcomb discovered that 1 appears in about 30 percent of cases, and 2 in 18 percent. Considering only these two, the logarithmic distribution is quickly found: 0.30 is approximately equal to the logarithm of 2, and 0.18 is slightly greater than the logarithm of 3/2. Benford's law thus states that the probability P(n) of the first significant digit in a number being n is approximately given by: P(n) is approximately equal to log((1+n)/n)\ldots
-
 \bigskip
-\textit{Source: NRC Handelsblad, August 22, 1998}
+\newline \noindent
+\textsc{remember}
+
+\noindent • define goodness of fit and explain its purpose in statistical analysis.
+
+\noindent • identify the null and alternative hypotheses used in goodness-of-fit testing.
+
+\noindent • state the main characteristics and expected digit frequencies of Benford's Law.
+
+\noindent • recall the assumptions and conditions required for the application of goodness-of-fit tests.
+\bigskip
+\newline \noindent
+\textsc{understand}
+
+\noindent • explain how goodness-of-fit tests compare observed fre\-quencies with expected frequencies.
+
+\noindent • describe the rationale behind Benford's Law and why it applies to many naturally occurring datasets.
+
+\noindent • explain the relationship between test statistics, degrees of freedom, and statistical significance.
+
+\noindent • understand the strengths and limitations of Benford's Law as a tool for fraud detection.
+\bigskip
+\newline \noindent
+\textsc{apply}
+
+\noindent • construct observed and expected frequency tables for goodness-of-fit analyses.
+
+\noindent • perform a chi-square goodness-of-fit test using statistical software.
+
+\noindent • apply Benford's Law to a dataset and compare observed digit frequencies with expected frequencies.
+
+\noindent • interpret p-values and test results in the context of auditing and data analysis.
+\bigskip
+\newline \noindent
+\textsc{analyze}
+
+\noindent • investigate discrepancies between observed and expected frequencies.
+
+\noindent • determine which categories or digits contribute most to a lack of fit.
+
+\noindent • assess whether deviations from Benford's Law are likely due to natural variation or require further investigation.
+\bigskip
+\newline \noindent
+\textsc{evaluate}
+
+\noindent • evaluate the appropriateness of a goodness-of-fit model for a particular dataset.
+
+\noindent • judge whether the assumptions underlying a goodness-of-fit test have been satisfied.
+
+\noindent • assess the evidential value of Benford analysis in an audit or fraud examination.
+\bigskip
+\newline \noindent
+\textsc{create}
+
+\noindent • design a goodness-of-fit analysis to assess whether observed data follow a specified distribution.
+
+\noindent • develop a Benford's Law testing procedure for use in an audit or forensic investigation.
+
+\noindent • formulate recommendations for additional audit procedures based on the results of a goodness-of-fit analysis.
+
+
+
+
+
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20]
+\section*{Case Study: Benford's Law and the Search for Irregularities}
+\sloppy
+
+Imagine opening a book of logarithm tables in the nineteenth century. The first pages are noticeably more worn than the later pages. This curious observation led astronomer and mathematician Simon Newcomb to an unexpected discovery. In 1881, Newcomb noted that numbers beginning with the digit 1 appeared more frequently than numbers beginning with larger digits. He published a short article proposing that naturally occurring numbers do not have uniformly distributed leading digits.
+
+Newcomb's observation attracted little attention until physicist Frank Benford independently rediscovered the phenomenon almost fifty years later. Benford collected more than 20,000 observations from diverse sources, including river lengths, population figures, and physical constants. He found a remarkably consistent pattern: approximately 30\% of numbers begin with the digit 1, while fewer than 5\% begin with the digit 9. Today, this pattern is known as \emph{Benford's Law}.
+
+One reason auditors find Benford's Law interesting is that fabricated numbers often fail to follow this natural pattern. Human beings tend to distribute digits more evenly than they occur in real datasets. As a result, deviations from Benford's distribution can serve as indicators of unusual activity requiring further investigation.
+
+A famous example involves HealthSouth Corporation, one of the largest accounting frauds in U.S. history. During the late 1990s and early 2000s, executives allegedly created numerous fraudulent journal entries to inflate reported earnings. Subsequent analyses showed that the fabricated entries exhibited digit patterns that differed from those predicted by Benford's Law. Researchers have argued that systematic application of digit analysis could have identified unusual patterns much earlier in the audit process.
+
+Benford's Law has also been applied to public-sector data. During the European sovereign debt crisis, researchers examined economic statistics reported by several countries, including Greece, to investigate whether reported figures displayed unusual digit distributions. While such analyses cannot prove manipulation, they can highlight datasets that deserve closer scrutiny and additional audit procedures.
+
+These examples illustrate both the power and the limitations of Benford's Law. A departure from the expected distribution is not evidence of fraud by itself. Legitimate datasets may deviate from Benford's pattern for many reasons, including small sample sizes or inappropriate data characteristics. Nevertheless, Benford analysis provides auditors with a simple and inexpensive screening tool that can help focus attention on areas of elevated risk.
+
 \end{mdframed}
 
 
-
-
-In the preceding chapters of this book, extensive data manipulation has been conducted. Averages and standard deviations have been computed, estimation intervals determined, and various tests performed. The data processed for these analyses were primarily ratio-scaled ('decimal numbers').
-
-When dealing with data that can fall into multiple classes or categories, or when dealing with nominal scale data (lacking numerical values and ordinal relationships), this is referred to as a multinomial distribution. The binomial distribution (with 2 classes) is essentially a special case of this.
-
-In general, a multinomial experiment consists of a sample of n independent observations distributed across k cells (or classes). For each cell, there exists a probability i that an observation falls within this cell. Table 11.1 provides a schematic representation of this concept.
 
 
 

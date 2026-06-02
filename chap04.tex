@@ -15,30 +15,53 @@ This chapter addresses these issues. The use of an auxiliary variable and/or str
 
 After studying this chapter, you will be able to:
 
-\begin{compactitem}
+\bigskip
+\noindent \textsc{remember}
 
-\item define\marginnote{remember} auxiliary variables and stratification in the context of sampling.
+\begin{itemize}
+
+\item define auxiliary variables and stratification in the context of sampling.
 \item list the four estimators discussed: mean-per-unit, regression, ratio, and difference estimation.
 \item recall the assumption of normality for the sample mean and the conditions under which it may be violated.
+\end{itemize}
 
-\item explain\marginnote{understand} how auxiliary variables improve the precision of estimates.
+\noindent \textsc{understand}
+\begin{itemize}
+
+\item explain how auxiliary variables improve the precision of estimates.
 \item describe the benefits of stratifying a population and how it supports normality of the sample mean.
 \item differentiate between the four estimators (mean-per-unit, regression, ratio, and difference estimation) and explain their appropriate use cases.
+\end{itemize}
 
-\item stratify\marginnote{apply} a population based on available data.
+\noindent \textsc{apply}
+\begin{itemize}
+
+\item stratify a population based on available data.
 \item allocate a calculated sample size to strata using proportional or optimal allocation methods.
 \item evaluate the results of a stratified sample to estimate population characteristics.
+\end{itemize}
 
-\item assess\marginnote{analyze} sampling situations to determine whether auxiliary variables or stratification would improve estimation precision.
+\noindent \textsc{analyze}
+\begin{itemize}
+
+\item assess sampling situations to determine whether auxiliary variables or stratification would improve estimation precision.
 \item examine the impact of stratification and auxiliary variables on reducing bias and promoting normality.
+\end{itemize}
+
+\noindent \textsc{evaluate}
+\begin{itemize}
 
 \item critically\marginnote{evaluate} assess whether the assumption of normality for the sample mean holds in specific sampling scenarios.
 \item compare the precision and accuracy of different estimators in varied sampling contexts.
+\end{itemize}
 
-\item design\marginnote{create} a sampling plan incorporating stratification and auxiliary variables to achieve precise and unbiased estimates.
+\noindent \textsc{create}
+\begin{itemize}
+
+\item design a sampling plan incorporating stratification and auxiliary variables to achieve precise and unbiased estimates.
 \item develop strategies to address cases where the assumption of normality is violated.
 
-\end{compactitem}
+\end{itemize}
 
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10, innerleftmargin=0.3cm]
@@ -48,12 +71,12 @@ As part of the financial statement audit, you perform procedures for the valuati
 Your client records inventory items at an internal calculation value, and he asserts that this is a good approximation for the lower of cost and market prices.
 
 You want to investigate whether this statement is correct. You select 400 items from the population. For every item selected, the historic cost price is obtained by vouching the item to the most recent purchase invoices. You also perform tests for impairment. The results for the sample are partially reproduced in Table \ref{tab:sample_results}. Furthermore, the following totals are given as
-\begin{compactitem}
-\item the cross-product of book value ($x$) and audit value ($y$)\nomenclature{$y$}{audit value} $\sum x y = $ 3,550,437,464;
+\begin{itemize}
+\item the cross-product of book value ($x$) and audit value ($y$)\nomenclature{$y$}{audit value}\\ $\sum x y = $ 3,550,437,464;
 \item the squared book values $\sum x^2 = $3,586,086,982;
 \item the squared audit values $\sum y^2 = $3,649,977,984;
 \item the squared differences $\sum d^2\nomenclature{$d$}{difference $x - y$ between the book value $x$ and audit value $y$} = $135,190,038.
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 The audited values are then extrapolated to obtain a 95\% two-sided prediction interval for the true value of inventories. The target precision for this estimate is 200,000. 
@@ -497,11 +520,11 @@ There are more practical considerations that help determine which estimator to e
 
 We also consider the performance of the estimators. The ideal estimator: 
 
-\begin{compactitem}
+\begin{itemize}
 \item is unbiased -- the average over all possible samples equals the population parameter of interest;
 \item has minimum variance -- the estimator yields more precise estimates than its competitors; and
 \item provides good \hlblue{coverage}\index{coverage} -- the estimator yields a precision interval that contains the population parameter with a probability of at least $(1 - \alpha)$. Estimators with bad coverage are referred to as being \hlblue{anti-conservative}.\index{anti-conservative}
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 To further clarify these criteria, we seeded the \emph{Inventories} population with different error patterns, with a total error of 260,000. The \emph{constant difference} pattern differences are normally distributed, with a mean of 82 and a standard deviation of 200. The \emph{no intercept} scenario has a difference of 3.7\% in each item plus or minus a difference that is normally distributed with a mean of 0 and a standard deviation of 200. The \emph{slope and intercept} distribution has audit values of .96 of the book value, plus a constant of 10, and a difference that is normally distributed with a mean 0 and a standard deviation of 200. Finally, we contrast these distributions with \emph{sporadic errors}, where 116 elements have an audit value of 0 and the remaining items are correct. 
@@ -719,11 +742,11 @@ The philosophy behind stratification is straightforward. If the population eleme
 
 \bigskip
 Further justification for stratification may be as follows:
-\begin{compactitem}
+\begin{itemize}
 \item the populations are recorded at different physical locations;
 \item we use different audit procedures at each stratum; and
 \item we not only want to conclude on the population as a whole, but also on each or some of its parts.
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 In some cases, we test all items in a stratum. This stratum is called the \hlblue{census stratum}\index{census stratum}\index{stratum!census} or \hlblue{100\% stratum}\index{100\% stratum}\index{stratum!100\%}. 
@@ -731,14 +754,14 @@ Testing all items in a stratum may be the most efficient way to allocate the sam
 
 \bigskip
 The remainder of this section is devoted to some choices that arise when we decide that stratification is required.
-\begin{compactitem}
+\begin{itemize}
 \item the number of strata;
 \item how stratum boundaries are determined;
 \item determination of the sample size;
 \item allocation of the sample to the strata;
 \item evaluation of the results per stratum; and
 \item combination of the results of the strata.
-\end{compactitem}
+\end{itemize}
 
 \paragraph{Number of strata}
 
@@ -754,11 +777,11 @@ Apart from an unfortunate distribution of audit differences across strata, as th
 \paragraph{Stratum boundaries}
 
 Three techniques for locating stratum boundaries often used in practice are
-\begin{compactitem}
+\begin{itemize}
 \item judgmentally created boundaries;
 \item equal book values\index{stratification!equal book values}; and
 \item cumulative square root of frequencies\index{stratification!cumulative square root of frequencies}.
-\end{compactitem}
+\end{itemize}
 
 We may determine strata boundaries \hlblue{judgmentally}\index{stratification!judgmentally determined boundaries} when we believe this is appropriate, for example, if we want to conclude on one or each of the strata separately or if we expect that error patterns are different between the strata.
 
@@ -881,12 +904,12 @@ We continue the example calculations with the results from Table \ref{tab:strat_
 \paragraph{Sample size}
 
 It is difficult to calculate the required sample size for a stratified sample. The following complications are identified:
-\begin{compactitem}
+\begin{itemize}
 \item For the MPU estimator, we need an estimate of the variance of the audit values, but before we have tested any items this is not available. As a temporary solution, we can use the variance of the book values.
 \item If, however, the book values have a strong correlation with the audit values, and therefore the variance of the book values is a proxy for that of the audit values, we expect that the estimation techniques that use the book value as an auxiliary variable provide more precise estimates than the MPU estimator. To take advantage of this improved precision in the expected sample size, we need an estimate of the variance of the differences or ratios (in the case of difference or ratio estimation), or the correlation between book and audit values (in the case of regression estimation). Until we tested some items, we could not obtain a reasonable estimate of these variances.
 \item The sample size is needed for the determination of the number of degrees of freedom of the relevant $t$-factor, which is needed to determine the sample size.
 \item The formula to calculate the required sample size assumes normality of the audit values or differences.
-\end{compactitem} 
+\end{itemize} 
 
 \bigskip
 Therefore, it is recommended to first obtain a pilot sample of sufficient size (at least 50) to estimate reasonable approximations of these input variables. However, in practice this may not always be possible.
@@ -926,7 +949,7 @@ Total & 3,500 & & 2,745,042 & 2,623,388,667 \\
 \label{tab:samp_size_stratified}
 \end{table}
 
-Filling in the intermediate values from Table \ref{tab:samp_size_stratified} into Equation \ref{eq:sample_size_strat} yields the minimum sample size required to achieve a precision of 200,000.
+\newpage Filling in the intermediate values from Table \ref{tab:samp_size_stratified} into Equation \ref{eq:sample_size_strat} yields the minimum sample size required to achieve a precision of 200,000.
 \footnote{At this stage, the determination of the mean-per-unit $t$ value is arbitrary. We presume that the calculated sample size is greater than 200, and therefore use a mean-per-unit $t$ value with 200 degrees of freedom.}
 \begin{equation*}
 n = \frac{1.972^2 \cdot 2,745,042^2} {200,000^2 + 1.972^2 \cdot 2,623,388,667} = 584

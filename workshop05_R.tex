@@ -190,7 +190,7 @@ This example demonstrates how invoices 201719763 and 201710344 were selected twi
 
 \textbf{Stringer bound}
 
-We continue the case study sample, and select the sample.\marginnote{See the description of the randomized fixed interval selection method on page~\pageref{par:fixed_interval_selection}}
+We continue the case study sample, and select the sample.\ (See the description of the randomized fixed interval selection method on page~\pageref{par:fixed_interval_selection})
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{ar <- select(ar, selMeth = "randomized.fixed", seed = 345)}
@@ -265,11 +265,17 @@ The results of the cell evaluation method, as presented in Table \ref{tab:precis
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{ar <- evaluate(ar, av = myResults$av, evalMeth = "cell")}
 \textcolor{KPMG_blue}{ar$evalResults$Over$`Precision calculation`}
-\textcolor{KPMG_light_blue}{  m    mum      taint projMisst     t_ave   mUPrev loadspread simplespread stageUPL}
-\textcolor{KPMG_light_blue}{1 0 276050         NA        NA        NA       NA   276050.0     276050.0 276050.0}
-\textcolor{KPMG_light_blue}{2 1 436007 1.00000000 93103.448 1.0000000 276050.0   369153.4     436007.0 436007.0}
-\textcolor{KPMG_light_blue}{3 2 577535 0.20000072 18620.757 0.6000004 436007.0   454627.8     346521.2 454627.8}
-\textcolor{KPMG_light_blue}{4 3 710132 0.03999931  3724.073 0.4133333 454627.8   458351.8     293521.2 458351.8}
+\textcolor{KPMG_light_blue}{  m    mum      taint projMisst     t_ave   mUPrev loadspread }
+\textcolor{KPMG_light_blue}{1 0 276050         NA        NA        NA       NA   276050.0 }
+\textcolor{KPMG_light_blue}{2 1 436007 1.00000000 93103.448 1.0000000 276050.0   369153.4 }
+\textcolor{KPMG_light_blue}{3 2 577535 0.20000072 18620.757 0.6000004 436007.0   454627.8 }
+\textcolor{KPMG_light_blue}{4 3 710132 0.03999931  3724.073 0.4133333 454627.8   458351.8 }
+\textcolor{KPMG_light_blue}{  simplespread stageUPL}
+\textcolor{KPMG_light_blue}{1     276050.0 276050.0}
+\textcolor{KPMG_light_blue}{2     436007.0 436007.0}
+\textcolor{KPMG_light_blue}{3     346521.2 454627.8}
+\textcolor{KPMG_light_blue}{4     293521.2 458351.8}
+
 \end{Verbatim}
 
 \end{exercise}
