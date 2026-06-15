@@ -6,93 +6,699 @@
 Albert Einstein (1879-1955)
 \end{quote}
 
-% Whenever duplication of numbers occurs, the distribution of digits may deviate from Benford’s Law. Identifying these anomalies constitutes Dr. Nigrini’s life's work and epitomizes his legacy aspirations. He expressed his desire for his tombstone inscription to read, "He found abnormal duplications."
+In the previous chapter, we used regression analysis to study relationships between variables and to evaluate how well statistical models described observed data. An important question that arose throughout that discussion was whether a proposed model provided an adequate representation of reality. Measures such as the coefficient of determination and analyses of residuals offered ways to assess the quality of a model's fit. More generally, statisticians often need methods for determining whether observed data are consistent with an expected pattern or distribution. This is the central idea behind goodness-of-fit analysis.
 
-% \subsection{Introduction}
+Goodness-of-fit techniques compare observed outcomes with those predicted by a theoretical model. When the observed and expected values are sufficiently close, the model may be considered plausible. Large discrepancies, however, may indicate that the model is inappropriate, that important factors have been overlooked, or that the data contain unusual observations. As a result, goodness-of-fit methods are widely used in fields ranging from scientific research and quality control to economics and public policy.
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Update references
-\end{mdframed}
-
-In Chapter 9 (Section 9.6.5), the question was raised regarding whether the residuals were normally distributed, or in testing terms, whether the residuals significantly deviated from the normal distribution. Normality testing could be performed using Kolmogorov-Smirnov or Shapiro-Wilk tests depending on the sample size, utilizing SPSS. This chapter introduces a novel statistical method for assessing whether observations conform to a particular distribution or not. This is accomplished through the Chi-square goodness-of-fit test. This test enables the assessment of whether observations significantly depart from a random probability distribution. An advantage of the Chi-square test over the aforementioned tests is its broader applicability, allowing for the analysis of nominal data. Kolmogorov-Smirnov is limited to continuous variables, while Shapiro-Wilk is applicable only to normal distributions.
-
-Section 11.1\marginnote{\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Update references
-\end{mdframed}} provides background information on the Chi-square distribution and the associated test statistic. Subsequent sections discuss various applications. Section 11.2 addresses a newspaper article where the Benford distribution can be employed to test for irregularities in numerical data. Section 11.3 applies the Chi-square test to two commonly used distribution functions, namely the (discrete) uniform distribution and the normal distribution. The discriminatory power of the Chi-square test on the normal distribution is compared with the Kolmogorov-Smirnov test.
-
-
+One particularly interesting application involves the detection of fraud. Auditors and forensic accountants often examine whether numerical data conform to patterns that commonly occur in naturally generated datasets. A well-known example is Benford’s Law, which predicts the frequency with which different digits appear as the leading digit in many real-world collections of numbers. Although deviations from Benford’s Law do not prove wrongdoing, they can serve as useful warning signals that warrant further investigation. In this chapter, we introduce the concepts and methods of goodness-of-fit testing, with special attention to Benford’s Law and its role in auditing and fraud detection.
 
 \section*{Learning objectives}
+
 At the end of this chapter you will be able to
-\begin{compactitem}
-\item Perform a Chi-square goodness-of-fit test to check adherence to Benford’s Law, the uniform distribution, and the normal distribution;
-\item Verify whether the assumptions of the Chi-square test have been met;
-\item Determine the degrees of freedom of the Chi-square test;
-\item Determine the required sample size to perform a Chi-square test;
-\item Merge cells if necessary and re-run the test with adjusted critical values and test statistics.
-\end{compactitem}
-
-
-
-
-
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20,nobreak=true]
-\section*{Number one is number one}
-\sloppy
-
-\textbf{Benford's Law Determines First Digits of Number Series}
-In an astonishing number of 'ordinary' numerical series, 1 appears more frequently than 2, and 2 more frequently than 3. Why? For no particular reason.
-
-\begin{multicols}{2}
-
-When American physicist Frank Benford was browsing through a logarithm table in the library in the early 1930s, he noticed something peculiar. The pages at the beginning of the book were much more worn than those at the end. Apparently, his predecessors needed the logarithm more frequently for numbers starting with 1, 2, or 3 than with 9. Unbeknownst to Benford, a compatriot of his, the astronomer Newcomb, had observed the same phenomenon about fifty years earlier. Newcomb had even published about it in the American Journal of Mathematics, where he derived an (logarithmic) equation for the probability of a number starting with a certain digit (see inset). Unfortunately for Newcomb, his work went unnoticed. Benford became greatly intrigued by the 'skewed' and counterintuitive distribution, and embarked on a quest for other examples. The list he eventually published in 1937, after years of research, was impressive. He encountered the logarithmic distribution everywhere: in river surfaces, baseball statistics, atomic weights, Reader’s Digest articles, natural constants, totaling no less than 20,000 observations! Wherever he looked, 1 invariably appeared first in a number, followed by two, and so on. Benford's Law was born.
-
-\textit{Scale Invariance}
-
-It proved to be a law with several remarkable properties, applicable to random sequences of individual numbers, for example, not to the decimals of the number pi. Firstly, it is scale invariant. This means that it is independent of the unit in which the numbers are expressed. Take a random list of stocks, with prices expressed in guilders, and convert them into dollars. Benford holds true and continues to hold true...
-
-\textit{Nothing Mysterious}
-
-In an article published three years ago (Statistical Science, vol. 10 (1995), pp. 354-363), Ted Hill, a mathematician affiliated with the Georgia Institute of Technology, demonstrated that Benford's law will always apply when numbers are randomly chosen from random collections. This is sufficient to obtain the logarithmic distribution. And this happens even when the distributions individually do not comply. Benford himself stated: "the variety of subjects I have studied was as broad as time and energy allowed." Nothing mysterious, therefore, no 'universal table of constants', just a mathematical phenomenon...
-
-\end{multicols}
-
-\end{mdframed}
-
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20,nobreak=true]
-\section*{Number one is number one}
-
-\sloppy
-
-\begin{multicols}{2}
-
-
-\textit{Triumphal March}
-
-However, the main application of Benford's law lies in the detection of fraud in financial documents. Mark Nigrini, former professor at St. Mary's University in Canada, developed a method for this in the early nineties. He first reported on it in his 1992 thesis, titled 'The detection of income tax evasion through an analysis of digital distributions' (University of Cincinnati, 1993). Since then, his digital analysis technique has made a triumphant march. Nigrini has since left the academic world and joined the accounting firm Ernst \& Young. There, he developed DATAS (Digital Analysis Tests And Statistics), with which he -- according to the Wall Street Journal of July 11, 1995 -- detected cases of tax evasion at various firms, unmasked check forgers, and even subjected President Clinton's tax return to a thorough examination. (There was nothing wrong with that.) And all this by searching for anomalous patterns in rows of numbers. When certain digits or digit combinations occur more frequently than expected, alarm bells ring. Someone who commits fraud and invents fictitious entries almost never succeeds in distributing the numbers truly randomly, let alone mimicking the Benford distribution. But much more can be brought to light. Some managers in the business world evade their spending authority by dividing large amounts into a number of smaller ones. But inefficient procedures can also be uncovered, for example, when a company orders the same item from the same supplier two hundred times in one year. Digital analysis -- based on an obscure mathematical law on digit distributions -- helps to detect such phenomena...
-
-
-
-\end{multicols}
-
-\textsc{Logarithmic Series.} 
-Both Benford and Newcomb discovered that 1 appears in about 30 percent of cases, and 2 in 18 percent. Considering only these two, the logarithmic distribution is quickly found: 0.30 is approximately equal to the logarithm of 2, and 0.18 is slightly greater than the logarithm of 3/2. Benford's law thus states that the probability P(n) of the first significant digit in a number being n is approximately given by: P(n) is approximately equal to log((1+n)/n)\ldots
 
 \bigskip
-\textit{Source: NRC Handelsblad, August 22, 1998}
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item define goodness of fit and explain its purpose in statistical analysis.
+\item identify the null and alternative hypotheses used in goodness-of-fit testing.
+\item state the main characteristics and expected digit frequencies of Benford's Law.
+\item recall the assumptions and conditions required for the application of goodness-of-fit tests.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain how goodness-of-fit tests compare observed fre\-quencies with expected frequencies.
+\item describe the rationale behind Benford's Law and why it applies to many naturally occurring datasets.
+\item explain the relationship between test statistics, degrees of freedom, and statistical significance.
+\item understand the strengths and limitations of Benford's Law as a tool for fraud detection.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item construct observed and expected frequency tables for goodness-of-fit analyses.
+\item perform a chi-square goodness-of-fit test using statistical software.
+\item apply Benford's Law to a dataset and compare observed digit frequencies with expected frequencies.
+\item interpret p-values and test results in the context of auditing and data analysis.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item investigate discrepancies between observed and expected frequencies.
+\item determine which categories or digits contribute most to a lack of fit.
+\item assess whether deviations from Benford's Law are likely due to natural variation or require further investigation.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item evaluate the appropriateness of a goodness-of-fit model for a particular dataset.
+\item judge whether the assumptions underlying a goodness-of-fit test have been satisfied.
+\item assess the evidential value of Benford analysis in an audit or fraud examination.
+\end{itemize}
+\noindent \textsc{create}
+\begin{itemize}
+\item design a goodness-of-fit analysis to assess whether observed data follow a specified distribution.
+\item develop a Benford's Law testing procedure for use in an audit or forensic investigation.
+\item formulate recommendations for additional audit procedures based on the results of a goodness-of-fit analysis.
+\end{itemize}
+
+
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20]
+\section*{Case Study: Benford's Law and the Search for Irregularities}
+\sloppy
+
+Imagine opening a book of logarithm tables in the nineteenth century. The first pages are noticeably more worn than the later pages. This curious observation led astronomer and mathematician Simon Newcomb to an unexpected discovery. In 1881, Newcomb noted that numbers beginning with the digit 1 appeared more frequently than numbers beginning with larger digits. He published a short article proposing that naturally occurring numbers do not have uniformly distributed leading digits.
+
+Newcomb's observation attracted little attention until physicist Frank Benford independently rediscovered the phenomenon almost fifty years later. Benford collected more than 20,000 observations from diverse sources, including river lengths, population figures, and physical constants. He found a remarkably consistent pattern: approximately 30\% of numbers begin with the digit 1, while fewer than 5\% begin with the digit 9. Today, this pattern is known as \emph{Benford's Law}.
+
+One reason auditors find Benford's Law interesting is that fabricated numbers often fail to follow this natural pattern. Human beings tend to distribute digits more evenly than they occur in real datasets. As a result, deviations from Benford's distribution can serve as indicators of unusual activity requiring further investigation.
+
+A famous example involves HealthSouth Corporation, one of the largest accounting frauds in U.S. history. During the late 1990s and early 2000s, executives allegedly created numerous fraudulent journal entries to inflate reported earnings. Subsequent analyses showed that the fabricated entries exhibited digit patterns that differed from those predicted by Benford's Law. Researchers have argued that systematic application of digit analysis could have identified unusual patterns much earlier in the audit process.
+
+Benford's Law has also been applied to public-sector data. During the European sovereign debt crisis, researchers examined economic statistics reported by several countries, including Greece, to investigate whether reported figures displayed unusual digit distributions. While such analyses cannot prove manipulation, they can highlight datasets that deserve closer scrutiny and additional audit procedures.
+
+These examples illustrate both the power and the limitations of Benford's Law. A departure from the expected distribution is not evidence of fraud by itself. Legitimate datasets may deviate from Benford's pattern for many reasons, including small sample sizes or inappropriate data characteristics. Nevertheless, Benford analysis provides auditors with a simple and inexpensive screening tool that can help focus attention on areas of elevated risk.
+
 \end{mdframed}
 
+\newpage
+\section{Chi-Square Goodness-of-Fit Test}
+
+\begin{quote}
+\textit{The mathematician, carried along on his flood of symbols, dealing apparently with purely formal truths, may still reach results of endless importance for our description of the physical universe.}
+\\[0.2cm]
+--- Karl Pearson (1857--1936), \textit{The Grammar of Science} (1900)
+\end{quote}
+
+In the preceding chapters of this book, extensive calculations have been performed with data. Means and standard deviations have been computed, confidence intervals determined, and various tests conducted. The data processed for these purposes were typically ratio-scaled (i.e., numerical data with equal intervals and a true zero point).
+
+When data can be categorized into multiple classes (or distributions) or when dealing with nominal-scale data (data without numerical values or inherent order), this is referred to as a \textit{multinomial distribution}. The binomial distribution (with two classes) is essentially a special case of the multinomial distribution. Table \ref{tab:ar_aging} gives an example of the categorization of accounts receivable aging.
+
+\begin{table}[thbp]
+\begin{tabularx}{\textwidth}{@{}lYYYYY@{}}
+
+\toprule
+\parbox[t]{1.5 cm}{Days} &
+<= 30 &
+31 - 60 &
+61 - 270 &
+> 270 &
+Total\\
+
+\midrule
+
+Number & 9 & 41 & 15 & 4 & 69 \\
+
+\bottomrule
+\end{tabularx}
+\caption{Aging of accounts receivable}
+\label{tab:ar_aging}
+\end{table}
+
+In general, a multinomial experiment consists of a sample of $n$ independent observations distributed across $k$ cells (or classes). For each cell, there is a probability $\pi_i$ that an observation falls into that cell. This is schematized in Table \ref{tab:multinomial_distribution}.
+
+\begin{table}[thbp]
+\begin{tabularx}{\textwidth}{@{}lYYYYYYYY@{}}
+
+\toprule
+\parbox[t]{1.5 cm}{Cell} &
+1 &
+2 &
+3 &
+\ldots &
+$i$ &
+\ldots &
+$k$ &
+Total\\
+
+\midrule
+
+Number & $n_1$ & $n_2$ & $n_3$ & \ldots & $n_i$ & \ldots & $n_k$ & $n$ \\
+Probability & $\pi_1$ & $\pi_3$ & $\pi_3$ & \ldots & $\pi_i$ & \ldots & $\pi_k$ & 1 \\
+
+\bottomrule
+\end{tabularx}
+\caption{Multinomial distribution}
+\label{tab:multinomial_distribution}
+\end{table}
+
+The total probability across all cells sums to 1 (100\%). 
 
 
+\bigskip
+For example, a customer satisfaction survey was conducted among all 625 customers (the population). The results are presented in Table \ref{tab:client_satisfaction}.
 
-In the preceding chapters of this book, extensive data manipulation has been conducted. Averages and standard deviations have been computed, estimation intervals determined, and various tests performed. The data processed for these analyses were primarily ratio-scaled ('decimal numbers').
+\begin{table}[thbp]
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 
-When dealing with data that can fall into multiple classes or categories, or when dealing with nominal scale data (lacking numerical values and ordinal relationships), this is referred to as a multinomial distribution. The binomial distribution (with 2 classes) is essentially a special case of this.
+\toprule
+\parbox[t]{2 cm}{Satisfaction} &
+(Very) Dissatisfied &
+Neutral &
+(Very) Satisfied &
+Total\\
 
-In general, a multinomial experiment consists of a sample of n independent observations distributed across k cells (or classes). For each cell, there exists a probability i that an observation falls within this cell. Table 11.1 provides a schematic representation of this concept.
+\midrule
+
+Count & 250 & 100 & 275 & 625 \\
+Proportion & 0.40 & 0.16 & 0.44 & 1.00 \\
+
+\bottomrule
+\end{tabularx}
+\caption{Client satisfaction results}
+\label{tab:client_satisfaction}
+\end{table}
+
+The aim is to investigate whether customer satisfaction has changed in the subsequent year.
+
+For a goodness-of-fit test, the hypotheses examine whether the distribution of satisfaction in the follow-up year is the same as the distribution observed in the base year. Because all 625 customers were surveyed in the base year, the observed proportions are equal to the population proportions for that year. These proportions therefore serve as the hypothesized probabilities under the null hypothesis.
+
+Let $\pi_i$ denote the proportion of customers in the follow-up year belonging to satisfaction category $i$. The null hypothesis is
+\begin{equation*}
+    H_0 : \pi_1 = 0.40, \pi_2 = 0.16, \pi_3 = 0.44
+\end{equation*}
+
+The alternative hypothesis states that the distribution of customer satisfaction has changed:
+
+\begin{equation*}
+    H_1 : \text{At least one of the } \pi_i \text{ differs from its hypothesized value}
+\end{equation*}
+
+The follow-up study found that, from a sample of 40 customers, 15 were (very) dissatisfied, 12 were neutral, and 13 were (very) satisfied. The observed frequencies are summarized in Table \ref{tab:client_satisfaction_followup}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
+\toprule
+Satisfaction &
+(Very) Dissatisfied &
+Neutral &
+(Very) Satisfied &
+Total \\
+\midrule
+Observed frequency & 15 & 12 & 13 & 40 \\
+\bottomrule
+\end{tabularx}
+\caption{Customer satisfaction in the follow-up study}
+\label{tab:client_satisfaction_followup}
+\end{table}
+
+Under the null hypothesis, the population proportions are
+
+\begin{equation*}
+    \pi_1 = 0.40,\qquad \pi_2 = 0.16,\qquad \pi_3 = 0.44
+\end{equation*}
+
+The expected frequencies are therefore obtained by multiplying these proportions by the sample size $n=40$:
+
+\begin{equation*}
+E_1 = 40(0.40) = 16.0,\qquad
+E_2 = 40(0.16) = 6.4,\qquad
+E_3 = 40(0.44) = 17.6.
+\end{equation*}
+
+The observed and expected frequencies are shown in Table \ref{tab:gof_expected}. Although frequencies are often reported as whole numbers, the expected frequencies used in a chi-square test may be fractional. These expected frequencies should not be rounded before calculating the test statistic, as rounding can affect the result of the test.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYY@{}}
+\toprule
+Satisfaction &
+(Very) Dissatisfied &
+Neutral &
+(Very) Satisfied \\
+\midrule
+Observed ($O_i$) & 15 & 12 & 13 \\
+Expected ($E_i$) & 16.0 & 6.4 & 17.6 \\
+\bottomrule
+\end{tabularx}
+\caption{Observed and expected frequencies}
+\label{tab:gof_expected}
+\end{table}
+
+The chi-square test statistic is
+
+\begin{equation}
+\begin{aligned}
+\chi^2
+&=
+\sum_{i=1}^{k}
+\frac{(O_i-E_i)^2}{E_i} \\[1ex]
+&=
+\frac{(15-16)^2}{16}
++
+\frac{(12-6.4)^2}{6.4}
++
+\frac{(13-17.6)^2}{17.6} \\[1ex]
+&=
+0.063 + 4.900 + 1.202 \\[1ex]
+&=
+6.165.
+\end{aligned}
+\label{eq:chi_square_test_statistic}
+\end{equation}
+
+Since there are $k=3$ categories and no parameters are estimated from the sample, the number of degrees of freedom is
+
+\begin{equation*}
+df = k-1 = 3-1 = 2.
+\end{equation*}
+
+For a significance level of $\alpha=0.05$, the critical value is $\chi^2_{0.05,2} = 5.991$. Because
+
+\begin{equation*}
+\chi^2 = 6.165 > \chi^2_{0.05,2} = 5.991,
+\end{equation*}
+the null hypothesis is rejected.
+
+\bigskip
+Equivalently, the $p$ value is
+
+\begin{equation*}
+    p = P(\chi^2_2 \geq 6.165) \approx 0.046.
+\end{equation*}
+
+Since $p < 0.05$, the null hypothesis is rejected. 
+
+\bigskip
+Conclusion: there is sufficient evidence at the 5\% significance level to conclude that the distribution of customer satisfaction in the follow-up year differs from the distribution observed in the base year.
+
+\subsection{The Chi-Square Distribution}
+
+The chi-square goodness-of-fit test is used to determine whether the distribution of a categorical variable corresponds to a hypothesized distribution.
+
+Suppose that a sample of size $n$ is classified into $k$ mutually exclusive categories. Under the null hypothesis, the probability that an observation falls into category $i$ is ($\pi_i$), where
+
+\begin{equation*}
+    \sum_{i=1}^{k}\pi_i = 1.
+\end{equation*}
+
+Let $O_i$ denote the observed frequency in category $i$. The vector of observed frequencies
+
+\begin{equation*}
+    (O_1,O_2,\ldots,O_k)
+\end{equation*}
+
+follows a multinomial distribution:
+
+\begin{equation*}
+    (O_1,O_2, \ldots, O_k) \sim \text{Multinomial}(n; \pi_1, \pi_2, \ldots, \pi_k).
+\end{equation*}
+
+For each category $i$, the expected frequency is
+
+\begin{equation*}
+    E_i = n \pi_i .
+\end{equation*}
+
+When the sample size is sufficiently large, the multinomial distribution can be approximated by a multivariate normal distribution. Consequently, the standardized deviations $\frac{O_i-E_i}
+{\sqrt{E_i}}$ are approximately standard normally distributed:
+
+\begin{equation*}
+    Z_i \overset{\text{approx}}{\sim} N(0,1).
+\end{equation*}
+
+The chi-square test statistic is obtained by summing the squared standardized deviations across all categories:
+
+\begin{equation*}
+    \sum_{i = 1}^{k} \left(\frac{O_i - E_i}{\sqrt{E_i}}\right)^2
+\end{equation*}
+
+Under the null hypothesis and for sufficiently large sample sizes, the test statistic follows approximately a chi-square distribution. The number of degrees of freedom equals the number of categories minus one, minus the number of parameters estimated from the sample:
+\begin{equation*}
+    df = k - p - 1
+\end{equation*}
+where $k$ is the number of categories and $p$ is the number of parameters estimated from the data.
+
+\bigskip
+To apply the chi-square goodness-of-fit test, the following conditions should be satisfied:
+
+\begin{itemize}
+\item The sample contains at least 20 observations.
+\item The observations are independent.
+\item The probability that an observation falls into a particular category remains constant throughout the sampling process.
+\item The expected frequency in each category is sufficiently large.
+\end{itemize}
+
+The final condition deserves special attention. The chi-square distribution is derived as the distribution of a sum of squared standard normal random variables. Therefore, the normal approximation used in the derivation must be adequate for each category. A commonly used rule of thumb is:
+
+\begin{itemize}
+\item The expected frequency in every category should be at least 5.
+\end{itemize}
+
+This rule is often considered conservative. Cochran (1963) proposed a more flexible guideline. According to this guideline, the chi-square approximation may still be used provided that
+
+\begin{itemize}
+\item $E_i \geq 1$ for every category, and
+\item at least 80\% of the categories satisfy $E_i \geq 5$.
+\end{itemize}
+
+The shape of the chi-square distribution depends on the number of degrees of freedom. As the number of categories increases, the degrees of freedom increase and the distribution becomes more symmetric. For small degrees of freedom, the chi-square distribution is strongly right-skewed; as the degrees of freedom increase, it gradually approaches a normal distribution.
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=0cm, innerleftmargin=0.3cm]
+\sloppy
+\section*{Case: Inventory list}
+At a company, inventory is tracked using an inventory list. In addition to sampling the actual presence of inventory, a control is applied to the inventory figures to check whether they comply with \textbf{Benford's Law}. The first digit of a total of 300 inventory values was tallied and is presented in Table \ref{tab:inventories_first_digits}.
+
+\section*{Objective}
+Investigate whether the figures provide reason to assume that there are irregularities present in the inventory list. 
+\\
+\end{mdframed}
+
+\begin{table}[thbp]
+\begin{tabularx}{\textwidth}{@{}lYYYYYYYYY@{}}
+
+\toprule
+\parbox[t]{1.5 cm}{Digit} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\midrule
+
+Frequency & 86 & 48 & 23 & 32 & 24 & 36 & 19 & 18 & 14 \\
+
+\bottomrule
+\end{tabularx}
+\caption{Frequency Distribution of First Digits in Inventory Values}
+\label{tab:inventories_first_digits}
+\end{table}
+
+\section*{Benford's Research}
+
+In 1938, Benford conducted research into the validity of his law, expressed in \textbf{Benford's Law}:
+
+\begin{equation}
+    P(i) = \log \left( \frac{i + 1}{i} \right)
+    \label{eq:benfords_law}
+\end{equation}
+
+For $i = 1, 2, \ldots, 9$, the probability $P(i)$ can be determined that the first digit of a number is equal to $i$.
+
+The results of Equation \ref{eq:benfords_law}, representing Benford's Law for the first digit of a number, are shown in Figure \ref{fig:H9_benford}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{H9_benford.pdf}
+    \caption{Benford's Law for the First Digit of a Number}
+    \label{fig:H9_benford}
+\end{figure}
+
+Table \ref{tab:benford_series} containing (a selection) from Benford's original 1938 publication shows the distribution of the first digit of numbers from various sources.
+
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{@{}lrrrrXXXXXr@{}}
+
+\toprule
+\parbox[t]{1 cm}{Series} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & $n$\\
+\midrule
+
+Rivers & 31.0 & 16.4 & 10.7 & 11.3 & 7.2 & 8.6 & 5.5 & 4.2 & 5.1 & 335 \\
+Am. Leag. & 32.7 & 17.6 & 12.6 & 9.8 & 7.4 & 6.4 & 4.9 & 5.6 & 3.0 & 1458 \\
+Cost Data & 32.4 & 18.8 & 10.1 & 10.1 & 9.8 & 5.5 & 4.7 & 5.5 & 3.1 & 741 \\
+Reader's D & 33.4 & 18.5 & 12.4 & 7.5 & 7.1 & 6.5 & 5.5 & 4.9 & 4.2 & 308 \\
+Mol. Wgt. & 26.7 & 25.2 & 15.4 & 10.8 & 6.7 & 5.1 & 4.1 & 2.8 & 3.2 & 1800 \\
+\midrule
+Average & 31.2 & 19.3 & 12.2 & 9.9 & 7.6 & 6.4 & 4.9 & 4.6 & 3.7 & 4643 \\
 
 
+\bottomrule
+\end{tabularx}
+\caption{Frequency Distribution of First Digits in Inventory Values}
+\label{tab:benford_series}
+\end{table}
+
+The data from Table \ref{tab:benford_series} are presented in Figure \ref{fig:H9_benford_examples}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{H9_benford_examples.pdf}
+    \caption{Some of Benford's examples}
+    \label{fig:H9_benford_examples}
+\end{figure}
+
+
+The various datasets (to a greater or lesser extent) show the same pattern as the Benford distribution. Subsequently, Benford performed the same control for a combination of the datasets (see "Average" in Table \ref{tab:benford_series}). This is shown in Figure 11.5.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{H9_benford_ave_vs_theor.pdf}
+    \caption{Observed and Theoretical First-Digit Distributions}
+    \label{fig:H9_benford_ave_vs_theor}
+\end{figure}
+
+
+The combination of datasets was found to fit the Benford distribution even better than the individual datasets. Benford's research further demonstrated that when controlling the first digit of datasets, there was no issue with combining ``apples and oranges'' (i.e., different datasets).
+It is also possible to check for irregularities in the second and third digits of numbers. This will be revisited in Section 11.3.1.
+
+Checking whether figures comply with Benford's Law is a form of digit analysis and is an example of \textit{data mining}.
+
+\subsection{Chi-Square Test and Benford's Law}
+
+Before applying a chi-square goodness-of-fit test to assess compliance with
+Benford's Law, it is important to verify that the data are suitable for such
+an analysis. Benford's Law does not apply to every numerical data set. It is
+most commonly observed in naturally occurring numerical data that span several
+orders of magnitude and are not constrained by artificial limits.
+
+In practice, the following conditions should be considered:
+
+\begin{itemize}
+    \item The data should not be restricted by fixed minimum or maximum values.
+    For example, if the weekly turnover of a snack bar always lies between
+    6,000 and 9,500, only numbers beginning with the digits 6, 7, 8, or 9
+    can occur. Such a restriction prevents the first-digit distribution from
+    following Benford's Law.
+
+    \item The values should represent measured or naturally occurring quantities
+    rather than assigned identifiers. Numbers such as product codes, item
+    numbers, telephone numbers, or social security numbers are generated by
+    design and are therefore not expected to follow Benford's Law.
+
+    \item The values should not be heavily influenced by human preferences or
+    conventions. For example, retail prices frequently end in digits such as
+    95 or 99. These so-called \textit{psychological prices} can create digit
+    patterns that differ substantially from those predicted by Benford's Law.
+\end{itemize}
+
+Additional practical guidelines are often recommended when performing
+Benford analyses:
+
+\begin{itemize}
+    \item The data set should contain a sufficiently large number of
+    observations, preferably at least 1,000 values.
+    \item Values smaller than 10 are typically excluded when analysing
+    first-two-digit frequencies.
+    \item Numbers should contain at least four digits when first-two-digit
+    tests are performed.
+\end{itemize}
+
+These guidelines are particularly relevant for tests based on the first two
+digits. Values below 10 do not possess two significant leading digits, and a
+large sample size is required to ensure that expected frequencies are
+sufficiently large for the chi-square approximation to be valid. A commonly
+used rule is that each expected frequency should be at least 5.
+
+If a population contains both positive and negative values, the positive and
+negative observations are usually analysed separately because they may arise
+from different generating processes.
+
+\bigskip
+Consider the inventory data set introduced in the \textit{Case: Inventory
+List} (Table~\ref{tab:inventories_first_digits}), which contains
+$n=300$ observations. The objective is to determine whether the distribution
+of first digits is consistent with Benford's Law.
+
+The expected frequencies are obtained by multiplying the Benford probabilities
+by the sample size. The observed and expected frequencies are presented in
+Table~\ref{tab:observed_and_expected_frequencies}.
+
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{@{}lrrrrrrrrr@{}}
+
+\toprule
+\parbox[t]{1 cm}{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\midrule
+
+$O_i$ & 86 & 48 & 23 & 32 & 24 & 36 & 19 & 18 & 14 \\
+$E_i = n.P(i)$ & 90.3 & 52.8 & 37.5 & 29.1 & 23.8 & 20.1 & 17.4 & 15.3 & 13.7  \\
+\bottomrule
+\end{tabularx}
+\caption{Observed and expected first-digit frequencies}
+\label{tab:observed_and_expected_frequencies}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{H9_inventor_list.pdf}
+    \caption{Observed and expected frequencies of first digits in inventory list}
+    \label{fig:H9_inventory_list}
+\end{figure}
+
+The observed and expected frequencies are displayed graphically in
+Figure~\ref{fig:H9_inventory_list}. Visual inspection suggests
+some differences between the two distributions. The chi-square
+goodness-of-fit test is used to determine whether these differences are large
+enough to be statistically significant.
+
+\subsection*{Hypotheses}
+
+Let $\pi_i$ denote the probability that the first digit is equal to $i$. Under Benford's Law,
+\begin{equation*}
+\begin{aligned}
+    (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669,\,0.0580,\, \\
+    &0.0512,\,0.0458).
+\end{aligned}
+\end{equation*}
+The hypotheses for the chi-square goodness-of-fit test are
+
+\begin{equation*}
+\begin{aligned}
+    H_0 : (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669, \\
+    &\,0.0580,\,0.0512,\,0.0458).
+\end{aligned}
+\end{equation*}
+
+\begin{equation*}
+\begin{aligned}
+    H_0 : (\pi_1,\pi_2,\ldots,\pi_9) \neq (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669, \\
+    &\,0.0580,\,0.0512,\,0.0458).
+\end{aligned}
+\end{equation*}
+
+In words,
+
+\begin{equation*}
+\begin{aligned}
+H_0 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data follows } \\
+&\hspace{0.5em} \text{Benford's Law,} \\
+H_1 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data does not follow} \\
+&\hspace{0.5em} \text{Benford's Law. }
+\end{aligned}
+\end{equation*}
+
+\subsection*{Calculation of the Test Statistic}
+
+The chi-square goodness-of-fit test statistic is calculated according to Equation \ref{eq:chi_square_test_statistic}:
+
+\begin{equation*}
+    \chi^2 = \sum_{i=1}^{9}
+\frac{(O_i-E_i)^2}{E_i},
+\end{equation*}
+where \(O_i\) denotes the observed frequency of first digit \(i\) and
+\(E_i\) denotes the corresponding expected frequency under Benford's Law.
+
+The statistic measures the overall discrepancy between the observed and
+expected distributions. Large values of \(\chi^2\) indicate that the observed
+frequencies differ substantially from those predicted by Benford's Law.
+
+\bigskip
+For the inventory data, the calculation is conveniently organized in
+tabular form, as shown in Table~\ref{tab:chi_square_calculation}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Digit} &
+\(O_i\) &
+\(E_i\) &
+\((O_i-E_i)^2\) &
+\(\frac{(O_i-E_i)^2}{E_i}\) \\
+\midrule
+1 & 86 & 90.31 & 18.58 & 0.21 \\
+2 & 48 & 52.83 & 23.33 & 0.44 \\
+3 & 23 & 37.48 & 209.67 & 5.59 \\
+4 & 32 & 29.07 & 8.58 & 0.30 \\
+5 & 24 & 23.75 & 0.06 & 0.00 \\
+6 & 36 & 20.08 & 253.45 & 12.62 \\
+7 & 19 & 17.40 & 2.56 & 0.15 \\
+8 & 18 & 15.35 & 7.02 & 0.46 \\
+9 & 14 & 13.73 & 0.07 & 0.01 \\
+\cmidrule{1-5}
+\textbf{Total} & 300 & 300.00 & & \(\chi^2 = 19.80\) \\
+\bottomrule
+\end{tabular}
+\caption{Calculation of the chi-square test statistic}
+\label{tab:chi_square_calculation}
+\end{table}
+
+The final test statistic is $\chi^2 = 19.80$.
+
+\subsection*{Critical Value and Decision Rule}
+
+Under the null hypothesis, the test statistic follows approximately a
+chi-square distribution with $df = k-1 = 9-1 = 8$ degrees of freedom, where $k$ is the number of possible first digits.
+
+For a significance level of $\alpha=0.05$, the critical value is
+$\chi^2_{0.05,8}=15.51.$
+
+Figure~\ref{fig:H9_chisq_dist_df8} illustrates the chi-square
+distribution with 8 degrees of freedom. Values of the test statistic that
+fall to the right of the critical value belong to the rejection region.
+
+\begin{figure}[thbp]
+    \centering
+    \includegraphics[width=1\textwidth]{H9_chisq_dist_df8.pdf}
+    \caption{Chi-square distribution with df=8}
+    \label{fig:H9_chisq_dist_df8}
+\end{figure}
+
+\subsection*{Conclusion}
+
+Because $\chi^2 = 19.80 > 15.51$, the test statistic falls within the rejection region. Therefore, the null hypothesis is rejected at the 5\% significance level.
+
+The data provide sufficient statistical evidence to conclude that the
+distribution of first digits in the inventory data differs from the
+distribution predicted by Benford's Law.
+
+It is important to note that rejecting the null hypothesis does not prove
+the existence of fraud, error, or manipulation. The result merely indicates
+that the observed digit frequencies are unlikely to have arisen from a
+population that follows Benford's Law. The source of the discrepancy must
+therefore be investigated further.
+
+\subsection*{Identifying Sources of Deviation}
+
+An advantage of the chi-square statistic is that its individual components
+can be examined separately. Each quantity
+
+\[
+\frac{(O_i-E_i)^2}{E_i}
+\]
+
+represents the contribution of digit \(i\) to the overall test statistic.
+
+Table~\ref{tab:chi_square_calculation} shows that most of the chi-square
+value is generated by the digits 6 and 3. Their contributions are 12.62 and 5.59, respectively. Together they account for more than \(90\%\) of the total
+test statistic.
+
+A closer inspection reveals that numbers beginning with the digit 6 occur
+substantially more often than expected, whereas numbers beginning with the
+digit 3 occur substantially less often than expected.
+
+From an auditing perspective, excessive frequencies are often of greater
+interest than deficient frequencies. Consequently, the unusually high number
+of observations beginning with the digit 6 would normally receive priority
+for further investigation.
+
+A natural next step is to analyse the first two digits rather than only the
+first digit. This may reveal whether the excess frequency is concentrated in
+particular ranges such as 60--69 or even in specific two-digit combinations.
+
+For first-two-digit analysis, Benford's Law predicts that the probability of
+observing the two-digit combination \(ij\) is
+
+\[
+P(ij)
+=
+\log_{10}
+\left(
+1+\frac{1}{ij}
+\right),
+\tag{11.4}
+\]
+
+where
+
+\[
+ij = 10,11,12,\ldots,99.
+\]
+
+This finer level of analysis can help identify the specific values that are
+responsible for the departure from Benford's Law.
 
 % chapter goodness_of_fit (end)

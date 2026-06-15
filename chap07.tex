@@ -23,216 +23,7 @@ Such anomalies may warrant further investigation to determine their nature and c
 In the absence of notable deviations, auditors assess the overall fit of the model and the precision of its predictions to establish the level of assurance provided, thereby forming a basis for concluding on the reasonableness of the financial data.
 
 
-\section*{Learning objectives}
-At the end of this chapter you will be able to
 
-% ### **7.1. General Introduction to Simple Linear Regression and the Purposes of Regression Analysis**
-
-\begin{compactitem}
-
-\item Section \ref{sec:what_is_regression_analysis}
-\begin{compactitem}
-% - **Remember**: 
-\item define\marginnote{remember} regression analysis and identify its primary components: dependent variable, independent variable, and error term.
-\item state the key purposes of regression analysis, including prediction, explanation, and hypothesis testing.
-\item recall the differences between exploratory and confirmatory data analysis.
-% - **Understand**:
-\item explain\marginnote{understand} how regression identifies relationships between variables and distinguishes correlation from causation.
-\item describe the differences between exploratory data analysis (EDA) and confirmatory data analysis (CDA) in the context of regression.
-% - **Apply**:
-\item use\marginnote{apply} a simple linear regression model to explore the relationship between two variables in a dataset.
-\item generate summary statistics and plots (e.g., scatterplots) to visualize potential relationships.
-% - **Analyze**:
-\item compare\marginnote{analyze} EDA and CDA approaches in terms of their goals and methodologies.
-\item assess the appropriateness of linear regression for a given dataset based on initial exploration.
-% - **Evaluate**:
-\item justify\marginnote{evaluate} the choice of simple linear regression as a starting point for analyzing relationships in data.
-\item critique the limitations of simple regression for more complex, real-world relationships.
-% - **Create**:
-\item formulate\marginnote{create} hypotheses to be tested using regression based on EDA insights.
-  
-\end{compactitem}
-
-% ### **7.2. Assumption Underlying Regression Results**
-\item{Section \ref{sec:assumptions_underlying_regression_results}}
-
-\begin{compactitem}
-% - **Remember**:
-\item list\marginnote{remember} the key assumptions underlying regression analysis: linearity in the parameters, random sampling, sample variation, and zero-conditional mean of errors.
-\item define the meaning of each assumption in the context of regression analysis.
-% - **Understand**:
-\item explain\marginnote{understand} why each assumption is important for the validity of regression results.
-\item discuss the implications of violating assumptions such as non-linearity or biased sampling.
-% - **Apply**:
-\item identify\marginnote{apply} potential violations of regression assumptions in a dataset using diagnostic tools (e.g., residual plots).
-\item demonstrate how to deal with non-linearity in practice.
-% - **Analyze**:
-\item assess\marginnote{analyze} how different violations of assumptions (e.g., heteroskedasticity, omitted variable bias) affect regression coefficients and predictions.
-% - **Evaluate**:
-\item recommend\marginnote{evaluate} solutions for addressing assumption violations, such as transformations or alternative modeling approaches.
-% - **Create**:
-\item develop\marginnote{create} a checklist for verifying regression assumptions before interpreting results.
-\end{compactitem}
-
-% ### **7.3. Obtaining and Testing Data**
-\item Section \ref{sec:obtaining_and_testing_data}
-
-\begin{compactitem}
-% - **Remember**:
-\item identify\marginnote{remember} steps for summarizing and plotting data to explore relationships.
-\item recall methods for testing the relevance and independence of independent variables (e.g., correlation analysis, variance inflation factor).
-\item describe the purpose of splitting data into estimation and hold-out sets.
-% - **Understand**:
-\item explain\marginnote{understand} the role of data wrangling in preparing datasets for regression analysis.
-\item discuss why testing independent variables is essential for model reliability.
-\item illustrate the importance of separating estimation and validation data for model evaluation.
-% - **Apply**:
-\item perform\marginnote{apply} data wrangling tasks, such as handling missing values, recoding variables, and generating summary statistics.
-\item use visualizations (e.g., histograms, scatterplots, boxplots) to explore data distributions and relationships.
-\item split a dataset into estimation and hold-out sets to prepare for model development and validation.
-% - **Analyze**:
-\item evaluate\marginnote{analyze} the quality and relevance of independent variables for inclusion in a regression model.
-\item compare different approaches for data splitting and their effects on model evaluation.
-% - **Evaluate**:
-\item justify\marginnote{evaluate} the use of specific independent variables based on theoretical and empirical considerations.
-\item critique the adequacy of data wrangling and exploration steps in ensuring data quality.
-% - **Create**:
-\item design\marginnote{create} a workflow for obtaining, preparing, and validating data for a regression project.
-\end{compactitem}
-
-% ### **7.4. Modelling**
-\item Section \ref{sec:modeling}
-
-\begin{compactitem}
-% - **Remember**: 
-% \item define\marginnote{remember} linear regression and describe key components like predictors, response, and error terms.
-% - **Understand**: 
-\item explain\marginnote{understand} the purpose of transformations and interactions in regression models.
-% - **Apply**: 
-\item perform\marginnote{apply} stepwise regression procedures to identify significant predictors.
-% - **Analyze**: 
-\item compare\marginnote{analyze} different models (with or without transformations and interactions) to determine the best fit based on criteria like adjusted $r^2$ or AIC.
-% - **Evaluate**: 
-\item critique\marginnote{evaluate} the limitations of stepwise regression and suggest alternative variable selection methods.
-% - **Create**: 
-\item design\marginnote{create} a regression model with appropriate transformations and interactions to optimize predictive accuracy.
-\end{compactitem}
-
-% ### **7.5. Diagnostics Checking**
-\item Section \ref{sec:diagnostics_checking}
-
-\begin{compactitem}
-% - **Remember**: 
-\item list\marginnote{remember} common diagnostic tools for detecting outliers and influential observations (e.g., residual plots, Cook’s distance).
-% - **Understand**: 
-\item describe\marginnote{understand} the impact of outliers in $x$, $y$, or both on model coefficients and predictions.
-% - **Apply**: 
-\item use\marginnote{apply} diagnostic metrics (e.g., leverage values, standardized residuals) to identify problematic observations.
-% - **Analyze**: 
-\item differentiate\marginnote{analyze} between types of outliers (e.g., high leverage, large residuals) and assess their impact on model validity.
-% - **Evaluate**: 
-\item recommend\marginnote{evaluate} strategies for handling outliers and justify their appropriateness for the given context.
-\end{compactitem}
-
-% ### **7.6. Analysis of Variance**
-\item Section \ref{sec:analysis_of_variance}
-
-\begin{compactitem}
-% - **Remember**: 
-\item state\marginnote{remember} the purpose of analysis of variance (ANOVA) in the context of regression models.
-% - **Understand**: 
-\item explain\marginnote{understand} the partitioning of total variation into explained and residual components (SST = SSR + SSE).
-% - **Apply**: 
-\item calculate\marginnote{apply} $F$ statistics and interpret their significance for testing model fit.
-% - **Analyze**: 
-\item assess\marginnote{analyze} whether a significant $F$ statistic aligns with the results of individual coefficient tests.
-% - **Evaluate**: 
-\item compare\marginnote{evaluate} the use of ANOVA in linear models versus other types of models (e.g., non-linear regression).
-\end{compactitem}
-% ---
-
-% ### **7.7. Testing Model Assumptions**
-\item Section \ref{sec:testing_model_assumptions}
-
-\begin{compactitem}
-% - **Remember**: 
-\item identify\marginnote{remember} the assumptions underlying linear regression (e.g., normality, homoscedasticity, independence).
-% - **Understand**: 
-\item explain\marginnote{understand} the implications of violations of assumptions on regression results.
-% - **Apply**: 
-\item perform\marginnote{apply} statistical tests for normality, heteroskedasticity, and autocorrelation.
-% - **Analyze**: 
-\item interpret\marginnote{analyze} diagnostic plots (e.g., residuals vs. fitted values) to evaluate assumptions visually.
-% - **Evaluate**: 
-\item recommend\marginnote{evaluate} corrective actions (e.g., transformations, robust standard errors) for violated assumptions.
-\end{compactitem}
-
-% ### **7.8. Testing Significance of Coefficients and the Model**
-\item Section \ref{sec:testing_significance}
-
-\begin{compactitem}
-% - **Remember**: 
-\item recall\marginnote{remember} the null and alternative hypotheses for testing coefficients and the overall model.
-% - **Understand**: 
-\item explain\marginnote{understand} the relationship between $t$ tests for coefficients and the $F$ test for the model.
-% - **Apply**: 
-\item conduct\marginnote{apply} hypothesis tests for individual coefficients and interpret $p$values.
-% - **Analyze**: 
-\item assess\marginnote{analyze} the practical significance of coefficients beyond statistical significance.
-% - **Evaluate**: 
-\item critique\marginnote{evaluate} the implications of multicollinearity on significance testing.
-\end{compactitem}
-
-% ### **7.9. Creating Expectations**
-\item Section \ref{sec:expectations}
-
-\begin{compactitem}
-% - **Remember**: 
-\item state\marginnote{remember} the definitions of confidence and prediction intervals, and define the difference between predictions for new data points and predictions for mean responses.
-% - **Understand**: 
-\item explain\marginnote{understand} the steps involved in making predictions from a regression model and the key differences between confidence intervals and prediction intervals.
-% - **Apply**: 
-\item construct\marginnote{apply} and interpret confidence and prediction intervals using regression output for a given dataset.
-% - **Analyze**: 
-\item compare\marginnote{analyze} predicted values with observed values to evaluate the model’s performance and assess why prediction intervals are wider than confidence intervals.
-% - **Evaluate**: 
-\item recommend\marginnote{evaluate} when to use confidence versus prediction intervals in practice, and justify their use in specific applications.
-\end{compactitem}
-
-% ### **7.10. Calculating the Level of Assurance**
-\item Section \ref{sec:auditor_response}
-
-\begin{compactitem}
-% - **Remember**: 
-\item recall\marginnote{remember} that assurance is the complement of Type II error risk.
-% - **Understand**: 
-\item describe\marginnote{understand} how assurance quantifies the probability of correctly concluding that the account is not misstated.
-% - **Apply**: 
-\item calculate\marginnote{apply} assurance levels based on prediction intervals and (performance) materiality.
-% - **Analyze**: 
-\item examine\marginnote{analyze} how assurance levels change with different significance levels and data variability.
-% - **Evaluate**: 
-\item interpret\marginnote{evaluate} assurance levels to assess the reliability of conclusions drawn from the regression analysis.
-\end{compactitem}
-% ---
-
-% ### Example Application in Practice
-\item General 
-
-\begin{compactitem}
-% - **Remember**: 
-\item use\marginnote{remember} statistical software to implement regression modeling.
-% - **Understand**: 
-\item interpret\marginnote{understand} software output and diagnostic plots to assess model fit and assumptions.
-% - **Apply**: 
-\item develop\marginnote{apply} and validate models using real-world data.
-% - **Analyze**: 
-\item evaluate\marginnote{analyze} the strengths and weaknesses of the model and its predictions.
-% - **Evaluate**: 
-\item communicate\marginnote{evaluate} findings and their implications to stakeholders.
-\end{compactitem}
-
-\end{compactitem}
 
 \bigskip
 % TODO
@@ -247,11 +38,11 @@ US SteamCo is a public utility in the northeastern United States. It produces st
 \bigskip
 You have performed other audit procedures to provide assurance regarding revenues, including the following:
 
-\begin{compactitem}
+\begin{itemize}
 \item Tests of the effective operation of controls over revenues and revenue adjustments (all relevant assertions).
 \item Confirmation of accounts receivable from customers (occurrence, accuracy, cutoff).
 \item Various procedures to audit cash receipts regarding amounts billed (occurrence).
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 Use the data of US SteamCo from 2011 to 2013 (the estimation period) to model the relationship between revenue and steam production, measured by mass in units of thousands of pounds, as well as cooling and heating degree day data. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period. 
@@ -265,6 +56,42 @@ How strong is the relationship between revenue and production? Are there any inf
 
 \section{What is regression analysis}
 \label{sec:what_is_regression_analysis}
+
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item define regression analysis and identify its primary components: dependent variable, independent variable, and error term.
+\item state the key purposes of regression analysis, including prediction, explanation, and hypothesis testing.
+\item recall the differences between exploratory and confirmatory data analysis.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain how regression identifies relationships between variables and distinguishes correlation from causation.
+\item describe the differences between exploratory data analysis (EDA) and confirmatory data analysis (CDA) in the context of regression.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item use a simple linear regression model to explore the relationship between two variables in a dataset.
+\item generate summary statistics and plots (e.g., scatterplots) to visualize potential relationships.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item compare EDA and CDA approaches in terms of their goals and methodologies.
+\item assess the appropriateness of linear regression for a given dataset based on initial exploration.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item justify the choice of simple linear regression as a starting point for analyzing relationships in data.
+\item critique the limitations of simple regression for more complex, real-world relationships.
+\end{itemize}
+\noindent \textsc{create}
+\begin{itemize}
+\item formulate hypotheses to be tested using regression based on EDA insights.
+\end{itemize}
 
 \subsection{Introduction to regression analysis} % (fold)
 \label{sub:quick_overview}
@@ -305,7 +132,7 @@ One of the applications is when an analysis is carried out over a large number o
 
 Auditors may use regression analysis for the following purposes:
 
-\begin{compactitem}
+\begin{itemize}
 \item Investigate whether the two variables are correlated, and what the strength of the relationship is.
 
 For example, we may want to determine whether there is a relationship between production and revenue in the \textit{Case: US SteamCo}.
@@ -329,7 +156,7 @@ The expectations for monthly revenue are expected to be distributed over a certa
 \item Direct or reduce other substantive audit procedures.
 
 After completing the analysis and follow-up work on unexpected differences, we will have a better understanding of this part of the financial statements and amend our audit approach accordingly.
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 The initial phase of data analysis, referred to as an \hlblue{exploratory data analysis}\index{exploratory data analysis}, is aimed at understanding the dataset and identifying patterns, relationships, anomalies, and potential insights. Exploratory data analysis involves a variety of techniques and visualizations to summarize and examine the data. Some common techniques include the following:
@@ -431,6 +258,40 @@ The expectations from the previous step are compared to the recorded values, as 
 \section{Assumptions underlying regression results}
 \label{sec:assumptions_underlying_regression_results}
 
+% ### **7.2. Assumption Underlying Regression Results**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item list the key assumptions underlying regression analysis: linearity in the parameters, random sampling, sample variation, and zero-conditional mean of errors.
+\item define the meaning of each assumption in the context of regression analysis.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain why each assumption is important for the validity of regression results.
+\item discuss the implications of violating assumptions such as non-linearity or biased sampling.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item identify potential violations of regression assumptions in a dataset using diagnostic tools (e.g., residual plots).
+\item demonstrate how to deal with non-linearity in practice.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item assess how different violations of assumptions (e.g., heteroskedasticity, omitted variable bias) affect regression coefficients and predictions.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item recommend solutions for addressing assumption violations, such as transformations or alternative modeling approaches.
+\end{itemize}
+\noindent \textsc{create}
+\begin{itemize}
+\item develop a checklist for verifying regression assumptions before interpreting results.
+\end{itemize}
+
 The calculation underlying the regression results presented in this chapter is based on a number of assumptions, some of which need to be satisfied to obtain \emph{unbiased estimates} of the slope and intercept coefficients, and others to allow the testing of hypotheses about the parameters in the regression model, the creation of a prediction interval around the expectation, and the determination of the level of assurance obtained from the analysis. 
 
 It is important to make this distinction: if the first group of assumptions is satisfied but one or more from the second group are violated, we still have a valid regression model that can serve the purposes of an explanatory data analysis. Only if we want to test certain hypotheses and ultimately construct an interval of acceptable differences and measure the level of assurance obtained do we need all assumptions to be validated.
@@ -440,12 +301,12 @@ We first set out to test the assumptions that need to be satisfied to obtain unb
 \bigskip
 The four assumptions that must be satisfied to obtain unbiased estimates of the coefficients of the regression model are
 
-\begin{compactitem}
+\begin{itemize}
 \item linearity in the parameter (Section \ref{sub:linearity});
 \item random sampling (Section \ref{sub:random_sampling});
 \item sample variation in the independent variable (Section \ref{sub:sample_variation_in_the_independent_variable}); and
 \item zero-conditional mean (Section \ref{sub:zero_conditional_mean}).
-\end{compactitem}
+\end{itemize}
 
 \subsection{Linearity} % (fold)
 \label{sub:linearity}
@@ -510,6 +371,45 @@ In most applications of regression analysis in auditing, the zero-conditional me
 
 \section{Obtaining and testing data} % (fold)
 \label{sec:obtaining_and_testing_data}
+
+% ### **7.3. Obtaining and Testing Data**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item identify steps for summarizing and plotting data to explore relationships.
+\item recall methods for testing the relevance and independence of independent variables (e.g., correlation analysis, variance inflation factor).
+\item describe the purpose of splitting data into estimation and hold-out sets.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain the role of data wrangling in preparing datasets for regression analysis.
+\item discuss why testing independent variables is essential for model reliability.
+\item illustrate the importance of separating estimation and validation data for model evaluation.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item perform data wrangling tasks, such as handling missing values, recoding variables, and generating summary statistics.
+\item use visualizations (e.g., histograms, scatterplots, boxplots) to explore data distributions and relationships.
+\item split a dataset into estimation and hold-out sets to prepare for model development and validation.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item evaluate the quality and relevance of independent variables for inclusion in a regression model.
+\item compare different approaches for data splitting and their effects on model evaluation.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item justify the use of specific independent variables based on theoretical and empirical considerations.
+\item critique the adequacy of data wrangling and exploration steps in ensuring data quality.
+\end{itemize}
+\noindent \textsc{create}
+\begin{itemize}
+\item design a workflow for obtaining, preparing, and validating data for a regression project.
+\end{itemize}
 
 \subsection{Obtaining data}
 \label{sub:obtaining_data}
@@ -645,13 +545,13 @@ Neglecting data wrangling can lead to inaccuracies and misinterpretation in the 
 
 % AAG A.53 The independent variables are as follows (see exhibit A-3 for data):
 
-% \begin{compactitem}
+% \begin{itemize}
 % \item The level of inventory (merchandise plus gas) at the store.
 % \item The number of staff at the store (full-time equivalent employees, or FTEs).
 % \item Whether the store opened or closed during the year, or for any reason was not open the entire year. This variable is entered as a binary, or "0/1" variable: a 0 if the store was open all year, and a 1 if the store was open only part of the year.
 % \item Distinctive characteristics of each store, such as whether it sells gas. This variable is also entered as a binary variable: a value of 1 if it sells gas, and a value of 0 if it does not sell gas.
 % \item Square feet of floor space at each store. In this case, there are only 2 size stores (1 at 2,500 square feet and 1 at 4,000 square feet). Thus, for simplicity and clarity this variable is entered into the regression as a binary variable, which has a value of 0 for stores with 2,500 square feet, and a value of 1 for stores of 4,000 square feet.
-% \end{compactitem}
+% \end{itemize}
 
 % AAG A.54 Depending on the auditor's local knowledge, additional variables might be included, for example, whether the store has a check-cashing facility, whether it is an attractive location (for example, near to an intersection of highways, a ballpark, or other "draw" of customers), the number of parking places, and other factors about the general competitive environment for the store.
 
@@ -689,6 +589,37 @@ This is repeated for each observation, giving a robust measure of model performa
 \section{Modeling} % (fold)
 \label{sec:modeling}
 
+% ### **7.4. Modelling**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item define linear regression and describe key components like predictors, response, and error terms.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain the purpose of transformations and interactions in regression models.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item perform stepwise regression procedures to identify significant predictors.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item compare different models (with or without transformations and interactions) to determine the best fit based on criteria like adjusted $r^2$ or AIC.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item critique the limitations of stepwise regression and suggest alternative variable selection methods.
+\end{itemize}
+\noindent \textsc{create}
+\begin{itemize}
+\item design a regression model with appropriate transformations and interactions to optimize predictive accuracy.
+\end{itemize}
+
 The next step in the execution of the analytical procedure is to create the model. In many cases, a simple linear regression may suffice our needs, but it is important to stress that there are many modeling techniques to choose from. In this section we first discuss some of the considerations we go through when selecting a modeling technique (Section \ref{sub:model_selection}), and then we dive into simple linear regression (Section \ref{sub:simple_linear_regression}). We then discuss what happens when we add independent variables to the model (Section \ref{sub:multiple_regression}), including data disaggregation (Section \ref{sub:disaggregation_ch07}). We briefly touch on lead and lagged effects (Section \ref{sub:time_lag}). Section \ref{sub:transformations} introduces transformations. We finish the discussion on modeling in Section \ref{sub:alternative_modeling_techniques} with an overview of alternative modeling techniques.
 
 \subsection{Model selection} % (fold)
@@ -696,7 +627,7 @@ The next step in the execution of the analytical procedure is to create the mode
 
 There are many different modeling techniques, ranging from simple linear regression, with one dependent variable and one independent variable, to structural equation modeling, which accommodates multiple dependent variables and multiple independent variables. We may have already formed an idea about which technique to use when deciding which data to collect, but there may be reasons to choose an alternative when the selected modeling technique does not produce a satisfactory result. For example:
 
-\begin{compactitem}
+\begin{itemize}
   \item the resulting model is imprecise;
 
   When the model is imprecise, the desired level of assurance may not be obtained from the analysis. This could be caused by regression outliers (see Section \ref{sub:outliers_and_influential_observations}), a level of aggregation of the data that is too high, or an omitted independent variable;
@@ -708,7 +639,7 @@ There are many different modeling techniques, ranging from simple linear regress
   \item it appears that a nonlinear equation fits the data better.
 
   Particularly in multiple linear regression, nonlinearity in one of the independent variables could only be detected by executing a transformation.\footnote{For transformations, see Section \ref{sub:transformations}}
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 Our general recommendation is to begin with a simple model. 
@@ -1197,6 +1128,33 @@ BSTS models can adjust for heteroskedasticity, autocorrelation, and non-normalit
 \section{Diagnostics checking} % (fold)
 \label{sec:diagnostics_checking}
 
+% ### **7.5. Diagnostics Checking**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item list common diagnostic tools for detecting outliers and influential observations (e.g., residual plots, Cook’s distance).
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item describe the impact of outliers in $x$, $y$, or both on model coefficients and predictions.
+\end{itemize}
+\noindent \textsc{create}
+\begin{itemize}
+\item use diagnostic metrics (e.g., leverage values, standardized residuals) to identify problematic observations.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item differentiate between types of outliers (e.g., high leverage, large residuals) and assess their impact on model validity.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item recommend strategies for handling outliers and justify their ap\-pro\-priateness for the given context.
+\end{itemize}
+
 A first step in checking the diagnostics of the model is to plot the residuals against each of the independent variables used, as well as against the fitted values $\hat{y}$. The purpose of these plot is to detect patterns or relationships between the independent variables and the residuals. If the plot exhibits any systematic patterns, it could indicate issues with the assumptions of the linear regression model. Figure \ref{fig:H7_residualPlots_mod2} shows these plots for \ttblue{mod.2}, developed in Section \ref{sub:disaggregation_ch07}.
 
 The blue lines in the plot show the best attempt at fitting a nonlinear model. None of the plots suggest that a nonlinear model fits the data better.
@@ -1215,11 +1173,11 @@ After estimating the regression relationship, we first examine whether there are
 \bigskip
 \noindent We distinguish between:
 
-\begin{compactitem}
+\begin{itemize}
 \item \hlblue{leverage points}\index{leverage point}, which are individual data points that have extreme values on a combination of independent variables;
 \item \hlblue{regression outliers}\index{regression outlier}, individual data points that have an observed value that is far different from the fitted value; and
 \item \hlblue{influential observations}\index{influential observation}, observations that are outliers and have high leverage.
-\end{compactitem}
+\end{itemize}
 
 Figure \ref{fig:H7-influenceIndexPlot} summarizes the influence statistics. It shows from bottom to top the hat values indicating potential leverage, Studentized residuals indicating regression outliers, and their respective Bonferroni $p$ values and Cook's distance, indicating potentially influential observations. Each of these is discussed in detail.
 
@@ -1473,6 +1431,34 @@ Like the standard VIF, any predictor that has $GVIF_j^{1/(2df)}~>~10$ indicates 
 \section{Analysis of variance} % (fold)
 \label{sec:analysis_of_variance}
 
+% ### **7.6. Analysis of Variance**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item state the purpose of analysis of variance (ANOVA) in the context of regression models.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain the partitioning of total variation into explained and residual components (SST = SSR + SSE).
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item calculate $F$ statistics and interpret their significance for testing model fit.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item assess whether a significant $F$ statistic aligns with the results of individual coefficient tests.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item compare the use of ANOVA in linear models versus other types of models (e.g., non-linear regression).
+\end{itemize}
+% ---
+
 In this section, we focus on the model quality. If one of the purposes of regression analysis is to explain the variation in the dependent variable, \hlblue{analysis of variance}\index{analysis of variance} or \emph{anova}\index{anova} assists in describing how each independent variable explains this variation and how much remains unexplained. 
 
 In statistical analysis, the terms \emph{variation} and \emph{variance} are frequently encountered, each carrying distinct implications despite their apparent similarity. While both concepts pertain to the dispersion or spread of data points around a central tendency, they diverge subtly in their mathematical formulations and interpretations. Specifically, \emph{total variation} denotes the aggregate of squared deviations between individual data points ($y_i$) and the sample mean ($\bar{y}$), encapsulating the entirety of variability within a dataset. In contrast, \emph{variance} represents a refined measure, derived from the total variation, wherein the summation of squared deviations is divided by the degrees of freedom, $n - 1$. This adjustment compensates for the tendency of sample variance to underestimate the population variance, thereby yielding an unbiased estimator. Consequently, while both metrics elucidate the extent of dispersion in a dataset, the incorporation of degrees of freedom renders variance a more nuanced and statistically robust measure compared to total variation.
@@ -1551,7 +1537,6 @@ Total & Total (TSS) & $\sum{(y_i - \bar{y})^2}$ & $n - 1$ \\
 \label{tab:anova_decomposition}
 \end{table}
 
-\newpage
 Note that $s^2_y = TSS/(n-1)$, and that therefore $TSS = s^2_y (n - 1)$.
 
 We can now try to make statements about the quality of the relationship. One way of doing this is by means of the correlation between $x$ and $y$, expressed in the \hlblue{correlation coefficient}\index{correlation coefficient}, that we introduced in Equation \ref{eq:correlation}
@@ -1768,13 +1753,40 @@ We continue the development of our analysis using \ttblue{mod.3}.
 \section{Testing model assumptions}
 \label{sec:testing_model_assumptions}
 
+% ### **7.7. Testing Model Assumptions**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item identify the assumptions underlying linear regression (e.g., normality, homoscedasticity, independence).
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain the implications of violations of assumptions on regression results.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item perform statistical tests for normality, hetero\-skedasticity, and auto\-correlation.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item interpret diagnostic plots (e.g., residuals vs. fitted values) to evaluate assumptions visually.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item recommend corrective actions (e.g., transformations, robust standard errors) for violated assumptions.
+\end{itemize}
+
 We discuss the assumptions for obtaining unbiased estimates in Section \ref{sec:assumptions_underlying_regression_results}. The second set of assumptions is related to our ability to test hypotheses, create prediction intervals, and calculate the level of assurance obtained. The three assumptions are as follows:
 
-\begin{compactitem}
+\begin{itemize}
 \item normality;
 \item homoskedasticity; and
 \item (for time-series analyses only) the absence of autocorrelation.
-\end{compactitem}
+\end{itemize}
 
 We can rely on graphical information for each of these assumptions, or objective statistical tests are performed.
 
@@ -2069,6 +2081,33 @@ In some cases, variables may remain due to data availability or to support futur
 \section{Testing significance} % (fold)
 \label{sec:testing_significance}
 
+% ### **7.8. Testing Significance of Coefficients and the Model**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item recall the null and alternative hypotheses for testing coefficients and the overall model.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain the relationship between $t$ tests for coefficients and the $F$ test for the model.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item conduct hypothesis tests for individual coefficients and interpret $p$values.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item assess the practical significance of coefficients beyond statistical significance.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item critique the implications of multicollinearity on significance testing.
+\end{itemize}
+
 \subsection{Testing significance of independent variables} % (fold)
 \label{sub:testing_significance_of_independent_variables}
 
@@ -2162,6 +2201,38 @@ H_1 : \text{At least one of the } \beta_j \neq 0
 \section{Expectations}
 \label{sec:expectations}
 
+% ### **7.9. Creating Expectations**
+\subsection*{Learning objectives}
+At the end of this section you will be able to
+
+\bigskip
+\noindent \textsc{remember}
+
+\begin{itemize}
+\item state the definitions of confidence and prediction intervals, and define the difference between predictions for new data points and predictions for mean responses.
+\item recall that assurance is the complement of Type II error risk.
+\end{itemize}
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain the steps involved in making predictions from a regression model and the key differences between confidence intervals and prediction intervals.
+\item describe how assurance quantifies the probability of correctly concluding that the account is not misstated.
+\end{itemize}
+\noindent \textsc{apply}
+\begin{itemize}
+\item construct and interpret confidence and prediction intervals using regression output for a given dataset.
+\item calculate assurance levels based on prediction intervals and (per\-for\-mance) materiality.
+\end{itemize}
+\noindent \textsc{analyze}
+\begin{itemize}
+\item compare predicted values with observed values to evaluate the model’s performance and assess why prediction intervals are wider than confidence intervals.
+\item examine how assurance levels change with different significance levels and data variability.
+\end{itemize}
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item recommend when to use confidence versus prediction intervals in practice, and justify their use in specific applications.
+\item interpret assurance levels to assess the reliability of conclusions drawn from the regression analysis.
+\end{itemize}
+
 In the previous sections, a regression model was constructed based on data from a baseline period of 36 months, explaining the monthly revenue by accounting for \ttblue{production} and the number of cooling degree days (\ttblue{coolDD}), while taking account for different relationships between summer and winter months. To forecast revenue for the current year, this model can be applied to new data, beginning with a expectation for January.
 
 For the first month of the hold-out set (January 2014), the model can generate an expectation of revenue using the known values of the explanatory variables: production (606,400), coolDD (0), and whether the month is a summer month. Since January is not a summer month, the interaction terms involving \ttblue{summer} will drop out of the equation. Table \ref{tab:expectation_january} shows the detail calculation of the expectation.
@@ -2190,7 +2261,7 @@ coolDD : summer     &   125,064 & 0 $\cdot$ 0       &          0 \\
 
 \bottomrule
 \end{tabularx}
-\caption{Calculation fo the expectation for January 2014, based on the estimated coefficients of \ttblue{mod.5}.}
+\caption{Calculation of the expectation for January 2014, based on the estimated coefficients of \ttblue{mod.5}.}
 \label{tab:expectation_january}
 \end{table}
 
@@ -2386,10 +2457,10 @@ This distribution accounts for the uncertainty in the model’s coefficient esti
 
 However, under the alternative hypotheses $H_1$, where the recorded revenue is either overstated or understated, the test statistic $T$ would also follow a non-central $t$~distribution but with a non-zero non-centrality parameter. We define this non-centrality parameter as $M$, the materiality threshold, representing the degree of revenue deviation that would indicate a material misstatement. 
 Specifically:
-\begin{compactitem}
+\begin{itemize}
 \item Under $H_{1A}$ (material overstatement), the non-centrality parameter is positive, suggesting that the observed revenue is significantly above the expected range.
 \item Under $H_{1B}$ (material understatement), the non-centrality parameter is negative, suggesting that the observed revenue is significantly below the expected range.
-\end{compactitem}
+\end{itemize}
 
 \bigskip
 The non-central $t$~distribution under $H_1$ allows us to quantify the risk that an observed revenue deviation from expectations represents a material misstatement. By using this distribution, we can calculate the probability of observing the recorded revenue given the hypothesized level of misstatement, which provides a basis for determining the confidence level and assurance against misstatement.
