@@ -630,7 +630,7 @@ The \emph{upper confidence bound}\index{confidence bound}\index{bound!confidence
 \paragraph{Cell bounds} The \hlblue{cell bounds}\index{cell bounds} evaluation method is a further refinement of the Stringer bound method. 
 The philosophy behind this is that if a partial misstatement is encountered, it can be proven that the most conservative evaluation approach is either
 
-\begin{description}[leftmargin=*]
+\begin{description}[style=nextline]
 \item[Load and Spread.] In addition to the partial error, all other errors in the population are 100\% errors. As a result, the upper bound $M_U[k]$ for error $k$ is the sum of the previous upper bound $M_U[k-1]$ and the point estimate $t_k X / n$ for error $k$; or\footnote{$M_{U,LS}[k] = M_U[k-1] + t X / n$}
 
 \item[Simple Spread.] All partial errors in the population exhibit the same tainting. This results in applying the average tainting $\bar{t}$ to the upper bound $M_U$.\footnote{$M_{U,SS}[k] = M_U[k] \bar{t}$}
