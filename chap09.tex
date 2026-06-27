@@ -1,3 +1,5 @@
+% !TEX root = ../ada_volume1.tex
+
 \chapter{Goodness of fit} % (fold)
 \label{cha:goodness_of_fit}
 
@@ -11,6 +13,8 @@ In the previous chapter, we used regression analysis to study relationships betw
 Goodness-of-fit techniques compare observed outcomes with those predicted by a theoretical model. When the observed and expected values are sufficiently close, the model may be considered plausible. Large discrepancies, however, may indicate that the model is inappropriate, that important factors have been overlooked, or that the data contain unusual observations. As a result, goodness-of-fit methods are widely used in fields ranging from scientific research and quality control to economics and public policy.
 
 One particularly interesting application involves the detection of fraud. Auditors and forensic accountants often examine whether numerical data conform to patterns that commonly occur in naturally generated datasets. A well-known example is Benford’s Law, which predicts the frequency with which different digits appear as the leading digit in many real-world collections of numbers. Although deviations from Benford’s Law do not prove wrongdoing, they can serve as useful warning signals that warrant further investigation. In this chapter, we introduce the concepts and methods of goodness-of-fit testing, with special attention to Benford’s Law and its role in auditing and fraud detection.
+
+In this chapter, we first introduce the chi-square goodness-of-fit test using a simple categorical example. We then explain the connection between the test statistic and the chi-square distribution. Finally, we apply the same logic to digit analysis, including Benford's Law and related audit applications. The chapter concludes by showing how the chi-square distribution also appears in other statistical procedures.
 
 \section*{Learning objectives}
 
@@ -79,11 +83,12 @@ These examples illustrate both the power and the limitations of Benford's Law. A
 \end{mdframed}
 
 \newpage
-\section{Chi-Square Goodness-of-Fit Test}
+\section{The chi-square goodness-of-fit test}
+\label{sec:the_chi_square_goodness_of_fit_test}
 
 \begin{quote}
 \textit{The mathematician, carried along on his flood of symbols, dealing apparently with purely formal truths, may still reach results of endless importance for our description of the physical universe.}
-\\[0.2cm]
+\vspace{0.2cm}
 --- Karl Pearson (1857--1936), \textit{The Grammar of Science} (1900)
 \end{quote}
 
@@ -131,7 +136,7 @@ Total\\
 \midrule
 
 Number & $n_1$ & $n_2$ & $n_3$ & \ldots & $n_i$ & \ldots & $n_k$ & $n$ \\
-Probability & $\pi_1$ & $\pi_3$ & $\pi_3$ & \ldots & $\pi_i$ & \ldots & $\pi_k$ & 1 \\
+Probability & $\pi_1$ & $\pi_2$ & $\pi_3$ & \ldots & $\pi_i$ & \ldots & $\pi_k$ & 1 \\
 
 \bottomrule
 \end{tabularx}
@@ -200,7 +205,7 @@ Observed frequency & 15 & 12 & 13 & 40 \\
 \label{tab:client_satisfaction_followup}
 \end{table}
 
-Under the null hypothesis, the population proportions are
+\noindent Under the null hypothesis, the population proportions are
 
 \begin{equation*}
     \pi_1 = 0.40,\qquad \pi_2 = 0.16,\qquad \pi_3 = 0.44
@@ -232,35 +237,28 @@ Expected ($E_i$) & 16.0 & 6.4 & 17.6 \\
 \caption{Observed and expected frequencies}
 \label{tab:gof_expected}
 \end{table}
+\noindent The chi-square test statistic is
 
-The chi-square test statistic is
-
-\begin{equation}
-\begin{aligned}
-\chi^2
-&=
-\sum_{i=1}^{k}
-\frac{(O_i-E_i)^2}{E_i} \\[1ex]
-&=
-\frac{(15-16)^2}{16}
-+
-\frac{(12-6.4)^2}{6.4}
-+
-\frac{(13-17.6)^2}{17.6} \\[1ex]
-&=
-0.063 + 4.900 + 1.202 \\[1ex]
-&=
-6.165.
-\end{aligned}
-\label{eq:chi_square_test_statistic}
-\end{equation}
-
+% \begin{equation}
+% \begin{aligned}
+% \chi^2 &= \sum_{i=1}^{k} \frac{(O_i-E_i)^2}{E_i} \\
+%        &= \frac{(15-16)^2}{16} + \frac{(12-6.4)^2}{6.4} + \frac{(13-17.6)^2}{17.6} \\
+%        &= 0.063 + 4.900 + 1.202 \\
+%        &= 6.165.
+% \end{aligned}
+% \label{eq:chi_square_test_statistic}
+% \end{equation}
+\begin{align}
+\chi^2 &= \sum_{i=1}^{k} \frac{(O_i-E_i)^2}{E_i} \label{eq:chi_square_test_statistic} \\
+       &= \frac{(15-16)^2}{16} + \frac{(12-6.4)^2}{6.4} + \frac{(13-17.6)^2}{17.6} \nonumber \\
+       &= 0.063 + 4.900 + 1.202 \nonumber \\
+       &= 6.165. \nonumber
+\end{align}
 Since there are $k=3$ categories and no parameters are estimated from the sample, the number of degrees of freedom is
 
 \begin{equation*}
 df = k-1 = 3-1 = 2.
 \end{equation*}
-
 For a significance level of $\alpha=0.05$, the critical value is $\chi^2_{0.05,2} = 5.991$. Because
 
 \begin{equation*}
@@ -269,13 +267,14 @@ For a significance level of $\alpha=0.05$, the critical value is $\chi^2_{0.05,2
 the null hypothesis is rejected.
 
 \bigskip
-Equivalently, the $p$ value is
+\noindent Equivalently, the $p$ value is
 
 \begin{equation*}
     p = P(\chi^2_2 \geq 6.165) \approx 0.046.
 \end{equation*}
 
-Since $p < 0.05$, the null hypothesis is rejected. 
+\bigskip
+\noindent Since $p < 0.05$, the null hypothesis is rejected. 
 
 \bigskip
 Conclusion: there is sufficient evidence at the 5\% significance level to conclude that the distribution of customer satisfaction in the follow-up year differs from the distribution observed in the base year.
@@ -296,20 +295,19 @@ Let $O_i$ denote the observed frequency in category $i$. The vector of observed 
 \begin{equation*}
     (O_1,O_2,\ldots,O_k)
 \end{equation*}
-
 follows a multinomial distribution:
 
 \begin{equation*}
     (O_1,O_2, \ldots, O_k) \sim \text{Multinomial}(n; \pi_1, \pi_2, \ldots, \pi_k).
 \end{equation*}
 
-For each category $i$, the expected frequency is
+\noindent For each category $i$, the expected frequency is
 
 \begin{equation*}
     E_i = n \pi_i .
 \end{equation*}
 
-When the sample size is sufficiently large, the multinomial distribution can be approximated by a multivariate normal distribution. Consequently, the standardized deviations $\frac{O_i-E_i}
+\noindent When the sample size is sufficiently large, the multinomial distribution can be approximated by a multivariate normal distribution. Consequently, the standardized deviations $\frac{O_i-E_i}
 {\sqrt{E_i}}$ are approximately standard normally distributed:
 
 \begin{equation*}
@@ -378,23 +376,28 @@ Frequency & 86 & 48 & 23 & 32 & 24 & 36 & 19 & 18 & 14 \\
 \label{tab:inventories_first_digits}
 \end{table}
 
-In 1938, Benford conducted research into the validity of his law, expressed in \textbf{Benford's Law}:
+In 1938, Benford conducted research into the validity of the pattern that is now known as \textbf{Benford's Law}. For the first digit of a number, Benford's Law states that
 
 \begin{equation}
-    P(i) = \log \left( \frac{i + 1}{i} \right)
-    \label{eq:benfords_law}
+P(i) = \log_{10} \left( \frac{i + 1}{i} \right)
+=
+\log_{10}\left(1+\frac{1}{i}\right),
+\label{eq:benfords_law}
 \end{equation}
 
-For $i = 1, 2, \ldots, 9$, the probability $P(i)$ can be determined that the first digit of a number is equal to $i$.
-The results of Equation \ref{eq:benfords_law}, representing Benford's Law for the first digit of a number, are shown in Figure \ref{fig:H9_benford}.
+where (i = 1,2,\ldots,9). Thus, (P(i)) denotes the probability that the first digit of a number is equal to (i).
+
+The probabilities obtained from Equation~\ref{eq:benfords_law} are shown in Figure~\ref{fig:H9_benford}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{H9_benford.pdf}
-    \caption{Benford's Law for the First Digit of a Number}
-    \label{fig:H9_benford}
+\centering
+\includegraphics[width=1\textwidth]{H9_benford.pdf}
+\caption{Benford's Law for the first digit of a number}
+\label{fig:H9_benford}
 \end{figure}
-Table \ref{tab:benford_series} containing (a selection) from Benford's original 1938 publication shows the distribution of the first digit of numbers from various sources.
+
+Table~\ref{tab:benford_series} contains a selection of first-digit distributions from Benford's original 1938 publication.
+
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lrrrrXXXXXr@{}}
 
@@ -410,31 +413,31 @@ Mol. Wgt. & 26.7 & 25.2 & 15.4 & 10.8 & 6.7 & 5.1 & 4.1 & 2.8 & 3.2 & 1800 \\
 Average & 31.2 & 19.3 & 12.2 & 9.9 & 7.6 & 6.4 & 4.9 & 4.6 & 3.7 & 4643 \\
 \bottomrule
 \end{tabularx}
-\caption{Frequency Distribution of First Digits in Inventory Values}
+\caption{First-digit distributions in selected examples from Benford's study}
 \label{tab:benford_series}
 \end{table}
-The data from Table \ref{tab:benford_series} are presented in Figure \ref{fig:H9_benford_examples}.
+
+The data from Table~\ref{tab:benford_series} are presented in Figure~\ref{fig:H9_benford_examples}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{H9_benford_examples.pdf}
-    \caption{Some of Benford's examples}
-    \label{fig:H9_benford_examples}
+\centering
+\includegraphics[width=1\textwidth]{H9_benford_examples.pdf}
+\caption{Some of Benford's examples}
+\label{fig:H9_benford_examples}
 \end{figure}
 
-\bigskip
-The various datasets (to a greater or lesser extent) show the same pattern as the Benford distribution. Subsequently, Benford performed the same control for a combination of the datasets (see "Average" in Table \ref{tab:benford_series}). This is shown in Figure 11.5.
+The various datasets show, to a greater or lesser extent, the same pattern as the Benford distribution. Benford also examined the combined dataset, shown as ``Average'' in Table~\ref{tab:benford_series}. This is shown in Figure~\ref{fig:H9_benford_ave_vs_theor}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{H9_benford_ave_vs_theor.pdf}
-    \caption{Observed and Theoretical First-Digit Distributions}
-    \label{fig:H9_benford_ave_vs_theor}
+\centering
+\includegraphics[width=1\textwidth]{H9_benford_ave_vs_theor.pdf}
+\caption{Observed and theoretical first-digit distributions}
+\label{fig:H9_benford_ave_vs_theor}
 \end{figure}
 
+The combined dataset was found to fit the Benford distribution even better than many of the individual datasets. Benford's research therefore illustrates that, for first-digit analysis, it can be meaningful to combine data from different sources, provided that the underlying data are suitable for Benford analysis.
 
-The combination of datasets was found to fit the Benford distribution even better than the individual datasets. Benford's research further demonstrated that when controlling the first digit of datasets, there was no issue with combining ``apples and oranges'' (i.e., different datasets).
-It is also possible to check for irregularities in the second and third digits of numbers. This will be revisited in Section 11.3.1.
+It is also possible to check for irregularities in the second and third digits of numbers. This will be revisited in Section~\ref{sec:further_digit_analysis}.
 
 Checking whether figures comply with Benford's Law is a form of digit analysis and is an example of \textit{data mining}.
 
@@ -501,25 +504,29 @@ of first digits is consistent with Benford's Law.
 \subsection{Hypotheses}
 
 Let $\pi_i$ denote the probability that the first digit is equal to $i$. Under Benford's Law,
+
 \begin{equation*}
 \begin{aligned}
-    (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669,\,0.0580,\, \\
-    &0.0512,\,0.0458).
+(\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,,0.1761,,0.1249,,0.0969,,0.0792,,0.0669,,0.0580,, \\
+&0.0512,,0.0458).
 \end{aligned}
 \end{equation*}
+
 The hypotheses for the chi-square goodness-of-fit test are
 
 \begin{equation*}
 \begin{aligned}
-    H_0 : (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669, \\
-    &\,0.0580,\,0.0512,\,0.0458).
+H_0 : (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,,0.1761,,0.1249,,0.0969,,0.0792,,0.0669, \\
+&,0.0580,,0.0512,,0.0458),
 \end{aligned}
 \end{equation*}
 
+and
+
 \begin{equation*}
 \begin{aligned}
-    H_0 : (\pi_1,\pi_2,\ldots,\pi_9) \neq (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669, \\
-    &\,0.0580,\,0.0512,\,0.0458).
+H_1 : (\pi_1,\pi_2,\ldots,\pi_9) \neq (&0.3010,,0.1761,,0.1249,,0.0969,,0.0792,,0.0669, \\
+&,0.0580,,0.0512,,0.0458).
 \end{aligned}
 \end{equation*}
 
@@ -530,13 +537,13 @@ In words,
 H_0 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data follows } \\
 &\hspace{0.5em} \text{Benford's Law,} \\
 H_1 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data does not follow} \\
-&\hspace{0.5em} \text{Benford's Law. }
+&\hspace{0.5em} \text{Benford's Law.}
 \end{aligned}
 \end{equation*}
 
 \subsection{Statistical assumptions}
 
-It is assumed that the first digits of the values of the inventoru items are the result of a natural process.
+It is assumed that the first digits of the values of the inventory items are the result of a natural process.
 
 The expected frequencies are obtained by multiplying the Benford probabilities by the sample size. 
 The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies}.
@@ -582,8 +589,6 @@ The statistic measures the overall discrepancy between the observed and expected
 Large values of \(\chi^2\) indicate that the observed frequencies differ substantially from those predicted by Benford's Law.
 The test statistic $\chi^2$ follows a chi-squared distribution with $df = 8$ degrees of freedom.
 
-
-
 \subsection{Derivation of the distribution of the test statistic}
 
 Refer to Section \ref{sec:the_chi_square_distribution} for the derivation of the distribution of the test statistic under the null hypothesis. 
@@ -614,7 +619,7 @@ tabular form, as shown in Table~\ref{tab:chi_square_calculation}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{lcccc}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \textbf{Digit} &
 \(O_i\) &
@@ -622,28 +627,28 @@ tabular form, as shown in Table~\ref{tab:chi_square_calculation}.
 \((O_i-E_i)^2\) &
 \(\frac{(O_i-E_i)^2}{E_i}\) \\
 \midrule
-1 & 86 & 90.31 & 18.58 & 0.21 \\
-2 & 48 & 52.83 & 23.33 & 0.44 \\
-3 & 23 & 37.48 & 209.67 & 5.59 \\
-4 & 32 & 29.07 & 8.58 & 0.30 \\
+1 & 86 & 90.31 & 18.57 & 0.21 \\
+2 & 48 & 52.83 & 23.30 & 0.44 \\
+3 & 23 & 37.48 & 209.72 & 5.60 \\
+4 & 32 & 29.07 & 8.57 & 0.29 \\
 5 & 24 & 23.75 & 0.06 & 0.00 \\
-6 & 36 & 20.08 & 253.45 & 12.62 \\
-7 & 19 & 17.40 & 2.56 & 0.15 \\
-8 & 18 & 15.35 & 7.02 & 0.46 \\
+6 & 36 & 20.08 & 253.32 & 12.61 \\
+7 & 19 & 17.40 & 2.57 & 0.15 \\
+8 & 18 & 15.35 & 7.05 & 0.46 \\
 9 & 14 & 13.73 & 0.07 & 0.01 \\
 \cmidrule{1-5}
-\textbf{Total} & 300 & 300.00 & & \(\chi^2 = 19.80\) \\
+\textbf{Total} & 300 & 300.00 & & \(\chi^2 = 19.77\) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Calculation of the chi-square test statistic}
 \label{tab:chi_square_calculation}
 \end{table}
 
-The final test statistic is $\chi^2 = 19.80$.
+\noindent The final test statistic is $\chi^2 = 19.77$.
 
 \subsection*{Conclusion}
 
-Because $\chi^2 = 19.80 > 15.51$, the test statistic falls within the rejection region. Therefore, the null hypothesis is rejected at the 5\% significance level.
+Because $\chi^2 = 19.77 > 15.51$, the test statistic falls within the rejection region. Therefore, the null hypothesis is rejected at the 5\% significance level.
 
 The data provide sufficient statistical evidence to conclude that the
 distribution of first digits in the inventory data differs from the
@@ -655,14 +660,7 @@ The source of the discrepancy must therefore be investigated further.
 
 \subsection{Identifying Sources of Deviation}
 
-An advantage of the chi-square statistic is that its individual components
-can be examined separately. Each quantity
-
-\[
-\frac{(O_i-E_i)^2}{E_i}
-\]
-
-represents the contribution of digit \(i\) to the overall test statistic.
+An advantage of the chi-square statistic is that its individual components can be examined separately. Each quantity $(O_i-E_i)^2/E_i$ represents the contribution of digit \(i\) to the overall test statistic.
 
 \bigskip
 Table~\ref{tab:chi_square_calculation} shows that most of the chi-square value is generated by the digits 6 and 3. 
@@ -673,135 +671,790 @@ A closer inspection reveals that numbers beginning with the digit 6 occur substa
 
 From an auditing perspective, excessive frequencies are often of greater interest than deficient frequencies. Consequently, the unusually high number of observations beginning with the digit 6 would normally receive priority for further investigation.
 
-\section{Discrete Uniform Distribution}
+\section{Further Digit Analysis}
+\label{sec:further_digit_analysis}
 
-A natural extension of the first-digit analysis is to examine the first two digits rather than only the leading digit. Such an analysis may reveal whether any excess frequency is concentrated in particular ranges (e.g., 60--69) or even in specific two-digit combinations.
+The first-digit analysis identifies whether the leading digits of a dataset are consistent with Benford's Law. A natural extension is to examine the first two digits rather than only the first digit. Such an analysis may reveal whether any excess frequency is concentrated in particular ranges, such as 60--69, or even in specific two-digit combinations.
 
-For the first two digits, Benford's Law predicts that the probability of observing the two-digit combination \(ij\) is
+Let (D) denote the first-two-digit number, where
+
+\begin{equation*}
+D = 10,11,12,\ldots,99.
+\end{equation*}
+
+Under Benford's Law, the probability of observing first-two-digit number (d) is
 
 \begin{equation}
-P(ij)
+P(D=d)
 =
 \log_{10}
 \left(
-1+\frac{1}{ij}
-\right), 
+1+\frac{1}{d}
+\right),
+\qquad d=10,11,\ldots,99.
 \end{equation}
-where
 
-\begin{equation*}
-    ij = 10,11,12,\ldots,99.
-\end{equation*}
+This more detailed analysis may help identify the specific values responsible for any departure from Benford's Law. However, first-two-digit analysis has 90 possible categories. As a result, it usually requires a much larger dataset than first-digit analysis.
 
-This more detailed analysis may help identify the specific values responsible for any departure from Benford's Law.
+It is also possible to examine individual digit positions, such as the second or third digit. Figure~\ref{fig:H9_benford-digit-distributions} illustrates the theoretical distributions of the first, second, and third digits under Benford's Law.
 
-Instead of analysing the leading digits, it is also possible to examine individual digit positions, such as the second or third digit. Figure~%\ref{} 
-illustrates the theoretical distributions of the first, second, and third digits under Benford's Law.
+\begin{figure}[thbp]
+\centering
+\includegraphics[width=1\textwidth]{H9_benford-digit-distributions.pdf}
+\caption{Probability distributions for the first, second, and third digits according to Benford's Law}
+\label{fig:H9_benford-digit-distributions}
+\end{figure}
 
-
-
-% \begin{center}
-% \includegraphics[width=0.7\textwidth]{benford-digit-distributions.png}
-% \captionof{figure}{Probability Distributions for the First, Second, and Third Digits According to Benford's Law}
-% \end{center}
-
-From Figure~%\ref{} 
-it can be seen that the distribution of the third digit, and to a lesser extent the second digit, is considerably flatter than that of the first digit. For practical purposes, these digits are often approximated by a \textbf{uniform distribution}.\footnote{The assumption of a uniform distribution for the second or third digit is adopted here for educational purposes. Under Benford's Law, neither the second-digit nor the third-digit distribution is exactly uniform.}
-
-Alternatively, one may analyse specific digit positions in monetary amounts, such as the tens-of-euros or units-of-euros positions.
+From Figure~\ref{fig:H9_benford-digit-distributions}, it can be seen that the distribution of the third digit, and to a lesser extent the second digit, is considerably flatter than that of the first digit. For practical purposes, these digits are sometimes approximated by a \textbf{uniform distribution}.\footnote{The assumption of a uniform distribution for the second or third digit is adopted here for educational purposes. Under Benford's Law, neither the second-digit nor the third-digit distribution is exactly uniform.}
 
 Compared with a first-digit Benford analysis, two important differences arise:
 
 \begin{itemize}
-    \item The digit zero may occur.
-    \item All digits occur with approximately equal probability.
+\item The digit zero may occur.
+\item All digits occur with approximately equal probability.
 \end{itemize}
 
-\subsubsection*{Hypotheses}
-
-The results are presented in Table \ref{tab:observed_and_expected_frequencies_uniform}.
+\subsection{The Discrete Uniform Distribution}
 
 When each digit occurs with equal probability, the distribution is referred to as a \textbf{uniform distribution}. Since only integer values can occur, the appropriate model is a \textbf{discrete uniform distribution}.
 
-For the \textit{Inventory List} case, the digits in the tens-of-euros and units-of-euros positions were recorded and pooled. The resulting frequencies were tested against the null hypothesis stated in Exercise~%\ref{}
-, namely that the digits follow a discrete uniform distribution.
+For the \textit{Inventory List} case, the digits in the tens-of-euros and units-of-euros positions were recorded and pooled. This gives a total of 600 digit observations. The resulting frequencies are
+
+\begin{equation*}
+O_i = {39,69,60,72,70,58,65,55,59,53},
+\end{equation*}
+
+for digits (0,1,2,\ldots,9), respectively. These frequencies are tested against the null hypothesis that the digits follow a discrete uniform distribution.
+
+\subsubsection*{Hypotheses}
+
+Let $\pi_i$ denote the probability that a digit is equal to $i$, where $i=0,1,\ldots,9$. Under the discrete uniform distribution,
+
+\begin{equation*}
+\pi_0=\pi_1=\cdots=\pi_9=0.10.
+\end{equation*}
+
+The hypotheses are
+
+\begin{equation*}
+\begin{aligned}
+H_0 &: \text{The pooled digit frequencies follow a discrete uniform distribution,} \\
+H_1 &: \text{The pooled digit frequencies do not follow a discrete uniform distribution.}
+\end{aligned}
+\end{equation*}
 
 The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies_uniform}.
 
 \begin{table}[htbp]
-    
-\begin{tabularx}{\textwidth}{@{}lYYYYYYYYYYX@{}}
-
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYYYYYYYYY@{}}
 \toprule
-\parbox[t]{1.3 cm}{Digit} & 0 & 1 & 2 & 3 & \ldots & 9 & Tot.\\
+\parbox[t]{1.3 cm}{Digit} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & Tot.\\
 \midrule
-
-$O_i$ & 39 & 69 & 60 & 72 & \ldots & 53 & 600\\
-$E_i$ & 60 & 60 & 60 & 60 & \ldots & 60 & 600 \\
-$(O_i - E_i)^2$ & 441 & 81 & 0 & 144 & \ldots & 49 \\
-$(O_i - E_i)^2 / {E_i}$ & 7.35 & 1.35 & 0.00 & 2.40 & \ldots & 0.82 & 14.50 \\
+$O_i$ & 39 & 69 & 60 & 72 & 70 & 58 & 65 & 55 & 59 & 53 & 600\\
+$E_i$ & 60 & 60 & 60 & 60 & 60 & 60 & 60 & 60 & 60 & 60 & 600\\
+$(O_i - E_i)^2$ & 441 & 81 & 0 & 144 & 100 & 4 & 25 & 25 & 1 & 49 & \\
+$(O_i - E_i)^2 / E_i$ & 7.35 & 1.35 & 0.00 & 2.40 & 1.67 & 0.07 & 0.42 & 0.42 & 0.02 & 0.82 & 14.50\\
 \bottomrule
 \end{tabularx}
-\caption{Observed and expected second and third-digit frequencies}
+\caption{Observed and expected second- and third-digit frequencies}
 \label{tab:observed_and_expected_frequencies_uniform}
 \end{table}
 
+The minimum sample size required for the chi-square goodness-of-fit test follows from the condition that each expected frequency must satisfy $E_i \geq 5$. Under a discrete uniform distribution,
 
-The minimum sample size required for the chi-square goodness-of-fit test follows from the condition that each expected frequency must satisfy \(E_i \geq 5\). Under a discrete uniform distribution,
+\begin{equation*}
+\pi_i = 0.1
+\end{equation*}
 
-\[
-\pi_i = 0.1,
-\]
-for each of the ten possible digits. Since
+for each of the ten possible digits. Since $E_i = n\pi_i$, the requirement $E_i \geq 5$ implies
 
-\[
-E_i = n\pi_i,
-\]
-the requirement \(E_i \geq 5\) implies
-
-\[
+\begin{equation*}
 n \geq \frac{5}{0.1}=50.
-\]
+\end{equation*}
 
 Thus, the minimum sample size is 50 observations, which is approximately half of the sample size typically required for a first-digit Benford analysis. This may be advantageous when analysing relatively small datasets.
 
-\bigskip
 The chi-square test statistic computed from the frequencies in Table~\ref{tab:observed_and_expected_frequencies_uniform} is
 
-\[
+\begin{equation*}
 \chi^2 = 14.50.
-\]
+\end{equation*}
 
 With ten categories and no estimated parameters, the number of degrees of freedom is
 
-\[
+\begin{equation*}
 df = 10-1 = 9.
-\]
+\end{equation*}
 
-At the 5\% significance level, the critical value is
+At the 5% significance level, the critical value is
 
-\[
+\begin{equation*}
 \chi^2_{0.05,9}=16.92.
-\]
+\end{equation*}
 
-The corresponding $p$-value is
+The corresponding (p)-value is
 
-\[
+\begin{equation*}
 p = 0.106.
-\]
+\end{equation*}
 
 \subsubsection*{Conclusion}
 
 Because
 
-\[
+\begin{equation*}
 \chi^2 = 14.50 < 16.92,
+\end{equation*}
+
+the test statistic does not fall within the critical region. Consequently, the null hypothesis is not rejected at the 5% significance level.
+
+The observed digit frequencies do not provide sufficient evidence to conclude that the distribution differs from a discrete uniform distribution. However, failure to reject the null hypothesis should not be interpreted as proof that the distribution is uniform; the possibility of a Type~II error, or $\beta$-risk, remains.
+
+The (p)-value of 0.106 indicates that the observed deviations from uniformity are consistent with random sampling variation.
+
+\section{Normal Distribution}
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=0cm, innerleftmargin=0.3cm]
+\sloppy
+\section*{Case: Normality of Residuals}
+The chi-square goodness-of-fit test can, in principle, be applied to many different distributions, including continuous distributions. In Chapter~\ref{cha:introduction_to_regression_analysis}, the normality of the residuals was investigated using the Shapiro-Wilk test. Figure~\ref{fig:H9_hist_normalized_residuals} shows the histogram of the standardized residuals of the \ttblue{mod.3} model.
+
+The chi-square goodness-of-fit test can also be used to compare the observed distribution of the residuals with the expected distribution under normality. In this case, the example is mainly intended to illustrate the mechanics of the test for a continuous distribution.
+
+\section*{Objective}
+Test at the 5\% significance level whether the standardized residuals are normally distributed, using the chi-square goodness-of-fit test.
+
+\end{mdframed}
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{H7_hist_standardized_residuals_mod3.pdf}
+\caption{Histogram of standardized residuals of the \ttblue{mod.3} model}
+\label{fig:H9_hist_normalized_residuals}
+\end{figure}
+
+To perform the chi-square test, the residuals must be divided into classes. A simple rule of thumb for choosing the number of classes is to set the number of classes approximately equal to the square root of the number of observations:
+
+\begin{equation*}
+\text{Number of classes} \approx \sqrt{\text{Number of observations}}.
+\end{equation*}
+
+For the \textit{Case: Normality of Residuals}, this gives
+
+\begin{equation*}
+\sqrt{36}=6.
+\end{equation*}
+
+The residuals range from a minimum of (-2.51122) to a maximum of (1.613923). The range of the residuals is therefore
+
+\begin{equation*}
+1.613923 - (-2.51122) = 4.125143.
+\end{equation*}
+
+Dividing this range into approximately six classes gives a class width of
+
+\begin{equation*}
+\frac{4.125143}{6} \approx 0.6891742.
+\end{equation*}
+
+A practical class width of 0.7 is chosen. The observed frequencies within the six original classes are shown in Table~\ref{tab:observations_divided_into_6_classes}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Class} & $(O_i)$ \\
+\midrule
+$(-2.55 \leq X < -1.85)$ & 2 \\
+$(-1.85 \leq X < -1.15)$ & 1 \\
+$(-1.15 \leq X < -0.45)$ & 10 \\
+$(-0.45 \leq X < 0.25)$ & 10 \\
+$(0.25 \leq X < 0.95)$ & 5 \\
+$(0.95 \leq X < 1.65)$ & 8 \\
+\cmidrule{1-2}
+\textbf{Total} & 36 \\
+\bottomrule
+\end{tabular}
+\caption{Observations divided into six classes}
+\label{tab:observations_divided_into_6_classes}
+\end{table}
+
+\subsection{Research question}
+
+The objective is to determine whether the standardized residuals of the \ttblue{mod.3} regression model are consistent with a normal distribution.
+
+\subsection{Hypotheses}
+
+Let $X$ denote a standardized residual. Under the null hypothesis, the standardized residuals follow a standard normal distribution:
+
+\begin{equation*}
+X \sim N(0,1).
+\end{equation*}
+
+The hypotheses for the chi-square goodness-of-fit test are therefore
+
+\begin{equation*}
+\begin{aligned}
+H_0 &: \text{The standardized residuals are normally distributed,} \\
+H_1 &: \text{The standardized residuals are not normally distributed.}
+\end{aligned}
+\end{equation*}
+
+More specifically, under $H_0$, the probability that a standardized residual falls within a particular class is determined by the standard normal distribution.
+
+\subsection{Statistical assumptions}
+
+The chi-square goodness-of-fit test requires that the observations can be regarded as independent and that the expected frequency in each class is sufficiently large. A commonly used rule of thumb is that the expected frequency in each class should be at least 5.
+
+In the present case, this condition is not satisfied for all classes, especially in the tails of the distribution. In addition, residuals from a regression model are diagnostic quantities rather than ordinary independent observations. Therefore, the calculation below should be regarded primarily as an educational illustration of how the chi-square goodness-of-fit test can be applied to a continuous distribution. In practice, tests such as the Shapiro-Wilk test, together with graphical methods such as a histogram or a normal Q-Q plot, are usually more appropriate for assessing the normality of regression residuals in small samples.
+
+\subsection{Expected frequencies}
+
+The six original classes are retained, and open-ended tail classes are added on both sides. This ensures that the class probabilities under the normal distribution sum to one.
+
+The class probabilities are calculated from the cumulative distribution function of the standard normal distribution, denoted by $\Phi(\cdot)$. For example,
+
+\begin{equation*}
+P(-1.15 \leq X < -0.45)
+=
+\Phi(-0.45)-\Phi(-1.15).
+\end{equation*}
+
+The expected frequency in class (i) is then
+
+\begin{equation*}
+E_i = n\pi_i,
+\end{equation*}
+where $n=36$ and $\pi_i$ is the probability of falling in class $i$ under the standard normal distribution.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYY@{}}
+\toprule
+\textbf{Class} & $(\pi_i)$ & $(O_i)$ & $(E_i = n\pi_i)$ \\
+\midrule
+$(X < -2.55)$              & 0.0054 & 0  & 0.19 \\
+$(-2.55 \leq X < -1.85)$  & 0.0268 & 2  & 0.96 \\
+$(-1.85 \leq X < -1.15)$  & 0.0929 & 1  & 3.34 \\
+$(-1.15 \leq X < -0.45)$  & 0.2013 & 10 & 7.25 \\
+$(-0.45 \leq X < 0.25)$   & 0.2724 & 10 & 9.80 \\
+$(0.25 \leq X < 0.95)$    & 0.2302 & 5  & 8.29 \\
+$(0.95 \leq X < 1.65)$    & 0.1216 & 8  & 4.38 \\
+$(X \geq 1.65)$            & 0.0495 & 0  & 1.78 \\
+\cmidrule{1-4}
+\textbf{Total}             & 1.0000 & 36 & 36.00 \\
+\bottomrule
+\end{tabularx}
+\caption{Observed and expected frequencies of standardized residuals under the standard normal distribution}
+\label{tab:observed_expected_residuals_normal}
+\end{table}
+
+\subsection{Calculation of the test statistic}
+
+The chi-square goodness-of-fit test statistic is calculated as
+
+\begin{equation*}
+\chi^2
+=
+\sum_{i=1}^{8}
+\frac{(O_i-E_i)^2}{E_i},
+\end{equation*}
+where $O_i$ denotes the observed frequency in class $i$, and $E_i$ denotes the corresponding expected frequency under the standard normal distribution.
+
+The calculation is shown in Table~\ref{tab:chi_square_residuals_normal}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
+\toprule
+\textbf{Class} &
+$(O_i)$ &
+$(E_i)$ &
+$((O_i-E_i)^2)$ &
+$(\frac{(O_i-E_i)^2}{E_i})$ \\
+\midrule
+$(X < -2.55)$              & 0  & 0.19 & 0.04  & 0.19 \\
+$(-2.55 \leq X < -1.85)$  & 2  & 0.96 & 1.07  & 1.11 \\
+$(-1.85 \leq X < -1.15)$  & 1  & 3.34 & 5.50  & 1.64 \\
+$(-1.15 \leq X < -0.45)$  & 10 & 7.25 & 7.58  & 1.05 \\
+$(-0.45 \leq X < 0.25)$   & 10 & 9.80 & 0.04  & 0.00 \\
+$(0.25 \leq X < 0.95)$    & 5  & 8.29 & 10.82 & 1.30 \\
+$(0.95 \leq X < 1.65)$    & 8  & 4.38 & 13.13 & 3.00 \\
+$(X \geq 1.65)$            & 0  & 1.78 & 3.17  & 1.78 \\
+\cmidrule{1-5}
+\textbf{Total}             & 36 & 36.00 &       & $(\chi^2 = 10.09)$ \\
+\bottomrule
+\end{tabularx}
+\caption{Calculation of the chi-square test statistic for normality of standardized residuals}
+\label{tab:chi_square_residuals_normal}
+\end{table}
+
+The resulting test statistic is
+
+\begin{equation*}
+\chi^2 = 10.09.
+\end{equation*}
+
+\subsection{Significance level}
+
+The test is performed at the 5% significance level:
+
+\begin{equation*}
+\alpha = 0.05.
+\end{equation*}
+
+\subsection{Critical region}
+
+There are eight classes. For this introductory illustration, the standard normal distribution is treated as fully specified. The number of degrees of freedom is therefore
+
+\begin{equation*}
+df = k-1 = 8-1 = 7.
+\end{equation*}
+
+If parameters such as the mean and standard deviation were estimated specifically for the goodness-of-fit test, the degrees of freedom would have to be reduced accordingly.
+
+At the 5\% significance level, the critical value is
+
+\begin{equation*}
+\chi^2_{0.05,7} = 14.07.
+\end{equation*}
+
+The rejection region therefore consists of values of the test statistic greater than 14.07.
+
+\subsection*{Conclusion}
+
+Because
+
+\begin{equation*}
+\chi^2 = 10.09 < 14.07,
+\end{equation*}
+the test statistic does not fall within the rejection region. Therefore, the null hypothesis is not rejected at the 5\% significance level.
+
+The data do not provide sufficient statistical evidence to conclude that the standardized residuals deviate from a normal distribution.
+
+The corresponding (p)-value is approximately
+
+\begin{equation*}
+p = 0.184.
+\end{equation*}
+
+This (p)-value indicates that the observed differences between the empirical class frequencies and the expected frequencies under the normal distribution are not statistically significant at the 5\% level.
+
+However, this conclusion should be interpreted with caution. Several expected frequencies are smaller than 5, which means that the usual large-sample approximation underlying the chi-square goodness-of-fit test is weak in this example. The result should therefore be considered alongside the histogram, a normal Q-Q plot, and the Shapiro-Wilk test.
+
+\bigskip
+The examples in this chapter all follow the same basic logic. First, specify an expected distribution. Second, compare the observed frequencies with the expected frequencies. Third, determine whether the deviations are larger than would reasonably be expected from random sampling variation alone. This logic underlies many practical audit analytics procedures.
+
+\section{Other Applications of the Chi-Square Distribution}
+
+In this chapter, the chi-square distribution has mainly been used for goodness-of-fit tests. In such tests, observed frequencies are compared with expected frequencies under a specified theoretical distribution. The same general idea also appears in several other statistical applications.
+
+\paragraph{Testing the relationship between two categorical variables.} The chi-square test can be used to examine whether two categorical variables are statistically independent. For example, an auditor may want to know whether the type of error found in a transaction is related to the department in which the transaction was processed. Under the null hypothesis, the two variables are independent. A significant result indicates that there is evidence of an association between the variables, although it does not prove a causal relationship.
+
+\paragraph{Testing whether several groups have the same distribution.} A closely related application is the test of homogeneity. Here the question is whether different groups have the same distribution over a number of categories. For example, an auditor may compare the distribution of error types across several branches or business units. The calculation is similar to the chi-square test of independence, but the interpretation is different: the focus is on whether the categorical distribution is the same across groups.
+
+\paragraph{Comparing a sample with a known population composition.}
+The chi-square goodness-of-fit test can also be used to compare the composition of a sample with known proportions in the population. For example, suppose that 25% of all inventory items are located in the New York tri-state area and 75% are located elsewhere. If a sample is drawn from the inventory population, the chi-square test can be used to assess whether the sample composition differs significantly from these known population proportions. Such a test may be useful as a check on the composition of a sample. However, it does not prove that the sample is representative in every respect. Representativeness also depends on the way in which the sample was selected and on other relevant characteristics of the population.
+
+\paragraph{Constructing confidence intervals for a variance or standard deviation.} The chi-square distribution can also be used to construct confidence intervals for the variance or standard deviation of a normally distributed quantitative variable. This application is mathematically important, but it is less common in the practical audit settings discussed in this chapter. It also requires the assumption that the underlying variable is normally distributed.
+
+\bigskip
+The principles discussed in this chapter are also relevant for modern audit practice. Fraud detection and anomaly detection software often starts from a similar idea: compare what is observed in the data with what would normally be expected. The expected pattern may be based on Benford's Law, on historical data, on business rules, or on statistical models. Observations that deviate strongly from the expected pattern are not automatically errors or fraud, but they may indicate transactions, accounts, or processes that deserve further audit attention.
+
+In all these applications, the chi-square distribution is used to evaluate whether the differences between observed and expected frequencies, or between an observed and hypothesized amount of variation, are larger than would normally be expected due to random sampling variation alone.
+
+\section{Workshop R}
+
+The following exercises are designed for use in the accompanying R Notebook.
+They allow you to reproduce the calculations in this chapter, explore the
+effect of changing assumptions, and interpret the results in an audit context.
+
+\begin{exercise}
+
+\textbf{Goodness of Fit as a Comparison Between Observed and Expected Frequencies}
+
+\textsc{Learning objectives:}
+define goodness of fit; explain how goodness-of-fit tests compare observed
+frequencies with expected frequencies.
+
+\medskip
+In the R Notebook, the observed frequencies from the customer satisfaction
+example are stored as follows:
+
+\begin{verbatim}
+observed <- c(15, 12, 13)
+expected_prob <- c(0.40, 0.16, 0.44)
+n <- sum(observed)
+expected <- n * expected_prob
+\end{verbatim}
+
+\begin{enumerate}
+    \item Calculate the expected frequencies.
+    \item Create a table containing the observed frequencies, expected
+    frequencies, and the difference \(O_i - E_i\).
+    \item Explain in your own words what it means for the observed frequencies
+    to be close to the expected frequencies.
+    \item Explain why expected frequencies do not have to be whole numbers.
+\end{enumerate}
+
+\end{exercise}
+
+
+
+
+\subsection*{Exercise 11.2: Formulating Hypotheses}
+
+\textbf{Learning objectives:}
+identify the null and alternative hypotheses used in goodness-of-fit testing.
+
+\medskip
+Use the customer satisfaction example from Exercise 11.1.
+
+\begin{enumerate}
+    \item Write down the null hypothesis in words.
+    \item Write down the alternative hypothesis in words.
+    \item In the R Notebook, change the observed frequencies to:
+    \begin{verbatim}
+observed <- c(16, 6, 18)
+    \end{verbatim}
+    Recalculate the observed and expected frequencies.
+    \item Explain whether these new observed frequencies appear more or less
+    consistent with the null hypothesis than the original data.
+\end{enumerate}
+
+\subsection*{Exercise 11.3: Calculating the Chi-Square Test Statistic}
+
+\textbf{Learning objectives:}
+construct observed and expected frequency tables; perform a chi-square
+goodness-of-fit test using statistical software.
+
+\medskip
+For the customer satisfaction example, calculate the individual contributions
+to the chi-square statistic:
+
+\[
+    \frac{(O_i-E_i)^2}{E_i}.
 \]
 
-the test statistic does not fall within the critical region. Consequently, the null hypothesis is not rejected at the 5\% significance level.
+\begin{enumerate}
+    \item Use R to calculate the value of \((O_i-E_i)^2/E_i\) for each
+    satisfaction category.
+    \item Add the individual contributions to obtain the chi-square test
+    statistic.
+    \item Use the R function \texttt{chisq.test()} to check your result.
+    \item Compare your result with the calculation in the chapter.
+\end{enumerate}
 
-The observed digit frequencies do not provide sufficient evidence to conclude that the distribution differs from a discrete uniform distribution. However, failure to reject the null hypothesis should not be interpreted as proof that the distribution is uniform; the possibility of a Type~II error (\(\beta\)-risk) remains.
+\subsection*{Exercise 11.4: Degrees of Freedom and Statistical Significance}
 
-The $p$-value of 0.106 indicates that the observed deviations from uniformity are consistent with random sampling variation.
+\textbf{Learning objectives:}
+explain the relationship between test statistics, degrees of freedom, and
+statistical significance; interpret \(p\)-values and test results.
+
+\medskip
+Use the customer satisfaction example.
+
+\begin{enumerate}
+    \item Determine the number of categories \(k\).
+    \item Calculate the degrees of freedom using
+    \[
+        df = k - 1.
+    \]
+    \item Use R to calculate the critical value for a 5\% significance level:
+    \begin{verbatim}
+qchisq(0.95, df = 2)
+    \end{verbatim}
+    \item Use R to calculate the \(p\)-value:
+    \begin{verbatim}
+pchisq(6.165, df = 2, lower.tail = FALSE)
+    \end{verbatim}
+    \item Explain the conclusion of the test in the context of customer
+    satisfaction.
+\end{enumerate}
+
+\subsection*{Exercise 11.5: Benford's Law}
+
+\textbf{Learning objectives:}
+state the expected digit frequencies of Benford's Law; describe why Benford's
+Law applies to many naturally occurring datasets.
+
+\medskip
+In the R Notebook, create the Benford probabilities for the first digit:
+
+\begin{verbatim}
+digits <- 1:9
+benford_prob <- log10((digits + 1) / digits)
+\end{verbatim}
+
+\begin{enumerate}
+    \item Display the Benford probabilities in a table.
+    \item Create a bar chart of the Benford probabilities.
+    \item Which first digit has the highest probability?
+    \item Which first digit has the lowest probability?
+    \item Explain why Benford's Law does not imply that all first digits are
+    equally likely.
+\end{enumerate}
+
+\subsection*{Exercise 11.6: Applying Benford's Law to Inventory Data}
+
+\textbf{Learning objectives:}
+apply Benford's Law to a dataset; compare observed digit frequencies with
+expected frequencies.
+
+\medskip
+The observed first-digit frequencies from the inventory list are:
+
+\begin{verbatim}
+observed <- c(86, 48, 23, 32, 24, 36, 19, 18, 14)
+digits <- 1:9
+benford_prob <- log10((digits + 1) / digits)
+expected <- sum(observed) * benford_prob
+\end{verbatim}
+
+\begin{enumerate}
+    \item Calculate the expected frequencies under Benford's Law.
+    \item Create a table with the observed and expected frequencies.
+    \item Produce a bar chart comparing observed and expected frequencies.
+    \item Describe which digits appear to deviate most strongly from Benford's
+    Law.
+\end{enumerate}
+
+\subsection*{Exercise 11.7: Testing the Inventory Data}
+
+\textbf{Learning objectives:}
+perform a chi-square goodness-of-fit test; interpret \(p\)-values and test
+results in the context of auditing.
+
+\medskip
+Using the inventory first-digit data from Exercise 11.6:
+
+\begin{enumerate}
+    \item Calculate the chi-square test statistic manually in R.
+    \item Use \texttt{chisq.test()} to perform the goodness-of-fit test.
+    \item Report the test statistic, degrees of freedom, and \(p\)-value.
+    \item State whether the null hypothesis is rejected at the 5\% significance
+    level.
+    \item Explain what the result means from an audit perspective.
+    \item Explain why rejection of the null hypothesis does not prove fraud.
+\end{enumerate}
+
+\subsection*{Exercise 11.8: Identifying the Main Sources of Deviation}
+
+\textbf{Learning objectives:}
+investigate discrepancies between observed and expected frequencies; determine
+which categories or digits contribute most to a lack of fit.
+
+\medskip
+For the inventory first-digit data, calculate the contribution of each digit to
+the chi-square statistic:
+
+\begin{verbatim}
+contribution <- (observed - expected)^2 / expected
+\end{verbatim}
+
+\begin{enumerate}
+    \item Create a table showing the contribution of each digit.
+    \item Create a bar chart of the contributions.
+    \item Which digit contributes most to the chi-square statistic?
+    \item Which digit contributes second most?
+    \item Explain why examining the individual contributions is useful in an
+    audit setting.
+\end{enumerate}
+
+\subsection*{Exercise 11.9: Evaluating Whether Benford's Law Is Appropriate}
+
+\textbf{Learning objectives:}
+evaluate the appropriateness of a goodness-of-fit model for a particular
+dataset; understand the strengths and limitations of Benford's Law.
+
+\medskip
+Suppose an auditor is considering whether Benford's Law is appropriate for each
+of the following datasets:
+
+\begin{enumerate}
+    \item invoice amounts from a large supplier ledger;
+    \item employee identification numbers;
+    \item retail prices ending in 95 or 99 cents;
+    \item total annual sales by customer;
+    \item postal codes.
+\end{enumerate}
+
+For each dataset:
+
+\begin{enumerate}
+    \item State whether Benford's Law is likely to be appropriate.
+    \item Give one reason for your answer.
+    \item Identify whether the data are naturally occurring measurements,
+    assigned numbers, or values constrained by human convention.
+\end{enumerate}
+
+\subsection*{Exercise 11.10: Discrete Uniform Distribution}
+
+\textbf{Learning objectives:}
+construct observed and expected frequency tables; recall the assumptions and
+conditions required for goodness-of-fit tests.
+
+\medskip
+The pooled second- and third-digit frequencies from the inventory case are:
+
+\begin{verbatim}
+digits <- 0:9
+observed <- c(39, 69, 60, 72, 70, 58, 65, 55, 59, 53)
+expected_prob <- rep(0.10, 10)
+expected <- sum(observed) * expected_prob
+\end{verbatim}
+
+\begin{enumerate}
+    \item Explain why the digit zero can occur in this analysis.
+    \item Calculate the expected frequencies under the discrete uniform
+    distribution.
+    \item Check whether all expected frequencies are at least 5.
+    \item Calculate the chi-square test statistic.
+    \item Perform the test using \texttt{chisq.test()}.
+    \item Interpret the result at the 5\% significance level.
+\end{enumerate}
+
+\subsection*{Exercise 11.11: Sample Size and Expected Frequencies}
+
+\textbf{Learning objectives:}
+recall the assumptions and conditions required for goodness-of-fit tests;
+judge whether the assumptions underlying a goodness-of-fit test have been
+satisfied.
+
+\medskip
+In a chi-square goodness-of-fit test, the expected frequency in each category
+should generally be sufficiently large.
+
+\begin{enumerate}
+    \item For a discrete uniform distribution with ten categories, calculate the
+    minimum sample size needed to obtain \(E_i \geq 5\) in every category.
+    \item Repeat the calculation for a first-digit Benford test with nine
+    categories. Use the smallest Benford probability in your calculation.
+    \item Explain why first-two-digit Benford tests require much larger samples
+    than first-digit tests.
+    \item In the R Notebook, experiment with different sample sizes and observe
+    how the expected frequencies change.
+\end{enumerate}
+
+\subsection*{Exercise 11.12: Exploring Random Variation by Simulation}
+
+\textbf{Learning objectives:}
+assess whether deviations from Benford's Law are likely due to natural variation
+or require further investigation.
+
+\medskip
+Use R to simulate first-digit samples from Benford's Law:
+
+\begin{verbatim}
+set.seed(123)
+digits <- 1:9
+benford_prob <- log10((digits + 1) / digits)
+simulated <- sample(digits, size = 300, replace = TRUE, prob = benford_prob)
+observed_sim <- table(factor(simulated, levels = digits))
+\end{verbatim}
+
+\begin{enumerate}
+    \item Calculate the observed frequencies in the simulated sample.
+    \item Compare the simulated frequencies with the expected Benford
+    frequencies.
+    \item Perform a chi-square goodness-of-fit test.
+    \item Repeat the simulation several times.
+    \item Explain why a dataset generated from Benford's Law will not match the
+    Benford probabilities exactly.
+\end{enumerate}
+
+\subsection*{Exercise 11.13: Normality of Residuals}
+
+\textbf{Learning objectives:}
+design a goodness-of-fit analysis to assess whether observed data follow a
+specified distribution; judge whether the assumptions underlying the test have
+been satisfied.
+
+\medskip
+The R Notebook contains the standardized residuals from the regression model
+\ttblue{mod.3}.
+
+\begin{enumerate}
+    \item Create a histogram of the standardized residuals.
+    \item Divide the residuals into the classes used in the chapter.
+    \item Calculate the observed frequencies in each class.
+    \item Use the standard normal distribution to calculate the expected
+    probabilities for each class.
+    \item Convert these probabilities into expected frequencies.
+    \item Check whether the expected frequencies satisfy the usual rule of
+    thumb for the chi-square approximation.
+    \item Explain why the chi-square goodness-of-fit test is not the preferred
+    test for normality in this small-sample example.
+\end{enumerate}
+
+\subsection*{Exercise 11.14: Comparing Chi-Square and Shapiro-Wilk Tests}
+
+\textbf{Learning objectives:}
+evaluate the appropriateness of a goodness-of-fit model; assess the evidential
+value of different statistical procedures.
+
+\medskip
+Use the standardized residuals from Exercise 11.13.
+
+\begin{enumerate}
+    \item Perform the chi-square goodness-of-fit test for normality.
+    \item Perform the Shapiro-Wilk test using:
+    \begin{verbatim}
+shapiro.test(residuals)
+    \end{verbatim}
+    \item Compare the conclusions of the two tests.
+    \item Create a normal Q-Q plot of the residuals.
+    \item Explain which method you would rely on most in this case and why.
+\end{enumerate}
+
+\subsection*{Exercise 11.15: Designing an Audit Analytics Procedure}
+
+\textbf{Learning objectives:}
+design a goodness-of-fit analysis; develop a Benford's Law testing procedure;
+formulate recommendations for additional audit procedures.
+
+\medskip
+Assume that you are part of an audit team and have received a dataset containing
+transaction amounts from a client.
+
+Design a simple audit analytics procedure in the R Notebook.
+
+\begin{enumerate}
+    \item State the audit question you want to investigate.
+    \item Decide whether Benford's Law, a discrete uniform distribution, or
+    another expected distribution is appropriate.
+    \item Explain why the chosen distribution is appropriate for the data.
+    \item Calculate the observed frequencies.
+    \item Calculate the expected frequencies.
+    \item Perform a chi-square goodness-of-fit test.
+    \item Identify the categories or digits that contribute most to the test
+    statistic.
+    \item Write a short audit conclusion.
+    \item Recommend one additional audit procedure based on the results.
+\end{enumerate}
+
+\subsection*{Exercise 11.16: From Statistical Signal to Audit Follow-Up}
+
+\textbf{Learning objectives:}
+assess the evidential value of Benford analysis in an audit or fraud
+examination; formulate recommendations for additional audit procedures.
+
+\medskip
+Suppose that a Benford analysis of a large transaction file produces a
+statistically significant result.
+
+\begin{enumerate}
+    \item Explain why this result is not sufficient evidence of fraud.
+    \item Identify at least two legitimate reasons why a dataset may deviate
+    from Benford's Law.
+    \item Use the individual chi-square contributions to identify the most
+    unusual digit or digit range.
+    \item Propose two follow-up audit procedures that could be performed.
+    \item Write a short paragraph explaining the result to a non-statistical
+    audit manager.
+\end{enumerate}
+```
+
+
 
 % chapter goodness_of_fit (end)
