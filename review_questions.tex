@@ -1,0 +1,189 @@
+\documentclass[12pt,a4paper]{memoir}
+
+% Basic setup for a handout
+\usepackage[T1]{fontenc}
+\usepackage{newpxtext,newpxmath}
+% To enable compactitem
+\usepackage{paralist}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{nomencl} % For \nomenclature
+\usepackage{makeidx} % For \index
+\usepackage{ragged2e} % For \RaggedRight
+\makeindex
+\makenomenclature
+\setsecnumdepth{subsection} % Number sections and subsections
+
+% Allow cross referencing to another document
+\usepackage{xr}
+\externaldocument{ada_volume1}
+
+
+% Allows background color to paragraphs
+\usepackage[framemethod=tikz]{mdframed} 
+
+% Automatically numbered Exercises
+\newcounter{exercise}[chapter]
+\renewcommand{\theexercise}{\thechapter.\arabic{exercise}}
+\newenvironment{exercise}
+  {\refstepcounter{exercise}\par\medskip\noindent\textbf{\theexercise}\quad}
+  {\par\medskip}
+
+% Page layout
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{0.5in}
+\setlength{\headsep}{0.25in}
+
+% To embed flowcharts
+\usepackage{tikz} 
+  \usetikzlibrary{shapes, arrows, positioning, calc, math, arrows.meta}
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=gray, 
+    text width=4.5 em, text badly centered, node distance=3 cm, inner sep = 0 pt]
+\tikzstyle{whiteblock} = [rectangle, draw, node distance=2.5 cm, text width=7.2 em, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{widewhiteblock} = [rectangle, draw, node distance=2.5 cm, text width=4cm, text centered, rounded corners, minimum height=4 em]
+\tikzstyle{blueblock} = [rectangle, draw, fill=gray!20, text width=7.2 em, text centered, rounded corners, minimum height=4 em, node distance=3 cm]  
+\tikzstyle{wideblueblock} = [rectangle, draw, fill=gray!20, 
+    text width=4cm, text centered, rounded corners, minimum height=4 em,
+    node distance=3 cm]  
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, circle, fill=red!20, node distance=3 cm,
+    minimum height=2 em]
+
+
+\begin{document}
+
+% Title page
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{2in}
+    {\Huge \textbf{Audit Data Analysis -- Volume 1}} \\[0.3in]
+    {\LARGE \textit{Review Questions}} \\[0.5in]
+    {\Large Lucas Hoogduin} \\[0.5in]
+    {\large \today}
+\end{center}
+\newpage
+
+% Table of contents (optional for handout)
+\tableofcontents
+\newpage
+
+% Main content
+
+\chapter{Probability distributions}
+
+\chapter{Estimating the population mean and proportion}
+
+\chapter{Estimation with auxiliary variables and stratification}
+
+\chapter{Hypothesis testing}
+
+\chapter{Regression analysis}
+
+\chapter{Goodness of fit}
+
+\begin{exercise}
+Explain in your own words what it means for the observed frequencies to be close to the expected frequencies.
+\end{exercise}
+
+\begin{exercise}
+    Explain why expected frequencies do not have to be whole numbers.
+\end{exercise}
+
+\begin{exercise}
+    Use the customer satisfaction example from Section \ref{sec:the_chi_square_goodness_of_fit_test}. 
+    \begin{enumerate}
+        \item Write down the null hypothesis in words. 
+        \item Write down the alternative hypothesis in words.
+    \end{enumerate}
+    
+\end{exercise}
+    
+\begin{exercise}
+    Explain why Benford's Law does not imply that all first digits are equally likely.
+\end{exercise}
+
+\begin{exercise}
+    Refer to the Inventory first-digit data in Section \ref{sec:the_chi_square_distribution}. Explain why rejection of the null hypothesis does not prove fraud.
+\end{exercise}
+
+\begin{exercise}
+    An advantage of the chi-square statistic is that its individual components can be examined separately. Why is this useful in an audit setting?
+\end{exercise}
+
+\begin{exercise}
+    Suppose an auditor is considering whether Benford's Law is appropriate for each of the following datasets:
+
+\begin{itemize}
+    \item invoice amounts from a large supplier ledger;
+    \item employee identification numbers;
+    \item retail prices ending in 95 or 99 cents;
+    \item total annual sales by customer;
+    \item postal codes.
+\end{itemize}
+
+For each dataset:
+
+\begin{enumerate}
+    \item State whether Benford's Law is likely to be appropriate.
+    \item Give one reason for your answer.
+    \item Identify whether the data are naturally occurring measurements, assigned numbers, or values constrained by human convention.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    You are analyzing second- and third-digit frequencies from a large dataset. Explain why the digit zero can occur in this analysis.
+\end{exercise}
+
+\begin{exercise}
+    In a chi-square goodness-of-fit test, the expected frequency in each category should generally be sufficiently large.
+    \begin{enumerate}
+    \item For a discrete uniform distribution with ten categories, calculate the
+    minimum sample size needed to obtain \(E_i \geq 5\) in every category.
+    \item Repeat the calculation for a first-digit Benford test with nine
+    categories. Use the smallest Benford probability in your calculation.
+    \item Explain why first-two-digit Benford tests require much larger samples
+    than first-digit tests.
+\end{enumerate}
+    
+\end{exercise}
+
+\begin{exercise}
+    Explain why the chi-square goodness-of-fit test is not the preferred test for normality in this small-sample example.
+\end{exercise}
+
+\begin{exercise}
+Assume that you are part of an audit team and have received a dataset containing
+transaction amounts from a client.
+
+Design a simple audit analytics procedure.
+
+\begin{enumerate}
+    \item State the audit question you want to investigate.
+    \item Decide whether Benford's Law, a discrete uniform distribution, or
+    another expected distribution is appropriate.
+    \item Explain why the chosen distribution is appropriate for the data.
+    \item  Write a short paragraph explaining the result to a non-statistical audit manager.
+\end{enumerate}
+
+Assume that the number 7 occurs more frequently than expected. Explain how you would investigate this anomaly.
+
+\begin{enumerate}[resume]
+    \item Explain why this result is not sufficient evidence of fraud.
+    \item Write a short audit conclusion.
+    \item Recommend one additional audit procedure based on the results.
+\end{enumerate}
+
+At the same time, you observe that the number 2 occurs less frequently than expected. 
+\begin{enumerate}[resume]
+    \item Explain how you would investigate this anomaly.
+\end{enumerate}
+
+
+\end{exercise}
+
+\end{document}

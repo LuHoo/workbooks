@@ -1,3 +1,5 @@
+% !TEX root = ../ada_volume1.tex
+
 \chapter{Goodness of fit} % (fold)
 \label{cha:goodness_of_fit}
 
@@ -12,11 +14,13 @@ Goodness-of-fit techniques compare observed outcomes with those predicted by a t
 
 One particularly interesting application involves the detection of fraud. Auditors and forensic accountants often examine whether numerical data conform to patterns that commonly occur in naturally generated datasets. A well-known example is Benford’s Law, which predicts the frequency with which different digits appear as the leading digit in many real-world collections of numbers. Although deviations from Benford’s Law do not prove wrongdoing, they can serve as useful warning signals that warrant further investigation. In this chapter, we introduce the concepts and methods of goodness-of-fit testing, with special attention to Benford’s Law and its role in auditing and fraud detection.
 
+In this chapter, we first introduce the chi-square goodness-of-fit test using a simple categorical example. We then explain the connection between the test statistic and the chi-square distribution. Finally, we apply the same logic to digit analysis, including Benford's Law and related audit applications. The chapter concludes by showing how the chi-square distribution also appears in other statistical procedures.
+
 \section*{Learning objectives}
 
 At the end of this chapter you will be able to
 
-\bigskip
+\medskip
 \noindent \textsc{remember}
 
 \begin{itemize}
@@ -60,7 +64,7 @@ At the end of this chapter you will be able to
 
 
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20]
+\begin{mdframed}[hidealllines=true,backgroundcolor=ada_blue!20]
 \section*{Case Study: Benford's Law and the Search for Irregularities}
 \sloppy
 
@@ -79,11 +83,12 @@ These examples illustrate both the power and the limitations of Benford's Law. A
 \end{mdframed}
 
 \newpage
-\section{Chi-Square Goodness-of-Fit Test}
+\section{The chi-square goodness-of-fit test}
+\label{sec:the_chi_square_goodness_of_fit_test}
 
 \begin{quote}
 \textit{The mathematician, carried along on his flood of symbols, dealing apparently with purely formal truths, may still reach results of endless importance for our description of the physical universe.}
-\\[0.2cm]
+\vspace{0.2cm}
 --- Karl Pearson (1857--1936), \textit{The Grammar of Science} (1900)
 \end{quote}
 
@@ -131,7 +136,7 @@ Total\\
 \midrule
 
 Number & $n_1$ & $n_2$ & $n_3$ & \ldots & $n_i$ & \ldots & $n_k$ & $n$ \\
-Probability & $\pi_1$ & $\pi_3$ & $\pi_3$ & \ldots & $\pi_i$ & \ldots & $\pi_k$ & 1 \\
+Probability & $\pi_1$ & $\pi_2$ & $\pi_3$ & \ldots & $\pi_i$ & \ldots & $\pi_k$ & 1 \\
 
 \bottomrule
 \end{tabularx}
@@ -142,9 +147,8 @@ Probability & $\pi_1$ & $\pi_3$ & $\pi_3$ & \ldots & $\pi_i$ & \ldots & $\pi_k$ 
 The total probability across all cells sums to 1 (100\%). 
 
 
-\bigskip
+\medskip
 For example, a customer satisfaction survey was conducted among all 625 customers (the population). The results are presented in Table \ref{tab:client_satisfaction}.
-
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 
@@ -165,7 +169,6 @@ Proportion & 0.40 & 0.16 & 0.44 & 1.00 \\
 \caption{Client satisfaction results}
 \label{tab:client_satisfaction}
 \end{table}
-
 The aim is to investigate whether customer satisfaction has changed in the subsequent year.
 
 For a goodness-of-fit test, the hypotheses examine whether the distribution of satisfaction in the follow-up year is the same as the distribution observed in the base year. Because all 625 customers were surveyed in the base year, the observed proportions are equal to the population proportions for that year. These proportions therefore serve as the hypothesized probabilities under the null hypothesis.
@@ -200,7 +203,7 @@ Observed frequency & 15 & 12 & 13 & 40 \\
 \label{tab:client_satisfaction_followup}
 \end{table}
 
-Under the null hypothesis, the population proportions are
+\noindent Under the null hypothesis, the population proportions are
 
 \begin{equation*}
     \pi_1 = 0.40,\qquad \pi_2 = 0.16,\qquad \pi_3 = 0.44
@@ -232,35 +235,28 @@ Expected ($E_i$) & 16.0 & 6.4 & 17.6 \\
 \caption{Observed and expected frequencies}
 \label{tab:gof_expected}
 \end{table}
+\noindent The chi-square test statistic is
 
-The chi-square test statistic is
-
-\begin{equation}
-\begin{aligned}
-\chi^2
-&=
-\sum_{i=1}^{k}
-\frac{(O_i-E_i)^2}{E_i} \\[1ex]
-&=
-\frac{(15-16)^2}{16}
-+
-\frac{(12-6.4)^2}{6.4}
-+
-\frac{(13-17.6)^2}{17.6} \\[1ex]
-&=
-0.063 + 4.900 + 1.202 \\[1ex]
-&=
-6.165.
-\end{aligned}
-\label{eq:chi_square_test_statistic}
-\end{equation}
-
+% \begin{equation}
+% \begin{aligned}
+% \chi^2 &= \sum_{i=1}^{k} \frac{(O_i-E_i)^2}{E_i} \\
+%        &= \frac{(15-16)^2}{16} + \frac{(12-6.4)^2}{6.4} + \frac{(13-17.6)^2}{17.6} \\
+%        &= 0.063 + 4.900 + 1.202 \\
+%        &= 6.165.
+% \end{aligned}
+% \label{eq:chi_square_test_statistic}
+% \end{equation}
+\begin{align}
+\chi^2 &= \sum_{i=1}^{k} \frac{(O_i-E_i)^2}{E_i} \label{eq:chi_square_test_statistic} \\
+       &= \frac{(15-16)^2}{16} + \frac{(12-6.4)^2}{6.4} + \frac{(13-17.6)^2}{17.6} \nonumber \\
+       &= 0.063 + 4.900 + 1.202 \nonumber \\
+       &= 6.165. \nonumber
+\end{align}
 Since there are $k=3$ categories and no parameters are estimated from the sample, the number of degrees of freedom is
 
 \begin{equation*}
 df = k-1 = 3-1 = 2.
 \end{equation*}
-
 For a significance level of $\alpha=0.05$, the critical value is $\chi^2_{0.05,2} = 5.991$. Because
 
 \begin{equation*}
@@ -268,16 +264,17 @@ For a significance level of $\alpha=0.05$, the critical value is $\chi^2_{0.05,2
 \end{equation*}
 the null hypothesis is rejected.
 
-\bigskip
-Equivalently, the $p$ value is
+\medskip
+\noindent Equivalently, the $p$ value is
 
 \begin{equation*}
     p = P(\chi^2_2 \geq 6.165) \approx 0.046.
 \end{equation*}
 
-Since $p < 0.05$, the null hypothesis is rejected. 
+\medskip
+\noindent Since $p < 0.05$, the null hypothesis is rejected. 
 
-\bigskip
+\medskip
 Conclusion: there is sufficient evidence at the 5\% significance level to conclude that the distribution of customer satisfaction in the follow-up year differs from the distribution observed in the base year.
 
 \section{The Chi-Square Distribution}
@@ -296,20 +293,19 @@ Let $O_i$ denote the observed frequency in category $i$. The vector of observed 
 \begin{equation*}
     (O_1,O_2,\ldots,O_k)
 \end{equation*}
-
 follows a multinomial distribution:
 
 \begin{equation*}
     (O_1,O_2, \ldots, O_k) \sim \text{Multinomial}(n; \pi_1, \pi_2, \ldots, \pi_k).
 \end{equation*}
 
-For each category $i$, the expected frequency is
+\noindent For each category $i$, the expected frequency is
 
 \begin{equation*}
     E_i = n \pi_i .
 \end{equation*}
 
-When the sample size is sufficiently large, the multinomial distribution can be approximated by a multivariate normal distribution. Consequently, the standardized deviations $\frac{O_i-E_i}
+\noindent When the sample size is sufficiently large, the multinomial distribution can be approximated by a multivariate normal distribution. Consequently, the standardized deviations $\frac{O_i-E_i}
 {\sqrt{E_i}}$ are approximately standard normally distributed:
 
 \begin{equation*}
@@ -328,7 +324,7 @@ Under the null hypothesis and for sufficiently large sample sizes, the test stat
 \end{equation*}
 where $k$ is the number of categories and $p$ is the number of parameters estimated from the data.
 
-\bigskip
+\medskip
 To apply the chi-square goodness-of-fit test, the following conditions should be satisfied:
 
 \begin{itemize}
@@ -353,7 +349,7 @@ This rule is often considered conservative. Cochran (1963) proposed a more flexi
 
 The shape of the chi-square distribution depends on the number of degrees of freedom. As the number of categories increases, the degrees of freedom increase and the distribution becomes more symmetric. For small degrees of freedom, the chi-square distribution is strongly right-skewed; as the degrees of freedom increase, it gradually approaches a normal distribution.
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!10,innerbottommargin=0cm, innerleftmargin=0.3cm]
+\begin{mdframed}[hidealllines=true,backgroundcolor=ada_blue!10,innerbottommargin=0cm, innerleftmargin=0.3cm]
 \sloppy
 \section*{Case: Inventory list}
 At a company, inventory is tracked using an inventory list. In addition to sampling the actual presence of inventory, a control is applied to the inventory figures to check whether they comply with \textbf{Benford's Law}. The first digit of a total of 300 inventory values was tallied and is presented in Table \ref{tab:inventories_first_digits}.
@@ -378,28 +374,31 @@ Frequency & 86 & 48 & 23 & 32 & 24 & 36 & 19 & 18 & 14 \\
 \label{tab:inventories_first_digits}
 \end{table}
 
-In 1938, Benford conducted research into the validity of his law, expressed in \textbf{Benford's Law}:
+In 1938, Benford conducted research into the validity of the pattern that is now known as \textbf{Benford's Law}. For the first digit of a number, Benford's Law states that
 
 \begin{equation}
-    P(i) = \log \left( \frac{i + 1}{i} \right)
-    \label{eq:benfords_law}
+P(i) = \log_{10} \left( \frac{i + 1}{i} \right)
+=
+\log_{10}\left(1+\frac{1}{i}\right),
+\label{eq:benfords_law}
 \end{equation}
 
-For $i = 1, 2, \ldots, 9$, the probability $P(i)$ can be determined that the first digit of a number is equal to $i$.
-The results of Equation \ref{eq:benfords_law}, representing Benford's Law for the first digit of a number, are shown in Figure \ref{fig:H9_benford}.
+where (i = 1,2,\ldots,9). Thus, (P(i)) denotes the probability that the first digit of a number is equal to (i).
 
+The probabilities obtained from Equation~\ref{eq:benfords_law} are shown in Figure~\ref{fig:H9_benford}.
 \begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{H9_benford.pdf}
-    \caption{Benford's Law for the First Digit of a Number}
-    \label{fig:H9_benford}
+\centering
+\includegraphics[width=1\textwidth]{H9_benford.pdf}
+\caption{Benford's Law for the first digit of a number}
+\label{fig:H9_benford}
 \end{figure}
-Table \ref{tab:benford_series} containing (a selection) from Benford's original 1938 publication shows the distribution of the first digit of numbers from various sources.
+Table~\ref{tab:benford_series} contains a selection of first-digit distributions from Benford's original 1938 publication.
+
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{@{}lrrrrXXXXXr@{}}
+\begin{tabularx}{\textwidth}{@{}lXXXXXXXXXr@{}}
 
 \toprule
-\parbox[t]{1 cm}{Series} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & $n$\\
+\parbox[t]{0.95 cm}{Series} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & $n$\\
 \midrule
 Rivers & 31.0 & 16.4 & 10.7 & 11.3 & 7.2 & 8.6 & 5.5 & 4.2 & 5.1 & 335 \\
 Am. Leag. & 32.7 & 17.6 & 12.6 & 9.8 & 7.4 & 6.4 & 4.9 & 5.6 & 3.0 & 1458 \\
@@ -410,31 +409,29 @@ Mol. Wgt. & 26.7 & 25.2 & 15.4 & 10.8 & 6.7 & 5.1 & 4.1 & 2.8 & 3.2 & 1800 \\
 Average & 31.2 & 19.3 & 12.2 & 9.9 & 7.6 & 6.4 & 4.9 & 4.6 & 3.7 & 4643 \\
 \bottomrule
 \end{tabularx}
-\caption{Frequency Distribution of First Digits in Inventory Values}
+\caption{First-digit distributions in selected examples from Benford's study}
 \label{tab:benford_series}
 \end{table}
-The data from Table \ref{tab:benford_series} are presented in Figure \ref{fig:H9_benford_examples}.
+
+The data from Table~\ref{tab:benford_series} are presented in Figure~\ref{fig:H9_benford_examples}.
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{H9_benford_examples.pdf}
+\caption{Some of Benford's examples}
+\label{fig:H9_benford_examples}
+\end{figure}
+The various datasets show, to a greater or lesser extent, the same pattern as the Benford distribution. Benford also examined the combined dataset, shown as ``Average'' in Table~\ref{tab:benford_series}. This is shown in Figure~\ref{fig:H9_benford_ave_vs_theor}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{H9_benford_examples.pdf}
-    \caption{Some of Benford's examples}
-    \label{fig:H9_benford_examples}
+\centering
+\includegraphics[width=1\textwidth]{H9_benford_ave_vs_theor.pdf}
+\caption{Average observed and theoretical first-digit distributions}
+\label{fig:H9_benford_ave_vs_theor}
 \end{figure}
 
-\bigskip
-The various datasets (to a greater or lesser extent) show the same pattern as the Benford distribution. Subsequently, Benford performed the same control for a combination of the datasets (see "Average" in Table \ref{tab:benford_series}). This is shown in Figure 11.5.
+The combined dataset was found to fit the Benford distribution even better than many of the individual datasets. Benford's research therefore illustrates that, for first-digit analysis, it can be meaningful to combine data from different sources, provided that the underlying data are suitable for Benford analysis.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{H9_benford_ave_vs_theor.pdf}
-    \caption{Observed and Theoretical First-Digit Distributions}
-    \label{fig:H9_benford_ave_vs_theor}
-\end{figure}
-
-
-The combination of datasets was found to fit the Benford distribution even better than the individual datasets. Benford's research further demonstrated that when controlling the first digit of datasets, there was no issue with combining ``apples and oranges'' (i.e., different datasets).
-It is also possible to check for irregularities in the second and third digits of numbers. This will be revisited in Section 11.3.1.
+It is also possible to check for irregularities in the second and third digits of numbers. This will be revisited in Section~\ref{sec:further_digit_analysis}.
 
 Checking whether figures comply with Benford's Law is a form of digit analysis and is an example of \textit{data mining}.
 
@@ -488,7 +485,7 @@ If a population contains both positive and negative values, the positive and
 negative observations are usually analysed separately because they may arise
 from different generating processes.
 
-\bigskip
+\medskip
 Consider the inventory data set introduced in the \textit{Case: Inventory
 List} (Table~\ref{tab:inventories_first_digits}), which contains
 $n=300$ observations. We use the nine-step approach from Section \ref{sec:the_nine_step_approach} to investigate the data.
@@ -501,53 +498,49 @@ of first digits is consistent with Benford's Law.
 \subsection{Hypotheses}
 
 Let $\pi_i$ denote the probability that the first digit is equal to $i$. Under Benford's Law,
+
 \begin{equation*}
 \begin{aligned}
-    (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669,\,0.0580,\, \\
-    &0.0512,\,0.0458).
+(\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010, 0.1761, 0.1249, 0.0969, 0.0792, 0.0669, 0.0580, \\
+&0.0512, 0.0458).
 \end{aligned}
 \end{equation*}
 The hypotheses for the chi-square goodness-of-fit test are
-
 \begin{equation*}
 \begin{aligned}
-    H_0 : (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669, \\
-    &\,0.0580,\,0.0512,\,0.0458).
+H_0 : (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010, 0.1761, 0.1249, 0.0969, 0.0792, \\
+&0.0669, 0.0580, 0.0512, 0.0458),
 \end{aligned}
 \end{equation*}
-
+and
 \begin{equation*}
 \begin{aligned}
-    H_0 : (\pi_1,\pi_2,\ldots,\pi_9) \neq (&0.3010,\,0.1761,\,0.1249,\,0.0969,\,0.0792,\,0.0669, \\
-    &\,0.0580,\,0.0512,\,0.0458).
+H_0 : (\pi_1,\pi_2,\ldots,\pi_9) \neq (&0.3010, 0.1761, 0.1249, 0.0969, 0.0792, \\
+&0.0669, 0.0580, 0.0512, 0.0458),
 \end{aligned}
 \end{equation*}
-
 In words,
-
 \begin{equation*}
 \begin{aligned}
 H_0 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data follows } \\
 &\hspace{0.5em} \text{Benford's Law,} \\
 H_1 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data does not follow} \\
-&\hspace{0.5em} \text{Benford's Law. }
+&\hspace{0.5em} \text{Benford's Law.}
 \end{aligned}
 \end{equation*}
 
 \subsection{Statistical assumptions}
 
-It is assumed that the first digits of the values of the inventoru items are the result of a natural process.
+It is assumed that the first digits of the values of the inventory items are the result of a natural process.
 
 The expected frequencies are obtained by multiplying the Benford probabilities by the sample size. 
-The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies}.
-
+The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies},
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lrrrrrrrrr@{}}
 
 \toprule
 \parbox[t]{1 cm}{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
 \midrule
-
 $O_i$ & 86 & 48 & 23 & 32 & 24 & 36 & 19 & 18 & 14 \\
 $E_i = n.P(i)$ & 90.3 & 52.8 & 37.5 & 29.1 & 23.8 & 20.1 & 17.4 & 15.3 & 13.7  \\
 \bottomrule
@@ -555,15 +548,13 @@ $E_i = n.P(i)$ & 90.3 & 52.8 & 37.5 & 29.1 & 23.8 & 20.1 & 17.4 & 15.3 & 13.7  \
 \caption{Observed and expected first-digit frequencies}
 \label{tab:observed_and_expected_frequencies}
 \end{table}
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1\textwidth]{H9_inventor_list.pdf}
     \caption{Observed and expected frequencies of first digits in inventory list}
     \label{fig:H9_inventory_list}
 \end{figure}
-
-The observed and expected frequencies are displayed graphically in Figure~\ref{fig:H9_inventory_list}. 
+and displayed graphically in Figure~\ref{fig:H9_inventory_list}. 
 Visual inspection suggests some differences between the two distributions. 
 The chi-square goodness-of-fit test is used to determine whether these differences are large enough to be statistically significant.
 
@@ -581,8 +572,6 @@ where \(O_i\) denotes the observed frequency of first digit \(i\) and
 The statistic measures the overall discrepancy between the observed and expected distributions. 
 Large values of \(\chi^2\) indicate that the observed frequencies differ substantially from those predicted by Benford's Law.
 The test statistic $\chi^2$ follows a chi-squared distribution with $df = 8$ degrees of freedom.
-
-
 
 \subsection{Derivation of the distribution of the test statistic}
 
@@ -614,7 +603,7 @@ tabular form, as shown in Table~\ref{tab:chi_square_calculation}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{lcccc}
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \textbf{Digit} &
 \(O_i\) &
@@ -622,28 +611,28 @@ tabular form, as shown in Table~\ref{tab:chi_square_calculation}.
 \((O_i-E_i)^2\) &
 \(\frac{(O_i-E_i)^2}{E_i}\) \\
 \midrule
-1 & 86 & 90.31 & 18.58 & 0.21 \\
-2 & 48 & 52.83 & 23.33 & 0.44 \\
-3 & 23 & 37.48 & 209.67 & 5.59 \\
-4 & 32 & 29.07 & 8.58 & 0.30 \\
+1 & 86 & 90.31 & 18.57 & 0.21 \\
+2 & 48 & 52.83 & 23.30 & 0.44 \\
+3 & 23 & 37.48 & 209.72 & 5.60 \\
+4 & 32 & 29.07 & 8.57 & 0.29 \\
 5 & 24 & 23.75 & 0.06 & 0.00 \\
-6 & 36 & 20.08 & 253.45 & 12.62 \\
-7 & 19 & 17.40 & 2.56 & 0.15 \\
-8 & 18 & 15.35 & 7.02 & 0.46 \\
+6 & 36 & 20.08 & 253.32 & 12.61 \\
+7 & 19 & 17.40 & 2.57 & 0.15 \\
+8 & 18 & 15.35 & 7.05 & 0.46 \\
 9 & 14 & 13.73 & 0.07 & 0.01 \\
 \cmidrule{1-5}
-\textbf{Total} & 300 & 300.00 & & \(\chi^2 = 19.80\) \\
+\textbf{Total} & 300 & 300.00 & & \(\chi^2 = 19.77\) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Calculation of the chi-square test statistic}
 \label{tab:chi_square_calculation}
 \end{table}
 
-The final test statistic is $\chi^2 = 19.80$.
+\noindent The final test statistic is $\chi^2 = 19.77$.
 
 \subsection*{Conclusion}
 
-Because $\chi^2 = 19.80 > 15.51$, the test statistic falls within the rejection region. Therefore, the null hypothesis is rejected at the 5\% significance level.
+Because $\chi^2 = 19.77 > 15.51$, the test statistic falls within the rejection region. Therefore, the null hypothesis is rejected at the 5\% significance level.
 
 The data provide sufficient statistical evidence to conclude that the
 distribution of first digits in the inventory data differs from the
@@ -655,16 +644,9 @@ The source of the discrepancy must therefore be investigated further.
 
 \subsection{Identifying Sources of Deviation}
 
-An advantage of the chi-square statistic is that its individual components
-can be examined separately. Each quantity
+An advantage of the chi-square statistic is that its individual components can be examined separately. Each quantity $(O_i-E_i)^2/E_i$ represents the contribution of digit \(i\) to the overall test statistic.
 
-\[
-\frac{(O_i-E_i)^2}{E_i}
-\]
-
-represents the contribution of digit \(i\) to the overall test statistic.
-
-\bigskip
+\medskip
 Table~\ref{tab:chi_square_calculation} shows that most of the chi-square value is generated by the digits 6 and 3. 
 Their contributions are 12.62 and 5.59, respectively. 
 Together they account for more than \(90\%\) of the total test statistic.
@@ -673,135 +655,717 @@ A closer inspection reveals that numbers beginning with the digit 6 occur substa
 
 From an auditing perspective, excessive frequencies are often of greater interest than deficient frequencies. Consequently, the unusually high number of observations beginning with the digit 6 would normally receive priority for further investigation.
 
-\section{Discrete Uniform Distribution}
+\section{Further Digit Analysis}
+\label{sec:further_digit_analysis}
 
-A natural extension of the first-digit analysis is to examine the first two digits rather than only the leading digit. Such an analysis may reveal whether any excess frequency is concentrated in particular ranges (e.g., 60--69) or even in specific two-digit combinations.
+The first-digit analysis identifies whether the leading digits of a dataset are consistent with Benford's Law. A natural extension is to examine the first two digits rather than only the first digit. Such an analysis may reveal whether any excess frequency is concentrated in particular ranges, such as 60--69, or even in specific two-digit combinations.
 
-For the first two digits, Benford's Law predicts that the probability of observing the two-digit combination \(ij\) is
+Let (D) denote the first-two-digit number, where
+
+\begin{equation*}
+D = 10,11,12,\ldots,99.
+\end{equation*}
+
+Under Benford's Law, the probability of observing first-two-digit number (d) is
 
 \begin{equation}
-P(ij)
+P(D=d)
 =
 \log_{10}
 \left(
-1+\frac{1}{ij}
-\right), 
+1+\frac{1}{d}
+\right),
+\qquad d=10,11,\ldots,99.
 \end{equation}
-where
 
-\begin{equation*}
-    ij = 10,11,12,\ldots,99.
-\end{equation*}
+This more detailed analysis may help identify the specific values responsible for any departure from Benford's Law. However, first-two-digit analysis has 90 possible categories. As a result, it usually requires a much larger dataset than first-digit analysis.
 
-This more detailed analysis may help identify the specific values responsible for any departure from Benford's Law.
+It is also possible to examine individual digit positions, such as the second or third digit. Figure~\ref{fig:H9_benford-digit-distributions} illustrates the theoretical distributions of the first, second, and third digits under Benford's Law.
 
-Instead of analysing the leading digits, it is also possible to examine individual digit positions, such as the second or third digit. Figure~%\ref{} 
-illustrates the theoretical distributions of the first, second, and third digits under Benford's Law.
+\begin{figure}[thbp]
+\centering
+\includegraphics[width=1\textwidth]{H9_benford-digit-distributions.pdf}
+\caption{Probability distributions for the first, second, and third digits according to Benford's Law}
+\label{fig:H9_benford-digit-distributions}
+\end{figure}
 
-
-
-% \begin{center}
-% \includegraphics[width=0.7\textwidth]{benford-digit-distributions.png}
-% \captionof{figure}{Probability Distributions for the First, Second, and Third Digits According to Benford's Law}
-% \end{center}
-
-From Figure~%\ref{} 
-it can be seen that the distribution of the third digit, and to a lesser extent the second digit, is considerably flatter than that of the first digit. For practical purposes, these digits are often approximated by a \textbf{uniform distribution}.\footnote{The assumption of a uniform distribution for the second or third digit is adopted here for educational purposes. Under Benford's Law, neither the second-digit nor the third-digit distribution is exactly uniform.}
-
-Alternatively, one may analyse specific digit positions in monetary amounts, such as the tens-of-euros or units-of-euros positions.
+From Figure~\ref{fig:H9_benford-digit-distributions}, it can be seen that the distribution of the third digit, and to a lesser extent the second digit, is considerably flatter than that of the first digit. For practical purposes, these digits are sometimes approximated by a \textbf{uniform distribution}.\footnote{The assumption of a uniform distribution for the second or third digit is adopted here for educational purposes. Under Benford's Law, neither the second-digit nor the third-digit distribution is exactly uniform.}
 
 Compared with a first-digit Benford analysis, two important differences arise:
 
 \begin{itemize}
-    \item The digit zero may occur.
-    \item All digits occur with approximately equal probability.
+\item The digit zero may occur.
+\item All digits occur with approximately equal probability.
 \end{itemize}
 
-\subsubsection*{Hypotheses}
-
-The results are presented in Table \ref{tab:observed_and_expected_frequencies_uniform}.
+\subsection{The Discrete Uniform Distribution}
 
 When each digit occurs with equal probability, the distribution is referred to as a \textbf{uniform distribution}. Since only integer values can occur, the appropriate model is a \textbf{discrete uniform distribution}.
 
-For the \textit{Inventory List} case, the digits in the tens-of-euros and units-of-euros positions were recorded and pooled. The resulting frequencies were tested against the null hypothesis stated in Exercise~%\ref{}
-, namely that the digits follow a discrete uniform distribution.
+For the \textit{Inventory List} case, the digits in the tens-of-euros and units-of-euros positions were recorded and pooled. This gives a total of 600 digit observations. The resulting frequencies are
+
+\begin{equation*}
+O_i = {39,69,60,72,70,58,65,55,59,53},
+\end{equation*}
+for digits (0,1,2,\ldots,9), respectively. These frequencies are tested against the null hypothesis that the digits follow a discrete uniform distribution.
+
+\subsubsection*{Hypotheses}
+
+Let $\pi_i$ denote the probability that a digit is equal to $i$, where $i=0,1,\ldots,9$. Under the discrete uniform distribution,
+
+\begin{equation*}
+\pi_0=\pi_1=\cdots=\pi_9=0.10.
+\end{equation*}
+
+The hypotheses are
+
+\begin{equation*}
+\begin{aligned}
+H_0: & \text{The pooled digit frequencies follow a discrete uniform} \\
+&\text{distribution,} \\
+H_1: & \text{The pooled digit frequencies do not follow a discrete uniform} \\
+&\text{distribution}
+\end{aligned}
+\end{equation*}
 
 The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies_uniform}.
 
 \begin{table}[htbp]
-    
-\begin{tabularx}{\textwidth}{@{}lYYYYYYYYYYX@{}}
-
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYYYYY@{}}
 \toprule
 \parbox[t]{1.3 cm}{Digit} & 0 & 1 & 2 & 3 & \ldots & 9 & Tot.\\
 \midrule
-
 $O_i$ & 39 & 69 & 60 & 72 & \ldots & 53 & 600\\
-$E_i$ & 60 & 60 & 60 & 60 & \ldots & 60 & 600 \\
-$(O_i - E_i)^2$ & 441 & 81 & 0 & 144 & \ldots & 49 \\
-$(O_i - E_i)^2 / {E_i}$ & 7.35 & 1.35 & 0.00 & 2.40 & \ldots & 0.82 & 14.50 \\
+$E_i$ & 60 & 60 & 60 & 60 & \ldots & 60 & 600\\
+$(O_i - E_i)^2$ & 441 & 81 & 0 & 144 & \ldots & 49 & \\
+$(O_i - E_i)^2 / E_i$ & 7.35 & 1.35 & 0.00 & 2.40 & \ldots & 0.82 & 14.50\\
 \bottomrule
 \end{tabularx}
-\caption{Observed and expected second and third-digit frequencies}
+\caption{Observed and expected second- and third-digit frequencies}
 \label{tab:observed_and_expected_frequencies_uniform}
 \end{table}
 
+\medskip
+The minimum sample size required for the chi-square goodness-of-fit test follows from the condition that each expected frequency must satisfy $E_i \geq 5$. Under a discrete uniform distribution, \(\pi_i = 0.1\) for each of the ten possible digits. Since $E_i = n\pi_i$, the requirement $E_i \geq 5$ implies
 
-The minimum sample size required for the chi-square goodness-of-fit test follows from the condition that each expected frequency must satisfy \(E_i \geq 5\). Under a discrete uniform distribution,
-
-\[
-\pi_i = 0.1,
-\]
-for each of the ten possible digits. Since
-
-\[
-E_i = n\pi_i,
-\]
-the requirement \(E_i \geq 5\) implies
-
-\[
+\begin{equation*}
 n \geq \frac{5}{0.1}=50.
-\]
+\end{equation*}
 
 Thus, the minimum sample size is 50 observations, which is approximately half of the sample size typically required for a first-digit Benford analysis. This may be advantageous when analysing relatively small datasets.
 
-\bigskip
 The chi-square test statistic computed from the frequencies in Table~\ref{tab:observed_and_expected_frequencies_uniform} is
 
-\[
+\begin{equation*}
 \chi^2 = 14.50.
-\]
-
+\end{equation*}
 With ten categories and no estimated parameters, the number of degrees of freedom is
 
-\[
+\begin{equation*}
 df = 10-1 = 9.
-\]
-
+\end{equation*}
 At the 5\% significance level, the critical value is
 
-\[
+\begin{equation*}
 \chi^2_{0.05,9}=16.92.
-\]
+\end{equation*}
+The corresponding \(p\)-value is
 
-The corresponding $p$-value is
-
-\[
+\begin{equation*}
 p = 0.106.
-\]
+\end{equation*}
 
 \subsubsection*{Conclusion}
 
 Because
 
-\[
+\begin{equation*}
 \chi^2 = 14.50 < 16.92,
-\]
-
+\end{equation*}
 the test statistic does not fall within the critical region. Consequently, the null hypothesis is not rejected at the 5\% significance level.
 
-The observed digit frequencies do not provide sufficient evidence to conclude that the distribution differs from a discrete uniform distribution. However, failure to reject the null hypothesis should not be interpreted as proof that the distribution is uniform; the possibility of a Type~II error (\(\beta\)-risk) remains.
+The observed digit frequencies do not provide sufficient evidence to conclude that the distribution differs from a discrete uniform distribution. However, failure to reject the null hypothesis should not be interpreted as proof that the distribution is uniform; the possibility of a Type~II error, or $\beta$-risk, remains.
 
-The $p$-value of 0.106 indicates that the observed deviations from uniformity are consistent with random sampling variation.
+The \(p\)-value of 0.106 indicates that the observed deviations from uniformity are consistent with random sampling variation.
+
+\section{Normal Distribution}
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=ada_blue!10,innerbottommargin=0cm, innerleftmargin=0.3cm]
+\sloppy
+\section*{Case: Normality of residuals}
+The chi-square goodness-of-fit test can, in principle, be applied to many different distributions, including continuous distributions. In Chapter~\ref{cha:introduction_to_regression_analysis}, the normality of the residuals was investigated using the Shapiro-Wilk test. Figure~\ref{fig:H9_hist_normalized_residuals} shows the histogram of the standardized residuals of the \ttblue{mod.3} model.
+
+The chi-square goodness-of-fit test can also be used to compare the observed distribution of the residuals with the expected distribution under normality. In this case, the example is mainly intended to illustrate the mechanics of the test for a continuous distribution.
+
+\section*{Objective}
+Test at the 5\% significance level whether the standardized residuals are normally distributed, using the chi-square goodness-of-fit test.
+
+\end{mdframed}
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{H7_hist_standardized_residuals_mod3.pdf}
+\caption{Histogram of standardized residuals of the \ttblue{mod.3} model}
+\label{fig:H9_hist_normalized_residuals}
+\end{figure}
+
+To perform the chi-square test, the residuals must be divided into classes. A simple rule of thumb for choosing the number of classes is to set the number of classes approximately equal to the square root of the number of observations:
+
+\begin{equation*}
+\text{Number of classes} \approx \sqrt{\text{Number of observations}}.
+\end{equation*}
+For the \textit{Case: Normality of residuals}, this gives
+
+\begin{equation*}
+\sqrt{36}=6.
+\end{equation*}
+The residuals range from a minimum of (-2.51122) to a maximum of (1.613923). The range of the residuals is therefore
+
+\begin{equation*}
+1.613923 - (-2.51122) = 4.125143.
+\end{equation*}
+Dividing this range into approximately six classes gives a class width of
+
+\begin{equation*}
+\frac{4.125143}{6} \approx 0.6891742.
+\end{equation*}
+
+A practical class width of 0.7 is chosen. The observed frequencies within the six original classes are shown in Table~\ref{tab:observations_divided_into_6_classes}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Class} & $(O_i)$ \\
+\midrule
+$(-2.55 \leq X < -1.85)$ & 2 \\
+$(-1.85 \leq X < -1.15)$ & 1 \\
+$(-1.15 \leq X < -0.45)$ & 10 \\
+$(-0.45 \leq X < 0.25)$ & 10 \\
+$(0.25 \leq X < 0.95)$ & 5 \\
+$(0.95 \leq X < 1.65)$ & 8 \\
+\cmidrule{1-2}
+\textbf{Total} & 36 \\
+\bottomrule
+\end{tabular}
+\caption{Observations divided into six classes}
+\label{tab:observations_divided_into_6_classes}
+\end{table}
+
+\subsection{Research question}
+
+The objective is to determine whether the standardized residuals of the \ttblue{mod.3} regression model are consistent with a normal distribution.
+
+\subsection{Hypotheses}
+
+Let $X$ denote a standardized residual. Under the null hypothesis, the standardized residuals follow a standard normal distribution:
+
+\begin{equation*}
+X \sim N(0,1).
+\end{equation*}
+
+The hypotheses for the chi-square goodness-of-fit test are therefore
+
+\begin{equation*}
+\begin{aligned}
+H_0 &: \text{The standardized residuals are normally distributed,} \\
+H_1 &: \text{The standardized residuals are not normally distributed.}
+\end{aligned}
+\end{equation*}
+
+More specifically, under $H_0$, the probability that a standardized residual falls within a particular class is determined by the standard normal distribution.
+
+\subsection{Statistical assumptions}
+
+The chi-square goodness-of-fit test requires that the observations can be regarded as independent and that the expected frequency in each class is sufficiently large. A commonly used rule of thumb is that the expected frequency in each class should be at least 5.
+
+In the present case, this condition is not satisfied for all classes, especially in the tails of the distribution. In addition, residuals from a regression model are diagnostic quantities rather than ordinary independent observations. Therefore, the calculation below should be regarded primarily as an educational illustration of how the chi-square goodness-of-fit test can be applied to a continuous distribution. In practice, tests such as the Shapiro-Wilk test, together with graphical methods such as a histogram or a normal Q-Q plot, are usually more appropriate for assessing the normality of regression residuals in small samples.
+
+\subsection{Expected frequencies}
+
+The six original classes are retained, and open-ended tail classes are added on both sides. This ensures that the class probabilities under the normal distribution sum to one.
+
+The class probabilities are calculated from the cumulative distribution function of the standard normal distribution, denoted by $\Phi(\cdot)$. For example,
+
+\begin{equation*}
+P(-1.15 \leq X < -0.45)
+=
+\Phi(-0.45)-\Phi(-1.15).
+\end{equation*}
+The expected frequency in class (i) is then
+
+\begin{equation*}
+E_i = n\pi_i,
+\end{equation*}
+where $n=36$ and $\pi_i$ is the probability of falling in class $i$ under the standard normal distribution.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYY@{}}
+\toprule
+\textbf{Class} & $(\pi_i)$ & $(O_i)$ & $(E_i = n\pi_i)$ \\
+\midrule
+$(X < -2.55)$              & 0.0054 & 0  & 0.19 \\
+$(-2.55 \leq X < -1.85)$  & 0.0268 & 2  & 0.96 \\
+$(-1.85 \leq X < -1.15)$  & 0.0929 & 1  & 3.34 \\
+$(-1.15 \leq X < -0.45)$  & 0.2013 & 10 & 7.25 \\
+$(-0.45 \leq X < 0.25)$   & 0.2724 & 10 & 9.80 \\
+$(0.25 \leq X < 0.95)$    & 0.2302 & 5  & 8.29 \\
+$(0.95 \leq X < 1.65)$    & 0.1216 & 8  & 4.38 \\
+$(X \geq 1.65)$            & 0.0495 & 0  & 1.78 \\
+\cmidrule{1-4}
+\textbf{Total}             & 1.0000 & 36 & 36.00 \\
+\bottomrule
+\end{tabularx}
+\caption{Observed and expected frequencies of standardized residuals under the standard normal distribution}
+\label{tab:observed_expected_residuals_normal}
+\end{table}
+
+\subsection{Calculation of the test statistic}
+
+The chi-square goodness-of-fit test statistic is calculated as
+
+\begin{equation*}
+\chi^2
+=
+\sum_{i=1}^{8}
+\frac{(O_i-E_i)^2}{E_i},
+\end{equation*}
+where $O_i$ denotes the observed frequency in class $i$, and $E_i$ denotes the corresponding expected frequency under the standard normal distribution. The calculation is shown in Table~\ref{tab:chi_square_residuals_normal}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
+\toprule
+\textbf{Class} &
+$(O_i)$ &
+$(E_i)$ &
+$((O_i-E_i)^2)$ &
+$(\frac{(O_i-E_i)^2}{E_i})$ \\
+\midrule
+$(X < -2.55)$              & 0  & 0.19 & 0.04  & 0.19 \\
+$(-2.55 \leq X < -1.85)$  & 2  & 0.96 & 1.07  & 1.11 \\
+$(-1.85 \leq X < -1.15)$  & 1  & 3.34 & 5.50  & 1.64 \\
+$(-1.15 \leq X < -0.45)$  & 10 & 7.25 & 7.58  & 1.05 \\
+$(-0.45 \leq X < 0.25)$   & 10 & 9.80 & 0.04  & 0.00 \\
+$(0.25 \leq X < 0.95)$    & 5  & 8.29 & 10.82 & 1.30 \\
+$(0.95 \leq X < 1.65)$    & 8  & 4.38 & 13.13 & 3.00 \\
+$(X \geq 1.65)$            & 0  & 1.78 & 3.17  & 1.78 \\
+\cmidrule{1-5}
+\textbf{Total}             & 36 & 36.00 &       & $(\chi^2 = 10.09)$ \\
+\bottomrule
+\end{tabularx}
+\caption{Calculation of the chi-square test statistic for normality of standardized residuals}
+\label{tab:chi_square_residuals_normal}
+\end{table}
+The resulting test statistic is
+
+\begin{equation*}
+\chi^2 = 10.09.
+\end{equation*}
+
+\subsection{Significance level}
+
+The test is performed at the 5\% significance level:
+
+\begin{equation*}
+\alpha = 0.05.
+\end{equation*}
+
+\subsection{Critical region}
+
+There are eight classes. For this introductory illustration, the standard normal distribution is treated as fully specified. The number of degrees of freedom is therefore
+
+\begin{equation*}
+df = k-1 = 8-1 = 7.
+\end{equation*}
+
+If parameters such as the mean and standard deviation were estimated specifically for the goodness-of-fit test, the degrees of freedom would have to be reduced accordingly.
+
+At the 5\% significance level, the critical value is
+
+\begin{equation*}
+\chi^2_{0.05,7} = 14.07.
+\end{equation*}
+
+The rejection region therefore consists of values of the test statistic greater than 14.07.
+
+\subsection*{Conclusion}
+
+Because
+
+\begin{equation*}
+\chi^2 = 10.09 < 14.07,
+\end{equation*}
+the test statistic does not fall within the rejection region. Therefore, the null hypothesis is not rejected at the 5\% significance level.
+
+The data do not provide sufficient statistical evidence to conclude that the standardized residuals deviate from a normal distribution.
+
+\medskip
+The corresponding \(p\)-value is approximately
+
+\begin{equation*}
+p = 0.184.
+\end{equation*}
+
+This \(p\)-value indicates that the observed differences between the empirical class frequencies and the expected frequencies under the normal distribution are not statistically significant at the 5\% level.
+
+However, this conclusion should be interpreted with caution. Several expected fre\-quencies are smaller than 5, which means that the usual large-sample approximation underlying the chi-square goodness-of-fit test is weak in this example. The result should therefore be considered alongside the histogram, a normal Q-Q plot, and the Shapiro-Wilk test.
+
+\medskip
+The examples in this chapter all follow the same basic logic. First, specify an expected distribution. Second, compare the observed fre\-quencies with the expected frequencies. Third, determine whether the deviations are larger than would reasonably be expected from random sampling variation alone. This logic underlies many practical audit ana\-lytics procedures.
+
+\section{Other Applications of the Chi-Square Distribution}
+
+In this chapter, the chi-square distribution has mainly been used for goodness-of-fit tests. In such tests, observed frequencies are compared with expected frequencies under a specified theoretical distribution. The same general idea also appears in several other statistical applications.
+
+\paragraph{Testing the relationship between two categorical variables.} The chi-square test can be used to examine whether two categorical variables are statistically independent. For example, an auditor may want to know whether the type of error found in a transaction is related to the department in which the transaction was processed. Under the null hypothesis, the two variables are independent. A significant result indicates that there is evidence of an association between the variables, although it does not prove a causal relationship.
+
+\paragraph{Testing whether several groups have the same distribution.} A closely related application is the test of homogeneity. Here the question is whether different groups have the same distribution over a number of categories. For example, an auditor may compare the distribution of error types across several branches or business units. The calculation is similar to the chi-square test of independence, but the interpretation is different: the focus is on whether the categorical distribution is the same across groups.
+
+\paragraph{Comparing a sample with a known population composition.}
+The chi-square goodness-of-fit test can also be used to compare the composition of a sample with known proportions in the population. For example, suppose that 25% of all inventory items are located in the New York tri-state area and 75% are located elsewhere. If a sample is drawn from the inventory population, the chi-square test can be used to assess whether the sample composition differs significantly from these known population proportions. Such a test may be useful as a check on the composition of a sample. However, it does not prove that the sample is representative in every respect. Representativeness also depends on the way in which the sample was selected and on other relevant characteristics of the population.
+
+\paragraph{Constructing confidence intervals for a variance or standard deviation.} The chi-square distribution can also be used to construct confidence intervals for the variance or standard deviation of a normally distributed quantitative variable. This application is mathematically important, but it is less common in the practical audit settings discussed in this chapter. It also requires the assumption that the underlying variable is normally distributed.
+
+\medskip
+The principles discussed in this chapter are also relevant for modern audit practice. Fraud detection and anomaly detection software often starts from a similar idea: compare what is observed in the data with what would normally be expected. The expected pattern may be based on Benford's Law, on historical data, on business rules, or on statistical models. Observations that deviate strongly from the expected pattern are not automatically errors or fraud, but they may indicate transactions, accounts, or processes that deserve further audit attention.
+
+In all these applications, the chi-square distribution is used to evaluate whether the differences between observed and expected frequencies, or between an observed and hypothesized amount of variation, are larger than would normally be expected due to random sampling variation alone.
+
+\section{Workshop R}
+
+The following exercises are designed for use in the accompanying R Notebook.
+They allow you to reproduce the calculations in this chapter, explore the
+effect of changing assumptions, and interpret the results in an audit context.
+
+\begin{exercise}
+
+\textbf{Goodness of Fit as a Comparison Between Observed and Expected Frequencies}
+
+\medskip
+\noindent The baseline customer satisfaction survey results are:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{baseline <- c(250, 100, 275)}
+\end{Verbatim}
+That makes the expected probabilites:
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(expected_prob <- baseline / sum(baseline))}
+\textcolor{ada_light_blue}{0.40 0.16 0.44}
+\end{Verbatim}
+The observed frequencies in the follow-up study of the client satisfaction survey in Table \ref{tab:client_satisfaction_followup} are stored as follows:
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{observed <- c(15, 12, 13)}
+\end{Verbatim}
+The expected frequencies are:
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(expected <- sum(observed) * expected_prob)}
+\textcolor{ada_light_blue}{16.0  6.4 17.6}
+\end{Verbatim}
+The difference between observed and expected frequencies is
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{observed - expected}
+\textcolor{ada_light_blue}{-1.0  5.6 -4.6}
+\end{Verbatim}
+The chi-square test statistic is
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(chi_sq <- sum((observed - expected)^2 / expected))}
+\textcolor{ada_light_blue}{6.164773}
+\end{Verbatim}
+The individual contributions are
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(contributions <- (observed - expected)^2 / expected)}
+\textcolor{ada_light_blue}{0.062500 4.900000 1.202273}
+\end{Verbatim}
+Use the built-in function to check your result
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(test_result <- chisq.test(x = observed, p = expected_prob))}
+\textcolor{ada_light_blue}{ Chi-squared test for given probabilities}
+\textcolor{ada_light_blue}{ data:  observed}
+\textcolor{ada_light_blue}{ X-squared = 6.1648, df = 2, p-value = 0.04585}
+\end{Verbatim}
+The number of categories in the survey is
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(k <- length(observed))}
+\textcolor{ada_light_blue}{3}
+\end{Verbatim}
+The number of degrees of freedom is
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(df <- k - 1)}
+\textcolor{ada_light_blue}{2}
+\end{Verbatim}
+The critical value is
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(critical_value <- qchisq(0.95, df = df))}
+\textcolor{ada_light_blue}{5.991465}
+\end{Verbatim}
+The p-value of the test is
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(p_value <- pchisq(chi_sq, df = df, lower.tail = FALSE))}
+\textcolor{ada_light_blue}{0.04584971}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+
+\textbf{Benford’s Law}
+
+\medskip
+\noindent The Benford probabilities for the first digit are
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{digits <- 1:9}
+\textcolor{ada_blue}{(benford_prob <- log10((digits + 1) / digits))}
+\textcolor{ada_light_blue}{0.30103000 0.17609126 0.12493874 0.09691001 0.07918125 0.06694679}
+\textcolor{ada_light_blue}{0.05799195 0.05115252 0.04575749}
+\end{Verbatim}
+Show the probabilities in a bar chart.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{benford <- data.frame(}
+\textcolor{ada_blue}{  Digit = factor(digits, levels = digits),}
+\textcolor{ada_blue}{  Probability = benford_prob}
+\textcolor{ada_blue}{)}
+\textcolor{ada_blue}{ggplot(benford, aes(x = Digit, y = Probability)) +}
+\textcolor{ada_blue}{  geom_col(fill = "#00338D", width = 0.7) +}
+\textcolor{ada_blue}{  scale_y_continuous(}
+\textcolor{ada_blue}{   limits = c(0, 0.35),}
+\textcolor{ada_blue}{    breaks = seq(0, 0.35, by = 0.05),}
+\textcolor{ada_blue}{    labels = scales::percent_format(accuracy = 1)}
+\textcolor{ada_blue}{  ) +}
+\textcolor{ada_blue}{  labs(}
+\textcolor{ada_blue}{    x = "First digit",}
+\textcolor{ada_blue}{    y = "Probability"}
+\textcolor{ada_blue}{  )}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+
+\textbf{Applying Benford’s Law to inventory data}
+
+\medskip
+\noindent The observed first-digit frequencies from the inventory list are:
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(inv_observed <- c(86, 48, 23, 32, 24, 36, 19, 18, 14))}
+\textcolor{ada_light_blue}{86 48 23 32 24 36 19 18 14}
+\textcolor{ada_blue}{(inv_expected <- sum(inv_observed) * benford_prob)}
+\textcolor{ada_light_blue}{90.30900 52.82738 37.48162 29.07300 23.75437 20.08404 17.39758 }
+\textcolor{ada_light_blue}{15.34576 13.72725}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{}
+\textcolor{ada_light_blue}{}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+
+\textbf{Testing the inventory data}
+
+\medskip
+\noindent Manual calculation of the chi-square test statistic.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(inv_chi_sq <- sum((inv\_observed - inv\_expected)^2 / inv\_expected))}
+\textcolor{ada_light_blue}{19.76415}
+\end{Verbatim}
+Use the built-in function to check your result
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(inv_test_result <- chisq.test(x = inv\_observed, p = benford_prob))}
+\textcolor{ada_light_blue}{Chi-squared test for given probabilities}
+\textcolor{ada_light_blue}{data:  inv_observed}
+\textcolor{ada_light_blue}{X-squared = 19.764, df = 8, p-value = 0.01127}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+
+\textbf{Identify the main sources of deviation}
+
+\medskip
+\noindent For the inventory first-digit data, calculate the contribution of each digit to the chi-square statistic:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{contribution <- (inv\_observed - inv\_expected)^2 / inv\_expected}
+\textcolor{ada_blue}{(contr <- data.frame(digit = digits, contribution = contribution))}
+\textcolor{ada_light_blue}{  digit contribution}
+\textcolor{ada_light_blue}{1     1  0.205599332}
+\textcolor{ada_light_blue}{2     2  0.441126867}
+\textcolor{ada_light_blue}{3     3  5.595204817}
+\textcolor{ada_light_blue}{4     4  0.294682523}
+\textcolor{ada_light_blue}{5     5  0.002539836}
+\textcolor{ada_light_blue}{6     6 12.612896657}
+\textcolor{ada_light_blue}{7     7  0.147591569}
+\textcolor{ada_light_blue}{8     8  0.459085038}
+\textcolor{ada_light_blue}{9     9  0.005419448}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+
+\textbf{Discrete uniform distribution}
+
+\noindent The pooled second- and third-digit frequencies from the inventory case are
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{inv2\_digits <- 0:9}
+\textcolor{ada_blue}{inv2\_observed <- c(39, 69, 60, 72, 70, 58, 65, 55, 59, 53)}
+\textcolor{ada_blue}{inv2\_expected_prob <- rep(0.10, 10)}
+\textcolor{ada_blue}{inv2\_expected <- sum(inv2\_observed) * inv2\_expected_prob}
+\end{Verbatim}
+Manual calculation of the chi-square test statistic.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(inv2_chi_sq <- sum((inv2\_observed - inv2\_expected)^2 / }
+\textcolor{ada_blue}{                     inv2\_expected))}
+\textcolor{ada_light_blue}{14.5}
+\end{Verbatim}
+Use the built-in function to check your result.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(inv2_test_result <- chisq.test(x = inv2\_observed, }
+\textcolor{ada_blue}{                                p = inv2\_expected_prob))}
+\textcolor{ada_light_blue}{ Chi-squared test for given probabilities}
+\textcolor{ada_light_blue}{data:  inv2\_observed}
+\textcolor{ada_light_blue}{X-squared = 14.5, df = 9, p-value = 0.1056}
+\end{Verbatim}
+
+\end{exercise}
+
+\begin{exercise}
+
+\textbf{Normality of residuals}
+
+\medskip
+\noindent The residuals from \ttblue{mod.3} are
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{mod3_res <- c(-1230927.1086, ..., -3345636.9793)}
+\end{Verbatim}
+Standardize the residuals
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{nres <- mod3_res / sd(mod3_res)}
+\textcolor{ada_blue}{model3 <- as.data.frame(nres)}
+\end{Verbatim}
+Divide the residuals into classes used in the chapter.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{breaks <- c(-2.55, -1.85, -1.15, -0.45, 0.25, 0.95, 1.65)}
+\textcolor{ada_blue}{(hist_nres <- ggplot(model3, aes(nres)) + }
+\textcolor{ada_blue}{  geom_histogram(aes(y = after_stat(density)),}
+\textcolor{ada_blue}{                 breaks = breaks,}
+\textcolor{ada_blue}{                 fill = "blue", color = "black") +}
+\textcolor{ada_blue}{  stat_function(fun = dnorm,}
+\textcolor{ada_blue}{                args = list(mean = mean(model3$nres),}
+\textcolor{ada_blue}{                            sd = sd(model3$nres)),}
+\textcolor{ada_blue}{                color = "red", size = 1))}
+\end{Verbatim}
+Divide the residuals into the classes.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{classes <- cut(}
+\textcolor{ada_blue}{  nres,}
+\textcolor{ada_blue}{  breaks = breaks,}
+\textcolor{ada_blue}{  right = FALSE,}
+\textcolor{ada_blue}{  include.lowest = TRUE}
+\textcolor{ada_blue}{)}
+\textcolor{ada_light_blue}{}
+\end{Verbatim}
+Save the observed frequencies as a vector.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{observed <- as.vector(table(classes))}
+\textcolor{ada_blue}{table(classes)}
+\textcolor{ada_light_blue}{classes}
+\textcolor{ada_light_blue}{[-2.55,-1.85) [-1.85,-1.15) [-1.15,-0.45)  [-0.45,0.25)   }
+\textcolor{ada_light_blue}{            2             1            10            10  }
+\textcolor{ada_light_blue}{[0.25,0.95)   [0.95,1.65] }
+\textcolor{ada_light_blue}{          5            8}
+\end{Verbatim}
+The expected probabilities under the standard normal distribution are the differences between the cumulative distribution function values.
+For example, \(P(-1.15 \leq X < -0.45) = \Phi(-0.45) - \Phi(-1.15)\).
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{(prob_normal <- diff(pnorm(breaks)))}
+\textcolor{ada_light_blue}{0.02677063 0.09291516 0.20128328 0.27235111 0.23023755 0.12158466}
+\end{Verbatim}
+Notice, however that
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{sum(prob_normal)}
+\textcolor{ada_light_blue}{0.9451424}
+\end{Verbatim}
+The probabilities do not sum to 1, because the normal distribution extends beyond the class boundaries used in the histogram. The missing probability is:
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{1 - sum(prob_normal)}
+\textcolor{ada_light_blue}{0.05485761}
+\end{Verbatim}
+Convert these probabilities into expected frequencies.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{n <- length(nres)}
+\textcolor{ada_blue}{(norm_expected <- n * prob_normal)}
+\textcolor{ada_light_blue}{0.9637426 3.3449458 7.2461982 9.8046398 8.2885517 4.3770477}
+\textcolor{ada_blue}{sum(norm_expected)}
+\textcolor{ada_light_blue}{34.02513}
+\end{Verbatim}
+The expected frequencies do not sum to 36, because the six classes do not cover the full normal distribution. This motivates adding open-ended tail classes for the chi-square goodness-of-fit test.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{breaks_chisq <- c(-Inf, breaks, Inf) }
+\textcolor{ada_blue}{classes_chisq <- cut(nres, breaks = breaks_chisq, right = FALSE, }
+\textcolor{ada_blue}{                     include.lowest = TRUE ) }
+\textcolor{ada_blue}{observed_chisq <- as.vector(table(classes_chisq)) }
+\textcolor{ada_blue}{prob_chisq <- diff(pnorm(breaks_chisq)) }
+\textcolor{ada_blue}{expected_chisq <- n * prob_chisq }
+\textcolor{ada_blue}{(result_chisq <- data.frame(Class = levels(classes_chisq), }
+\textcolor{ada_blue}{                            Observed = observed_chisq, }
+\textcolor{ada_blue}{                            Probability = round(prob_chisq, 4), }
+\textcolor{ada_blue}{                            Expected = round(expected_chisq, 2), }
+\textcolor{ada_blue}{                            Contribution = round((observed_chisq - }
+\textcolor{ada_blue}{                            expected_chisq)^2 / expected_chisq, 2) }
+\textcolor{ada_blue}{                            ) )}
+\textcolor{ada_light_blue}{          Class Observed Probability Expected Contribution}
+\textcolor{ada_light_blue}{1  [-Inf,-2.55)        0      0.0054     0.19         0.19}
+\textcolor{ada_light_blue}{2 [-2.55,-1.85)        2      0.0268     0.96         1.11}
+\textcolor{ada_light_blue}{3 [-1.85,-1.15)        1      0.0929     3.34         1.64}
+\textcolor{ada_light_blue}{4 [-1.15,-0.45)       10      0.2013     7.25         1.05}
+\textcolor{ada_light_blue}{5  [-0.45,0.25)       10      0.2724     9.80         0.00}
+\textcolor{ada_light_blue}{6   [0.25,0.95)        5      0.2302     8.29         1.30}
+\textcolor{ada_light_blue}{7   [0.95,1.65)        8      0.1216     4.38         3.00}
+\textcolor{ada_light_blue}{8   [1.65, Inf]        0      0.0495     1.78         1.78}
+\textcolor{ada_blue}{(chi_square <- sum((observed_chisq - expected_chisq)^2 / }
+\textcolor{ada_blue}{                    expected_chisq) )}
+\textcolor{ada_light_blue}{10.08697}
+\end{Verbatim}
+The histogram ignores the observations that would fall outside the chosen class limits, whereas the normal distribution extends to $-\infty$ and $\infty$.
+The missing probability corresponds to the two omitted tails $P(X < -2.55)$ and $X > 1.65$.
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{pnorm(-2.55)}
+\textcolor{ada_light_blue}{0.005386146}
+\textcolor{ada_blue}{1 - pnorm(1.65)}
+\textcolor{ada_light_blue}{0.04947147}
+\end{Verbatim}
+This naturally motivates why, for a proper chi-square goodness-of-fit test, one should add the two open-ended tail classes. It demonstrates that the chi-square test compares the entire theoretical distribution with the observed data, not just the portion shown in the histogram.
+\end{exercise}
+
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{}
+\textcolor{ada_light_blue}{}
+\end{Verbatim}
+
+
+
+
+
+
+
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \textcolor{ada_blue}{}
+% \textcolor{ada_light_blue}{}
+% \end{Verbatim}
+
+% \end{exercise}
+
+
+
 
 % chapter goodness_of_fit (end)
