@@ -2515,68 +2515,67 @@ AAG A.69 Once the stores have been identified, the auditor begins a further anal
 \subsection{Level of assurance obtained} % (fold)
 \label{sub:level_of_assurance_obtained}
 
-As highlighted in Step 9, the final conclusion of the hypothesis test hinges on whether the observed revenue total for the hold-out year falls inside or outside the critical region. 
-If the test statistic lies within this region, the recorded value is considered consistent with expectations and no further action is required. 
-However, if the test statistic falls outside the critical region, this does not immediately imply that a material misstatement has occurred. 
-Instead, it serves as a prompt for further examination, initiating the identification, investigation, and evaluation process described in Section \ref{sub:identification_investigation_and_evaluation}. 
-This additional scrutiny helps determine whether the deviation reflects a genuine misstatement, a model limitation, or other contextual factors.
+As highlighted in Step 9, the conclusion of the hypothesis test depends on whether the recorded revenue total for the hold-out year falls inside or outside the acceptable difference range. If the difference falls outside this range, this does not immediately imply that a material misstatement has occurred. Instead, it initiates the identification, investigation, and evaluation process described in Section \ref{sub:identification_investigation_and_evaluation}. Further work is then needed to determine whether the difference reflects a genuine misstatement, a limitation of the model, or other contextual factors.
 
-When the hypothesis test does not lead to rejection of the null, a more detailed assessment of the evidence is required to determine whether the recorded amount can be considered free from material misstatement.
-This introduces the concept of a \emph{level of assurance}, which expresses the degree of confidence that the recorded amount is free from material misstatement. 
-Rather than limiting the analysis to rejecting or failing to reject the null hypothesis, this approach assesses the statistical likelihood that the observed deviation remains within acceptable bounds relative to the predefined materiality threshold.
-
-The level of assurance is derived by assessing the probability of failing to reject the null hypothesis when it is, in fact, false. 
-This probability is computed by evaluating the distribution of the test statistic $T$ under each of the two alternative hypotheses. 
-In both cases, the distribution of $T$ is described by a non-central $t$ distribution, which extends the standard $t$ distribution by incorporating a non-centrality parameter that represents the magnitude of deviation implied by the materiality threshold.
-
-Let the test statistic be defined as:
+If the difference falls within the acceptable difference range, the substantive analytical procedure has not identified a significant unexpected difference. We then determine the level of assurance obtained from the procedure. Consistent with Section \ref{sub:acceptable_difference} in Volume 2, we define the difference as
 
 \begin{equation}
-T = \frac{\hat{y}_{\text{total}} - y_{\text{recorded}}}{s_{comb}}
+D = y_{\text{recorded}} - \hat{y}_{\text{total}}.
 \end{equation}
 
-and let
+A positive difference indicates that the recorded amount exceeds the expectation and is therefore relevant when considering a possible overstatement. A negative difference indicates that the recorded amount is below the expectation and is therefore relevant when considering a possible understatement.
+
+The standardized difference is
 
 \begin{equation}
-\delta = \frac{M}{s_{\text{comb}}}
+T = \frac{D}{s_{\text{comb}}},
 \end{equation}
 
-be the non-centrality parameter\nomenclature{$\delta$}{non-centrality parameter of the non-central $t$ distribution}, where $M$ is the materiality threshold and $s_{comb}$ is the combined prediction standard error.
+where $s_{\text{comb}}$ is the combined prediction standard error. If the account is not materially misstated, $T$ follows a central $t$ distribution with
 
-\bigskip
-The distribution of $T$ under the alternative hypotheses reflects the expected behaviour of the test statistic if the recorded revenue deviates from the true value by more than $M$.
+\begin{equation}
+df = n-k-1
+\end{equation}
 
-It is crucial to understand that material overstatements and under\-statements are directional claims. 
-As such, they require directional tests:
-If we are evaluating the risk of a \emph{material overstatement}, we focus on the lower tail of the distribution, because the assumption is that the observed revenue should be significantly lower than expected if no overstatement occurred.
-If we are evaluating the risk of a \emph{material understatement}, we focus on the upper tail, because the assumption is that the observed revenue should be significantly higher than expected if no understatement occurred.
+degrees of freedom.
 
-Using this framework, the assurance level is interpreted as the probability that a materially misstated value could fall within the acceptance region defined by the null hypothesis, thereby escaping detection.
+Let
 
-Let $t_{\alpha/2}$ be the critical value corresponding to the desired confidence level (e.g., $99\%$), such that the acceptance region is given by $[-t_{\alpha/2}, +t_{\alpha/2}]$.
+\begin{equation}
+\delta = \frac{PM}{s_{\text{comb}}}
+\end{equation}
 
-Then the assurance level is calculated as:
+be the non-centrality parameter\nomenclature{$\delta$}{non-centrality parameter of the non-central $t$ distribution}, where $PM$ is performance materiality. If revenue is materially overstated by $PM$, the distribution of $T$ shifts to the right and follows a non-central $t$ distribution with non-centrality parameter $+\delta$. If revenue is materially understated by $PM$, the distribution shifts to the left and follows a non-central $t$ distribution with non-centrality parameter $-\delta$.
 
-\begin{itemize}
-  \item For material \textbf{overstatement}, using the non-central $t$ distribution with positive shift $\delta $:
-  \begin{equation}
-  \text{Assurance level} = P(T > t_{\alpha/2} \mid T \sim t_{\delta , df})
-  \end{equation}
+As discussed in Section \ref{sub:acceptable_difference} in Volume 2, the acceptable difference range may be determined by controlling either efficiency risk or effectiveness risk. If the auditor controls efficiency risk, the acceptable range is based on the central $t$ distribution under the assumption of no misstatement. For an efficiency risk of $\beta$, the acceptable difference range is
 
-  \item For material \textbf{understatement}, using the non-central $t$ distribution with negative shift $-\delta $:
-  \begin{equation}
-  \text{Assurance level} = P(T < -t_{\alpha/2} \mid T \sim t_{-\delta , df})
-  \end{equation}
-\end{itemize}
+\begin{equation}
+\left[
+t_{\beta/2,df}s_{\text{comb}},
+t_{1-\beta/2,df}s_{\text{comb}}
+\right].
+\end{equation}
 
-These probabilities represent the likelihood that a materially misstated value would fall within the acceptance range defined by the null hypothesis, and are computed using the non-central $t$ distribution with degrees of freedom $df = n - k - 1$.
+This limits the probability of investigating a difference when the account is not materially misstated. In that case, the level of assurance is not fixed in advance. It follows from the width of the acceptable difference range, the precision of the model, and performance materiality.
 
-The calculated level of assurance reflects the probability that a materially misstated revenue total could nonetheless fall within the bounds defined by the null hypothesis. 
-This value is not interpreted in isolation; instead, it is compared to a predefined \emph{target level of assurance}, which is typically derived from the assessed level of \emph{inherent risk} and the extent to which the auditor relies on internal controls.
+Let $c_L$ and $c_U$ denote the lower and upper standardized boundaries of the acceptable difference range. The achieved assurance for detecting a material overstatement is
 
-If the level of assurance obtained from the substantive analytical procedure exceeds the target level, no further substantive procedures are required. 
-However, if it falls short of the target, the obtained assurance may still contribute to the audit evidence, allowing the auditor to reduce the extent of additional substantive procedures, such as substantive sampling. 
-This probabilistic approach enables a risk-based audit strategy that combines statistical rigor with professional judgment, moving beyond binary conclusions to deliver a defensible and proportional response to the evidence.
+\begin{equation}
+P(T > c_U \mid T \sim t_{df,\delta}).
+\end{equation}
+
+The achieved assurance for detecting a material understatement is
+
+\begin{equation}
+P(T < c_L \mid T \sim t_{df,-\delta}).
+\end{equation}
+
+These probabilities express the likelihood that a material misstatement of size $PM$ would produce a difference outside the acceptable difference range and would therefore be detected by the procedure. The complement of this probability is the risk that a material misstatement would remain inside the acceptable difference range and escape detection.
+
+Alternatively, the auditor may determine the acceptable difference range by controlling effectiveness risk directly. In that case, the boundaries are chosen so that a material overstatement or understatement is detected with the desired level of assurance. This fixes the desired level of assurance, but the resulting acceptable difference range may become narrow when the model is imprecise. This increases the probability of investigating differences that are caused merely by model imprecision.
+
+The achieved level of assurance should therefore be interpreted together with the precision of the model, performance materiality, and the auditor's planned reliance on other substantive procedures. If the achieved assurance is sufficient for the assessed risk, the substantive analytical procedure may provide sufficient audit evidence for the assertion under consideration. If it falls short of the target level, the procedure may still contribute audit evidence, but additional substantive procedures are required.
+
 
 % subsection level_of_assurance_obtained (end)
 
