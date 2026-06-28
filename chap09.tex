@@ -149,7 +149,6 @@ The total probability across all cells sums to 1 (100\%).
 
 \medskip
 For example, a customer satisfaction survey was conducted among all 625 customers (the population). The results are presented in Table \ref{tab:client_satisfaction}.
-
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 
@@ -170,7 +169,6 @@ Proportion & 0.40 & 0.16 & 0.44 & 1.00 \\
 \caption{Client satisfaction results}
 \label{tab:client_satisfaction}
 \end{table}
-
 The aim is to investigate whether customer satisfaction has changed in the subsequent year.
 
 For a goodness-of-fit test, the hypotheses examine whether the distribution of satisfaction in the follow-up year is the same as the distribution observed in the base year. Because all 625 customers were surveyed in the base year, the observed proportions are equal to the population proportions for that year. These proportions therefore serve as the hypothesized probabilities under the null hypothesis.
@@ -388,14 +386,12 @@ P(i) = \log_{10} \left( \frac{i + 1}{i} \right)
 where (i = 1,2,\ldots,9). Thus, (P(i)) denotes the probability that the first digit of a number is equal to (i).
 
 The probabilities obtained from Equation~\ref{eq:benfords_law} are shown in Figure~\ref{fig:H9_benford}.
-
 \begin{figure}
 \centering
 \includegraphics[width=1\textwidth]{H9_benford.pdf}
 \caption{Benford's Law for the first digit of a number}
 \label{fig:H9_benford}
 \end{figure}
-
 Table~\ref{tab:benford_series} contains a selection of first-digit distributions from Benford's original 1938 publication.
 
 \begin{table}[htbp]
@@ -418,14 +414,12 @@ Average & 31.2 & 19.3 & 12.2 & 9.9 & 7.6 & 6.4 & 4.9 & 4.6 & 3.7 & 4643 \\
 \end{table}
 
 The data from Table~\ref{tab:benford_series} are presented in Figure~\ref{fig:H9_benford_examples}.
-
 \begin{figure}
 \centering
 \includegraphics[width=1\textwidth]{H9_benford_examples.pdf}
 \caption{Some of Benford's examples}
 \label{fig:H9_benford_examples}
 \end{figure}
-
 The various datasets show, to a greater or lesser extent, the same pattern as the Benford distribution. Benford also examined the combined dataset, shown as ``Average'' in Table~\ref{tab:benford_series}. This is shown in Figure~\ref{fig:H9_benford_ave_vs_theor}.
 
 \begin{figure}
@@ -511,27 +505,21 @@ Let $\pi_i$ denote the probability that the first digit is equal to $i$. Under B
 &0.0512, 0.0458).
 \end{aligned}
 \end{equation*}
-
 The hypotheses for the chi-square goodness-of-fit test are
-
 \begin{equation*}
 \begin{aligned}
 H_0 : (\pi_1,\pi_2,\ldots,\pi_9) = (&0.3010, 0.1761, 0.1249, 0.0969, 0.0792, \\
 &0.0669, 0.0580, 0.0512, 0.0458),
 \end{aligned}
 \end{equation*}
-
 and
-
 \begin{equation*}
 \begin{aligned}
 H_0 : (\pi_1,\pi_2,\ldots,\pi_9) \neq (&0.3010, 0.1761, 0.1249, 0.0969, 0.0792, \\
 &0.0669, 0.0580, 0.0512, 0.0458),
 \end{aligned}
 \end{equation*}
-
 In words,
-
 \begin{equation*}
 \begin{aligned}
 H_0 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data follows } \\
@@ -546,15 +534,13 @@ H_1 : &\hspace{0.5em} \text{The first-digit distribution of the inventory data d
 It is assumed that the first digits of the values of the inventory items are the result of a natural process.
 
 The expected frequencies are obtained by multiplying the Benford probabilities by the sample size. 
-The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies}.
-
+The observed and expected frequencies are presented in Table~\ref{tab:observed_and_expected_frequencies},
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lrrrrrrrrr@{}}
 
 \toprule
 \parbox[t]{1 cm}{} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
 \midrule
-
 $O_i$ & 86 & 48 & 23 & 32 & 24 & 36 & 19 & 18 & 14 \\
 $E_i = n.P(i)$ & 90.3 & 52.8 & 37.5 & 29.1 & 23.8 & 20.1 & 17.4 & 15.3 & 13.7  \\
 \bottomrule
@@ -562,15 +548,13 @@ $E_i = n.P(i)$ & 90.3 & 52.8 & 37.5 & 29.1 & 23.8 & 20.1 & 17.4 & 15.3 & 13.7  \
 \caption{Observed and expected first-digit frequencies}
 \label{tab:observed_and_expected_frequencies}
 \end{table}
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1\textwidth]{H9_inventor_list.pdf}
     \caption{Observed and expected frequencies of first digits in inventory list}
     \label{fig:H9_inventory_list}
 \end{figure}
-
-The observed and expected frequencies are displayed graphically in Figure~\ref{fig:H9_inventory_list}. 
+and displayed graphically in Figure~\ref{fig:H9_inventory_list}. 
 Visual inspection suggests some differences between the two distributions. 
 The chi-square goodness-of-fit test is used to determine whether these differences are large enough to be statistically significant.
 
@@ -1065,18 +1049,15 @@ effect of changing assumptions, and interpret the results in an audit context.
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{baseline <- c(250, 100, 275)}
 \end{Verbatim}
-
 That makes the expected probabilites:
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{(expected_prob <- baseline / sum(baseline))}
 \textcolor{ada_light_blue}{0.40 0.16 0.44}
 \end{Verbatim}
-
 The observed frequencies in the follow-up study of the client satisfaction survey in Table \ref{tab:client_satisfaction_followup} are stored as follows:
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{observed <- c(15, 12, 13)}
 \end{Verbatim}
-
 The expected frequencies are:
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{(expected <- sum(observed) * expected_prob)}
@@ -1354,7 +1335,7 @@ The expected frequencies do not sum to 36, because the six classes do not cover 
 \textcolor{ada_light_blue}{10.08697}
 \end{Verbatim}
 The histogram ignores the observations that would fall outside the chosen class limits, whereas the normal distribution extends to $-\infty$ and $\infty$.
-The missing probability corresponds to the two omitted tails $P(X < -2.55)$ and $X > 1.65$
+The missing probability corresponds to the two omitted tails $P(X < -2.55)$ and $X > 1.65$.
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{pnorm(-2.55)}
 \textcolor{ada_light_blue}{0.005386146}
