@@ -400,10 +400,21 @@ Applying these formulas to the results of \emph{Case: Valuation of Inventories} 
 The standard deviation of the ratio estimator is
 
 \begin{align*}
-s_q^2 &= \frac{3,649,977,984 - 2\!\cdot 1.00117\!\cdot\!3,550,437,464 + 1.00117^2\!\cdot\!3,586,086,982}{400 - 1} \\
+s_q^2
+&=
+\frac{\scalebox{0.92}{$
+3,649,977,984
+-2\cdot1.00117\cdot3,550,437,464
++1.00117^2\cdot3,586,086,982
+$}}{400-1} \\
 &= 339,043.79
-%\label{eq:sd_ratios}
 \end{align*}
+
+% \begin{align*}
+% s_q^2 &= \frac{3,649,977,984 - 2\!\cdot 1.0012\!\cdot\!3,550,437,464 + 1.0012^2\!\cdot\!3,586,086,982}{400 - 1} \\
+% &= 339,043.79
+% %\label{eq:sd_ratios}
+% \end{align*}
 and as a result the two-sided 95\% prediction interval is
 
 \begin{equation*}
@@ -414,6 +425,7 @@ and as a result the two-sided 95\% prediction interval is
   7,369,438 \pm 188,530
 %\label{eq:pred_interval_difference}
 \end{equation*}
+
 which yields the prediction interval [7,180,908; 7,557,968]. Similar to the regression and difference estimators, the ratio estimator yields a precision less than the target precision of 200,000.
 
 % The estimated misstatement in these results is the difference between the book value of the population (7,360,816) and estimated audit value. For example, the estimated misstatement from the MPU estimator is $X - \hat{Y}_{MPU} = 7,360,816 - 7,561,859.20 = -201,043.20$.
@@ -555,15 +567,15 @@ From the graphs, we cannot tell how the estimators perform in terms of bias, pre
 
 Bias can be measured by taking the average of the estimate over all replications. In addition, statistical literature indicates that the ratio estimator is biased, the difference estimator is unbiased, and the regression estimator is biased when the population book values are skewed, as in our case.
 
-\begin{table}[htbp]
+\begin{table}[tbp]
 \centering
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{2cm}{Estimator} &
-\parbox[t]{2cm}{\raggedleft Constant difference} &
-\parbox[t]{2cm}{\raggedleft No intercept} &
-\parbox[t]{2cm}{\raggedleft Slope and\\intercept} &
-\parbox[t]{2cm}{\raggedleft Sporadic errors} \\
+\parbox[t]{1.7cm}{\raggedleft Constant difference} &
+\parbox[t]{1.7cm}{\raggedleft No intercept} &
+\parbox[t]{1.7cm}{\raggedleft Slope and\\intercept} &
+\parbox[t]{1.7cm}{\raggedleft Sporadic errors} \\
 \midrule
 Difference & 260,061 & 259,469 & 258,983 & 261,954 \\
 Ratio      & 262,571 & 259,493 & 255,750 & 262,293 \\
@@ -583,10 +595,10 @@ Precision is estimated by calculating the standard deviation of  estimates acros
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{2cm}{Estimator} &
-\parbox[t]{2cm}{\raggedleft Constant difference} &
-\parbox[t]{2cm}{\raggedleft No intercept} &
-\parbox[t]{2cm}{\raggedleft Slope and\\intercept} &
-\parbox[t]{2cm}{\raggedleft Sporadic errors} \\
+\parbox[t]{1.7cm}{\raggedleft Constant difference} &
+\parbox[t]{1.7cm}{\raggedleft No intercept} &
+\parbox[t]{1.7cm}{\raggedleft Slope and\\intercept} &
+\parbox[t]{1.7cm}{\raggedleft Sporadic errors} \\
 \midrule
 
 Difference & 66,480 & 72,079 & 90,768 & 189,442 \\
@@ -609,10 +621,10 @@ Finally, we counted the fraction of samples that yielded a confidence interval t
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{2cm}{Estimator} &
-\parbox[t]{2cm}{\raggedleft Constant difference} &
-\parbox[t]{2cm}{\raggedleft No intercept} &
-\parbox[t]{2cm}{\raggedleft Slope and\\intercept} &
-\parbox[t]{2cm}{\raggedleft Sporadic errors} \\
+\parbox[t]{1.7cm}{\raggedleft Constant difference} &
+\parbox[t]{1.7cm}{\raggedleft No intercept} &
+\parbox[t]{1.7cm}{\raggedleft Slope and\\intercept} &
+\parbox[t]{1.7cm}{\raggedleft Sporadic errors} \\
 \midrule
 
 Difference & 94.94\% & 94.85\% & 94.94\% & 78.41\% \\
@@ -690,7 +702,7 @@ such that the result is\footnote{The $t$ value of 2.571 is for a two-sided inter
 \end{equation}
 
 \begin{align*}
-	s_{q, m}^2 &= \frac{230,244,509 - 2 \cdot 0.982489 \cdot 231,280,871 + 0.982489^2 \cdot 234,376,912}{6 - 1} \\ 
+	s_{q, m}^2 &= \frac{230,244,509 - 2 \cdot 0.9825 \cdot 231,280,871 + 0.9825^2 \cdot 234,376,912}{6 - 1} \\ 
 	&= 404,624
 \end{align*}
 This quantity is then used for the calculation of the estimated standard deviation of population ratios as
@@ -800,7 +812,7 @@ The desired total book value per stratum is therefore 7,360,816 / 3 = 2,453,605.
 The resulting stratification is listed in Table \ref{tab:strat_equal}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}p{4.5cm} >{\raggedleft\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}p{4.5cm} >{\raggedleft\arraybackslash}X}
 \toprule
 Stratum &
 Number~of items~$N$ &
@@ -837,7 +849,7 @@ A summary of this classification is given in Table \ref{tab:class_inventories}.
 \begin{tabularx}{\textwidth}{@{}llYYY@{}}
 \toprule
 Class &
-\parbox[t]{4cm}{Book~values} &
+\parbox[t]{3.5cm}{Book~values} &
 Frequency $f$ &
 $\sqrt{f}$ &
 Cum.~sum \\
@@ -927,7 +939,7 @@ We apply this formula to the stratification results from Table \ref{tab:strat_cu
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{2 cm}{Stratum} &
+\parbox[t]{1.5 cm}{Stratum} &
 $N$ &
 $s_x$ &
 $N s_x$ &
@@ -1081,29 +1093,26 @@ where $L$ is the number of strata \nomenclature{$L$}{number of strata}, and $g_h
 The calculations are summarized in Table \ref{tab:intermediate_results_variance}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{@{}lrrYYr@{}}
-\toprule
-\parbox[t]{1.34 cm}{Stratum} &
-\parbox[t]{1.34 cm}{\raggedleft $N$} &
-\parbox[t]{1.34 cm}{\raggedleft $n$} &
-\parbox[t]{2cm}{\raggedleft $g^2$} &
-\parbox[t]{2cm}{\raggedleft $s_y^2$} &
-\parbox[t]{2.4cm}{\raggedleft $g^2 s_y^2$} \\
-
-\midrule
-
-1 & 2,030 & 226 & 16,204.07 &   297,308 & 4,817,605,606 \\
-2 & 1,217 & 259 &  4,501,49 & 1,696,612 & 7,637,282,583 \\
-3 &   253 &  98 &    400.15 & 7,979,066 & 3,192,847,772 \\
-
-\midrule
-
-Total & & & & & 15,647,735,961 \\
-
-\bottomrule
-\end{tabularx}
+\centering
 \caption{Intermediate results for the calculation of the variance of the MPU estimate}
 \label{tab:intermediate_results_variance}
+
+\begin{tabularx}{\textwidth}{@{}lrrrrr@{}}
+\toprule
+Stratum &
+$N$ &
+$n$ &
+$g^2$ &
+$s_y^2$ &
+$g^2 s_y^2$ \\
+\midrule
+1 & 2,030 & 226 & 16,204.07 &   297,308 &  4,817,605,606 \\
+2 & 1,217 & 259 &  4,501.49 & 1,696,612 &  7,637,282,583 \\
+3 &   253 &  98 &    400.15 & 7,979,066 &  3,192,847,772 \\
+\midrule
+Total & & & & & 15,647,735,961 \\
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \bigskip
@@ -1140,7 +1149,7 @@ leads to a prediction interval of [7,424,999,\hspace{0.5em} 7,916,401]. This res
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lrrYYY@{}}
 \toprule
-\parbox[t]{2cm}{Stratum} &
+Stratum &
 \parbox[t]{2cm}{\raggedleft $\sum{x y}$} &
 \parbox[t]{1cm}{\raggedleft $n$} &
 $\bar{x}$ &
@@ -1268,9 +1277,9 @@ s^2_{R} = \sum_{h = 1}^{L}g_h^2 s_{y_r,h}^2
 The calculations are summarized in Table \ref{tab:intermediate_results_variance}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y >{\raggedleft\arraybackslash}p{2.3cm}}
+\begin{tabularx}{\textwidth}{l Y Y Y Y >{\raggedleft\arraybackslash}p{2.3cm}}
 \toprule
-\parbox[t]{1.4 cm}{Stratum} &
+\parbox[t]{0.7 cm}{Str} &
 $N$ &
 $n$ &
 $g^2$ &
@@ -1391,9 +1400,9 @@ s^2_{D} = \sum_{h = 1}^{L}g_h^2 s_{d,h}^2
 The calculations are summarized in Table \ref{tab:intermediate_results_variance_diff}.
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X r r Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.5cm}}
+\begin{tabularx}{\textwidth}{l r r Y >{\raggedleft\arraybackslash}p{2cm} >{\raggedleft\arraybackslash}p{2cm}}
 \toprule
-\parbox[t]{1.4 cm}{Stratum} &
+\parbox[t]{0.7 cm}{Str} &
 \parbox[t]{1cm}{\raggedleft $N$} &
 \parbox[t]{1cm}{\raggedleft $n$} &
 $g^2$ &
@@ -1443,9 +1452,9 @@ q = \frac{\sum{N_h \bar{y}_h}}{\sum{N_h \bar{x}_h}}
 \end{equation}
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X r Y Y >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm}}
+\begin{tabularx}{\textwidth}{l r Y Y >{\raggedleft\arraybackslash}p{2cm} >{\raggedleft\arraybackslash}p{2cm}}
 \toprule
-\parbox[t]{1.4 cm}{Stratum} &
+\parbox[t]{0.7 cm}{Str} &
 \parbox[t]{1cm}{\raggedleft $N$} &
 $\bar{x}$ &
 $\bar{y}$ &

@@ -500,7 +500,8 @@ Working with untested or poor-quality data can have several negative effects on 
 
 \paragraph{Inaccurate insights} Unreliable data can lead to inaccurate conclusions and insights. Decision-making based on inaccurate data can result in poor strategies and outcomes.
 \paragraph{Biased results} Data quality issues such as missing values or skewed distributions can introduce bias into the analysis, leading to skewed results and misleading interpretations.
-\paragraph{Wasted resources} Analyzing poor-quality data consumes both resources and time. Inaccurate conclusions may lead to misguided efforts and waste of resources.
+\paragraph{Wasted resources}
+Analyzing poor-quality data is an inefficient use of time and resources. Moreover, inaccurate conclusions may lead to misguided audit efforts.
 \paragraph{Damaged reputation} If decisions are made based on faulty data, they can damage the reputation of individuals or organizations, especially if the decisions lead to negative outcomes.
 \paragraph{Misguided strategies} Data-driven strategies based on unreliable data can lead to incorrect business directions, missed opportunities, or increased risks.
 \paragraph{Legal and ethical concerns} Incorrect data may lead to compliance violations or ethical concerns, especially in sensitive domains where accurate reporting is essential.
@@ -525,7 +526,7 @@ This can include merging tables that contain different aspects of the same objec
 \hlblue{Data aggregation}\index{data aggregation}\index{aggregation!data} is also a part of data integration, which involves the computation of new values by summarizing data across records or tables. 
 For instance, in the \emph{Case: US SteamCo} it is imaginable that the variables \ttblue{coolDD} and \ttblue{heatDD} were constructed by first calculating the daily differences between maximum temperature and reference temperature, and then adding these differences for the month.
 
-\hlblue{Formatting data}\index{formatting data}\index{data!formatting} is another crucial step, involving syntactic modifications that maintain data meaning but meet the requirements of the modeling tools. 
+\hlblue{Formatting data}\index{formatting data}\index{data!formatting} is another crucial step, involving syntactic mod\-i\-fications that maintain data meaning but meet the requirements of the modeling tools. 
 This can include reordering attributes to match tool specifications because some tools demand a specific order or random arrangement of records. 
 Additionally, formatting might include syntactic changes to fulfill specific tool demands, such as removing commas from text fields or limiting the length of values to adhere to tool constraints.
 
@@ -903,7 +904,7 @@ This gives rise to building a new model (\ttblue{mod.2}), incorporating \ttblue{
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{4.5 cm}{Variable} &
+\parbox[t]{3.8 cm}{Variable} &
 Estimate &
 Std. Error &
 $t$ value &
@@ -1039,7 +1040,7 @@ Choosing an appropriate $\lambda$ involves finding the transformation that best 
 The Box-Cox transformation assumes that the data values are positive. If the data contain zeros or negative values, alternative transformations like the \hlblue{Yeo-Johnson transformation}\index{Yeo-Johnson transformation} can be used, which can accommodate a wider range of data distributions.
 
 \bigskip
-The \hlblue{Box-Tidwell transformation}\index{Box-Tidwell transformation}\index{transformation!Box-Tidwell} is used to model non-linear relationships between the predictor variables and the response variable. Instead of transforming the response variable, Box-Tidwell transforms the predictor variables $x_i$ in a regression model. It is defined as:
+The \hlblue{Box--Tidwell transformation}\index{Box-Tidwell transformation}\index{transformation!Box-Tidwell} models non-linear relationships by applying a power transformation to the predictor variables \(x_i\), rather than to the response variable. It is defined as:
 \begin{equation}
 x_i(\lambda_i) = x_i^{\lambda_i}
 \end{equation} 
@@ -1074,10 +1075,10 @@ Create literature list.
 
 % paragraph generalized_least_squares (end)
 
-\paragraph{Generalized Autoregressive Conditional Heteroskedasticity} % (fold)
+\paragraph{GARCH\index{GARCH} or Generalized Autoregressive Conditional Heteroskedasticity} % (fold)
 \label{par:generalized_autoregressive_conditional_heteroskedasticity}
 
-\index{generalized autoregressive conditional heteroskedasticity} (GARCH)\index{GARCH} models are based on time series models and then generalized to accommodate non-constant variance. 
+\index{generalized autoregressive conditional heteroskedasticity} models are based on time series models and then generalized to accommodate non-constant variance. 
 
 % paragraph generalized_autoregressive_conditional_heteroskedasticity (end)
 
@@ -1202,7 +1203,7 @@ Equation \ref{eq:hat_value} shows that $h_i$ increases as the distance between $
 
 \paragraph{Regression outliers} A regression outlier, or outlier in $y$, is an observation in which the value of the dependent variable is conditionally unusual, given the value of the independent variable. Given that the distance to the regression line is much shorter for the other variables, it should cause us to wonder why this observation is different. The most serious problem related to regression outliers is that they violate the assumption that residuals are normally distributed.
 
-When we ignore the problem, outliers are responsible for overestimating the precision of the model, thereby reducing the amount of audit evidence obtained from the analysis. However, if the outlier is removed from the calculations (or given a lower weight in the calculations, when using robust regression\footnote{see page \pageref{par:robust_regression}.}), and the circumstances under which it arose return in the period under audit, may unnecessarily lead to additional work.
+Ignoring outliers may cause the model's precision to be overestimated, resulting in insufficient audit evidence. Conversely, if an outlier is removed from the analysis (or assigned a lower weight, as in robust regression\footnote{See page \pageref{par:robust_regression}.}) and similar circumstances occur during the period under audit, the model may underestimate the true variability, resulting in unnecessary additional audit work.
 
 Regression outliers are identified using the \hlblue{Studentized residual}\index{Studentized residual}. 
 Studentized residuals are preferred over standardized residuals for detecting regression outliers because they account for the leverage and influence of each data point, adjusting for variations in residual variance. 
@@ -1263,17 +1264,17 @@ As a general rule, a Cook's distance greater than 1 indicates a point likely to 
 
 Figure \ref{fig:H7_influenceplot} summarizes the three statistics: hat-values on the $x$-axis, Studentized residuals on the $y$-axis, and the size of the bubbles is proportional to their Cook's distance.
 
-\begin{figure}
+\begin{figure}[tbp]
   \includegraphics[width=\columnwidth]{H7_influenceplot.pdf}
   \caption{Plot of hat-values, Studentized residuals, and Cook's distances for \ttblue{mod.2}. The size of the circles is proportional to the Cook's distance.}
   \label{fig:H7_influenceplot}
 \end{figure}
 
-\begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X X Y Y Y}
+\begin{table}[tbp]
+\begin{tabularx}{\textwidth}{ll Y Y Y}
 \toprule
-\parbox[t]{1.2 cm}{\#} &
-\parbox[t]{1.2 cm}{month} &
+\parbox[t]{1 cm}{\#} &
+\parbox[t]{1 cm}{month} &
 Studentized residual &
 hat-value &
 Cook's distance \\
@@ -1318,6 +1319,7 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
 
 \begin{figure}[htbp]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}
   \begin{axis}[
     width=12cm,
@@ -1361,6 +1363,7 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
     \draw[dashed, thick, gray] (axis cs:22,-4830879) -- (axis cs:22,-2421841);
   \end{axis}
 \end{tikzpicture}
+}
 \caption{Winsorization of observation 22 (October 2012) residual to 5th percentile} 
 \label{fig:winsor_obs22}
 \end{figure}
@@ -1370,7 +1373,7 @@ We fit a new model, \ttblue{mod.3}, on the winsorized data. The coefficient esti
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
-\parbox[t]{4.5 cm}{Variable} &
+\parbox[t]{3.8 cm}{Variable} &
 Estimate &
 Std. Error &
 $t$ value &
@@ -1418,7 +1421,7 @@ In some cases, if multicollinearity persists as a significant problem, we may ex
 Ignoring multicollinearity can lead to serious issues in linear regression models. First, the coefficients become unreliable and challenging to interpret, as they can change drastically with minor adjustments to the model or data. Incorrect standard errors may also be estimated, affecting the computation of confidence intervals and hypothesis tests, leading to misleading conclusions regarding the significance of independent variables. Moreover, multicollinearity can increase the risk of overfitting the model, causing it to perform poorly on data from the hold-out set.
 
 \bigskip
-In regression models that include interaction terms, the \hlblue{Generalized Variance Inflation Factor}\index{generalized variance inflation factor} (GVIF) is a diagnostic tool to assess multicollinearity in a more nuanced way than the standard VIF. The GVIF accounts for the effects of interaction terms on multicollinearity among predictors.
+In regression models that include interaction terms, the \hlblue{Generalized Variance Inflation Factor}\index{generalized variance inflation factor} (GVIF) provides a more appropriate measure of multicollinearity than the standard VIF. Unlike the VIF, the GVIF accounts for the increased complexity introduced by interaction terms and assesses multicollinearity among predictors accordingly.
 The GVIF effectively adjusts the standard VIF by accounting for the dimensionality of the predictor space, particularly when interactions are involved.
 
 Like the standard VIF, any predictor that has $GVIF_j^{1/(2df)}~>~10$ indicates significant multicollinearity. The exponent $1/(2df)$ in the Generalized Variance Inflation Factor (GVIF) formula normalizes the GVIF to account for the degrees of freedom of predictors, especially categorical variables, ensuring that predictors with more levels do not disproportionately affect the multicollinearity measure. This adjustment allows for a fair comparison across continuous and categorical variables.
@@ -1465,6 +1468,7 @@ In statistical analysis, the terms \emph{variation} and \emph{variance} are freq
 
 \begin{figure} [htb]
 \begin{center}
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}
 
 \draw [->, >=stealth] (0,0) -- (10, 0) node[below] {production};
@@ -1497,7 +1501,8 @@ In statistical analysis, the terms \emph{variation} and \emph{variance} are freq
 \draw (0, 2.89) [dashed] node[left] {$\bar{y}$} -- (5.23, 2.89); % Correct $\bar{y}$ position
 
 \end{tikzpicture}
-\caption{Decomposition of total variation into explained and unexplained portions.}
+}
+\caption{Explained and unexplained components of total variation.}
 \label{fig:decomposition_of_total_variation}
 \end{center}
 \end{figure}
@@ -2309,8 +2314,8 @@ The difference between the confidence interval and the prediction interval is vi
 
 Table \ref{tab:expectations_holdout} and Figure \ref{fig:H7_expectations} summarize the recorded values, expectation and prediction interval bounds based on \ttblue{mod.5} for the hold-out period.
 
-\begin{sidewaystable}[thbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y Y}
+\begin{sidewaystable}[p]
+\begin{tabularx}{0.99\textwidth}{l Y Y Y Y Y}
 \toprule
 \parbox[t]{2.0 cm}{month} &
 recorded &
@@ -2336,7 +2341,7 @@ December 2014  &        18,377,456  & 16,921,330 & 21,094,017 & 25,266,704 & -2,
 
 \midrule
 
-Total          &174,778,400 &             & 199,588,104 &  \\
+Total          &174,778,400 &             & 199,588,104 & & -24,809,704 \\
 
 \bottomrule
 \end{tabularx}
@@ -2495,20 +2500,15 @@ Finally, we evaluate the test statistic in the context of the critical region:
 \subsection{Identification, investigation, and evaluation} % (fold)
 \label{sub:identification_investigation_and_evaluation}
 
-\begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_light_pink!20]
-\sloppy
-Work in Progress. 
+A substantive analytical procedure does not end with the calculation of an expectation and the comparison with the recorded amount. Whenever the procedure identifies an unexpected difference, the auditor should investigate its cause and evaluate whether the explanation obtained provides sufficient appropriate audit evidence. The objective is not merely to explain a statistical deviation, but to determine whether the deviation indicates a material misstatement or can be satisfactorily explained by legitimate business circumstances.
 
-Consider including:
+The first step is the identification of unusual observations. Depending on the design of the substantive analytical procedure, these may be individual observations with large residuals, observations outside their prediction interval, or an aggregated amount that falls outside the acceptable difference range. Figure~\ref{fig:H7_expectations} illustrates this process for the US SteamCo case. Although the total recorded revenue for 2014 falls within the acceptable difference range, the recorded revenue for March 2014 falls below the lower limit of its 99\% prediction interval. This observation therefore warrants further investigation.
 
-AAG A.67 To examine the stores for the completeness and existence of sales, the auditor first identifies stores with large prediction errors (labeled the residuals in the regression output), that is, the difference between the actual sales and predicted sales for each store. A common approach is to identify and focus on the largest few residuals. In particular, the auditor may choose all stores that have residuals greater than the standard error. The total number of stores to pick depends on the number of large residuals. The more stores with large residuals, the more stores should be selected to achieve the desired level of assurance.
+The second step is an analytical investigation of the identified difference. The auditor should seek to understand why the observed value differs from the expectation generated by the regression model. This may involve analyzing additional operational information, considering changes in business activities, or determining whether important explanatory variables were omitted from the model. In the US SteamCo case, the auditor might investigate whether production data were incomplete, whether an unusual maintenance shutdown occurred, whether severe weather disrupted operations, or whether revenue was recognized in a different accounting period. Such analyses may provide a plausible explanation for the unexpected difference without immediately suggesting the existence of a misstatement.
 
-AAG A.68 Because the auditor in this case is looking for over\-state\-ments, the positive residuals are important; stores with positive residuals are those for which the regression predicts a lower level of sales than the actual number, a potential overstatement. Exhibit A-10 shows that the largest positive residuals are at Store Nos. 4, 8, and 18. The analysis points to beginning further investigation (if any) at stores 4, 8, and 18, because the regression shows them to be the most out of line with the other stores, based on the relationships in the data for these 4 independent variables.
+The final step is the evaluation of the evidence obtained. Explanations provided by management should not be accepted without corroboration. Instead, they should be supported by additional analytical procedures, inspection of relevant documentation, inquiry of knowledgeable personnel, or other audit evidence. If the explanation is adequately supported, the unexpected difference no longer represents a potential material misstatement. If no satisfactory explanation can be obtained, or if the explanation is inconsistent with other audit evidence, the auditor should conclude that the substantive analytical procedure has identified a potential material misstatement. In that case, additional substantive procedures should be performed to obtain sufficient appropriate audit evidence.
 
-AAG A.69 Once the stores have been identified, the auditor begins a further analytical investigation. The goal of the additional analysis is to explain why these four stores are out of line in comparison with the others. The further analytics can be based on product line analysis or more detailed analysis of the predictor factors (that is, for new stores, how many months they were open). For example, On the Go Stores sales can be divided into the product lines: grocery and other merchandise, beer and wine, lottery, and gasoline. A more detailed analytical study can help explain why a store is out of line. For example, the analytics might show that Store No. 8's sales are unusual because of an unusually large amount of sales of beer and wine. The explanations derived in this manner are then taken to management as a basis for inquiry, to corroborate the explanations found in the analytics or to discover new explanations. For example, management might respond that the unusual sales for Store No. 8 are not likely due to beer and wine sales, but rather to a construction project near the store, which increased traffic at the store and increased sales significantly. Management's explanations should be corroborated by further analytics, inquiry, or testing.
-
-\end{mdframed}
-
+This illustrates an important principle of substantive analytical procedures. Regression models identify observations that merit professional attention; they do not determine whether a misstatement exists. Statistical models assist the auditor in directing further investigation, but the final conclusion always depends on the auditor's evaluation of all relevant audit evidence obtained during the investigation.
 
 % subsection identification_investigation_and_evaluation (end)
 
@@ -3117,7 +3117,7 @@ Figure \ref{fig:H7_qqplot} provides the QQ plot for \ttblue{ussteamco.mod.2}, wi
 
 \textbf{Influential observations}
 
-Cook’s distances for a model can be obtained using the \ttblue{cooks.distance} function.
+We use the \ttblue{cooks.distance} function to obtain Cook's distances for a model. 
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{cooks.mod.2 <- cooks.distance(ussteamco.mod.2)}
@@ -3430,7 +3430,7 @@ The QQ plot is produced by
 \end{Verbatim}
 % \end{minipage}
 
-The Shapiro-Wilk normality test is executed through the \ttblue{shapiro.test} function from the \ttblue{stats} package.
+We use the \ttblue{shapiro.test} function from the \ttblue{stats} package to perform the Shapiro-Wilk normality test on the residuals of \ttblue{ussteamco.mod.3}. The output is as follows:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{shapiro.test(ussteamco.mod.3$residuals)}
