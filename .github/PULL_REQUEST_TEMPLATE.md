@@ -24,6 +24,10 @@ Closes #
 - [ ] `CHANGELOG.md` updated if needed
 - [ ] `WHATS_NEW.md` updated if reader-facing
 
+## Public update
+- [ ] Add to website update page
+- [ ] Do not add to website update page
+
 ## Notes for reviewer
 
 Anything specific to check?
