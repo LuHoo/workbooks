@@ -36,3 +36,12 @@ This file is chronological and project-facing. For reader-facing edition notes, 
 - Fixes graphics paths
 - Remove PNG files from PNG_files
 - Remove LaTeX auxiliary files
+
+---
+*1 July 2026*
+
+### Changed
+
+- Corrected the annual evaluation in the regression chapter by computing the annual prediction standard error from the covariance matrix of the estimated regression coefficients instead of combining monthly prediction standard errors.
+- Revised Section 5.10 to present the worked annual evaluation in the main text and aligned the narrative with the updated calculations.
+- Refined the US SteamCo case study by incorporating a corroborated adjustment for the March 2014 winter storm before evaluating annual revenue.
