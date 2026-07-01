@@ -1,38 +1,29 @@
-## 📄 Titel van de Pull Request
-<!-- Geef een korte, duidelijke titel. Bijvoorbeeld: "Toevoegen van methodologie-sectie aan hoofdstuk 3" -->
+## Summary
 
----
+What does this pull request change?
 
-## ✍️ Beschrijving
-<!-- Beschrijf wat je hebt gedaan en waarom. -->
-Deze PR voegt [beschrijving van de wijziging] toe aan het project. Dit is bedoeld om [doel of motivatie].
+Closes #
 
----
+## Type of change
 
-## 📚 Gewijzigde bestanden
-<!-- Noem de belangrijkste bestanden die zijn aangepast. -->
-- `hoofdstuk3.tex`: Toegevoegd sectie "Methodologie"
-- `main.tex`: Sectie opgenomen in de inhoudsopgave
+- [ ] `content-correction`
+- [ ] `methodology`
+- [ ] `clarification`
+- [ ] `layout`
+- [ ] `new-material`
+- [ ] `internal`
 
----
+## Checks
 
-## ✅ Checklist
-<!-- Kruis aan wat je hebt gecontroleerd. -->
-- [ ] Compilatie succesvol zonder fouten
-- [ ] Spelling en grammatica nagekeken
-- [ ] Labels en referenties correct
-- [ ] PDF visueel gecontroleerd
-- [ ] Index, glossaries en nomenclatures gegenereerd (indien van toepassing)
+- [ ] Related issue has clear acceptance criteria
+- [ ] Branch name refers to the issue number
+- [ ] Commits are small and focused
+- [ ] LaTeX compiles without new warnings
+- [ ] Relevant pages visually checked
+- [ ] Calculations, references, or citations verified
+- [ ] `CHANGELOG.md` updated if needed
+- [ ] `WHATS_NEW.md` updated if reader-facing
 
----
+## Notes for reviewer
 
-## 🧪 Testen
-<!-- Beschrijf hoe je hebt getest of alles werkt. -->
-PDF gegenereerd met `lualatex` en gecontroleerd op layout, paginanummering en verwijzingen.
-
----
-
-## 🗒️ Opmerkingen
-<!-- Eventuele extra notities, twijfels of TODO's. -->
-Overweeg om [suggestie of toekomstige uitbreiding]. Feedback welkom over [specifiek onderdeel].
-
+Anything specific to check?
