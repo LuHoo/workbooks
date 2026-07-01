@@ -294,7 +294,7 @@ The procedure is as follows:
 \end{enumerate}
 
 \begin{figure*}
-
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[node distance = 2cm and 1.2cm, auto]
 
     % Place nodes
@@ -313,6 +313,7 @@ The procedure is as follows:
     \path [line] (seco) -- node {k > 0} (rej2);
 
 \end{tikzpicture}
+}
 \caption{Executing a double sampling plan.}
 \end{figure*}
 
@@ -469,7 +470,7 @@ What happens if the logical unit is partially correct and partially incorrect? F
 \begin{figure}[bthp]
 
 \begin{center}
-
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[scale=1]
 % Define the custom color
   \definecolor{myblue}{RGB}{0,51,141}
@@ -489,6 +490,7 @@ What happens if the logical unit is partially correct and partially incorrect? F
   \node at (10.4, 0.4) {$\times$};
    
 \end{tikzpicture}
+}
 \caption{Element A contains 5 correct  and 2 incorrect monetary units.}
 \label{fig:Partially_correct_item}
 
@@ -501,14 +503,14 @@ The evaluation of the hypothesis test is exactly the same as in the previous sec
 \bigskip
 Most selection methods allow for the determination of selected monetary units within the tested element. The all-or-nothing-approach has a perceived disadvantage in that not all audit information is considered when evaluating the sample; it could be the case that multiple erroneous elements are in the sample, but that each selected monetary unit happens to be in the correct part of the element. As a result, the auditor found information about errors in the population that are not reflected in the statistical evaluation of the sample.
 
-\paragraph{Stringer Bound} This evaluation method is named after its inventor, Kenneth W. Stringer.\index{Stringer Bound}. 
+\paragraph{Stringer Bound} This evaluation method is named after its inventor, Kenneth W. Stringer.\index{Stringer Bound} 
 It uses all available information of the sampled elements to calculate an \hlblue{upper confidence bound}\index{confidence bound}\index{bound!confidence} of the error amount. 
 The null hypothesis is rejected if this upper bound is less than performance materiality $M$.
 
 Let us assume that three errors were found, as summarized in Table~\ref{tab:three_errors}.
 
-\begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y Y}
+\begin{table}[tbp]
+\begin{tabularx}{\textwidth}{l Y Y Y Y}
 \toprule
 \parbox[t]{2.0 cm}{ID} &
 Book value $x$ &

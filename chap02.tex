@@ -295,10 +295,10 @@ To appreciate the differences between the calculations using three different dis
  \label{fig:H2Discrete_distributions}
 \end{figure}
 
-\begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y}
+\begin{table}[tbp]
+\begin{tabularx}{\textwidth}{@{}lrrr@{}}
 \toprule
-\parbox[t]{2cm}{Number of errors} &
+Number of errors &
 Hypergeometric &
 Binomial &
 Poisson \\
@@ -316,7 +316,7 @@ Poisson \\
 For \emph{Case: Number of students}, we learn from Table \ref{tab:summaryProbabilities} that there are differences in the results. 
 
 \begin{table}[htbp]
-\begin{tabularx}{\textwidth}{X Y Y Y}
+\begin{tabularx}{\textwidth}{@{}l Y Y Y@{}}
 \toprule
 Probability distribution &
 Number of parameters &
@@ -389,10 +389,10 @@ In Sections \ref{sec:hypergeometric_distribution} - \ref{sec:poisson_distributio
 
 Therefore, we need another method to represent the probabilities. The solution is to measure probabilities not at a single point but over a certain range. Rather than using a probability \emph{mass} function, we use a \hlblue{probability density function}\index{probability density function} to calculate the probabilities. The total area under the curve described by the probability density function is equal to 100\%. In Figure \ref{fig:H2ContinueKansverdeling} we show a continuous probability density; the total probability (100\%) is shaded blue.
 
-\begin{figure}[htbp]
+\begin{figure}
  \centering
- \includegraphics[width=1\textwidth]{H2ContinueKansverdeling.pdf}
- \caption{Probability density function of a continuous probability distribution}
+ \includegraphics[width=\textwidth]{H2ContinueKansverdeling.pdf}
+ \caption{Probability density function of a continuous distribution}
  \label{fig:H2ContinueKansverdeling}
 \end{figure}
 
@@ -621,7 +621,7 @@ A classic example we discuss when introducing hypothesis testing is to compare t
 \section{Approximations} % (fold)
 \label{sec:approximations}
 
-Several relationships exist between the probability distributions introduced in the preceding sections. We have already observed that some distributions are \hlblue{special cases} of others. For example, the standard normal distribution is a normal distribution with $\mu = 0$ and $\sigma = 1$.
+Several relationships exist among the probability distributions introduced in the preceding sections. We have already seen that some distributions are \hlblue{special cases} of others. For example, the standard normal distribution is a normal distribution with $\mu = 0$ and $\sigma = 1$.
 
 Sometimes, if we \hlblue{transform} a random variable, then we know the distribution of the resulting random variable. For example, if $X$ follows a normal distribution, its linear transformation $aX + b$ also follows a normal distribution, elthough with different parameters.
 
