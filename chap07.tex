@@ -1723,7 +1723,7 @@ This point is important in the present chapter. Models \ttblue{mod.0}, \ttblue{m
 Model \ttblue{mod.3}, by contrast, is fitted after winsorizing observation 22. 
 Because the response variable has been modified, the likelihoods underlying AIC and BIC are not directly comparable with those of the earlier models. The winsorized model should therefore be interpreted as a sensitivity analysis rather than as a competing model in the same AIC/BIC comparison.
 
-Table \ref{tab} summarizes the performance of the models fitted to the original response data in terms of their multiple $r^2$, adjusted $r^2$, AIC, and BIC.
+Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models fitted to the original response data in terms of their multiple $r^2$, adjusted $r^2$, AIC, and BIC.
 
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
@@ -1744,7 +1744,7 @@ mod.2          & 0.9170 & 0.8963 & 1143.217 & 1157.468 \\
 \label{tab:comparison_mod_0_2}
 \end{table}
 
-The assessment of regression model precision relies not only on overall goodness-of-fit statistics such as multiple $r^2$ and adjusted $r^2$, but also on measures of individual predictor strength and the overall standard error of the estimate, as emphasized in AAG A.62--B.04. In this context, Table \ref{tab} shows that each extension beyond \ttblue{mod.0} substantially improves explanatory power.
+The assessment of regression model precision relies not only on overall goodness-of-fit statistics such as multiple $r^2$ and adjusted $r^2$, but also on measures of individual predictor strength and the overall standard error of the estimate, as emphasized in AAG A.62--B.04. In this context, Table \ref{tab:comparison_mod_0_2} shows that each extension beyond \ttblue{mod.0} substantially improves explanatory power.
 
 The simple benchmark model \ttblue{mod.0} has an adjusted $r^2$ of 0.3789 and a BIC of 1207.383. The models that include additional predictors perform much better. \ttblue{model\_forward} and \ttblue{mod.1} both achieve adjusted $r^2$ values above 0.85, with \ttblue{model\_forward} having a slightly lower BIC than \ttblue{mod.1}. This is consistent with the fact that \ttblue{mod.1} includes \ttblue{coolDD}, whose marginal contribution is limited once \ttblue{production} and \ttblue{heatDD} have been included.
 
@@ -2397,7 +2397,7 @@ According to this Standard, auditors are expected to gather and assess evidence 
 
 In the preceding sections, we developed and evaluated regression models to predict revenue for future observations. In the Case: US SteamCo, the model is used to create 12 monthly revenue expectations for the current hold-out year. The model was estimated using historical data from the estimation period and then applied to the 2014 hold-out period.
 
-The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:expectations_recorded}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue may be related to an unexpected storm affecting the East Coast. Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors.
+The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:H7_expectations}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue may be related to an unexpected storm affecting the East Coast. Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors.
 
 The next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
 
@@ -2538,7 +2538,7 @@ Given that we are testing whether the observed revenue total significantly devia
 \hspace*{1.2cm}\=\hspace*{1.4cm}\=\hspace*{0.2cm}\= \kill
 where \> $\hat{y}_{\text{total}}$ \> : \> combined expected revenue \\
       \> $y_{\text{recorded}}$     \> : \> recorded revenue \\
-      \> $s_{comb}$     \> : \> standard error of the combined prediction (Eq. \ref{eq:s_combined})
+      \> $s_{comb}$     \> : \> standard error of the combined prediction (Eq. \ref{eq:annual_prediction_interval})
 \end{tabbing}
 
 \paragraph{Step 5. Derive the distribution of the test statistic under the  hypotheses} Under the null hypothesis $H_0$, which assumes that the recorded revenue aligns with the combined expectations, the test statistic $T$ follows a non-central $t$~distribution due to the combined prediction variance. 
@@ -4000,7 +4000,7 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 
 \textbf{Combining 12 monthly predictions}
 
-We use Equations \ref{eq:s_combined} and \ref{eq:variance_y_hat} to construct a prediction interval for total revenue for the year under audit.
+We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{}
