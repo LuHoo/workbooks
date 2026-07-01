@@ -1,9 +1,3 @@
-# What's New
-
-This document summarizes the main reader-facing improvements in the new edition.
-
-Internal project changes are excluded.
-
 ## Unreleased
 
 ### Content corrections
@@ -11,9 +5,11 @@ Internal project changes are excluded.
 
 ### Methodological improvements
 - Tightened and refined the level of assurance standards used in the book
+- Revised the annual evaluation in the regression chapter by using a covariance-aware prediction interval and aligning the audit workflow with professional practice
 
 ### Clarifications
 - Made various minor edits and updates to improve clarity
+- Refined the US SteamCo case study by incorporating the investigation of the March 2014 winter storm before the annual evaluation
 
 ### Layout and readability
 - Improved spacing of figures and tables to avoid overfull/underfull text warnings
