@@ -790,7 +790,7 @@ production &     18.99 &      4.02 & 4.728 & 0.0000 \\
 \end{table}
 
 % \bigskip
-% Assuming that we have satisfied all requirements set out in section \ref{sec:conditions_underlying_regression_results}, we now have a regression model that is linear, and with unbiased estimates of the coefficients $\beta_0$ and $\beta_1$. 
+% Assuming that we have satisfied all requirements set out in section \ref{sec:assumptions_underlying_regression_results}, we now have a regression model that is linear, and with unbiased estimates of the coefficients $\beta_0$ and $\beta_1$. 
 
 % subsection simple_linear_regression (end)
 
@@ -805,8 +805,6 @@ We extend the simple linear regression model introduced in Equation \ref{eq:simp
 \end{equation}
 
 The main reason for extending the model is to improve the model fit, as measured by $r^2$. A better model fit, in turn, will lead to more precise expectations and, ultimately, a higher level of assurance obtained from the analysis. One of the problems related to omitted significant variables is that they could lead to biased and inconsistent estimates of the coefficients included in the model.
-
-% In practice, it is not always easy to determine which variables should be considered for inclusion in a model or to obtain their data. When we are lucky enough to obtain data for all potentially relevant independent variables, we may not always be able to use all of them. As a rule of thumb, data scientists use at least between 10 and 20 observations for every independent variable included in the model. This implies that with an estimation set that contains three years of monthly data ($n = 36$), we can deploy up to two independent variables. The question then arises: when we have more independent variables available, how can we choose a subset with a maximum of two independent variables that best fits the data?
 
 In practice, it is not always easy to determine which variables should be considered for inclusion in a model or to obtain their data. When we are fortunate enough to have data for all potentially relevant independent variables, we may not always be able to use all of them. As a general guideline, data scientists recommend using at least 10 to 20 observations for every independent variable included in the model. Some stricter guidelines suggest a minimum of 30 observations per variable to improve stability and reduce overfitting. This implies that with an estimation set containing three years of monthly data ($n = 36$), we can deploy between one and three independent variables, or at most three under more lenient rules. 
 
@@ -2390,6 +2388,23 @@ Total          &174,778,400 &             & 198,680,683 & & -23,902,283 \\
 The recorded revenue for January 2014 falls within the 99\% prediction interval, indicating that it aligns well with its expectation. However, the value for March 2014 lies outside these bounds, which suggests a deviation that warrants further examination. This outlier may reflect contradictory or potentially unreliable information, especially in light of the Standard 500, which addresses audit evidence requirements. 
 According to this Standard, auditors are expected to gather and assess evidence that supports the accuracy and reliability of financial information. When recorded values do not align with the predicted intervals, as in March, this may indicate anomalies that could compromise the integrity of the data. Standard 500 advises auditors to investigate unusual discrepancies to determine whether they represent errors, misstatements, or otherwise unreliable data that might affect the auditor's conclusions and overall audit quality.
 
+The investigation of March 2014 revealed that the lower-than-expected revenue coincided with a severe winter storm that affected large parts of the East Coast of the United States. Although the model includes production and heating degree days, these variables did not fully capture the effect of the storm. The event caused major disruptions in the delivery of steam, so that revenue was lower than would normally be expected given the observed production levels and weather conditions.
+
+Based on corroborating audit evidence, the auditor estimated the additional effect of the storm on March revenue at approximately \$8 million. This amount is incorporated into the March expectation before evaluating whether the recorded March revenue falls within its monthly acceptable difference range.
+
+The adjusted March expectation is therefore
+
+\[
+\hat{y}_{\text{Mar, adjusted}}
+=
+\hat{y}_{\text{Mar}} - 8,\!000,\!000.
+\]
+
+After this adjustment, the recorded revenue for March 2014 falls within the 99\% prediction interval for that month. Consequently, the March difference no longer represents an unexplained deviation requiring further investigation. The adjusted monthly expectation is then used in the next section when combining the 12 monthly expectations into the annual expectation.
+
+\medskip
+Substantive analytical procedures are intended to identify unexpected differences, not merely to report them. When a significant deviation can be satisfactorily explained and supported by appropriate audit evidence, the expectation should be adjusted to reflect the conditions that actually prevailed during the audit period. Accordingly, the auditor adjusts the annual revenue expectation for the estimated effect of the March 2014 storm before evaluating the annual recorded revenue against the acceptable difference range. The adjusted expectation provides a more meaningful benchmark for assessing whether the remaining annual difference is consistent with the risk of material misstatement.
+
 % section expectations (end)
 
 \section{Evaluation} % (fold)
@@ -2399,7 +2414,7 @@ In the preceding sections, we developed and evaluated regression models to predi
 
 The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:H7_expectations}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue may be related to an unexpected storm affecting the East Coast. Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors.
 
-The next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
+After investigating and, where appropriate, incorporating corroborated explanations for individual monthly deviations, the next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
 
 We then compare the recorded annual revenue with the annual expectation and its acceptable difference range. If the recorded revenue falls outside this range, the difference may indicate a potential material overstatement or understatement and requires further investigation. If the recorded revenue falls within the range, the substantive analytical procedure has not identified a significant unexpected difference at the annual level. We then determine the level of assurance obtained from the procedure and evaluate whether it is sufficient in light of the assessed risk of material misstatement and the extent of other substantive procedures planned.
 
@@ -2412,6 +2427,8 @@ When predictions are made for multiple periods, such as the 12 months in the hol
 \label{eq:annual_expectation}
 \hat{y}_{\text{total}} = \sum_{i=1}^{12} \hat{y}_i.
 \end{equation}
+
+
 
 Constructing a prediction interval for this annual total requires more care. The annual prediction interval cannot be obtained by summing the lower and upper limits of the monthly prediction intervals. Nor should the annual prediction standard error be calculated merely as the square root of the sum of the squared monthly prediction standard errors. The reason is that all monthly predictions are based on the same estimated regression coefficients. As a result, the estimation errors in the monthly predictions are correlated, even when the future residual errors are uncorrelated.
 
@@ -2476,6 +2493,8 @@ s_{\text{annual}}
 }.
 \end{equation}
 
+
+
 The 99\% acceptable difference range around the annual expectation is then obtained as
 
 \begin{equation}
@@ -2486,6 +2505,53 @@ t_{0.995,df}
 s_{\text{annual}},
 \end{equation}
 where $df$ is the residual degrees of freedom of the regression model.
+
+\medskip
+For the US SteamCo case, the annual expectation is obtained by summing the 12 monthly expectations after adjusting the March 2014 expectation for the corroborated winter storm effect.
+The resulting annual expectation is:
+
+\begin{equation*}
+\hat{y}_{\text{total}}
+=
+190,\!680,\!684.
+\end{equation*}
+
+Using the covariance matrix of the estimated regression coefficients together with the residual variance yields an annual prediction standard error of
+
+\begin{equation*}
+s_{\text{annual}}
+=
+6,\!323,\!301.
+\end{equation*}
+
+With a 99\% prediction interval and the appropriate $t$ critical value, the resulting acceptable prediction range for the annual revenue is
+
+\begin{equation*}
+173,\!291,\!634
+\le
+y_{\text{total}}
+\le
+208,\!069,\!735.
+\end{equation*}
+
+The recorded annual revenue for 2014 equals
+
+\begin{equation*}
+y_{\text{recorded}}
+=
+174,\!778,\!400,
+\end{equation*}
+so that the annual difference, defined as recorded revenue minus expected revenue, is
+
+\begin{equation*}
+174,\!778,\!400
+-
+190,\!680,\!684
+=
+-15,\!902,\!284.
+\end{equation*}
+
+Since the recorded annual revenue falls within the adjusted 99\% acceptable difference range, the substantive analytical procedure does not identify a remaining significant unexplained difference at the annual level. The auditor can therefore proceed to evaluate the level of assurance obtained from the procedure.
 
 \medskip
 If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be replaced by the appropriate residual covariance matrix. In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
