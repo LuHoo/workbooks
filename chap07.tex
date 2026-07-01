@@ -1226,7 +1226,7 @@ where: & $e_i^*$ : & the Studentized residual of observation $i$\\
 \nomenclature{$e_i^*$}{the Studentized residual of observation $i$}
 
 \bigskip
-The Studentized residual $e_i^*$ follows a $t$ distribution with $n - k - 2$ degrees of freedom. Be careful, however, to simply look up all observations with a Studentized residual greater than 2. First, we expect to find approximately 5\% of the observations above this boundary. Secondly, when we want to identify the largest Studentized residual, we employ the $t$-test $n$ times, thereby heavily capitalizing the test probabilities.\footnote{For example, if we carry out a hypothesis test 20 times with an $\alpha$ risk of 5\%, the effective $\alpha$ risk will be $1 - 0.95^{20} = 0.64.$} A solution to this is to consider the number of tests. This procedure is referred to as the \hlblue{Bonferroni adjustment}\index{Bonferroni adjustment}. It takes the $p$ value for the largest absolute Studentized residual and multiplies it with the number of tests $n$, in the \emph{Case: US SteamCo} $n = 36$. 
+The Studentized residual $e_i^*$ follows a $t$ distribution with $n - k - 2$ degrees of freedom. Be careful, however, to look up all observations with a Studentized residual greater than 2. First, we expect to find approximately 5\% of the observations above this boundary. Secondly, when we want to identify the largest Studentized residual, we employ the $t$-test $n$ times, thereby heavily capitalizing the test probabilities.\footnote{For example, if we carry out a hypothesis test 20 times with an $\alpha$ risk of 5\%, the effective $\alpha$ risk will be $1 - 0.95^{20} = 0.64.$} A solution to this is to consider the number of tests. This procedure is referred to as the \hlblue{Bonferroni adjustment}\index{Bonferroni adjustment}. It takes the $p$ value for the largest absolute Studentized residual and multiplies it with the number of tests $n$, in the \emph{Case: US SteamCo} $n = 36$. 
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{H7_qqplot.pdf}
@@ -1300,7 +1300,7 @@ Because not all top three are similar, a total of five observations are listed.
 
 There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Standardized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
 
-Since we are working with time-series data, we cannot simply remove the observation without disrupting the temporal structure of the analysis. Instead, we applied winsorization to reduce the influence of this extreme value while retaining its presence in the series. Specifically, the response variable in October 2012 was adjusted to match the value at the 5th percentile of the response distribution.
+Since we are working with time-series data, we cannot remove the observation without disrupting the temporal structure of the analysis. Instead, we applied winsorization to reduce the influence of this extreme value while retaining its presence in the series. Specifically, the response variable in October 2012 was adjusted to match the value at the 5th percentile of the response distribution.
 
 Mathematically, \hlblue{winsorization}\index{winsorization} replaces extreme values beyond a chosen threshold with the value at that threshold. 
 For a lower winsorization bound $\tau_L$ \nomenclature{$\tau_L$, $\tau_U$}{lower and upper winsorization bound} (e.g., the 5th percentile), the transformed value $y_t^\ast$ is given by:
@@ -1421,10 +1421,27 @@ In some cases, if multicollinearity persists as a significant problem, we may ex
 Ignoring multicollinearity can lead to serious issues in linear regression models. First, the coefficients become unreliable and challenging to interpret, as they can change drastically with minor adjustments to the model or data. Incorrect standard errors may also be estimated, affecting the computation of confidence intervals and hypothesis tests, leading to misleading conclusions regarding the significance of independent variables. Moreover, multicollinearity can increase the risk of overfitting the model, causing it to perform poorly on data from the hold-out set.
 
 \bigskip
-In regression models that include interaction terms, the \hlblue{Generalized Variance Inflation Factor}\index{generalized variance inflation factor} (GVIF) provides a more appropriate measure of multicollinearity than the standard VIF. Unlike the VIF, the GVIF accounts for the increased complexity introduced by interaction terms and assesses multicollinearity among predictors accordingly.
-The GVIF effectively adjusts the standard VIF by accounting for the dimensionality of the predictor space, particularly when interactions are involved.
+In regression models that include interaction terms, the \hlblue{Generalized Variance Inflation Factor}\index{generalized variance inflation factor} (GVIF) provides a more appropriate measure of multicollinearity than the standard VIF. The GVIF is especially useful when a predictor is represented by more than one degree of freedom, for example because it is categorical or because it is involved in interaction terms.
 
-Like the standard VIF, any predictor that has $GVIF_j^{1/(2df)}~>~10$ indicates significant multicollinearity. The exponent $1/(2df)$ in the Generalized Variance Inflation Factor (GVIF) formula normalizes the GVIF to account for the degrees of freedom of predictors, especially categorical variables, ensuring that predictors with more levels do not disproportionately affect the multicollinearity measure. This adjustment allows for a fair comparison across continuous and categorical variables.
+The raw GVIF is not directly comparable across predictors with different degrees of freedom. For that reason, software often reports the adjusted quantity
+
+\[
+GVIF_j^{1/(2df_j)}.
+\]
+
+This adjustment places predictors with different degrees of freedom on a comparable scale. However, it should be interpreted carefully. For a one-degree-of-freedom predictor, the adjusted GVIF equals the square root of the ordinary VIF:
+
+\[
+GVIF_j^{1/(2df_j)} = \sqrt{VIF_j}.
+\]
+
+Consequently, the common rule of thumb that a VIF greater than 10 indicates serious multicollinearity corresponds to an adjusted GVIF greater than approximately
+
+\[
+\sqrt{10} \approx 3.16.
+\]
+
+Thus, when using the adjusted GVIF scale, values above about 3.16 may indicate substantial multicollinearity. Values well below this threshold do not suggest serious variance inflation.
 
 % subsection multicollinearity (end)
 
@@ -1699,44 +1716,41 @@ A model with a lower AIC or BIC value is preferred.
 Similar to the adjusted $r^2$, both the AIC and BIC penalize models for the inclusion of additional independent variables that do not significantly improve performance. 
 The penalty for adding more independent variables is linear with $k$ for the AIC, and proportional to $k \cdot \ln(n)$ for the BIC, where $k$ is the number of predictors and $n$ is the sample size. 
 Thus, while a lower Sum of Squared Errors (SSE) reduces the AIC and BIC, adding too many predictors can increase them due to the penalty term. 
-This ensures that the model balances goodness-of-fit with \hlblue{parsimony}\index{parsimony}, selecting the simplest model that adequately explains or predicts the data, avoiding unnecessary complexity that does not significantly improve model performance. 
-For the models considered in this chapter, the difference between using AIC and BIC is not substantial, and both criteria lead to similar conclusions. In practice, researchers typically prefer AIC when the goal is better predictive accuracy, whereas BIC is favored when identifying the most plausible model structure from the data.
+These criteria therefore balance goodness-of-fit with \hlblue{parsimony}\index{parsimony}.
 
-Table \ref{tab:comparison_mod_0_2} summarizes the performance of the models discussed so far in terms of their multiple $r^2$, adjusted $r^2$, and BIC.
+AIC and BIC values should only be compared for models fitted to the same response data. 
+This point is important in the present chapter. Models \ttblue{mod.0}, \ttblue{model\_forward}, \ttblue{mod.1}, and \ttblue{mod.2} are fitted to the original estimation data. 
+Model \ttblue{mod.3}, by contrast, is fitted after winsorizing observation 22. 
+Because the response variable has been modified, the likelihoods underlying AIC and BIC are not directly comparable with those of the earlier models. The winsorized model should therefore be interpreted as a sensitivity analysis rather than as a competing model in the same AIC/BIC comparison.
 
+Table \ref{tab} summarizes the performance of the models fitted to the original response data in terms of their multiple $r^2$, adjusted $r^2$, AIC, and BIC.
 
 \begin{table}[thbp]
-
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
-
 \toprule
-
 \parbox[t]{2.2 cm}{Model} &
 Multiple $r^2$ &
 Adjusted $r^2$ & 
 AIC &
 BIC \\
-
 \midrule
-
 mod.0          & 0.3967 & 0.3789 & 1202.633 & 1207.383 \\
 model\_forward & 0.8667 & 0.8586 & 1150.277 & 1156.611 \\
 mod.1          & 0.8683 & 0.8559 & 1151.848 & 1159.766 \\
 mod.2          & 0.9170 & 0.8963 & 1143.217 & 1157.468 \\
-mod.3          & 0.9329 & 0.9161 & 1134.239 & 1148.490 \\
-
 \bottomrule
-
 \end{tabularx}
-
 \caption{Comparison of the various models discussed}
 \label{tab:comparison_mod_0_2}
 \end{table}
 
-The assessment of regression model precision relies not only on overall goodness-of-fit statistics such as multiple $r^2$ and adjusted $r^2$, but also on measures of individual predictor strength and the overall standard error of the estimate, as emphasized in AAG A.62–B.04. In this context, we evaluated the five competing models listed in Table \ref{tab:comparison_mod_0_2}.
+The assessment of regression model precision relies not only on overall goodness-of-fit statistics such as multiple $r^2$ and adjusted $r^2$, but also on measures of individual predictor strength and the overall standard error of the estimate, as emphasized in AAG A.62--B.04. In this context, Table \ref{tab} shows that each extension beyond \ttblue{mod.0} substantially improves explanatory power.
 
-While \ttblue{mod.0} serves as a basic benchmark with an adjusted $r^2$ of 0.3789 and a high BIC of 1207.383, the other four models all achieve substantial improvements in explanatory power (adjusted $r^2$ values above 0.85). 
-Among these, \ttblue{mod.3} has the lowest BIC (1148.490), suggesting the best balance between model complexity and goodness-of-fit. This makes \ttblue{mod.3} the leading candidate from a statistical perspective. Although \ttblue{mod.2} also delivers a high adjusted $r^2$ (0.8963), its BIC is slightly higher than that of \ttblue{mod.3}. The only difference between these two models is that, in \ttblue{mod.3}, an outlier was winsorized, which led to both a higher adjusted $r^2$ and a lower BIC. This suggests that the improved performance of \ttblue{mod.3} is primarily due to the treatment of the outlier rather than an increase in model complexity. Similarly, \ttblue{model\_forward} and \ttblue{mod.1} improve substantially over \ttblue{mod.0}, but are outperformed by \ttblue{mod.3} in both fit and parsimony.
+The simple benchmark model \ttblue{mod.0} has an adjusted $r^2$ of 0.3789 and a BIC of 1207.383. The models that include additional predictors perform much better. \ttblue{model\_forward} and \ttblue{mod.1} both achieve adjusted $r^2$ values above 0.85, with \ttblue{model\_forward} having a slightly lower BIC than \ttblue{mod.1}. This is consistent with the fact that \ttblue{mod.1} includes \ttblue{coolDD}, whose marginal contribution is limited once \ttblue{production} and \ttblue{heatDD} have been included.
+
+Among the models fitted to the original response data, \ttblue{mod.2} has the highest adjusted $r^2$ and the lowest AIC. Its BIC is slightly higher than that of \ttblue{model\_forward}, reflecting the stronger penalty imposed by BIC for the additional interaction terms. This illustrates the trade-off between explanatory richness and parsimony. From an audit perspective, \ttblue{mod.2} remains important because the interaction terms capture the distinct revenue relationships in summer and non-summer months, which are consistent with the business model of US SteamCo.
+
+After this comparison, we separately examine the effect of the outlying observation identified in the diagnostic analysis. Winsorizing observation 22 leads to \ttblue{mod.3}. The improvement in fit after winsorization is in\-for\-mative, but it should not be interpreted as an AIC/BIC improvement over \ttblue{mod.2}, because the model is fitted to a modified response variable. Instead, it supports the conclusion that the outlier had a material influence on the regression results and that further work on the treatment of this observation is warranted.
 
 Following the AAG guidance (AAG A.63), we also consider standard errors and $t$ statistics from the individual model summaries (for example, Table \ref{tab:summary_mod_3}). 
 In \ttblue{mod.3}, for instance, most predictors have statistically significant $t$ statistics whose absolute values exceed 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. 
@@ -1814,7 +1828,7 @@ Another graphical tool for assessing the normality of residuals is the QQ plot, 
   \label{fig:H7_hist_normalized_residuals}
 \end{figure}
 
-Many statistical tests address normality. The \hlblue{Shapiro-Wilk test}\index{Shapiro-Wilk test} has been shown to outperform any competitor. We follow the nine-step approach from Section \ref{sec:the_nine_step_approach}.
+Many statistical tests address normality. The \hlblue{Shapiro--Wilk test}\index{Shapiro--Wilk test} has been shown to outperform any competitor. We follow the nine-step approach from Section \ref{sec:the_nine_step_approach}.
 
 \paragraph{Research question} Is there a reason to believe that the residuals $\epsilon$ are not normally distributed?
 
@@ -1833,20 +1847,18 @@ $H_1 : $ The residuals $\epsilon$ are not normally distributed.
 
 \paragraph{Assumptions} There are no assumptions underlying the test.
 
-\paragraph{Test statistic} We use the \hlblue{$W$ statistic}\index{W statistic}\nomenclature{$W$}{Shapiro-Wilk test statistic}. 
+\paragraph{Test statistic} We use the \hlblue{$W$ statistic}\index{W statistic}\nomenclature{$W$}{Shapiro--Wilk test statistic}. 
 Its calculation is quite complicated and based on order statistics. The $W$ statistic takes values between 0 and 1, with 1 being a perfect match with the normal distribution. 
 
 \paragraph{Distribution} The $W$ statistic's distribution cannot be described by means of a familiar distribution.
 
 \paragraph{Significance level} In regression analysis, we deviate from the standard approach of committing to a significance level ahead of time and then using a critical region. Instead, it is more informative to answer the following question: given the observed value of the $W$ statistic, what is the smallest significance level at which the null hypothesis would be rejected? This level is referred to as the \hlblue{$p$ value}\index{p value}\nomenclature{$p$}{significance level} for the test. The significance level for the $W$ statistic is calculated using approximations.
 
-\paragraph{Value of test statistic} We use the Shapiro-Wilk
-% \ttblue{shapiro.test} function 
-test to obtain the values of the $W$ statistic, and its related $p$ value. For \ttblue{mod.3}, the value of the \emph{W} statistic is 0.9480, with a \emph{p} value of 0.09045.\footnote{See Exercise \ref{ex:normality_test}}
+\paragraph{Value of test statistic} We use the Shapiro--Wilk test to obtain the value of the $W$ statistic and its associated $p$ value. For \ttblue{mod.3}, the value of the $W$ statistic is 0.9480, with a $p$ value of 0.09045.\footnote{See Exercise \ref{ex:normality_test}.}
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.09045. Therefore, we fail to reject the null hypothesis at levels below 0.09045. The residuals appear to be normally distributed.
+The $p$ value of the Shapiro--Wilk test is 0.09045. Consequently, we do not reject the null hypothesis of normality at the conventional significance levels of 5\% or 1\%. The test therefore provides no evidence that the residuals deviate from a normal distribution.
 
 \bigskip
 In our experience, many situations involving non-normality of the residuals are caused by data-input errors. Hence, we recommend performing diagnostic checking and/or reviewing the necessity of transformations prior to testing the model assumptions. If non-normality is not remedied by these procedures, Weighted Least Squares (see Section \ref{sub:homoskedasticity}) may help. Other remedies include nonparametric regression models such as kernel regression and spline regression, or generalized linear models. These remedies are beyond the scope of this book.
@@ -1902,11 +1914,11 @@ where $n$ is the number of observations and $r^2$ is the coefficient of determin
 
 \paragraph{Significance level} Again, we typically conclude based on the $p$ value of the test.
 
-\paragraph{Value of test statistic} We obtain the value of the $BP$ statistic, 7.2079, and its related $p$ value, 0.4076.\footnote{See Exercise \ref{ex:breusch_pagan}}
+\paragraph{Value of test statistic} We obtain the value of the $BP$ statistic, 7.1466, and its related $p$ value, 0.0674.\footnote{See Exercise \ref{ex:breusch_pagan}}
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.4076. We therefore fail to reject the null hypothesis at levels below 0.4076. The residuals appear to have constant variance.
+The $p$ value of the test statistic is 0.0674. We therefore fail to reject the null hypothesis at levels greater than 0.0674. The residuals appear to have constant variance.
 
 \bigskip
 In cases where the null hypothesis is rejected, and the residuals show non-constant variance, we use a technique referred to as \hlblue{Weighted Least Squares}\index{weighted least squares} (WLS)\index{WLS}. It involves specifying a weight matrix for the residuals based on our understanding of the data and the source of heteroskedasticity. The weight matrix is based on the variance of the residuals, with larger weights assigned to observations with smaller residuals. 
@@ -1967,18 +1979,18 @@ $H_1 : $ The residuals $\epsilon$ are autocorrelated.
 \end{equation}
 where $n$ is the number of observations, and $r^2$ is the coefficient of determination from the autoregressive model.
 
-\paragraph{Distribution} Under the null hypothesis of no autocorrelation, the test statistic $BG$ follows a chi-squared distribution with $k.p$ degrees of freedom.
+\paragraph{Distribution} Under the null hypothesis of no autocorrelation, the Breusch--Godfrey test statistic is asymptotically chi-squared distributed with $p$ degrees of freedom, where $p$ is the number of lagged residual terms included in the auxiliary regression.
 
-\paragraph{Significance level} We conclude based on the $p$ value of the test.
+\paragraph{Significance level} We conclude based on the $p$ value of the test. The null hypothesis is rejected when the chosen significance level is greater than the reported $p$ value.
 
-\paragraph{Value of test statistic} We obtain the value of the $BG$ statistic, 7.1466, and its related $p$ value, 0.06737.\footnote{See Exercise \ref{ex:breusch_godfrey_test}} It is noteworthy that the order $p$ can be specified by the user. If omitted, the default value is \ttblue{order = 1}.
+\paragraph{Value of test statistic} We obtain a Breusch--Godfrey test statistic of 7.1466, with a related $p$ value of 0.06737.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.} In this example, the test is performed with order $p=3$, so the reference distribution is a chi-squared distribution with 3 degrees of freedom. It is noteworthy that the order $p$ can be specified by the user. If omitted, the default value is \ttblue{order = 1}.
 
 \paragraph{Conclusion}
 
 The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals. 
 This is visually supported by a moderate spike in the PACF plot. 
 While not definitively conclusive, these signs suggest that the model may benefit from adjustments to account for autocorrelation. 
-In time-series regression, residual autocorrelation violates the assumption of independence, potentially biasing standard errors and undermining inference.
+In time-series regression, residual autocorrelation violates the assumption that the error terms are independent over time. When this occurs, the ordinary least squares coefficient estimates may still be unbiased if the regressors are exogenous, but the usual standard errors, confidence intervals, and significance tests may no longer be reliable.
 
 One commonly suggested workaround is to include lagged residuals as predictors in the model. 
 This approach can be effective for addressing first-order autocorrelation, but it comes with a caveat: since residuals are themselves estimates derived from the data, treating them as fixed predictors introduces a layer of uncertainty that is typically not accounted for. As a result, the method lacks a rigorous statistical foundation and may lead to biased or inefficient estimates if used uncritically.
@@ -1986,20 +1998,40 @@ This approach can be effective for addressing first-order autocorrelation, but i
 A more principled solution is to apply \hlblue{Generalized Least Squares}\index{generalized least squares} (GLS), which adjusts the estimation procedure by explicitly modeling the covariance structure of the residuals. However, GLS is beyond the scope of this book.
 
 \bigskip
-Instead, a practical and widely used alternative is the \hlblue{Cochrane-Orcutt method}\index{Cochrane-Orcutt method}, designed specifically to correct for first-order autocorrelation (AR(1)). 
-This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
-The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
+Instead, a practical and widely used alternative is to apply a first-order autoregressive correction. This approach estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of the lagged value from both the dependent variable and each independent variable. The transformed model can then be estimated by ordinary least squares, restoring valid statistical inference when the residuals follow an AR(1) process.
 
-The transformed model under the Cochrane-Orcutt method is given by:
+For a regression model without interaction terms, the transformed model is given by
 
 \begin{equation}
-  y_t - \rho y_{t-1} = \beta_0(1 - \rho) + \beta_1(x_{1,t} - \rho x_{1,t-1}) + \ldots + \beta_k(x_{k,t} - \rho x_{k,t-1}) + u_t
+  y_t - \rho y_{t-1}
+  =
+  \beta_0(1-\rho)
+  + \beta_1(x_{1,t}-\rho x_{1,t-1})
+  + \cdots
+  + \beta_k(x_{k,t}-\rho x_{k,t-1})
+  + u_t,
 \end{equation}
-
-where $\rho$ \nomenclature{$\rho$}{estimated autocorrelation coefficient} is the estimated autocorrelation coefficient, and $u_t$\nomenclature{$u_t$}{error or disturbance term} is the new error term with no autocorrelation.
+where $\rho$\nomenclature{$\rho$}{estimated autocorrelation coefficient} is the estimated autocorrelation coefficient, and $u_t$\nomenclature{$u_t$}{transformed error term} is the trans\-formed error term.
 
 \bigskip
-This formula shows how each variable is transformed by subtracting $\rho$ times its lagged value, effectively filtering out the AR(1) structure in the residuals. The resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and $t$ and $p$ values are summarized in Table \ref{tab:summary_mod_4}.
+When the regression model includes interaction terms, the interaction variables should first be constructed and then transformed in the same manner as the other predictors. For example, if
+
+\[
+z_t = x_t s_t
+\]
+is an interaction term, the transformed interaction becomes
+
+\begin{equation}
+  z_t - \rho z_{t-1}
+  =
+  x_t s_t - \rho x_{t-1}s_{t-1}.
+\end{equation}
+
+Thus, the interaction term itself is transformed, rather than multiplying separately transformed predictor variables.
+
+\bigskip
+This transformation reduces the first-order autocorrelation in the residuals, provided that the AR(1) model is appropriate. The transformed variables are then used to estimate the regression model by ordinary least squares. In this chapter, the resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and the associated $t$ and $p$ values are summarized in Table~\ref{tab:summary_mod_4}.
+
 
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
@@ -2012,14 +2044,14 @@ $Pr(>|t|)$ \\
 
 \midrule
 
-intercept         &   199,459 &   773,625 &  0.258 & 0.798498 \\
-production\_adj   &     31.86 &     3.045 & 10.463 & 0.000000 \\
-summer\_adj       & 1,646,049 & 1,062,804 &  1.549 & 0.133078 \\ 
-coolDD\_adj       &    25,316 &    17,740 &  1.427 & 0.165033 \\
-heatDD\_adj       &     3,804 &     2,049 &  1.856 & 0.074368 \\
-prod\_summer\_adj &    -24.06 &     6.468 & -3.721 & 0.000923 \\        
-cool\_summer\_adj &   -48,824 &    32,388 & -1.507 & 0.143311 \\      
-heat\_summer\_adj &   -18,375 &    21,459 & -0.856 & 0.399379 \\
+intercept         &    14,959 &   741,231 &  0.020 & 0.984046 \\
+production\_adj   &     34.07 &     3.209 & 10.615 & 0.000000 \\
+summer\_adj       & 5,633,141 & 2,324,882 &  2.423 & 0.022375 \\ 
+coolDD\_adj       &   -82,554 &    32,693 & -2.525 & 0.017747 \\
+heatDD\_adj       &     2,155 &     2,326 &  0.927 & 0.362397 \\
+prod\_summer\_adj &    -22.83 &      5.31 & -4.303 & 0.000198 \\        
+cool\_summer\_adj &    84,539 &    33,751 &  2.505 & 0.018590 \\      
+heat\_summer\_adj &   -20,135 &    13,897 & -1.449 & 0.158894 \\
 
 \bottomrule
 \end{tabularx}
@@ -2341,7 +2373,7 @@ December 2014  &        18,377,456  & 16,921,330 & 21,094,017 & 25,266,704 & -2,
 
 \midrule
 
-Total          &174,778,400 &             & 199,588,104 & & -24,809,704 \\
+Total          &174,778,400 &             & 198,680,683 & & -23,902,283 \\
 
 \bottomrule
 \end{tabularx}
@@ -2363,48 +2395,100 @@ According to this Standard, auditors are expected to gather and assess evidence 
 \section{Evaluation} % (fold)
 \label{sec:auditor_response}
 
-In the preceding sections, we explored the construction and application of linear models to predict revenue for a set of future observations. 
-Case: US SteamCo focuses on 12 monthly revenue expectations for the current hold-out year. 
-Using a regression model built on historical data, we generated monthly predictions, which served as benchmarks for evaluating the observed revenues. 
-Throughout this process, we identified individual months with significant deviations from the model predictions, flagging them for further analysis. 
-For example, one notable deviation occurred in March, when the recorded revenue was lower than expected because of an unexpected storm impacting the East Coast. 
-Such cases illustrate real-world events that can impact financial outcomes even when an effective predictive model is in place. 
+In the preceding sections, we developed and evaluated regression models to predict revenue for future observations. In the Case: US SteamCo, the model is used to create 12 monthly revenue expectations for the current hold-out year. The model was estimated using historical data from the estimation period and then applied to the 2014 hold-out period.
 
-With these monthly predictions established, the next critical step is to assess whether the cumulative revenue results for the year suggest a material misstatement. 
-This final assessment involves combining the 12 monthly expectations into a single yearly expectation and constructing the \emph{hlblue}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR}, a 99\% prediction interval around it. 
-This interval represents the range within which true revenue is expected to fall if the account is free of material misstatement, serving as the basis for our null hypothesis. 
+The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:expectations_recorded}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue may be related to an unexpected storm affecting the East Coast. Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors.
 
-We then determine whether the recorded revenue falls within this range. 
-If it does not, this may indicate one of two possible alternative hypotheses: that the account is either materially overstated or materially understated, which requires further investigation. 
-If it does, we calculate the level of assurance obtained from the analysis, which helps us evaluate if we have obtained sufficient evidence to conclude on the risk of material misstatement.
+The next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
+
+We then compare the recorded annual revenue with the annual expectation and its acceptable difference range. If the recorded revenue falls outside this range, the difference may indicate a potential material overstatement or understatement and requires further investigation. If the recorded revenue falls within the range, the substantive analytical procedure has not identified a significant unexpected difference at the annual level. We then determine the level of assurance obtained from the procedure and evaluate whether it is sufficient in light of the assessed risk of material misstatement and the extent of other substantive procedures planned.
 
 \subsection{Combining detail expectations} % (fold)
 \label{sub:combining_detail_expectations}
 
-When creating predictions over multiple periods (e.g., 12 months), combining the prediction intervals requires careful consideration of both individual prediction uncertainty and dependencies between predictions.
-
-Each individual prediction interval (Equation \ref{eq:prediction_interval} provides a range within which the actual value for a single month is expected to fall, given the model's parameters and error variance. 
-These intervals are calculated independently, but because each prediction uses the same model (and thus the same residual standard error $s_e$\nomenclature{$s_e$}{residual standard error}), they are not statistically independent.
-In addition, the coefficients are fixed for all predictions and estimated from the same sample. 
-Therefore, any inaccuracies in the model parameters (such as systematic bias) affect all the predictions in the same manner.
-
-For cumulative predictions (e.g., predicting total revenue over 12 months), we can combine individual prediction intervals using the root-sum-of-squares formula. We first create the \hlblue{standard error of the combined prediction}:\nomenclature{$s_{comb}$}{standard error of the combined prediction}
+When predictions are made for multiple periods, such as the 12 months in the hold-out year, the annual expectation is obtained by summing the individual monthly expectations:
 
 \begin{equation}
-\label{eq:s_combined}
-s_{comb} = \sqrt{\sum_{i=1}^{12} \text{Var}(\hat{y}_i)}  
+\label{eq:annual_expectation}
+\hat{y}_{\text{total}} = \sum_{i=1}^{12} \hat{y}_i.
 \end{equation}
-where the individual variance of $\hat{y_i}$ is given by the square of the right-hand part of Equation \ref{eq:prediction_interval}:
+
+Constructing a prediction interval for this annual total requires more care. The annual prediction interval cannot be obtained by summing the lower and upper limits of the monthly prediction intervals. Nor should the annual prediction standard error be calculated merely as the square root of the sum of the squared monthly prediction standard errors. The reason is that all monthly predictions are based on the same estimated regression coefficients. As a result, the estimation errors in the monthly predictions are correlated, even when the future residual errors are uncorrelated.
+
+This distinction is important. Tests for autocorrelation, such as the Breusch--Godfrey test, address correlation in the residual errors. They do not address the dependence between monthly predictions that arises because each prediction uses the same estimated coefficient vector.
+
+Let $\mathbf{X}_{\text{hold}}$ denote the design matrix for the 12 hold-out observations, and let $\widehat{\boldsymbol{\beta}}$ be the vector of estimated regression coefficients. The vector of monthly expectations is
+
 \begin{equation}
-\label{eq:variance_y_hat}
-\text{Var}(\hat{y}_i) =  s_e^2 \cdot \left(1 + \frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}\right)
+\label{eq:monthly_expectation_vector}
+\widehat{\mathbf{y}}_{\text{hold}}
+=
+\mathbf{X}_{\text{hold}}\widehat{\boldsymbol{\beta}}.
 \end{equation}
 
-Assuming that the errors are uncorrelated, the variance in the total prediction is the sum of the individual variances. 
-However, if the predictions are dependent, this approach may understate the combined uncertainty.
+The annual expectation can therefore be written as
 
-When dependencies are likely, the covariance matrix of the predictions is used to adjust the combined interval. 
-This approach is preferred in practice but is beyond the scope of this book.
+\begin{equation}
+\label{eq:annual_expectation_matrix}
+\hat{y}_{\text{total}}
+=
+\mathbf{1}^{\top}
+\mathbf{X}_{\text{hold}}
+\widehat{\boldsymbol{\beta}},
+\end{equation}
+where $\mathbf{1}$ is a vector of twelve ones.
+
+\medskip
+The prediction variance of the annual total consists of two components. The first component reflects the uncertainty in the estimated regression coefficients. This component captures the covariance between the monthly expectations caused by using the same estimated regression coefficients. The second component reflects the future residual variation of the 12 monthly observations.
+
+Under the assumption that the future residuals are uncorrelated and have common variance $\hat{\sigma}^2$, the prediction variance of the annual total is
+
+\begin{equation}
+\label{eq:annual_prediction_variance}
+\operatorname{Var}
+\left(
+y_{\text{total}} - \hat{y}_{\text{total}}
+\right)
+=
+\mathbf{1}^{\top}
+\mathbf{X}_{\text{hold}}
+\operatorname{Var}(\widehat{\boldsymbol{\beta}})
+\mathbf{X}_{\text{hold}}^{\top}
+\mathbf{1}
++
+12\hat{\sigma}^2.
+\end{equation}
+
+The \hlblue{annual prediction standard error}\index{annual prediction standard error}\nomenclature{$s_{\text{annual}}$}{annual prediction standard error} is therefore
+
+\begin{equation}
+\label{eq:annual_prediction_standard_error}
+s_{\text{annual}}
+=
+\sqrt{
+\mathbf{1}^{\top}
+\mathbf{X}_{\text{hold}}
+\operatorname{Var}(\widehat{\boldsymbol{\beta}})
+\mathbf{X}_{\text{hold}}^{\top}
+\mathbf{1}
++
+12\hat{\sigma}^2
+}.
+\end{equation}
+
+The 99\% acceptable difference range around the annual expectation is then obtained as
+
+\begin{equation}
+\label{eq:annual_prediction_interval}
+\hat{y}_{\text{total}}
+\pm
+t_{0.995,df}
+s_{\text{annual}},
+\end{equation}
+where $df$ is the residual degrees of freedom of the regression model.
+
+\medskip
+If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be replaced by the appropriate residual covariance matrix. In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
 
 % subsection combining_detail_expectations (end)
 
@@ -2447,13 +2531,13 @@ Given that we are testing whether the observed revenue total significantly devia
 
 \begin{equation}
 \label{eq:test_statistic}
-  T = \frac{\sum_{i=1}^{12} (\hat{y}_i - y_i)}{s_{comb}}
+  T = \frac{y_{\text{recorded}} - \hat{y}_{\text{total}}}{s_{comb}}
 \end{equation}
 
 \begin{tabbing}
 \hspace*{1.2cm}\=\hspace*{1.4cm}\=\hspace*{0.2cm}\= \kill
-where \> $\sum_{i=1}^{12} \hat{y}_i$ \> : \> combined expected revenue \\
-      \> $y_i$     \> : \> recorded revenue \\
+where \> $\hat{y}_{\text{total}}$ \> : \> combined expected revenue \\
+      \> $y_{\text{recorded}}$     \> : \> recorded revenue \\
       \> $s_{comb}$     \> : \> standard error of the combined prediction (Eq. \ref{eq:s_combined})
 \end{tabbing}
 
@@ -2508,7 +2592,7 @@ The second step is an analytical investigation of the identified difference. The
 
 The final step is the evaluation of the evidence obtained. Explanations provided by management should not be accepted without corroboration. Instead, they should be supported by additional analytical procedures, inspection of relevant documentation, inquiry of knowledgeable personnel, or other audit evidence. If the explanation is adequately supported, the unexpected difference no longer represents a potential material misstatement. If no satisfactory explanation can be obtained, or if the explanation is inconsistent with other audit evidence, the auditor should conclude that the substantive analytical procedure has identified a potential material misstatement. In that case, additional substantive procedures should be performed to obtain sufficient appropriate audit evidence.
 
-This illustrates an important principle of substantive analytical procedures. Regression models identify observations that merit professional attention; they do not determine whether a misstatement exists. Statistical models assist the auditor in directing further investigation, but the final conclusion always depends on the auditor's evaluation of all relevant audit evidence obtained during the investigation.
+This illustrates an important principle of substantive analytical procedures. Regression models identify observations that merit pro\-fessional attention; they do not determine whether a misstatement exists. Statistical models assist the auditor in directing further investigation, but the final conclusion always depends on the auditor's evaluation of all relevant audit evidence obtained during the investigation.
 
 % subsection identification_investigation_and_evaluation (end)
 
@@ -2530,21 +2614,13 @@ The standardized difference is
 \begin{equation}
 T = \frac{D}{s_{\text{comb}}},
 \end{equation}
-
-where $s_{\text{comb}}$ is the combined prediction standard error. If the account is not materially misstated, $T$ follows a central $t$ distribution with
-
-\begin{equation}
-df = n-k-1
-\end{equation}
-
-degrees of freedom.
+where $s_{\text{comb}}$ is the combined prediction standard error. If the account is not materially misstated, $T$ follows a central $t$ distribution with $n - k - 1$ degrees of freedom.
 
 Let
 
 \begin{equation}
 \delta = \frac{PM}{s_{\text{comb}}}
 \end{equation}
-
 be the non-centrality parameter\nomenclature{$\delta$}{non-centrality parameter of the non-central $t$ distribution}, where $PM$ is performance materiality. If revenue is materially overstated by $PM$, the distribution of $T$ shifts to the right and follows a non-central $t$ distribution with non-centrality parameter $+\delta$. If revenue is materially understated by $PM$, the distribution shifts to the left and follows a non-central $t$ distribution with non-centrality parameter $-\delta$.
 
 As discussed in Section \ref{sub:acceptable_difference} in Volume 2, the acceptable difference range may be determined by controlling either efficiency risk or effectiveness risk. If the auditor controls efficiency risk, the acceptable range is based on the central $t$ distribution under the assumption of no misstatement. For an efficiency risk of $\beta$, the acceptable difference range is
@@ -2558,13 +2634,13 @@ t_{1-\beta/2,df}s_{\text{comb}}
 
 This limits the probability of investigating a difference when the account is not materially misstated. In that case, the level of assurance is not fixed in advance. It follows from the width of the acceptable difference range, the precision of the model, and performance materiality.
 
-Let $c_L$ and $c_U$ denote the lower and upper standardized boundaries of the acceptable difference range. The achieved assurance for detecting a material overstatement is
+Let $c_L$ and $c_U$ denote the lower and upper standardized boundaries of the acceptable difference range. The achieved assurance for detecting a material overstatement is the upper-tail probability
 
 \begin{equation}
 P(T > c_U \mid T \sim t_{df,\delta}).
 \end{equation}
 
-The achieved assurance for detecting a material understatement is
+The achieved assurance for detecting a material understatement is the lower-tail probability
 
 \begin{equation}
 P(T < c_L \mid T \sim t_{df,-\delta}).
@@ -3430,7 +3506,7 @@ The QQ plot is produced by
 \end{Verbatim}
 % \end{minipage}
 
-We use the \ttblue{shapiro.test} function from the \ttblue{stats} package to perform the Shapiro-Wilk normality test on the residuals of \ttblue{ussteamco.mod.3}. The output is as follows:
+We use the \ttblue{shapiro.test} function from the \ttblue{stats} package to perform the Shapiro--Wilk normality test on the residuals of \ttblue{ussteamco.mod.3}. The output is as follows:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{shapiro.test(ussteamco.mod.3$residuals)}
@@ -3813,7 +3889,7 @@ Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotte
 \textcolor{KPMG_blue}{pi_bounds_true <- data.frame(}
 \textcolor{KPMG_blue}{  x = x_extended,}
 \textcolor{KPMG_blue}{  pi_lower = pi_lower_true,}
-\textcolor{KPMG_blue}{  pi_upper = pi_upper_true}
+\textcolor{KPMG_blue}{  pi_upper = pi_upper_true)}
 
 \textcolor{KPMG_blue}{ggplot() +}
 \textcolor{KPMG_blue}{  geom_ribbon(}
