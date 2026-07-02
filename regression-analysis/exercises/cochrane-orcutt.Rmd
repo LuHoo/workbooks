@@ -1,0 +1,57 @@
+## Exercise 5.26. The Cochrane--Orcutt method
+
+A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation (AR(1)). This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
+
+We first estimate an AR(1) model for the residuals from `mod.3`.
+
+```{r}
+(rho <- arima(ussteamco.mod.3$residuals,
+              order = c(1, 0, 0))$coef[1])
+```
+
+Then we transform all variables using the estimated $\rho$. For each interaction, we first construct the interaction from the original variables at times $t$ and $t-1$, and then apply the AR(1) transformation to that interaction:
+
+$$x_t s_t - \rho x_{t-1}s_{t-1}.$$
+
+```{r}
+n <- nrow(USSteamCoEstim2)
+trans <- USSteamCoEstim2[-1, ]  # t
+lag   <- USSteamCoEstim2[-n, ]  # t-1
+
+trans$revenue_adj <- trans$revenue - rho * lag$revenue
+
+trans$production_adj <- trans$production - rho * lag$production
+trans$heatDD_adj     <- trans$heatDD     - rho * lag$heatDD
+trans$coolDD_adj     <- trans$coolDD     - rho * lag$coolDD
+trans$summer_adj     <- trans$summer     - rho * lag$summer
+
+trans$prod_summer_adj <- trans$production * trans$summer -
+  rho * lag$production * lag$summer
+trans$heat_summer_adj <- trans$heatDD * trans$summer -
+  rho * lag$heatDD * lag$summer
+trans$cool_summer_adj <- trans$coolDD * trans$summer -
+  rho * lag$coolDD * lag$summer
+```
+
+We fit a new model using the Cochrane--Orcutt method.
+
+```{r}
+ussteamco.mod.4 <- lm(revenue_adj ~
+                        production_adj + heatDD_adj + coolDD_adj +
+                        summer_adj + prod_summer_adj +
+                        heat_summer_adj + cool_summer_adj,
+                      data = trans)
+
+summary(ussteamco.mod.4)
+```
+
+This manual approach follows the Cochrane--Orcutt transformation:
+
+$$y_t - \rho y_{t-1} = \beta_0(1 - \rho) + \sum_j \beta_j(x_{jt} - \rho x_{j,t-1}) + u_t.$$
+
+It discards the first observation, which cannot be transformed because no lagged observation is available. After fitting the transformed model, we check whether autocorrelation is reduced by inspecting the `pacf` plot and running the Breusch--Godfrey test.
+
+```{r}
+pacf(ussteamco.mod.4$residuals)
+bgtest(ussteamco.mod.4, order = 3)
+```
