@@ -1,0 +1,1095 @@
+---
+title: "Workshop Chapter 1"
+author: "Lucas Hoogduin"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+ 
+## Chapter 1. Probability distributions
+ 
+### Exercise 1.1 Hypergeometric distribution
+ 
+The `R` function `dhyper()` requires four arguments: $k, M, (N - M)$, and $n$.
+The prefix `d` indicates that the function is a density function.
+ 
+```{r}
+dhyper(x = 0, m = 17, n = 314, k = 60)
+dhyper(x = 1, m = 17, n = 314, k = 60)
+```
+*Cumulative probabilities* $P(k \leq k)$ (the probability of finding not more than $k$ errors) are obtained with `phyper()`. For example, if we are interested in the probability of finding no more than one error, we use `phyper(1, 17, 314, 60)`. In this case the prefix `p` indicates the (cumulative) probability function.
+```{r}
+phyper(1, 17, 314, 60)
+dhyper(0, 17, 314, 60) + dhyper(1, 17, 314, 60)
+```
+ 
+We see that the result for the cumulative function equals that of the sum of the two individual probabilities.
+ 
+Probabilities in the right-hand tail $P(k > k)$ can be calculated by passing the additional argument `lower.tail = FALSE`. For example, the probability $P(k > 1)$ is calculated by
+ 
+```{r}
+phyper(1, 17, 314, 60, lower.tail = FALSE)
+```
+ 
+### Exercise 1.2 Binomial distribution
+ 
+The relevant `R functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and `$\pi$ = M / N`.
+ 
+```{r}
+dbinom(x = 1, size = 60, prob = 17 / 331)
+pbinom(1, 60, 17 / 331)
+```
+ 
+### Exercise 1.3 Poisson distribution
+ 
+The functions `dpois()` and `ppois()` are used for the calculation of probabilities from the Poisson distribution.
+They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$.
+For the *Case: Number of students* remember that $n = 60$ and $\pi = 17 / 331$.
+ 
+```{r}
+dpois(1, 60 * 17/ 331)
+dpois(3, 60 * 17/ 331)
+```
+ 
+The probability of finding one error is 14.14%.
+ 
+To calculate the probability of finding no more than one error in the sample of 60 Ph.D.s, use
+ 
+```{r}
+ppois(1, 60 * 17/ 331)
+```
+ 
+### Exercise 1.4 Normal distribution
+ 
+In `R` we use the function `pnorm`, that uses the arguments `q` for the sampling result that we evaluate, `mean` for the population mean, and `sd` for the standard deviation of the mean.
+ 
+```{r}
+pnorm(q = 1012, mean = 1030, sd = 115.26/sqrt(200))
+```
+ 
+Note that the syntax is more elaborate than what we have done so far. In `R` we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
+ 
+There are two advantages to using argument names and values. First, the command is easier to interpret by a reviewer. Second, we can pass the arguments in any order. The following commands are therefore equivalent:
+ 
+```{r}
+pnorm(1012, 1030, 115.26 / sqrt(200))
+pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
+pnorm(sd = 115.26/sqrt(200), mean = 1030, q = 1012)
+```
+ 
+### Exercise 1.5 Student's $t$ distribution
+ 
+To calculate the probability found of 14.7%, we use the function `pt()` with arguments `x` for the boundary value and `df` for the number of degrees of freedom.
+ 
+```{r}
+(t_val <- (1004 - 1030) / (73.8 / sqrt(10)))
+pt(t_val, 9)
+```
+ 
+The probability is 14.7%. Notice that we used another shortcut notation: we added brackets to the assignment of the `t_val` variable, so that the assigned value is returned immediately.
+ 
+### Exercise 1.6 $\chi^2$ (chi-squared) distribution
+ 
+The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
+ 
+```{r}
+qchisq(p = .95, df = 9)
+```
+ 
+Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$ distributed variable
+ 
+```{r}
+qchisq(p = .05, df = 9)
+```
+ 
+These two results are then used to calculate the upper and lower 90\% confidence bounds of the population variance.
+ 
+### Exercise 1.7 $F$ distribution
+ 
+Hypothesis testing is done with the function `qf`, where we use the argument `lower.tail = FALSE` to indicate the direction of the test.
+ 
+```{r}
+(f_crit <- qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE))
+```
+ 
+In the example above, the critical value of the $F$ statistic is `r round(f_crit, 6)`. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not.
+ 
+The probability of obtaining this particular value of the test statistic is calculated with the `pf` function.
+ 
+```{r}
+pf(q = f_crit, df1 = 25, df2 = 23, lower.tail = FALSE)
+```
+
+
+<!-- SUPPORT-ONLY:START -->
+
+## Private book-support calculations
+
+
+```{r}
+library(ggplot2)
+library(grid)
+library(plyr)
+library(MASS)
+library(gridExtra)
+library(kthemes)
+theme_set(theme_kpmg())
+
+```
+# Hypergeometric distribution
+
+Figure 2.1
+
+```{r}
+k3 <- seq(0, 11)
+p3_1 <- dhyper(x=k3, m=17, n=314, k=10)
+df5_1 <- data.frame(k=k3, P=p3_1, emphasis = "no")
+p3_2 <- dhyper(x=k3, m=17, n=314, k=20)
+df5_2 <- data.frame(k=k3, P=p3_2, emphasis = "no")
+p3_3 <- dhyper(x=k3, m=17, n=314, k=40)
+df5_3 <- data.frame(k=k3, P=p3_3, emphasis = "no")
+p3_4 <- dhyper(x=k3, m=17, n=314, k=60)
+df5_4 <- data.frame(k=k3, P=p3_4, emphasis = "yes",
+                    Distribution = "hypergeometric")
+p3_4b <- dhyper(x=k3, m=17, n=314, k=90)
+df5_4b <- data.frame(k=k3, P=p3_4b, emphasis = "no")
+p3_5 <- dhyper(x=k3, m=17, n=314, k=120)
+df5_5 <- data.frame(k=k3, P=p3_5, emphasis = "no")
+
+p1 <-
+  ggplot(df5_1, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+p2 <-
+  ggplot(df5_2, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+p3 <-
+  ggplot(df5_3, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+
+p4 <-
+  ggplot(df5_4, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  scale_fill_manual(values = c("no" = "#00338D",
+                               "yes" = "#0091DA")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+p4b <-
+  ggplot(df5_4b, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  scale_fill_manual(values = c("no" = "#00338D",
+                               "yes" = "#0091DA")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())  +
+  theme(axis.text.x = element_blank())
+
+p5 <-
+  ggplot(df5_5, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+
+grid.arrange(p1, p4, p2, p4b, p3, p5, ncol=2)
+
+```
+
+
+
+```{r}
+dhyper(0, 17, 314, 60)
+dhyper(1, 17, 314, 60)
+```
+```{r}
+phyper(1, 17, 314, 60)
+dhyper(0, 17, 314, 60) + dhyper(1, 17, 314, 60)
+```
+```{r}
+phyper(1, 17, 314, 60, lower.tail = FALSE)
+```
+
+
+
+# Binomial distribution
+
+Figure 2.2
+
+```{r}
+k4 <- seq(0, 11)
+p4_1 <- dbinom(x=k4, prob = 17/331, size=10)
+df6_1 <- data.frame(k=k4, P=p4_1, emphasis = "no")
+p4_2 <- dbinom(x=k4, prob = 17/331, size=20)
+df6_2 <- data.frame(k=k4, P=p4_2, emphasis = "no")
+p4_3 <- dbinom(x=k4, prob = 17/331, size=40)
+df6_3 <- data.frame(k=k4, P=p4_3, emphasis = "no")
+p4_4 <- dbinom(x=k4, prob = 17/331, size=60)
+df6_4 <- data.frame(k=k4, P=p4_4, emphasis = "yes",
+                    Distribution = "binomial")
+p4_5 <- dbinom(x=k4, prob = 17/331, size=90)
+df6_5 <- data.frame(k=k4, P=p4_5, emphasis = "no")
+p4_6 <- dbinom(x=k4, prob = 17/331, size=120)
+df6_6 <- data.frame(k=k4, P=p4_6, emphasis = "no")
+
+Fig2.2_a <-
+  ggplot(df6_1, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k4) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+Fig2.2_b <-
+  ggplot(df6_2, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k4) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+Fig2.2_c <-
+  ggplot(df6_3, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k4) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+
+Fig2.2_d <-
+  ggplot(df6_4, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  scale_fill_manual(values = c("no" = "#00338D",
+                               "yes" = "#0091DA")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k4) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+Fig2.2_e <-
+  ggplot(df6_5, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  scale_fill_manual(values = c("no" = "#00338D",
+                               "yes" = "#0091DA")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())  +
+  theme(axis.text.x = element_blank())
+
+Fig2.2_f <-
+  ggplot(df6_6, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+
+grid.arrange(Fig2.2_a, Fig2.2_d, Fig2.2_b, Fig2.2_e, Fig2.2_c, Fig2.2_f, ncol=2)
+
+```
+
+
+
+```{r}
+dbinom(1, 60, 17 / 331)
+pbinom(1, 60, 17 / 331)
+```
+
+
+# Poisson distribution
+
+Figure 2.3
+
+```{r}
+
+k5 <- seq(0, 11)
+p5_1 <- dpois(x=k5, lambda=10 * 17 / 331)
+df7_1 <- data.frame(k=k5, P=p5_1, emphasis = "no")
+p5_2 <- dpois(x=k5, lambda=20 * 17 / 331)
+df7_2 <- data.frame(k=k5, P=p5_2, emphasis = "no")
+p5_3 <- dpois(x=k5, lambda=40 * 17 / 331)
+df7_3 <- data.frame(k=k5, P=p5_3, emphasis = "no")
+p5_4 <- dpois(x=k5, lambda=60 * 17 / 331)
+df7_4 <- data.frame(k=k5, P=p5_4, emphasis = "yes",
+                    Distribution = "Poisson")
+p5_5 <- dpois(x=k5, lambda=90 * 17 / 331)
+df7_5 <- data.frame(k=k5, P=p5_5, emphasis = "no")
+p5_6 <- dpois(x=k5, lambda=120 * 17 / 331)
+df7_6 <- data.frame(k=k5, P=p5_6, emphasis = "no")
+
+Fig2.3_a <-
+  ggplot(df7_1, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+Fig2.3_b <-
+  ggplot(df7_2, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+Fig2.3_c <-
+  ggplot(df7_3, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+
+Fig2.3_d <-
+  ggplot(df7_4, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  scale_fill_manual(values = c("no" = "#00338D",
+                               "yes" = "#0091DA")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  theme(axis.text.x = element_blank())
+
+Fig2.3_e <-
+  ggplot(df7_5, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  scale_fill_manual(values = c("no" = "#00338D",
+                               "yes" = "#0091DA")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())  +
+  theme(axis.text.x = element_blank())
+
+Fig2.3_f <-
+  ggplot(df7_6, aes(x = k, y = P, fill = emphasis)) +
+  theme_grey() + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = k3) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+
+grid.arrange(Fig2.3_a, Fig2.3_d, Fig2.3_b, Fig2.3_e, Fig2.3_c, Fig2.3_f, ncol=2)
+
+```
+
+
+Figure 2.4: Combination of three distributions
+
+```{r}
+df_combi <- rbind(df5_4, df6_4, df7_4)
+
+p <-
+  ggplot(df_combi, aes(x=k, fill=Distribution)) +
+  geom_bar(aes(x=k, y=P), stat="identity", position="dodge") +
+  scale_x_continuous(breaks = k3) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+  theme(axis.text=element_text(size=16),
+        axis.title=element_text(size=36),
+        legend.text=element_text(size=18),
+        legend.title=element_text(size=18))
+p
+```
+```{r}
+dpois(1, 60 * 17/ 331)
+dpois(3, 60 * 17/ 331)
+```
+```{r}
+ppois(1, 60 * 17/ 331)
+```
+Table 2.1
+```{r}
+k <- c(0, 1, 2)
+prob_hyper <- round(dhyper(k, 17, 314, 60), digits = 4)
+prob_binom <- round(dbinom(k, 60, 17 / 331), digits = 4)
+prob_pois <- round(dpois(k, 60 * 17/ 331), digits = 4)
+(table_2_1 <- data.frame(k, prob_hyper, prob_binom, prob_pois))
+```
+
+
+
+
+# Continuous distributions
+
+
+Continue kansverdeling Figure 2.6
+```{r}
+max = 0.25
+
+xc <- seq(0, max, max*.001)
+hx <- dgamma(xc,2,30)
+df8 <- data.frame(x=xc, density=hx)
+
+p <-
+  ggplot(df8) +
+  geom_area(aes(x = x, y = density, fill = "constant")) +
+  theme(legend.position="none") + # Removes the legend
+  theme(axis.text.x = element_blank(), axis.text.y = element_blank()) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.title.y = element_blank())
+p
+```
+
+
+
+# Normal distribution
+
+
+Figure 2.7
+
+```{r}
+
+z <- seq(-3, 3, by=0.01)
+yz <- dnorm(z)
+
+
+df11 <- data.frame(zwaarde=z, density=yz)
+
+p <-
+  ggplot(df11) +
+  theme_grey() +
+  geom_line(aes(x=zwaarde, y=density, colour = "constant"), size=1) +
+  theme(axis.text.y=element_blank()) +
+  theme(legend.position="none") + # Removes the legend
+  theme(legend.title=element_blank()) +
+  scale_x_continuous(breaks = seq(-3, 3)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.title.y = element_blank()) + 
+  annotate("segment", x = 0, xend = 0, y = 0, yend = 0.4) + 
+  annotate("segment", x = -1, xend = 0, y = 0.2419707, yend = 0.2419707) + 
+  geom_text(aes(0.2, 0.03, label="mu"), parse=TRUE, size = 8) + 
+  geom_text(aes(-0.5, 0.2
+                , label="sigma"), parse=TRUE, size = 8) +
+  theme(axis.text=element_text(size=16),
+        axis.title=element_text(size=36))
+
+p
+```
+
+Figure 2.8
+
+```{r}
+
+# 2.7 Sampling distribution of x_ave
+
+# Creates data file with 'perfect' normal distribution
+
+mu <- 1000
+stdev <- 130
+perc <- .0001
+# 
+# # initialize vector
+normal_data <- 500
+# 
+ left_bound <- qnorm(p = perc, mean = mu, sd = stdev)
+# 
+# # fill right-hand cells
+for(i in 1:9998){
+   right_bound <- qnorm(p = perc + i/10000, mean = mu, sd = stdev)
+   normal_data[i+1] <- round((left_bound + right_bound)/2,2)
+   left_bound <- right_bound
+}
+# 
+ normal_data[10000] <- 1500
+
+# 
+ uniform_data <- rep(0, 1004)
+for (i in 1:1004){uniform_data[i] <- 773.875 + i * .45}
+
+
+# #Creates data file with 'perfect' exponential distribution
+# 
+lambda <- 1000
+perc <- .0001
+# 
+# # initialize dataframe
+values <- rep(0, 9998)
+exponential_data <- as.data.frame(values)
+# 
+# 
+ left_bound <- 0
+# 
+# 
+# # fill right-hand cells
+for(i in 1:9998){
+   right_bound <- qexp(p = perc + i/10000, rate = 1 / lambda)
+   exponential_data$values[i] <- round((left_bound + right_bound)/2,2)
+   left_bound <- right_bound
+}
+
+# 
+ for(i in 1:9998){
+   exponential_data$values[i] <- exponential_data$values[i] + 1
+}
+# 
+ subtotal <- 0.005
+# 
+ for(i in 1:9998){
+   subtotal <- subtotal + 0.003171634
+   if(subtotal > .01){
+     exponential_data$values[i] <- exponential_data$values[i] + 0.01
+     subtotal <- subtotal - .01
+   }
+}
+# 
+
+exponential_data$values <- exponential_data$values / 7.660425
+exponential_data$values <- exponential_data$values + 869.4341
+# 
+simSize <- 1000000
+sampSize <- c(1, 2, 5, 10, 50)
+distributions <- c("exponential", "normal", "uniform")
+# 
+sampleDist <- function(distribution, size){
+   if(distribution == "normal"){
+     return(normal_data[sample(length(normal_data), size)])
+   } else if(distribution == "uniform"){
+     return(uniform_data[sample(length(uniform_data), size)])
+   } else if(distribution == "exponential"){
+     return(exponential_data$values[sample(length(exponential_data$values), size)])
+   } else if(distribution == "two-point"){
+     return(rare_data[sample(length(rare_data), size)])
+   }
+}
+# 
+df_results <- data.frame(sample_mean = numeric(), 
+                          sampSize = factor(), 
+                          distribution = factor())
+# 
+for(d in 1:length(distributions)){
+   for(k in 1:length(sampSize)){
+     sample_mean <- rep(0, simSize)
+     for (i in k:simSize){
+       sample_df <- sampleDist(distributions[d], sampSize[k])
+       x_ave <- mean(sample_df)
+       sample_mean[i] <- x_ave
+     }  
+     
+     df_results <- rbind(df_results, 
+                         data.frame(sample_mean = sample_mean, 
+                                    sampSize = rep(factor(sampSize[k]), simSize), 
+                                    distribution = rep(factor(distributions[d]), 
+                                                       simSize)))
+   }
+}
+
+grid <- with(df_results, seq(800, 1200, length = 100))
+# 
+normaldens <- ddply(df_results, c("sampSize", "distribution"), function(df) {
+   data.frame( 
+     sample_mean = grid,
+     density = dnorm(grid, mean(df$sample_mean), sd(df$sample_mean))
+   )
+})
+
+p_sampling_dist <-  ggplot(df_results, aes(sample_mean))  + 
+   geom_histogram(aes(y = ..density..), bins = 100, fill = "#00338D") +
+   geom_line(aes(y = density), data = normaldens, colour = "red") +
+   scale_x_continuous(limits = c(800, 1200)) +
+   facet_grid(sampSize ~ distribution) +
+   theme(axis.title.x=element_blank(),
+         axis.title.y=element_blank(),
+         axis.text.x =element_blank(),
+         axis.text.y =element_blank())
+
+p_sampling_dist
+
+```
+```{r}
+pnorm(q = 1012, mean = 1030, sd = 115.26/sqrt(200))
+```
+```{r}
+pnorm(1012, 1030, 115.26 / sqrt(200))
+pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
+pnorm(sd = 115.26/sqrt(200), mean = 1030, q = 1012)
+```
+
+
+# 2.6 Student's t-distribution
+
+Figure 2.10
+
+```{r}
+
+xt <- seq(-5, 5, by=.01)
+hx1 <- dt(xt, 1)
+hx2 <- dt(xt, 3)
+hx3 <- dt(xt, 9)
+hx4 <- dt(xt, 100)
+s1 <- "df=1"
+s2 <- "df=3"
+s3 <- "df=9"
+s4 <- "df=100"
+
+
+df9a <- data.frame(t=xt, density = hx1, series=s1)
+df9b <- data.frame(t=xt, density = hx2, series=s2)
+df9c <- data.frame(t=xt, density = hx3, series=s3)
+df9d <- data.frame(t=xt, density = hx4, series=s4)
+
+df9t <- rbind(df9a, df9b, df9c, df9d)
+
+Fig2.10 <-
+  ggplot(df9t) +
+  theme_grey() +
+  geom_line(aes(x=t, y=density, colour=series), size=1) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.title = element_blank())
+Fig2.10
+```
+
+
+
+Figure 2.11 Probability in the t-distribution
+
+```{r}
+xt2 <- seq(-5, 5, by = .01000)
+ys <- dt(xt2, df=9)
+
+df10 <- data.frame(t_value=xt2, density=ys);
+
+Fig2.11 <-
+  ggplot(df10) +
+  theme_grey() +
+  geom_line(aes(x=t_value, y=density), size=0.5) +
+  geom_area(aes(x = ifelse(t_value < -1.11, t_value, t_value), y=ifelse(t_value < -1.11, density, 0)
+                 ), fill="#00338D", alpha=1) +
+  xlab("t-value") +
+  theme(axis.text.y=element_blank()) +
+  theme(axis.text.x=element_blank()) +
+  theme(axis.title.x=element_blank()) +
+  theme(axis.title.y=element_blank()) +
+  theme(legend.title=element_blank()) +
+  scale_x_continuous(breaks = seq(-5,5))
+Fig2.11
+```
+```{r}
+(t_val <- (1004 - 1030) / (73.8 / sqrt(10)))
+pt(t_val, 9)
+```
+```{r}
+t <- (961 - 1030) / (73.8 / sqrt(10))
+pt(t,9)
+```
+
+# 2.12 Chi-squared distributions
+
+```{r}
+
+xchi <- seq(0, 20, by=.01)
+hchi1 <- dchisq(xchi, 3)
+hchi2 <- dchisq(xchi, 6)
+hchi3 <- dchisq(xchi, 10)
+
+s1 <- "df=3"
+s2 <- "df=6"
+s3 <- "df=10"
+
+df12a <- data.frame(x=xchi, density = hchi1, series=s1)
+df12b <- data.frame(x=xchi, density = hchi2, series=s2)
+df12c <- data.frame(x=xchi, density = hchi3, series=s3)
+
+df12t <- rbind(df12a, df12b, df12c)
+
+Fig2.12 <-
+  ggplot(df12t) +
+  theme_grey() +
+  geom_line(aes(x=x, y=density, colour=series), size=1)  +
+  theme(axis.text.y=element_blank(), 
+        axis.text.x=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.title = element_blank())
+  
+Fig2.12
+```
+```{r}
+qchisq(p = .05, df = 9)
+```
+
+
+# 2.8 F-distribution
+
+Figure 2.13
+
+```{r}
+xf <- seq(0, 5, by = .01)
+
+hf1 <- df(xf, df1=5, df2=20)
+hf2 <- df(xf, df1=25, df2=15)
+hf3 <- df(xf, df1=6, df2=2)
+
+s1 <- "df1 = 5, df2 = 20"
+s2 <- "df1 = 25, df2 = 15"
+s3 <- "df1 = 6, df2 = 2"
+
+df13a <- data.frame(x=xf, density=hf1, series=s1)
+df13b <- data.frame(x=xf, density=hf2, series=s2)
+df13c <- data.frame(x=xf, density=hf3, series=s3)
+
+df13t <- rbind(df13a, df13b, df13c)
+
+Fig2.13 <-
+  ggplot(df13t) +
+  theme_grey() +
+  geom_line(aes(x=x, y=density, colour=series), size=1)  +
+  theme(axis.text.y = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.title.x = element_blank(), 
+        axis.title.y = element_blank(),
+        legend.title = element_blank())
+
+Fig2.13
+```
+```{r}
+qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE)
+```
+```{r}
+pf(q = 1.996271, df1 = 25, df2 = 23, lower.tail = FALSE)
+```
+
+
+# Hypergeometric approximated by binomial
+
+Figure 2.15
+
+```{r}
+errorRate <- .05
+k1 <- seq(0, 9)
+
+p_hyper <- dhyper(x = k1, m = 50, n = 950, k = 25)
+lab_hyper <- 'Hypergeometric'
+df_hyper <- data.frame(k = k1,
+                       probability = p_hyper,
+                       distribution = lab_hyper)
+
+p_binom <- dbinom(x = k1, size = 25, prob = errorRate)
+lab_binom <- 'Binomial'
+df_binom <- data.frame(k = k1,
+                       probability = p_binom,
+                       distribution = lab_binom)
+
+
+df_combi <- rbind(df_hyper, df_binom)
+
+p3 <- ggplot(df_combi, 
+             aes(x = k, 
+                 fill = distribution)) +
+  geom_bar(aes(x = k, 
+               y = probability),
+           stat = "identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Hypergeometric" = "#00338D",
+                               "Binomial" = "#0091DA")) +
+  scale_x_continuous(breaks = k1) + #Shows ticks and labels for all values of xbin
+  ggtitle("n = 25") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x =element_blank(),
+        legend.position = "none")
+
+k2 <- seq(0, 9)
+p_hyper2 <- dhyper(x = k2, m = 50, n = 950, k = 50)
+df_hyper2 <- data.frame(k = k2,
+                        probability = p_hyper2,
+                        distribution = lab_hyper)
+p_binom2 <- dbinom(x = k2, size = 50, prob = errorRate)
+df_binom2 <- data.frame(k = k2,
+                       probability = p_binom2,
+                       distribution = lab_binom)
+
+
+df_combi2 <- rbind(df_hyper2, df_binom2)
+
+p4 <- ggplot(df_combi2, 
+             aes(x = k, 
+                 fill = distribution)) +
+  geom_bar(aes(x = k, 
+               y = probability),
+           stat = "identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Hypergeometric" = "#00338D",
+                               "Binomial" = "#0091DA")) +
+  scale_x_continuous(breaks = k2) + #Shows ticks and labels for all values of xbin
+  ggtitle("n = 50") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x =element_blank(),
+        legend.position = "none")
+
+k3 <- seq(0, 11)
+p_hyper3 <- dhyper(x = k3, m = 50, n = 950, k = 100)
+df_hyper3 <- data.frame(k = k3,
+                        probability = p_hyper3,
+                        distribution = lab_hyper)
+p_binom3 <- dbinom(x = k3, size = 100, prob = errorRate)
+df_binom3 <- data.frame(k = k3,
+                       probability = p_binom3,
+                       distribution = lab_binom)
+
+df_combi3 <- rbind(df_hyper3, df_binom3)
+
+p5 <- ggplot(df_combi3, 
+             aes(x = k, 
+                 fill = distribution)) +
+  geom_bar(aes(x = k, 
+               y = probability),
+           stat = "identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Hypergeometric" = "#00338D",
+                               "Binomial" = "#0091DA")) +
+  scale_x_continuous(breaks = k3) + #Shows ticks and labels for all values of xbin
+  ggtitle("n = 100") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x =element_blank(),
+        legend.position = "none")
+
+k4 <- seq(3, 19)
+p_hyper4 <- dhyper(x = k4, m = 50, n = 950, k = 200)
+df_hyper4 <- data.frame(k = k4,
+                        probability = p_hyper4,
+                        distribution = lab_hyper)
+p_binom4 <- dbinom(x = k4, size = 200, prob = errorRate)
+df_binom4 <- data.frame(k = k4,
+                       probability = p_binom4,
+                       distribution = lab_binom)
+
+df_combi4 <- rbind(df_hyper4, df_binom4)
+
+p6 <- ggplot(df_combi4, 
+             aes(x = k, 
+                 fill = distribution)) +
+  geom_bar(aes(x = k, 
+               y = probability),
+           stat = "identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Hypergeometric" = "#00338D",
+                               "Binomial" = "#0091DA")) +
+  scale_x_continuous(breaks = k4) + #Shows ticks and labels for all values of xbin
+  ggtitle("n = 200") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x =element_blank(),
+        legend.position = "none")
+
+k5 <- seq(8, 35)
+p_hyper5 <- dhyper(x = k5, m = 50, n = 950, k = 400)
+df_hyper5 <- data.frame(k = k5,
+                        probability = p_hyper5,
+                        distribution = lab_hyper)
+p_binom5 <- dbinom(x = k5, size = 400, prob = errorRate)
+df_binom5 <- data.frame(k = k5,
+                       probability = p_binom5,
+                       distribution = lab_binom)
+
+df_combi5 <- rbind(df_hyper5, df_binom5)
+
+p7 <- ggplot(df_combi5, 
+             aes(x = k, 
+                 fill = distribution)) +
+  geom_bar(aes(x = k, 
+               y = probability),
+           stat = "identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Hypergeometric" = "#00338D",
+                               "Binomial" = "#0091DA")) +
+  scale_x_continuous(breaks = k5) + #Shows ticks and labels for all values of xbin
+  ggtitle("n = 400") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x =element_blank(),
+        legend.position = "none")
+
+grid.arrange(p3, p4, p5, p6, p7, ncol=5)
+```
+
+
+# Binomial approximated by Poisson
+
+Figure 2.16
+```{r}
+lab_poisson = "Poisson"
+
+k <- seq(0, 3)
+errorRate = .01
+p_binom1 <- dbinom(x = k, size = 60, prob = errorRate)
+
+df_binom1 <- data.frame(k = k,
+                        probability = p_binom1,
+                        distribution = lab_binom)
+
+p_poisson1 <- dpois(x = k, lambda = 60 * errorRate)
+
+df_poisson1 <- data.frame(k = k,
+                          probability = p_poisson1,
+                          distribution = lab_poisson)
+
+df_comb_bp1 <- rbind(df_binom1, df_poisson1)
+
+plot_bp1 <- ggplot(df_comb_bp1, aes(x = k, fill = distribution)) +
+  geom_bar(aes(x = k, y = probability), 
+           stat="identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Binomial" = "#00338D",
+                               "Poisson" = "#0091DA")) +
+  # scale_x_continuous(breaks = k) + #Shows ticks and labels for all values of xbin
+  ggtitle(bquote(pi==.(0.01))) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position = "none")
+
+k <- seq(0,9)
+errorRate = .05
+p_binom2 <- dbinom(x = k, size = 60, prob = errorRate)
+
+df_binom2 <- data.frame(k = k,
+                        probability = p_binom2,
+                        distribution = lab_binom)
+
+p_poisson2 <- dpois(x = k, lambda = 60 * errorRate)
+
+df_poisson2 <- data.frame(k = k,
+                          probability = p_poisson2,
+                          distribution = lab_poisson)
+
+df_comb_bp2 <- rbind(df_binom2, df_poisson2)
+
+plot_bp2 <- ggplot(df_comb_bp2, aes(x = k, fill = distribution)) +
+  geom_bar(aes(x = k, y = probability), 
+           stat="identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Binomial" = "#00338D",
+                               "Poisson" = "#0091DA")) +
+  # scale_x_continuous(breaks = k) + #Shows ticks and labels for all values of xbin
+  ggtitle(bquote(pi==.(0.05))) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position = "none")
+
+k <- seq(0, 15)
+errorRate = .1
+p_binom3 <- dbinom(x = k, size = 60, prob = errorRate)
+
+df_binom3 <- data.frame(k = k,
+                        probability = p_binom3,
+                        distribution = lab_binom)
+
+p_poisson3 <- dpois(x = k, lambda = 60 * errorRate)
+
+df_poisson3 <- data.frame(k = k,
+                          probability = p_poisson3,
+                          distribution = lab_poisson)
+
+df_comb_bp3 <- rbind(df_binom3, df_poisson3)
+
+plot_bp3 <- ggplot(df_comb_bp3, aes(x = k, fill = distribution)) +
+  geom_bar(aes(x = k, y = probability), 
+           stat="identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Binomial" = "#00338D",
+                               "Poisson" = "#0091DA")) +
+  # scale_x_continuous(breaks = k) + #Shows ticks and labels for all values of xbin
+  ggtitle(bquote(pi==.(0.10))) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position = "none")
+
+k <- seq(2, 25)
+errorRate = .2
+p_binom4 <- dbinom(x = k, size = 60, prob = errorRate)
+
+df_binom4 <- data.frame(k = k,
+                        probability = p_binom4,
+                        distribution = lab_binom)
+
+p_poisson4 <- dpois(x = k, lambda = 60 * errorRate)
+
+df_poisson4 <- data.frame(k = k,
+                          probability = p_poisson4,
+                          distribution = lab_poisson)
+
+df_comb_bp4 <- rbind(df_binom4, df_poisson4)
+
+plot_bp4 <- ggplot(df_comb_bp4, aes(x = k, fill = distribution)) +
+  geom_bar(aes(x = k, y = probability), 
+           stat="identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Binomial" = "#00338D",
+                               "Poisson" = "#0091DA")) +
+  # scale_x_continuous(breaks = k) + #Shows ticks and labels for all values of xbin
+  ggtitle(bquote(pi==.(0.20))) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position = "none")
+
+k <- seq(10, 39)
+errorRate = .4
+p_binom5 <- dbinom(x = k, size = 60, prob = errorRate)
+
+df_binom5 <- data.frame(k = k,
+                        probability = p_binom5,
+                        distribution = lab_binom)
+
+p_poisson5 <- dpois(x = k, lambda = 60 * errorRate)
+
+df_poisson5 <- data.frame(k = k,
+                          probability = p_poisson5,
+                          distribution = lab_poisson)
+
+df_comb_bp5 <- rbind(df_binom5, df_poisson5)
+
+plot_bp5 <- ggplot(df_comb_bp5, aes(x = k, fill = distribution)) +
+  geom_bar(aes(x = k, y = probability), 
+           stat="identity", 
+           position = "dodge") +
+  scale_fill_manual(values = c("Binomial" = "#00338D",
+                               "Poisson" = "#0091DA")) +
+  # scale_x_continuous(breaks = k) + #Shows ticks and labels for all values of xbin
+  ggtitle(bquote(pi==.(0.40))) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position = "none")
+
+grid.arrange(plot_bp5, plot_bp4, plot_bp3, plot_bp2, plot_bp1, ncol=5)
+```
+Table 2.5
+```{r}
+alpha <- c(.01, .05, .1)
+t49 <- round(qt(1 - alpha, df = 49), 3)
+t99 <- round(qt(1 - alpha, df = 99), 3)
+t199 <- round(qt(1 - alpha, df = 199), 3)
+z <- round(qnorm(1 - alpha), 3)
+(table_2_5 <- data.frame(t49, t99, t199, z))
+```
+<!-- SUPPORT-ONLY:END -->

@@ -1,0 +1,418 @@
+---
+title: "Workshop Chapter 2"
+author: "Lucas Hoogduin"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+
+## 2. Estimating the population mean and proportion
+
+### Exercise 2.1 Drawing a sample
+
+In this Chapter we will use one single data file, so you can get familiar with estimating a mean, a proportion, and their respective confidence intervals without learning the specifics of many different datasets. The `salaries` dataset contains salary details of 2,222 employees of the imaginary town of Winesbury, and is included with the `FSaudit` package. The data file indicates for each employee the Grade, Step within the Grade, and Gross salary, as well as a unique employee ID. The field Gender is coded with a 1 for female and a 0 for male.
+
+In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of `R` we set it to `Rounding`, which was the default prior to version 3.6.
+
+Details of the data file can be obtained using base `R` functionality.
+
+```{r}
+library(FSaudit)
+names(salaries)
+(N <- nrow(salaries))
+```
+We sample 50 units from the `salaries` dataset by using the `sample()` function.
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+n <- 50
+set.seed(12345)
+sample1 <- salaries[sample(N, n), ]
+head(sample1)
+```
+### Exercise 2.2 Point estimation of the mean
+
+The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
+
+```{r}
+(y_bar <- mean(sample1$gross))
+```
+We can use the sample mean as an estimate for the total payroll in the population. The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
+```{r}
+N * y_bar
+```
+
+### Exercise 2.3 Confidence intervals around the mean
+
+First, we estimate the standard deviation in the population from the standard deviation of the sample.
+
+```{r}
+(s <- sd(sample1$gross))
+```
+
+The calculation of the standard error is then
+
+```{r}
+(se <- s / sqrt(n))
+```
+
+For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.095.
+
+```{r}
+(tval <- qt(0.975, df = (n - 1)))
+```
+
+We multiply the $t$-value with the standard error to obtain the precision achieved.
+
+```{r}
+(precAch <- tval * se)
+```
+
+The resulting lower and upper bounds are
+```{r}
+(lowerBound <- y_bar - precAch)
+(upperBound <- y_bar + precAch)
+```
+
+For a 99\% confidence interval, the calculations are
+
+```{r}
+(lowerBound <- y_bar + qt(0.005, 49) * se)
+(upperBound <- y_bar + qt(0.995, 49) * se)
+N * lowerBound
+N * upperBound
+```
+
+### Exercise 2.4 Extending the sample
+
+To achieve the target precision of $E = $ 600,000, we extend the sample from Exercise 3.1 from 50 to 131 sampling units.
+
+```{r}
+set.seed(12345)
+sample2 <- salaries[sample(N, 131), ]
+```
+
+The mean of the total sample is:
+
+```{r}
+mean(sample2$gross)
+```
+
+### Exercise 2.5 Finite populations
+
+We saw in Section 3.2.3 that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = 50$, $N = 2,222$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
+
+The confidence interval incorporating the finite-population correction factor is given by Equation 3.10:
+
+```{r}
+E <- 300000
+tval <- qt(0.975, df = (n - 1))
+(gamma <- E^2 / (N * tval^2 * sd(sample1$gross)^2))
+(N / (1 + gamma))
+```
+
+The total sample size required to obtain an estimate of the mean monthly payroll with a precision of 300,000 at 95% confidence is 424. This is more than 10% of the population size; therefore, we were right to use the finite-population correction factor. If we had not anticipated that the required sample size would have been unnecessarily large, not taking the finite-population correction factor into account would have resulted in a sample size of 524.
+
+```{r}
+(N^2 * tval^2) * sd(sample1$gross)^2 / E^2
+```
+
+### Exercise 2.6 Confidence intervals around the proportion
+
+These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
+
+```{r}
+lower(k = 31, popn = 2222, n = 50, alpha = .025)
+upper(k = 31, popn = 2222, n = 50, alpha = .025)
+```
+
+Binomial bounds can be obtained, by adding the distribution to the respective functions.
+
+```{r}
+lower(k = 31, n = 50, alpha = .025, dist = "binom")
+upper(k = 31, n = 50, alpha = .025, dist = "binom")
+lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+```
+Note that the hypergeometric distribution provides a more precise result.
+
+<!-- SUPPORT-ONLY:START -->
+
+## Private book-support calculations
+
+
+```{r}
+library(ggplot2)
+library(grid)
+library(plyr)
+library(MASS)
+library(gridExtra)
+library(kthemes)
+theme_set(theme_kpmg())
+library(FSaudit)
+```
+
+# Case: salaries
+
+```{r}
+names(salaries)
+(N <- nrow(salaries))
+```
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+n <- 50
+set.seed(12345)
+salaries[2, 3]
+sample1 <- salaries[sample(N, n), ]
+head(sample1)
+```
+# Point estimation of the mean
+```{r}
+sum(sample1$gross)
+(y_bar <- mean(sample1$gross))
+```
+```{r}
+N * y_bar
+```
+
+# Confidence intervals around the mean
+
+Figure 3.1
+
+```{r}
+mu <- 3014.16
+sigma <- 1537.551 / sqrt(50)
+
+z <- seq(2000, 4000, by=1)
+yz <- dnorm(z, mean = mu, sd = sigma)
+
+df16 <- data.frame(zwaarde=z, density=yz)
+
+Fig3.1 <-
+  ggplot(df16) +
+  geom_line(aes(x=zwaarde, y=density), size=1) +
+  theme(axis.text.y=element_blank()) +
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12)) +
+  theme(legend.title=element_blank()) +
+  xlab("sample mean monthly payroll") +
+  annotate("text", x = 3014.16, y = 0, label = "X", size = 10) +
+  geom_vline(xintercept = 3014.16)
+Fig3.1
+```
+
+Figure 3.2
+
+```{r}
+mu <- 3200
+sigma <- 1537.551 / sqrt(50)
+
+z <- seq(2000, 4000, by=5)
+yz <- dnorm(z, mean = mu, sd = sigma)
+
+
+df17 <- data.frame(zwaarde=z, density=yz)
+
+Fig3.2 <-
+  ggplot(df17) +
+  geom_line(aes(x=zwaarde, y=density), size=1) +
+  theme(axis.text.y=element_blank()) +
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12)) +
+  theme(legend.title=element_blank()) +
+  xlab("mean monthly payroll") +
+  annotate("text", x = 3014.16, y = 0, label = "X", size = 10) +
+  geom_vline(xintercept = mu)
+Fig3.2
+```
+Figure 3.3
+
+```{r}
+mu1 <- 2577.19
+sigma1 <- 1537.551 / sqrt(50)
+mu2 <- 3451.13
+sigma2 <- 1537.551 / sqrt(50)
+
+z <- seq(2000, 4000, by=5)
+yz1 <- dnorm(z, mean = mu1, sd = sigma1)
+yz2 <- dnorm(z, mean = mu2, sd = sigma2)
+
+
+
+s1 <- paste("mu == ", 2577)
+s2 <- paste("mu == ", 3451)
+
+df17a <- data.frame(zwaarde=z, density=yz1, series=s1)
+df17b <- data.frame(zwaarde=z, density=yz2, series=s2)
+
+df17t <- rbind(df17a, df17b)
+
+Fig3.3 <-
+  ggplot(df17t) +
+  geom_line(aes(x=zwaarde, y=density, colour=series), size=1) +
+  theme(axis.text.y=element_blank(), 
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12)) +
+  theme(legend.position = "none") +
+  xlab("mean monthly payroll") +
+  annotate("text", x = 3014.16, y = 0, label = "X", size = 10)  +
+  annotate("text", x = 2200, y = 0.0008, label = s1, size = 5, parse = TRUE)  +
+  annotate("text", x = 3800, y = 0.0008, label = s2, size = 5, parse = TRUE)  +
+  scale_colour_manual(values = c("#00338D", "#005EB8")) +
+  geom_vline(xintercept = mu1) +
+  geom_vline(xintercept = mu2) +
+  annotate("segment", x=mu1, xend=mu2, y=0.0005, yend=0.0005, 
+           colour = "black", 
+           arrow = arrow(angle = 45, length = unit(0.5, "cm"), 
+                         ends = "both", type = "open"))
+Fig3.3
+```
+Figure 3.4
+
+```{r}
+xt2 <- seq(-4, 4, by = .01000)
+ys2 <- dt(xt2, df=49)
+
+df18 <- data.frame(t_value=xt2, density=ys2)
+temp = "alpha/2"
+
+Fig3.4 <-
+  ggplot(df18) +
+  geom_line(aes(x=t_value, y=density), size=0.5) +
+  geom_area(aes(x = ifelse(t_value < -2.01, t_value, t_value), y=ifelse(t_value < -2.01, density, 0)
+  ), fill="#00338D", alpha=1) +
+  geom_area(aes(x = ifelse(t_value > 2.01, t_value, t_value), y=ifelse(t_value > 2.01, density, 0)
+  ), fill="#00338D", alpha=1) +
+  xlab("t-value") +
+  theme(axis.text.y=element_blank()) +
+  theme(axis.text.x=element_blank()) +
+  theme(axis.text=element_text(size=16),
+        axis.title=element_text(size=18),
+        legend.text=element_text(size=18),
+        legend.title=element_text(size=18)) +
+  annotate("text", x = -3.5, y = 0.05, label = temp, size = 5, parse = TRUE)  +
+  annotate("text", x = 3.5, y = 0.05, label = temp, size = 5, parse = TRUE) +
+  geom_hline(yintercept = 0)
+
+Fig3.4
+```
+
+```{r}
+(s <- sd(sample1$gross))
+(s2 <- var(sample1$gross))
+sqrt(s2)
+```
+
+```{r}
+(se <- sqrt(s2 / n))
+```
+
+```{r}
+(tval <- qt(0.975, df = (n - 1)))
+```
+
+```{r}
+(precAch <- tval * se)
+```
+
+```{r}
+(lowerBound <- y_bar + qt(0.005, 49) * se)
+(upperBound <- y_bar + qt(0.995, 49) * se)
+N * lowerBound
+N * upperBound
+```
+## One-sided intervals
+
+```{r}
+(tval2 <- qt(0.95, df = (nrow(sample1) - 1)))
+y_bar + tval2 * se
+N * y_bar + tval2 * se
+```
+
+## The effect of finiteness
+
+Figure 3.5
+
+```{r}
+n_fraction <- seq(0, 1, .0001)
+correction <- sqrt(1 - n_fraction)
+
+df18a <- data.frame(x = n_fraction, correction = correction)
+
+Fig3.5 <-
+  ggplot(df18a) +
+  geom_line(aes(x = x, y = correction), size = 0.5) +
+  xlab("n / N") +
+  theme(legend.position = "none")
+Fig3.5
+```
+
+
+# Minimum sample size to estimate the mean
+
+For the sample of 50 employees, the results are
+
+```{r}
+tval <- qt(.975, df = 49)
+N^2 * tval^2 * s^2 / 600000^2
+```
+```{r}
+set.seed(12345)
+sample2 <- salaries[sample(N, 131), ]
+mean(sample2$gross)
+```
+## Finite populations
+
+```{r}
+E <- 300000
+(gamma <- E^2 / (N * tval^2 * sd(sample1$gross)^2))
+(N / (1 + gamma))
+```
+
+# Point estimate of the fraction
+
+```{r}
+lower(k = 31, popn = 2222, n = 50, alpha = .025)
+upper(k = 31, popn = 2222, n = 50, alpha = .025)
+```
+```{r}
+lower(k = 31, n = 50, alpha = .025, dist = "binom")
+upper(k = 31, n = 50, alpha = .025, dist = "binom")
+lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+```
+## Minimum sample size to estimate a fraction
+
+
+Figure 3.6
+```{r}
+xfrac <- seq(0, 1, by = .001000)
+
+df18 <- data.frame(fraction=xfrac, density=0)
+
+Fig3.6 <- ggplot(df18) +
+  annotate("segment", x=.472, xend=.753, y=1, yend=1, colour = "black",
+           arrow = arrow(angle = 90, length = unit(0.2, "cm"), 
+                         ends = "both", type = "open")) +
+  annotate("text", x = .63, y = 1.2, label = "p") +
+  annotate("text", x = .472, y = 1.2, label = "p_l") +
+  annotate("text", x = .753, y = 1.2, label = "p_u") +
+  annotate("text", x = .546, y = 1.1, label = "14.8%") +
+  annotate("text", x = .6865, y = 1.1, label = "13.3%") +
+  geom_vline(xintercept = 0.62, linetype = "dotted") +
+  annotate("segment", x=.519, xend=.726, y=0, yend=0, colour = "black",
+           arrow = arrow(angle = 90, length = unit(0.2, "cm"), 
+                         ends = "both", type = "open")) +
+  annotate("text", x = .519, y = 0.2, label = "p_l") +
+  annotate("text", x = .726, y = 0.2, label = "p_u") +
+  annotate("text", x = .5726868, y = 0.1, label = "10.7%") +
+  annotate("text", x = .6761868, y = 0.1, label = "10.0%") +
+  theme(axis.title = element_blank()) +
+  theme(axis.text.y = element_blank())
+
+Fig3.6
+```
+
+<!-- SUPPORT-ONLY:END -->

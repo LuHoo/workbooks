@@ -17,3 +17,7 @@
 *.pdf
 *.synctex.gz
 *.toc
+
+# Rendered notebook artifacts
+notebooks/**/*.html
+notebooks/**/*_files/
