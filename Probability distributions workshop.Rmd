@@ -7,7 +7,7 @@ output:
     df_print: paged
 ---
 
-<!-- GENERATED FILE: edit notebooks/probability-distributions/probability-distributions.Rmd in the private ada repository. -->
+<!-- GENERATED FILE: edit notebooks/support/probability-distributions/support.Rmd in the private ada repository. -->
 
  
 ## Chapter 1. Probability distributions

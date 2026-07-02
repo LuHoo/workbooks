@@ -7,7 +7,7 @@ output:
     df_print: paged
 ---
 
-<!-- GENERATED FILE: edit notebooks/population-estimation/population-estimation.Rmd in the private ada repository. -->
+<!-- GENERATED FILE: edit notebooks/support/population-estimation/support.Rmd in the private ada repository. -->
 
 
 ## 2. Estimating the population mean and proportion
