@@ -1,7 +1,7 @@
 # Notebook sources
 
-Each Volume 1 chapter has one authored R notebook under its semantic chapter
-directory. These canonical notebooks contain both the workshop exercises and
+Each Volume 1 chapter has one authored R notebook at
+`support/<semantic-chapter>/support.Rmd`. These canonical notebooks contain both the workshop exercises and
 the private support calculations used while maintaining the book. Chapter
 numbers live in `scripts/notebook-manifest.R`; filenames do not change when a
 volume is reorganized.
@@ -20,7 +20,7 @@ to render the private sources, or `all` to render both variants. To export witho
 `Rscript scripts/export-workshops.R`. Never edit generated public R workbooks
 directly.
 
-`analytical-procedures/figure-support.Rmd` is a private-only Volume 2 figure
+`support/analytical-procedures/support.Rmd` is a private-only Volume 2 figure
 notebook. It is canonical but has no Binder export.
 
 Git history replaces version suffixes such as `_v01`, `_v02`, `bis`, and

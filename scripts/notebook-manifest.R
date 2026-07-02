@@ -9,7 +9,7 @@ notebooks <- list(
 
 for (i in seq_along(notebooks)) {
   notebook <- notebooks[[i]]
-  notebook$source <- file.path("notebooks", notebook$slug, paste0(notebook$slug, ".Rmd"))
+  notebook$source <- file.path("notebooks", "support", notebook$slug, "support.Rmd")
   notebook$output <- file.path("notebooks", "workshops", paste0(notebook$title, " workshop.Rmd"))
   notebooks[[i]] <- notebook
 }
