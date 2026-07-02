@@ -1,5 +1,5 @@
 ---
-title: "Workshop Chapter 4"
+title: "Workshop Chapter 3: Estimation with auxiliary variables and stratification"
 author: "Lucas Hoogduin"
 date: "`r Sys.Date()`"
 output:
@@ -7,9 +7,12 @@ output:
     df_print: paged
 ---
 
+<!-- GENERATED FILE: edit notebooks/auxiliary-variables-and-stratification/auxiliary-variables-and-stratification.Rmd in the private ada repository. -->
+
+
 ## Estimation with auxiliary variables and stratification
 
-### Exercise 4.1. The `inventoryData` file
+### Exercise 3.1. The `inventoryData` file
 
 In this Chapter we will work with the `inventoryData` data file, that serves as the sample frame for the *Case: Valuation of inventories*. The data file is included with the `FSaudit` package. The data file indicates for each of the 3,500 elements in the inventories population its `id`, a sequential number from 1 to 3,500, the book value $x$ is `bv`, and we have added an audit value $y =$ `av` to enable running simulations on the file to compare different sampling strategies.
 
@@ -32,7 +35,7 @@ sum(inventoryData$bv)
 head(inventoryData[1:3])
 ```
 
-### Exercise 4.2. Working with the CVS object
+### Exercise 3.2. Working with the CVS object
 
 We first create a Classical Variables Sampling ("CVS") object. An object is a container that gathers all the data relevant to a particular sampling application. The `FSaudit` package recognizes three such objects. We work with the CVS object `cvs_obj` in this chapter, and with the attribute `att_obj` and MUS `mus_obj` objects in Chapter 5.
 
@@ -82,7 +85,7 @@ The evaluation results are stored in the `evalResults` attribute of the CVS obje
 names(mySample$evalResults)
 ```
 
-### Exercise 4.3. Mean-per-unit estimator
+### Exercise 3.3. Mean-per-unit estimator
 In Section 4.1 we found an estimate of the population value $\hat{Y}_{MPU}$ = 7,561,859, and achieved precision of 684,415. These values are stored in the attribute `evalResults` of `mySample`.
 
 ```{r}
@@ -106,7 +109,7 @@ Alternatively, we can refer to the label of the relevant column.
 mySample$evalResults$Estimates$mpu[4:5]
 ```
 
-### Exercise 4.4. The Regression Estimator
+### Exercise 3.4. The Regression Estimator
 
 The results for the regression estimator are stored in a similar way.
 
@@ -123,7 +126,7 @@ The prediction interval is determined by:
 mySample$evalResults$Estimates$regr[4:5]
 ```
 
-### Exercise 4.5. The Difference Estimator
+### Exercise 3.5. The Difference Estimator
 
 The results for the difference estimator are as follows.
 
@@ -141,7 +144,7 @@ The prediction interval is determined by:
 mySample$evalResults$Estimates$diff[4:5]
 ```
 
-### Exercise 4.6. The Ratio Estimator
+### Exercise 3.6. The Ratio Estimator
 
 Finally, the results of the ratio estimator.
 
@@ -163,7 +166,7 @@ An overview of all estimates is given by
 mySample$evalResults$Estimates
 ```
 
-### Exercise 4.7. Using CVS with sporadic errrors
+### Exercise 3.7. Using CVS with sporadic errrors
 
 We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
 
@@ -215,7 +218,7 @@ The effective degrees of freedom is $m - 1$. This explains the $t$ value used wh
 qt(0.975, df = m - 1)
 ```
 
-### Exercise 4.8. Stratification with equal recorded boundaries
+### Exercise 3.8. Stratification with equal recorded boundaries
 
 We start with creating a CVS object.
 ```{r}
@@ -232,7 +235,7 @@ equal <- stratify(equal,
 equal$stratSumm
 ```
 
-### Exercise 4.9. Stratification with the cumulative method
+### Exercise 3.9. Stratification with the cumulative method
 
 ```{r}
 cumul <- cvs_obj(bv = inventoryData$bv,
@@ -281,4 +284,3 @@ A summary table of the estimates for each of the estimation methods is stored in
 ```{r}
 cumul$evalResults$Estimates
 ```
-
