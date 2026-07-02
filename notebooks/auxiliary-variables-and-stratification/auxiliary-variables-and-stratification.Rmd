@@ -1,0 +1,1286 @@
+---
+title: "Workshop Chapter 3"
+author: "Lucas Hoogduin"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Estimation with auxiliary variables and stratification
+
+### Exercise 3.1. The `inventoryData` file
+
+In this Chapter we will work with the `inventoryData` data file, that serves as the sample frame for the *Case: Valuation of inventories*. The data file is included with the `FSaudit` package. The data file indicates for each of the 3,500 elements in the inventories population its `id`, a sequential number from 1 to 3,500, the book value $x$ is `bv`, and we have added an audit value $y =$ `av` to enable running simulations on the file to compare different sampling strategies.
+
+Details of the data file can be obtained using base `R` functionality.
+
+```{r}
+# Open FSaudit library
+library(FSaudit)
+
+# Show the variable names of the data file
+names(inventoryData)
+
+# Get the number of rows
+(N <- nrow(inventoryData))
+
+# Calculate the total book value
+sum(inventoryData$bv)
+
+# Show the top-6 rows with the first three columns
+head(inventoryData[1:3])
+```
+
+### Exercise 3.2. Working with the CVS object
+
+We first create a Classical Variables Sampling ("CVS") object. An object is a container that gathers all the data relevant to a particular sampling application. The `FSaudit` package recognizes three such objects. We work with the CVS object `cvs_obj` in this chapter, and with the attribute `att_obj` and MUS `mus_obj` objects in Chapter 5.
+
+We create the CVS object `mySample` by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiers `id`, and the random seed number `seed`.
+
+```{r}
+mySample <- cvs_obj(n = 400,
+                    bv = inventoryData$bv,
+                    id = inventoryData$item,
+                    seed = 12345)
+```
+
+The CVS object has 19 different attributes attached to it, that will be filled as we proceed from sample planning, through stratification and selection to evaluation. The following is a list of all attributes.
+
+```{r}
+names(mySample)
+```
+Some of these attributes are empty for now, for example `sample`.
+
+```{r}
+mySample$sample
+```
+In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of *R* we set it to `Rounding`, which was the default prior to version 3.6.
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+```
+
+We sample 400 units from the `inventoryData` dataset with the `select()` function. This effectively fills the `sample` attribute in `mySample`.
+
+```{r}
+mySample <-  select(mySample)
+head(mySample$sample)
+```
+
+We audit the sampling units selected, and submit the audit values to the CVS object for the sample to be evaluated.
+
+```{r}
+audit_values <-
+  inventoryData[match(mySample$sample$item, inventoryData$item), "av"]
+mySample <- evaluate(mySample, av = audit_values)
+```
+
+The evaluation results are stored in the `evalResults` attribute of the CVS object. This attribute itself is a list of 17 different attributes.
+
+```{r}
+names(mySample$evalResults)
+```
+
+### Exercise 3.3. Mean-per-unit estimator
+In Section 4.1 we found an estimate of the population value $\hat{Y}_{MPU}$ = 7,561,859, and achieved precision of 684,415. These values are stored in the attribute `evalResults` of `mySample`.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount mpu`
+```
+```{r}
+mySample$evalResults$`Achieved precision mpu`
+```
+
+The prediction interval is stored in:
+
+```{r}
+mySample$evalResults$Estimates[4:5, 1]
+```
+
+In this call, the numbers in brackets refer to the 4th and 5th row of the Estimates table. The first column stores the results of the mean-per-unit estimator.
+
+Alternatively, we can refer to the label of the relevant column.
+
+```{r}
+mySample$evalResults$Estimates$mpu[4:5]
+```
+
+### Exercise 3.4. The Regression Estimator
+
+The results for the regression estimator are stored in a similar way.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount regression`
+```
+```{r}
+mySample$evalResults$`Achieved precision regression`
+```
+
+The prediction interval is determined by:
+
+```{r}
+mySample$evalResults$Estimates$regr[4:5]
+```
+
+### Exercise 3.5. The Difference Estimator
+
+The results for the difference estimator are as follows.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount difference`
+```
+
+```{r}
+mySample$evalResults$`Achieved precision difference`
+```
+
+The prediction interval is determined by:
+
+```{r}
+mySample$evalResults$Estimates$diff[4:5]
+```
+
+### Exercise 3.6. The Ratio Estimator
+
+Finally, the results of the ratio estimator.
+
+```{r}
+mySample$evalResults$`Most likely total audited amount ratio`
+```
+
+```{r}
+mySample$evalResults$`Achieved precision ratio`
+```
+
+The prediction interval is determined by:
+
+```{r}
+mySample$evalResults$Estimates$ratio[4:5]
+```
+An overview of all estimates is given by
+```{r}
+mySample$evalResults$Estimates
+```
+
+### Exercise 3.7. Using CVS with sporadic errrors
+
+We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
+
+```{r}
+arSample <- cvs_obj(bv = accounts_receivable$amount,
+                    id = accounts_receivable$invoice,
+                    n = 100)
+```
+We select the sample, using a seed equal to 1.
+
+```{r}
+arSample <- select(arSample, seed = 1)
+```
+
+We look up the audit values of the selected sampling units.
+
+```{r}
+audit_values <- accounts_receivable[
+  match(
+    arSample$sample$item,
+    accounts_receivable$invoice
+  ),
+  "av2"
+]
+```
+
+We then evaluate the sample and look at the `Estimates` attribute.
+
+```{r}
+arSample <- evaluate(arSample, av = audit_values$av2)
+arSample$evalResults$Estimates
+```
+The number of differences is stored in the `#_Errors` attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error (k = 4 to 19) method, or using the standard CVS method.
+
+```{r}
+arSample$evalResults$`Regression estimation`$`#_Errors`
+```
+
+Most of the calculations presented in Section 4.7 are easy to follow, so we will not repeat them all in this workshop. Instead, we zoom in on some specific parts of the overall calculations.
+
+The value of $M_U$ that is used in, for example, Equation 4.23 is obtained as follows.
+```{r}
+N <- nrow(accounts_receivable)
+m <- 6
+(m_u <- upper(k = m, popn = N, n = 100, alpha = 0.05) / N)
+```
+The effective degrees of freedom is $m - 1$. This explains the $t$ value used when calculating the confidence intervals.
+```{r}
+qt(0.975, df = m - 1)
+```
+
+### Exercise 3.8. Stratification with equal recorded boundaries
+
+We start with creating a CVS object.
+```{r}
+equal <- cvs_obj(bv = inventoryData$bv,
+                 id = inventoryData$item)
+```
+
+We then stratify with the equal method (`stratMeth = equal`), and view the summary.
+
+```{r}
+equal <- stratify(equal,
+                  strata = 3,
+                  stratMeth = "equal")
+equal$stratSumm
+```
+
+### Exercise 3.9. Stratification with the cumulative method
+
+```{r}
+cumul <- cvs_obj(bv = inventoryData$bv,
+                 id = inventoryData$item)
+cumul <- stratify(cumul,
+                  strata = 3,
+                  classes = 10,
+                  stratMeth = "cumulative")
+```
+
+The classification in Table 4.6 is stored in the `classSum` attribute.
+
+```{r}
+cumul$classSumm
+```
+
+The stratification summary is then:
+
+```{r}
+cumul$stratSumm
+```
+
+We calculate the required sample size for a desired precision of 200,000.
+
+```{r}
+cumul <- size(cumul, desPrec = 200000)
+cumul$n
+```
+Select sample
+
+```{r}
+cumul <- select(cumul, seed = 12345)
+head(cumul$sample)
+```
+
+Obtain the audit values and evaluate the sample.
+
+```{r}
+true_values <- inventoryData[match(cumul$sample$item,
+                                   inventoryData$item), "av"]
+cumul <- evaluate(cumul, av = true_values)
+
+```
+A summary table of the estimates for each of the estimation methods is stored in the `Estimates` argument, which is part of the `evalResults` argument.
+
+```{r}
+cumul$evalResults$Estimates
+```
+
+
+
+<!-- SUPPORT-ONLY:START -->
+
+## Private book-support calculations
+
+
+
+# Case: Valuation of inventories
+
+Population characteristics of the file inventoryData: number of items:
+
+```{r}
+library(ggplot2)
+library(magrittr)
+library(FSaudit)
+library(kthemes)
+theme_set(theme_kpmg())
+RNGkind(sample.kind = "Rounding")
+names(inventoryData)
+(N <- nrow(inventoryData))
+sum(inventoryData$bv)
+head(inventoryData[1:3])
+```
+We assign the cvs object type to a sampling variable.
+```{r}
+mySample <- cvs_obj(n = 400,
+                    bv = inventoryData$bv,
+                    id = inventoryData$item,
+                    seed = 12345)
+```
+
+```{r}
+mySample <-  select(mySample)
+
+head(mySample$sample)
+```
+
+Audit the selected sampling units and evaluate results
+```{r}
+audit_values <- inventoryData[
+  match(mySample$sample$item,
+        inventoryData$item), "av"]
+mySample <- evaluate(mySample,
+                      av = audit_values)
+mySample$evalResults$Estimates
+```
+
+Values from Case Inventories
+```{r}
+myData <- data.frame(item = mySample$sample$item, 
+                     bv = mySample$sample$bv, 
+                     av = audit_values)
+myData$bvav <- myData$bv * myData$av
+myData$bv2 <- myData$bv * myData$bv
+myData$av2 <- myData$av * myData$av
+myData$diff <- myData$bv - myData$av
+myData$diff2 <- myData$diff * myData$diff
+
+```
+
+Case: Valuation of inventories. Totals required for manual calculations:
+```{r}
+sum(myData$bvav)
+sum(myData$bv2)
+sum(myData$av2)
+sum(myData$diff2)
+```
+Table 4.1 Sample results
+```{r}
+myData[c(1:6),c(1,2,3,7)]
+```
+
+Column totals
+```{r}
+
+sum(myData$bv)
+sum(myData$av)
+sum(myData$diff)
+```
+## 4.1 MPU Estimator
+
+Mean audit value
+```{r}
+sum(mySample$av)
+sd(mySample$av)
+```
+Point estimate:
+
+```{r}
+mySample$evalResults$`Most likely total audited amount mpu`
+(Y_bar <- N * mean(myData$av))
+```
+```{r}
+var(mySample$av)
+```
+```{r}
+n <- mySample$n
+(g <- sqrt((N * (N - n)) / n))
+```
+
+
+
+```{r}
+precision <- g * qt(.975, df = 399) * sd(myData$av)
+precision
+mySample$evalResults$`Achieved precision mpu`
+mySample$evalResults$Estimates$mpu[4:5]
+```
+
+
+Lower and upper bound (default is 95%)
+```{r}
+Y_bar - precision
+Y_bar + precision
+mySample$evalResults$Estimates$mpu[4]
+mySample$evalResults$Estimates$mpu[5]
+```
+
+
+## Regression estimator
+
+Figure 4.1
+```{r}
+scatterPlot <-  ggplot(myData, aes(bv, av))  +
+  theme_grey() +
+  geom_point(aes(colour = bv)) +
+  xlab("book value") +
+  ylab("audit value") +
+  theme(legend.position = "none")
+
+scatterPlot
+```
+
+Calculation of slope parameter
+
+```{r}
+slope <- (sum(myData$bvav) - sum(myData$bv) * 
+            sum(myData$av) / n) / (sum(myData$bv2) -
+            sum(myData$bv)^2 / n)
+slope
+```
+That make the regression estimator
+```{r}
+Y_reg <- N * mean(myData$av) + slope * (sum(inventoryData$bv) - N * mean(myData$bv))
+Y_reg
+mySample$evalResults$`Most likely total audited amount regression`
+```
+
+Covariance
+```{r}
+sum(myData$bvav)
+sum(myData$bv)
+sum(myData$av)
+(covBvAv <- (sum(myData$bvav) - sum(myData$bv) * sum(myData$av) / n)/(n - 1))
+```
+This makes the regression standard deviation
+```{r}
+(sdRegr <- sqrt((sum(var(myData$av) - 2 * slope * covBvAv + slope^2 * var(myData$bv))) * (n - 1) /(n - 2)))
+sdRegr^2
+```
+The resulting precision of the regression estimator is then
+```{r}
+qt(.975, df = 399)
+(precisionReg <- N * qt(.975, df = 399) * sdRegr / sqrt(n)  * fpc)
+g *  qt(.975, df = 399) * sdRegr
+mySample$evalResults$`Achieved precision regression`
+mySample$evalResults$Estimates$regr[4:5]
+```
+
+
+Adjustment factor
+```{r}
+r <- cor(myData$bv, myData$av)
+r
+adj_factor <- sqrt(1 - r^2)
+adj_factor
+```
+
+
+
+Achieved precision
+```{r}
+precision
+sqrt((n - 1) / (n - 2))
+precision * adj_factor * sqrt((n - 1) / (n - 2))
+mySample$evalResults$`Achieved precision regression`
+mySample$evalResults$Estimates$regr[4:5]
+```
+## Difference estimator
+
+
+The difference estimate is
+```{r}
+mean_difference <- (sum(myData$bv) - sum(myData$av)) / n
+diff_est <- sum(inventoryData$bv) - N * mean_difference
+diff_est
+mySample$evalResults$`Most likely total audited amount difference`
+```
+The standard deviation of the differences is
+```{r}
+(sum(myData$diff2) - sum(myData$diff)^2 / n) / (n - 1)
+var(myData$diff)
+```
+Precision achieved for the difference estimator
+$$N * t_{\alpha/2}(v) * \frac{\sigma}{\sqrt(n)} * \sqrt{\frac{N - n}{N }}$$
+
+```{r}
+precision_diff <- N * qt(.975, df = 399) * sd(myData$diff) / sqrt(n) * fpc
+precision_diff
+g * qt(.975, df = 399) * sqrt(var(myData$diff))
+mySample$evalResults$`Achieved precision difference`
+mySample$evalResults$Estimates$diff[4:5]
+```
+
+### H4_adjustment_factor
+
+```{r}
+# Create a data frame of correlation values (r) from 0 to 1
+df <- data.frame(
+  correlation = seq(0, 1, length.out = 200)
+)
+
+# Compute adjustment = 1 - r^2
+df$adjustment = sqrt(1 - df$correlation^2)
+
+# Plot
+ggplot(df, aes(x = correlation, y = adjustment)) +
+  theme_grey() +
+  geom_line(size = 1.2, color = "#00338D") + #       return("#00338D");
+  labs(
+  x = expression("correlation " * r),
+  y = expression("adjustment " * sqrt(1 - r^2) ), ) +
+  xlim(0, 1) +
+  ylim(0, 1)
+```
+
+
+
+## Ratio estimator
+
+
+The ratio estimate is
+```{r}
+ratio <- sum(myData$av) / sum(myData$bv)
+ratio
+ratio_est <- sum(inventoryData$bv) * ratio
+ratio_est
+mySample$evalResults$`Most likely total audited amount ratio`
+```
+The standard deviation of the ratios is
+```{r}
+sd_ratio <- sqrt((sum(myData$av2) - 2 * ratio * sum(myData$bvav) + ratio^2 * sum(myData$bv2)) / (n - 1))
+sd_ratio
+sd_ratio^2
+```
+Precision achieved for the ratio estimator
+$$N * t_{\alpha/2}(\nu) * \frac{\sigma}{\sqrt{n}} * \sqrt{\frac{N - n}{N}}$$
+```{r}
+precision_ratio <- N * qt(.975, df = 399) * sd_ratio / sqrt(n) * fpc
+precision_ratio
+mySample$evalResults$`Achieved precision ratio`
+```
+
+
+This provides the following lower and upper bounds
+```{r}
+mySample$evalResults$Estimates$ratio[4:5]
+```
+An overview of all estimates is given by
+```{r}
+mySample$evalResults$Estimates
+```
+
+# Error distributions
+
+```{r}
+
+p1 <- ggplot(inventoryData, aes(x = bv, y = av_dif)) +
+  geom_point(color = "#00338D") +
+  theme_grey() +
+  labs(title = "Constant difference") +
+  labs(x = "x", y = "y") 
+
+p2 <- ggplot(inventoryData, aes(x = bv, y = av_rat)) +
+  geom_point(color = "#00338D") +
+  theme_grey() +
+  labs(title = "No intercept") +
+  labs(x = "x", y = "y") 
+
+p3 <- ggplot(inventoryData, aes(x = bv, y = av_reg)) +
+  geom_point(color = "#00338D") +
+  theme_grey() +
+  labs(title = "Slope and intercept") +
+  labs(x = "x", y = "y") 
+
+p4 <- ggplot(inventoryData, aes(x = bv, y = av_mus)) +
+  geom_point(color = "#00338D") +
+  theme_grey() +
+  labs(title = "Sporadic errors") +
+  labs(x = "x", y = "y") 
+
+grid.arrange(p1, p2, p3, p4, ncol=2)
+```
+
+
+
+# Choice of estimator
+
+We will use the updated inventoryData file. It contains the four error distributions, each with a total difference of 260000.
+```{r}
+pm <- 260000
+ee <- 24000
+clMUS <- .95
+clCVS <- .95
+i <- 1
+sum(inventoryData$bv)
+sum(inventoryData$av_mus)
+sum(inventoryData$av_reg)
+sum(inventoryData$av_dif)
+sum(inventoryData$av_rat)
+```
+Define results dataframe
+```{r}
+
+{ 
+  simSize <- 50000
+  every <- 5000
+  estimators <- c("Ratio", "Difference", "Regression")
+  distributions <- c("Constant difference", "No intercept", "Slope and intercept", "Sporadic errors")
+  n_est <- length(estimators)
+  n_dist <- length(distributions)
+  n_results <- simSize * n_est * n_dist
+  
+  simResult <- data.frame(estimator = factor(),
+                          distribution = factor(),
+                          m = factor(),
+                          estimate = numeric(),
+                          coverage = factor()
+                          )
+  
+  simResult <- data.frame(matrix(ncol = 5, nrow = n_results))
+  
+  names(simResult) <- c("estimator", "distr", "m", "estimate", "coverage")
+
+}
+```
+
+Initialize objects
+```{r}
+n <- 100
+
+cvsSample <- cvs_obj()
+cvsSample <- cvs_obj(desPrec = 200000,
+                     n = n,
+                     bv = inventoryData$bv,
+                     id = inventoryData$item,
+                     cl = cl,
+                     seed = i)
+cvsSample2 <- cvs_obj()
+cvsSample2 <- cvs_obj(desPrec = 200000,
+                     n = n,
+                     bv = inventoryData$bv,
+                     id = inventoryData$item,
+                     cl = cl,
+                     seed = i)
+
+N <- length(inventoryData$bv)
+t_value <- qt(1 - (1 - cl) / 2, n - 1)
+cont_corr <- sqrt((N - n)/(N - 1))
+```
+# Run simulations
+
+```{r}
+start <- Sys.time()
+
+for (i in 1:simSize) {
+
+  # Take CVS sample
+  cvsSample <- FSaudit::select(cvsSample,
+                               seed = i)
+  avCVS <- inventoryData[match(cvsSample$sample$item, inventoryData$item),
+                            c("item", "av_mus", "av_reg", "av_dif", "av_rat")]
+  for (j in 1:length(distributions)) {
+    if (distributions[j] == "Constant difference") {
+      avC <- avCVS$av_dif
+    } else if (distributions[j] == "No intercept") {
+      avC <- avCVS$av_rat
+    } else if (distributions[j] == "Slope and intercept") {
+      avC <- avCVS$av_reg
+    } else if (distributions[j] == "Sporadic errors") {
+      avC <- avCVS$av_mus
+    }
+
+    for (k in 1:length(estimators)) {
+      r <- (i-1) * n_dist * n_est + (j-1) * n_est + k
+      simResult[r, 1] <- estimators[k]
+      simResult[r, 2] <- distributions[j]
+      switch(estimators[k],
+             "Ratio" = {
+               cvsSample <- evaluate(cvsSample, av = avC)
+               est <- cvsSample$evalResults$`Most likely total error ratio`
+               precision <- cvsSample$evalResults$Estimates[3, 3]
+               lower <- est - precision
+               upper <- est + precision
+               m <- cvsSample$evalResults$`Ratio estimation`$`#_Errors`
+               simResult[r, 3] <- m
+               simResult[r, 4] <- est
+               simResult[r, 5] <- (lower < pm) & (upper > pm)
+             },
+             "Difference" = {
+               cvsSample <- evaluate(cvsSample, av = avC)
+               est <- cvsSample$evalResults$`Most likely total error difference`
+               precision <- cvsSample$evalResults$Estimates[3, 2]
+               lower <- est - precision
+               upper <- est + precision
+               m <- cvsSample$evalResults$`Difference estimation`$`#_Errors`
+               simResult[r, 3] <- m
+               simResult[r, 4] <- est
+               simResult[r, 5] <- (lower < pm) & (upper > pm)
+             },
+             "Regression" = {
+               cvsSample <- evaluate(cvsSample, av = avC)
+               est <- cvsSample$evalResults$`Most likely total error regression`
+               precision <- cvsSample$evalResults$Estimates[3, 4]
+               lower <- est - precision
+               upper <- est + precision
+               m <- cvsSample$evalResults$`Regression estimation`$`#_Errors`
+               simResult[r, 3] <- m
+               simResult[r, 4] <- est
+               simResult[r, 5] <- (lower < pm) & (upper > pm)
+             }
+             )
+      if (r %% every == 0) {
+        print(paste(r, "of", length(simResult$estimator)))
+      }
+    }
+  }
+}
+
+end <- Sys.time()
+
+print(end - start)
+
+```
+Create graph of distribution of estimates
+```{r}
+
+p_sampling_dist <-  ggplot(simResult, aes(estimate))  +
+  geom_histogram(aes(y = ..density..), bins = 54, fill = "#00338D") +
+  scale_x_continuous(limits = c(-200000, 800000)) +
+  facet_grid(estimator ~ distr) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x =element_blank(),
+        axis.text.y =element_blank())
+
+p_sampling_dist
+```
+
+
+
+
+# Using CVS with sporadic errors
+
+We start with setting up a cvs_obj object, and fill itwith the parameters.
+
+```{r}
+arSample <- cvs_obj(bv = accounts_receivable$amount,
+                    id = accounts_receivable$invoice,
+                    n = 100)
+```
+We select the sample, using the seed equal to 1.
+```{r}
+arSample <- select(arSample, seed = 1)
+```
+We look up the audit values of the selected sampling units.
+```{r}
+audit_values <- accounts_receivable[match(arSample$sample$item,
+                                          accounts_receivable$invoice), "av2"]
+```
+We then evaluate the sample and look at the Estimates attribute.
+```{r}
+arSample <- evaluate(arSample, av = audit_values$av2)
+arSample$evalResults$Estimates
+```
+The number of differences is stored in the #_Errors attribute, under
+each of the estimation methods.
+```{r}
+arSample$evalResults$`Regression estimation`$`#_Errors`
+```
+We collect the sample data and the audit values in a single data frame, and obtain the summary statistics required for further calculations.
+```{r}
+sample <- arSample$sample
+sample$av <- audit_values$av2
+sample$diff <- sample$bv - sample$av
+(N <- arSample$popn)
+(n <- arSample$n)
+(m <- length(which(sample$diff != 0)))
+(alpha <- (1 - arSample$cl))
+(sum_d <- sum(sample$diff))
+(sum_dsq <- sum(sample$diff^2))
+```
+## Difference estimator
+
+For the difference estimator, we first calculate the average difference for the differences only.
+```{r}
+(ave_dm <- sum_d / m)
+```
+Then calculate the standard deviation of the differences only.
+```{r}
+(var_dm  <- (sum_dsq - (m * ave_dm^2)) / (m - 1))
+(pU <- upper(m, N, n, alpha) / N)
+(var_diff <- pU * var_dm + pU * (1 - pU) * ave_dm^2)
+```
+Precision achieved is then calculated with Equation 4.14
+```{r}
+(g <- sqrt(N * (N-n)/n))
+qt(1 - alpha / 2, df = m - 1) 
+g * qt(1 - alpha / 2, df = m - 1) * sqrt(var_diff)
+sqrt(var_diff)
+```
+## Ratio estimator
+
+```{r}
+(sum_avsq <- sum(sample$av^2))
+(sum_bvav <- sum(sample$bv*sample$av))
+(sum_bvsq <- sum(sample$bv^2))
+(q <- sum(sample$av) / sum(sample$bv))
+```
+```{r}
+(sQm2 <- (sum_avsq - 2 * q * sum_bvav + q^2 * sum_bvsq) / (m - 1))
+(var_ratio <- pU * sQm2)
+```
+Precision achieved is then calculated with Equation 4.17
+```{r}
+g *  qt(1 - alpha / 2, df = m - 1) * sqrt(var_ratio)
+(precAchRat <- N * qt(1 - alpha / 2, df = m - 1) *
+sd_ratio / sqrt(n) * fpc)
+```
+## Regression estimator
+```{r}
+(var_bv <- var(sample$bv))
+(covBvAv   <- (sum(sample$bv * sample$av) - sum(sample$bv) * sum(sample$av)/ n) / (n - 1))
+(slope <- covBvAv / var_bv)
+```
+Then we fill the results into Equation 4.24.
+```{r}
+
+
+(var_regr <- sd_diff^2 - 2 * (slope - 1) * (covBvAv - var_bv) + (slope - 1)^2 * var_bv)
+```
+Precision achieved is then calculated with
+```{r}
+g * qt(1 - alpha / 2, df = m - 1) * sqrt(var_regr)
+
+```
+
+
+
+
+# Stratification
+
+Assign cvs object
+
+```{r}
+myStrat <- cvs_obj(bv = inventoryData$bv,
+                   id = inventoryData$item)
+```
+
+### Stratify population with equal recorded boundaries
+
+```{r}
+myStrat <- stratify(myStrat, 
+                    strata = 3,
+                    stratMeth = "equal")
+
+myStrat$stratSumm
+```
+
+### Stratify population with cumulative method
+
+```{r}
+myStrat <- stratify(myStrat,
+                    strata = 3,
+                    classes = 10,
+                    stratMeth = "cumulative")
+```
+
+Classes
+
+```{r}
+myStrat$classSumm
+```
+
+Stratification result
+
+```{r}
+myStrat$stratSumm
+```
+
+Calculate sample size for precision of 200,000.
+
+```{r}
+myStrat <- size(myStrat, desPrec = 200000)
+myStrat$n
+```
+
+Select sample
+
+```{r}
+myStrat <- select(myStrat, seed = 12345)
+head(myStrat$sample)
+```
+
+Obtain audit values
+
+```{r}
+true_values <- inventoryData[
+  match(myStrat$sample$item,
+        inventoryData$item), "av"]
+
+head(true_values)
+```
+
+Evaluate sample (Table 4.9)
+
+```{r}
+myStrat <- evaluate(myStrat,
+                      av = true_values)
+myStrat$evalResults$Estimates
+```
+To follow the results in Audit Data Analytics, we do the following:
+ 
+```{r}
+sample <- data.frame(bv = myStrat$sample$bv, av = myStrat$av, strat = myStrat$sample$strat)
+```
+
+Table 4.10
+```{r}
+(Nh <- myStrat$stratSumm$freq)
+sum(Nh)
+(nh <- myStrat$alloc$nh)
+sum(nh)
+(sum_av <- aggregate(av ~ as.factor(strat), data = sample, FUN = "sum")[, 2])
+(sd_av <- aggregate(av ~ as.factor(strat), data = sample, FUN = "sd")[, 2])
+```
+Table 4.11
+```{r}
+(ave_av <- sum_av / nh)
+Nh * ave_av
+(Y_MPU <- sum(Nh * ave_av))
+myStrat$evalResults$`Most likely total audited amount mpu`
+```
+
+Intermediate results for the calculation of the variance of the MPU estimator.
+
+Table 4.12 column 4-6
+```{r}
+(gh <- Nh * (Nh - nh) / nh)
+sd_av^2
+gh * sd_av^2
+sum(gh * sd_av^2)
+```
+
+Standard error of the MPU estimate
+```{r}
+options(digits = 12)
+(se_MPU <- sqrt(sum(gh * sd_av^2)))
+
+```
+
+Effective number of degrees of freedom
+```{r}
+sum(gh * sd_av^2)
+(gh * sd_av^2)
+(df_eff <- round(sum(gh * sd_av^2)^2 / sum((gh * sd_av^2)^2 / (nh - 1))))
+
+```
+
+Relevant t-value
+```{r}
+alpha <- 0.05
+(tval <- qt(1 - alpha / 2, df = df_eff))
+
+```
+Achieved precision of the MPU estimator
+
+
+
+```{r}
+(achPrecMPU <- se_MPU * tval)
+myStrat$evalResults$`Achieved precision mpu`
+Y_MPU - achPrecMPU
+myStrat$evalResults$Estimates$mpu[4]
+Y_MPU + achPrecMPU
+myStrat$evalResults$Estimates$mpu[5]
+```
+#  Regression Estimator
+
+Table 4.13
+```{r}
+sample$bvav <- sample$bv * sample$av
+(sumBvAv <- stats::aggregate(bvav ~ strat, data = sample, FUN = "sum")[, 2])
+nh
+(aveSampBv <- stats::aggregate(bv ~ strat, data = sample, FUN = "mean")[, 2])
+(aveSampAv <- ave_av)
+(covBvAv <- (sumBvAv - nh * aveSampBv * aveSampAv) / (nh - 1))
+
+popBv <- sum(inventoryData$bv)
+(sum_bv  <- stats::aggregate(bv ~ strat, data = sample, FUN = "sum")[, 2])
+```
+
+Table 4.14
+```{r}
+gh
+covBvAv
+(sd_bv   <- stats::aggregate(bv ~ strat, data = sample, FUN = "sd")[, 2])
+gh * covBvAv
+gh * sd_bv^2
+sum(gh * covBvAv)
+sum(gh * sd_bv^2)
+
+```
+```{r}
+(slope <- sum(gh * covBvAv) / sum(gh * sd_bv^2))
+```
+Table 4.15
+```{r}
+Nh
+aveSampBv
+Nh * aveSampBv
+sum(Nh * aveSampBv)
+
+```
+
+```{r}
+(Y_Reg <- Y_MPU + slope * (popBv - sum(Nh * (sum_bv / nh))))
+myStrat$evalResults$`Most likely total audited amount regression`
+
+```
+Precision
+```{r}
+sortedBv <- inventoryData[order(inventoryData[, 2]), , drop = FALSE]
+pop <- data.frame(bv = sortedBv$bv, strat = myStrat$strat)
+avePopBv <- stats::aggregate(bv ~ strat, data = pop, FUN = "mean")[, 2]
+```
+
+Table 4.16
+```{r}
+nh
+sd_av^2
+covBvAv
+sd_bv^2
+(nh - 1) / (nh - 2) * (sd_av^2 - 2 * slope * covBvAv + slope^2 * sd_bv^2)
+```
+
+Calculation of sdRegr
+```{r}
+(sdRegr <- sqrt((nh - 1) / (nh - 2) * (sd_av^2 - 2 * slope * covBvAv + slope^2 * sd_bv^2)))
+sdRegr^2
+sum(sdRegr^2)
+```
+```{r}
+options(digits = 8)
+gh * sdRegr^2
+sum(gh * sdRegr^2)
+sqrt(sum(gh * sdRegr^2))
+```
+
+```{r}
+(dfReg <- round((sum(gh * sdRegr^2))^2 / sum((gh^2 * sdRegr^4) / (nh - 1))))
+qt(1 - alpha / 2, dfReg)
+```
+
+
+```{r}
+precAchReg <- qt(1 - alpha / 2, dfReg) * sqrt(sum(gh * sdRegr^2))
+precAchReg
+myStrat$evalResults$`Achieved precision regression`
+myStrat$evalResults$Estimates$regr[4:5]
+Y_Reg - precAchReg
+Y_Reg + precAchReg
+```
+
+
+
+
+#  Difference Estimator
+
+```{r}
+(sum_Bv  <- stats::aggregate(bv ~ strat, data = pop, FUN = "sum")[, 2])
+sum(sum_Bv)
+popBv
+sample$diff <- sample$bv - sample$av
+(sum_diff  <- stats::aggregate(diff ~ strat, data = sample, FUN = "sum")[, 2])
+(sd_diff <- stats::aggregate(diff ~ strat, data = sample, FUN = "sd")[, 2])
+sum(Nh * sum_diff / nh)
+myStrat$evalResults$`Most likely total error difference`
+sum_Bv - Nh * sum_diff / nh
+
+myStrat$evalResults$`Most likely total audited amount difference`
+```
+Table 4.18
+```{r}
+Table4_18 <- data.frame(Nh, nh, sum_diff, sd_diff)
+Table4_18
+```
+Table 4.21
+```{r}
+(Table4_21 <- data.frame(Nh, sum_diff / nh, Nh * sum_diff / nh))
+(Total <- sum(Nh * sum_diff / nh))
+```
+Difference estimate
+```{r}
+(Y_diff <- popBv - Total)
+myStrat$evalResults$Estimates$diff[1:6]
+```
+Estimated variance
+Table 4.20
+```{r}
+(Table4_20 <- data.frame(Nh, nh,
+                         gh,
+                         sd_diff^2,
+                         gh * sd_diff^2))
+```
+Total of column 5
+```{r}
+sum(gh * sd_diff^2)
+(se_diff <- sqrt(sum(gh * sd_diff^2)))
+```
+Formula 4.32
+```{r}
+(df_d <- floor(sum(gh * sd_diff^2)^2 / sum((gh * sd_diff^2)^2 / (nh - 1))))
+(tval <- qt(1 - alpha / 2, df = df_d))
+```
+Prediction interval
+```{r}
+# Achieved precision of the MPU estimator
+(achPrecDif <- se_diff * tval)
+# This should match
+myStrat$evalResults$`Achieved precision difference`
+
+# Lower and upper bounds
+Y_diff - achPrecDif
+myStrat$evalResults$Estimates$diff[4]
+Y_diff + achPrecDif
+myStrat$evalResults$Estimates$diff[5]
+```
+
+
+Table 4.21
+```{r}
+(Table4_21 <- data.frame(Nh, aveSampBv, aveSampAv, Nh * aveSampBv, Nh * aveSampAv))
+```
+Ratio
+```{r}
+(ratio <- sum(Nh * aveSampAv) / sum(Nh * aveSampBv))
+```
+Ratio estimate
+```{r}
+(Y_rat <- ratio * popBv)
+(myStrat$evalResults$`Most likely total audited amount ratio`)
+```
+Variance calculation
+```{r}
+(sdRatio <- sqrt(sd_av^2 - 2 * ratio * covBvAv + ratio^2 * sd_bv^2))
+```
+Table 4.24
+```{r}
+(Table4_24 <- data.frame(gh,
+                         sdRatio^2,
+                         gh * sdRatio^2))
+```
+Standard error
+```{r}
+sum(gh * sdRatio^2)
+(se_ratio <- sqrt(sum(gh * sdRatio^2)))
+```
+Degrees of freedom
+```{r}
+(dfRat <- round(sum(gh * sdRatio^2)^2 / sum((gh^2 * sdRatio^4) / (nh - 1))))
+(tval <- qt(1 - alpha / 2, df = dfRat))
+```
+```{r}
+(precAchRat <- qt(1 - alpha / 2, dfRat) * sqrt(sum(gh * sdRatio^2)))
+(myStrat$evalResults$`Achieved precision ratio`)
+```
+
+Prediction interval
+```{r}
+# Lower and upper bounds
+Y_rat - precAchRat
+myStrat$evalResults$Estimates$ratio[4]
+Y_rat + precAchRat
+myStrat$evalResults$Estimates$ratio[5]
+```
+
+
+# Choice of estimator
+```{r}
+arSample <- cvs_obj(bv = accounts_receivable$amount,
+                    id = accounts_receivable$invoice,
+                    n = 100)
+
+```
+Select sample
+```{r}
+arSample <- select(arSample, seed = 1)
+
+```
+Audit sampling units
+```{r}
+audit_values <- accounts_receivable[match(arSample$sample$item,
+                                          accounts_receivable$invoice), "av2"]
+```
+Evaluate
+```{r}
+arSample <- evaluate(arSample, av = audit_values$av2)
+arSample$evalResults$Estimates
+
+```
+The number of differences is stored in the \ttblue{\#\_Errors} attribute, under each of the estimation methods.
+```{r}
+arSample$evalResults$`Regression estimation`$`#_Errors`
+```
+The objective now is to see how precision is calculated for the difference, ratio, and regression estimators. We collect the sample data and the audit values in a single data frame, and obtain the summary statistics required for further calculations.
+```{r}
+sample <- arSample$sample
+sample$av <- audit_values$av2
+sample$diff <- sample$bv - sample$av
+(N <- arSample$popn)
+(n <- arSample$n)
+(m <- length(which(sample$diff != 0)))
+(alpha <- (1 - arSample$cl))
+(sum_d <- sum(sample$diff))
+(sum_dsq <- sum(sample$diff^2))
+```
+For the difference estimator, we then calculate the average difference for the differences only.
+```{r}
+(ave_dm <- sum_d / m)
+```
+Then calculate the standard deviation of the differences only.
+```{r}
+(sd_dm <- sqrt((sum_dsq - (m * ave_dm^2)) / (m - 1))) ## 4.17
+```
+```{r}
+(pU <- upper(m, N, n, alpha) / N)
+(sd_diff <- sqrt(pU * sd_dm^2 + pU * (1 - pU) * ave_dm^2)) # 4.18
+```
+Precision achieved is then calculated with
+
+```{r}
+
+cont_corr <- sqrt((N - n) / (N - 1))
+(precAchDif <- N * qt(1 - alpha / 2, df = m - 1) * 
+    sd_diff / sqrt(n) * cont_corr)
+arSample$evalResults$Estimates[3, 2]
+```
+This result matches!
+
+For the ratio estimator, we need the following quantities 
+
+```{r}
+(sum_avsq <- sum(sample$av^2))
+(sum_bvav <- sum(sample$bv*sample$av))
+(sum_bvsq <- sum(sample$bv^2))
+(q <- sum(sample$av) / sum(sample$bv))
+(sQm <- sqrt((sum_avsq - 2 * q * sum_bvav + q^2 * sum_bvsq) / (m - 1)))
+```
+This quantity is then used for the calculation of the estimated standard deviation of populaion ratios as
+```{r}
+(sd_ratio <- sqrt(pU * sQm^2))
+```
+Precision achieved is then
+```{r}
+(precAchRat <- N * qt(1 - alpha / 2, df = m - 1) * 
+    sd_ratio / sqrt(n) * cont_corr)
+arSample$evalResults$Estimates[3, 3]
+```
+Regression estimator
+
+We first calculate these last two values.
+```{r}
+(sd_bv <- sd(sample$bv))
+(covBvAv <- cov(sample$bv, sample$av))
+(slope <- covBvAv / sd_bv^2)
+```
+Filling in (this is the formula from Roberts p. 91)
+```{r}
+(sd_reg <- sqrt(pU * sd_dm^2 + pU * (1- pU) * ave_dm^2 - (n -1) / (n - 2) * (slope - 1)^2 * sd_bv))
+```
+Precision achieved is then
+```{r}
+(precAchReg <- N * qt(1 - alpha / 2, df = m - 1) * 
+    sd_reg / sqrt(n) * cont_corr)
+arSample$evalResults$Estimates[3, 4]
+```
+
+
+
+<!-- SUPPORT-ONLY:END -->

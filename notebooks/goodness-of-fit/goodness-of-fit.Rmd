@@ -1,0 +1,339 @@
+---
+title: "Chapter 6 -- Goodness of fit"
+author: "Lucas Hoogduin"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Goodness of fit
+
+### Exercise 6.1. Before we start
+
+To run the exercises in this workshop, we need to load a few packages.
+
+```{r setup}
+library(ggplot2)         # Data visualization
+# library(aicpa)           # Contains US SteamCo data
+# library(car)             # Companion to Applied Regression
+library(gridExtra)       # Arrange multiple grid-based plots
+library(tidyr)           # Data tidying (reshape and transform)
+library(tidyverse)
+# library(corrplot)        # Correlation matrix visualization
+library(lmtest)          # Diagnostic tests for linear models
+# library(latex2exp)       # Use LaTeX expressions in plots
+# library(scales)
+library(kthemes)
+theme_set(theme_grey())
+```
+
+### Exercise 6.2.  Customer satisfaction survey
+
+The client satisfaction results from Table 6.3
+
+```{r}
+# Hypothesized population proportions from the base year
+p <- c(0.40, 0.16, 0.44)
+```
+
+Results from the follow-up study
+
+```{r}
+# Observed frequencies from the follow-up study
+observed <- c(15, 12, 13)
+
+# Sample size
+n <- sum(observed)
+```
+
+The expected frequencies are therefore obtained by multiplying these
+proportions by the sample size.
+
+```{r}
+# Expected frequencies
+(expected <- n * p)
+```
+
+The chi-square test statistic is
+
+```{r}
+# Chi-square test statistic (manual calculation)
+(chi_sq <- sum((observed - expected)^2 / expected))
+```
+
+Calculation of the critical value
+
+```{r}
+# Degrees of freedom
+(df <- length(observed) - 1)
+
+# Critical value for alpha = 0.05
+alpha <- 0.05
+(critical_value <- qchisq(1 - alpha, df))
+```
+
+Calculation of the p-value
+
+```{r}
+(p_value <- pchisq(chi_sq, df, lower.tail = FALSE))
+```
+
+Using the built-in test
+
+```{r}
+chisq.test(x = observed, p = p)
+```
+
+### Benford's Law
+
+```{r}
+# Benford probabilities
+digits <- 1:9
+probabilities <- log10((digits + 1) / digits)
+
+# Data frame
+benford <- data.frame(
+  Digit = factor(digits, levels = digits),
+  Probability = probabilities
+)
+
+# Figure
+ggplot(benford, aes(x = Digit, y = Probability)) +
+  geom_col(fill = "#00338D", width = 0.7) +
+  scale_y_continuous(
+    limits = c(0, 0.35),
+    breaks = seq(0, 0.35, by = 0.05),
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  labs(
+    x = "First digit",
+    y = "Probability"
+  ) # +
+  # theme_minimal(base_size = 12)
+```
+
+### Examples from Benford
+
+```{r}
+library(tidyverse)
+
+df <- tribble(
+  ~Digit, ~Rivers, ~AmLeague, ~CostData, ~ReadersDigest, ~MolWgt, ~Average,
+  1, 31.0, 32.7, 32.4, 33.4, 26.7, 31.2,
+  2, 16.4, 17.6, 18.8, 18.5, 25.2, 19.3,
+  3, 10.7, 12.6, 10.1, 12.4, 15.4, 12.2,
+  4, 11.3,  9.8, 10.1,  7.5, 10.8,  9.9,
+  5,  7.2,  7.4,  9.8,  7.1,  6.7,  7.6,
+  6,  8.6,  6.4,  5.5,  6.5,  5.1,  6.4,
+  7,  5.5,  4.9,  4.7,  5.5,  4.1,  4.9,
+  8,  4.2,  5.6,  5.5,  4.9,  2.8,  4.6,
+  9,  5.1,  3.0,  3.1,  4.2,  3.2,  3.7
+)
+
+df_long <- pivot_longer(
+  df,
+  -Digit,
+  names_to = "Series",
+  values_to = "Percentage"
+)
+
+ggplot(df_long,
+       aes(x = Digit,
+           y = Percentage,
+           color = Series)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(breaks = 1:9) +
+  labs(
+    x = "First digit",
+    y = "Percentage"
+  ) 
+```
+
+### Comparison of average with theoretical
+
+```{r}
+# Benford probabilities (%)
+benford <- 100 * probabilities
+
+# Average from the table
+average <- c(31.2, 19.3, 12.2, 9.9, 7.6, 6.4, 4.9, 4.6, 3.7)
+
+# Data frame
+df <- data.frame(
+  Digit = rep(digits, 2),
+  Percentage = c(benford, average),
+  Series = rep(c("Benford", "Average"), each = 9)
+)
+
+# Plot
+ggplot(df,
+       aes(x = Digit,
+           y = Percentage,
+           color = Series,
+           linetype = Series)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(breaks = 1:9) +
+  labs(
+    x = "First digit",
+    y = "Percentage"
+  ) 
+```
+## Inventory data
+
+```{r}
+# Benford probabilities (%)
+inv_expected <- 300 * probabilities
+
+# Observed frequencies inventories
+inv_observed <- c(86, 48, 23, 32, 24, 36, 19, 18, 14)
+
+# Data frame
+df_inv <- data.frame(
+  Digit = rep(digits, 2),
+  Frequency = c(inv_expected, inv_observed),
+  Series = rep(c("Expected", "Observed"), each = 9)
+)
+
+# Plot
+inv_plot <- ggplot(df_inv,
+       aes(x = Digit,
+           y = Frequency,
+           color = Series,
+           linetype = Series)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(breaks = 1:9) +
+  theme(legend.position = "top") +
+  guides(color = guide_legend(title = NULL), linetype = guide_legend(title = NULL)) + # Remove legend titles
+  labs(
+    x = "First digit",
+    y = "Frequency"
+  ) 
+
+inv_plot
+```
+Calculation of the test statistic
+
+```{r}
+# Expected
+round(inv_expected, 2)
+```
+```{r}
+# Obs - Exp squared
+round((inv_observed - inv_expected)^2, 2)
+```
+```{r}
+# Obs - Exp squared divided by expected
+round(((inv_observed - inv_expected)^2 / inv_expected), 2)
+sum(round(((inv_observed - inv_expected)^2 / inv_expected), 2))
+```
+
+Critical region
+```{r}
+# Parameters
+df <- 8  # Degrees of freedom
+x <- seq(0, 20, by = 0.1)  # Range of x values
+tail_start <- 15.51  # Starting point for the shaded tail
+
+# Create a data frame for the chi-square distribution
+data <- data.frame(
+  x = x,
+  y = dchisq(x, df = df)
+)
+
+# Create the plot
+ggplot(data, aes(x = x, y = y)) +
+  geom_line(color = "#00338D", size = 1) +
+  geom_area(
+    data = subset(data, x >= tail_start),
+    aes(x = x, y = y),
+    fill = "#00338D",
+    alpha = 1
+  ) +
+  labs(x="x", y="density")
+```
+
+
+Using the built-in test
+
+```{r}
+chisq.test(x = inv_observed, p = probabilities)
+```
+## Discrete Uniform Distribution
+
+```{r}
+# First digit probabilities
+first_digit <- data.frame(
+  digit = 1:9,
+  probability = log10(1 + 1/1:9),
+  position = "First"
+)
+
+# Second digit probabilities
+second_digit <- data.frame(
+  digit = 0:9,
+  probability = sapply(0:9, function(d) sum(log10(1 + 1/(10 * 1:9 + d)))),
+  position = "Second"
+)
+
+# Third digit probabilities
+third_digit <- data.frame(
+  digit = 0:9,
+  probability = sapply(0:9, function(d) sum(log10(1 + 1/(10 * 10:99 + d)))),
+  position = "Third"
+)
+
+# Combine data
+benford_data <- bind_rows(first_digit, second_digit, third_digit)
+
+# Create line plots
+ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~position, ncol = 1, scales = "free_x") +
+  labs(
+    x = "Digit",
+    y = "Probability"
+  ) +
+  theme(legend.position = "none")
+```
+
+
+
+
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+nres <- ussteamco.mod.3$residuals / sd(ussteamco.mod.3$residuals)
+model3 <- as.data.frame(nres)
+
+# Function to create a histogram with a given number of bins
+create_hist <- function(bins) {
+  ggplot(model3, aes(nres)) +
+    geom_histogram(aes(y = after_stat(density)),
+                   breaks = seq(min(nres), max(nres), length.out = bins + 1),
+                   fill = "#00338D", color = "black") +
+    stat_function(fun = dnorm,
+                  args = list(mean = mean(model3$nres),
+                              sd = sd(model3$nres)),
+                  color = "red", size = 1) +
+    labs(title = paste("Histogram with", bins, "bins"),
+         x = "Standardized Residuals", y = "Density") +
+    theme_minimal()
+}
+
+# Create the four histograms
+hist_6 <- create_hist(6)
+hist_7 <- create_hist(7)
+hist_8 <- create_hist(8)
+hist_9 <- create_hist(9)
+
+# Arrange in a 2x2 grid using grid
+grid.arrange(hist_6, hist_7, hist_8, hist_9, ncol = 2)
+```
+

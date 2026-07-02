@@ -1,10 +1,10 @@
 # Notebook sources
 
-## Regression analysis
-
-`regression-analysis/regression-analysis.Rmd` is the only authored source for
-the Regression notebooks. It contains the full support material used while
-maintaining the book.
+Each Volume 1 chapter has one authored R notebook under its semantic chapter
+directory. These canonical notebooks contain both the workshop exercises and
+the private support calculations used while maintaining the book. Chapter
+numbers live in `scripts/notebook-manifest.R`; filenames do not change when a
+volume is reorganized.
 
 Material enclosed by the exact marker lines
 
@@ -13,16 +13,15 @@ Material enclosed by the exact marker lines
 <!-- SUPPORT-ONLY:END -->
 ```
 
-is retained in the private support notebook and omitted from the public
-workshop. Run
+is retained in the private support notebook and omitted from the generated
+public workshop. Run `Rscript scripts/render-notebooks.R` to regenerate and render all
+public Binder workbooks in the `notebooks/workshops` submodule. Pass `canonical`
+to render the private sources, or `all` to render both variants. To export without rendering, run
+`Rscript scripts/export-workshops.R`. Never edit generated public R workbooks
+directly.
 
-```sh
-Rscript scripts/render-regression-notebooks.R
-```
-
-to regenerate the public Binder workbook in the `notebooks/workshops`
-submodule and render both variants. Never edit the generated public Regression
-workbook directly.
+`analytical-procedures/figure-support.Rmd` is a private-only Volume 2 figure
+notebook. It is canonical but has no Binder export.
 
 Git history replaces version suffixes such as `_v01`, `_v02`, `bis`, and
-`DELETE`; new canonical notebook filenames should remain stable.
+`DELETE`; canonical notebook filenames remain stable.
