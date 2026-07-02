@@ -7,7 +7,7 @@ output:
     df_print: paged
 ---
 
-<!-- GENERATED FILE: edit notebooks/auxiliary-variables-and-stratification/auxiliary-variables-and-stratification.Rmd in the private ada repository. -->
+<!-- GENERATED FILE: edit notebooks/support/auxiliary-variables-and-stratification/support.Rmd in the private ada repository. -->
 
 
 ## Estimation with auxiliary variables and stratification
