@@ -1,5 +1,5 @@
 ---
-title: "Workshop Chapter 5"
+title: "Workshop Chapter 4: Hypothesis testing"
 author: "Lucas Hoogduin"
 date: "`r Sys.Date()`"
 output:
@@ -7,9 +7,12 @@ output:
     df_print: paged
 ---
 
+<!-- GENERATED FILE: edit notebooks/hypothesis-testing/hypothesis-testing.Rmd in the private ada repository. -->
+
+
 ## Hypothesis testing
 
-### Exercise 5.1. Effect of the critical region on the sample size
+### Exercise 4.1. Effect of the critical region on the sample size
 
 The results on page 119 are obtained with the `FSaudit` package, first by creating an attribute object, filling it with the parameters of the test, and then applying the `size()` function.
 The relevant parameters are the significanve level `alpha`, the number of deviations in the population $M$ `popdev`, the population size $N$ `popn`, and the critical region `c`.
@@ -38,7 +41,7 @@ mySample2 <- size(mySample2)
 mySample2$n
 ```
 
-### Exercise 5.2. Significance levels
+### Exercise 4.2. Significance levels
 
 On page 120 we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in `R` with the following code:
 ```{r}
@@ -48,7 +51,7 @@ phyper(q = 2, m = 60, n = 1140, k = 102)
 Refer to Equation 2.1.
 Remember that `R` uses `q` for the number of errors found $k$, `m` for the number of deviations in the population $M$, `n` for the number of correct items $N - M$, and `k` for the sample size $n$.
 
-### Exercise 5.3. Type II error
+### Exercise 4.3. Type II error
 
 On page 121 we also calculated the Type II error, for a scenario with no errors allowed in the sample and 24 errors in the population, or a population error rate of $24 / 200 = 0.02$.
 
@@ -56,7 +59,7 @@ On page 121 we also calculated the Type II error, for a scenario with no errors 
 phyper(0, m = 24, n = 1176, k = 45, lower.tail = FALSE)
 ```
 
-### Exercise 5.4. One-sided upper bounds
+### Exercise 4.4. One-sided upper bounds
 
 The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
 
@@ -65,7 +68,7 @@ upper(popn = 1200, n = 102, k = 0, alpha = 0.10) / 1200
 upper(popn = 1200, n = 102, k = 3, alpha = 0.10) / 1200
 ```
 
-### Exercise 5.5. Case: European innovation subsidies
+### Exercise 4.5. Case: European innovation subsidies
 The sample size in the *Case: European innovation subsidies* depends on the critical region chosen. When the null hypothesis $H_0 : M \geq 120,000$ is rejected when the sample yields no errors, the critical region is $\{k | k = 0\}$. We first create an `mus_obj` object, and load it with the parameters.
 ```{r}
 subsidies <- mus_obj(cl = 0.95, 
@@ -90,7 +93,7 @@ myAttSample$n
 
 In MUS, we increase the critical region by anticipating on the expected error (in monetary terms) in the population. Thus, in applications where selected items are either completely correct or completely incorrect, it is easier to calculate the minimum required sample size using the `att_obj` than using the `mus_obj`.
 
-### Exercise 5.6. Case: Accounts receivable circularization
+### Exercise 4.6. Case: Accounts receivable circularization
 
 We start by setting up the MUS object `ar` (for Accounts Receivable) in `R` with the `FSaudit` package and first verify that the number of sampling units `popn` and the total book value `popBv` of the sampling frame match those in the population. Notice that these statistics are calculated as soon as the object is loaded with the detail amounts.
 
@@ -120,7 +123,7 @@ ar2$n
 
 We can therefore infer that with an expected error of `ee = 100000`, we can tolerate between one and two 100% errors.
 
-### Exercise 5.7. Multiple hits with random selection
+### Exercise 4.7. Multiple hits with random selection
 
 If we draw a sample of size $n = 1,100$ from the `accounts_receivable` population, the largest sampling units have an almost 100% inclusion probability and with a selection method such as `random` are likely to be hit more than once.
 
@@ -149,7 +152,7 @@ head(sample[order(-sample$bv), ])
 ```
 This example demonstrates that invoices 201719763 and 201710344 were selected twice.
 
-### Exercise 5.8. Stringer bound
+### Exercise 4.8. Stringer bound
 
 We continue the case study sample, and select the sample, now with the "randomized fixed" selection method.
 
@@ -198,7 +201,7 @@ upper(k = 2, popn = 13500000, n = 145, alpha = .05)
 upper(k = 3, popn = 13500000, n = 145, alpha = .05)
 ```
 
-### Exercise 5.9. Cell evaluation
+### Exercise 4.9. Cell evaluation
 
 The results of the cell evaluation method, as presented in Table 5.8, can also be obtained, by changing the evaluation method.
 
@@ -208,7 +211,7 @@ ar <- evaluate(ar, av = myResults$av, evalMeth = "cell")
 ar$evalResults$Over$`Precision calculation`
 ```
 
-### Exercise 5.10. PPS estimation
+### Exercise 4.10. PPS estimation
 
 Finally, we present results from the `pps` evaluation method. For this purpose, we use audit values stored in the variable `av2`. The total error amount reflected in `av2` is 450,000.
 
@@ -225,4 +228,3 @@ ar$evalResults$`pps estimate`
 ar$evalResults$`Lower bound`
 ar$evalResults$`Upper bound`
 ```
-

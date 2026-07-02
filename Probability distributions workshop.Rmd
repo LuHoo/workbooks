@@ -1,15 +1,18 @@
 ---
-title: "Workshop Chapter 2"
+title: "Workshop Chapter 1: Probability distributions"
 author: "Lucas Hoogduin"
 date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
 ---
+
+<!-- GENERATED FILE: edit notebooks/probability-distributions/probability-distributions.Rmd in the private ada repository. -->
+
  
-## Chapter 2. Probability distributions
+## Chapter 1. Probability distributions
  
-### Exercise 2.1 Hypergeometric distribution
+### Exercise 1.1 Hypergeometric distribution
  
 The `R` function `dhyper()` requires four arguments: $k, M, (N - M)$, and $n$.
 The prefix `d` indicates that the function is a density function.
@@ -32,7 +35,7 @@ Probabilities in the right-hand tail $P(k > k)$ can be calculated by passing the
 phyper(1, 17, 314, 60, lower.tail = FALSE)
 ```
  
-### Exercise 2.2 Binomial distribution
+### Exercise 1.2 Binomial distribution
  
 The relevant `R functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and `$\pi$ = M / N`.
  
@@ -41,7 +44,7 @@ dbinom(x = 1, size = 60, prob = 17 / 331)
 pbinom(1, 60, 17 / 331)
 ```
  
-### Exercise 2.3 Poisson distribution
+### Exercise 1.3 Poisson distribution
  
 The functions `dpois()` and `ppois()` are used for the calculation of probabilities from the Poisson distribution.
 They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$.
@@ -60,7 +63,7 @@ To calculate the probability of finding no more than one error in the sample of 
 ppois(1, 60 * 17/ 331)
 ```
  
-### Exercise 2.4 Normal distribution
+### Exercise 1.4 Normal distribution
  
 In `R` we use the function `pnorm`, that uses the arguments `q` for the sampling result that we evaluate, `mean` for the population mean, and `sd` for the standard deviation of the mean.
  
@@ -78,7 +81,7 @@ pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
 pnorm(sd = 115.26/sqrt(200), mean = 1030, q = 1012)
 ```
  
-### Exercise 2.5 Student's $t$ distribution
+### Exercise 1.5 Student's $t$ distribution
  
 To calculate the probability found of 14.7%, we use the function `pt()` with arguments `x` for the boundary value and `df` for the number of degrees of freedom.
  
@@ -89,7 +92,7 @@ pt(t_val, 9)
  
 The probability is 14.7%. Notice that we used another shortcut notation: we added brackets to the assignment of the `t_val` variable, so that the assigned value is returned immediately.
  
-### Exercise 2.6 $\chi^2$ (chi-squared) distribution
+### Exercise 1.6 $\chi^2$ (chi-squared) distribution
  
 The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
  
@@ -105,7 +108,7 @@ qchisq(p = .05, df = 9)
  
 These two results are then used to calculate the upper and lower 90\% confidence bounds of the population variance.
  
-### Exercise 2.7 $F$ distribution
+### Exercise 1.7 $F$ distribution
  
 Hypothesis testing is done with the function `qf`, where we use the argument `lower.tail = FALSE` to indicate the direction of the test.
  
