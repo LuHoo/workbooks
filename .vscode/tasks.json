@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Volume 1",
+      "type": "shell",
+      "command": "/Library/TeX/texbin/latexmk",
+      "args": [
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-file-line-error",
+        "ada_volume1.tex"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$latex"]
+    },
+    {
+      "label": "Build Volume 2",
+      "type": "shell",
+      "command": "/Library/TeX/texbin/latexmk",
+      "args": [
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-file-line-error",
+        "ada_volume2.tex"
+      ],
+      "group": "build",
+      "problemMatcher": ["$latex"]
+    },
+    {
+      "label": "Start R terminal",
+      "type": "shell",
+      "command": "/usr/local/bin/R",
+      "problemMatcher": []
+    },
+    {
+      "label": "Export and render regression notebooks",
+      "type": "process",
+      "command": "/usr/local/bin/Rscript",
+      "args": [
+        "scripts/render-regression-notebooks.R"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "RSTUDIO_PANDOC": "/Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

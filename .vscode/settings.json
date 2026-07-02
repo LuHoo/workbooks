@@ -1,4 +1,9 @@
 {
+  "latex-workshop.latex.autoBuild.run": "never",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "r.alwaysUseActiveTerminal": true,
+  "r.bracketedPaste": true,
+  "r.rterm.mac": "/usr/local/bin/R",
   "files.exclude": {
     "**/*.aux": true,
     "**/*.idx": true,
