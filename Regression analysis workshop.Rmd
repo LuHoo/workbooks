@@ -7,7 +7,7 @@ output:
     df_print: paged
 ---
 
-<!-- GENERATED FILE: edit notebooks/regression-analysis/regression-analysis.Rmd in the private ada repository. -->
+<!-- GENERATED FILE: edit notebooks/support/regression-analysis/support.Rmd in the private ada repository. -->
 
 
 ## Regression analysis

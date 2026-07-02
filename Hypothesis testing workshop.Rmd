@@ -7,7 +7,7 @@ output:
     df_print: paged
 ---
 
-<!-- GENERATED FILE: edit notebooks/hypothesis-testing/hypothesis-testing.Rmd in the private ada repository. -->
+<!-- GENERATED FILE: edit notebooks/support/hypothesis-testing/support.Rmd in the private ada repository. -->
 
 
 ## Hypothesis testing

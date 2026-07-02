@@ -7,7 +7,7 @@ output:
     df_print: paged
 ---
 
-<!-- GENERATED FILE: edit notebooks/goodness-of-fit/goodness-of-fit.Rmd in the private ada repository. -->
+<!-- GENERATED FILE: edit notebooks/support/goodness-of-fit/support.Rmd in the private ada repository. -->
 
 
 ## Goodness of fit
