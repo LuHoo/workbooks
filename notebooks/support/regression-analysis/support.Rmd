@@ -7,6 +7,11 @@ output:
   html_document:
     df_print: paged
 ---
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Regression analysis
 
@@ -89,8 +94,13 @@ hist_heatDD <-
   geom_histogram(binwidth = 100, fill = "#00338D") +
   scale_x_continuous(labels = label_comma())
 
-grid.arrange(hist_revenue, hist_production, hist_coolDD, hist_heatDD, ncol = 2)
+histograms_plot <- grid.arrange(hist_revenue, hist_production, hist_coolDD, hist_heatDD, ncol = 2)
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(histograms_plot, "H7_Histograms.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 Figure 5.3 shows the time-series plots for the same dataset.
 
@@ -100,7 +110,7 @@ rev_range <- range(USSteamCoEstim$revenue, na.rm = TRUE)
 prod_range <- range(USSteamCoEstim$production, na.rm = TRUE)
 
 # Create the plot
-ggplot(data = USSteamCoEstim, aes(x = date)) +
+time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   # First time series (revenue)
   geom_line(aes(y = revenue), colour = "#00338D") +
   # Second time series (production), rescaled to match revenue range
@@ -120,17 +130,29 @@ ggplot(data = USSteamCoEstim, aes(x = date)) +
     axis.title.y.left = element_text(color = "#00338D"),
     axis.title.y.right = element_text(color = "#BC204B")
   )
+time_series_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(time_series_plot, "H7_time_series_plot2.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 
 Figure 5.1 shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
 
 ```{r}
-ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
+scatter_plot <- ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
   geom_point(color = "#00338D") +
   scale_x_continuous(name = "Production (x 1000 lb)", labels = scales::label_comma()) +
   scale_y_continuous(name = "Revenue ($)", labels = scales::label_comma())
+scatter_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(scatter_plot, "H7_scatterplot.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 The enhanced scatter plot in Figure 5.4 is obtained by running the following code.
 
@@ -140,6 +162,14 @@ scatterplot(revenue ~ production,
             smooth = FALSE)
 
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(
+  scatterplot(revenue ~ production, data = USSteamCoEstim, smooth = FALSE),
+  "H7_enhanced_scatterplot2.pdf"
+)
+```
+<!-- SUPPORT-ONLY:END -->
 
 ### Exercise 5.4. The base model `mod.0`
 
@@ -177,6 +207,16 @@ corrplot(cor_ussteam,
          col=colorRampPalette(c("#bc204b","white","#00348d"))(100),
          col.lim=c(-1,1))
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(
+  corrplot(cor_ussteam, tl.col = "black",
+           col = colorRampPalette(c("#bc204b", "white", "#00348d"))(100),
+           col.lim = c(-1, 1)),
+  "H7_Correlogram.pdf"
+)
+```
+<!-- SUPPORT-ONLY:END -->
 
 ### Exercise 5.7. Modelling strategies
 
@@ -269,6 +309,11 @@ p <- ggplot(USSteamCoEstim, aes(x = production, y = revenue, color = summer_fact
 
 p
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(p, "H7_scat_rev2.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 
 Note the special operator `|`, that can be expressed as 'given the value of'. To call this relationship, we use
@@ -294,6 +339,36 @@ with(USSteamCoEstim,
          y = revenue,
          lag.max = 4))
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(
+  with(USSteamCoEstim, ccf(x = production, y = revenue, lag.max = 4)),
+  "H7_timelag.pdf"
+)
+```
+<!-- SUPPORT-ONLY:END -->
+
+<!-- SUPPORT-ONLY:START -->
+```{r}
+# Exponential relationship with a positive slope and its linearization.
+b0 <- 3
+b1 <- 0.025
+exponential_data <- data.frame(x = 0:100)
+exponential_data$y <- exp(b0 + b1 * exponential_data$x)
+exponential_data$log_y <- log(exponential_data$y)
+
+exponential_plot <- ggplot(exponential_data, aes(x = x, y = y)) +
+  geom_line(color = "#00338D") +
+  labs(title = expression("Exponential function: " * y == e^b[0] %*% e^{b[1] * x}),
+       x = "x", y = "y")
+linearized_plot <- ggplot(exponential_data, aes(x = x, y = log_y)) +
+  geom_line(color = "#00338D") +
+  labs(title = expression("Linearized function: " * ln(y) == b[0] + b[1] * x),
+       x = "x", y = "ln(y)")
+exponential_function_pos <- grid.arrange(exponential_plot, linearized_plot, ncol = 2)
+save_book_figure(exponential_function_pos, "H7_exponential_function_pos.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Exercise 5.11. Residual plots
 
@@ -381,6 +456,11 @@ combined <- arrangeGrob(
 grid.newpage()
 grid.draw(combined)
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(combined, "H7_residualPlots_mod2.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 
 
@@ -391,6 +471,11 @@ Figure 5.10 provides the Influence index plots. From bottom to top: Leverage poi
 ```{r}
 influenceIndexPlot(ussteamco.mod.2)
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(influenceIndexPlot(ussteamco.mod.2), "H7_influenceIndexPlot.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Exercise 5.13. Leverage points
 
@@ -419,6 +504,11 @@ Figure 5.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three la
 ```{r}
 qqPlot(ussteamco.mod.2, id = list(n = 3))
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(qqPlot(ussteamco.mod.2, id = list(n = 3)), "H7_qqplot.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Exercise 5.15. Influential observations
 
@@ -441,6 +531,14 @@ Figure 5.12 shows the hat-values, Studentized residuals, and Cook’s distances 
 ```{r}
 influencePlot(ussteamco.mod.2, id=list(n=3, cex=0.8))
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(
+  influencePlot(ussteamco.mod.2, id = list(n = 3, cex = 0.8)),
+  "H7_influenceplot.pdf"
+)
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Exercise 5.17. Winsorizing observation # 22
 
@@ -607,6 +705,11 @@ hist_stand_res <-
                                          sd = sd(model3$nres)))
 hist_stand_res
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(hist_stand_res, "H7_hist_standardized_residuals_mod3.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 The QQ plot is produced by:
 
@@ -629,6 +732,14 @@ To test the asumption of constant variance, we can employ visual means, such as 
 residualPlots(ussteamco.mod.3, layout = c(2, 3),
               quadratic = FALSE, linear = TRUE)
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(
+  residualPlots(ussteamco.mod.3, layout = c(2, 3), quadratic = FALSE, linear = TRUE),
+  "H7_residualPlots3.pdf"
+)
+```
+<!-- SUPPORT-ONLY:END -->
 The formal statistical test is the Breusch-Pagan test.
 
 ```{r}
@@ -642,6 +753,11 @@ We use the `pacf` plot from Figure 5.17 to see if autocorrelation is present, an
 ```{r}
 pacf(ussteamco.mod.3$residuals)
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_base_figure(pacf(ussteamco.mod.3$residuals), "H7_pacf.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 The Breusch-Godfrey test is executed through `bgtest`.
 
@@ -828,7 +944,7 @@ for (i in 1:rep) {
 All the elements created earlier are now plotted on a single canvas.
 
 ```{r}
-ggplot() +
+regression_lines_plot <- ggplot() +
   geom_line(data = simulated_lines, aes(x = x, y = y, group = rep),
             color = "#00338D", alpha = 0.1) +   # Plot the simulated regression lines
   geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", linewidth = .5) +  # Plot the true line
@@ -840,7 +956,13 @@ ggplot() +
        x = "x", y = "y") +
   theme_minimal() +
   xlim(x_extended_min, x_extended_max)  # Extend the x-axis limits
+regression_lines_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(regression_lines_plot, "H7_200_regression_lines.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 The resulting graph is shown in Figure 5.20.
 
@@ -864,7 +986,7 @@ pi_bounds_true <- data.frame(
   pi_upper = pi_upper_true
 )
 
-ggplot() +
+intervals_plot <- ggplot() +
   geom_ribbon(
     data = pi_bounds_true,
     aes(x = x, ymin = pi_lower, ymax = pi_upper),
@@ -889,7 +1011,13 @@ ggplot() +
     x = "x", y = "y"
   ) +
   xlim(x_extended_min, x_extended_max)
+intervals_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(intervals_plot, "H7_conf_and_pred_intervals.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 
 ## Exercise 5.33. Creating expectations for the hold-out period
@@ -945,7 +1073,7 @@ pred_df <- data.frame(
 )
 pred_df$outside = with(pred_df, recorded < lwr | recorded > upr)
 
-ggplot(pred_df, aes(x = date)) +
+expectations_plot <- ggplot(pred_df, aes(x = date)) +
   # Plot the predicted values as a line
   geom_line(aes(y = fit, color = "Expectation"), linewidth = 1) +
   # Add the prediction interval as a shaded area
@@ -970,7 +1098,13 @@ ggplot(pred_df, aes(x = date)) +
   scale_y_continuous(labels = label_comma()) +
   theme(legend.position = "bottom")
 
+expectations_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(expectations_plot, "H7_expectations.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Exercise 5.35. Combining 12 monthly predictions
 

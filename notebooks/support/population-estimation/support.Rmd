@@ -6,6 +6,11 @@ output:
   html_document:
     df_print: paged
 ---
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## 2. Estimating the population mean and proportion
 
@@ -201,6 +206,7 @@ Fig3.1 <-
   annotate("text", x = 3014.16, y = 0, label = "X", size = 10) +
   geom_vline(xintercept = 3014.16)
 Fig3.1
+save_book_figure(Fig3.1, "H3best_estimate.pdf")
 ```
 
 Figure 3.2
@@ -226,6 +232,7 @@ Fig3.2 <-
   annotate("text", x = 3014.16, y = 0, label = "X", size = 10) +
   geom_vline(xintercept = mu)
 Fig3.2
+save_book_figure(Fig3.2, "H3low_estimate.pdf")
 ```
 Figure 3.3
 
@@ -268,6 +275,7 @@ Fig3.3 <-
            arrow = arrow(angle = 45, length = unit(0.5, "cm"), 
                          ends = "both", type = "open"))
 Fig3.3
+save_book_figure(Fig3.3, "H3two_borderline_sampling_distributions.pdf")
 ```
 Figure 3.4
 
@@ -297,6 +305,7 @@ Fig3.4 <-
   geom_hline(yintercept = 0)
 
 Fig3.4
+save_book_figure(Fig3.4, "twosided.pdf")
 ```
 
 ```{r}
@@ -347,6 +356,7 @@ Fig3.5 <-
   xlab("n / N") +
   theme(legend.position = "none")
 Fig3.5
+save_book_figure(Fig3.5, "fpcf.pdf")
 ```
 
 
@@ -413,6 +423,7 @@ Fig3.6 <- ggplot(df18) +
   theme(axis.text.y = element_blank())
 
 Fig3.6
+save_book_figure(Fig3.6, "old_and_new_intervals_fraction.pdf")
 ```
 
 <!-- SUPPORT-ONLY:END -->

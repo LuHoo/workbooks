@@ -1,6 +1,8 @@
 ---
 title: "Generate Volume 2 Chapter 2 graphs"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 
@@ -11,6 +13,12 @@ library(dplyr)
 library(scales)
 library(latex2exp)
 ```
+
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ```{r}
 # Function to generate the plot
@@ -160,11 +168,17 @@ plot2
 ```
 
 
+<!-- SUPPORT-ONLY:START -->
 ```{r}
 # Save the plot as a PDF
-pdf_file_path <- getwd()
-ggsave(pdf_file_path, plot = plot, device = "pdf", width = 10, height = 6.03, dpi = 300)
+pdf_file_path <- save_book_figure(
+  plot,
+  "H6_Expected_diff_precise.pdf",
+  width = 10,
+  height = 6.03
+)
 ```
+<!-- SUPPORT-ONLY:END -->
 
 ```{r}
 
@@ -262,10 +276,20 @@ dist <- "None"  # Niet relevant voor deze vergelijking
 
 # Genereer de vergelijkingsplot
 comparison_plot <- generate_comparison_plot(materiality, std_precise, std_less_precise, cl, beta, deg, approach)
-
-# Sla de plot op als PDF
-ggsave("comparison_precise_vs_less_precise.pdf", plot = comparison_plot, device = "pdf", width = 10, height = 6.03, dpi = 300)
-
-print(comparison_plot)
 ```
 
+<!-- SUPPORT-ONLY:START -->
+```{r}
+# Sla de plot op als PDF
+save_book_figure(
+  comparison_plot,
+  "comparison_precise_vs_less_precise.pdf",
+  width = 10,
+  height = 6.03
+)
+```
+<!-- SUPPORT-ONLY:END -->
+
+```{r}
+print(comparison_plot)
+```

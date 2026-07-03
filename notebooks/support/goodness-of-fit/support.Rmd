@@ -6,6 +6,11 @@ output:
   html_document:
     df_print: paged
 ---
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Goodness of fit
 
@@ -99,7 +104,7 @@ benford <- data.frame(
 )
 
 # Figure
-ggplot(benford, aes(x = Digit, y = Probability)) +
+benford_plot <- ggplot(benford, aes(x = Digit, y = Probability)) +
   geom_col(fill = "#00338D", width = 0.7) +
   scale_y_continuous(
     limits = c(0, 0.35),
@@ -111,7 +116,14 @@ ggplot(benford, aes(x = Digit, y = Probability)) +
     y = "Probability"
   ) # +
   # theme_minimal(base_size = 12)
+
+benford_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(benford_plot, "H9_benford.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ### Examples from Benford
 
@@ -138,7 +150,7 @@ df_long <- pivot_longer(
   values_to = "Percentage"
 )
 
-ggplot(df_long,
+benford_examples_plot <- ggplot(df_long,
        aes(x = Digit,
            y = Percentage,
            color = Series)) +
@@ -149,7 +161,14 @@ ggplot(df_long,
     x = "First digit",
     y = "Percentage"
   ) 
+
+benford_examples_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(benford_examples_plot, "H9_benford_examples.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ### Comparison of average with theoretical
 
@@ -168,7 +187,7 @@ df <- data.frame(
 )
 
 # Plot
-ggplot(df,
+benford_average_plot <- ggplot(df,
        aes(x = Digit,
            y = Percentage,
            color = Series,
@@ -180,7 +199,14 @@ ggplot(df,
     x = "First digit",
     y = "Percentage"
   ) 
+
+benford_average_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(benford_average_plot, "H9_benford_ave_vs_theor.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 ## Inventory data
 
 ```{r}
@@ -215,6 +241,11 @@ inv_plot <- ggplot(df_inv,
 
 inv_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(inv_plot, "H9_inventor_list.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 Calculation of the test statistic
 
 ```{r}
@@ -245,7 +276,7 @@ data <- data.frame(
 )
 
 # Create the plot
-ggplot(data, aes(x = x, y = y)) +
+chisq_plot <- ggplot(data, aes(x = x, y = y)) +
   geom_line(color = "#00338D", size = 1) +
   geom_area(
     data = subset(data, x >= tail_start),
@@ -254,7 +285,14 @@ ggplot(data, aes(x = x, y = y)) +
     alpha = 1
   ) +
   labs(x="x", y="density")
+
+chisq_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(chisq_plot, "H9_chisq_dist_df8.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 
 Using the built-in test
@@ -290,7 +328,7 @@ third_digit <- data.frame(
 benford_data <- bind_rows(first_digit, second_digit, third_digit)
 
 # Create line plots
-ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
+benford_digit_plot <- ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
   geom_line() +
   geom_point() +
   facet_wrap(~position, ncol = 1, scales = "free_x") +
@@ -299,7 +337,14 @@ ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
     y = "Probability"
   ) +
   theme(legend.position = "none")
+
+benford_digit_plot
 ```
+<!-- SUPPORT-ONLY:START -->
+```{r}
+save_book_figure(benford_digit_plot, "H9_benford-digit-distributions.pdf")
+```
+<!-- SUPPORT-ONLY:END -->
 
 
 
@@ -336,4 +381,3 @@ hist_9 <- create_hist(9)
 # Arrange in a 2x2 grid using grid
 grid.arrange(hist_6, hist_7, hist_8, hist_9, ncol = 2)
 ```
-
