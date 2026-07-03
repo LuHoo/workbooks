@@ -226,14 +226,14 @@ Once we have a model or a set of competing models, we obtain a sense of their qu
 \paragraph{Testing model assumptions} % (fold)
 \label{par:testing_model_assumptions}
 
-Section \ref{sec:testing_model_assumptions} then proceeds by testing the three model assumptions (normality, constant variance, and absence of autocorrelation) that need to be valid for the subsequent tests and expectations to be statistically valid.
+Section \ref{sec:testing_model_assumptions} then proceeds by testing the three model assumptions (normality, constant variance, and absence of autocorrelation) that need to be valid for the subsequent tests and expectations to be statistically valid. These are model-validation tests and use conventional statistical hypotheses.
 
 % paragraph testing_model_assumptions (end)
 
 \paragraph{Testing significance} % (fold)
 \label{par:testing_significance}
 
-Section \ref{sec:testing_significance} includes two tests: one on the significance of each independent variable in the model and a second test on the significance of the model as a whole.
+Section \ref{sec:testing_significance} includes two conventional statistical tests: one on the significance of each independent variable in the model and a second test on the significance of the model as a whole. These tests evaluate the regression model; they are distinct from the audit hypothesis test applied to the recorded amount.
 
 % paragraph testing_significance (end)
 
@@ -247,7 +247,7 @@ Once the validity and significance of the model have been assessed, we proceed i
 \paragraph{Evaluation} % (fold)
 \label{par:evaluation}
 
-The expectations from the previous step are compared to the recorded values, as discussed in Section \ref{sec:auditor_response}. The difference between the two is compared with the acceptable difference, and we also discuss how this quantity is determined. We evaluate whether the expectation is sufficiently precise and, if not, the actions to increase precision. Significant differences are then investigated, and we determine whether the substantive analytical procedure identified a misstatement and evaluate any misstatement.  Finally, we conclude by determining whether the objectives of the substantive analytical procedure are achieved.
+Section \ref{sec:auditor_response} marks the transition from statistical model validation to audit evaluation. The regression expectation and its prediction uncertainty are used as evidence in an audit hypothesis test, in which the null hypothesis is that the recorded amount is materially misstated. Significant differences are investigated, after which the auditor determines whether sufficient evidence has been obtained to reject material misstatement at the required level of assurance. Finally, we conclude by determining whether the objectives of the substantive analytical procedure are achieved.
 
 % paragraph evaluation (end)
 
@@ -292,9 +292,9 @@ At the end of this section you will be able to
 \item develop a checklist for verifying regression assumptions before interpreting results.
 \end{itemize}
 
-The calculation underlying the regression results presented in this chapter is based on a number of assumptions, some of which need to be satisfied to obtain \emph{unbiased estimates} of the slope and intercept coefficients, and others to allow the testing of hypotheses about the parameters in the regression model, the creation of a prediction interval around the expectation, and the determination of the level of assurance obtained from the analysis. 
+The calculation underlying the regression results presented in this chapter is based on a number of assumptions, some of which need to be satisfied to obtain \emph{unbiased estimates} of the slope and intercept coefficients, and others to allow conventional statistical tests of the model parameters and the creation of a prediction interval around the expectation. The resulting model and prediction uncertainty may then be used as evidence in the separate audit hypothesis test.
 
-It is important to make this distinction: if the first group of assumptions is satisfied but one or more from the second group are violated, we still have a valid regression model that can serve the purposes of an explanatory data analysis. Only if we want to test certain hypotheses and ultimately construct an interval of acceptable differences and measure the level of assurance obtained do we need all assumptions to be validated.
+It is important to make this distinction: if the first group of assumptions is satisfied but one or more from the second group are violated, we still have a valid regression model that can serve the purposes of an explanatory data analysis. If the model is to produce prediction intervals and serve as audit evidence, all assumptions relevant to those predictions need to be validated. This model validation remains distinct from evaluating the recorded amount under the audit hypotheses.
 
 We first set out to test the assumptions that need to be satisfied to obtain unbiased estimates. The testing assumptions for the regression inference are discussed in Section \ref{sec:testing_model_assumptions}.
 
@@ -1797,7 +1797,7 @@ At the end of this section you will be able to
 \item recommend corrective actions (e.g., transformations, robust standard errors) for violated assumptions.
 \end{itemize}
 
-We discuss the assumptions for obtaining unbiased estimates in Section \ref{sec:assumptions_underlying_regression_results}. The second set of assumptions is related to our ability to test hypotheses, create prediction intervals, and calculate the level of assurance obtained. The three assumptions are as follows:
+We discuss the assumptions for obtaining unbiased estimates in Section \ref{sec:assumptions_underlying_regression_results}. The second set of assumptions supports conventional statistical inference about the model and the construction of prediction intervals. The three assumptions are as follows:
 
 \begin{itemize}
 \item normality;
@@ -1805,7 +1805,7 @@ We discuss the assumptions for obtaining unbiased estimates in Section \ref{sec:
 \item (for time-series analyses only) the absence of autocorrelation.
 \end{itemize}
 
-We can rely on graphical information for each of these assumptions, or objective statistical tests are performed.
+We can rely on graphical information for each of these assumptions, or perform objective statistical tests. The hypotheses in the following diagnostic tests concern properties of the regression residuals. They are conventional model-validation hypotheses, not the audit hypotheses concerning material misstatement of the recorded amount.
 
 
 % section conditions_underlying_regression_results (end)
@@ -1916,7 +1916,7 @@ where $n$ is the number of observations and $r^2$ is the coefficient of determin
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.0674. We therefore fail to reject the null hypothesis at levels greater than 0.0674. The residuals appear to have constant variance.
+The $p$ value of the test statistic is 0.0674. We therefore fail to reject the null hypothesis at conventional significance levels below 0.0674, such as 5\% or 1\%. The model-validation test provides no evidence of non-constant variance at these levels.
 
 \bigskip
 In cases where the null hypothesis is rejected, and the residuals show non-constant variance, we use a technique referred to as \hlblue{Weighted Least Squares}\index{weighted least squares} (WLS)\index{WLS}. It involves specifying a weight matrix for the residuals based on our understanding of the data and the source of heteroskedasticity. The weight matrix is based on the variance of the residuals, with larger weights assigned to observations with smaller residuals. 
@@ -1985,7 +1985,7 @@ where $n$ is the number of observations, and $r^2$ is the coefficient of determi
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals. 
+The $p$ value of the test statistic is 0.06737. Therefore, we fail to reject the null hypothesis at conventional significance levels below 0.06737, such as 5\% or 1\%. The model-validation test provides no evidence of autocorrelation at these levels, although the result is marginal at a 10\% level.
 This is visually supported by a moderate spike in the PACF plot. 
 While not definitively conclusive, these signs suggest that the model may benefit from adjustments to account for autocorrelation. 
 In time-series regression, residual autocorrelation violates the assumption that the error terms are independent over time. When this occurs, the ordinary least squares coefficient estimates may still be unbiased if the regressors are exogenous, but the usual standard errors, confidence intervals, and significance tests may no longer be reliable.
@@ -2146,7 +2146,7 @@ At the end of this section you will be able to
 \subsection{Testing significance of independent variables} % (fold)
 \label{sub:testing_significance_of_independent_variables}
 
-Under the assumptions specified in Section \ref{sec:assumptions_underlying_regression_results}, the estimates of the coefficients are unbiased, and when the assumptions from Section \ref{sec:testing_model_assumptions} hold, the residual term $\epsilon$ is normally distributed, with constant variance, and free of autocorrelation. With this in place, we can now develop and test hypotheses about any particular coefficient $\beta_j$ in the model. Remember that these coefficients are unknown and that we will never know them with certainty. We follow the nine-step approach from Section \ref{sec:the_nine_step_approach}.
+Under the assumptions specified in Section \ref{sec:assumptions_underlying_regression_results}, the estimates of the coefficients are unbiased, and when the assumptions from Section \ref{sec:testing_model_assumptions} hold, the residual term $\epsilon$ is normally distributed, with constant variance, and free of autocorrelation. With this in place, we can now develop and test hypotheses about any particular coefficient $\beta_j$ in the model. These are conventional statistical hypotheses used to validate and interpret the model; they do not use the audit convention for evaluating material misstatement. Remember that these coefficients are unknown and that we will never know them with certainty. We follow the nine-step approach from Section \ref{sec:the_nine_step_approach}.
 
 \paragraph{Research question} We are particularly interested in determining which independent variables have a significant impact on revenue ($y$). Specifically, we test whether the coefficient of each independent variable is significantly different from zero. If the coefficient of an independent variable is significantly different from zero, we conclude that this variable has a partial effect on revenue, accounting for the effects of all other variables in the model. Conversely, if the coefficient is not significantly different from zero, we conclude that the independent variable does not have a measurable impact on revenue within the context of the model.
 
@@ -2195,7 +2195,7 @@ The variable \ttblue{summer} enables the regression model to differentiate behav
 \subsection{Testing significance of the model} % (fold)
 \label{sub:testing_significance_of_the_model}
 
-In addition to testing the significance of the individual coefficients in the model, we can test whether the model as a whole is significant. This may seem superfluous and, in most cases, it is. Only in rare circumstances are we working with a significant model that incorporates insignificant independent variables. These circumstances do not occur in most auditing applications. In addition to testing the significance of the model as a whole, we can use the information used to compare the models. Once more, we follow the nine-step approach from Section \ref{sec:the_nine_step_approach}.
+In addition to testing the significance of the individual coefficients in the model, we can test whether the model as a whole is significant. This is also a conventional model-validation test rather than an audit test of the recorded amount. It may seem superfluous and, in most cases, it is. Only in rare circumstances are we working with a significant model that incorporates insignificant independent variables. These circumstances do not occur in most auditing applications. In addition to testing the significance of the model as a whole, we can use the information used to compare the models. Once more, we follow the nine-step approach from Section \ref{sec:the_nine_step_approach}.
 
 \paragraph{Research question} We want to know if the changes in the dependent variable are explained by (one of) the independent variable(s). 
 
@@ -2245,12 +2245,12 @@ At the end of this section you will be able to
 
 \begin{itemize}
 \item state the definitions of confidence and prediction intervals, and define the difference between predictions for new data points and predictions for mean responses.
-\item recall that assurance is the complement of Type II error risk.
+\item recall that audit assurance is the complement of Type I error risk.
 \end{itemize}
 \noindent \textsc{understand}
 \begin{itemize}
 \item explain the steps involved in making predictions from a regression model and the key differences between confidence intervals and prediction intervals.
-\item describe how assurance quantifies the probability of correctly concluding that the account is not misstated.
+\item describe how assurance quantifies the probability of not incorrectly concluding that the account is not materially misstated.
 \end{itemize}
 \noindent \textsc{apply}
 \begin{itemize}
@@ -2385,7 +2385,7 @@ Total          &174,778,400 &             & 198,680,683 & & -23,902,283 \\
   \label{fig:H7_expectations}
 \end{figure}
 
-The recorded revenue for January 2014 falls within the 99\% prediction interval, indicating that it aligns well with its expectation. However, the value for March 2014 lies outside these bounds, which suggests a deviation that warrants further examination. This outlier may reflect contradictory or potentially unreliable information, especially in light of the Standard 500, which addresses audit evidence requirements. 
+The prediction intervals are statistical tools for measuring the uncertainty around the monthly expectations; they are not, by themselves, the audit objective. The difference for January 2014 is consistent with the uncertainty measured by its 99\% prediction interval. The value for March 2014 lies outside these bounds, which identifies a deviation that warrants further examination. This outlier may reflect contradictory or potentially unreliable information, especially in light of the Standard 500, which addresses audit evidence requirements.
 According to this Standard, auditors are expected to gather and assess evidence that supports the accuracy and reliability of financial information. When recorded values do not align with the predicted intervals, as in March, this may indicate anomalies that could compromise the integrity of the data. Standard 500 advises auditors to investigate unusual discrepancies to determine whether they represent errors, misstatements, or otherwise unreliable data that might affect the auditor's conclusions and overall audit quality.
 
 The investigation of March 2014 revealed that the lower-than-expected revenue coincided with a severe winter storm that affected large parts of the East Coast of the United States. Although the model includes production and heating degree days, these variables did not fully capture the effect of the storm. The event caused major disruptions in the delivery of steam, so that revenue was lower than would normally be expected given the observed production levels and weather conditions.
@@ -2400,7 +2400,7 @@ The adjusted March expectation is therefore
 \hat{y}_{\text{Mar}} - 8,\!000,\!000.
 \]
 
-After this adjustment, the recorded revenue for March 2014 falls within the 99\% prediction interval for that month. Consequently, the March difference no longer represents an unexplained deviation requiring further investigation. The adjusted monthly expectation is then used in the next section when combining the 12 monthly expectations into the annual expectation.
+After this adjustment, the March difference is consistent with the uncertainty measured by the 99\% prediction interval for that month. Consequently, it no longer represents an unexplained deviation requiring further investigation. The adjusted monthly expectation is then used in the next section when combining the 12 monthly expectations into the annual expectation.
 
 \medskip
 Substantive analytical procedures are intended to identify unexpected differences, not merely to report them. When a significant deviation can be satisfactorily explained and supported by appropriate audit evidence, the expectation should be adjusted to reflect the conditions that actually prevailed during the audit period. Accordingly, the auditor adjusts the annual revenue expectation for the estimated effect of the March 2014 storm before evaluating the annual recorded revenue against the acceptable difference range. The adjusted expectation provides a more meaningful benchmark for assessing whether the remaining annual difference is consistent with the risk of material misstatement.
@@ -2410,13 +2410,17 @@ Substantive analytical procedures are intended to identify unexpected difference
 \section{Evaluation} % (fold)
 \label{sec:auditor_response}
 
-In the preceding sections, we developed and evaluated regression models to predict revenue for future observations. In the Case: US SteamCo, the model is used to create 12 monthly revenue expectations for the current hold-out year. The model was estimated using historical data from the estimation period and then applied to the 2014 hold-out period.
+In the preceding sections, we developed and statistically validated regression models to predict revenue for future observations. These model-validation procedures use conventional statistical hypotheses and establish whether the model is suitable for prediction. In the Case: US SteamCo, the model was estimated using data from the prior-year period and then applied to the 12 months of the 2014 hold-out period.
+
+The audit evaluation follows two stages. First, the auditor compares the individual and combined recorded amounts with expectations generated by the prior-year model. Differences that are not consistent with the model's prediction uncertainty are identified and investigated. The auditor evaluates the explanations and corroborating evidence and, where appropriate, adjusts the expectations for conditions that were not captured by the model. This first stage must be completed before the regression results are used to draw an audit conclusion.
+
+Second, once the individual and combined differences have been satisfactorily resolved, the auditor assesses the strength and precision of the model and determines the level of assurance obtained. At this stage, the regression model is used as audit evidence in a hypothesis test of whether the recorded amount is materially misstated. The achieved assurance is then considered together with the assessed risk and evidence from other audit procedures to determine whether further substantive procedures are required.
 
 The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:H7_expectations}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue may be related to an unexpected storm affecting the East Coast. Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors.
 
 After investigating and, where appropriate, incorporating corroborated explanations for individual monthly deviations, the next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
 
-We then compare the recorded annual revenue with the annual expectation and its acceptable difference range. If the recorded revenue falls outside this range, the difference may indicate a potential material overstatement or understatement and requires further investigation. If the recorded revenue falls within the range, the substantive analytical procedure has not identified a significant unexpected difference at the annual level. We then determine the level of assurance obtained from the procedure and evaluate whether it is sufficient in light of the assessed risk of material misstatement and the extent of other substantive procedures planned.
+Only after the individual and annual differences have been satisfactorily resolved do we proceed to the second stage: evaluating the strength of the regression evidence. The auditor determines the assurance provided by the model and decides whether that assurance, together with other audit evidence, is sufficient to reject material misstatement or whether further substantive procedures are required.
 
 \subsection{Combining detail expectations} % (fold)
 \label{sub:combining_detail_expectations}
@@ -2551,7 +2555,7 @@ so that the annual difference, defined as recorded revenue minus expected revenu
 -15,\!902,\!284.
 \end{equation*}
 
-Since the recorded annual revenue falls within the adjusted 99\% acceptable difference range, the substantive analytical procedure does not identify a remaining significant unexplained difference at the annual level. The auditor can therefore proceed to evaluate the level of assurance obtained from the procedure.
+The annual difference is consistent with the uncertainty measured by the adjusted 99\% acceptable difference range. The substantive analytical procedure therefore does not identify a remaining significant unexplained difference at the annual level, and the auditor can proceed to determine whether the evidence and achieved assurance are sufficient to reject material misstatement.
 
 \medskip
 If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be replaced by the appropriate residual covariance matrix. In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
@@ -2561,25 +2565,25 @@ If there is evidence of residual autocorrelation in the hold-out errors, the res
 \subsection{The nine-step approach} % (fold)
 \label{sub:the_nine_step_approach}
 
-With the combined revenue expectations for the year calculated, the next step is to determine whether the observed revenue for the hold-out year indicates a material misstatement. 
+With the combined revenue expectations calculated and the identified differences satisfactorily resolved, the auditor proceeds to the second stage and assesses the assurance provided by the regression evidence. The question is whether this evidence is sufficient to reject material misstatement of the recorded revenue for the hold-out year.
 We will follow the nine-step approach from Section \ref{sec:the_nine_step_approach} to analyze this question.
 
 \paragraph{Step 1. Develop the research question}
 The research question here is: 
 \begin{quote}
-Does the recorded total revenue for the hold-out year fall within the expected range, or is there evidence suggesting a material misstatement?
+Does the regression evidence provide sufficient assurance to reject the hypothesis that the recorded total revenue for the hold-out year is materially misstated?
 \end{quote}
 This question guides the choice of statistical test and the interpretation of the results.
 
 \paragraph{Step 2. State the null and alternative hypotheses}
-To assess the potential for a material misstatement, we set up two possible scenarios:
+Following the audit convention used in the sampling chapters, we set up two possible scenarios:
 \begin{itemize}
-    \item $H_0$: The recorded revenue for the year is accurate, meaning there is no difference between recorded revenue and true revenue.
-    \item $H_1$: The recorded revenue for the year is materially misstated. This could take two forms:
+    \item $H_0$: The recorded revenue for the year is materially misstated. This could take two forms:
     \begin{itemize}
-        \item $H_{1A}$: The revenue is materially overstated, recorded revenue is greater than true revenue by an amount that exceeds $M$.
-        \item $H_{1B}$: The revenue is materially understated, recorded revenue is less than true revenue by an amount that exceeds $M$.
+        \item $H_{0A}$: The revenue is materially overstated, recorded revenue is greater than true revenue by an amount that exceeds $M$.
+        \item $H_{0B}$: The revenue is materially understated, recorded revenue is less than true revenue by an amount that exceeds $M$.
     \end{itemize}
+    \item $H_1$: The recorded revenue for the year is not materially misstated.
 \end{itemize}
 Here we define $M$, the \hlblue{materiality}\index{materiality} threshold, representing the degree of revenue deviation that would indicate a material misstatement.
 
@@ -2607,21 +2611,20 @@ where \> $\hat{y}_{\text{total}}$ \> : \> combined expected revenue \\
       \> $s_{comb}$     \> : \> standard error of the combined prediction (Eq. \ref{eq:annual_prediction_interval})
 \end{tabbing}
 
-\paragraph{Step 5. Derive the distribution of the test statistic under the  hypotheses} Under the null hypothesis $H_0$, which assumes that the recorded revenue aligns with the combined expectations, the test statistic $T$ follows a non-central $t$~distribution due to the combined prediction variance. 
-This distribution accounts for the uncertainty in the model’s coefficient estimates and the natural variability around the predicted revenue, helping us determine the likelihood of observing the recorded revenue if $H_0$ is true. The non-centrality parameter for this $t$~distribution under $H_0$ is zero, making it equivalent to the standard $t$~distribution with $n-k-1$ degrees of freedom.
+\paragraph{Step 5. Derive the distribution of the test statistic under the hypotheses} Under the alternative hypothesis $H_1$, which assumes that the recorded revenue is not materially misstated, the test statistic $T$ follows a central $t$~distribution with $n-k-1$ degrees of freedom. This distribution accounts for the uncertainty in the model's coefficient estimates and the natural variability around the predicted revenue.
 
-However, under the alternative hypotheses $H_1$, where the recorded revenue is either overstated or understated, the test statistic $T$ would also follow a non-central $t$~distribution but with a non-zero non-centrality parameter. We define this non-centrality parameter as $M$, the materiality threshold, representing the degree of revenue deviation that would indicate a material misstatement. 
+Under the null hypothesis $H_0$, where the recorded revenue is materially overstated or understated, the test statistic follows a non-central $t$~distribution. At the materiality boundary, the non-centrality parameter is the materiality threshold standardized by the combined prediction standard error.
 Specifically:
 \begin{itemize}
-\item Under $H_{1A}$ (material overstatement), the non-centrality parameter is positive, suggesting that the observed revenue is significantly above the expected range.
-\item Under $H_{1B}$ (material understatement), the non-centrality parameter is negative, suggesting that the observed revenue is significantly below the expected range.
+\item Under $H_{0A}$ (material overstatement), the non-centrality parameter is positive.
+\item Under $H_{0B}$ (material understatement), the non-centrality parameter is negative.
 \end{itemize}
 
 \bigskip
-The non-central $t$~distribution under $H_1$ allows us to quantify the risk that an observed revenue deviation from expectations represents a material misstatement. By using this distribution, we can calculate the probability of observing the recorded revenue given the hypothesized level of misstatement, which provides a basis for determining the confidence level and assurance against misstatement.
+The non-central $t$~distribution under $H_0$ allows us to calculate the probability of rejecting material misstatement when a material misstatement exists. This is the Type I error risk $\alpha$; audit assurance is $1-\alpha$.
 
 \paragraph{Step 6. Select a significance level}
-A 99\% prediction interval corresponds to a significance level $\alpha = 0.01$. As explained in Section \ref{sub:acceptable_difference}, this choice reflects control for the efficiency risk.
+A 99\% prediction interval has a central tail probability of 0.01. In the audit hypothesis test, this probability concerns the alternative hypothesis of no material misstatement and therefore represents Type II error risk $\beta$, or efficiency risk. It is not the audit significance level $\alpha$. The Type I error risk $\alpha$ is determined under the non-central distribution at the materiality boundary, and assurance equals $1-\alpha$.
 
 \paragraph{Step 7. Determine the critical region}
 The critical region or Acceptable Difference Range $(ADR)$ is defined by the 99\% prediction interval bounds around the expected difference between the expectation of $y$ and its recorded value:
@@ -2633,7 +2636,7 @@ The critical region or Acceptable Difference Range $(ADR)$ is defined by the 99\
 where $t_{0.005}$ represents the critical value for a 99\% confidence level with $n-k-1$ degrees of freedom.
 
 \bigskip
-If the observed revenue lies outside this interval, we reject $H_0$, suggesting a potential material misstatement.
+The acceptable difference range is the rejection region for the audit null hypothesis: after unexplained differences have been investigated, a test statistic within this range may provide sufficient evidence to reject material misstatement. A test statistic outside this range does not provide sufficient evidence to reject $H_0$.
 
 \paragraph{Step 8. Compute the value of the test statistic from the sample}
 Using the observed revenue for the hold-out year, we compute the test statistic $T$ by substituting the recorded revenue $y_i$ and the combined standard error $s_{comb}$ into the formula.
@@ -2641,33 +2644,33 @@ Using the observed revenue for the hold-out year, we compute the test statistic 
 \paragraph{Step 9. Conclude on the test}
 Finally, we evaluate the test statistic in the context of the critical region:
 \begin{itemize}
-    \item \emph{If $T$ lies within the critical region}, we fail to reject $H_0$, concluding that the observed revenue aligns with expectations and that no material misstatement is indicated.
-    \item \emph{If $T$ lies outside the critical region}, we reject $H_0$ in favor of one of the alternative hypotheses, concluding that the revenue is either overstated or understated, suggesting a material misstatement.
+    \item \emph{If $T$ lies within the critical region}, and the achieved assurance is sufficient, we reject $H_0$ and conclude that sufficient evidence has been obtained that the recorded revenue is not materially misstated.
+    \item \emph{If $T$ lies outside the critical region}, we do not reject $H_0$. The procedure has not obtained sufficient evidence that the recorded revenue is not materially misstated, so further investigation or other substantive procedures are required.
 \end{itemize}
 
 % subsection the_nine_step_approach (end)
 
-\subsection{Identification, investigation, and evaluation} % (fold)
+\subsection{Stage 1: Identification, investigation, and evaluation} % (fold)
 \label{sub:identification_investigation_and_evaluation}
 
-A substantive analytical procedure does not end with the calculation of an expectation and the comparison with the recorded amount. Whenever the procedure identifies an unexpected difference, the auditor should investigate its cause and evaluate whether the explanation obtained provides sufficient appropriate audit evidence. The objective is not merely to explain a statistical deviation, but to determine whether the deviation indicates a material misstatement or can be satisfactorily explained by legitimate business circumstances.
+The first stage determines whether individual or combined recorded amounts require further investigation because they are not in line with the model fitted on prior-year data. Whenever the procedure identifies such an unexpected difference, the auditor should investigate its cause and evaluate whether the explanation obtained provides sufficient appropriate audit evidence. The objective is not merely to explain a statistical deviation, but to determine whether it indicates a potential misstatement, a limitation of the model, or a legitimate business circumstance.
 
 The first step is the identification of unusual observations. Depending on the design of the substantive analytical procedure, these may be individual observations with large residuals, observations outside their prediction interval, or an aggregated amount that falls outside the acceptable difference range. Figure~\ref{fig:H7_expectations} illustrates this process for the US SteamCo case. Although the total recorded revenue for 2014 falls within the acceptable difference range, the recorded revenue for March 2014 falls below the lower limit of its 99\% prediction interval. This observation therefore warrants further investigation.
 
 The second step is an analytical investigation of the identified difference. The auditor should seek to understand why the observed value differs from the expectation generated by the regression model. This may involve analyzing additional operational information, considering changes in business activities, or determining whether important explanatory variables were omitted from the model. In the US SteamCo case, the auditor might investigate whether production data were incomplete, whether an unusual maintenance shutdown occurred, whether severe weather disrupted operations, or whether revenue was recognized in a different accounting period. Such analyses may provide a plausible explanation for the unexpected difference without immediately suggesting the existence of a misstatement.
 
-The final step is the evaluation of the evidence obtained. Explanations provided by management should not be accepted without corroboration. Instead, they should be supported by additional analytical procedures, inspection of relevant documentation, inquiry of knowledgeable personnel, or other audit evidence. If the explanation is adequately supported, the unexpected difference no longer represents a potential material misstatement. If no satisfactory explanation can be obtained, or if the explanation is inconsistent with other audit evidence, the auditor should conclude that the substantive analytical procedure has identified a potential material misstatement. In that case, additional substantive procedures should be performed to obtain sufficient appropriate audit evidence.
+The final part of this stage is the evaluation of the evidence obtained. Explanations provided by management should not be accepted without corroboration. Instead, they should be supported by additional analytical procedures, inspection of relevant documentation, inquiry of knowledgeable personnel, or other audit evidence. If the explanation is adequately supported, the unexpected difference is resolved and the expectation may be adjusted where appropriate. If no satisfactory explanation can be obtained, or if the explanation is inconsistent with other audit evidence, the auditor should conclude that the procedure has identified a potential misstatement and perform additional substantive procedures. The auditor proceeds to the assurance assessment only after all relevant individual and combined differences have been satisfactorily resolved.
 
 This illustrates an important principle of substantive analytical procedures. Regression models identify observations that merit pro\-fessional attention; they do not determine whether a misstatement exists. Statistical models assist the auditor in directing further investigation, but the final conclusion always depends on the auditor's evaluation of all relevant audit evidence obtained during the investigation.
 
 % subsection identification_investigation_and_evaluation (end)
 
-\subsection{Level of assurance obtained} % (fold)
+\subsection{Stage 2: Level of assurance obtained} % (fold)
 \label{sub:level_of_assurance_obtained}
 
-As highlighted in Step 9, the conclusion of the hypothesis test depends on whether the recorded revenue total for the hold-out year falls inside or outside the acceptable difference range. If the difference falls outside this range, this does not immediately imply that a material misstatement has occurred. Instead, it initiates the identification, investigation, and evaluation process described in Section \ref{sub:identification_investigation_and_evaluation}. Further work is then needed to determine whether the difference reflects a genuine misstatement, a limitation of the model, or other contextual factors.
+After the first stage has been completed and all relevant differences have been satisfactorily resolved, the auditor assesses the strength of the model as audit evidence. The acceptable difference range translates the model's prediction uncertainty into a critical region for the audit hypothesis test. A precise model provides more assurance than an imprecise model for the same performance materiality and observed difference.
 
-If the difference falls within the acceptable difference range, the substantive analytical procedure has not identified a significant unexpected difference. We then determine the level of assurance obtained from the procedure. Consistent with Section \ref{sub:acceptable_difference} in Volume 2, we define the difference as
+If an unresolved difference lies outside the acceptable difference range, the auditor does not proceed as though the first stage were complete and does not reject the hypothesis of material misstatement. The difference must first be investigated as described in Section \ref{sub:identification_investigation_and_evaluation}. When the differences have been resolved, the auditor determines whether the achieved assurance is sufficient to reject material misstatement. Consistent with Section \ref{sub:acceptable_difference} in Volume 2, we define the difference as
 
 \begin{equation}
 D = y_{\text{recorded}} - \hat{y}_{\text{total}}.
@@ -2712,11 +2715,11 @@ The achieved assurance for detecting a material understatement is the lower-tail
 P(T < c_L \mid T \sim t_{df,-\delta}).
 \end{equation}
 
-These probabilities express the likelihood that a material misstatement of size $PM$ would produce a difference outside the acceptable difference range and would therefore be detected by the procedure. The complement of this probability is the risk that a material misstatement would remain inside the acceptable difference range and escape detection.
+These probabilities express the likelihood that a material misstatement of size $PM$ would produce a difference outside the acceptable difference range, so that $H_0$ would not be incorrectly rejected. Under the audit convention, this is assurance, $1-\alpha$. Its complement, $\alpha$, is the Type I error risk of a material misstatement producing a difference within the acceptable difference range and therefore being incorrectly rejected.
 
-Alternatively, the auditor may determine the acceptable difference range by controlling effectiveness risk directly. In that case, the boundaries are chosen so that a material overstatement or understatement is detected with the desired level of assurance. This fixes the desired level of assurance, but the resulting acceptable difference range may become narrow when the model is imprecise. This increases the probability of investigating differences that are caused merely by model imprecision.
+Alternatively, the auditor may determine the acceptable difference range by controlling $\alpha$ directly. In that case, the boundaries are chosen to provide the desired level of assurance, $1-\alpha$, against incorrectly rejecting material misstatement. This fixes the desired level of assurance, but the resulting acceptable difference range may become narrow when the model is imprecise. This increases $\beta$, the Type II error risk of failing to reject $H_0$ when the recorded amount is not materially misstated, and therefore increases the probability of investigating differences caused merely by model imprecision.
 
-The achieved level of assurance should therefore be interpreted together with the precision of the model, performance materiality, and the auditor's planned reliance on other substantive procedures. If the achieved assurance is sufficient for the assessed risk, the substantive analytical procedure may provide sufficient audit evidence for the assertion under consideration. If it falls short of the target level, the procedure may still contribute audit evidence, but additional substantive procedures are required.
+The achieved level of assurance should therefore be interpreted together with the precision of the model, performance materiality, the assessed risk of material misstatement, and evidence obtained from other audit procedures. Resolving all unexpected differences completes the first stage but does not, by itself, establish that sufficient audit evidence has been obtained. If the achieved assurance is sufficient, the auditor may reject the hypothesis of material misstatement. If it falls short of the required level, the regression procedure may still contribute audit evidence, but further substantive procedures are required.
 
 
 % subsection level_of_assurance_obtained (end)
@@ -3629,7 +3632,7 @@ The Breusch-Godfrey test is executed through \ttblue{bgtest}.
 \textcolor{KPMG_light_blue}{LM test = 7.1466, df = 3, p-value = 0.06737}
 \end{Verbatim}
 
-The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals. 
+The $p$ value of the test statistic is 0.06737. Therefore, we fail to reject the null hypothesis at conventional significance levels below 0.06737, such as 5\% or 1\%. This model-validation test provides no evidence of autocorrelation at these levels, although the result is marginal at a 10\% level.
 
 \end{exercise}
 
@@ -3943,13 +3946,13 @@ The resulting graph is shown in Figure \ref{fig:H7_200_regression_lines}.
 
 \textbf{Confidence and prediction intervals}
 
-Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
+Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. These intervals measure statistical uncertainty around the model and its predictions; they do not state the audit hypotheses or the audit conclusion. The figure is created with the following code.
 \footnote{Starting from ggplot2 version 3.3.0 (released April 2020), the preferred aesthetic name for controlling line thickness in geoms like \ttblue{geom\_line()} and \ttblue{geom\_path()} was changed from \ttblue{size} to \ttblue{linewidth} to better distinguish it from point size. If you use an older version of ggplot2, for example in the Binder notebooks that accompany this book, use \ttblue{size} instead of \ttblue{linewidth}.}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 
-\textcolor{KPMG_blue}{alpha_pred <- 0.01  # For 99% prediction interval}
-\textcolor{KPMG_blue}{t_value_pred <- qt(1 - alpha_pred / 2, df = n - 2)}
+\textcolor{KPMG_blue}{pred_tail_prob <- 0.01  # Central tail probability for 99% PI}
+\textcolor{KPMG_blue}{t_value_pred <- qt(1 - pred_tail_prob / 2, df = n - 2)}
 \textcolor{KPMG_blue}{se_pred <- sigma * sqrt(1 + 1/n + (x_extended - mean_x)^2 / S_xx)}
 
 \textcolor{KPMG_blue}{pi_upper_true <- (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred}
@@ -3994,7 +3997,7 @@ Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotte
 
 \textbf{Creating expectations for the hold-out period}
 
-The function \ttblue{predict} creates expectations, when data from \ttblue{newdata} are evaluated with a certain \ttblue{object}. The optional \ttblue{interval} is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The \ttblue{level} specifies the confidence level of the interval.
+The function \ttblue{predict} creates expectations, when data from \ttblue{newdata} are evaluated with a certain \ttblue{object}. The optional \ttblue{interval} is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The \ttblue{level} specifies the statistical coverage of the interval. In the later audit evaluation, the 1\% central tail probability of this 99\% prediction interval represents $\beta$, not the audit Type I error risk $\alpha$.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{(predictions <- predict(object = ussteamco.mod.5, }
@@ -4024,7 +4027,7 @@ The function \ttblue{predict} creates expectations, when data from \ttblue{newda
 
 \textbf{Plotting expectations against recorded values}
 
-In Figure \ref{fig:H7_expectations} we have plotted expectations against the recorded values of revenue, indicating which individual observations fall outside of the 99\% prediction interval. The following code is used to create it.
+In Figure \ref{fig:H7_expectations} we have plotted expectations against the recorded values of revenue, highlighting individual observations whose differences are not consistent with the uncertainty measured by the 99\% prediction interval. These observations require investigation; the plot does not itself establish whether the recorded amount is materially misstated. The following code is used to create it.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{}
@@ -4069,33 +4072,39 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 
 \textbf{Combining 12 monthly predictions}
 
-We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit.
+We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit. The code includes the covariance between monthly expectations caused by their shared estimated coefficients and adjusts the March expectation for the corroborated storm effect. This completes the first-stage evaluation of the annual difference. The resulting interval measures prediction uncertainty and forms the critical region used in the second-stage assurance assessment.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{}
 \textcolor{KPMG_light_blue}{}
 \textcolor{KPMG_blue}{df_res <- ussteamco.mod.5$df.residual}
-\textcolor{KPMG_blue}{monthly_predictions <- pred_df$fit}
-\textcolor{KPMG_blue}{monthly_se <- (pred_df$upr - pred_df$fit) / (qt(0.995, df_res))}
+\textcolor{KPMG_blue}{X_hold <- model.matrix(ussteamco.mod.5, data = USSteamCoHold)}
+\textcolor{KPMG_blue}{one <- rep(1, nrow(X_hold))}
 \textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{annual_prediction <- sum(monthly_predictions)}
+\textcolor{KPMG_blue}{storm_adjustment <- 8000000}
+\textcolor{KPMG_blue}{annual_prediction <- sum(pred_df$fit) - storm_adjustment}
 \textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{annual_se <- sqrt(sum(monthly_se^2))}
+\textcolor{KPMG_blue}{coefficient_variance <- as.numeric(}
+\textcolor{KPMG_blue}{  t(one) \%*\% X_hold \%*\% vcov(ussteamco.mod.5) \%*\% t(X_hold) \%*\% one)}
+\textcolor{KPMG_blue}{residual_variance <- nrow(X_hold) * sigma(ussteamco.mod.5)^2}
+\textcolor{KPMG_blue}{annual_se <- sqrt(coefficient_variance + residual_variance)}
 \textcolor{KPMG_blue}{}
 \textcolor{KPMG_blue}{t_score <- qt(0.995, df = df_res)}
 \textcolor{KPMG_blue}{}
 \textcolor{KPMG_blue}{annual_lower <- annual_prediction - t_score * annual_se}
 \textcolor{KPMG_blue}{annual_upper <- annual_prediction + t_score * annual_se}
 \textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{cat("99\% Confidence Interval for Annual Prediction:\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{99\% Confidence Interval for Annual Prediction:}
+\textcolor{KPMG_blue}{cat("99\% Prediction Interval for Annual Revenue:\textbackslash{}n")}
+\textcolor{KPMG_light_blue}{99\% Prediction Interval for Annual Revenue:}
 \textcolor{KPMG_blue}{cat("Lower Bound:", annual_lower, "\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{Lower Bound: 183603175 }
+\textcolor{KPMG_light_blue}{Lower Bound: 173291634 }
 \textcolor{KPMG_blue}{cat("Annual Prediction:", annual_prediction, "\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{Annual Prediction: 198680684 }
+\textcolor{KPMG_light_blue}{Annual Prediction: 190680684 }
 \textcolor{KPMG_blue}{cat("Upper Bound:", annual_upper, "\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{Upper Bound: 213758193 }
+\textcolor{KPMG_light_blue}{Upper Bound: 208069735 }
 \end{Verbatim}
+
+The recorded annual revenue is consistent with the prediction uncertainty measured by this interval. Together with the satisfactory resolution of the March difference, this completes the first stage; it is not yet the audit conclusion. In the second stage, the auditor assesses the model's strength by determining the Type I error risk $\alpha$ under a material misstatement of size $PM$. The auditor may reject $H_0$ only if the resulting assurance, $1-\alpha$, is sufficient in light of the assessed risk and other audit evidence. Otherwise, further substantive procedures are required.
 
 
 \end{exercise}
