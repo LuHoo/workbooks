@@ -175,7 +175,7 @@ pdf_file_path <- save_book_figure(
   plot,
   "H6_Expected_diff_precise.pdf",
   width = 10,
-  height = 6.03
+  height = 6.18
 )
 ```
 <!-- SUPPORT-ONLY:END -->
@@ -285,7 +285,7 @@ save_book_figure(
   comparison_plot,
   "comparison_precise_vs_less_precise.pdf",
   width = 10,
-  height = 6.03
+  height = 6.18
 )
 ```
 <!-- SUPPORT-ONLY:END -->
