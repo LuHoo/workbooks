@@ -6,6 +6,11 @@ output:
   html_document:
     df_print: paged
 ---
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Hypothesis testing
 
@@ -287,6 +292,7 @@ occ <-
   xlab("Number of errors in population") +
   ylab("Probability of rejection")
 occ
+save_book_figure(occ, "TypeIIerror.pdf")
 ```
 OCC for three fixed attribute plans
 
@@ -324,6 +330,7 @@ occ <-
   ylab("Probability of rejecting the null") +
   geom_vline(xintercept = 0.05)
 occ
+save_book_figure(occ, "three_attribute_occ.pdf")
 ```
 
 OCC for double vs discovery and fixed
@@ -374,6 +381,7 @@ occ <-
   ylab("Probability of rejecting the null") +
   geom_vline(xintercept = 0.05)
 occ
+save_book_figure(occ, "att_double_occ.pdf")
 ```
 
 

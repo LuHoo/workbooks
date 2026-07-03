@@ -6,6 +6,11 @@ output:
   html_document:
     df_print: paged
 ---
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
  
 ## Chapter 1. Probability distributions
  
@@ -213,7 +218,8 @@ p5 <-
   theme(legend.position="none") + # Removes the legend
   theme(axis.title.x=element_blank(), axis.title.y=element_blank())
 
-grid.arrange(p1, p4, p2, p4b, p3, p5, ncol=2)
+H2hypergeometric <- grid.arrange(p1, p4, p2, p4b, p3, p5, ncol=2)
+save_book_figure(H2hypergeometric, "H2hypergeometric.pdf")
 
 ```
 
@@ -309,7 +315,8 @@ Fig2.2_f <-
   theme(legend.position="none") + # Removes the legend
   theme(axis.title.x=element_blank(), axis.title.y=element_blank())
 
-grid.arrange(Fig2.2_a, Fig2.2_d, Fig2.2_b, Fig2.2_e, Fig2.2_c, Fig2.2_f, ncol=2)
+H2Binomial <- grid.arrange(Fig2.2_a, Fig2.2_d, Fig2.2_b, Fig2.2_e, Fig2.2_c, Fig2.2_f, ncol=2)
+save_book_figure(H2Binomial, "H2Binomial.pdf")
 
 ```
 
@@ -398,7 +405,8 @@ Fig2.3_f <-
   theme(legend.position="none") + # Removes the legend
   theme(axis.title.x=element_blank(), axis.title.y=element_blank())
 
-grid.arrange(Fig2.3_a, Fig2.3_d, Fig2.3_b, Fig2.3_e, Fig2.3_c, Fig2.3_f, ncol=2)
+H2Poisson <- grid.arrange(Fig2.3_a, Fig2.3_d, Fig2.3_b, Fig2.3_e, Fig2.3_c, Fig2.3_f, ncol=2)
+save_book_figure(H2Poisson, "H2Poisson.pdf")
 
 ```
 
@@ -418,6 +426,7 @@ p <-
         legend.text=element_text(size=18),
         legend.title=element_text(size=18))
 p
+save_book_figure(p, "H2Discrete_distributions.pdf")
 ```
 ```{r}
 dpois(1, 60 * 17/ 331)
@@ -457,6 +466,7 @@ p <-
   theme(axis.title.x = element_blank()) +
   theme(axis.title.y = element_blank())
 p
+save_book_figure(p, "H2ContinueKansverdeling.pdf")
 ```
 
 
@@ -493,6 +503,7 @@ p <-
         axis.title=element_text(size=36))
 
 p
+save_book_figure(p, "H2Standaardnormaal.pdf")
 ```
 
 Figure 2.8
@@ -622,6 +633,7 @@ p_sampling_dist <-  ggplot(df_results, aes(sample_mean))  +
          axis.text.y =element_blank())
 
 p_sampling_dist
+save_book_figure(p_sampling_dist, "H2sampling_distributions_v4.pdf")
 
 ```
 ```{r}
@@ -666,6 +678,7 @@ Fig2.10 <-
         axis.title.y=element_blank(),
         legend.title = element_blank())
 Fig2.10
+save_book_figure(Fig2.10, "H2tverdelingen.pdf")
 ```
 
 
@@ -692,6 +705,7 @@ Fig2.11 <-
   theme(legend.title=element_blank()) +
   scale_x_continuous(breaks = seq(-5,5))
 Fig2.11
+save_book_figure(Fig2.11, "H2KansInTVerdeling.pdf")
 ```
 ```{r}
 (t_val <- (1004 - 1030) / (73.8 / sqrt(10)))
@@ -732,6 +746,7 @@ Fig2.12 <-
         legend.title = element_blank())
   
 Fig2.12
+save_book_figure(Fig2.12, "H2Chisquare.pdf")
 ```
 ```{r}
 qchisq(p = .05, df = 9)
@@ -770,6 +785,7 @@ Fig2.13 <-
         legend.title = element_blank())
 
 Fig2.13
+save_book_figure(Fig2.13, "H2Fverdelingen.pdf")
 ```
 ```{r}
 qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE)

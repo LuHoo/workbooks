@@ -6,6 +6,11 @@ output:
   html_document:
     df_print: paged
 ---
+<!-- SUPPORT-ONLY:START -->
+```{r notebook-utils, include=FALSE}
+source("../../../R/notebook-utils.R")
+```
+<!-- SUPPORT-ONLY:END -->
 
 ## Estimation with auxiliary variables and stratification
 
@@ -414,6 +419,7 @@ scatterPlot <-  ggplot(myData, aes(bv, av))  +
   theme(legend.position = "none")
 
 scatterPlot
+save_book_figure(scatterPlot, "H4_scatterplot_bv_av.pdf")
 ```
 
 Calculation of slope parameter
@@ -509,7 +515,7 @@ df <- data.frame(
 df$adjustment = sqrt(1 - df$correlation^2)
 
 # Plot
-ggplot(df, aes(x = correlation, y = adjustment)) +
+adjustment_plot <- ggplot(df, aes(x = correlation, y = adjustment)) +
   theme_grey() +
   geom_line(size = 1.2, color = "#00338D") + #       return("#00338D");
   labs(
@@ -517,6 +523,9 @@ ggplot(df, aes(x = correlation, y = adjustment)) +
   y = expression("adjustment " * sqrt(1 - r^2) ), ) +
   xlim(0, 1) +
   ylim(0, 1)
+
+adjustment_plot
+save_book_figure(adjustment_plot, "H4_adjustment_factor.pdf")
 ```
 
 
@@ -584,7 +593,8 @@ p4 <- ggplot(inventoryData, aes(x = bv, y = av_mus)) +
   labs(title = "Sporadic errors") +
   labs(x = "x", y = "y") 
 
-grid.arrange(p1, p2, p3, p4, ncol=2)
+error_distributions <- grid.arrange(p1, p2, p3, p4, ncol=2)
+save_book_figure(error_distributions, "H4_errorDistributions.pdf")
 ```
 
 
@@ -740,6 +750,7 @@ p_sampling_dist <-  ggplot(simResult, aes(estimate))  +
         axis.text.y =element_blank())
 
 p_sampling_dist
+save_book_figure(p_sampling_dist, "H4_samplingDistributions.pdf")
 ```
 
 
