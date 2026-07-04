@@ -2443,50 +2443,55 @@ When predictions are made for multiple periods, such as the 12 months in the hol
 
 Constructing a prediction interval for this annual total requires more care. The annual prediction interval cannot be obtained by summing the lower and upper limits of the monthly prediction intervals. Nor should the annual prediction standard error be calculated merely as the square root of the sum of the squared monthly prediction standard errors. The reason is that all monthly predictions are based on the same estimated regression coefficients. As a result, the estimation errors in the monthly predictions are correlated, even when the future residual errors are uncorrelated.
 
-This distinction is important. Tests for autocorrelation, such as the Breusch--Godfrey test, address correlation in the residual errors. They do not address the dependence between monthly predictions that arises because each prediction uses the same estimated coefficient vector.
+This distinction is important. Tests for autocorrelation, such as the Breusch--Godfrey test, address correlation in the residual errors. They do not address the dependence between monthly predictions that arises because each prediction uses the same estimated regression coefficients.
 
-Let $\mathbf{X}_{\text{hold}}$ denote the design matrix for the 12 hold-out observations, and let $\widehat{\boldsymbol{\beta}}$ be the vector of estimated regression coefficients. The vector of monthly expectations is
+For a regression model with one predictor, the monthly expectation for hold-out observation $i$ is
 
 \begin{equation}
-\label{eq:monthly_expectation_vector}
-\widehat{\mathbf{y}}_{\text{hold}}
-=
-\mathbf{X}_{\text{hold}}\widehat{\boldsymbol{\beta}}.
+\label{eq:monthly_expectation}
+\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i.
 \end{equation}
 
 The annual expectation can therefore be written as
 
 \begin{equation}
-\label{eq:annual_expectation_matrix}
-\hat{y}_{\text{total}}
-=
-\mathbf{1}^{\top}
-\mathbf{X}_{\text{hold}}
-\widehat{\boldsymbol{\beta}},
+\label{eq:annual_expectation_one_predictor}
+\hat{y}_{\text{total}} = 12\hat{\beta}_0 + \hat{\beta}_1 \sum_{i=1}^{12} x_i.
 \end{equation}
-where $\mathbf{1}$ is a vector of twelve ones.
 
 \medskip
-The prediction variance of the annual total consists of two components. The first component reflects the uncertainty in the estimated regression coefficients. This component captures the covariance between the monthly expectations caused by using the same estimated regression coefficients. The second component reflects the future residual variation of the 12 monthly observations.
+The prediction variance of the annual total consists of two components. The first component reflects the uncertainty in the estimated regression coefficients. This component captures the covariance between the monthly expectations caused by using the same estimated coefficients. The second component reflects the future residual variation of the 12 monthly observations.
 
 Under the assumption that the future residuals are uncorrelated and have common variance $\hat{\sigma}^2$, the prediction variance of the annual total is
 
 \begin{equation}
 \label{eq:annual_prediction_variance}
+\begin{split}
 \operatorname{Var}
 \left(
 y_{\text{total}} - \hat{y}_{\text{total}}
 \right)
-=
-\mathbf{1}^{\top}
-\mathbf{X}_{\text{hold}}
-\operatorname{Var}(\widehat{\boldsymbol{\beta}})
-\mathbf{X}_{\text{hold}}^{\top}
-\mathbf{1}
+={}&
+12^2\operatorname{Var}(\hat{\beta}_0)
++
+\left(
+\sum_{i=1}^{12} x_i
+\right)^2
+\operatorname{Var}(\hat{\beta}_1) \\
+&+
+2 \cdot 12
+\left(
+\sum_{i=1}^{12} x_i
+\right)
+\operatorname{Cov}(\hat{\beta}_0,\hat{\beta}_1)
 +
 12\hat{\sigma}^2.
+\end{split}
 \end{equation}
 
+The formulas in this section assume a regression model with a single predictor. For models with multiple predictors, the same principles apply, but the corresponding formulas require matrix notation, which is beyond the scope of this book.
+
+\medskip
 The \hlblue{combined prediction standard error}\index{combined prediction standard error}\nomenclature{$s_{\text{comb}}$}{combined prediction standard error} is therefore
 
 \begin{equation}
@@ -2494,15 +2499,26 @@ The \hlblue{combined prediction standard error}\index{combined prediction standa
 s_{\text{comb}}
 =
 \sqrt{
-\mathbf{1}^{\top}
-\mathbf{X}_{\text{hold}}
-\operatorname{Var}(\widehat{\boldsymbol{\beta}})
-\mathbf{X}_{\text{hold}}^{\top}
-\mathbf{1}
-+
-12\hat{\sigma}^2
+\operatorname{Var}
+\left(
+y_{\text{total}}-\hat{y}_{\text{total}}
+\right)
 }.
 \end{equation}
+
+% \begin{equation}
+% \label{eq:combined_prediction_standard_error}
+% \small
+% s_{\text{comb}} = \sqrt{12^2\operatorname{Var}(\hat{\beta}_0) + \left(\sum_{i=1}^{12} x_i \right)^2 \operatorname{Var}(\hat{\beta}_1) +
+% 2 \cdot 12
+% \left(
+% \sum_{i=1}^{12} x_i
+% \right)
+% \operatorname{Cov}(\hat{\beta}_0,\hat{\beta}_1)
+% +
+% 12\hat{\sigma}^2
+% }.
+% \end{equation}
 
 The 99\% acceptable difference range around the annual expectation is then obtained as
 
@@ -2516,54 +2532,44 @@ s_{\text{comb}},
 where $df$ is the residual degrees of freedom of the regression model.
 
 \medskip
-For the US SteamCo case, the annual expectation is obtained by summing the 12 monthly expectations after adjusting the March 2014 expectation for the corroborated winter storm effect.
+For the \emph{Case: US SteamCo}, the annual expectation is obtained by summing the 12 monthly expectations after adjusting the March 2014 expectation for the corroborated winter storm effect.
 The resulting annual expectation is:
 
 \begin{equation*}
-\hat{y}_{\text{total}}
-=
-190,\!680,\!684.
+\hat{y}_{\text{total}} = 190,680,684.
 \end{equation*}
 
-Using the covariance matrix of the estimated regression coefficients together with the residual variance yields a combined prediction standard error of
+Using the variances and covariance of the estimated regression coefficients together with the residual variance yields a combined prediction standard error of
 
 \begin{equation*}
-s_{\text{comb}}
-=
-6,\!323,\!301.
+s_{\text{comb}} = 6,323,301.
 \end{equation*}
 
 With a 99\% prediction interval and the appropriate $t$ critical value, the resulting acceptable prediction range for the annual revenue is
 
 \begin{equation*}
-173,\!291,\!634
+173,291,634
 \le
 y_{\text{total}}
 \le
-208,\!069,\!735.
+208,069,735.
 \end{equation*}
 
 The recorded annual revenue for 2014 equals
 
 \begin{equation*}
-y_{\text{recorded}}
-=
-174,\!778,\!400,
+y_{\text{recorded}} = 174,778,400,
 \end{equation*}
 so that the annual difference, defined as recorded revenue minus expected revenue, is
 
 \begin{equation*}
-174,\!778,\!400
--
-190,\!680,\!684
-=
--15,\!902,\!284.
+174,778,400 - 190,680,684 = -15,902,284.
 \end{equation*}
 
 The annual difference is consistent with the uncertainty measured by the adjusted 99\% acceptable difference range. The substantive analytical procedure therefore does not identify a remaining significant unexplained difference at the annual level, and the auditor can proceed to determine whether the evidence and achieved assurance are sufficient to reject material misstatement.
 
 \medskip
-If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be replaced by the appropriate residual covariance matrix. In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
+If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be adjusted to reflect that correlation. In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
 
 % subsection combining_detail_expectations (end)
 

@@ -17,6 +17,7 @@
 - Revises Section 5.10 to present the worked annual evaluation in the main text.
 - Refines the US SteamCo case study by incorporating the March 2014 winter storm investigation into the audit workflow.
 - Minor updates and edits.
+- Simplifies the presentation of regression formulas by expressing them for a single-predictor model and noting that multiple-predictor extensions require matrix notation.
 
 ### Layout
 - Adjusts spacing of floats to avoid underfull warnings.
