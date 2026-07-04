@@ -21,3 +21,5 @@
 # Rendered notebook artifacts
 notebooks/**/*.html
 notebooks/**/*_files/
+
+*.html
