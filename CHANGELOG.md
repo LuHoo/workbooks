@@ -4,9 +4,10 @@
 - Fixes missing references
 
 ### Methodology
-- Revises the annual evaluation in the regression chapter to compute the annual prediction standard error using the covariance matrix of the estimated regression coefficients.
+- Improves the annual regression evaluation by incorporating the covariance between monthly predictions.
 - Replaces the root-sum-of-squares approximation for combining monthly prediction intervals with a covariance-aware annual prediction interval.
 - Refines the annual evaluation workflow by incorporating corroborated adjustments to monthly expectations before assessing annual revenue.
+- Aligns the evaluation stage of the regression chapter with the audit assurance framework used throughout the sampling chapters by distinguishing statistical model validation from audit evaluation and consistently interpreting prediction intervals, hypothesis tests, and audit assurance.
 
 ### Clarifications
 - Tightens the Level of Assurance section.
