@@ -1295,28 +1295,34 @@ Cook's distance \\
 \end{table}
 
 Table \ref{tab:top_3_influence_statistics} shows the three largest (absolute) values of the Studentized residuals, hat-values and Cook's distances for \ttblue{mod.2}.
-The largest outliers in $x$ are observations 22, 34, and 36, and the three largest leverage points are 34, 29, and 30, respectively. 
-The three largest influential observations have indices of 34, 22, and 30, respectively. 
+The largest residual outliers are observations 22, 34, and 36, and the three largest leverage points are 34, 29, and 30. 
+The three most influential observations, as measured by Cook's distance, are observations 34, 22, and 30.
 Because not all top three are similar, a total of five observations are listed.
 
-There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Standardized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
+There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Studentizized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
 
-Since we are working with time-series data, we cannot remove the observation without disrupting the temporal structure of the analysis. Instead, we applied winsorization to reduce the influence of this extreme value while retaining its presence in the series. Specifically, the response variable in October 2012 was adjusted to match the value at the 5th percentile of the response distribution.
+Since we are working with time-series data, we cannot remove the observation without disrupting the temporal structure of the analysis. Instead, we apply residual winsorization to reduce the influence of this extreme value while retaining its presence in the series. In this approach, the residual is adjusted relative to the fitted regression value. Specifically, the residual for October 2012 is replaced by the 5th percentile of the residual distribution, and the adjusted response is reconstructed as the fitted value plus this winsorized residual.
 
-Mathematically, \hlblue{winsorization}\index{winsorization} replaces extreme values beyond a chosen threshold with the value at that threshold. 
-For a lower winsorization bound $\tau_L$ \nomenclature{$\tau_L$, $\tau_U$}{lower and upper winsorization bound} (e.g., the 5th percentile), the transformed value $y_t^\ast$ is given by:
-
+Mathematically, \hlblue{residual winsorization}\index{winsorization!residual} first decomposes the observed response into a fitted value and a residual,
 \begin{equation}
-y_t^\ast =
-\begin{cases}
-\tau_L & \text{if } y_t < \tau_L \\
-y_t & \text{if } \tau_L \le y_t \le \tau_U \\
-\tau_U & \text{if } y_t > \tau_U
-\end{cases}
-\label{eq:winsorization}
+e_t = y_t - \hat{y}_t.
 \end{equation}
-
-In our case, only the October 2012 value was below the lower threshold $\tau_L$ and was thus set equal to $\tau_L$. This ensures the outlier does not exert undue influence on the regression estimates while preserving the time structure of the data.
+For lower and upper residual winsorization bounds $\tau_L$ and $\tau_U$ \nomenclature{$\tau_L$, $\tau_U$}{lower and upper residual winsorization bound}, the winsorized residual $e_t^\ast$ is defined as
+\begin{equation}
+e_t^\ast =
+\begin{cases}
+\tau_L & \text{if } e_t < \tau_L, \\
+e_t & \text{if } \tau_L \le e_t \le \tau_U, \\
+\tau_U & \text{if } e_t > \tau_U.
+\end{cases}
+\label{eq:residual_winsorization}
+\end{equation}
+The adjusted response is then reconstructed as
+\begin{equation}
+y_t^\ast = \hat{y}_t + e_t^\ast.
+\label{eq:adjusted_response}
+\end{equation}
+In our case, only the October 2012 residual was below the lower threshold $\tau_L$, defined as the 5th percentile of the residual distribution. The adjusted October 2012 revenue is therefore set equal to its fitted value plus the 5th-percentile residual. This ensures that the outlier does not exert undue influence on the regression estimates while preserving the time structure of the data.
 
 \begin{figure}[htbp]
 \centering
@@ -1365,11 +1371,11 @@ In our case, only the October 2012 value was below the lower threshold $\tau_L$ 
   \end{axis}
 \end{tikzpicture}
 }
-\caption{Winsorization of observation 22 (October 2012) residual to 5th percentile} 
+\caption{Residual winsorization of observation 22 (October 2012). The original residual is replaced by the 5th-percentile residual before reconstructing the adjusted response.} 
 \label{fig:winsor_obs22}
 \end{figure}
 
-We fit a new model, \ttblue{mod.3}, on the winsorized data. The coefficient estimates of this model are summarized in \ref{tab:summary_mod_3}. The remaining analyses in this section are executed on the results of this model.
+We fit a new model, \ttblue{mod.3}, on the residual-winsorized data. The coefficient estimates of this model are summarized in \ref{tab:summary_mod_3}. The remaining analyses in this section are executed on the results of this model.
 
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
@@ -2309,53 +2315,32 @@ We now want to determine if this deviation is within expected bounds or if it is
 
 To measure the uncertainty around a expectation in regression, we use two types of intervals: the \emph{confidence interval}\index{confidence interval}\index{interval!confidence} and the \emph{prediction interval}\index{prediction interval}\index{interval!prediction}. Both intervals give ranges, but they serve different purposes.
 
-\paragraph{Confidence Interval} This interval estimates the range within which the average value of the dependent variable is expected to lie, given a certain value of the independent variable. It accounts for the uncertainty in estimating the coefficients of the model but does not account for the random variation around individual observations. 
+\paragraph{Confidence Interval} This interval estimates the range where the average value of the dependent variable is expected to lie, given a certain value of the independent variable. It accounts for the uncertainty in estimating the coefficients of the model but does not account for the random variation around individual observations. 
 The confidence interval for a model with one independent variable is given by\footnote{The formula for confidence intervals for multiple linear regression models is more complicated and is best rendered using matrix algebra notation.}
 \begin{equation}
-\hat{y}_* \pm t_{1-\alpha/2,\,n-2}\, s_e
-\sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
+\hat{y}_* \pm t_{\alpha / 2} \cdot s_e \sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
 \end{equation}
 \nomenclature{$x_*$}{given value of the independent variable}
 
-The confidence interval thus provides a range of plausible values for the average value of $y$ for a given set of values of independent variables, based solely on the model's estimation uncertainty.
+The confidence interval thus predicts the average value of $y$ for a given set of values of independent variables, based solely on the model's estimation uncertainty.
 
-For example, when using a model with one single independent variable such as \ttblue{mod.0} to create an expectation of $y$ = \ttblue{revenue} from $x$ = \ttblue{production}, in the rare case that we are interested in obtaining an estimate of the average value of $y$ when $x = 606,400$, we first use Equation~\ref{eq:regression_model_0} to estimate $\hat{y}_*$.\footnote{The regression formula from Equation~\ref{eq:regression_model_0} is $\hat{y}=4,897,663+18.99x$.}
-
+For example, when using a model with one single independent variable like \ttblue{mod.0} to create an expectation of $y$ = \ttblue{revenue} from $x$ = \ttblue{production}, in the rare case that we are interested in obtaining an estimate of the average value of $y$ given that $x = 606,400$, we first use Equation \ref{eq:regression_model_0} to estimate $y_*$\footnote{The regression formula from Equation \ref{eq:regression_model_0} is $\hat{y} = 4,897,663 + 18.99x$}
 \begin{equation*}
-\hat{y}_* = 4,897,663 + 18.99 \cdot 606,400 = 16,414,429
+  \hat{y_*} = 4,897,663 + 18.99 \cdot 606,400 = 16,414,429
 \end{equation*}
-
-A 99\% confidence interval around this estimate is then
-
+a 99\% confidence interval around this estimate is then
 \begin{equation*}
-16,414,429
-\pm
-2.728 \cdot 4,112,487
-\sqrt{
-\frac{1}{36}
-+
-\frac{(606,400-471,663)^2}
-{35 \cdot 29,945,297,385}
-}
-=
+  16,414,429 \pm 2.728 \cdot 4,112,487 \sqrt{\frac{1}{36} + \frac{(606,400 - 471,663)^2}{35 \cdot 29,945,297,385}} =
 \end{equation*}
-
 \begin{equation*}
-16,414,429 \pm 2,382,500
+16,414,429 \pm 11,470,711
 \end{equation*}
-
-or approximately
-
-\begin{equation*}
-(14,031,929,\;18,796,929).
-\end{equation*}
-
 \paragraph{Prediction Interval} This interval gives the range in which an individual observation of $y$ is expected to fall, for a certain value of the independent variable. In addition to model uncertainty (accounted for by the confidence interval), the prediction interval includes random data variation, capturing the natural scatter of data around the regression line. The formula for the prediction interval is:
 \begin{equation}
 \label{eq:prediction_interval}
-y_* \pm t_{1-\alpha/2,\,n-2} \cdot s_e \sqrt{1 + \frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
+y_* \pm t_{\alpha / 2} \cdot s_e \sqrt{1 + \frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
 \end{equation}
-Note that $y_*$ denotes a future observattion, whereas $\hat{y}_*$ denotes the predicted mean response.
+
 Here, the extra $+1$ under the square root accounts for the additional variation of an individual observation around its expectation, rather than the average.
 
 The difference between the confidence interval and the prediction interval is visualized in Figure \ref{fig:H7_conf_and_pred_intervals}. The confidence interval is narrower than the prediction interval, as it only accounts for uncertainty in the model coefficients and predicts the \emph{mean response}. The prediction interval is wider, as it includes both uncertainty in the model coefficients and unexplained data variation, giving a range for a \emph{single new observation}. 
