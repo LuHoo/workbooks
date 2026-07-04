@@ -4,6 +4,7 @@
 - Fixes missing references
 - Corrects the regression chapter by expressing the noncentrality parameter as a standardized quantity, refining the terminology for decision bounds, and removing ambiguity in the audit hypothesis test.
 - Corrects the worked 99% confidence interval for the mean response in the regression chapter and standardizes the confidence and prediction interval formulas to use the upper-tail critical value \(t_{1-\alpha/2}\).
+- Corrects the description of winsorization in the regression chapter to match the implemented residual winsorization procedure, including the mathematical definition and the October 2012 example.
 
 ### Methodology
 - Improves the annual regression evaluation by incorporating the covariance between monthly predictions.

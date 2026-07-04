@@ -10,6 +10,7 @@
 ### Clarifications
 - Made various minor edits and updates to improve clarity
 - Refined the US SteamCo case study by incorporating the investigation of the March 2014 winter storm before the annual evaluation
+- Clarified the winsorization procedure in the regression chapter. The text now correctly explains that the workshop winsorizes regression residuals before reconstructing the adjusted response, matching the accompanying R code and examples.
 
 ### Layout and readability
 - Improved spacing of figures and tables to avoid overfull/underfull text warnings
