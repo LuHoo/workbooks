@@ -1,5 +1,5 @@
 {
-  "latex-workshop.latex.autoBuild.run": "never",
+  "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.view.pdf.viewer": "tab",
   "r.alwaysUseActiveTerminal": true,
   "r.bracketedPaste": true,

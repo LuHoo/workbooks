@@ -3,6 +3,9 @@
 \chapter{Regression analysis}
 \label{cha:introduction_to_regression_analysis}
 
+% Prevent underfull vbox warnings on pages with little text
+\raggedbottom
+
 \begin{quote}
 `Prediction is very difficult, especially if it is about the future'\\
 Niels Bohr (1885-1962)
@@ -1856,7 +1859,7 @@ Its calculation is quite complicated and based on order statistics. The $W$ stat
 
 \paragraph{Conclusion}
 
-The $p$ value of the Shapiro--Wilk test is 0.09045. Consequently, we do not reject the null hypothesis of normality at the conventional significance levels of 5\% or 1\%. The test therefore provides no evidence that the residuals deviate from a normal distribution.
+The $p$ value of the Shapiro--Wilk test is 0.09045. Con\-se\-quently, we do not reject the null hypothesis of normality at the conventional significance levels of 5\% or 1\%. The test therefore provides no evidence that the residuals deviate from a normal distribution.
 
 \bigskip
 In our experience, many situations involving non-normality of the residuals are caused by data-input errors. Hence, we recommend performing diagnostic checking and/or reviewing the necessity of transformations prior to testing the model assumptions. If non-normality is not remedied by these procedures, Weighted Least Squares (see Section \ref{sub:homoskedasticity}) may help. Other remedies include nonparametric regression models such as kernel regression and spline regression, or generalized linear models. These remedies are beyond the scope of this book.
@@ -2420,7 +2423,7 @@ The monthly expectations serve as benchmarks for evaluating the recorded monthly
 
 After investigating and, where appropriate, incorporating corroborated explanations for individual monthly deviations, the next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
 
-Only after the individual and annual differences have been satisfactorily resolved do we proceed to the second stage: evaluating the strength of the regression evidence. The auditor determines the assurance provided by the model and decides whether that assurance, together with other audit evidence, is sufficient to reject material misstatement or whether further substantive procedures are required.
+Only after the individual and annual differences have been sa\-tis\-factorily resolved do we proceed to the second stage: evaluating the strength of the regression evidence. The auditor determines the assurance provided by the model and decides whether that assurance, together with other audit evidence, is sufficient to reject material misstatement or whether further substantive procedures are required.
 
 \subsection{Combining detail expectations} % (fold)
 \label{sub:combining_detail_expectations}
@@ -2431,8 +2434,6 @@ When predictions are made for multiple periods, such as the 12 months in the hol
 \label{eq:annual_expectation}
 \hat{y}_{\text{total}} = \sum_{i=1}^{12} \hat{y}_i.
 \end{equation}
-
-
 
 Constructing a prediction interval for this annual total requires more care. The annual prediction interval cannot be obtained by summing the lower and upper limits of the monthly prediction intervals. Nor should the annual prediction standard error be calculated merely as the square root of the sum of the squared monthly prediction standard errors. The reason is that all monthly predictions are based on the same estimated regression coefficients. As a result, the estimation errors in the monthly predictions are correlated, even when the future residual errors are uncorrelated.
 
@@ -2480,11 +2481,11 @@ y_{\text{total}} - \hat{y}_{\text{total}}
 12\hat{\sigma}^2.
 \end{equation}
 
-The \hlblue{annual prediction standard error}\index{annual prediction standard error}\nomenclature{$s_{\text{annual}}$}{annual prediction standard error} is therefore
+The \hlblue{combined prediction standard error}\index{combined prediction standard error}\nomenclature{$s_{\text{comb}}$}{combined prediction standard error} is therefore
 
 \begin{equation}
-\label{eq:annual_prediction_standard_error}
-s_{\text{annual}}
+\label{eq:combined_prediction_standard_error}
+s_{\text{comb}}
 =
 \sqrt{
 \mathbf{1}^{\top}
@@ -2497,8 +2498,6 @@ s_{\text{annual}}
 }.
 \end{equation}
 
-
-
 The 99\% acceptable difference range around the annual expectation is then obtained as
 
 \begin{equation}
@@ -2506,7 +2505,7 @@ The 99\% acceptable difference range around the annual expectation is then obtai
 \hat{y}_{\text{total}}
 \pm
 t_{0.995,df}
-s_{\text{annual}},
+s_{\text{comb}},
 \end{equation}
 where $df$ is the residual degrees of freedom of the regression model.
 
@@ -2520,10 +2519,10 @@ The resulting annual expectation is:
 190,\!680,\!684.
 \end{equation*}
 
-Using the covariance matrix of the estimated regression coefficients together with the residual variance yields an annual prediction standard error of
+Using the covariance matrix of the estimated regression coefficients together with the residual variance yields a combined prediction standard error of
 
 \begin{equation*}
-s_{\text{annual}}
+s_{\text{comb}}
 =
 6,\!323,\!301.
 \end{equation*}
@@ -2580,12 +2579,12 @@ Following the audit convention used in the sampling chapters, we set up two poss
 \begin{itemize}
     \item $H_0$: The recorded revenue for the year is materially misstated. This could take two forms:
     \begin{itemize}
-        \item $H_{0A}$: The revenue is materially overstated, recorded revenue is greater than true revenue by an amount that exceeds $M$.
-        \item $H_{0B}$: The revenue is materially understated, recorded revenue is less than true revenue by an amount that exceeds $M$.
+        \item $H_{0A}$: The revenue is materially overstated, recorded revenue is greater than true revenue by an amount that exceeds $PM$.
+        \item $H_{0B}$: The revenue is materially understated, recorded revenue is less than true revenue by an amount that exceeds $PM$.
     \end{itemize}
     \item $H_1$: The recorded revenue for the year is not materially misstated.
 \end{itemize}
-Here we define $M$, the \hlblue{materiality}\index{materiality} threshold, representing the degree of revenue deviation that would indicate a material misstatement.
+Here we define $PM$, the \hlblue{materiality}\index{materiality} threshold, representing the degree of revenue deviation that would indicate a material misstatement.
 
 \paragraph{Step 3. Consider statistical assumptions}
 This test relies on several assumptions about the data:
@@ -2611,66 +2610,70 @@ where \> $\hat{y}_{\text{total}}$ \> : \> combined expected revenue \\
       \> $s_{comb}$     \> : \> standard error of the combined prediction (Eq. \ref{eq:annual_prediction_interval})
 \end{tabbing}
 
-\paragraph{Step 5. Derive the distribution of the test statistic under the hypotheses} Under the alternative hypothesis $H_1$, which assumes that the recorded revenue is not materially misstated, the test statistic $T$ follows a central $t$~distribution with $n-k-1$ degrees of freedom. This distribution accounts for the uncertainty in the model's coefficient estimates and the natural variability around the predicted revenue.
+\paragraph{Step 5. Derive the distribution of the test statistic under the hypotheses}
+Under the alternative hypothesis $H_1$, which assumes that the recorded revenue is not materially misstated, the test statistic $T$ follows a central $t$~distribution with $n-k-1$ degrees of freedom. This distribution accounts for the uncertainty in the model's coefficient estimates and the natural variability around the predicted revenue.
 
-Under the null hypothesis $H_0$, where the recorded revenue is materially overstated or understated, the test statistic follows a non-central $t$~distribution. At the materiality boundary, the non-centrality parameter is the materiality threshold standardized by the combined prediction standard error.
+Under the null hypothesis $H_0$, where the recorded revenue is materially overstated or understated, the test statistic follows a non-central $t$~distribution. Since $T$ is a standardized statistic, the non-centrality parameter must also be standardized. At the performance-materiality boundary, it is defined as
+
+\begin{equation}
+\label{eq:standardized_noncentrality_parameter}
+  \lambda_{PM} = \frac{PM}{s_{comb}} ,
+\end{equation}
+
+where $PM$ is performance materiality expressed in monetary units and $s_{comb}$ is the standard error of the combined prediction, also expressed in monetary units. The ratio $\lambda_{PM}$ is therefore dimensionless.
+
 Specifically:
 \begin{itemize}
-\item Under $H_{0A}$ (material overstatement), the non-centrality parameter is positive.
-\item Under $H_{0B}$ (material understatement), the non-centrality parameter is negative.
+\item Under $H_{0A}$ (material overstatement), the non-centrality parameter is $+\lambda_{PM}$.
+\item Under $H_{0B}$ (material understatement), the non-centrality parameter is $-\lambda_{PM}$.
 \end{itemize}
 
 \bigskip
-The non-central $t$~distribution under $H_0$ allows us to calculate the probability of rejecting material misstatement when a material misstatement exists. This is the Type I error risk $\alpha$; audit assurance is $1-\alpha$.
+The non-central $t$~distribution under $H_0$ allows us to calculate the probability of incorrectly rejecting material misstatement when a material misstatement of size $PM$ exists. This is the Type I error risk $\alpha$; audit assurance is $1-\alpha$.
 
 \paragraph{Step 6. Select a significance level}
 A 99\% prediction interval has a central tail probability of 0.01. In the audit hypothesis test, this probability concerns the alternative hypothesis of no material misstatement and therefore represents Type II error risk $\beta$, or efficiency risk. It is not the audit significance level $\alpha$. The Type I error risk $\alpha$ is determined under the non-central distribution at the materiality boundary, and assurance equals $1-\alpha$.
 
-\paragraph{Step 7. Determine the critical region}
-The critical region or Acceptable Difference Range $(ADR)$ is defined by the 99\% prediction interval bounds around the expected difference between the expectation of $y$ and its recorded value:
+\paragraph{Step 7. Determine the decision bounds}\footnote{
+Traditional presentations of hypothesis testing often refer to the \emph{critical region}. In this chapter we instead refer to the \emph{decision bounds} because the audit null hypothesis assumes a material misstatement. Consequently, the rejection region lies between the bounds rather than in the tails of the distribution. Referring to the bounds rather than the critical region avoids confusion and emphasizes that observations outside the bounds do not indicate that the test has failed; they indicate that there is insufficient evidence to reject material misstatement.}
+\nopagebreak[4]
+The Acceptable Difference Range is defined by the 99\% prediction interval around the expected difference between the expected and recorded revenue:
 
 \begin{equation}
 \label{eq:acceptable_difference_range}
-\text{ADR} =  \pm t_{0.005} \cdot s_{comb}
+\text{ADR} = \pm t_{0.005} \cdot s_{\text{comb}}
 \end{equation}
-where $t_{0.005}$ represents the critical value for a 99\% confidence level with $n-k-1$ degrees of freedom.
+
+where $t_{0.005}$ denotes the critical value of the $t$~distribution for a two-sided significance level of 1\% with $n-k-1$ degrees of freedom.
 
 \bigskip
-The acceptable difference range is the rejection region for the audit null hypothesis: after unexplained differences have been investigated, a test statistic within this range may provide sufficient evidence to reject material misstatement. A test statistic outside this range does not provide sufficient evidence to reject $H_0$.
+
+The ADR is expressed in monetary units and represents the range of unexplained differences that are considered acceptable. Dividing the ADR by $s_{\text{comb}}$ gives the corresponding decision bounds for the standardized test statistic $T$:
+
+\[
+T = \pm t_{0.005}.
+\]
+
+A test statistic that falls between these bounds provides sufficient evidence to reject the audit null hypothesis of material misstatement. Test statistics below the lower bound or above the upper bound do not provide sufficient evidence to reject $H_0$.
 
 \paragraph{Step 8. Compute the value of the test statistic from the sample}
-Using the observed revenue for the hold-out year, we compute the test statistic $T$ by substituting the recorded revenue $y_i$ and the combined standard error $s_{comb}$ into the formula.
+Using the observed revenue for the hold-out year, we compute the test statistic $T$ by substituting the recorded revenue $y_i$ and the combined standard error $s_{\text{comb}}$ into the formula.
 
 \paragraph{Step 9. Conclude on the test}
-Finally, we evaluate the test statistic in the context of the critical region:
+Finally, we evaluate the test statistic against the decision bounds:
 \begin{itemize}
-    \item \emph{If $T$ lies within the critical region}, and the achieved assurance is sufficient, we reject $H_0$ and conclude that sufficient evidence has been obtained that the recorded revenue is not materially misstated.
-    \item \emph{If $T$ lies outside the critical region}, we do not reject $H_0$. The procedure has not obtained sufficient evidence that the recorded revenue is not materially misstated, so further investigation or other substantive procedures are required.
+    \item \emph{If $T$ lies between the decision bounds}, and the achieved assurance is sufficient, we reject $H_0$ and conclude that sufficient evidence has been obtained that the recorded revenue is not materially misstated.
+    \item \emph{If $T$ lies outside the decision bounds}, we do not reject $H_0$. The procedure has not obtained sufficient evidence that the recorded revenue is not materially misstated. Consequently, further investigation or other substantive procedures are required.
 \end{itemize}
 
 % subsection the_nine_step_approach (end)
 
-\subsection{Stage 1: Identification, investigation, and evaluation} % (fold)
-\label{sub:identification_investigation_and_evaluation}
-
-The first stage determines whether individual or combined recorded amounts require further investigation because they are not in line with the model fitted on prior-year data. Whenever the procedure identifies such an unexpected difference, the auditor should investigate its cause and evaluate whether the explanation obtained provides sufficient appropriate audit evidence. The objective is not merely to explain a statistical deviation, but to determine whether it indicates a potential misstatement, a limitation of the model, or a legitimate business circumstance.
-
-The first step is the identification of unusual observations. Depending on the design of the substantive analytical procedure, these may be individual observations with large residuals, observations outside their prediction interval, or an aggregated amount that falls outside the acceptable difference range. Figure~\ref{fig:H7_expectations} illustrates this process for the US SteamCo case. Although the total recorded revenue for 2014 falls within the acceptable difference range, the recorded revenue for March 2014 falls below the lower limit of its 99\% prediction interval. This observation therefore warrants further investigation.
-
-The second step is an analytical investigation of the identified difference. The auditor should seek to understand why the observed value differs from the expectation generated by the regression model. This may involve analyzing additional operational information, considering changes in business activities, or determining whether important explanatory variables were omitted from the model. In the US SteamCo case, the auditor might investigate whether production data were incomplete, whether an unusual maintenance shutdown occurred, whether severe weather disrupted operations, or whether revenue was recognized in a different accounting period. Such analyses may provide a plausible explanation for the unexpected difference without immediately suggesting the existence of a misstatement.
-
-The final part of this stage is the evaluation of the evidence obtained. Explanations provided by management should not be accepted without corroboration. Instead, they should be supported by additional analytical procedures, inspection of relevant documentation, inquiry of knowledgeable personnel, or other audit evidence. If the explanation is adequately supported, the unexpected difference is resolved and the expectation may be adjusted where appropriate. If no satisfactory explanation can be obtained, or if the explanation is inconsistent with other audit evidence, the auditor should conclude that the procedure has identified a potential misstatement and perform additional substantive procedures. The auditor proceeds to the assurance assessment only after all relevant individual and combined differences have been satisfactorily resolved.
-
-This illustrates an important principle of substantive analytical procedures. Regression models identify observations that merit pro\-fessional attention; they do not determine whether a misstatement exists. Statistical models assist the auditor in directing further investigation, but the final conclusion always depends on the auditor's evaluation of all relevant audit evidence obtained during the investigation.
-
-% subsection identification_investigation_and_evaluation (end)
-
-\subsection{Stage 2: Level of assurance obtained} % (fold)
+\subsection{Level of assurance obtained} % (fold)
 \label{sub:level_of_assurance_obtained}
 
-After the first stage has been completed and all relevant differences have been satisfactorily resolved, the auditor assesses the strength of the model as audit evidence. The acceptable difference range translates the model's prediction uncertainty into a critical region for the audit hypothesis test. A precise model provides more assurance than an imprecise model for the same performance materiality and observed difference.
+After all relevant individual and annual differences have been identified, investigated, and satisfactorily resolved, the auditor assesses the strength of the regression model as audit evidence. The decision bounds translate the model's prediction uncertainty, performance materiality, and the auditor's risk parameters into a statistical decision rule. A precise model provides more assurance than an imprecise model for the same performance materiality and observed difference.
 
-If an unresolved difference lies outside the acceptable difference range, the auditor does not proceed as though the first stage were complete and does not reject the hypothesis of material misstatement. The difference must first be investigated as described in Section \ref{sub:identification_investigation_and_evaluation}. When the differences have been resolved, the auditor determines whether the achieved assurance is sufficient to reject material misstatement. Consistent with Section \ref{sub:acceptable_difference} in Volume 2, we define the difference as
+Consistent with Section~\ref{sub:acceptable_difference} in Volume 2, we define the difference as
 
 \begin{equation}
 D = y_{\text{recorded}} - \hat{y}_{\text{total}}.
@@ -2690,9 +2693,9 @@ Let
 \begin{equation}
 \delta = \frac{PM}{s_{\text{comb}}}
 \end{equation}
-be the non-centrality parameter\nomenclature{$\delta$}{non-centrality parameter of the non-central $t$ distribution}, where $PM$ is performance materiality. If revenue is materially overstated by $PM$, the distribution of $T$ shifts to the right and follows a non-central $t$ distribution with non-centrality parameter $+\delta$. If revenue is materially understated by $PM$, the distribution shifts to the left and follows a non-central $t$ distribution with non-centrality parameter $-\delta$.
+be the standardized non-centrality parameter\nomenclature{$\delta$}{standardized non-centrality parameter of the non-central $t$ distribution}, where $PM$ is performance materiality expressed in monetary units. Because both $PM$ and $s_{\text{comb}}$ are expressed in monetary units, $\delta$ is dimensionless, like the test statistic $T$. If revenue is materially overstated by $PM$, the distribution of $T$ shifts to the right and follows a non-central $t$ distribution with non-centrality parameter $+\delta$. If revenue is materially understated by $PM$, the distribution shifts to the left and follows a non-central $t$ distribution with non-centrality parameter $-\delta$.
 
-As discussed in Section \ref{sub:acceptable_difference} in Volume 2, the acceptable difference range may be determined by controlling either efficiency risk or effectiveness risk. If the auditor controls efficiency risk, the acceptable range is based on the central $t$ distribution under the assumption of no misstatement. For an efficiency risk of $\beta$, the acceptable difference range is
+As discussed in Section~\ref{sub:acceptable_difference} in Volume 2, the decision bounds may be determined by controlling either efficiency risk or effectiveness risk. If the auditor controls efficiency risk, the monetary bounds are based on the central $t$ distribution under the assumption of no material misstatement. For an efficiency risk of $\beta$, these bounds are
 
 \begin{equation}
 \left[
@@ -2701,9 +2704,9 @@ t_{1-\beta/2,df}s_{\text{comb}}
 \right].
 \end{equation}
 
-This limits the probability of investigating a difference when the account is not materially misstated. In that case, the level of assurance is not fixed in advance. It follows from the width of the acceptable difference range, the precision of the model, and performance materiality.
+This limits the probability of investigating a difference when the account is not materially misstated. In that case, the level of assurance is not fixed in advance. It follows from the width of the bounds, the precision of the model, and performance materiality.
 
-Let $c_L$ and $c_U$ denote the lower and upper standardized boundaries of the acceptable difference range. The achieved assurance for detecting a material overstatement is the upper-tail probability
+Let $c_L$ and $c_U$ denote the lower and upper standardized decision bounds. The achieved assurance for detecting a material overstatement is the upper-tail probability
 
 \begin{equation}
 P(T > c_U \mid T \sim t_{df,\delta}).
@@ -2715,12 +2718,12 @@ The achieved assurance for detecting a material understatement is the lower-tail
 P(T < c_L \mid T \sim t_{df,-\delta}).
 \end{equation}
 
-These probabilities express the likelihood that a material misstatement of size $PM$ would produce a difference outside the acceptable difference range, so that $H_0$ would not be incorrectly rejected. Under the audit convention, this is assurance, $1-\alpha$. Its complement, $\alpha$, is the Type I error risk of a material misstatement producing a difference within the acceptable difference range and therefore being incorrectly rejected.
+These probabilities express the likelihood that a material misstatement of size $PM$ would produce a difference outside the decision bounds. Their complement, $\alpha$, is the risk that a material misstatement of size $PM$ nevertheless produces a difference between the decision bounds, causing the auditor to incorrectly reject the audit null hypothesis of material misstatement. Under the audit convention, assurance is therefore $1-\alpha$.
 
-Alternatively, the auditor may determine the acceptable difference range by controlling $\alpha$ directly. In that case, the boundaries are chosen to provide the desired level of assurance, $1-\alpha$, against incorrectly rejecting material misstatement. This fixes the desired level of assurance, but the resulting acceptable difference range may become narrow when the model is imprecise. This increases $\beta$, the Type II error risk of failing to reject $H_0$ when the recorded amount is not materially misstated, and therefore increases the probability of investigating differences caused merely by model imprecision.
+\bigskip
+Alternatively, the auditor may determine the decision bounds by controlling $\alpha$ directly. In that case, the bounds are chosen to provide the desired level of assurance, $1-\alpha$, against incorrectly rejecting material misstatement. This fixes the desired level of assurance, but the resulting range may become narrow when the model is imprecise. This increases $\beta$, the Type II error risk of failing to reject $H_0$ when the recorded amount is not materially misstated, and therefore increases the probability of investigating differences caused merely by model imprecision.
 
-The achieved level of assurance should therefore be interpreted together with the precision of the model, performance materiality, the assessed risk of material misstatement, and evidence obtained from other audit procedures. Resolving all unexpected differences completes the first stage but does not, by itself, establish that sufficient audit evidence has been obtained. If the achieved assurance is sufficient, the auditor may reject the hypothesis of material misstatement. If it falls short of the required level, the regression procedure may still contribute audit evidence, but further substantive procedures are required.
-
+The achieved level of assurance should therefore be interpreted together with the precision of the model, performance materiality, the assessed risk of material misstatement, and evidence obtained from other audit procedures. Resolving all unexpected differences is necessary, but does not, by itself, establish that sufficient audit evidence has been obtained. If the achieved assurance is sufficient, the auditor may reject the hypothesis of material misstatement. If it falls short of the required level, the regression procedure may still contribute audit evidence, but further substantive procedures are required.
 
 % subsection level_of_assurance_obtained (end)
 
@@ -4072,7 +4075,8 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 
 \textbf{Combining 12 monthly predictions}
 
-We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit. The code includes the covariance between monthly expectations caused by their shared estimated coefficients and adjusts the March expectation for the corroborated storm effect. This completes the first-stage evaluation of the annual difference. The resulting interval measures prediction uncertainty and forms the critical region used in the second-stage assurance assessment.
+We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit. The code includes the covariance between monthly expectations caused by their shared estimated coefficients and adjusts the March expectation for the corroborated storm effect. This completes the first-stage evaluation of the annual difference. 
+The resulting interval measures prediction uncertainty and provides the monetary decision bounds used in the second-stage assurance assessment.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{}
