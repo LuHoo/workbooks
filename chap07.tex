@@ -2481,11 +2481,11 @@ y_{\text{total}} - \hat{y}_{\text{total}}
 12\hat{\sigma}^2.
 \end{equation}
 
-The \hlblue{annual prediction standard error}\index{annual prediction standard error}\nomenclature{$s_{\text{annual}}$}{annual prediction standard error} is therefore
+The \hlblue{combined prediction standard error}\index{combined prediction standard error}\nomenclature{$s_{\text{comb}}$}{combined prediction standard error} is therefore
 
 \begin{equation}
-\label{eq:annual_prediction_standard_error}
-s_{\text{annual}}
+\label{eq:combined_prediction_standard_error}
+s_{\text{comb}}
 =
 \sqrt{
 \mathbf{1}^{\top}
@@ -2505,7 +2505,7 @@ The 99\% acceptable difference range around the annual expectation is then obtai
 \hat{y}_{\text{total}}
 \pm
 t_{0.995,df}
-s_{\text{annual}},
+s_{\text{comb}},
 \end{equation}
 where $df$ is the residual degrees of freedom of the regression model.
 
@@ -2519,10 +2519,10 @@ The resulting annual expectation is:
 190,\!680,\!684.
 \end{equation*}
 
-Using the covariance matrix of the estimated regression coefficients together with the residual variance yields an annual prediction standard error of
+Using the covariance matrix of the estimated regression coefficients together with the residual variance yields a combined prediction standard error of
 
 \begin{equation*}
-s_{\text{annual}}
+s_{\text{comb}}
 =
 6,\!323,\!301.
 \end{equation*}
@@ -2579,12 +2579,12 @@ Following the audit convention used in the sampling chapters, we set up two poss
 \begin{itemize}
     \item $H_0$: The recorded revenue for the year is materially misstated. This could take two forms:
     \begin{itemize}
-        \item $H_{0A}$: The revenue is materially overstated, recorded revenue is greater than true revenue by an amount that exceeds $M$.
-        \item $H_{0B}$: The revenue is materially understated, recorded revenue is less than true revenue by an amount that exceeds $M$.
+        \item $H_{0A}$: The revenue is materially overstated, recorded revenue is greater than true revenue by an amount that exceeds $PM$.
+        \item $H_{0B}$: The revenue is materially understated, recorded revenue is less than true revenue by an amount that exceeds $PM$.
     \end{itemize}
     \item $H_1$: The recorded revenue for the year is not materially misstated.
 \end{itemize}
-Here we define $M$, the \hlblue{materiality}\index{materiality} threshold, representing the degree of revenue deviation that would indicate a material misstatement.
+Here we define $PM$, the \hlblue{materiality}\index{materiality} threshold, representing the degree of revenue deviation that would indicate a material misstatement.
 
 \paragraph{Step 3. Consider statistical assumptions}
 This test relies on several assumptions about the data:
@@ -2629,27 +2629,26 @@ Specifically:
 \end{itemize}
 
 \bigskip
-The non-central $t$~distribution under $H_0$ allows us to calculate the probability of rejecting material misstatement when no material misstatement exists. This is the Type I error risk $\alpha$; audit assurance is $1-\alpha$.
+The non-central $t$~distribution under $H_0$ allows us to calculate the probability of incorrectly rejecting material misstatement when a material misstatement of size $PM$ exists. This is the Type I error risk $\alpha$; audit assurance is $1-\alpha$.
 
 \paragraph{Step 6. Select a significance level}
 A 99\% prediction interval has a central tail probability of 0.01. In the audit hypothesis test, this probability concerns the alternative hypothesis of no material misstatement and therefore represents Type II error risk $\beta$, or efficiency risk. It is not the audit significance level $\alpha$. The Type I error risk $\alpha$ is determined under the non-central distribution at the materiality boundary, and assurance equals $1-\alpha$.
 
-\paragraph{Step 7. Determine the decision bounds}
-
-Traditional presentations of hypothesis testing often refer to the \emph{critical region}. In this chapter we instead refer to the \emph{decision bounds} because the audit null hypothesis assumes a material misstatement. Consequently, the rejection region lies between the bounds rather than in the tails of the distribution. Referring to the bounds rather than the critical region avoids confusion and emphasizes that observations outside the bounds do not indicate that the test has failed; they indicate that there is insufficient evidence to reject material misstatement.
-
-The Acceptable Difference Range (ADR) is defined by the 99\% prediction interval around the expected difference between the expected and recorded revenue:
+\paragraph{Step 7. Determine the decision bounds}\footnote{
+Traditional presentations of hypothesis testing often refer to the \emph{critical region}. In this chapter we instead refer to the \emph{decision bounds} because the audit null hypothesis assumes a material misstatement. Consequently, the rejection region lies between the bounds rather than in the tails of the distribution. Referring to the bounds rather than the critical region avoids confusion and emphasizes that observations outside the bounds do not indicate that the test has failed; they indicate that there is insufficient evidence to reject material misstatement.}
+\nopagebreak[4]
+The Acceptable Difference Range is defined by the 99\% prediction interval around the expected difference between the expected and recorded revenue:
 
 \begin{equation}
 \label{eq:acceptable_difference_range}
-\text{ADR} = \pm t_{0.005} \cdot s_{comb}
+\text{ADR} = \pm t_{0.005} \cdot s_{\text{comb}}
 \end{equation}
 
 where $t_{0.005}$ denotes the critical value of the $t$~distribution for a two-sided significance level of 1\% with $n-k-1$ degrees of freedom.
 
 \bigskip
 
-The ADR is expressed in monetary units and represents the range of unexplained differences that are considered acceptable. Dividing the ADR by $s_{comb}$ gives the corresponding decision bounds for the standardized test statistic $T$:
+The ADR is expressed in monetary units and represents the range of unexplained differences that are considered acceptable. Dividing the ADR by $s_{\text{comb}}$ gives the corresponding decision bounds for the standardized test statistic $T$:
 
 \[
 T = \pm t_{0.005}.
@@ -2658,7 +2657,7 @@ T = \pm t_{0.005}.
 A test statistic that falls between these bounds provides sufficient evidence to reject the audit null hypothesis of material misstatement. Test statistics below the lower bound or above the upper bound do not provide sufficient evidence to reject $H_0$.
 
 \paragraph{Step 8. Compute the value of the test statistic from the sample}
-Using the observed revenue for the hold-out year, we compute the test statistic $T$ by substituting the recorded revenue $y_i$ and the combined standard error $s_{comb}$ into the formula.
+Using the observed revenue for the hold-out year, we compute the test statistic $T$ by substituting the recorded revenue $y_i$ and the combined standard error $s_{\text{comb}}$ into the formula.
 
 \paragraph{Step 9. Conclude on the test}
 Finally, we evaluate the test statistic against the decision bounds:
@@ -4076,7 +4075,8 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 
 \textbf{Combining 12 monthly predictions}
 
-We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit. The code includes the covariance between monthly expectations caused by their shared estimated coefficients and adjusts the March expectation for the corroborated storm effect. This completes the first-stage evaluation of the annual difference. The resulting interval measures prediction uncertainty and forms the critical region used in the second-stage assurance assessment.
+We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit. The code includes the covariance between monthly expectations caused by their shared estimated coefficients and adjusts the March expectation for the corroborated storm effect. This completes the first-stage evaluation of the annual difference. 
+The resulting interval measures prediction uncertainty and provides the monetary decision bounds used in the second-stage assurance assessment.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{}
