@@ -2309,53 +2309,32 @@ We now want to determine if this deviation is within expected bounds or if it is
 
 To measure the uncertainty around a expectation in regression, we use two types of intervals: the \emph{confidence interval}\index{confidence interval}\index{interval!confidence} and the \emph{prediction interval}\index{prediction interval}\index{interval!prediction}. Both intervals give ranges, but they serve different purposes.
 
-\paragraph{Confidence Interval} This interval estimates the range within which the average value of the dependent variable is expected to lie, given a certain value of the independent variable. It accounts for the uncertainty in estimating the coefficients of the model but does not account for the random variation around individual observations. 
+\paragraph{Confidence Interval} This interval estimates the range where the average value of the dependent variable is expected to lie, given a certain value of the independent variable. It accounts for the uncertainty in estimating the coefficients of the model but does not account for the random variation around individual observations. 
 The confidence interval for a model with one independent variable is given by\footnote{The formula for confidence intervals for multiple linear regression models is more complicated and is best rendered using matrix algebra notation.}
 \begin{equation}
-\hat{y}_* \pm t_{1-\alpha/2,\,n-2}\, s_e
-\sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
+\hat{y}_* \pm t_{\alpha / 2} \cdot s_e \sqrt{\frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
 \end{equation}
 \nomenclature{$x_*$}{given value of the independent variable}
 
-The confidence interval thus provides a range of plausible values for the average value of $y$ for a given set of values of independent variables, based solely on the model's estimation uncertainty.
+The confidence interval thus predicts the average value of $y$ for a given set of values of independent variables, based solely on the model's estimation uncertainty.
 
-For example, when using a model with one single independent variable such as \ttblue{mod.0} to create an expectation of $y$ = \ttblue{revenue} from $x$ = \ttblue{production}, in the rare case that we are interested in obtaining an estimate of the average value of $y$ when $x = 606,400$, we first use Equation~\ref{eq:regression_model_0} to estimate $\hat{y}_*$.\footnote{The regression formula from Equation~\ref{eq:regression_model_0} is $\hat{y}=4,897,663+18.99x$.}
-
+For example, when using a model with one single independent variable like \ttblue{mod.0} to create an expectation of $y$ = \ttblue{revenue} from $x$ = \ttblue{production}, in the rare case that we are interested in obtaining an estimate of the average value of $y$ given that $x = 606,400$, we first use Equation \ref{eq:regression_model_0} to estimate $y_*$\footnote{The regression formula from Equation \ref{eq:regression_model_0} is $\hat{y} = 4,897,663 + 18.99x$}
 \begin{equation*}
-\hat{y}_* = 4,897,663 + 18.99 \cdot 606,400 = 16,414,429
+  \hat{y_*} = 4,897,663 + 18.99 \cdot 606,400 = 16,414,429
 \end{equation*}
-
-A 99\% confidence interval around this estimate is then
-
+a 99\% confidence interval around this estimate is then
 \begin{equation*}
-16,414,429
-\pm
-2.728 \cdot 4,112,487
-\sqrt{
-\frac{1}{36}
-+
-\frac{(606,400-471,663)^2}
-{35 \cdot 29,945,297,385}
-}
-=
+  16,414,429 \pm 2.728 \cdot 4,112,487 \sqrt{\frac{1}{36} + \frac{(606,400 - 471,663)^2}{35 \cdot 29,945,297,385}} =
 \end{equation*}
-
 \begin{equation*}
-16,414,429 \pm 2,382,500
+16,414,429 \pm 11,470,711
 \end{equation*}
-
-or approximately
-
-\begin{equation*}
-(14,031,929,\;18,796,929).
-\end{equation*}
-
 \paragraph{Prediction Interval} This interval gives the range in which an individual observation of $y$ is expected to fall, for a certain value of the independent variable. In addition to model uncertainty (accounted for by the confidence interval), the prediction interval includes random data variation, capturing the natural scatter of data around the regression line. The formula for the prediction interval is:
 \begin{equation}
 \label{eq:prediction_interval}
-y_* \pm t_{1-\alpha/2,\,n-2} \cdot s_e \sqrt{1 + \frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
+y_* \pm t_{\alpha / 2} \cdot s_e \sqrt{1 + \frac{1}{n} + \frac{(x_* - \bar{x})^2}{(n - 1) s_x^2}}
 \end{equation}
-Note that $y_*$ denotes a future observattion, whereas $\hat{y}_*$ denotes the predicted mean response.
+
 Here, the extra $+1$ under the square root accounts for the additional variation of an individual observation around its expectation, rather than the average.
 
 The difference between the confidence interval and the prediction interval is visualized in Figure \ref{fig:H7_conf_and_pred_intervals}. The confidence interval is narrower than the prediction interval, as it only accounts for uncertainty in the model coefficients and predicts the \emph{mean response}. The prediction interval is wider, as it includes both uncertainty in the model coefficients and unexplained data variation, giving a range for a \emph{single new observation}. 
