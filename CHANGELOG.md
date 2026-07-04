@@ -2,6 +2,7 @@
 
 ### Content corrections
 - Fixes missing references
+- Corrects the regression chapter by expressing the noncentrality parameter as a standardized quantity, refining the terminology for decision bounds, and removing ambiguity in the audit hypothesis test.
 
 ### Methodology
 - Improves the annual regression evaluation by incorporating the covariance between monthly predictions.
