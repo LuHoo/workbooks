@@ -46,12 +46,7 @@ Probabilities in the right-hand tail $P(\stoch{k} > k)$ can be calculated by pas
 
 The relevant \ttblue{R} functions are \ttblue{dbinom()} for the probabilities $P(\stoch{k} = k)$ and \ttblue{pbinom()} for cumulative probabilities $P(\stoch{k} \leq k)$. Both functions use the parameters \ttblue{k}, \ttblue{n} and \ttblue{$\pi$ = M / N}.
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{dbinom(1, 60, 17 / 331)}
-\textcolor{KPMG_light_blue}{[1] 0.1373314}
-\textcolor{KPMG_blue}{pbinom(1, 60, 17 / 331)}
-\textcolor{KPMG_light_blue}{[1] 0.1796079}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-2-1}
 \end{exercise}
 
 \subsection{Section \ref{sec:poisson_distribution}}
@@ -63,21 +58,13 @@ The relevant \ttblue{R} functions are \ttblue{dbinom()} for the probabilities $P
 
 The functions \ttblue{dpois()} and \ttblue{ppois()} are used for the calculation of probabilities from the Poisson distribution. They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$. For the \emph{Case: Number of students} remember that $n = 60$ and $\pi = 17 / 331$.
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{dpois(1, 60 * 17/ 331)}
-\textcolor{KPMG_light_blue}{[1] 0.1414044}
-\textcolor{KPMG_blue}{dpois(3, 60 * 17/ 331)}
-\textcolor{KPMG_light_blue}{[1] 0.2237979}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-3-1}
 
 The probability of finding one error is 14.14\%.
 
 To calculate the probability of finding no more than one error in the sample of 60 Ph.D.s, use 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ppois(1, 60 * 17/ 331)}
-\textcolor{KPMG_light_blue}{[1] 0.1872915}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-3-2}
 
 \end{exercise}
 
@@ -90,23 +77,13 @@ To calculate the probability of finding no more than one error in the sample of 
 
 In \ttblue{R} we use the function \ttblue{pnorm}, that uses the arguments \ttblue{q} for the sampling result that we evaluate, \ttblue{mean} for the population mean, and \ttblue{sd} for the standard deviation of the mean.
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{pnorm(q = 1012, mean = 1030, sd = 115.26/sqrt(200))}
-\textcolor{KPMG_light_blue}{[1] 0.01360269}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-4-1}
 
 Note that the syntax is more elaborate than what we have done so far. In \ttblue{R} we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
 
 There are two advantages to using argument names and values. First, the command is easier to interpret by a reviewer. Second, we can pass the arguments in any order. The following commands are therefore equivalent:
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{pnorm(1012, 1030, 115.26 / sqrt(200))}
-\textcolor{KPMG_light_blue}{[1] 0.01360269}
-\textcolor{KPMG_blue}{pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))}
-\textcolor{KPMG_light_blue}{[1] 0.01360269}
-\textcolor{KPMG_blue}{pnorm(sd = 115.26/sqrt(200), mean = 1030, q = 1012)}
-\textcolor{KPMG_light_blue}{[1] 0.01360269}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-4-2}
 
 \end{exercise}
 
@@ -119,12 +96,7 @@ There are two advantages to using argument names and values. First, the command 
 
 To calculate the probability found of 14.7\%, we use the function \ttblue{pt()} with arguments \ttblue{x} for the boundary value and \ttblue{df} for the number of degrees of freedom.
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{(t_val <- (1004 - 1030) / (73.78 / sqrt(10)))}
-\textcolor{KPMG_light_blue}{[1] -1.114384}
-\textcolor{KPMG_blue}{pt(t_val, 9)}
-\textcolor{KPMG_light_blue}{[1] 0.1459939}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-5-1}
 
 The probability is 14.7\%. Notice that we used another shortcut notation: we added brackets to the assignment of the \ttblue{t\_val} variable, so that the assigned value is returned immediately.
 
@@ -139,17 +111,11 @@ The probability is 14.7\%. Notice that we used another shortcut notation: we add
 
 The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{qchisq(p = .95, df = 9)}
-\textcolor{KPMG_light_blue}{[1] 16.91898}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-6-1}
 
 Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$ distributed variable
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{qchisq(p = .05, df = 9)}
-\textcolor{KPMG_light_blue}{[1] 3.325113}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-6-2}
 
 These two results are then used to calculate the upper and lower 90\% confidence bounds of the population variance.
 
@@ -164,18 +130,12 @@ These two results are then used to calculate the upper and lower 90\% confidence
 
 Hypothesis testing is done with the function \ttblue{qf}, where we use the argument \ttblue{lower.tail = FALSE} to indicate the direction of the test.
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE)}
-\textcolor{KPMG_light_blue}{[1] 1.996271}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-7-1}
 
 In the example above, the critical value of the $F$-statistic is 1.996. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not. 
 
 The probability of obtaining this particular value of the test statistic is calculated with the \ttblue{pf} function.
 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{pf(q = 1.996271, df1 = 25, df2 = 23, lower.tail = FALSE)}
-\textcolor{KPMG_light_blue}{[1] 0.04999995}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-1-7-2}
 
 \end{exercise}
