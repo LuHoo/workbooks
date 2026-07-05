@@ -17,7 +17,7 @@ source("../../../R/notebook-utils.R")
 ### Exercise 4.1. Effect of the critical region on the sample size
 
 The results on page 119 are obtained with the `FSaudit` package, first by creating an attribute object, filling it with the parameters of the test, and then applying the `size()` function.
-The relevant parameters are the significanve level `alpha`, the number of deviations in the population $M$ `popdev`, the population size $N$ `popn`, and the critical region `c`.
+The relevant parameters are the significance level `alpha`, the number of deviations in the population $M$ `popdev`, the population size $N$ `popn`, and the critical region `c`.
 
 ```{r} 
 library(FSaudit)
