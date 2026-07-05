@@ -39,7 +39,7 @@ phyper(1, 17, 314, 60, lower.tail = FALSE)
  
 ### Exercise 1.2 Binomial distribution
  
-The relevant `R functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and `$\pi$ = M / N`.
+The relevant `R` functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and $\pi = M / N$.
  
 ```{r}
 dbinom(x = 1, size = 60, prob = 17 / 331)

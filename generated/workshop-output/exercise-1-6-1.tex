@@ -4,6 +4,9 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,11 +15,13 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 qchisq(p = .95, df = 9)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 16.91898
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$ distributed variable
