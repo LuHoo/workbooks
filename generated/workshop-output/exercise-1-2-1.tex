@@ -4,6 +4,9 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent The relevant \ttblue{R} functions are \ttblue{dbinom()} for the probabilities $P(k = k)$ and \ttblue{pbinom()} for cumulative probabilities $P(k \leq k)$. Both functions use the parameters \ttblue{k}, \ttblue{n} and $\pi = M / N$.
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,16 +15,16 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 dbinom(x = 1, size = 60, prob = 17 / 331)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.1373314
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 pbinom(1, 60, 17 / 331)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.1796079
 \end{Verbatim}
 \endgroup

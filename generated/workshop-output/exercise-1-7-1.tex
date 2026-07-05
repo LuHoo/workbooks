@@ -4,6 +4,9 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent Hypothesis testing is done with the function \ttblue{qf}, where we use the argument \ttblue{lower.tail = FALSE} to indicate the direction of the test.
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,11 +15,15 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 (f_crit <- qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE))
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 1.996271
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent In the example above, the critical value of the $F$ statistic is 1.996271. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not.
+
+\noindent The probability of obtaining this particular value of the test statistic is calculated with the \ttblue{pf} function.

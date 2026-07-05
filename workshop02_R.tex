@@ -21,17 +21,10 @@ Let's dive into the exercises and explore the practical applications of the conc
 
 \textbf{Hypergeometric distribution} 
 
-The \ttblue{R} function \ttblue{dhyper()} requires four arguments: $k, M, (N - M)$, and $n$. The prefix \ttblue{d} indicates that the function is a density function.
-
 \input{generated/workshop-output/exercise-1-1-1}
 
-\emph{Cumulative probabilities}\index{cumulative probability}\index{probability!cumulative} $P(\stoch{k}\leq k)$ (the probability of finding not more than $k$ errors) are obtained with \ttblue{phyper()}. For example, if we are interested in the probability of finding no more than one error, we use \ttblue{phyper(1, 17, 314, 60)}. In this case the prefix \ttblue{p} indicates the (cumulative) probability function.
-
+\index{cumulative probability}\index{probability!cumulative}
 \input{generated/workshop-output/exercise-1-1-2}
-
-We see that the result for the cumulative function equals that of the sum of the two individual probabilities.
-
-Probabilities in the right-hand tail $P(\stoch{k} > k)$ can be calculated by passing the additional argument \ttblue{lower.tail = FALSE}. For example, the probability $P(\stoch{k} > 1)$ is calculated by
 
 \input{generated/workshop-output/exercise-1-1-3}
 
@@ -44,8 +37,6 @@ Probabilities in the right-hand tail $P(\stoch{k} > k)$ can be calculated by pas
 
 \textbf{Binomial distribution} 
 
-The relevant \ttblue{R} functions are \ttblue{dbinom()} for the probabilities $P(\stoch{k} = k)$ and \ttblue{pbinom()} for cumulative probabilities $P(\stoch{k} \leq k)$. Both functions use the parameters \ttblue{k}, \ttblue{n} and \ttblue{$\pi$ = M / N}.
-
 \input{generated/workshop-output/exercise-1-2-1}
 \end{exercise}
 
@@ -56,13 +47,7 @@ The relevant \ttblue{R} functions are \ttblue{dbinom()} for the probabilities $P
 
 \textbf{Poisson distribution} 
 
-The functions \ttblue{dpois()} and \ttblue{ppois()} are used for the calculation of probabilities from the Poisson distribution. They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$. For the \emph{Case: Number of students} remember that $n = 60$ and $\pi = 17 / 331$.
-
 \input{generated/workshop-output/exercise-1-3-1}
-
-The probability of finding one error is 14.14\%.
-
-To calculate the probability of finding no more than one error in the sample of 60 Ph.D.s, use 
 
 \input{generated/workshop-output/exercise-1-3-2}
 
@@ -75,13 +60,7 @@ To calculate the probability of finding no more than one error in the sample of 
 
 \textbf{Normal distribution} 
 
-In \ttblue{R} we use the function \ttblue{pnorm}, that uses the arguments \ttblue{q} for the sampling result that we evaluate, \ttblue{mean} for the population mean, and \ttblue{sd} for the standard deviation of the mean.
-
 \input{generated/workshop-output/exercise-1-4-1}
-
-Note that the syntax is more elaborate than what we have done so far. In \ttblue{R} we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
-
-There are two advantages to using argument names and values. First, the command is easier to interpret by a reviewer. Second, we can pass the arguments in any order. The following commands are therefore equivalent:
 
 \input{generated/workshop-output/exercise-1-4-2}
 
@@ -94,11 +73,7 @@ There are two advantages to using argument names and values. First, the command 
 
 \textbf{Student's t distribution} \marginnote{Section \ref{sec:student_t_distribution}}
 
-To calculate the probability found of 14.7\%, we use the function \ttblue{pt()} with arguments \ttblue{x} for the boundary value and \ttblue{df} for the number of degrees of freedom.
-
 \input{generated/workshop-output/exercise-1-5-1}
-
-The probability is 14.7\%. Notice that we used another shortcut notation: we added brackets to the assignment of the \ttblue{t\_val} variable, so that the assigned value is returned immediately.
 
 \end{exercise}
 
@@ -109,15 +84,9 @@ The probability is 14.7\%. Notice that we used another shortcut notation: we add
 
 \textbf{\texorpdfstring{$\chi^2$}{chi-squared} distribution} 
 
-The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
-
 \input{generated/workshop-output/exercise-1-6-1}
 
-Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$ distributed variable
-
 \input{generated/workshop-output/exercise-1-6-2}
-
-These two results are then used to calculate the upper and lower 90\% confidence bounds of the population variance.
 
 \end{exercise}
 
@@ -128,13 +97,7 @@ These two results are then used to calculate the upper and lower 90\% confidence
 
 \textbf{F distribution} 
 
-Hypothesis testing is done with the function \ttblue{qf}, where we use the argument \ttblue{lower.tail = FALSE} to indicate the direction of the test.
-
 \input{generated/workshop-output/exercise-1-7-1}
-
-In the example above, the critical value of the $F$-statistic is 1.996. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not. 
-
-The probability of obtaining this particular value of the test statistic is calculated with the \ttblue{pf} function.
 
 \input{generated/workshop-output/exercise-1-7-2}
 

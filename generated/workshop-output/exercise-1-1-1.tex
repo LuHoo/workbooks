@@ -4,6 +4,10 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent The \ttblue{R} function \ttblue{dhyper()} requires four arguments: $k, M, (N - M)$, and $n$.
+The prefix \ttblue{d} indicates that the function is a density function.
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,17 +16,18 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 dhyper(x = 0, m = 17, n = 314, k = 60)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.03036498
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 dhyper(x = 1, m = 17, n = 314, k = 60)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.1214599
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+\noindent \emph{Cumulative probabilities} $P(k \leq k)$ (the probability of finding not more than $k$ errors) are obtained with \ttblue{phyper()}. For example, if we are interested in the probability of finding no more than one error, we use \ttblue{phyper(1, 17, 314, 60)}. In this case the prefix \ttblue{p} indicates the (cumulative) probability function.

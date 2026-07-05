@@ -4,6 +4,9 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent To calculate the probability found of 14.7\%, we use the function \ttblue{pt()} with arguments \ttblue{x} for the boundary value and \ttblue{df} for the number of degrees of freedom.
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,17 +15,19 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 (t_val <- (1004 - 1030) / (73.8 / sqrt(10)))
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] -1.114082
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 pt(t_val, 9)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.1470553
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent The probability is 14.7\%. Notice that we used another shortcut notation: we added brackets to the assignment of the \ttblue{t\_val} variable, so that the assigned value is returned immediately.

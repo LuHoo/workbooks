@@ -4,6 +4,11 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent The functions \ttblue{dpois()} and \ttblue{ppois()} are used for the calculation of probabilities from the Poisson distribution.
+They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$.
+For the \emph{Case: Number of students} remember that $n = 60$ and $\pi = 17 / 331$.
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,17 +17,21 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 dpois(1, 60 * 17/ 331)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.1414044
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 dpois(3, 60 * 17/ 331)
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.2237979
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent The probability of finding one error is 14.14\%.
+
+\noindent To calculate the probability of finding no more than one error in the sample of 60 Ph.D.s, use

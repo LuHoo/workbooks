@@ -4,6 +4,9 @@
 % Source: notebooks/support/probability-distributions/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent In \ttblue{R} we use the function \ttblue{pnorm}, that uses the arguments \ttblue{q} for the sampling result that we evaluate, \ttblue{mean} for the population mean, and \ttblue{sd} for the standard deviation of the mean.
+
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -12,11 +15,15 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
-\begin{Verbatim}[formatcom=\color{ada_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 pnorm(q = 1012, mean = 1030, sd = 115.26/sqrt(200))
 \end{Verbatim}
-\begin{Verbatim}[formatcom=\color{ada_light_blue}]
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.01360269
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent Note that the syntax is more elaborate than what we have done so far. In \ttblue{R} we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
+
+\noindent There are two advantages to using argument names and values. First, the command is easier to interpret by a reviewer. Second, we can pass the arguments in any order. The following commands are therefore equivalent:
