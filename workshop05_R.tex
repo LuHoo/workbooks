@@ -5,23 +5,11 @@
 
 \textbf{Effect of the critical region on the sample size}
 
-The results on page \pageref{eq:sample_size _calculation_att} are obtained with the \ttblue{FSaudit} package, first by creating an attribute object, filling it with the parameters of the test, and then applying the \ttblue{size()} function.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{library(FSaudit)}
-\textcolor{KPMG_blue}{mySample <- att_obj(alpha = .1, popdev = 60, popn = 1200, c = 0)}
-\textcolor{KPMG_blue}{mySample <- size(mySample)}
-\textcolor{KPMG_blue}{mySample$n}
-\textcolor{KPMG_light_blue}{[1] 45}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-1-1}
+\input{generated/workshop-output/exercise-4-1-2}
+\input{generated/workshop-output/exercise-4-1-3}
 \index[FSaudit]{\ttblue{att\_obj}}
 \index[FSaudit]{\ttblue{size}}
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{mySample <- size(mySample, c = 2)}
-\textcolor{KPMG_blue}{mySample$n}
-\textcolor{KPMG_light_blue}{[1] 102}
-\end{Verbatim}
 
 \end{exercise}
 
@@ -30,14 +18,7 @@ The results on page \pageref{eq:sample_size _calculation_att} are obtained with 
 
 \textbf{Significance levels}
 
-On page \pageref{p_value1} we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in \ttblue{R} with the following code:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{phyper(q = 1, m = 60, n = 1140, k = 45)}
-\textcolor{KPMG_light_blue}{[1] 0.3294032}
-\textcolor{KPMG_blue}{phyper(q = 2, m = 60, n = 1140, k = 102)}
-\textcolor{KPMG_light_blue}{[1] 0.09989878}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-2-1}
 
 \end{exercise}
 
@@ -46,12 +27,7 @@ On page \pageref{p_value1} we calculated significance levels for the occurrence 
 
 \textbf{Type II error}
 
-On page \pageref{type_two_error} we also calculated the Type II error.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{phyper(q = 0, m = 24, n = 1176, k = 45, lower.tail = FALSE)}
-\textcolor{KPMG_light_blue}{[1] 0.6040199}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-3-1}
 
 \end{exercise}
 
@@ -60,14 +36,7 @@ On page \pageref{type_two_error} we also calculated the Type II error.
 
 \textbf{One-sided upper bounds}
 
-The one-sided upper bounds $p_U$ in Table \ref{tab:confidence_intervals} are obtained as follows:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{upper(popn = 1200, n = 102, k = 0, alpha = 0.10) / 1200}
-\textcolor{KPMG_light_blue}{[1] 0.02083333}
-\textcolor{KPMG_blue}{upper(popn = 1200, n = 102, k = 3, alpha = 0.10) / 1200}
-\textcolor{KPMG_light_blue}{[1] 0.0625}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-4-1}
 \index[FSaudit]{\ttblue{upper}}
 
 \end{exercise}
@@ -79,33 +48,11 @@ The one-sided upper bounds $p_U$ in Table \ref{tab:confidence_intervals} are obt
 
 \textbf{Case: European innovation subsidies}
 
-Start with the sample size calculation in Step 7 of the nine-step model.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{subsidies <- mus_obj(cl = 0.95, popBv = 12000000, pm = 120000)}
-\textcolor{KPMG_blue}{subsidies <- size(subsidies, ee = 0)}
-\textcolor{KPMG_blue}{subsidies$n}
-\textcolor{KPMG_light_blue}{[1] 299}
-\end{Verbatim}
-\index[FSaudit]{\ttblue{mus\_obj}}\index[FSaudit]{\ttblue{size}}
-
-This result is exactly equal to that of the fixed-attribute sample:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{myAttSample <- att_obj(alpha = 0.05, popn = 12000000, popdev = 120000)}
-\textcolor{KPMG_blue}{myAttSample <- size(myAttSample, c = 0)}
-\textcolor{KPMG_blue}{myAttSample$n}
-\textcolor{KPMG_light_blue}{[1] 299}
-\end{Verbatim}
-\index[FSaudit]{\ttblue{att\_obj}}\index[FSaudit]{\ttblue{size}}
-
-To build a margin for one error, we may increase the critical region to $\{k | k \leq 1\}$, resulting in a sample size of $n =$ 473.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{myAttSample <- size(myAttSample, c = 1)}
-\textcolor{KPMG_blue}{myAttSample$n}
-\textcolor{KPMG_light_blue}{[1] 473}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-5-1}
+\input{generated/workshop-output/exercise-4-5-2}
+\input{generated/workshop-output/exercise-4-5-3}
+\index[FSaudit]{\ttblue{mus\_obj}}
+\index[FSaudit]{\ttblue{att\_obj}}
 \index[FSaudit]{\ttblue{size}}
 
 \end{exercise}
@@ -117,39 +64,12 @@ To build a margin for one error, we may increase the critical region to $\{k | k
 
 \textbf{Case: Accounts receivable circularization}
 
-We start by setting up an MUS object in \ttblue{R} with the \ttblue{FSaudit} package and first verify that the number of sampling units and the total book value of the sampling frame match those in the population.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar <- mus_obj(bv = accounts_receivable$amount,}
-\textcolor{KPMG_blue}{              id = accounts_receivable$invoice)}
-\textcolor{KPMG_blue}{ar$popn}
-\textcolor{KPMG_light_blue}{[1] 10000}
-\textcolor{KPMG_blue}{ar$popBv}
-\textcolor{KPMG_light_blue}{13500000}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-6-1}
+\input{generated/workshop-output/exercise-4-6-2}
+\input{generated/workshop-output/exercise-4-6-3}
 \index[FSaudit]{\ttblue{mus\_obj}}
-
-Sample size calculation:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar <- size(ar, cl = 0.95, pm = 450000, ee = 100000, evalMeth = "Stringer")}
-\textcolor{KPMG_blue}{ar$n}
-\textcolor{KPMG_light_blue}{[1] 145}
-\end{Verbatim}
+\index[FSaudit]{\ttblue{att\_obj}}
 \index[FSaudit]{\ttblue{size}}
-
-Compare this with the sample size calculated using fixed-attribute sampling.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar2 <- att_obj(alpha = 0.05, popn = 13500000, popdev = 450000)}
-\textcolor{KPMG_blue}{ar2 <- size(ar2, c = 1)}
-\textcolor{KPMG_blue}{ar2$n}
-\textcolor{KPMG_light_blue}{[1] 141}
-\textcolor{KPMG_blue}{ar2 <- size(ar2, c = 2)}
-\textcolor{KPMG_blue}{ar2$n}
-\textcolor{KPMG_light_blue}{[1] 187}
-\end{Verbatim}
-\index[FSaudit]{\ttblue{att\_obj}}\index[FSaudit]{\ttblue{size}}\index[FSaudit]{\ttblue{size}}
 
 \end{exercise}
 
@@ -158,30 +78,9 @@ Compare this with the sample size calculated using fixed-attribute sampling.
 
 \textbf{Multiple hits with random selection}
 
-If we draw a sample of size $n = 1,100$ from the \ttblue{accounts\_receivable} population, the largest sampling units have an almost 100\% inclusion probability and with a selection method such as \ttblue{random} are likely to be hit more than once.
- 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{multiple <- mus_obj(bv = accounts_receivable$amount,}
-\textcolor{KPMG_blue}{                    id = accounts_receivable$invoice,}
-\textcolor{KPMG_blue}{                    pm = 36730)}
-\textcolor{KPMG_blue}{multiple <- size(multiple)}
-\textcolor{KPMG_blue}{multiple$n}
-\textcolor{KPMG_light_blue}{[1] 1100}
-\end{Verbatim}
-We select the sample and order it in decreasing order, displaying the six largest book values. 
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{multiple <- select(multiple, selMeth = "random", seed = 1)}
-\textcolor{KPMG_blue}{sample <- multiple$sample}
-\textcolor{KPMG_blue}{head(sample[order(-sample$bv), ])}
-\textcolor{KPMG_light_blue}{          item       bv      cum     unit previous}
-\textcolor{KPMG_light_blue}{938  201719763 12049.70  6248492 10416.59  6236442}
-\textcolor{KPMG_light_blue}{1070 201719763 12049.70  6248492  5378.04  6236442}
-\textcolor{KPMG_light_blue}{243  201734940 11981.19 12301198   782.72 12289216}
-\textcolor{KPMG_light_blue}{543  201723585 10377.48  8822377  8218.39  8811999}
-\textcolor{KPMG_light_blue}{501  201710344  9918.25  7486492  4816.81  7476574}
-\textcolor{KPMG_light_blue}{822  201710344  9918.25  7486492  6251.71  7476574}
-\end{Verbatim}
-This example demonstrates how invoices 201719763 and 201710344 were selected twice.
+\input{generated/workshop-output/exercise-4-7-1}
+\input{generated/workshop-output/exercise-4-7-2}
+\input{generated/workshop-output/exercise-4-7-3}
 
 \end{exercise}
 
@@ -190,67 +89,15 @@ This example demonstrates how invoices 201719763 and 201710344 were selected twi
 
 \textbf{Stringer bound}
 
-We continue the case study sample, and select the sample.\ (See the description of the randomized fixed interval selection method on page~\pageref{par:fixed_interval_selection})
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar <- select(ar, selMeth = "randomized.fixed", seed = 345)}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-8-1}
+\input{generated/workshop-output/exercise-4-8-2}
+\input{generated/workshop-output/exercise-4-8-3}
+\input{generated/workshop-output/exercise-4-8-4}
+\input{generated/workshop-output/exercise-4-8-5}
+\input{generated/workshop-output/exercise-4-8-6}
+\input{generated/workshop-output/exercise-4-8-7}
 \index[FSaudit]{\ttblue{select}}
-
-Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{myResults <- data.frame(item = ar$sample$item, av = ar$sample$bv)}
-\end{Verbatim}
-
-Then we replace the book values of the items 16, 52, and 124, that are found to be in error.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{myResults[c(16, 52, 124) , ]}
-\textcolor{KPMG_light_blue}{         item      av}
-\textcolor{KPMG_light_blue}{16  201702532 5548.53}
-\textcolor{KPMG_light_blue}{52  201720040  670.43}
-\textcolor{KPMG_light_blue}{124 201724407 5761.85}
-\textcolor{KPMG_blue}{myResults[16, 2] <- 4438.82}
-\textcolor{KPMG_blue}{myResults[52, 2] <- 0}
-\textcolor{KPMG_blue}{myResults[124, 2] <- 5531.38}
-\textcolor{KPMG_blue}{myResults[c(16, 52, 124) , ]}
-\textcolor{KPMG_light_blue}{         item      av}
-\textcolor{KPMG_light_blue}{16  201702532 4438.82}
-\textcolor{KPMG_light_blue}{52  201720040    0.00}
-\textcolor{KPMG_light_blue}{124 201724407 5531.38}
-\end{Verbatim}
-
-The list of audit values is then submitted to the MUS object for evaluation.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar <- evaluate(ar, av = myResults$av, evalMeth = "stringer")}
-\end{Verbatim}
 \index[FSaudit]{\ttblue{evaluate}}
-
-The results of the Stringer bound evaluation as presented in Tables 5.6 and 5.7 are stored in the \ttblue{Precision calculation} attribute.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar$evalResults$Over$`Precision calculation`}
-\textcolor{KPMG_light_blue}{  m      taint projMis100 projMisst     mU mUincr   pgw100  precision}
-\textcolor{KPMG_light_blue}{1 0         NA         NA        NA 276050     NA       NA 276050.000}
-\textcolor{KPMG_light_blue}{2 1 1.00000000   93103.45 93103.448 436007 159957 66853.55  66853.552}
-\textcolor{KPMG_light_blue}{3 2 0.20000072  186206.90 18620.757 577535 141528 48424.55   9684.945}
-\textcolor{KPMG_light_blue}{4 3 0.03999931  279310.34  3724.073 710132 132597 39493.55   1579.715}
-\end{Verbatim}
-
-The upper bounds $M_U$ in Table \ref{tab:confidence_intervals_MUS} are calculated with the \ttblue{upper} function from the \ttblue{FSaudit} package.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{upper(k = 0, popn = 13500000, n = 145, alpha = .05)}
-\textcolor{KPMG_light_blue}{[1] 276050}
-\textcolor{KPMG_blue}{upper(k = 1, popn = 13500000, n = 145, alpha = .05)}
-\textcolor{KPMG_light_blue}{[1] 436007}
-\textcolor{KPMG_blue}{upper(k = 2, popn = 13500000, n = 145, alpha = .05)}
-\textcolor{KPMG_light_blue}{[1] 577535}
-\textcolor{KPMG_blue}{upper(k = 3, popn = 13500000, n = 145, alpha = .05)}
-\textcolor{KPMG_light_blue}{[1] 710132}
-\end{Verbatim}
 \index[FSaudit]{\ttblue{upper}}
 
 \end{exercise}
@@ -260,23 +107,7 @@ The upper bounds $M_U$ in Table \ref{tab:confidence_intervals_MUS} are calculate
 
 \textbf{Cell evaluation}
 
-The results of the cell evaluation method, as presented in Table \ref{tab:precision_Cell}, can also be obtained, by changing the evaluation method.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar <- evaluate(ar, av = myResults$av, evalMeth = "cell")}
-\textcolor{KPMG_blue}{ar$evalResults$Over$`Precision calculation`}
-\textcolor{KPMG_light_blue}{  m    mum      taint projMisst     t_ave   mUPrev loadspread }
-\textcolor{KPMG_light_blue}{1 0 276050         NA        NA        NA       NA   276050.0 }
-\textcolor{KPMG_light_blue}{2 1 436007 1.00000000 93103.448 1.0000000 276050.0   369153.4 }
-\textcolor{KPMG_light_blue}{3 2 577535 0.20000072 18620.757 0.6000004 436007.0   454627.8 }
-\textcolor{KPMG_light_blue}{4 3 710132 0.03999931  3724.073 0.4133333 454627.8   458351.8 }
-\textcolor{KPMG_light_blue}{  simplespread stageUPL}
-\textcolor{KPMG_light_blue}{1     276050.0 276050.0}
-\textcolor{KPMG_light_blue}{2     436007.0 436007.0}
-\textcolor{KPMG_light_blue}{3     346521.2 454627.8}
-\textcolor{KPMG_light_blue}{4     293521.2 458351.8}
-
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-9-1}
 
 \end{exercise}
 
@@ -285,40 +116,8 @@ The results of the cell evaluation method, as presented in Table \ref{tab:precis
 
 \textbf{PPS estimator}
 
-Finally, we present results from the \ttblue{pps} evaluation method. For this purpose, we use audit values stored in the variable \ttblue{av2}. The total error amount reflected in \ttblue{av2} is 450,000.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar <- evaluate(ar, av = myResults$av2, evalMeth = "pps")}
-\textcolor{KPMG_blue}{ar$evalResults$'Error estimate'}
-\textcolor{KPMG_light_blue}{[1] 115448.3}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-4-10-1}
+\input{generated/workshop-output/exercise-4-10-2}
 \index[FSaudit]{\ttblue{evaluate}}
 
-A two-sided prediction interval around the PPS estimate is calculated according to Equations \ref{eq:pred_interval_pps} and \ref{eq:sd_t}.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ar$evalResults$'pps estimate'}
-\textcolor{KPMG_light_blue}{[1] 13384552}
-\textcolor{KPMG_blue}{ar$evalResults$'Lower bound'}
-\textcolor{KPMG_light_blue}{[1] 12976389}
-\textcolor{KPMG_blue}{ar$evalResults$'Upper bound'}
-\textcolor{KPMG_light_blue}{[1] 13792714}
-\end{Verbatim}
-
 \end{exercise}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
