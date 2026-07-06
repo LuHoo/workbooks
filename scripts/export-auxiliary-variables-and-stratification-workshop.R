@@ -2,16 +2,18 @@
 
 source("scripts/export-workshop-output.R", chdir = FALSE)
 
-source_file <- "notebooks/support/probability-distributions/support.Rmd"
+source_file <- "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"
 output_dir <- "generated/workshop-output"
 expected_chunks <- c(
-  "1.1" = 3L,
-  "1.2" = 1L,
-  "1.3" = 2L,
-  "1.4" = 2L,
-  "1.5" = 1L,
-  "1.6" = 2L,
-  "1.7" = 2L
+  "3.1" = 1L,
+  "3.2" = 7L,
+  "3.3" = 4L,
+  "3.4" = 3L,
+  "3.5" = 3L,
+  "3.6" = 4L,
+  "3.7" = 7L,
+  "3.8" = 2L,
+  "3.9" = 7L
 )
 
 for (exercise in names(expected_chunks)) {

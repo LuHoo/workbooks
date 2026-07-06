@@ -2,16 +2,15 @@
 
 source("scripts/export-workshop-output.R", chdir = FALSE)
 
-source_file <- "notebooks/support/probability-distributions/support.Rmd"
+# Chapter 6 chunks rely on regression-model objects built in chapter 5.
+# Source the chapter 5 wrapper in-process to preserve object state.
+source("scripts/export-regression-analysis-workshop.R", chdir = FALSE)
+
+source_file <- "notebooks/support/goodness-of-fit/support.Rmd"
 output_dir <- "generated/workshop-output"
 expected_chunks <- c(
-  "1.1" = 3L,
-  "1.2" = 1L,
-  "1.3" = 2L,
-  "1.4" = 2L,
-  "1.5" = 1L,
-  "1.6" = 2L,
-  "1.7" = 2L
+  "6.1" = 1L,
+  "6.2" = 18L
 )
 
 for (exercise in names(expected_chunks)) {
