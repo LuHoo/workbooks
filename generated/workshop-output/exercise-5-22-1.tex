@@ -43,7 +43,7 @@ AIC(ussteamco.mod.2)
 \par\addvspace{\topsep}
 \noindent The AIC values shown above can be compared directly because all four models are fitted to the same response data (\ttblue{USSteamCoEstim}). Model \ttblue{mod.3} is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of \ttblue{mod.3} is not directly comparable with those of the earlier models. Instead, \ttblue{mod.3} should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
 
-\noindent The AIC value of the \ttblue{model\\_backward} does not quite match the output of the \ttblue{step} function. This can be explained as follows.
+\noindent The AIC value of the \ttblue{model\_backward} does not quite match the output of the \ttblue{step} function. This can be explained as follows.
 
 \noindent The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,

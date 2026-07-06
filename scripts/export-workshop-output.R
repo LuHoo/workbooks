@@ -179,11 +179,13 @@ render_r_chunk_to_latex <- function(chunk_lines, envir) {
 
 # Stage 5: Transform Markdown/LaTeX.
 escape_latex <- function(text) {
-  text <- gsub("\\\\%", "%", text)
-  text <- gsub("%", paste0(intToUtf8(92L), "%"), text, fixed = TRUE)
-  text <- gsub("&", "\\\\&", text, fixed = TRUE)
-  text <- gsub("_", "\\\\_", text, fixed = TRUE)
-  gsub("#", "\\\\#", text, fixed = TRUE)
+  # Normalize accidental repeated escapes (e.g., \\_ -> \_).
+  text <- gsub("(\\\\\\\\)+([_%&#])", "\\\\\\\\\\2", text, perl = TRUE)
+  # Escape only symbols that are not already escaped.
+  text <- gsub("(?<!\\\\)%", "\\\\%", text, perl = TRUE)
+  text <- gsub("(?<!\\\\)&", "\\\\&", text, perl = TRUE)
+  text <- gsub("(?<!\\\\)_", "\\\\_", text, perl = TRUE)
+  gsub("(?<!\\\\)#", "\\\\#", text, perl = TRUE)
 }
 
 evaluate_inline_r <- function(text, inline_env, source_file) {
