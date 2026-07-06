@@ -2781,20 +2781,7 @@ To run the exercises in this workshop, we need to load a few packages.
 
 \textbf{The US SteamCo data file}
 
-Throughout this workshop, we work with the \ttblue{USSteamCo} data file, this is available in the \ttblue{aicpa} package. The data file is used in the AICPA Guide to Audit Analytics, Exhibit B-3.
-
-The \ttblue{head} function shows the values of the variables (columns) in the first few observations (rows) from the dataset.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{head(USSteamCo)}
-\textcolor{KPMG_light_blue}{   month  revenue production coolDD heatDD}
-\textcolor{KPMG_light_blue}{1 Jan-11 23304096     659640      0   1021}
-\textcolor{KPMG_light_blue}{2 Feb-11 24552000     686144      0    794}
-\textcolor{KPMG_light_blue}{3 Mar-11 14804728     416464      0    717}
-\textcolor{KPMG_light_blue}{4 Apr-11 11265320     324456      1    354}
-\textcolor{KPMG_light_blue}{5 May-11  5945904     151104     72    114}
-\textcolor{KPMG_light_blue}{6 Jun-11 10379712     479264    239      4}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-2-1}
 
 \paragraph{Steam production} is measured by mass in units of thousands of pounds. These were internal data from a source outside the company's financial reporting system.\footnote{AAG DATA B.19} 
 \paragraph{Cooling and heating degree day (DD)} data (external data) were used in the preliminary analysis. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period. 
@@ -2809,105 +2796,14 @@ The \ttblue{head} function shows the values of the variables (columns) in the fi
 
 \textbf{Summarizing and plotting the data}
 
-The \ttblue{summary} command produces summary statistics of all variables in the dataset, the length (number of data points) for character types (such as \ttblue{month}) and distribution statistics for numeric types.\footnote{Use \ttblue{class} to find out the variable type.}
-
-\noindent
-\begin{minipage}{\textwidth}
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{summary(USSteamCo)}
-\textcolor{KPMG_light_blue}{   month              revenue           production         coolDD   }
-\textcolor{KPMG_light_blue}{Length:48          Min.   : 4809952   Min.   :151104   Min.   :  0.0}
-\textcolor{KPMG_light_blue}{Class :character   1st Qu.:10325796   1st Qu.:371474   1st Qu.:  0.0}
-\textcolor{KPMG_light_blue}{Mode  :character   Median :13542764   Median :502280   Median : 21.0}
-\textcolor{KPMG_light_blue}{                   Mean   :14032843   Mean   :493034   Mean   :113.3}
-\textcolor{KPMG_light_blue}{                   3rd Qu.:17865242   3rd Qu.:646926   3rd Qu.:203.8}
-\textcolor{KPMG_light_blue}{                   Max.   :26792280   Max.   :805600   Max.   :505.0}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{    heatDD    }
-\textcolor{KPMG_light_blue}{Min.   :   0.0}
-\textcolor{KPMG_light_blue}{1st Qu.:  10.5}
-\textcolor{KPMG_light_blue}{Median : 258.5}
-\textcolor{KPMG_light_blue}{Mean   : 367.3}
-\textcolor{KPMG_light_blue}{3rd Qu.: 690.0}
-\textcolor{KPMG_light_blue}{Max.   :1123.0}
-\textcolor{KPMG_light_blue}{}
-\end{Verbatim}
-\end{minipage}
-
-We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section \ref{sub:disaggregation_ch07}.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{USSteamCo$summer = c(0,0,0,0,1,1,1,1,1,0,0,0)}
-\end{Verbatim}
-
-We reformat the \ttblue{month} variable, that has a character type, into the \ttblue{date} variable.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{USSteamCo$date = seq(as.Date("2011-01-01"),}
-\textcolor{KPMG_blue}{                     by = "month", length.out = 48)}
-\end{Verbatim}
-
-We split the data file into an estimation set and a hold-out set.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{USSteamCoEstim <- USSteamCo[ 1:36,]}
-\textcolor{KPMG_blue}{USSteamCoHold  <- USSteamCo[37:48,]}
-\end{Verbatim}
-
-Figure \ref{fig:H7_Histograms} shows the histograms of the data in the US SteamCo estimation set.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{hist_revenue <-}
-\textcolor{KPMG_blue}{  ggplot(USSteamCoEstim, aes(x=revenue)) + }
-\textcolor{KPMG_blue}{  geom_histogram(binwidth = 4000000, fill = "#00338D")}
-\textcolor{KPMG_blue}{hist_production <- }
-\textcolor{KPMG_blue}{   ggplot(USSteamCoEstim, aes(x=production)) + }
-\textcolor{KPMG_blue}{  geom_histogram(binwidth = 50000, fill = "#00338D")}
-\textcolor{KPMG_blue}{hist_coolDD <-}
-\textcolor{KPMG_blue}{   ggplot(USSteamCoEstim, aes(x=coolDD)) + }
-\textcolor{KPMG_blue}{  geom_histogram(binwidth = 50, fill = "#00338D")}
-\textcolor{KPMG_blue}{hist_heatDD <-}
-\textcolor{KPMG_blue}{   ggplot(USSteamCoEstim, aes(x=heatDD)) + }
-\textcolor{KPMG_blue}{  geom_histogram(binwidth = 100, fill = "#00338D")}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{grid.arrange(hist_revenue, hist_production, }
-\textcolor{KPMG_blue}{             hist_coolDD, hist_heatDD, ncol=2)}
-\end{Verbatim}
-
-Figure \ref{fig:H7_Time_series_plots} shows the time-series plots for the same dataset. 
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{rev_range <- range(USSteamCoEstim$revenue, na.rm = TRUE)}
-\textcolor{KPMG_blue}{prod_range <- range(USSteamCoEstim$production, na.rm = TRUE)}
-\textcolor{KPMG_blue}{ggplot(data = USSteamCoEstim, aes(x = date)) +}
-\textcolor{KPMG_blue}{  geom_line(aes(y = revenue), colour = "#00338D") +   }        
-\textcolor{KPMG_blue}{  geom_line(aes(y = scales::rescale(production, to = rev_range)), }
-\textcolor{KPMG_blue}{            colour = "#BC204B") +            }                 
-\textcolor{KPMG_blue}{  scale_y_continuous(}
-\textcolor{KPMG_blue}{    name = "Revenue",      }                                   
-\textcolor{KPMG_blue}{    sec.axis = sec_axis(~scales::rescale(., from = rev_range,  }
-\textcolor{KPMG_blue}{                        to = prod_range), name = "Production")) +    }     
-\textcolor{KPMG_blue}{  theme(}
-\textcolor{KPMG_blue}{   axis.title.x = element_blank(),}
-\textcolor{KPMG_blue}{   axis.title.y.left = element_text(color = "#00338D"),}
-\textcolor{KPMG_blue}{   axis.title.y.right = element_text(color = "#BC204B")}
-\textcolor{KPMG_blue}{ )}
-\end{Verbatim}
-
-Figure \ref{fig:H7_scatterplot} shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ggplot(USSteamCoEstim, aes(x=production, y=revenue)) + }
-\textcolor{KPMG_blue}{  geom_point(color = "#00338D")}
-\end{Verbatim}
-
-The enhanced scatter plot in Figure \ref{fig:H7_Enhanced_scatterplot} is obtained by running the following code.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{scatterplot(revenue ~ production, }
-\textcolor{KPMG_blue}{            data = USSteamCoEstim,}
-\textcolor{KPMG_blue}{            smooth = FALSE)}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-3-1}
+\input{generated/workshop-output/exercise-5-3-2}
+\input{generated/workshop-output/exercise-5-3-3}
+\input{generated/workshop-output/exercise-5-3-4}
+\input{generated/workshop-output/exercise-5-3-5}
+\input{generated/workshop-output/exercise-5-3-6}
+\input{generated/workshop-output/exercise-5-3-7}
+\input{generated/workshop-output/exercise-5-3-8}
 
 \end{exercise}
 
@@ -2918,27 +2814,7 @@ The enhanced scatter plot in Figure \ref{fig:H7_Enhanced_scatterplot} is obtaine
 
 \textbf{The base model} \ttblue{mod.0}
 
-Figure \ref{fig:H7_Enhanced_scatterplot} shows that there is a positive (increasing) relationship: as production increases, so does revenue. 
-
-We use the \ttblue{R} function \ttblue{lm} (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set \ttblue{USSteamCoEstim}, as explained in Section \ref{sub:quick_overview}. A brief summary of the model is obtained with the function \ttblue{brief}.
-
-% \textcolor{KPMG_blue}{ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)}
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)}
-\textcolor{KPMG_blue}{brief(ussteamco.mod.0)}
-\textcolor{KPMG_light_blue}{           (Intercept) production}
-\textcolor{KPMG_light_blue}{Estimate       4897663      18.99}
-\textcolor{KPMG_light_blue}{Std. Error     2014855       4.02}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{ Residual SD = 4112487 on 34 df, R-squared = 0.397 }
-\end{Verbatim}
-
-The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$,  and the estimate of the slope $\beta_1$, $b_1 = 18.99$. As a result, the regression line for this model is expressed as
-
-\begin{equation*}
-\hat{y} = 4,897,663 + 18.99 x
-\end{equation*}
+\input{generated/workshop-output/exercise-5-4-1}
 
 \end{exercise}
 
@@ -2947,30 +2823,7 @@ The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$,  and the estimate of
 
 \textbf{The full summary of }\ttblue{mod.0}
 
-A full summary of \ttblue{mod.0} can be obtained with the \ttblue{summary} function.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{summary(ussteamco.mod.0)}
-\textcolor{KPMG_light_blue}{Call:}
-\textcolor{KPMG_light_blue}{lm(formula = revenue ~ production, data = USSteamCoEstim)}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residuals:}
-\textcolor{KPMG_light_blue}{     Min       1Q   Median       3Q      Max }
-\textcolor{KPMG_light_blue}{-7108228 -3596579  -980208  3571679  7665686 }
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Coefficients:}
-\textcolor{KPMG_light_blue}{             Estimate Std. Error t value Pr(>|t|)    }
-\textcolor{KPMG_light_blue}{(Intercept) 4.898e+06  2.015e+06   2.431  0.0205 *  }
-\textcolor{KPMG_light_blue}{production  1.899e+01  4.017e+00   4.728 3.86e-05 ***}
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residual standard error: 4112000 on 34 degrees of freedom}
-\textcolor{KPMG_light_blue}{Multiple R-squared:  0.3967,  Adjusted R-squared:  0.3789 }
-\textcolor{KPMG_light_blue}{F-statistic: 22.35 on 1 and 34 DF,  p-value: 3.86e-05}
-\end{Verbatim}
-
-In addition to the statistics produced by \ttblue{brief}, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance (these are discussed in Section \ref{sub:testing_significance_of_independent_variables}), the multiple $r^2$ and adjusted $r^2$ (See Section \ref{sec:analysis_of_variance}), and the $F$ statistic with its $p$ value (Section \ref{sub:testing_significance_of_the_model}).
+\input{generated/workshop-output/exercise-5-5-1}
 
 \end{exercise}
 
@@ -2980,30 +2833,8 @@ In addition to the statistics produced by \ttblue{brief}, it provides insight in
 
 \textbf{Correlations and correlogram}
 
-The correlations in Table \ref{tab:correlations_USSteamCo} are calculated using the \ttblue{cor} function.
-
-\bigskip
-\noindent
-\begin{minipage}{\textwidth}
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{(cor_ussteam <- cor(USSteamCoEstim[, 2:5]))}
-\textcolor{KPMG_light_blue}{              revenue  production     coolDD      heatDD}
-\textcolor{KPMG_light_blue}{revenue     1.0000000  0.62980737 -0.1304217  0.65409600}
-\textcolor{KPMG_light_blue}{production  0.6298074  1.00000000  0.5787927 -0.04872165}
-\textcolor{KPMG_light_blue}{coolDD     -0.1304217  0.57879271  1.0000000 -0.72481123}
-\textcolor{KPMG_light_blue}{heatDD      0.6540960 -0.04872165 -0.7248112  1.00000000}
-\textcolor{KPMG_light_blue}{}
-\end{Verbatim}
-\end{minipage}
-
-The correlogram in Figure \ref{fig:H7_Correlogram} is produced by
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{corrplot(cor_ussteam, }
-\textcolor{KPMG_blue}{         tl.col = "black",}
-\textcolor{KPMG_blue}{         col=colorRampPalette(c("#bc204b","white","#00348d"))(100),}
-\textcolor{KPMG_blue}{         col.lim=c(-1,1))}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-6-1}
+\input{generated/workshop-output/exercise-5-6-2}
 
 \end{exercise}
 
@@ -3012,105 +2843,10 @@ The correlogram in Figure \ref{fig:H7_Correlogram} is produced by
 
 \textbf{Modelling strategies}
 
-The \ttblue{step} function can be used to implement both backward and forward methods. The \ttblue{direction} argument specifies whether the stepwise algorithm should proceed forward (\ttblue{forward}), backward (\ttblue{backward}), or both (\ttblue{both}). The \ttblue{scope} argument specifies the range of models to be searched, whereas the \ttblue{k} argument\footnote{Use \ttblue{k = 2} for AIC and \ttblue{k = log(n)} for BIC} may be used to use BIC instead of the default AIC as a criterion. 
-
-We start with the forward method. From a model that only uses the constant (\ttblue{revenue $\sim$ 1}), we add variables one by one. The variable that the largest effect on the criterion, in this example, the default \ttblue{AIC}, is selected for inclusion in the model.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{model_forward <- lm(revenue ~ 1, data = USSteamCoEstim) } 
-\textcolor{KPMG_blue}{model_forward <- step(model_forward, }
-\textcolor{KPMG_blue}{+                     direction = "forward", }
-\textcolor{KPMG_blue}{+                     scope = formula(~ production + coolDD + heatDD))  }
-\textcolor{KPMG_light_blue}{Start:  AIC=1114.66}
-\textcolor{KPMG_light_blue}{revenue ~ 1}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{             Df  Sum of Sq        RSS    AIC}
-\textcolor{KPMG_light_blue}{+ heatDD      1 4.0776e+14 5.4531e+14 1096.6}
-\textcolor{KPMG_light_blue}{+ production  1 3.7804e+14 5.7503e+14 1098.5}
-\textcolor{KPMG_light_blue}{<none>                     9.5307e+14 1114.7}
-\textcolor{KPMG_light_blue}{+ coolDD      1 1.6212e+13 9.3686e+14 1116.0}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Step:  AIC=1096.56}
-\textcolor{KPMG_light_blue}{revenue ~ heatDD}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{             Df  Sum of Sq        RSS    AIC}
-\textcolor{KPMG_light_blue}{+ production  1 4.1826e+14 1.2705e+14 1046.1}
-\textcolor{KPMG_light_blue}{+ coolDD      1 2.3716e+14 3.0814e+14 1078.0}
-\textcolor{KPMG_light_blue}{<none>                     5.4531e+14 1096.6}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Step:  AIC=1046.11}
-\textcolor{KPMG_light_blue}{revenue ~ heatDD + production}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{         Df  Sum of Sq        RSS    AIC}
-\textcolor{KPMG_light_blue}{<none>                 1.2705e+14 1046.1}
-\textcolor{KPMG_light_blue}{+ coolDD  1 1.5042e+12 1.2554e+14 1047.7}
-\textcolor{KPMG_blue}{}
-\end{Verbatim}
-Starting with AIC = 1114.66 of a model with only a constant, \ttblue{R} evaluates the inclusion of each of the available independent variables and their effect on the resulting AIC. In the first step, it appears that including \ttblue{heatDD} has the best effect on AIC, as it reduces from 1114.66 to 1096.56. 
-
-Using this value of AIC = 1096.56 as the new starting value, \ttblue{R} evaluates if inclusion of any of the remaining variables has a favorable effect. It finds that including \ttblue{production} can further reduce the AIC to 1046.11.
-
-In the last step, we see that including \ttblue{coolDD} does not further reduce the AIC, leading to the final model \ttblue{revenue $\sim$ heatDD + production}. The summary of this model is:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{summary(model_forward)  }
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Call:}
-\textcolor{KPMG_light_blue}{lm(formula = revenue ~ heatDD + production, data = USSteamCoEstim)}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residuals:}
-\textcolor{KPMG_light_blue}{     Min       1Q   Median       3Q      Max }
-\textcolor{KPMG_light_blue}{-5123612  -743166   138006  1012863  4701869 }
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Coefficients:}
-\textcolor{KPMG_light_blue}{             Estimate Std. Error t value Pr(>|t|)    }
-\textcolor{KPMG_light_blue}{(Intercept) 7.272e+05  1.036e+06   0.702    0.488    }
-\textcolor{KPMG_light_blue}{heatDD      1.048e+04  9.715e+02  10.787 2.35e-12 ***}
-\textcolor{KPMG_light_blue}{production  2.000e+01  1.919e+00  10.423 5.68e-12 ***}
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residual standard error: 1962000 on 33 degrees of freedom}
-\textcolor{KPMG_light_blue}{Multiple R-squared:  0.8667,  Adjusted R-squared:  0.8586 }
-\textcolor{KPMG_light_blue}{F-statistic: 107.3 on 2 and 33 DF,  p-value: 3.629e-15}
-\end{Verbatim}
-
-Next, we show an example of the backward method, starting with the full model and eliminating variables one by one.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{model_backward <- lm(revenue ~ production + coolDD + heatDD,}
-\textcolor{KPMG_blue}{+                    data = USSteamCoEstim)  }
-\textcolor{KPMG_blue}{model_backward <- step(model_backward, }
-\textcolor{KPMG_blue}{+                      direction = "backward")  }
-\textcolor{KPMG_light_blue}{Start:  AIC=1047.68}
-\textcolor{KPMG_light_blue}{revenue ~ production + coolDD + heatDD}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{             Df  Sum of Sq        RSS    AIC}
-\textcolor{KPMG_light_blue}{- coolDD      1 1.5042e+12 1.2705e+14 1046.1}
-\textcolor{KPMG_light_blue}{<none>                     1.2554e+14 1047.7}
-\textcolor{KPMG_light_blue}{- heatDD      1 9.8390e+13 2.2393e+14 1066.5}
-\textcolor{KPMG_light_blue}{- production  1 1.8260e+14 3.0814e+14 1078.0}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Step:  AIC=1046.11}
-\textcolor{KPMG_light_blue}{revenue ~ production + heatDD}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{             Df  Sum of Sq        RSS    AIC}
-\textcolor{KPMG_light_blue}{<none>                     1.2705e+14 1046.1}
-\textcolor{KPMG_light_blue}{- production  1 4.1826e+14 5.4531e+14 1096.6}
-\textcolor{KPMG_light_blue}{- heatDD      1 4.4798e+14 5.7503e+14 1098.5}
-\end{Verbatim}
-
-We observe that this strategy results into the exact same model.
-
-\bigskip
-To run the stepwise procedure in both directions, we use the following code. Because it results into the same model, we have omitted the output.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{fit_both <- lm(revenue ~ 1, data = USSteamCoEstim)  }
-\textcolor{KPMG_blue}{fit_both <- step(fit_both, }
-\textcolor{KPMG_blue}{                 direction = "both", }
-\textcolor{KPMG_blue}{                 scope = formula(~ production + coolDD + heatDD)) }
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-7-1}
+\input{generated/workshop-output/exercise-5-7-2}
+\input{generated/workshop-output/exercise-5-7-3}
+\input{generated/workshop-output/exercise-5-7-4}
 
 \end{exercise}
 
@@ -3119,35 +2855,7 @@ To run the stepwise procedure in both directions, we use the following code. Bec
 
 \textbf{Multiple independent variables }\ttblue{mod.1}
 
-We now regress $y$ = \ttblue{revenue} on $x_1$ = \ttblue{production}, $x_2$ = \ttblue{coolDD}, and $x_3$ = \ttblue{heatDD}.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.1 <- lm(revenue ~ production + coolDD + heatDD,}
-\textcolor{KPMG_blue}{                      data = USSteamCoEstim)}
-\textcolor{KPMG_blue}{summary(ussteamco.mod.1)}
-\textcolor{KPMG_light_blue}{Call:}
-\textcolor{KPMG_light_blue}{lm(formula = revenue ~ production + coolDD + heatDD,}
-\textcolor{KPMG_light_blue}{             data = USSteamCoEstim)}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residuals:}
-\textcolor{KPMG_light_blue}{     Min       1Q   Median       3Q      Max }
-\textcolor{KPMG_light_blue}{-5404518  -912473   121268   933595  4433427 }
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Coefficients:}
-\textcolor{KPMG_light_blue}{              Estimate Std. Error t value Pr(>|t|)    }
-\textcolor{KPMG_light_blue}{(Intercept)  7.025e+05  1.047e+06   0.671    0.507    }
-\textcolor{KPMG_light_blue}{production   2.155e+01  3.158e+00   6.822 1.03e-07 ***}
-\textcolor{KPMG_light_blue}{coolDD      -2.965e+03  4.789e+03  -0.619    0.540    }
-\textcolor{KPMG_light_blue}{heatDD       9.478e+03  1.893e+03   5.008 1.94e-05 ***}
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residual standard error: 1981000 on 32 degrees of freedom}
-\textcolor{KPMG_light_blue}{Multiple R-squared:  0.8683,  Adjusted R-squared:  0.8559 }
-\textcolor{KPMG_light_blue}{F-statistic: 70.31 on 3 and 32 DF,  p-value: 3.551e-14}
-\end{Verbatim}
-
-Adding the additional variables \texttt{coolDD} and \texttt{heatDD} has improved the fit of the model. The residual standard deviation decreased from 4,112,487 for \texttt{mod.0} to 1,980,698 for \texttt{mod.1}. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods.
+\input{generated/workshop-output/exercise-5-8-1}
 
 \end{exercise}
 
@@ -3156,44 +2864,9 @@ Adding the additional variables \texttt{coolDD} and \texttt{heatDD} has improved
 
 \textbf{Interactions}
 
-In Section \ref{sub:disaggregation_ch07} we developed \ttblue{mod.2}, that incorporates two separate regression lines.
-In addition to the three independent variables, we also account for their interactions with the dummy variable \ttblue{summer}.
-
-The scatterplot in Figure \ref{fig:H7_scat_rev2} is prepared using
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{scat_rev2 <- scatterplot(revenue ~ production | summer, }
-\textcolor{KPMG_blue}{            data = USSteamCoEstim,}
-\textcolor{KPMG_blue}{            id = list(n = 8, cex = 0.8),}
-\textcolor{KPMG_blue}{            regLine=TRUE,}
-\textcolor{KPMG_blue}{            smooth = FALSE)}
-\end{Verbatim}
-
-\noindent Note the special operator \ttblue{|}, that can be expressed as 'given the value of'.
-To call this relationship, we use
-\footnote{The formula specified in the \ttblue{lm} function, \ttblue{revenue $\sim$ production * summer + coolDD * summer + heatDD * summer} can also be written as \ttblue{revenue $\sim$ (production + coolDD + heatDD) * summer}.} 
-\begin{samepage}
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.2 <- lm(revenue ~ production * summer + }
-\textcolor{KPMG_blue}{                        coolDD * summer + heatDD * summer,}
-\textcolor{KPMG_blue}{                      data = USSteamCoEstim)}
-\textcolor{KPMG_light_blue}{}
-\end{Verbatim}
-\end{samepage}
-A brief summary of \ttblue{mod.2} is
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_light_blue}{           (Intercept) production heatDD  coolDD  summer}
-\textcolor{KPMG_light_blue}{Estimate        580713      34.87    933 -111458 4809519}
-\textcolor{KPMG_light_blue}{Std. Error     1299338       3.87   2690   38501 2849202}
-\textcolor{KPMG_light_blue}{           production:summer heatDD:summer coolDD:summer}
-\textcolor{KPMG_light_blue}{Estimate              -24.24        -12777        114963}
-\textcolor{KPMG_light_blue}{Std. Error              6.05         19331         38779}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{ Residual SD = 1483679 on 28 df, R-squared = 0.933 }
-\end{Verbatim}
-
-As a result, this further improved the fit of the model. The residual standard deviation decreased to 1,680,711, and $r^2$ improved to 0.917.
+\input{generated/workshop-output/exercise-5-9-1}
+\input{generated/workshop-output/exercise-5-9-2}
+\input{generated/workshop-output/exercise-5-9-3}
 
 \end{exercise}
 
@@ -3202,12 +2875,7 @@ As a result, this further improved the fit of the model. The residual standard d
 
 \textbf{Time lag}
 
-The cross-correlation plot in Figure \ref{fig:H7_timelag} is created by running:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{with(USSteamCoEstim, }
-\textcolor{KPMG_blue}{     ccf(x = production, y = revenue, lag.max = 4))}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-10-1}
 
 \end{exercise}
 
@@ -3218,11 +2886,7 @@ The cross-correlation plot in Figure \ref{fig:H7_timelag} is created by running:
 
 \textbf{Residual plots}
 
-The residual plots in Figure \ref{fig:H7_residualPlots_mod2} are obtained by:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{residualPlots(ussteamco.mod.2)}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-11-1}
 
 \end{exercise}
 
@@ -3231,11 +2895,7 @@ The residual plots in Figure \ref{fig:H7_residualPlots_mod2} are obtained by:
 
 \textbf{Influence statistics}
 
-Figure \ref{fig:H7-influenceIndexPlot} provides the Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$ values and influential observations.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{influenceIndexPlot(ussteamco.mod.2)}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-12-1}
 
 \end{exercise}
 
@@ -3244,26 +2904,9 @@ Figure \ref{fig:H7-influenceIndexPlot} provides the Influence index plots. From 
 
 \textbf{Leverage points}
 
-We obtain the hat-values of a model by running the \ttblue{hatvalues} function on it.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{hatvals.mod.2 <- hatvalues(ussteamco.mod.2)}
-\end{Verbatim}
-
-The three largest hat-values are then summarized by
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{hatvals.mod.2[order(hatvals.mod.2, decreasing = TRUE)[1:3]]}
-\textcolor{KPMG_light_blue}{       34        29        30 }
-\textcolor{KPMG_light_blue}{0.6194744 0.5187665 0.4899321 }
-\end{Verbatim}
-
-The sum of the hat-values is equal to $k + 1$.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{sum(hatvals.mod.2)}
-\textcolor{KPMG_light_blue}{[1] 8}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-13-1}
+\input{generated/workshop-output/exercise-5-13-2}
+\input{generated/workshop-output/exercise-5-13-3}
 
 \end{exercise}
 
@@ -3272,12 +2915,7 @@ The sum of the hat-values is equal to $k + 1$.
 
 \textbf{Regression outliers}
 
-Figure \ref{fig:H7_qqplot} provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{qqPlot(ussteamco.mod.2, id = list(n = 3))}
-\textcolor{KPMG_light_blue}{[1] 22 34 36}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-14-1}
 
 \end{exercise}
 
@@ -3286,19 +2924,8 @@ Figure \ref{fig:H7_qqplot} provides the QQ plot for \ttblue{ussteamco.mod.2}, wi
 
 \textbf{Influential observations}
 
-We use the \ttblue{cooks.distance} function to obtain Cook's distances for a model. 
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{cooks.mod.2 <- cooks.distance(ussteamco.mod.2)}
-\end{Verbatim}
-
-The three largest Cook's distances are then summarized by
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{cooks.mod.2[order(cooks.mod.2, decreasing = TRUE)[1:3]]}
-\textcolor{KPMG_light_blue}{       34        22        30}
-\textcolor{KPMG_light_blue}{1.0011877 0.4480003 0.2016126}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-15-1}
+\input{generated/workshop-output/exercise-5-15-2}
 
 \end{exercise}
 
@@ -3307,12 +2934,7 @@ The three largest Cook's distances are then summarized by
 
 \textbf{Influence plot}
 
-Figure \ref{fig:H7_influenceplot} shows the hat-values, Studentized residuals, and Cook’s distances for \ttblue{ussteamco.mod.2}. The size of the circles is proportional to the Cook’s distance.
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{influencePlot(ussteamco.mod.2, id=list(n=3, cex=0.8))}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-16-1}
 
 \end{exercise}
 
@@ -3321,30 +2943,8 @@ Figure \ref{fig:H7_influenceplot} shows the hat-values, Studentized residuals, a
 
 \textbf{Winsorizing observation \# 22}
 
-Define the new estimation set. We replace the original value of observation 22 with its winsorized value.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{USSteamCoEstim2 <- USSteamCoEstim}
-\textcolor{KPMG_blue}{p5 <- quantile(ussteamco.mod.2$residuals, 0.05)}
-\textcolor{KPMG_blue}{fit_22 <- fitted(ussteamco.mod.2)[22]}
-\textcolor{KPMG_blue}{USSteamCoEstim2$revenue[22] <- fit_22 + p5}
-\end{Verbatim}
-
-We then fit a new linear model.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,}
-\textcolor{KPMG_blue}{                      data = USSteamCoEstim2)}
-\textcolor{KPMG_blue}{brief(ussteamco.mod.3)}
-\textcolor{KPMG_light_blue}{           (Intercept) production heatDD  coolDD  summer}
-\textcolor{KPMG_light_blue}{Estimate        580713      34.87    933 -111458 4809519}
-\textcolor{KPMG_light_blue}{Std. Error     1299338       3.87   2690   38501 2849202}
-\textcolor{KPMG_light_blue}{           production:summer heatDD:summer coolDD:summer}
-\textcolor{KPMG_light_blue}{Estimate              -24.24        -12777        114963}
-\textcolor{KPMG_light_blue}{Std. Error              6.05         19331         38779}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{ Residual SD = 1483679 on 28 df, R-squared = 0.933}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-17-1}
+\input{generated/workshop-output/exercise-5-17-2}
 
 \end{exercise}
 
@@ -3353,34 +2953,8 @@ We then fit a new linear model.
 
 \textbf{Multicollinearity}
 
-To assess multicollinearity for a model without interactions, like \ttblue{mod.1}, we use the standard \ttblue{vif()} function.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{vif(ussteamco.mod.1)}
-\textcolor{KPMG_light_blue}{production     coolDD     heatDD }
-\textcolor{KPMG_light_blue}{  2.664278   5.599833   3.732744 }
-\end{Verbatim}
-
-None of the VIF factors is greater than ten, and therefore we conclude that there is no serious inflation of variance.
-
-For models that include interactions, like like \ttblue{mod.3}, we use the \ttblue{vif()} function with the additional option \ttblue{type = 'predictor'}. It then calculates the GVIF instead of the standard VIF.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{vif(ussteamco.mod.3,type = 'predictor')}
-\textcolor{KPMG_light_blue}{GVIFs computed for predictors}
-\textcolor{KPMG_light_blue}{               GVIF Df GVIF^(1/(2*Df))             Interacts With}
-\textcolor{KPMG_light_blue}{production 203.6856  3        2.425642                     summer}
-\textcolor{KPMG_light_blue}{heatDD     192.5840  3        2.403090                     summer}
-\textcolor{KPMG_light_blue}{coolDD     226.3290  3        2.468634                     summer}
-\textcolor{KPMG_light_blue}{summer       1.0000  7        1.000000 production, heatDD, coolDD}
-\textcolor{KPMG_light_blue}{   Other Predictors} 
-\textcolor{KPMG_light_blue}{     coolDD, heatDD} 
-\textcolor{KPMG_light_blue}{               --  } 
-\textcolor{KPMG_light_blue}{ production, heatDD} 
-\textcolor{KPMG_light_blue}{ production, coolDD} 
-\end{Verbatim}
-
-We now assess whether any of the predictors has a value $GVIF^(1/(2*Df))$ that is greater than 10. Because there are none (see the column \ttblue{GVIF\^{}(1/(2*Df)}), this model does not suffer from variance inflation.
+\input{generated/workshop-output/exercise-5-18-1}
+\input{generated/workshop-output/exercise-5-18-2}
 
 \end{exercise}
 
@@ -3391,53 +2965,11 @@ We now assess whether any of the predictors has a value $GVIF^(1/(2*Df))$ that i
 
 \textbf{Variance and Total Sum of Squares}
 
-Table \ref{tab:anova_mod0} provides the analysis of variance for \ttblue{mod.0}. We apply the \ttblue{anova()} command to perform this analysis.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{anova(ussteamco.mod.0)}
-\textcolor{KPMG_light_blue}{Analysis of Variance Table}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Response: revenue}
-\textcolor{KPMG_light_blue}{           Df     Sum Sq    Mean Sq F value   Pr(>F)    }
-\textcolor{KPMG_light_blue}{production  1 3.7804e+14 3.7804e+14  22.353 3.86e-05 ***}
-\textcolor{KPMG_light_blue}{Residuals  34 5.7503e+14 1.6913e+13                     }
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\end{Verbatim}
-
-The variance of $y$, $s_y^2 = \frac{\sum(y_i - \bar{y})^2}{n - 1}$, is obtained from
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{var(USSteamCoEstim$revenue)}
-\textcolor{KPMG_light_blue}{2.723051e+13}
-\end{Verbatim}
-
-Total Sum of Squares $\sum(y_i - \bar{y})^2$ is calculated as
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{(mean_y <- mean(USSteamCoEstim$revenue))}
-\textcolor{KPMG_blue}{variation <- USSteamCoEstim$revenue - mean_y}
-\textcolor{KPMG_blue}{squared_variation <- variation^2}
-\textcolor{KPMG_blue}{(total_sum_of_squares <- sum(squared_variation))}
-\textcolor{KPMG_light_blue}{9.530679e+14}
-\end{Verbatim}
-
-Total Sum of Squares is the sum of the elements in the \ttblue{Sum Sq} column of the Analysis of Variance Table.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{anova.mod.0 <- anova(ussteamco.mod.0)}
-\textcolor{KPMG_blue}{anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2]}
-\textcolor{KPMG_light_blue}{9.530679e+14}
-\end{Verbatim}
-
-Therefore, when we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{total_sum_of_squares / 35}
-\textcolor{KPMG_light_blue}{2.723051e+13}
-\end{Verbatim}
-
-This shows how variance is linked to variation.
+\input{generated/workshop-output/exercise-5-19-1}
+\input{generated/workshop-output/exercise-5-19-2}
+\input{generated/workshop-output/exercise-5-19-3}
+\input{generated/workshop-output/exercise-5-19-4}
+\input{generated/workshop-output/exercise-5-19-5}
 
 \end{exercise}
 
@@ -3446,59 +2978,9 @@ This shows how variance is linked to variation.
 
 \textbf{Anova Type I and Type II}
 
-We now turn to a model with multiple independent variables, for example, \ttblue{mod.1}, introduced in Section \ref{sub:multiple_regression}.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{(anova.mod.1 <- anova(ussteamco.mod.1))}
-\textcolor{KPMG_light_blue}{Analysis of Variance Table}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Response: revenue}
-\textcolor{KPMG_light_blue}{           Df     Sum Sq    Mean Sq F value    Pr(>F)    }
-\textcolor{KPMG_light_blue}{production  1 3.7804e+14 3.7804e+14  96.361 3.561e-11 ***}
-\textcolor{KPMG_light_blue}{coolDD      1 3.5110e+14 3.5110e+14  89.493 8.659e-11 ***}
-\textcolor{KPMG_light_blue}{heatDD      1 9.8390e+13 9.8390e+13  25.079 1.942e-05 ***}
-\textcolor{KPMG_light_blue}{Residuals  32 1.2554e+14 3.9232e+12                      }
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\end{Verbatim}
-
-Declaring the independent variables in a different order shows that the calculation of the sum of squares is in sequential order.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.1b <- lm(revenue ~ heatDD + coolDD + production,}
-\textcolor{KPMG_blue}{                       data = USSteamCoEstim)}
-\textcolor{KPMG_blue}{(anova.mod.1b <- anova(ussteamco.mod.1b))}
-\textcolor{KPMG_light_blue}{Analysis of Variance Table}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Response: revenue}
-\textcolor{KPMG_light_blue}{           Df     Sum Sq    Mean Sq F value    Pr(>F)    }
-\textcolor{KPMG_light_blue}{heatDD      1 4.0776e+14 4.0776e+14 103.937 1.411e-11 ***}
-\textcolor{KPMG_light_blue}{coolDD      1 2.3716e+14 2.3716e+14  60.452 7.235e-09 ***}
-\textcolor{KPMG_light_blue}{production  1 1.8260e+14 1.8260e+14  46.545 1.027e-07 ***}
-\textcolor{KPMG_light_blue}{Residuals  32 1.2554e+14 3.9232e+12  }
-\end{Verbatim}
-
-To address this issue, an alternative version of the analysis of variance, referred to as Type II tests, is used. Instead of measuring the contribution of each independent variable sequentially, the analysis shows the contribution of each independent variable if it was the last independent variable added to the model. The analysis is obtained using the command \ttblue{Anova} (with capital A) from the \ttblue{car} package.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{Anova(ussteamco.mod.1)}
-\textcolor{KPMG_light_blue}{Anova Table (Type II tests)}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Response: revenue}
-\textcolor{KPMG_light_blue}{               Sum Sq Df F value    Pr(>F)    }
-\textcolor{KPMG_light_blue}{production 1.8260e+14  1 46.5446 1.027e-07 ***}
-\textcolor{KPMG_light_blue}{coolDD     1.5042e+12  1  0.3834    0.5402    }
-\textcolor{KPMG_light_blue}{heatDD     9.8390e+13  1 25.0793 1.942e-05 ***}
-\textcolor{KPMG_light_blue}{Residuals  1.2554e+14 32                      }
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\textcolor{KPMG_light_blue}{}
-\end{Verbatim}
-
-We see that the marginal effect of adding \ttblue{production}, assuming \ttblue{coolDD} and \ttblue{heatDD} have already been entered into the model, is 1.8260e+14. This is equal to the result obtained from the earlier \ttblue{anova} command on \ttblue{mod.1b}. We also see that the added value of entering \ttblue{coolDD} into the model is limited: its sum of squares is much lower than that of the other two variables, and its related $F$ value is not significant. 
-
-\bigskip
-We have no clear preference for either \ttblue{anova} or \ttblue{Anova}, they both have their merits. \ttblue{anova} decomposes TSS, but that decomposition is dependent on the order in which variables are entered into the equation. \ttblue{Anova} shows the marginal effect of each independent variable, but these marginal effects do not add to TSS.
+\input{generated/workshop-output/exercise-5-20-1}
+\input{generated/workshop-output/exercise-5-20-2}
+\input{generated/workshop-output/exercise-5-20-3}
 
 \end{exercise}
 
@@ -3507,25 +2989,7 @@ We have no clear preference for either \ttblue{anova} or \ttblue{Anova}, they bo
 
 \textbf{Anova with interactions}
 
-The analysis of variance of \ttblue{mod.3} is as follows:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{anova(ussteamco.mod.3)}
-\textcolor{KPMG_light_blue}{Analysis of Variance Table}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Response: revenue}
-\textcolor{KPMG_light_blue}{                  Df     Sum Sq    Mean Sq  F value    Pr(>F)    }
-\textcolor{KPMG_light_blue}{production         1 3.6966e+14 3.6966e+14 167.9259 2.380e-13 ***}
-\textcolor{KPMG_light_blue}{heatDD             1 4.3938e+14 4.3938e+14 199.6019 2.889e-14 ***}
-\textcolor{KPMG_light_blue}{coolDD             1 2.9753e+12 2.9753e+12   1.3516  0.254809    }
-\textcolor{KPMG_light_blue}{summer             1 1.1072e+12 1.1072e+12   0.5030  0.484066    }
-\textcolor{KPMG_light_blue}{production:summer  1 2.2022e+13 2.2022e+13  10.0043  0.003739 ** }
-\textcolor{KPMG_light_blue}{heatDD:summer      1 2.1719e+12 2.1719e+12   0.9867  0.329067    }
-\textcolor{KPMG_light_blue}{coolDD:summer      1 1.9347e+13 1.9347e+13   8.7889  0.006130 ** }
-\textcolor{KPMG_light_blue}{Residuals         28 6.1637e+13 2.2013e+12                       }
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-21-1}
 
 \end{exercise}
 
@@ -3534,39 +2998,8 @@ The analysis of variance of \ttblue{mod.3} is as follows:
 
 \textbf{Comparing models}
 
-We compare the performance of models with four different statistics, the Multiple $r^2$, Adjusted $r^2$ (both obtained from the `summary` function), and the AIC and BIC values. These last two can be called with their own respective commands.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{AIC(ussteamco.mod.0)}
-\textcolor{KPMG_light_blue}{[1] 1202.633}
-\textcolor{KPMG_blue}{AIC(model_backward)}
-\textcolor{KPMG_light_blue}{[1] 1150.277}
-\textcolor{KPMG_blue}{AIC(ussteamco.mod.1)}
-\textcolor{KPMG_light_blue}{[1] 1151.848}
-\textcolor{KPMG_blue}{AIC(ussteamco.mod.2)}
-\textcolor{KPMG_light_blue}{[1] 1143.217}
-\textcolor{KPMG_blue}{AIC(ussteamco.mod.3)}
-\textcolor{KPMG_light_blue}{[1] 1134.239}
-\end{Verbatim}
-
-The AIC and BIC values for \ttblue{model\_backward} may differ from those produced by R’s \ttblue{step} function. This is because \ttblue{AIC()} and \ttblue{BIC()} in \ttblue{R} compute the criteria using the full formulas $\text{AIC} = -2 \ln \hat{L} + 2k$ and $\text{BIC} = -2 \ln \hat{L} + k \ln n$, where $\ln \hat{L}$\nomenclature{$\hat{L}$}{maximized likelihood for the fitted model, used in AIC and BIC calculations} is the maximized log-likelihood and $k$ is the number of estimated parameters. For linear regression with normally distributed errors, $\ln \hat{L} = -\frac{n}{2} \left[\ln (2\pi) + 1 + \ln \left(\frac{\text{SSE}}{n}\right) \right]$, which simplifies the criteria (up to a constant) to $\text{AIC} = n \ln(\text{SSE}/n) + 2k$ and $\text{BIC} = n \ln(\text{SSE}/n) + k \ln n$, where $SSE$ is the sum of squared errors.
-
-However, the \ttblue{step} function omits constant terms that do not affect model comparison, reporting AIC as $n \ln(\text{SSE}/n) + 2k$. The difference between the full and simplified expressions is a constant shift of $n (\ln(2\pi) + 1) + 2$. Here, $n (\ln(2\pi) + 1)$ arises from assumptions about normal errors and sample size, while the extra $+2$ is due to R’s \ttblue{AIC} counting the estimated variance parameter $\sigma^2$ as an additional parameter, increasing the penalty accordingly. As a result, AIC and BIC values in R may differ by a constant even when the underlying formulas appear similar.
-
-Similarly, the BIC values are obtained as follows.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{BIC(ussteamco.mod.0)}
-\textcolor{KPMG_light_blue}{[1] 1207.383}
-\textcolor{KPMG_blue}{BIC(model_backward)}
-\textcolor{KPMG_light_blue}{[1] 1156.611}
-\textcolor{KPMG_blue}{BIC(ussteamco.mod.1)}
-\textcolor{KPMG_light_blue}{[1] 1159.766}
-\textcolor{KPMG_blue}{BIC(ussteamco.mod.2)}
-\textcolor{KPMG_light_blue}{[1] 1157.468}
-\textcolor{KPMG_blue}{BIC(ussteamco.mod.3)}
-\textcolor{KPMG_light_blue}{[1] 1148.49}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-22-1}
+\input{generated/workshop-output/exercise-5-22-2}
 
 \end{exercise}
 
@@ -3577,37 +3010,9 @@ Similarly, the BIC values are obtained as follows.
 
 \textbf{Testing normality}
 
-We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure \ref{fig:H7_hist_normalized_residuals} is obtained by:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{nres <- ussteamco.mod.3$residuals / sd(ussteamco.mod.3$residuals)}
-\textcolor{KPMG_blue}{model3 <- as.data.frame(nres)}
-\textcolor{KPMG_blue}{hist_stand_res <-}
-\textcolor{KPMG_blue}{  ggplot(model3, aes(nres)) + }
-\textcolor{KPMG_blue}{  geom_histogram(aes(y = after_stat(density)),}
-\textcolor{KPMG_blue}{                 breaks = seq(-2, 2, by = 0.5),}
-\textcolor{KPMG_blue}{                 fill = "#00338D") +}
-\textcolor{KPMG_blue}{  stat_function(fun = dnorm, args = list(mean = mean(model3$nres), }
-\textcolor{KPMG_blue}{                                         sd = sd(model3$nres)))}
-\textcolor{KPMG_blue}{hist_stand_res}
-\end{Verbatim}
-
-The QQ plot is produced by 
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{qqPlot(ussteamco.mod.3)}
-\end{Verbatim}
-% \end{minipage}
-
-We use the \ttblue{shapiro.test} function from the \ttblue{stats} package to perform the Shapiro--Wilk normality test on the residuals of \ttblue{ussteamco.mod.3}. The output is as follows:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{shapiro.test(ussteamco.mod.3$residuals)}
-\textcolor{KPMG_light_blue}{  Shapiro-Wilk normality test}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.3$residuals}
-\textcolor{KPMG_light_blue}{W = 0.948, p-value = 0.09045}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-23-1}
+\input{generated/workshop-output/exercise-5-23-2}
+\input{generated/workshop-output/exercise-5-23-3}
 
 \end{exercise}
 
@@ -3616,22 +3021,8 @@ We use the \ttblue{shapiro.test} function from the \ttblue{stats} package to per
 
 \textbf{Testing heteroskedasticity}
 
-To test the asumption of constant variance, we can employ visual means, such as the \ttblue{residualPlots} in Figure \ref{fig:H7_residualPlots3}. We can construct it as follows.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{residualPlots(ussteamco.mod.3, layout = c(2, 3),}
-\textcolor{KPMG_blue}{              quadratic = FALSE, linear = TRUE)}
-\end{Verbatim}
-
-The formal statistical test is the Breusch-Pagan test.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{bptest(ussteamco.mod.3)}
-\textcolor{KPMG_light_blue}{  studentized Breusch-Pagan test}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.3}
-\textcolor{KPMG_light_blue}{BP = 7.2079, df = 7, p-value = 0.4076}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-24-1}
+\input{generated/workshop-output/exercise-5-24-2}
 
 \end{exercise}
 
@@ -3640,23 +3031,8 @@ The formal statistical test is the Breusch-Pagan test.
 
 \textbf{Testing autocorrelation}
 
-We use the \ttblue{pacf} plot from Figure \ref{fig:H7_pacf} to see if autocorrelation is present, and if so, which order is significant.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{pacf(ussteamco.mod.3$residuals)}
-\end{Verbatim}
-
-The Breusch-Godfrey test is executed through \ttblue{bgtest}.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{bgtest(ussteamco.mod.3, order = 3)}
-\textcolor{KPMG_light_blue}{  Breusch-Godfrey test for serial correlation of order up to 3}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.3}
-\textcolor{KPMG_light_blue}{LM test = 7.1466, df = 3, p-value = 0.06737}
-\end{Verbatim}
-
-The $p$ value of the test statistic is 0.06737. Therefore, we fail to reject the null hypothesis at conventional significance levels below 0.06737, such as 5\% or 1\%. This model-validation test provides no evidence of autocorrelation at these levels, although the result is marginal at a 10\% level.
+\input{generated/workshop-output/exercise-5-25-1}
+\input{generated/workshop-output/exercise-5-25-2}
 
 \end{exercise}
 
@@ -3665,98 +3041,10 @@ The $p$ value of the test statistic is 0.06737. Therefore, we fail to reject the
 
 \textbf{The Cochrane-Orcutt method}
 
-A practical and widely used fix is the `Cochrane-Orcutt method`, designed specifically to correct for first-order autocorrelation. 
-This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of lagged values from both the dependent and independent variables. 
-The transformed model can then be estimated by ordinary least squares, restoring valid inference under autocorrelation.
-
-We first estimate an AR(1) model to the residuals from `mod.3`.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{(rho <- arima(ussteamco.mod.3$residuals, }
-\textcolor{KPMG_blue}{             order = c(1, 0, 0))$coef[1])}
-\textcolor{KPMG_light_blue}{      ar1 }
-\textcolor{KPMG_light_blue}{0.4413799}
-\end{Verbatim}
-
-Then we transform all variables using the estimated $\rho$. For each interaction, we first construct the interaction from the original variables at times $t$ and $t-1$, and then apply the AR(1) transformation to that interaction. This is consistent with the transformation described in the main text: $x_t s_t - \rho x_{t-1}s_{t-1}$.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{n <- nrow(USSteamCoEstim2)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{trans <- USSteamCoEstim2[-1, ]  # t}
-\textcolor{KPMG_blue}{lag   <- USSteamCoEstim2[-n, ]  # t-1}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{trans$revenue_adj <- trans$revenue - rho * lag$revenue}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{trans$production_adj <- trans$production - rho * lag$production}
-\textcolor{KPMG_blue}{trans$heatDD_adj     <- trans$heatDD     - rho * lag$heatDD}
-\textcolor{KPMG_blue}{trans$coolDD_adj     <- trans$coolDD     - rho * lag$coolDD}
-\textcolor{KPMG_blue}{trans$summer_adj     <- trans$summer     - rho * lag$summer}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{trans$prod_summer_adj <- trans$production * trans$summer -}
-\textcolor{KPMG_blue}{  rho * lag$production * lag$summer}
-\textcolor{KPMG_blue}{trans$heat_summer_adj <- trans$heatDD * trans$summer -}
-\textcolor{KPMG_blue}{  rho * lag$heatDD * lag$summer}
-\textcolor{KPMG_blue}{trans$cool_summer_adj <- trans$coolDD * trans$summer -}
-\textcolor{KPMG_blue}{  rho * lag$coolDD * lag$summer}
-\end{Verbatim}
-
-We fit a new model using the Cochrane-Orcutt method.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.4 <- lm(revenue_adj ~ }
-\textcolor{KPMG_blue}{                        production_adj + heatDD_adj + coolDD_adj +}
-\textcolor{KPMG_blue}{                        summer_adj + prod_summer_adj +}
-\textcolor{KPMG_blue}{                        heat_summer_adj + cool_summer_adj,}
-\textcolor{KPMG_blue}{                      data = trans)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{summary(ussteamco.mod.4)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_light_blue}{Call:}
-\textcolor{KPMG_light_blue}{lm(formula = revenue_adj ~ production_adj + heatDD_adj + coolDD_adj + }
-\textcolor{KPMG_light_blue}{    summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj, }
-\textcolor{KPMG_light_blue}{    data = trans)}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residuals:}
-\textcolor{KPMG_light_blue}{     Min       1Q   Median       3Q      Max }
-\textcolor{KPMG_light_blue}{-3140258  -631829    55261   705576  2379599 }
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Coefficients:}
-\textcolor{KPMG_light_blue}{                  Estimate Std. Error t value Pr(>|t|)    }
-\textcolor{KPMG_light_blue}{(Intercept)      1.496e+04  7.412e+05   0.020 0.984046    }
-\textcolor{KPMG_light_blue}{production_adj   3.407e+01  3.209e+00  10.615 3.89e-11 ***}
-\textcolor{KPMG_light_blue}{heatDD_adj       2.155e+03  2.326e+03   0.926 0.362397    }
-\textcolor{KPMG_light_blue}{coolDD_adj      -8.255e+04  3.269e+04  -2.525 0.017747 *  }
-\textcolor{KPMG_light_blue}{summer_adj       5.633e+06  2.325e+06   2.423 0.022375 *  }
-\textcolor{KPMG_light_blue}{prod_summer_adj -2.283e+01  5.306e+00  -4.303 0.000198 ***}
-\textcolor{KPMG_light_blue}{heat_summer_adj -2.014e+04  1.390e+04  -1.449 0.158894    }
-\textcolor{KPMG_light_blue}{cool_summer_adj  8.454e+04  3.375e+04   2.505 0.018590 *  }
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{Residual standard error: 1338000 on 27 degrees of freedom}
-\textcolor{KPMG_light_blue}{Multiple R-squared:  0.919,  Adjusted R-squared:  0.898 }
-\textcolor{KPMG_light_blue}{F-statistic: 43.75 on 7 and 27 DF,  p-value: 4.137e-13}
-\end{Verbatim}
-
-This manual approach follows the Cochrane-Orcutt transformation.
-
-\begin{equation*}
-y_t - \rho y_{t-1} = \beta_0(1 - \rho) + \sum_{j} \beta_j(x_{jt} - \rho x_{j,t-1}) + u_t
-\end{equation*}
-
-It discards the first observation (which cannot be differenced).
-After fitting the transformed model, we check if autocorrelation is reduced, by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{pacf(ussteamco.mod.4$residuals)}
-\textcolor{KPMG_blue}{bgtest(ussteamco.mod.4, order = 3)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_light_blue}{  Breusch-Godfrey test for serial correlation of order up to 3}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.4}
-\textcolor{KPMG_light_blue}{LM test = 2.2151, df = 3, p-value = 0.529}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-26-1}
+\input{generated/workshop-output/exercise-5-26-2}
+\input{generated/workshop-output/exercise-5-26-3}
+\input{generated/workshop-output/exercise-5-26-4}
 
 \end{exercise}
 
@@ -3765,15 +3053,7 @@ After fitting the transformed model, we check if autocorrelation is reduced, by 
 
 \textbf{Constructing a refined model}
 
-When a model includes interaction terms, it is important to respect the hierarchical structure, interaction terms should not be included without their corresponding main effects. The base \ttblue{R} function \ttblue{step} enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference. 
-On the winsorized historical data, we fit a new model using the \ttblue{backward} step procedure.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD)}
-\textcolor{KPMG_blue}{                       * summer, data = USSteamCoEstim2)  }
-\textcolor{KPMG_blue}{ussteamco.mod.5 <- step(ussteamco.mod.5,}
-\textcolor{KPMG_blue}{                        direction = "backward") }
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-27-1}
 
 \end{exercise}
 
@@ -3782,20 +3062,7 @@ On the winsorized historical data, we fit a new model using the \ttblue{backward
 
 \textbf{Coefficient test of the refined model}
 
-The $t$ statistics used for testing the significance of each of the predictors are obtained from the \ttblue{summary()} table.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{summary(ussteamco.mod.5)}
-\textcolor{KPMG_light_blue}{                    Estimate Std. Error t value Pr(>|t|)    }
-\textcolor{KPMG_light_blue}{(Intercept)        7.528e+05  1.170e+06   0.643   0.5250    }
-\textcolor{KPMG_light_blue}{production         3.587e+01  2.504e+00  14.327 5.90e-15 ***}
-\textcolor{KPMG_light_blue}{coolDD            -1.214e+05  2.510e+04  -4.835 3.71e-05 ***}
-\textcolor{KPMG_light_blue}{summer             3.220e+06  1.578e+06   2.041   0.0502 .  }
-\textcolor{KPMG_light_blue}{production:summer -2.323e+01  4.104e+00  -5.661 3.61e-06 ***}
-\textcolor{KPMG_light_blue}{coolDD:summer      1.251e+05  2.550e+04   4.904 3.06e-05 ***}
-\textcolor{KPMG_light_blue}{---}
-\textcolor{KPMG_light_blue}{Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-28-1}
 
 \end{exercise}
 
@@ -3804,38 +3071,7 @@ The $t$ statistics used for testing the significance of each of the predictors a
 
 \textbf{Re-running the model assumption tests}
 
-We re-run the model assumption tests
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{bptest(ussteamco.mod.5)}
-\textcolor{KPMG_light_blue}{  studentized Breusch-Pagan test}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.5}
-\textcolor{KPMG_light_blue}{BP = 7.0367, df = 5, p-value = 0.2179}
-\end{Verbatim}
-
-There is no evidence for non-constant variance.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{bgtest(ussteamco.mod.5, order = 3, type = "Chisq")}
-\textcolor{KPMG_light_blue}{  Breusch-Godfrey test for serial correlation of order up to 3}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.5}
-\textcolor{KPMG_light_blue}{LM test = 5.1992, df = 3, p-value = 0.1578}
-\end{Verbatim}
-
-The data appear to be non-correlated over time.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{shapiro.test(ussteamco.mod.5$residuals)}
-
-\textcolor{KPMG_light_blue}{  Shapiro-Wilk normality test}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_light_blue}{data:  ussteamco.mod.5$residuals}
-\textcolor{KPMG_light_blue}{W = 0.94875, p-value = 0.09554}
-\end{Verbatim}
-
-The residuals seem to be normally distributed.
+\input{generated/workshop-output/exercise-5-29-1}
 
 \end{exercise}
 
@@ -3846,12 +3082,7 @@ The residuals seem to be normally distributed.
 
 \textbf{Testing the significance of the model}
 
-The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{summary(ussteamco.mod.5)}
-\textcolor{KPMG_light_blue}{F-statistic:  81.81 on 5 and 30 DF,  p-value: < 2.2e-16}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-30-1}
 
 \end{exercise}
 
@@ -3860,106 +3091,10 @@ The $F$ statistic used for testing the significance of the model as a whole can 
 
 \textbf{Visualizing the uncertainty in the model parameters}
 
-To illustrate the uncertainty inherent in estimating model coefficients, we sample 200 regression lines from a known relationship and plot them. Each line represents a possible regression outcome from different samples of the same underlying relationship. By overlaying these lines on a plot, we observe the variation in their slopes and intercepts, which highlights the uncertainty in our coefficient estimates. Additionally, plotting the true confidence intervals around the central trend provides a clear visual reference: while individual regression lines may vary due to sampling differences, most fall within the confidence interval bounds. This visualization demonstrates how confidence intervals capture the range in which we expect the true relationship to lie, accounting for variability in coefficient estimates from sample to sample.
-
-\begin{figure}[htbp]
-  \includegraphics[width=\columnwidth]{H7_200_regression_lines.pdf}
-  \caption{Visualization of confidence interval}
-  \label{fig:H7_200_regression_lines}
-\end{figure}
-
-\bigskip
-First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{set.seed(12345)  # Set seed for reproducibility}
-\textcolor{KPMG_blue}{beta_0 <- 2      # True intercept}
-\textcolor{KPMG_blue}{beta_1 <- 1.5    # True slope}
-\textcolor{KPMG_blue}{n <- 11          # Number of points to sample}
-\textcolor{KPMG_blue}{x_min <- 0       # Minimum value of x}
-\textcolor{KPMG_blue}{x_max <- 10      # Maximum value of x}
-\textcolor{KPMG_blue}{x_values <- seq(x_min, x_max, length.out = n)  # x values modelled}
-\textcolor{KPMG_blue}{sigma <- 5       # Standard deviation of the noise}
-\textcolor{KPMG_blue}{rep <- 200       # Number of replications}
-\textcolor{KPMG_blue}{alpha <- 0.05    # Significance level of the confidence interval}
-\textcolor{KPMG_blue}{x_extended_min <- x_min - (x_max - x_min) / 2  }
-\textcolor{KPMG_blue}{x_extended_max <- x_max + (x_max - x_min) / 2  }
-\textcolor{KPMG_blue}{x_extended <- seq(x_extended_min, x_extended_max, length.out = 100)}
-\end{Verbatim}
-
-We then calculate the true regression line, along with its confidence interval.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{# Create a data frame for the true line over the extended range}
-\textcolor{KPMG_blue}{true_line <- data.frame(x = x_extended, }
-\textcolor{KPMG_blue}{                        y = beta_0 + beta_1 * x_extended)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{# Calculate the standard error of the true regression line}
-\textcolor{KPMG_blue}{mean_x <- mean(x_values)                        }
-\textcolor{KPMG_blue}{S_xx <- sum((x_values - mean_x)^2)              }
-\textcolor{KPMG_blue}{se_fit_true <- sigma * sqrt(1/n + (x_extended - mean_x)^2 / S_xx) }
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{# Calculate the theoretical confidence intervals}
-\textcolor{KPMG_blue}{t_value <- qt(1 - alpha / 2, df = n - 2)        }
-\textcolor{KPMG_blue}{ci_upper_true <- (beta_0 + beta_1 * x_extended) + }
-\textcolor{KPMG_blue}{                 t_value * se_fit_true}
-\textcolor{KPMG_blue}{ci_lower_true <- (beta_0 + beta_1 * x_extended) - }
-\textcolor{KPMG_blue}{                 t_value * se_fit_true}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{# Create a data frame for the confidence interval bounds }
-\textcolor{KPMG_blue}{ci_bounds_true <- data.frame(x = x_extended, }
-\textcolor{KPMG_blue}{                             ci_lower = ci_lower_true, }
-\textcolor{KPMG_blue}{                             ci_upper = ci_upper_true)}
-\end{Verbatim}
-
-Next, we sample $n$ points from a normal distribution, to generate $y$ values for each $x$ value and fit the corresponding regression line. We repeat this process \ttblue{rep} times.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{# Initialize a data frame to store the simulated regression lines}
-\textcolor{KPMG_blue}{simulated_lines <- data.frame()}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{# Repeat the process to simulate multiple regression lines}
-\textcolor{KPMG_blue}{for (i in 1:rep) \{ }
-\textcolor{KPMG_blue}{  }
-\textcolor{KPMG_blue}{  # Sample n points from the relationship }
-\textcolor{KPMG_blue}{  epsilon <- rnorm(n, mean = 0, sd = sigma)  }
-\textcolor{KPMG_blue}{  y_values <- beta_0 + beta_1 * x_values + epsilon}
-\textcolor{KPMG_blue}{  }
-\textcolor{KPMG_blue}{  # Fit a linear model}
-\textcolor{KPMG_blue}{  model <- lm(y_values ~ x_values)}
-\textcolor{KPMG_blue}{  }
-\textcolor{KPMG_blue}{  # Predict fitted values for the extended range of x}
-\textcolor{KPMG_blue}{  predicted_values <- predict(model, }
-\textcolor{KPMG_blue}{                     newdata = data.frame(x_values = x_extended))}
-\textcolor{KPMG_blue}{  }
-\textcolor{KPMG_blue}{  # Store the fitted line over the extended x range}
-\textcolor{KPMG_blue}{  simulated_lines <- rbind(simulated_lines, }
-\textcolor{KPMG_blue}{                           data.frame(x = x_extended, }
-\textcolor{KPMG_blue}{                                      y = predicted_values, }
-\textcolor{KPMG_blue}{                                      rep = i))}
-\textcolor{KPMG_blue}{\}}
-\end{Verbatim}
-
-All the elements created earlier are now plotted on a single canvas.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{ggplot() +}
-\textcolor{KPMG_blue}{  geom_line(data = simulated_lines, aes(x = x, y = y, group = rep), }
-\textcolor{KPMG_blue}{            color = "#00338D", alpha = 0.1) +   }
-\textcolor{KPMG_blue}{  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", }
-\textcolor{KPMG_blue}{                                  size = .5) +  }
-\textcolor{KPMG_blue}{  geom_line(data = ci_bounds_true, aes(x = x, y = ci_lower), }
-\textcolor{KPMG_blue}{            color = "#E36877", size = .5, linetype = "solid") +}
-\textcolor{KPMG_blue}{  geom_line(data = ci_bounds_true, aes(x = x, y = ci_upper), }
-\textcolor{KPMG_blue}{            color = "#E36877", size = .5, linetype = "solid") +}
-\textcolor{KPMG_blue}{  labs(title = paste(rep, " Regression Lines with Confidence}
-\textcolor{KPMG_blue}{                            Interval Based on True Model"),}
-\textcolor{KPMG_blue}{       x = "x", y = "y") +}
-\textcolor{KPMG_blue}{  theme_minimal() +}
-\textcolor{KPMG_blue}{  xlim(x_extended_min, x_extended_max)}
-\end{Verbatim}
-
-The resulting graph is shown in Figure \ref{fig:H7_200_regression_lines}.
+\input{generated/workshop-output/exercise-5-31-1}
+\input{generated/workshop-output/exercise-5-31-2}
+\input{generated/workshop-output/exercise-5-31-3}
+\input{generated/workshop-output/exercise-5-31-4}
 
 \end{exercise}
 
@@ -3970,49 +3105,7 @@ The resulting graph is shown in Figure \ref{fig:H7_200_regression_lines}.
 
 \textbf{Confidence and prediction intervals}
 
-Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotted confidence interval and a shaded prediction interval. These intervals measure statistical uncertainty around the model and its predictions; they do not state the audit hypotheses or the audit conclusion. The figure is created with the following code.
-\footnote{Starting from ggplot2 version 3.3.0 (released April 2020), the preferred aesthetic name for controlling line thickness in geoms like \ttblue{geom\_line()} and \ttblue{geom\_path()} was changed from \ttblue{size} to \ttblue{linewidth} to better distinguish it from point size. If you use an older version of ggplot2, for example in the Binder notebooks that accompany this book, use \ttblue{size} instead of \ttblue{linewidth}.}
-
-\begin{Verbatim}[commandchars=\\\{\}]
-
-\textcolor{KPMG_blue}{pred_tail_prob <- 0.01  # Central tail probability for 99% PI}
-\textcolor{KPMG_blue}{t_value_pred <- qt(1 - pred_tail_prob / 2, df = n - 2)}
-\textcolor{KPMG_blue}{se_pred <- sigma * sqrt(1 + 1/n + (x_extended - mean_x)^2 / S_xx)}
-
-\textcolor{KPMG_blue}{pi_upper_true <- (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred}
-\textcolor{KPMG_blue}{pi_lower_true <- (beta_0 + beta_1 * x_extended) - t_value_pred * se_pred}
-
-\textcolor{KPMG_blue}{pi_bounds_true <- data.frame(}
-\textcolor{KPMG_blue}{  x = x_extended,}
-\textcolor{KPMG_blue}{  pi_lower = pi_lower_true,}
-\textcolor{KPMG_blue}{  pi_upper = pi_upper_true)}
-
-\textcolor{KPMG_blue}{ggplot() +}
-\textcolor{KPMG_blue}{  geom_ribbon(}
-\textcolor{KPMG_blue}{    data = pi_bounds_true,}
-\textcolor{KPMG_blue}{    aes(x = x, ymin = pi_lower, ymax = pi_upper),}
-\textcolor{KPMG_blue}{    fill = "#00338D", alpha = 0.15}
-\textcolor{KPMG_blue}{  ) +  }
-\textcolor{KPMG_blue}{  geom_line(}
-\textcolor{KPMG_blue}{    data = ci_bounds_true,}
-\textcolor{KPMG_blue}{    aes(x = x, y = ci_lower),}
-\textcolor{KPMG_blue}{    color = "#00338D", linewidth = .5, linetype = "dashed"}
-\textcolor{KPMG_blue}{  ) +  }
-\textcolor{KPMG_blue}{  geom_line(}
-\textcolor{KPMG_blue}{    data = ci_bounds_true,}
-\textcolor{KPMG_blue}{    aes(x = x, y = ci_upper),}
-\textcolor{KPMG_blue}{    color = "#00338D", linewidth = .5, linetype = "dashed"}
-\textcolor{KPMG_blue}{  ) +  }
-\textcolor{KPMG_blue}{  geom_line(}
-\textcolor{KPMG_blue}{    data = true_line,}
-\textcolor{KPMG_blue}{    aes(x = x, y = y),}
-\textcolor{KPMG_blue}{    color = "#00338D", linewidth = 1}
-\textcolor{KPMG_blue}{  ) +  }
-\textcolor{KPMG_blue}{  labs(}
-\textcolor{KPMG_blue}{   x = "x", y = "y"}
-\textcolor{KPMG_blue}{  ) +}
-\textcolor{KPMG_blue}{  xlim(x_extended_min, x_extended_max)}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-32-1}
 
 \end{exercise}
 
@@ -4021,28 +3114,8 @@ Figure \ref{fig:H7_conf_and_pred_intervals} shows a regression line with a dotte
 
 \textbf{Creating expectations for the hold-out period}
 
-The function \ttblue{predict} creates expectations, when data from \ttblue{newdata} are evaluated with a certain \ttblue{object}. The optional \ttblue{interval} is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The \ttblue{level} specifies the statistical coverage of the interval. In the later audit evaluation, the 1\% central tail probability of this 99\% prediction interval represents $\beta$, not the audit Type I error risk $\alpha$.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{(predictions <- predict(object = ussteamco.mod.5, }
-\textcolor{KPMG_blue}{                        newdata = USSteamCoHold, }
-\textcolor{KPMG_blue}{                        interval = "prediction", }
-\textcolor{KPMG_blue}{                        level = 0.99))}
-
-\textcolor{KPMG_light_blue}{        fit      lwr      upr}
-\textcolor{KPMG_light_blue}{37 22505659 18270762 26740557}
-\textcolor{KPMG_light_blue}{38 26370098 21884851 30855345}
-\textcolor{KPMG_light_blue}{39 29651399 24872800 34429998}
-\textcolor{KPMG_light_blue}{40 14235543 10117297 18353788}
-\textcolor{KPMG_light_blue}{41  7683165  3275961 12090370}
-\textcolor{KPMG_light_blue}{42 11362096  7225223 15498968}
-\textcolor{KPMG_light_blue}{43 14845538 10572555 19118521}
-\textcolor{KPMG_light_blue}{44 13544329  9357740 17730918}
-\textcolor{KPMG_light_blue}{45 13497081  8613794 18380369}
-\textcolor{KPMG_light_blue}{46 12609214  8358271 16860157}
-\textcolor{KPMG_light_blue}{47 11282544  7059618 15505471}
-\textcolor{KPMG_light_blue}{48 21094017 16921330 25266704}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-33-1}
+\input{generated/workshop-output/exercise-5-33-2}
 
 \end{exercise}
 
@@ -4051,41 +3124,7 @@ The function \ttblue{predict} creates expectations, when data from \ttblue{newda
 
 \textbf{Plotting expectations against recorded values}
 
-In Figure \ref{fig:H7_expectations} we have plotted expectations against the recorded values of revenue, highlighting individual observations whose differences are not consistent with the uncertainty measured by the 99\% prediction interval. These observations require investigation; the plot does not itself establish whether the recorded amount is materially misstated. The following code is used to create it.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_blue}{pred_df <- data.frame(}
-\textcolor{KPMG_blue}{  date = USSteamCoHold$date,}
-\textcolor{KPMG_blue}{  recorded = USSteamCoHold$revenue,}
-\textcolor{KPMG_blue}{  lwr = predictions[, "lwr"],}
-\textcolor{KPMG_blue}{  fit = predictions[, "fit"],}
-\textcolor{KPMG_blue}{  upr = predictions[, "upr"]}
-\textcolor{KPMG_blue}{)}
-\textcolor{KPMG_blue}{pred_df$outside = with(pred_df, recorded < lwr | recorded > upr)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{ggplot(pred_df, aes(x = date)) +}
-\textcolor{KPMG_blue}{  geom_line(aes(y = fit, color = "Expectation"), linewidth = 1) + } 
-\textcolor{KPMG_blue}{  geom_ribbon(aes(ymin = lwr, ymax = upr), }
-\textcolor{KPMG_blue}{              fill = "#00338D", alpha = 0.2) +}
-\textcolor{KPMG_blue}{  geom_line(aes(y = recorded, color = "Recorded"), size = 0.5) +}
-\textcolor{KPMG_blue}{  geom_point(data = subset(pred_df, outside), aes(y = recorded), }
-\textcolor{KPMG_blue}{             color = "red", size = 1.5) +}
-\textcolor{KPMG_blue}{  scale_color_manual(}
-\textcolor{KPMG_blue}{    values = c("Expectation" = "#00338D", "Recorded" = "black"), }
-\textcolor{KPMG_blue}{    name = ""}
-\textcolor{KPMG_blue}{  ) +}
-\textcolor{KPMG_blue}{  labs(}
-\textcolor{KPMG_blue}{    x = "Date",}
-\textcolor{KPMG_blue}{    y = "Revenue"}
-\textcolor{KPMG_blue}{  ) +}
-\textcolor{KPMG_blue}{  scale_x_date(}
-\textcolor{KPMG_blue}{    date_breaks = "1 month",  }
-\textcolor{KPMG_blue}{    date_labels = "%b"  }
-\textcolor{KPMG_blue}{  ) +}
-\textcolor{KPMG_blue}{  theme(legend.position = "bottom")}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-5-34-1}
 
 \end{exercise}
 
@@ -4096,40 +3135,8 @@ In Figure \ref{fig:H7_expectations} we have plotted expectations against the rec
 
 \textbf{Combining 12 monthly predictions}
 
-We use Equations \ref{eq:annual_prediction_interval} and \ref{eq:annual_prediction_variance} to construct a prediction interval for total revenue for the year under audit. The code includes the covariance between monthly expectations caused by their shared estimated coefficients and adjusts the March expectation for the corroborated storm effect. This completes the first-stage evaluation of the annual difference. 
-The resulting interval measures prediction uncertainty and provides the monetary decision bounds used in the second-stage assurance assessment.
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_light_blue}{}
-\textcolor{KPMG_blue}{df_res <- ussteamco.mod.5$df.residual}
-\textcolor{KPMG_blue}{X_hold <- model.matrix(ussteamco.mod.5, data = USSteamCoHold)}
-\textcolor{KPMG_blue}{one <- rep(1, nrow(X_hold))}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{storm_adjustment <- 8000000}
-\textcolor{KPMG_blue}{annual_prediction <- sum(pred_df$fit) - storm_adjustment}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{coefficient_variance <- as.numeric(}
-\textcolor{KPMG_blue}{  t(one) \%*\% X_hold \%*\% vcov(ussteamco.mod.5) \%*\% t(X_hold) \%*\% one)}
-\textcolor{KPMG_blue}{residual_variance <- nrow(X_hold) * sigma(ussteamco.mod.5)^2}
-\textcolor{KPMG_blue}{annual_se <- sqrt(coefficient_variance + residual_variance)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{t_score <- qt(0.995, df = df_res)}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{annual_lower <- annual_prediction - t_score * annual_se}
-\textcolor{KPMG_blue}{annual_upper <- annual_prediction + t_score * annual_se}
-\textcolor{KPMG_blue}{}
-\textcolor{KPMG_blue}{cat("99\% Prediction Interval for Annual Revenue:\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{99\% Prediction Interval for Annual Revenue:}
-\textcolor{KPMG_blue}{cat("Lower Bound:", annual_lower, "\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{Lower Bound: 173291634 }
-\textcolor{KPMG_blue}{cat("Annual Prediction:", annual_prediction, "\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{Annual Prediction: 190680684 }
-\textcolor{KPMG_blue}{cat("Upper Bound:", annual_upper, "\textbackslash{}n")}
-\textcolor{KPMG_light_blue}{Upper Bound: 208069735 }
-\end{Verbatim}
-
-The recorded annual revenue is consistent with the prediction uncertainty measured by this interval. Together with the satisfactory resolution of the March difference, this completes the first stage; it is not yet the audit conclusion. In the second stage, the auditor assesses the model's strength by determining the Type I error risk $\alpha$ under a material misstatement of size $PM$. The auditor may reject $H_0$ only if the resulting assurance, $1-\alpha$, is sufficient in light of the assessed risk and other audit evidence. Otherwise, further substantive procedures are required.
+\input{generated/workshop-output/exercise-5-35-1}
+\input{generated/workshop-output/exercise-5-35-2}
 
 
 \end{exercise}
