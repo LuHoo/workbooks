@@ -31,5 +31,25 @@ Example:
 
 - Workshop-specific settings are isolated in `scripts/workshop-export-config.R`.
 - The exporter fails loudly for unsupported constructs and malformed marker blocks.
-- Legacy scripts `scripts/export-probability-distributions-workshop.R` and
-	`scripts/export-hypothesis-testing-workshop.R` remain as compatibility wrappers.
+- Chapter scripts remain as thin compatibility wrappers that delegate to the
+	canonical exporter via configuration:
+	- `scripts/export-probability-distributions-workshop.R`
+	- `scripts/export-auxiliary-variables-and-stratification-workshop.R`
+	- `scripts/export-hypothesis-testing-workshop.R`
+	- `scripts/export-regression-analysis-workshop.R`
+	- `scripts/export-goodness-of-fit-workshop.R`
+
+### Convenience wrappers
+
+To export all chunks for a chapter/workshop, run the relevant wrapper script.
+
+Examples:
+
+- `Rscript scripts/export-probability-distributions-workshop.R`
+- `Rscript scripts/export-auxiliary-variables-and-stratification-workshop.R`
+- `Rscript scripts/export-hypothesis-testing-workshop.R`
+- `Rscript scripts/export-regression-analysis-workshop.R`
+- `Rscript scripts/export-goodness-of-fit-workshop.R`
+
+Note: The goodness-of-fit wrapper preloads the regression workshop in-process,
+because chapter 6 exercises depend on objects produced by chapter 5 code.

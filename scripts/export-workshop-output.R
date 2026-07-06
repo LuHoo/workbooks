@@ -4,6 +4,7 @@ source("scripts/workshop-export-config.R", chdir = FALSE)
 
 # Static-analysis hint: function is provided by sourced config script.
 resolve_workshop_export_config <- get("resolve_workshop_export_config", mode = "function")
+resolve_workshop_export_config_by_id <- get("resolve_workshop_export_config_by_id", mode = "function")
 
 ensure_dependencies <- function() {
   if (!requireNamespace("knitr", quietly = TRUE)) {
@@ -408,6 +409,34 @@ export_single_chunk <- function(input_path, output_path) {
   validate_generated_output(generated)
   write_output(generated, output_path)
   message("Generated ", output_path)
+}
+
+build_output_path <- function(output_dir, exercise, chunk_index) {
+  exercise_slug <- gsub("\\.", "-", exercise)
+  file.path(output_dir, sprintf("exercise-%s-%d.tex", exercise_slug, chunk_index))
+}
+
+export_workshop_by_config <- function(config, output_dir = "generated/workshop-output") {
+  if (is.null(config) || is.null(config$source) || is.null(config$expected_chunks)) {
+    stop("Invalid workshop export configuration supplied.")
+  }
+
+  for (exercise in names(config$expected_chunks)) {
+    for (i in seq_len(config$expected_chunks[[exercise]])) {
+      export_single_chunk(config$source, build_output_path(output_dir, exercise, i))
+    }
+  }
+}
+
+export_workshop_by_config_id <- function(config_id, output_dir = "generated/workshop-output") {
+  config <- resolve_workshop_export_config_by_id(config_id)
+  if (is.null(config)) {
+    stop(
+      "Unsupported workshop config id: ", config_id,
+      ". Add it to scripts/workshop-export-config.R."
+    )
+  }
+  export_workshop_by_config(config, output_dir = output_dir)
 }
 
 main <- function() {
