@@ -24,7 +24,7 @@ pred_df <- data.frame(
   fit = predictions[, "fit"],
   upr = predictions[, "upr"]
 )
-pred_df$outside = with(pred_df, recorded < lwr | recorded > upr)
+pred_df$outside <- with(pred_df, recorded < lwr | recorded > upr)
 
 expectations_plot <- ggplot(pred_df, aes(x = date)) +
   # Plot the predicted values as a line
@@ -45,8 +45,8 @@ expectations_plot <- ggplot(pred_df, aes(x = date)) +
     y = "Revenue ($)"
   ) +
   scale_x_date(
-    date_breaks = "1 month",  # Adjusts to one gridline per month
-    date_labels = "%b"  # Optional: shows abbreviated month names
+    date_breaks = "1 month", # Adjusts to one gridline per month
+    date_labels = "%b" # Optional: shows abbreviated month names
   ) +
   scale_y_continuous(labels = label_comma()) +
   theme(legend.position = "bottom")

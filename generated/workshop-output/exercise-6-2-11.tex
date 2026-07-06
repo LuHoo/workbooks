@@ -27,11 +27,15 @@ df_inv <- data.frame(
 )
 
 # Plot
-inv_plot <- ggplot(df_inv,
-       aes(x = Digit,
-           y = Frequency,
-           color = Series,
-           linetype = Series)) +
+inv_plot <- ggplot(
+  df_inv,
+  aes(
+    x = Digit,
+    y = Frequency,
+    color = Series,
+    linetype = Series
+  )
+) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   scale_x_continuous(breaks = 1:9) +

@@ -18,25 +18,25 @@ n <- nrow(USSteamCoEstim2)
 
 # Current period t and lagged period t - 1
 trans <- USSteamCoEstim2[-1, ]
-lag   <- USSteamCoEstim2[-n, ]
+lag <- USSteamCoEstim2[-n, ]
 
 # Construct original interaction terms first
 trans$prod_summer <- trans$production * trans$summer
-trans$heat_summer <- trans$heatDD     * trans$summer
-trans$cool_summer <- trans$coolDD     * trans$summer
+trans$heat_summer <- trans$heatDD * trans$summer
+trans$cool_summer <- trans$coolDD * trans$summer
 
 lag$prod_summer <- lag$production * lag$summer
-lag$heat_summer <- lag$heatDD     * lag$summer
-lag$cool_summer <- lag$coolDD     * lag$summer
+lag$heat_summer <- lag$heatDD * lag$summer
+lag$cool_summer <- lag$coolDD * lag$summer
 
 # Transform dependent variable
 trans$revenue_adj <- trans$revenue - rho * lag$revenue
 
 # Transform independent variables
 trans$production_adj <- trans$production - rho * lag$production
-trans$heatDD_adj     <- trans$heatDD     - rho * lag$heatDD
-trans$coolDD_adj     <- trans$coolDD     - rho * lag$coolDD
-trans$summer_adj     <- trans$summer     - rho * lag$summer
+trans$heatDD_adj <- trans$heatDD - rho * lag$heatDD
+trans$coolDD_adj <- trans$coolDD - rho * lag$coolDD
+trans$summer_adj <- trans$summer - rho * lag$summer
 
 # Transform interaction terms
 trans$prod_summer_adj <- trans$prod_summer - rho * lag$prod_summer

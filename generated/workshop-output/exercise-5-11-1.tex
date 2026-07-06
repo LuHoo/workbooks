@@ -24,7 +24,6 @@ predictors <- all.vars(formula(ussteamco.mod.2))[-1]
 
 # Function to create residual plot
 make_resid_plot <- function(data, var) {
-
   n_unique <- length(unique(data[[var]]))
 
   p <- ggplot(data, aes(x = .data[[var]], y = resid)) +

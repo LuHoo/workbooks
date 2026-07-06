@@ -23,12 +23,13 @@ time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   geom_line(aes(y = revenue), colour = "#00338D") +
   # Second time series (production), rescaled to match revenue range
   geom_line(aes(y = scales::rescale(production, to = rev_range)),
-            colour = "#BC204B") +
+    colour = "#BC204B"
+  ) +
   scale_y_continuous(
     name = "Revenue ($)",
     labels = scales::label_comma(),
     sec.axis = sec_axis(
-      ~scales::rescale(., from = rev_range, to = prod_range),
+      ~ scales::rescale(., from = rev_range, to = prod_range),
       name = "Production (x 1000 lb)",
       labels = scales::label_comma()
     )

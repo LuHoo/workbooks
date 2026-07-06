@@ -17,9 +17,9 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 # Calculate the standard error for prediction interval
-alpha_pred <- 0.01  # For 99% prediction interval
+alpha_pred <- 0.01 # For 99% prediction interval
 t_value_pred <- qt(1 - alpha_pred / 2, df = n - 2)
-se_pred <- sigma * sqrt(1 + 1/n + (x_extended - mean_x)^2 / S_xx)
+se_pred <- sigma * sqrt(1 + 1 / n + (x_extended - mean_x)^2 / S_xx)
 
 # Calculate 99% prediction interval bounds
 pi_upper_true <- (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred
@@ -36,22 +36,22 @@ intervals_plot <- ggplot() +
     data = pi_bounds_true,
     aes(x = x, ymin = pi_lower, ymax = pi_upper),
     fill = "#00338D", alpha = 0.15
-  ) +  # 99% prediction interval as a ribbon
+  ) + # 99% prediction interval as a ribbon
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_lower),
     color = "#00338D", linewidth = .5, linetype = "dashed"
-  ) +  # 95% CI lower
+  ) + # 95% CI lower
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_upper),
     color = "#00338D", linewidth = .5, linetype = "dashed"
-  ) +  # 95% CI upper
+  ) + # 95% CI upper
   geom_line(
     data = true_line,
     aes(x = x, y = y),
     color = "#00338D", linewidth = 1
-  ) +  # True regression line
+  ) + # True regression line
   labs(
     x = "x", y = "y"
   ) +

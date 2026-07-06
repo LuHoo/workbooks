@@ -15,8 +15,9 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 fit_both <- lm(revenue ~ 1, data = USSteamCoEstim)
 fit_both <- step(fit_both,
-                 direction = "both",
-                 scope = formula(~ production + coolDD + heatDD))
+  direction = "both",
+  scope = formula(~ production + coolDD + heatDD)
+)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Start:  AIC=1114.66

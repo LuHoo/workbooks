@@ -126,3 +126,60 @@ Unsupported or malformed structures fail with explicit errors.
 No architectural redesign is expected before follow-up issues (references,
 controlled linting, and style cleanup). Future work should extend this exporter
 through the documented stages and configuration interfaces.
+
+## Controlled Workshop Linting
+
+Workshop source linting is handled by a dedicated script, separate from export:
+
+`Rscript scripts/lint-workshop-source.R`
+
+### Purpose
+
+- provide a safe, repeatable source-formatting workflow for `support.Rmd` files;
+- resolve recurring style issues in R chunk code without changing rendered
+	workshop prose or LaTeX-sensitive structures.
+
+### Modes
+
+- Check-only mode (non-zero exit when changes would be needed):
+	- `Rscript scripts/lint-workshop-source.R --all --check`
+- Auto-fix mode (in-place safe fixes):
+	- `Rscript scripts/lint-workshop-source.R --all --fix`
+- Targeted file mode:
+	- `Rscript scripts/lint-workshop-source.R --input notebooks/support/goodness-of-fit/support.Rmd --check`
+
+### Safety boundaries
+
+The linter only modifies R chunk bodies (```` ```{r ...}```` blocks) outside
+support-only sections. It does not modify:
+
+- Markdown prose;
+- LaTeX environments;
+- tables;
+- verbatim material;
+- support-only blocks (`<!-- SUPPORT-ONLY:START -->` / `<!-- SUPPORT-ONLY:END -->`).
+
+### Applied transformations
+
+- remove trailing whitespace where safe (R chunk bodies only);
+- style R chunk bodies with project `styler` configuration;
+- enforce consistent spacing around infix operators via `styler` output.
+
+### Relationship to exporter
+
+- Exporter responsibility: convert workshop source to generated LaTeX.
+- Linter responsibility: check/fix safe workshop-source formatting.
+
+The exporter remains canonical and does not require linting to run. Linter
+invocation by the exporter can be considered in future issues once lint behavior
+is proven stable.
+
+### Diagnostics policy
+
+Editor `lintr` diagnostics are intentionally limited to reduce noise on legacy
+workshop sources. In particular, `object_name_linter` is not enforced for this
+project.
+
+The authoritative style workflow for workshop support files is
+`scripts/lint-workshop-source.R` in `--check`/`--fix` mode, not broad editor
+style diagnostics.

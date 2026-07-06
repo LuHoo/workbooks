@@ -18,9 +18,8 @@ simulated_lines <- data.frame()
 
 # Repeat the process `rep` times to simulate multiple regression lines
 for (i in 1:rep) {
-
   # Sample n points from the relationship y = beta_0 + beta_1 * x + epsilon
-  epsilon <- rnorm(n, mean = 0, sd = sigma)  # Random noise
+  epsilon <- rnorm(n, mean = 0, sd = sigma) # Random noise
   y_values <- beta_0 + beta_1 * x_values + epsilon
 
   # Fit a linear model
@@ -30,10 +29,14 @@ for (i in 1:rep) {
   predicted_values <- predict(model, newdata = data.frame(x_values = x_extended))
 
   # Store the fitted line over the extended x range
-  simulated_lines <- rbind(simulated_lines,
-                           data.frame(x = x_extended,
-                                      y = predicted_values,
-                                      rep = i))
+  simulated_lines <- rbind(
+    simulated_lines,
+    data.frame(
+      x = x_extended,
+      y = predicted_values,
+      rep = i
+    )
+  )
 }
 \end{Verbatim}
 \endgroup

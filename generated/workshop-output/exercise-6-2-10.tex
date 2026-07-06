@@ -27,11 +27,15 @@ df <- data.frame(
 )
 
 # Plot
-benford_average_plot <- ggplot(df,
-       aes(x = Digit,
-           y = Percentage,
-           color = Series,
-           linetype = Series)) +
+benford_average_plot <- ggplot(
+  df,
+  aes(
+    x = Digit,
+    y = Percentage,
+    color = Series,
+    linetype = Series
+  )
+) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   scale_x_continuous(breaks = 1:9) +

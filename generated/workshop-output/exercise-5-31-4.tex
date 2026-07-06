@@ -14,17 +14,25 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 regression_lines_plot <- ggplot() +
-  geom_line(data = simulated_lines, aes(x = x, y = y, group = rep),
-            color = "#00338D", alpha = 0.1) +   # Plot the simulated regression lines
-  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", linewidth = .5) +  # Plot the true line
-  geom_line(data = ci_bounds_true, aes(x = x, y = ci_lower),
-            color = "#E36877", linewidth = .5, linetype = "solid") +  # Lower bound (true line)
-  geom_line(data = ci_bounds_true, aes(x = x, y = ci_upper),
-            color = "#E36877", linewidth = .5, linetype = "solid") +  # Upper bound (true line)
-  labs(title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),
-       x = "x", y = "y") +
+  geom_line(
+    data = simulated_lines, aes(x = x, y = y, group = rep),
+    color = "#00338D", alpha = 0.1
+  ) + # Plot the simulated regression lines
+  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", linewidth = .5) + # Plot the true line
+  geom_line(
+    data = ci_bounds_true, aes(x = x, y = ci_lower),
+    color = "#E36877", linewidth = .5, linetype = "solid"
+  ) + # Lower bound (true line)
+  geom_line(
+    data = ci_bounds_true, aes(x = x, y = ci_upper),
+    color = "#E36877", linewidth = .5, linetype = "solid"
+  ) + # Upper bound (true line)
+  labs(
+    title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),
+    x = "x", y = "y"
+  ) +
   theme_minimal() +
-  xlim(x_extended_min, x_extended_max)  # Extend the x-axis limits
+  xlim(x_extended_min, x_extended_max) # Extend the x-axis limits
 regression_lines_plot
 \end{Verbatim}
 \endgroup

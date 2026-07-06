@@ -16,10 +16,12 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-(predictions <- predict(object = ussteamco.mod.5,
-                        newdata = USSteamCoHold,
-                        interval = "prediction",
-                        level = 0.99))
+(predictions <- predict(
+  object = ussteamco.mod.5,
+  newdata = USSteamCoHold,
+  interval = "prediction",
+  level = 0.99
+))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
            fit         lwr        upr
