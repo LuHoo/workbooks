@@ -14,23 +14,23 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 hist_revenue <-
-  ggplot(USSteamCoEstim, aes(x=revenue)) +
+  ggplot(USSteamCoEstim, aes(x = revenue)) +
   geom_histogram(binwidth = 4000000, fill = "#00338D") +
   scale_x_continuous(labels = label_comma())
 
 hist_production <-
-  ggplot(USSteamCoEstim, aes(x=production)) +
+  ggplot(USSteamCoEstim, aes(x = production)) +
   geom_histogram(binwidth = 50000, fill = "#00338D") +
   scale_x_continuous(labels = label_comma()) +
-  theme(plot.margin = unit(c(0, 1, 0, 0), "cm"))  # top, right, bottom, left
+  theme(plot.margin = unit(c(0, 1, 0, 0), "cm")) # top, right, bottom, left
 
 hist_coolDD <-
-  ggplot(USSteamCoEstim, aes(x=coolDD)) +
+  ggplot(USSteamCoEstim, aes(x = coolDD)) +
   geom_histogram(binwidth = 50, fill = "#00338D") +
   scale_x_continuous(labels = label_comma())
 
 hist_heatDD <-
-  ggplot(USSteamCoEstim, aes(x=heatDD)) +
+  ggplot(USSteamCoEstim, aes(x = heatDD)) +
   geom_histogram(binwidth = 100, fill = "#00338D") +
   scale_x_continuous(labels = label_comma())
 

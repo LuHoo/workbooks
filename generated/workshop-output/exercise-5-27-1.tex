@@ -17,9 +17,11 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD) * summer,
-                     data = USSteamCoEstim2)
+  data = USSteamCoEstim2
+)
 ussteamco.mod.5 <- step(ussteamco.mod.5,
-                       direction = "backward")
+  direction = "backward"
+)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Start:  AIC=1030.08

@@ -22,10 +22,13 @@ model3 <- as.data.frame(nres)
 hist_stand_res <-
   ggplot(model3, aes(nres)) +
   geom_histogram(aes(y = after_stat(density)),
-                 breaks = seq(-2.55, 1.65, by = 0.7),
-                 fill = "#00338D") +
-  stat_function(fun = dnorm, args = list(mean = mean(model3$nres),
-                                         sd = sd(model3$nres)))
+    breaks = seq(-2.55, 1.65, by = 0.7),
+    fill = "#00338D"
+  ) +
+  stat_function(fun = dnorm, args = list(
+    mean = mean(model3$nres),
+    sd = sd(model3$nres)
+  ))
 hist_stand_res
 \end{Verbatim}
 \endgroup

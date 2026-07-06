@@ -16,18 +16,18 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-set.seed(123)    # Set seed for reproducibility
-beta_0 <- 2      # True intercept
-beta_1 <- 1.5    # True slope
-n <- 11          # Number of points to sample
-x_min <- 0       # Minimum value of x
-x_max <- 10      # Maximum value of x
-x_values <- seq(x_min, x_max, length.out = n)  # x values modelled
-sigma <- 5       # Standard deviation of the noise
-rep <- 200       # Number of replications
-alpha <- 0.05    # Significance level for 95% confidence interval
-x_extended_min <- x_min - (x_max - x_min) / 2  # Extended x range minimum
-x_extended_max <- x_max + (x_max - x_min) / 2  # Extended x range maximum
+set.seed(123) # Set seed for reproducibility
+beta_0 <- 2 # True intercept
+beta_1 <- 1.5 # True slope
+n <- 11 # Number of points to sample
+x_min <- 0 # Minimum value of x
+x_max <- 10 # Maximum value of x
+x_values <- seq(x_min, x_max, length.out = n) # x values modelled
+sigma <- 5 # Standard deviation of the noise
+rep <- 200 # Number of replications
+alpha <- 0.05 # Significance level for 95% confidence interval
+x_extended_min <- x_min - (x_max - x_min) / 2 # Extended x range minimum
+x_extended_max <- x_max + (x_max - x_min) / 2 # Extended x range maximum
 x_extended <- seq(x_extended_min, x_extended_max, length.out = 100) # Plot range
 \end{Verbatim}
 \endgroup

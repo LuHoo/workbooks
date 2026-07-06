@@ -14,12 +14,15 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-cumul <- cvs_obj(bv = inventoryData$bv,
-                 id = inventoryData$item)
+cumul <- cvs_obj(
+  bv = inventoryData$bv,
+  id = inventoryData$item
+)
 cumul <- stratify(cumul,
-                  strata = 3,
-                  classes = 10,
-                  stratMeth = "cumulative")
+  strata = 3,
+  classes = 10,
+  stratMeth = "cumulative"
+)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

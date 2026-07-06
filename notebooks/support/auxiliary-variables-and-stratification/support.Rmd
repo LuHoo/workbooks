@@ -44,10 +44,12 @@ We first create a Classical Variables Sampling ("CVS") object. An object is a co
 We create the CVS object `mySample` by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiers `id`, and the random seed number `seed`.
 
 ```{r}
-mySample <- cvs_obj(n = 400,
-                    bv = inventoryData$bv,
-                    id = inventoryData$item,
-                    seed = 12345)
+mySample <- cvs_obj(
+  n = 400,
+  bv = inventoryData$bv,
+  id = inventoryData$item,
+  seed = 12345
+)
 ```
 
 The CVS object has 19 different attributes attached to it, that will be filled as we proceed from sample planning, through stratification and selection to evaluation. The following is a list of all attributes.
@@ -69,7 +71,7 @@ RNGkind(sample.kind = "Rounding")
 We sample 400 units from the `inventoryData` dataset with the `select()` function. This effectively fills the `sample` attribute in `mySample`.
 
 ```{r}
-mySample <-  select(mySample)
+mySample <- select(mySample)
 head(mySample$sample)
 ```
 
@@ -173,9 +175,11 @@ mySample$evalResults$Estimates
 We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
 
 ```{r}
-arSample <- cvs_obj(bv = accounts_receivable$amount,
-                    id = accounts_receivable$invoice,
-                    n = 100)
+arSample <- cvs_obj(
+  bv = accounts_receivable$amount,
+  id = accounts_receivable$invoice,
+  n = 100
+)
 ```
 We select the sample, using a seed equal to 1.
 
@@ -224,28 +228,34 @@ qt(0.975, df = m - 1)
 
 We start with creating a CVS object.
 ```{r}
-equal <- cvs_obj(bv = inventoryData$bv,
-                 id = inventoryData$item)
+equal <- cvs_obj(
+  bv = inventoryData$bv,
+  id = inventoryData$item
+)
 ```
 
 We then stratify with the equal method (`stratMeth = equal`), and view the summary.
 
 ```{r}
 equal <- stratify(equal,
-                  strata = 3,
-                  stratMeth = "equal")
+  strata = 3,
+  stratMeth = "equal"
+)
 equal$stratSumm
 ```
 
 ### Exercise 3.9. Stratification with the cumulative method
 
 ```{r}
-cumul <- cvs_obj(bv = inventoryData$bv,
-                 id = inventoryData$item)
+cumul <- cvs_obj(
+  bv = inventoryData$bv,
+  id = inventoryData$item
+)
 cumul <- stratify(cumul,
-                  strata = 3,
-                  classes = 10,
-                  stratMeth = "cumulative")
+  strata = 3,
+  classes = 10,
+  stratMeth = "cumulative"
+)
 ```
 
 The classification in Table 4.6 is stored in the `classSum` attribute.
@@ -276,10 +286,11 @@ head(cumul$sample)
 Obtain the audit values and evaluate the sample.
 
 ```{r}
-true_values <- inventoryData[match(cumul$sample$item,
-                                   inventoryData$item), "av"]
+true_values <- inventoryData[match(
+  cumul$sample$item,
+  inventoryData$item
+), "av"]
 cumul <- evaluate(cumul, av = true_values)
-
 ```
 A summary table of the estimates for each of the estimation methods is stored in the `Estimates` argument, which is part of the `evalResults` argument.
 

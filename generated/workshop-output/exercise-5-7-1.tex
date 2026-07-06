@@ -20,8 +20,9 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 model_forward <- lm(revenue ~ 1, data = USSteamCoEstim)
 model_forward <- step(model_forward,
-                      direction = "forward",
-                      scope = formula(~ production + coolDD + heatDD))
+  direction = "forward",
+  scope = formula(~ production + coolDD + heatDD)
+)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Start:  AIC=1114.66

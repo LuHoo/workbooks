@@ -14,9 +14,9 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 # Parameters
-df <- 8  # Degrees of freedom
-x <- seq(0, 20, by = 0.1)  # Range of x values
-tail_start <- 15.51  # Starting point for the shaded tail
+df <- 8 # Degrees of freedom
+x <- seq(0, 20, by = 0.1) # Range of x values
+tail_start <- 15.51 # Starting point for the shaded tail
 
 # Create a data frame for the chi-square distribution
 data <- data.frame(
@@ -33,7 +33,7 @@ chisq_plot <- ggplot(data, aes(x = x, y = y)) +
     fill = "#00338D",
     alpha = 1
   ) +
-  labs(x="x", y="density")
+  labs(x = "x", y = "density")
 
 chisq_plot
 \end{Verbatim}

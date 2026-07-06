@@ -13,8 +13,10 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-true_values <- inventoryData[match(cumul$sample$item,
-                                   inventoryData$item), "av"]
+true_values <- inventoryData[match(
+  cumul$sample$item,
+  inventoryData$item
+), "av"]
 cumul <- evaluate(cumul, av = true_values)
 \end{Verbatim}
 \endgroup

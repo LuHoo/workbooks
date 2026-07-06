@@ -25,8 +25,8 @@ comparison <- as.data.frame(comparison)
 
 comparison$Recorded <- as.numeric(comparison$Recorded)
 comparison$Expected <- as.numeric(comparison$Expected)
-comparison$Lower    <- as.numeric(comparison$Lower)
-comparison$Upper    <- as.numeric(comparison$Upper)
+comparison$Lower <- as.numeric(comparison$Lower)
+comparison$Upper <- as.numeric(comparison$Upper)
 
 # Difference = Recorded - Expected
 comparison$Difference <- comparison$Recorded - comparison$Expected

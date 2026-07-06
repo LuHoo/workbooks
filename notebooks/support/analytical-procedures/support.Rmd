@@ -27,15 +27,21 @@ generate_plot <- function(materiality, std, cl, beta, deg, approach, dist) {
   shift <- materiality / std
 
   # Create data frames for each scenario
-  df <- data.frame(x = x * std,
-                   y = dt(x, df = deg),
-                   Scenario = "No misstatement")
-  df_under <- data.frame(x = x * std,
-                         y = dt(x, df = deg, ncp = -shift),
-                         Scenario = "Understatement")
-  df_over <- data.frame(x = x * std,
-                        y = dt(x, df = deg, ncp = shift),
-                        Scenario = "Overstatement")
+  df <- data.frame(
+    x = x * std,
+    y = dt(x, df = deg),
+    Scenario = "No misstatement"
+  )
+  df_under <- data.frame(
+    x = x * std,
+    y = dt(x, df = deg, ncp = -shift),
+    Scenario = "Understatement"
+  )
+  df_over <- data.frame(
+    x = x * std,
+    y = dt(x, df = deg, ncp = shift),
+    Scenario = "Overstatement"
+  )
 
   # Combine data frames based on the selected distribution
   if (dist == "Understatements") {
@@ -81,9 +87,11 @@ generate_plot <- function(materiality, std, cl, beta, deg, approach, dist) {
   # Generate the plot
   p <- ggplot(df, aes(x = x, y = y, linetype = Scenario)) +
     geom_line(size = 1) +
-    scale_linetype_manual(values = c("Understatement" = "dashed",
-                                     "No misstatement" = "solid",
-                                     "Overstatement" = "dotted")) +
+    scale_linetype_manual(values = c(
+      "Understatement" = "dashed",
+      "No misstatement" = "solid",
+      "Overstatement" = "dotted"
+    )) +
     xlab("Difference") +
     ylab("Density") +
     scale_x_continuous(labels = scales::comma) +
@@ -91,41 +99,64 @@ generate_plot <- function(materiality, std, cl, beta, deg, approach, dist) {
 
   # Add annotations and segments for "No misstatement"
   p <- p +
-    annotate("text", x = lower_bound * std, y = 0.06,
-             label = TeX("$C_{.005}$"), size = 3) +
-    annotate("text", x = upper_bound * std, y = 0.06,
-             label = TeX("$C_{.995}$"), size = 3) +
-    geom_segment(aes(x = lower_bound * std, y = 0.05,
-                     xend = upper_bound * std, yend = 0.05),
-                 size = 0.2, color = "black")
+    annotate("text",
+      x = lower_bound * std, y = 0.06,
+      label = TeX("$C_{.005}$"), size = 3
+    ) +
+    annotate("text",
+      x = upper_bound * std, y = 0.06,
+      label = TeX("$C_{.995}$"), size = 3
+    ) +
+    geom_segment(
+      aes(
+        x = lower_bound * std, y = 0.05,
+        xend = upper_bound * std, yend = 0.05
+      ),
+      size = 0.2, color = "black"
+    )
 
   # Add annotations and segments for "Understatement" if applicable
   if (dist %in% c("Understatements", "Both")) {
     p <- p +
-      annotate("text", x = under_lower_bound * std, y = 0.035,
-               label = TeX("$U_{.05}$"), size = 3) +
-      annotate("text", x = under_upper_bound * std, y = 0.035,
-               label = TeX("$U_{.95}$"), size = 3) +
-      geom_segment(aes(x = under_lower_bound * std, y = 0.045,
-                       xend = under_upper_bound * std, yend = 0.045),
-                   size = 0.2, color = "black", linetype = "dashed") +
+      annotate("text",
+        x = under_lower_bound * std, y = 0.035,
+        label = TeX("$U_{.05}$"), size = 3
+      ) +
+      annotate("text",
+        x = under_upper_bound * std, y = 0.035,
+        label = TeX("$U_{.95}$"), size = 3
+      ) +
+      geom_segment(
+        aes(
+          x = under_lower_bound * std, y = 0.045,
+          xend = under_upper_bound * std, yend = 0.045
+        ),
+        size = 0.2, color = "black", linetype = "dashed"
+      ) +
       annotate("text", x = -materiality, y = 0.01, label = TeX("$-PM$"), size = 3)
   }
 
   # Add annotations and segments for "Overstatement" if applicable
   if (dist %in% c("Overstatements", "Both")) {
     p <- p +
-      annotate("text", x = over_lower_bound * std, y = 0.03,
-               label = TeX("$O_{.05}$"), size = 3) +
-      annotate("text", x = over_upper_bound * std, y = 0.03,
-               label = TeX("$O_{.95}$"), size = 3) +
-      coord_cartesian(xlim = c(-2300000, 2300000)) +  # Beperk de x-as tot [-1,500,000; 1,500,000]
-      geom_segment(aes(x = over_lower_bound * std, y = 0.04,
-                       xend = over_upper_bound * std, yend = 0.04),
-                   size = 0.2, color = "black", linetype = "dotted") +
+      annotate("text",
+        x = over_lower_bound * std, y = 0.03,
+        label = TeX("$O_{.05}$"), size = 3
+      ) +
+      annotate("text",
+        x = over_upper_bound * std, y = 0.03,
+        label = TeX("$O_{.95}$"), size = 3
+      ) +
+      coord_cartesian(xlim = c(-2300000, 2300000)) + # Beperk de x-as tot [-1,500,000; 1,500,000]
+      geom_segment(
+        aes(
+          x = over_lower_bound * std, y = 0.04,
+          xend = over_upper_bound * std, yend = 0.04
+        ),
+        size = 0.2, color = "black", linetype = "dotted"
+      ) +
       annotate("text", x = materiality, y = 0.01, label = TeX("$PM$"), size = 3) +
-      theme(axis.text.y = element_blank())  # Verwijder labels y-as
-      
+      theme(axis.text.y = element_blank()) # Verwijder labels y-as
   }
 
   return(p)
@@ -181,8 +212,6 @@ pdf_file_path <- save_book_figure(
 <!-- SUPPORT-ONLY:END -->
 
 ```{r}
-
-
 # Display the path where the PDF is saved
 pdf_file_path
 ```
@@ -195,14 +224,14 @@ generate_comparison_plot <- function(materiality, std_precise, std_less_precise,
   # Data voor het precieze model
   df_precise <- suppressWarnings(data.frame(
     x = x * std_precise,
-    y = dt(x, df = deg) / std_precise,  # Normaliseer door std_precise
+    y = dt(x, df = deg) / std_precise, # Normaliseer door std_precise
     Scenario = "Precise Model"
   ))
 
   # Data voor het minder precieze model
   df_less_precise <- suppressWarnings(data.frame(
     x = x * std_less_precise,
-    y = dt(x, df = deg) / std_less_precise,  # Normaliseer door std_less_precise
+    y = dt(x, df = deg) / std_less_precise, # Normaliseer door std_less_precise
     Scenario = "Less Precise Model"
   ))
 
@@ -238,8 +267,8 @@ generate_comparison_plot <- function(materiality, std_precise, std_less_precise,
     ylab("Density") +
     scale_x_continuous(labels = scales::comma) +
     theme(legend.position = "top") +
-    coord_cartesian(xlim = c(-1000000, 1000000)) +  # Beperk de x-as tot [-1,500,000; 1,500,000]
-    theme(axis.text.y = element_blank())  # Verwijder labels y-as
+    coord_cartesian(xlim = c(-1000000, 1000000)) + # Beperk de x-as tot [-1,500,000; 1,500,000]
+    theme(axis.text.y = element_blank()) # Verwijder labels y-as
 
   # Voeg annotaties toe voor het precieze model
   # p <- p +
@@ -266,13 +295,13 @@ generate_comparison_plot <- function(materiality, std_precise, std_less_precise,
 
 # Parameters voor de plot
 materiality <- 1000000
-std_precise <- 200000  # Precieze standaarddeviatie
-std_less_precise <- 350000  # Minder precieze standaarddeviatie
+std_precise <- 200000 # Precieze standaarddeviatie
+std_less_precise <- 350000 # Minder precieze standaarddeviatie
 cl <- 0.95
 beta <- 0.01
 deg <- 11
 approach <- "Positive"
-dist <- "None"  # Niet relevant voor deze vergelijking
+dist <- "None" # Niet relevant voor deze vergelijking
 
 # Genereer de vergelijkingsplot
 comparison_plot <- generate_comparison_plot(materiality, std_precise, std_less_precise, cl, beta, deg, approach)

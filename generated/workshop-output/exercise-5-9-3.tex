@@ -13,10 +13,12 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-ussteamco.mod.2 <- lm(revenue ~ production * summer +
-                        coolDD * summer +
-                        heatDD * summer,
-                      data = USSteamCoEstim)
+ussteamco.mod.2 <- lm(
+  revenue ~ production * summer +
+    coolDD * summer +
+    heatDD * summer,
+  data = USSteamCoEstim
+)
 summary(ussteamco.mod.2)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
