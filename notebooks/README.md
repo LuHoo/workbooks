@@ -27,6 +27,13 @@ For example:
 `Rscript scripts/export-workshop-output.R --input notebooks/support/probability-distributions/support.Rmd --output generated/workshop-output/exercise-1-1-1.tex`
 
 Legacy workshop-specific scripts call this CLI for backward compatibility.
+Supported wrapper scripts are:
+
+- `Rscript scripts/export-probability-distributions-workshop.R`
+- `Rscript scripts/export-hypothesis-testing-workshop.R`
+- `Rscript scripts/export-regression-analysis-workshop.R`
+- `Rscript scripts/export-goodness-of-fit-workshop.R`
+
 Never edit generated public R workbooks
 directly.
 

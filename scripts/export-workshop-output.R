@@ -92,14 +92,8 @@ validate_supported_constructs <- function(lines, source_file) {
 }
 
 find_heading_line <- function(lines, exercise) {
-  prefix <- paste0("### Exercise ", exercise)
-  candidates <- which(startsWith(lines, prefix))
-  heading <- candidates[sapply(candidates, function(idx) {
-    line <- lines[[idx]]
-    if (nchar(line) == nchar(prefix)) return(TRUE)
-    next_char <- substr(line, nchar(prefix) + 1L, nchar(prefix) + 1L)
-    identical(next_char, " ") || identical(next_char, ".")
-  })]
+  pattern <- paste0("^##+ Exercise ", gsub("\\.", "\\\\.", exercise), "(\\.| |$)")
+  heading <- grep(pattern, lines)
   if (length(heading) != 1L) {
     stop("Could not find unique Exercise ", exercise)
   }
@@ -108,7 +102,7 @@ find_heading_line <- function(lines, exercise) {
 
 extract_exercise_segments <- function(lines, exercise, expected_chunk_count, source_file) {
   heading <- find_heading_line(lines, exercise)
-  next_heading <- grep("^### Exercise ", lines)
+  next_heading <- grep("^##+ Exercise ", lines)
   next_heading <- next_heading[next_heading > heading]
   end <- if (length(next_heading)) next_heading[[1L]] - 1L else length(lines)
   exercise_lines <- lines[(heading + 1L):end]
@@ -264,7 +258,7 @@ markdown_to_latex <- function(lines, inline_env, source_file) {
 }
 
 prepare_chunk_environment <- function(all_segments, config, target_exercise, target_chunk_index) {
-  env <- new.env(parent = .GlobalEnv)
+  env <- .GlobalEnv
 
   for (exercise in names(config$expected_chunks)) {
     segments <- all_segments[[exercise]]

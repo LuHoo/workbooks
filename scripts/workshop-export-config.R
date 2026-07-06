@@ -28,6 +28,55 @@ get_workshop_export_configs <- function() {
         "4.9" = 1L,
         "4.10" = 2L
       )
+    ),
+    list(
+      id = "regression-analysis",
+      source = "notebooks/support/regression-analysis/support.Rmd",
+      expected_chunks = c(
+        "5.1" = 1L,
+        "5.2" = 1L,
+        "5.3" = 8L,
+        "5.4" = 1L,
+        "5.5" = 1L,
+        "5.6" = 2L,
+        "5.7" = 4L,
+        "5.8" = 1L,
+        "5.9" = 3L,
+        "5.10" = 1L,
+        "5.11" = 1L,
+        "5.12" = 1L,
+        "5.13" = 3L,
+        "5.14" = 1L,
+        "5.15" = 2L,
+        "5.16" = 1L,
+        "5.17" = 2L,
+        "5.18" = 2L,
+        "5.19" = 5L,
+        "5.20" = 3L,
+        "5.21" = 1L,
+        "5.22" = 2L,
+        "5.23" = 3L,
+        "5.24" = 2L,
+        "5.25" = 2L,
+        "5.26" = 4L,
+        "5.27" = 1L,
+        "5.28" = 1L,
+        "5.29" = 1L,
+        "5.30" = 1L,
+        "5.31" = 4L,
+        "5.32" = 1L,
+        "5.33" = 2L,
+        "5.34" = 1L,
+        "5.35" = 2L
+      )
+    ),
+    list(
+      id = "goodness-of-fit",
+      source = "notebooks/support/goodness-of-fit/support.Rmd",
+      expected_chunks = c(
+        "6.1" = 1L,
+        "6.2" = 18L
+      )
     )
   )
 }
