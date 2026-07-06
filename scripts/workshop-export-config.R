@@ -14,6 +14,21 @@ get_workshop_export_configs <- function() {
       )
     ),
     list(
+      id = "auxiliary-variables-and-stratification",
+      source = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      expected_chunks = c(
+        "3.1" = 1L,
+        "3.2" = 7L,
+        "3.3" = 4L,
+        "3.4" = 3L,
+        "3.5" = 3L,
+        "3.6" = 4L,
+        "3.7" = 7L,
+        "3.8" = 2L,
+        "3.9" = 7L
+      )
+    ),
+    list(
       id = "hypothesis-testing",
       source = "notebooks/support/hypothesis-testing/support.Rmd",
       expected_chunks = c(
