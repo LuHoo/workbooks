@@ -173,3 +173,13 @@ support-only sections. It does not modify:
 The exporter remains canonical and does not require linting to run. Linter
 invocation by the exporter can be considered in future issues once lint behavior
 is proven stable.
+
+### Diagnostics policy
+
+Editor `lintr` diagnostics are intentionally limited to reduce noise on legacy
+workshop sources. In particular, `object_name_linter` is not enforced for this
+project.
+
+The authoritative style workflow for workshop support files is
+`scripts/lint-workshop-source.R` in `--check`/`--fix` mode, not broad editor
+style diagnostics.

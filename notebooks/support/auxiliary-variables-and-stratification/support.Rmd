@@ -686,7 +686,7 @@ for (i in 1:simSize) {
                                seed = i)
   avCVS <- inventoryData[match(cvsSample$sample$item, inventoryData$item),
                             c("item", "av_mus", "av_reg", "av_dif", "av_rat")]
-  for (j in 1:length(distributions)) {
+  for (j in seq_along(distributions)) {
     if (distributions[j] == "Constant difference") {
       avC <- avCVS$av_dif
     } else if (distributions[j] == "No intercept") {
@@ -697,7 +697,7 @@ for (i in 1:simSize) {
       avC <- avCVS$av_mus
     }
 
-    for (k in 1:length(estimators)) {
+    for (k in seq_along(estimators)) {
       r <- (i-1) * n_dist * n_est + (j-1) * n_est + k
       simResult[r, 1] <- estimators[k]
       simResult[r, 2] <- distributions[j]

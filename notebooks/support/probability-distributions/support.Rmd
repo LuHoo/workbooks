@@ -596,8 +596,8 @@ df_results <- data.frame(sample_mean = numeric(),
                           sampSize = factor(), 
                           distribution = factor())
 # 
-for(d in 1:length(distributions)){
-   for(k in 1:length(sampSize)){
+for (d in seq_along(distributions)) {
+  for (k in seq_along(sampSize)) {
      sample_mean <- rep(0, simSize)
      for (i in k:simSize){
        sample_df <- sampleDist(distributions[d], sampSize[k])
