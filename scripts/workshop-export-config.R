@@ -107,3 +107,13 @@ resolve_workshop_export_config <- function(input_path) {
   }
   NULL
 }
+
+resolve_workshop_export_config_by_id <- function(config_id) {
+  configs <- get_workshop_export_configs()
+  for (config in configs) {
+    if (identical(config$id, config_id)) {
+      return(config)
+    }
+  }
+  NULL
+}
