@@ -1041,331 +1041,35 @@ effect of changing assumptions, and interpret the results in an audit context.
 
 \begin{exercise}
 
-\textbf{Goodness of Fit as a Comparison Between Observed and Expected Frequencies}
+\textbf{Before we start}
 
-\medskip
-\noindent The baseline customer satisfaction survey results are:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{baseline <- c(250, 100, 275)}
-\end{Verbatim}
-That makes the expected probabilites:
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(expected_prob <- baseline / sum(baseline))}
-\textcolor{ada_light_blue}{0.40 0.16 0.44}
-\end{Verbatim}
-The observed frequencies in the follow-up study of the client satisfaction survey in Table \ref{tab:client_satisfaction_followup} are stored as follows:
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{observed <- c(15, 12, 13)}
-\end{Verbatim}
-The expected frequencies are:
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(expected <- sum(observed) * expected_prob)}
-\textcolor{ada_light_blue}{16.0  6.4 17.6}
-\end{Verbatim}
-The difference between observed and expected frequencies is
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{observed - expected}
-\textcolor{ada_light_blue}{-1.0  5.6 -4.6}
-\end{Verbatim}
-The chi-square test statistic is
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(chi_sq <- sum((observed - expected)^2 / expected))}
-\textcolor{ada_light_blue}{6.164773}
-\end{Verbatim}
-The individual contributions are
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(contributions <- (observed - expected)^2 / expected)}
-\textcolor{ada_light_blue}{0.062500 4.900000 1.202273}
-\end{Verbatim}
-Use the built-in function to check your result
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(test_result <- chisq.test(x = observed, p = expected_prob))}
-\textcolor{ada_light_blue}{ Chi-squared test for given probabilities}
-\textcolor{ada_light_blue}{ data:  observed}
-\textcolor{ada_light_blue}{ X-squared = 6.1648, df = 2, p-value = 0.04585}
-\end{Verbatim}
-The number of categories in the survey is
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(k <- length(observed))}
-\textcolor{ada_light_blue}{3}
-\end{Verbatim}
-The number of degrees of freedom is
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(df <- k - 1)}
-\textcolor{ada_light_blue}{2}
-\end{Verbatim}
-The critical value is
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(critical_value <- qchisq(0.95, df = df))}
-\textcolor{ada_light_blue}{5.991465}
-\end{Verbatim}
-The p-value of the test is
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(p_value <- pchisq(chi_sq, df = df, lower.tail = FALSE))}
-\textcolor{ada_light_blue}{0.04584971}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-6-1-1}
 
 \end{exercise}
 
 \begin{exercise}
 
-\textbf{Benford’s Law}
+\textbf{Goodness-of-fit workflow in R}
 
-\medskip
-\noindent The Benford probabilities for the first digit are
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{digits <- 1:9}
-\textcolor{ada_blue}{(benford_prob <- log10((digits + 1) / digits))}
-\textcolor{ada_light_blue}{0.30103000 0.17609126 0.12493874 0.09691001 0.07918125 0.06694679}
-\textcolor{ada_light_blue}{0.05799195 0.05115252 0.04575749}
-\end{Verbatim}
-Show the probabilities in a bar chart.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{benford <- data.frame(}
-\textcolor{ada_blue}{  Digit = factor(digits, levels = digits),}
-\textcolor{ada_blue}{  Probability = benford_prob}
-\textcolor{ada_blue}{)}
-\textcolor{ada_blue}{ggplot(benford, aes(x = Digit, y = Probability)) +}
-\textcolor{ada_blue}{  geom_col(fill = "#00338D", width = 0.7) +}
-\textcolor{ada_blue}{  scale_y_continuous(}
-\textcolor{ada_blue}{   limits = c(0, 0.35),}
-\textcolor{ada_blue}{    breaks = seq(0, 0.35, by = 0.05),}
-\textcolor{ada_blue}{    labels = scales::percent_format(accuracy = 1)}
-\textcolor{ada_blue}{  ) +}
-\textcolor{ada_blue}{  labs(}
-\textcolor{ada_blue}{    x = "First digit",}
-\textcolor{ada_blue}{    y = "Probability"}
-\textcolor{ada_blue}{  )}
-\end{Verbatim}
+\input{generated/workshop-output/exercise-6-2-1}
+\input{generated/workshop-output/exercise-6-2-2}
+\input{generated/workshop-output/exercise-6-2-3}
+\input{generated/workshop-output/exercise-6-2-4}
+\input{generated/workshop-output/exercise-6-2-5}
+\input{generated/workshop-output/exercise-6-2-6}
+\input{generated/workshop-output/exercise-6-2-7}
+\input{generated/workshop-output/exercise-6-2-8}
+\input{generated/workshop-output/exercise-6-2-9}
+\input{generated/workshop-output/exercise-6-2-10}
+\input{generated/workshop-output/exercise-6-2-11}
+\input{generated/workshop-output/exercise-6-2-12}
+\input{generated/workshop-output/exercise-6-2-13}
+\input{generated/workshop-output/exercise-6-2-14}
+\input{generated/workshop-output/exercise-6-2-15}
+\input{generated/workshop-output/exercise-6-2-16}
+\input{generated/workshop-output/exercise-6-2-17}
+\input{generated/workshop-output/exercise-6-2-18}
 
 \end{exercise}
-
-\begin{exercise}
-
-\textbf{Applying Benford’s Law to inventory data}
-
-\medskip
-\noindent The observed first-digit frequencies from the inventory list are:
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(inv_observed <- c(86, 48, 23, 32, 24, 36, 19, 18, 14))}
-\textcolor{ada_light_blue}{86 48 23 32 24 36 19 18 14}
-\textcolor{ada_blue}{(inv_expected <- sum(inv_observed) * benford_prob)}
-\textcolor{ada_light_blue}{90.30900 52.82738 37.48162 29.07300 23.75437 20.08404 17.39758 }
-\textcolor{ada_light_blue}{15.34576 13.72725}
-\end{Verbatim}
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{}
-\textcolor{ada_light_blue}{}
-\end{Verbatim}
-
-\end{exercise}
-
-\begin{exercise}
-
-\textbf{Testing the inventory data}
-
-\medskip
-\noindent Manual calculation of the chi-square test statistic.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(inv_chi_sq <- sum((inv\_observed - inv\_expected)^2 / inv\_expected))}
-\textcolor{ada_light_blue}{19.76415}
-\end{Verbatim}
-Use the built-in function to check your result
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(inv_test_result <- chisq.test(x = inv\_observed, p = benford_prob))}
-\textcolor{ada_light_blue}{Chi-squared test for given probabilities}
-\textcolor{ada_light_blue}{data:  inv_observed}
-\textcolor{ada_light_blue}{X-squared = 19.764, df = 8, p-value = 0.01127}
-\end{Verbatim}
-
-\end{exercise}
-
-\begin{exercise}
-
-\textbf{Identify the main sources of deviation}
-
-\medskip
-\noindent For the inventory first-digit data, calculate the contribution of each digit to the chi-square statistic:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{contribution <- (inv\_observed - inv\_expected)^2 / inv\_expected}
-\textcolor{ada_blue}{(contr <- data.frame(digit = digits, contribution = contribution))}
-\textcolor{ada_light_blue}{  digit contribution}
-\textcolor{ada_light_blue}{1     1  0.205599332}
-\textcolor{ada_light_blue}{2     2  0.441126867}
-\textcolor{ada_light_blue}{3     3  5.595204817}
-\textcolor{ada_light_blue}{4     4  0.294682523}
-\textcolor{ada_light_blue}{5     5  0.002539836}
-\textcolor{ada_light_blue}{6     6 12.612896657}
-\textcolor{ada_light_blue}{7     7  0.147591569}
-\textcolor{ada_light_blue}{8     8  0.459085038}
-\textcolor{ada_light_blue}{9     9  0.005419448}
-\end{Verbatim}
-
-\end{exercise}
-
-\begin{exercise}
-
-\textbf{Discrete uniform distribution}
-
-\noindent The pooled second- and third-digit frequencies from the inventory case are
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{inv2\_digits <- 0:9}
-\textcolor{ada_blue}{inv2\_observed <- c(39, 69, 60, 72, 70, 58, 65, 55, 59, 53)}
-\textcolor{ada_blue}{inv2\_expected_prob <- rep(0.10, 10)}
-\textcolor{ada_blue}{inv2\_expected <- sum(inv2\_observed) * inv2\_expected_prob}
-\end{Verbatim}
-Manual calculation of the chi-square test statistic.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(inv2_chi_sq <- sum((inv2\_observed - inv2\_expected)^2 / }
-\textcolor{ada_blue}{                     inv2\_expected))}
-\textcolor{ada_light_blue}{14.5}
-\end{Verbatim}
-Use the built-in function to check your result.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(inv2_test_result <- chisq.test(x = inv2\_observed, }
-\textcolor{ada_blue}{                                p = inv2\_expected_prob))}
-\textcolor{ada_light_blue}{ Chi-squared test for given probabilities}
-\textcolor{ada_light_blue}{data:  inv2\_observed}
-\textcolor{ada_light_blue}{X-squared = 14.5, df = 9, p-value = 0.1056}
-\end{Verbatim}
-
-\end{exercise}
-
-\begin{exercise}
-
-\textbf{Normality of residuals}
-
-\medskip
-\noindent The residuals from \ttblue{mod.3} are
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{mod3_res <- c(-1230927.1086, ..., -3345636.9793)}
-\end{Verbatim}
-Standardize the residuals
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{nres <- mod3_res / sd(mod3_res)}
-\textcolor{ada_blue}{model3 <- as.data.frame(nres)}
-\end{Verbatim}
-Divide the residuals into classes used in the chapter.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{breaks <- c(-2.55, -1.85, -1.15, -0.45, 0.25, 0.95, 1.65)}
-\textcolor{ada_blue}{(hist_nres <- ggplot(model3, aes(nres)) + }
-\textcolor{ada_blue}{  geom_histogram(aes(y = after_stat(density)),}
-\textcolor{ada_blue}{                 breaks = breaks,}
-\textcolor{ada_blue}{                 fill = "blue", color = "black") +}
-\textcolor{ada_blue}{  stat_function(fun = dnorm,}
-\textcolor{ada_blue}{                args = list(mean = mean(model3$nres),}
-\textcolor{ada_blue}{                            sd = sd(model3$nres)),}
-\textcolor{ada_blue}{                color = "red", size = 1))}
-\end{Verbatim}
-Divide the residuals into the classes.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{classes <- cut(}
-\textcolor{ada_blue}{  nres,}
-\textcolor{ada_blue}{  breaks = breaks,}
-\textcolor{ada_blue}{  right = FALSE,}
-\textcolor{ada_blue}{  include.lowest = TRUE}
-\textcolor{ada_blue}{)}
-\textcolor{ada_light_blue}{}
-\end{Verbatim}
-Save the observed frequencies as a vector.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{observed <- as.vector(table(classes))}
-\textcolor{ada_blue}{table(classes)}
-\textcolor{ada_light_blue}{classes}
-\textcolor{ada_light_blue}{[-2.55,-1.85) [-1.85,-1.15) [-1.15,-0.45)  [-0.45,0.25)   }
-\textcolor{ada_light_blue}{            2             1            10            10  }
-\textcolor{ada_light_blue}{[0.25,0.95)   [0.95,1.65] }
-\textcolor{ada_light_blue}{          5            8}
-\end{Verbatim}
-The expected probabilities under the standard normal distribution are the differences between the cumulative distribution function values.
-For example, \(P(-1.15 \leq X < -0.45) = \Phi(-0.45) - \Phi(-1.15)\).
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{(prob_normal <- diff(pnorm(breaks)))}
-\textcolor{ada_light_blue}{0.02677063 0.09291516 0.20128328 0.27235111 0.23023755 0.12158466}
-\end{Verbatim}
-Notice, however that
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{sum(prob_normal)}
-\textcolor{ada_light_blue}{0.9451424}
-\end{Verbatim}
-The probabilities do not sum to 1, because the normal distribution extends beyond the class boundaries used in the histogram. The missing probability is:
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{1 - sum(prob_normal)}
-\textcolor{ada_light_blue}{0.05485761}
-\end{Verbatim}
-Convert these probabilities into expected frequencies.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{n <- length(nres)}
-\textcolor{ada_blue}{(norm_expected <- n * prob_normal)}
-\textcolor{ada_light_blue}{0.9637426 3.3449458 7.2461982 9.8046398 8.2885517 4.3770477}
-\textcolor{ada_blue}{sum(norm_expected)}
-\textcolor{ada_light_blue}{34.02513}
-\end{Verbatim}
-The expected frequencies do not sum to 36, because the six classes do not cover the full normal distribution. This motivates adding open-ended tail classes for the chi-square goodness-of-fit test.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{breaks_chisq <- c(-Inf, breaks, Inf) }
-\textcolor{ada_blue}{classes_chisq <- cut(nres, breaks = breaks_chisq, right = FALSE, }
-\textcolor{ada_blue}{                     include.lowest = TRUE ) }
-\textcolor{ada_blue}{observed_chisq <- as.vector(table(classes_chisq)) }
-\textcolor{ada_blue}{prob_chisq <- diff(pnorm(breaks_chisq)) }
-\textcolor{ada_blue}{expected_chisq <- n * prob_chisq }
-\textcolor{ada_blue}{(result_chisq <- data.frame(Class = levels(classes_chisq), }
-\textcolor{ada_blue}{                            Observed = observed_chisq, }
-\textcolor{ada_blue}{                            Probability = round(prob_chisq, 4), }
-\textcolor{ada_blue}{                            Expected = round(expected_chisq, 2), }
-\textcolor{ada_blue}{                            Contribution = round((observed_chisq - }
-\textcolor{ada_blue}{                            expected_chisq)^2 / expected_chisq, 2) }
-\textcolor{ada_blue}{                            ) )}
-\textcolor{ada_light_blue}{          Class Observed Probability Expected Contribution}
-\textcolor{ada_light_blue}{1  [-Inf,-2.55)        0      0.0054     0.19         0.19}
-\textcolor{ada_light_blue}{2 [-2.55,-1.85)        2      0.0268     0.96         1.11}
-\textcolor{ada_light_blue}{3 [-1.85,-1.15)        1      0.0929     3.34         1.64}
-\textcolor{ada_light_blue}{4 [-1.15,-0.45)       10      0.2013     7.25         1.05}
-\textcolor{ada_light_blue}{5  [-0.45,0.25)       10      0.2724     9.80         0.00}
-\textcolor{ada_light_blue}{6   [0.25,0.95)        5      0.2302     8.29         1.30}
-\textcolor{ada_light_blue}{7   [0.95,1.65)        8      0.1216     4.38         3.00}
-\textcolor{ada_light_blue}{8   [1.65, Inf]        0      0.0495     1.78         1.78}
-\textcolor{ada_blue}{(chi_square <- sum((observed_chisq - expected_chisq)^2 / }
-\textcolor{ada_blue}{                    expected_chisq) )}
-\textcolor{ada_light_blue}{10.08697}
-\end{Verbatim}
-The histogram ignores the observations that would fall outside the chosen class limits, whereas the normal distribution extends to $-\infty$ and $\infty$.
-The missing probability corresponds to the two omitted tails $P(X < -2.55)$ and $X > 1.65$.
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{pnorm(-2.55)}
-\textcolor{ada_light_blue}{0.005386146}
-\textcolor{ada_blue}{1 - pnorm(1.65)}
-\textcolor{ada_light_blue}{0.04947147}
-\end{Verbatim}
-This naturally motivates why, for a proper chi-square goodness-of-fit test, one should add the two open-ended tail classes. It demonstrates that the chi-square test compares the entire theoretical distribution with the observed data, not just the portion shown in the histogram.
-\end{exercise}
-
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{}
-\textcolor{ada_light_blue}{}
-\end{Verbatim}
-
-
-
-
-
-
-
-% \begin{Verbatim}[commandchars=\\\{\}]
-% \textcolor{ada_blue}{}
-% \textcolor{ada_light_blue}{}
-% \end{Verbatim}
-
-% \end{exercise}
-
-
-
 
 % chapter goodness_of_fit (end)
