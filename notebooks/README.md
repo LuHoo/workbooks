@@ -16,8 +16,18 @@ Material enclosed by the exact marker lines
 is retained in the private support notebook and omitted from the generated
 public workshop. Run `Rscript scripts/render-notebooks.R` to regenerate and render all
 public Binder workbooks in the `notebooks/workshops` submodule. Pass `canonical`
-to render the private sources, or `all` to render both variants. To export without rendering, run
-`Rscript scripts/export-workshops.R`. Never edit generated public R workbooks
+to render the private sources, or `all` to render both variants. To export workshop
+exercise chunks without rendering, run `Rscript scripts/export-workshops.R`.
+The canonical chunk exporter entry point is:
+
+`Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex>`
+
+For example:
+
+`Rscript scripts/export-workshop-output.R --input notebooks/support/probability-distributions/support.Rmd --output generated/workshop-output/exercise-1-1-1.tex`
+
+Legacy workshop-specific scripts call this CLI for backward compatibility.
+Never edit generated public R workbooks
 directly.
 
 `support/analytical-procedures/support.Rmd` is a private-only Volume 2 figure
