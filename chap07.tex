@@ -1449,6 +1449,7 @@ Consequently, the common rule of thumb that a VIF greater than 10 indicates seri
 \]
 
 Thus, when using the adjusted GVIF scale, values above about 3.16 may indicate substantial multicollinearity. Values well below this threshold do not suggest serious variance inflation.
+For the \emph{Case: US SteamCo}, the largest VIF in \ttblue{mod.1} is 5.60 (for \ttblue{coolDD}), and the largest adjusted GVIF in \ttblue{mod.3} is 2.47 (also for \ttblue{coolDD}). Both are below their respective reference thresholds, so we find no evidence of problematic multicollinearity in the working models.
 
 % subsection multicollinearity (end)
 
@@ -2066,6 +2067,8 @@ heat\_summer\_adj &   -20,135 &    13,897 & -1.449 & 0.158894 \\
 \label{tab:summary_mod_4}
 \end{table}
 
+After applying the AR(1) correction, the Breusch--Godfrey test on \ttblue{mod.4} gives $LM = 2.2151$ with $p = 0.529$ (order 3), indicating no remaining evidence of residual autocorrelation at conventional levels.
+
 % subsection absence_of_autocorrelation (end)
 
 \subsection{Constructing a refined model}
@@ -2076,7 +2079,7 @@ We therefore seek to return to a simpler, more parsimonious specification, build
 Additionally, we must account for the presence of an outlier in observation 22, which we address through winsorization. 
 Another limitation of the earlier stepwise model (\ttblue{model\_forward}) is that it did not consider the inclusion of the dummy variable \ttblue{summer}, which we now believe to be theoretically relevant. 
 To address these issues, we initiate a new stepwise model selection procedure, this time based on the modified dataset USSteamCoEstim2, with the goal of identifying a model that is both statistically robust and more interpretable. 
-The resulting model will be referred to as \ttblue{mod.5}, and we work with this model for the remainder of this chapter.
+The resulting model will be referred to as \ttblue{mod.5}, and we work with this model for the remainder of this chapter. The backward procedure retains \ttblue{production}, \ttblue{coolDD}, and \ttblue{summer}, together with the interaction terms \ttblue{production:summer} and \ttblue{coolDD:summer}, while \ttblue{heatDD} and \ttblue{heatDD:summer} are removed.
 A summary of the coefficients of the resulting \ttblue{mod.5} is provided in Table \ref{tab:summary_mod_5}.
 
 \begin{table}[htbp]
@@ -2115,6 +2118,8 @@ The regression lines for summer months is
   \text{revenue} = 3,972,293 + 12.64 \cdot \text{production} + 3,683 \cdot \text{coolDD}
 \end{equation*}
 The coefficient values take the interactions into account. Therefore, the intercept value is equal to $752,767 + 3,219,526 = 3,972,293$, the slope value for \ttblue{production} is equal to $35.87 - 23.23 = 12.64$, and the marginal effect of \ttblue{coolDD} is given by $-121,381 + 125,064 = 3,683$.
+
+Re-running the model-assumption checks for \ttblue{mod.5} gives Breusch--Pagan $BP = 7.0367$ ($p = 0.2179$), Breusch--Godfrey $LM = 5.1992$ ($p = 0.1578$, order 3), and Shapiro--Wilk $W = 0.94875$ ($p = 0.09554$). Taken together, these results provide no evidence against homoskedasticity, absence of autocorrelation, or normality at the 5\% level.
 
 Although a backward procedure was applied to remove non-significant predictors, some variables may still merit inclusion for reasons beyond statistical significance. 
 These include theoretical relevance, potential interaction effects, or roles as control variables. 
@@ -2545,6 +2550,8 @@ Using the variances and covariance of the estimated regression coefficients toge
 s_{\text{comb}} = 6,323,301.
 \end{equation*}
 
+The corresponding annual prediction-variance components are approximately $1.4887 \cdot 10^{13}$ from coefficient uncertainty and $2.5098 \cdot 10^{13}$ from future residual variation. Thus, about 37.2\% of annual prediction variance comes from parameter estimation and 62.8\% from future-period noise.
+
 With a 99\% prediction interval and the appropriate $t$ critical value, the resulting acceptable prediction range for the annual revenue is
 
 \begin{equation*}
@@ -2729,6 +2736,8 @@ The achieved assurance for detecting a material understatement is the lower-tail
 \begin{equation}
 P(T < c_L \mid T \sim t_{df,-\delta}).
 \end{equation}
+
+Using the chapter's case settings $PM = 15,\!000,\!000$ and $\beta = 0.01$, the achieved assurance is 36.9\% for detecting a material overstatement and 36.9\% for detecting a material understatement.
 
 These probabilities express the likelihood that a material misstatement of size $PM$ would produce a difference outside the decision bounds. Their complement, $\alpha$, is the risk that a material misstatement of size $PM$ nevertheless produces a difference between the decision bounds, causing the auditor to incorrectly reject the audit null hypothesis of material misstatement. Under the audit convention, assurance is therefore $1-\alpha$.
 
