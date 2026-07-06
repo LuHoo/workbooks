@@ -22,4 +22,7 @@
 notebooks/**/*.html
 notebooks/**/*_files/
 
+# Simulation cache artifacts
+generated/cache/
+
 *.html
