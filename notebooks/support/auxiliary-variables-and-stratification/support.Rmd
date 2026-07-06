@@ -721,7 +721,7 @@ Precision achieved is then calculated with Equation 4.17
 ```{r}
 g *  qt(1 - alpha / 2, df = m - 1) * sqrt(var_ratio)
 (precAchRat <- N * qt(1 - alpha / 2, df = m - 1) *
-sd_ratio / sqrt(n) * fpc)
+sqrt(var_ratio) / sqrt(n) * fpc)
 ```
 ## Regression estimator
 ```{r}
@@ -733,7 +733,7 @@ Then we fill the results into Equation 4.24.
 ```{r}
 
 
-(var_regr <- sd_diff^2 - 2 * (slope - 1) * (covBvAv - var_bv) + (slope - 1)^2 * var_bv)
+(var_regr <- var_diff - 2 * (slope - 1) * (covBvAv - var_bv) + (slope - 1)^2 * var_bv)
 ```
 Precision achieved is then calculated with
 ```{r}
@@ -1138,7 +1138,7 @@ Precision achieved is then calculated with
 ```{r}
 
 cont_corr <- sqrt((N - n) / (N - 1))
-(precAchDif <- N * qt(1 - alpha / 2, df = m - 1) * 
+(precAchDif <- N * qt(1 - alpha / 2, df = m - 1) *
     sd_diff / sqrt(n) * cont_corr)
 arSample$evalResults$Estimates[3, 2]
 ```
