@@ -15,3 +15,99 @@
   exercise: "6.2"
   chunk: 2
   source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-3
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 3
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-4
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 4
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-5
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 5
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-6
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 6
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-7
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 7
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-8
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 8
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-9
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 9
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-10
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 10
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-11
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 11
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-12
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 12
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-13
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 13
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-14
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 14
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-15
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 15
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-16
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 16
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-17
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 17
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-18
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 18
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
