@@ -134,6 +134,23 @@ CLI flags:
 	required files are missing;
 - `--no-traceability` to skip metadata loading.
 
+## Learning Objective Coverage Reports
+
+Generate learning-objective coverage reports from traceability metadata:
+
+`Rscript scripts/generate-traceability-reports.R`
+
+Optional flags:
+
+- `--metadata-dir <path>` to override metadata source directory;
+- `--output-dir <path>` to override report output directory.
+
+Generated outputs (default directory `generated/traceability/`):
+
+- `learning-objective-coverage.csv`
+- `learning-objective-bloom-summary.csv`
+- `learning-objective-coverage.md`
+
 ### Assumptions and limitations
 
 - `knitr` is required.
