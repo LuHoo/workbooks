@@ -1,1 +1,29 @@
-[]
+- id: LO-C6-01
+  chapter: 6
+  scope: chapter
+  text: Explain the rationale of chi-square goodness-of-fit testing in an audit context.
+  bloom: understand
+  status: active
+
+- id: LO-C6S6.2-01
+  chapter: 6
+  scope: section
+  section: "6.2"
+  text: Apply Benford-based expected frequencies to interpret observed-versus-expected deviations.
+  bloom: apply
+  status: active
+
+- id: LO-C6S6.2-02
+  chapter: 6
+  scope: section
+  section: "6.2"
+  text: Evaluate whether identified digit anomalies warrant additional audit procedures.
+  bloom: evaluate
+  status: active
+
+- id: LO-C6-02
+  chapter: 6
+  scope: chapter
+  text: Distinguish statistical evidence of anomaly from conclusive evidence of fraud.
+  bloom: analyze
+  status: active

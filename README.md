@@ -153,6 +153,7 @@ Generated outputs (default directory `generated/traceability/`):
 - `review-question-to-lo.csv`
 - `lo-to-workshop-links.csv`
 - `lo-to-review-links.csv`
+- `traceability-exceptions.csv`
 - `learning-objective-coverage.md`
 
 ### Assumptions and limitations

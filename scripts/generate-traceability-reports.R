@@ -324,6 +324,81 @@ build_lo_to_review_table <- function(metadata) {
   out[order(out$lo_id), , drop = FALSE]
 }
 
+build_exceptions_table <- function(coverage, workshop_entity, review_entity) {
+  lo_gaps <- if (nrow(coverage) == 0L) {
+    coverage
+  } else {
+    coverage[coverage$coverage_status != "covered-both", , drop = FALSE]
+  }
+
+  workshop_gaps <- if (nrow(workshop_entity) == 0L) {
+    workshop_entity
+  } else {
+    workshop_entity[workshop_entity$mapping_status == "unmapped", , drop = FALSE]
+  }
+
+  review_gaps <- if (nrow(review_entity) == 0L) {
+    review_entity
+  } else {
+    review_entity[review_entity$mapping_status == "unmapped", , drop = FALSE]
+  }
+
+  rows <- list()
+
+  if (nrow(lo_gaps) > 0L) {
+    rows[[length(rows) + 1L]] <- data.frame(
+      entity_type = "learning_objective",
+      entity_id = lo_gaps$lo_id,
+      status = lo_gaps$coverage_status,
+      details = paste0(
+        "workshop_links=", lo_gaps$workshop_links,
+        "; review_links=", lo_gaps$review_links
+      ),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  if (nrow(workshop_gaps) > 0L) {
+    rows[[length(rows) + 1L]] <- data.frame(
+      entity_type = "workshop_exercise",
+      entity_id = workshop_gaps$workshop_traceability_id,
+      status = workshop_gaps$mapping_status,
+      details = paste0(
+        "workshop_id=", workshop_gaps$workshop_id,
+        "; exercise=", workshop_gaps$exercise,
+        "; chunk=", workshop_gaps$chunk
+      ),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  if (nrow(review_gaps) > 0L) {
+    rows[[length(rows) + 1L]] <- data.frame(
+      entity_type = "review_question",
+      entity_id = review_gaps$review_traceability_id,
+      status = review_gaps$mapping_status,
+      details = paste0(
+        "chapter=", review_gaps$chapter,
+        "; ordinal=", review_gaps$ordinal
+      ),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  if (length(rows) == 0L) {
+    return(data.frame(
+      entity_type = character(),
+      entity_id = character(),
+      status = character(),
+      details = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  out <- do.call(rbind, rows)
+  out[order(out$entity_type, out$entity_id), , drop = FALSE]
+}
+
 write_markdown_report <- function(
   coverage,
   bloom_summary,
@@ -331,6 +406,7 @@ write_markdown_report <- function(
   review_entity,
   lo_to_workshop,
   lo_to_review,
+  exceptions,
   path
 ) {
   lines <- c(
@@ -485,6 +561,28 @@ write_markdown_report <- function(
     }
   }
 
+  lines <- c(lines, "", "## Exceptions (Coverage Gaps)", "")
+  lines <- c(lines, "| Entity Type | Entity ID | Status | Details |")
+  lines <- c(lines, "|---|---|---|---|")
+
+  if (nrow(exceptions) == 0L) {
+    lines <- c(lines, "| _none_ | - | - | - |")
+  } else {
+    for (i in seq_len(nrow(exceptions))) {
+      row <- exceptions[i, , drop = FALSE]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %s | %s | %s |",
+          row$entity_type,
+          row$entity_id,
+          row$status,
+          ifelse(nzchar(row$details), row$details, "-")
+        )
+      )
+    }
+  }
+
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   writeLines(lines, path)
 }
@@ -507,6 +605,7 @@ main <- function() {
   review_entity <- build_review_entity_table(metadata)
   lo_to_workshop <- build_lo_to_workshop_table(metadata)
   lo_to_review <- build_lo_to_review_table(metadata)
+  exceptions <- build_exceptions_table(coverage, workshop_entity, review_entity)
 
   dir.create(args$output_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -516,6 +615,7 @@ main <- function() {
   review_entity_csv <- file.path(args$output_dir, "review-question-to-lo.csv")
   lo_to_workshop_csv <- file.path(args$output_dir, "lo-to-workshop-links.csv")
   lo_to_review_csv <- file.path(args$output_dir, "lo-to-review-links.csv")
+  exceptions_csv <- file.path(args$output_dir, "traceability-exceptions.csv")
   coverage_md <- file.path(args$output_dir, "learning-objective-coverage.md")
 
   utils::write.csv(coverage, coverage_csv, row.names = FALSE)
@@ -524,6 +624,7 @@ main <- function() {
   utils::write.csv(review_entity, review_entity_csv, row.names = FALSE)
   utils::write.csv(lo_to_workshop, lo_to_workshop_csv, row.names = FALSE)
   utils::write.csv(lo_to_review, lo_to_review_csv, row.names = FALSE)
+  utils::write.csv(exceptions, exceptions_csv, row.names = FALSE)
   write_markdown_report(
     coverage,
     bloom_summary,
@@ -531,6 +632,7 @@ main <- function() {
     review_entity,
     lo_to_workshop,
     lo_to_review,
+    exceptions,
     coverage_md
   )
 
@@ -540,6 +642,7 @@ main <- function() {
   message("Generated ", review_entity_csv)
   message("Generated ", lo_to_workshop_csv)
   message("Generated ", lo_to_review_csv)
+  message("Generated ", exceptions_csv)
   message("Generated ", coverage_md)
 }
 

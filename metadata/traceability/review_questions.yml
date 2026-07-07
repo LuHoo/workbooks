@@ -1,1 +1,14 @@
-[]
+- id: RQ-C6-001
+  chapter: 6
+  ordinal: 1
+  source_file: review_questions.tex
+
+- id: RQ-C6-002
+  chapter: 6
+  ordinal: 2
+  source_file: review_questions.tex
+
+- id: RQ-C6-003
+  chapter: 6
+  ordinal: 3
+  source_file: review_questions.tex

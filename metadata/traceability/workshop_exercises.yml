@@ -1,1 +1,17 @@
-[]
+- id: WX-goodness-of-fit-6.1-1
+  workshop_id: goodness-of-fit
+  exercise: "6.1"
+  chunk: 1
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-1
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 1
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
+
+- id: WX-goodness-of-fit-6.2-2
+  workshop_id: goodness-of-fit
+  exercise: "6.2"
+  chunk: 2
+  source_file: notebooks/support/goodness-of-fit/support.Rmd
