@@ -5,7 +5,15 @@
 
 \subsection*{Workshop Chapter 1 (Python)}
 
-Standalone Python notebook for Chapter 1 probability-distribution exercises, mirroring the R workshop flow.
+In this workshop, you apply the probability-distribution concepts from Chapter 1 directly in Python.
+
+\subsection*{Background on Python}
+
+Python is widely used in data analysis because it combines readable syntax with a strong scientific ecosystem. In this notebook we use \ttblue{scipy.stats} to mirror the same probability calculations as the R workshop.
+
+\subsection*{Integration with Theory}
+
+Each exercise corresponds to a theory section in the chapter. Move back and forth between the chapter text and the code blocks to connect formulae, parameter meanings, and interpretation of results.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{import math}
@@ -14,10 +22,12 @@ Standalone Python notebook for Chapter 1 probability-distribution exercises, mir
 
 
 \begin{exercise}
-\textbf{Hypergeometric distribution}
+\textbf{Hypergeometric Distribution}
 
 
-Equivalent to R \ttblue{dhyper()} / \ttblue{phyper()}: use \ttblue{hypergeom.pmf}, \ttblue{hypergeom.cdf}, and \ttblue{hypergeom.sf}.
+For the hypergeometric model, use \ttblue{hypergeom.pmf(k, N, M, n)} to calculate point probabilities $P(K = k)$.
+
+To compute cumulative probabilities $P(K \textbackslash{}leq k)$, use \ttblue{hypergeom.cdf}. Right-tail probabilities $P(K > k)$ are obtained with \ttblue{hypergeom.sf} (the survival function).
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{N = 331}
@@ -25,120 +35,121 @@ Equivalent to R \ttblue{dhyper()} / \ttblue{phyper()}: use \ttblue{hypergeom.pmf
 \textcolor{KPMG_blue}{n = 60}
 
 \textcolor{KPMG_blue}{hypergeom.pmf(0, N, M, n), hypergeom.pmf(1, N, M, n)}
-\textcolor{KPMG_light_blue}{(0.03036497699702399, 0.12145990798810331)}
+\textcolor{KPMG_light_blue}{(0.03036497699701723, 0.12145990798806892)}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{hypergeom.cdf(1, N, M, n), hypergeom.pmf(0, N, M, n) + hypergeom.pmf(1, N, M, n)}
-\textcolor{KPMG_light_blue}{(0.1518248849851273, 0.1518248849851273)}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{hypergeom.sf(1, N, M, n)}
-\textcolor{KPMG_light_blue}{0.8481751150149799}
 \end{Verbatim}
 
 
 \end{exercise}
 
 \begin{exercise}
-\textbf{Binomial distribution}
+\textbf{Binomial Distribution}
 
 
-Equivalent to R \ttblue{dbinom()} / \ttblue{pbinom()}: use \ttblue{binom.pmf} and \ttblue{binom.cdf}.
+For the binomial approximation, use \ttblue{binom.pmf} for $P(K = k)$ and \ttblue{binom.cdf} for $P(K \textbackslash{}leq k)$.
+
+The parameters are \ttblue{k}, \ttblue{n}, and \ttblue{p}, where in this case $p = M / N = 17 / 331$.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{binom.pmf(k=1, n=60, p=17 / 331), binom.cdf(1, 60, 17 / 331)}
-\textcolor{KPMG_light_blue}{(0.13733137916836718, 0.17960790177509958)}
 \end{Verbatim}
 
 
 \end{exercise}
 
 \begin{exercise}
-\textbf{Poisson distribution}
+\textbf{Poisson Distribution}
 
 
-Equivalent to R \ttblue{dpois()} / \ttblue{ppois()}: use \ttblue{poisson.pmf} and \ttblue{poisson.cdf} with \ttblue{mu = n * pi}.
+Use \ttblue{poisson.pmf} and \ttblue{poisson.cdf} with parameter $\textbackslash{}mu = n\textbackslash{}pi$. For this case, $\textbackslash{}mu = 60 \textbackslash{}cdot 17/331$.
+
+This gives a compact way to compare individual-event probabilities and cumulative probabilities in the same setting.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{mu = 60 * 17 / 331}
 \textcolor{KPMG_blue}{poisson.pmf(1, mu), poisson.pmf(3, mu)}
-\textcolor{KPMG_light_blue}{(0.1414043918733124, 0.22379789843860848)}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{poisson.cdf(1, mu)}
-\textcolor{KPMG_light_blue}{0.1872915033537697}
 \end{Verbatim}
 
 
 \end{exercise}
 
 \begin{exercise}
-\textbf{Normal distribution}
+\textbf{Normal Distribution}
 
 
-Equivalent to R \ttblue{pnorm()}: use \ttblue{norm.cdf(x, loc, scale)}.
+Use \ttblue{norm.cdf(x, loc, scale)} with \ttblue{x} as the observed value, \ttblue{loc} as the mean, and \ttblue{scale} as the standard deviation of the sampling distribution.
+
+You can pass arguments positionally or by name. Using named arguments is often clearer for review and makes reordering arguments safe.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{scale = 115.26 / math.sqrt(200)}
 \textcolor{KPMG_blue}{norm.cdf(x=1012, loc=1030, scale=scale)}
-\textcolor{KPMG_light_blue}{0.013602685762330115}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{norm.cdf(1012, 1030, scale), norm.cdf(x=1012, loc=1030, scale=scale), norm.cdf(scale=scale, x=1012, loc=1030)}
-\textcolor{KPMG_light_blue}{(0.013602685762330115, 0.013602685762330115, 0.013602685762330115)}
 \end{Verbatim}
 
 
 \end{exercise}
 
 \begin{exercise}
-\textbf{Student's t distribution}
+\textbf{Student's t Distribution}
 
 
-Equivalent to R \ttblue{pt()}: compute \ttblue{t\_val}, then use \ttblue{t.cdf}.
+First compute the t-statistic from the sample information, then evaluate the cumulative probability with \ttblue{t.cdf(x, df)}.
+
+This links the standardized value to its probability under Student's t distribution with the chosen degrees of freedom.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{t_val = (1004 - 1030) / (73.8 / math.sqrt(10))}
 \textcolor{KPMG_blue}{t_val, t.cdf(x=t_val, df=9)}
-\textcolor{KPMG_light_blue}{(-1.114081560492925, 0.14705532622052686)}
 \end{Verbatim}
 
 
 \end{exercise}
 
 \begin{exercise}
-\textbf{Chi-squared distribution}
+\textbf{Chi-Squared Distribution}
 
 
-Equivalent to R \ttblue{qchisq()}: use \ttblue{chi2.ppf}.
+Use \ttblue{chi2.ppf(q, df)} to obtain critical values (quantiles) of the $\textbackslash{}chi^2$ distribution.
+
+Here we compute both an upper quantile (95\%) and a lower quantile (5\%), which are then used for variance-interval reasoning.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{chi2.ppf(q=0.95, df=9), chi2.ppf(q=0.05, df=9)}
-\textcolor{KPMG_light_blue}{(16.918977604620448, 3.325112843066815)}
 \end{Verbatim}
 
 
 \end{exercise}
 
 \begin{exercise}
-\textbf{F distribution}
+\textbf{F Distribution}
 
 
-Equivalent to R \ttblue{qf(..., lower.tail = FALSE)} / \ttblue{pf(..., lower.tail = FALSE)}: use \ttblue{f.ppf} and \ttblue{f.sf}.
+Use \ttblue{f.ppf} to get the critical value for hypothesis testing, and \ttblue{f.sf} to compute the right-tail probability of that statistic.
+
+This mirrors the chapter logic: compare your test statistic to the critical value, then interpret the tail probability in context.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{f_crit = f.ppf(q=0.95, dfn=25, dfd=23)}
 \textcolor{KPMG_blue}{f_crit}
-\textcolor{KPMG_light_blue}{1.9962706179379208}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{KPMG_blue}{f.sf(x=f_crit, dfn=25, dfd=23)}
-\textcolor{KPMG_light_blue}{0.049999999999999975}
 \end{Verbatim}
 
 \end{exercise}
