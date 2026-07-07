@@ -50,6 +50,14 @@ normalize_text <- function(x) {
   as.character(x)
 }
 
+join_unique_ids <- function(values) {
+  values <- values[nzchar(values)]
+  if (length(values) == 0L) {
+    return("")
+  }
+  paste(sort(unique(values)), collapse = ", ")
+}
+
 build_lo_coverage_table <- function(metadata) {
   lo <- metadata$learning_objectives
   if (length(lo) == 0L) {
@@ -146,7 +154,185 @@ build_bloom_summary <- function(coverage) {
   do.call(rbind, rows)
 }
 
-write_markdown_report <- function(coverage, bloom_summary, path) {
+build_workshop_entity_table <- function(metadata) {
+  workshop_records <- metadata$workshop_exercises
+  lo_to_workshop <- metadata$lo_to_workshop
+
+  if (length(workshop_records) == 0L) {
+    return(data.frame(
+      workshop_traceability_id = character(),
+      workshop_id = character(),
+      exercise = character(),
+      chunk = integer(),
+      lo_ids = character(),
+      lo_count = integer(),
+      mapping_status = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  rows <- lapply(workshop_records, function(item) {
+    wx_id <- normalize_text(item$id)
+    linked_lo <- vapply(
+      lo_to_workshop,
+      function(m) {
+        if (identical(normalize_text(m$workshop_id), wx_id)) normalize_text(m$lo_id) else ""
+      },
+      character(1L)
+    )
+
+    linked_lo <- linked_lo[nzchar(linked_lo)]
+
+    data.frame(
+      workshop_traceability_id = wx_id,
+      workshop_id = normalize_text(item$workshop_id),
+      exercise = normalize_text(item$exercise),
+      chunk = as.integer(item$chunk),
+      lo_ids = join_unique_ids(linked_lo),
+      lo_count = length(unique(linked_lo)),
+      mapping_status = if (length(linked_lo) > 0L) "mapped" else "unmapped",
+      stringsAsFactors = FALSE
+    )
+  })
+
+  out <- do.call(rbind, rows)
+  out[order(out$workshop_traceability_id), , drop = FALSE]
+}
+
+build_review_entity_table <- function(metadata) {
+  review_records <- metadata$review_questions
+  lo_to_review <- metadata$lo_to_review
+
+  if (length(review_records) == 0L) {
+    return(data.frame(
+      review_traceability_id = character(),
+      chapter = integer(),
+      ordinal = integer(),
+      lo_ids = character(),
+      lo_count = integer(),
+      mapping_status = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  rows <- lapply(review_records, function(item) {
+    rq_id <- normalize_text(item$id)
+    linked_lo <- vapply(
+      lo_to_review,
+      function(m) {
+        if (identical(normalize_text(m$review_question_id), rq_id)) normalize_text(m$lo_id) else ""
+      },
+      character(1L)
+    )
+
+    linked_lo <- linked_lo[nzchar(linked_lo)]
+
+    data.frame(
+      review_traceability_id = rq_id,
+      chapter = as.integer(item$chapter),
+      ordinal = as.integer(item$ordinal),
+      lo_ids = join_unique_ids(linked_lo),
+      lo_count = length(unique(linked_lo)),
+      mapping_status = if (length(linked_lo) > 0L) "mapped" else "unmapped",
+      stringsAsFactors = FALSE
+    )
+  })
+
+  out <- do.call(rbind, rows)
+  out[order(out$review_traceability_id), , drop = FALSE]
+}
+
+build_lo_to_workshop_table <- function(metadata) {
+  lo_records <- metadata$learning_objectives
+  lo_to_workshop <- metadata$lo_to_workshop
+
+  if (length(lo_records) == 0L) {
+    return(data.frame(
+      lo_id = character(),
+      bloom = character(),
+      workshop_traceability_ids = character(),
+      workshop_count = integer(),
+      mapping_status = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  rows <- lapply(lo_records, function(item) {
+    lo_id <- normalize_text(item$id)
+    linked_wx <- vapply(
+      lo_to_workshop,
+      function(m) {
+        if (identical(normalize_text(m$lo_id), lo_id)) normalize_text(m$workshop_id) else ""
+      },
+      character(1L)
+    )
+
+    linked_wx <- linked_wx[nzchar(linked_wx)]
+
+    data.frame(
+      lo_id = lo_id,
+      bloom = tolower(normalize_text(item$bloom)),
+      workshop_traceability_ids = join_unique_ids(linked_wx),
+      workshop_count = length(unique(linked_wx)),
+      mapping_status = if (length(linked_wx) > 0L) "mapped" else "unmapped",
+      stringsAsFactors = FALSE
+    )
+  })
+
+  out <- do.call(rbind, rows)
+  out[order(out$lo_id), , drop = FALSE]
+}
+
+build_lo_to_review_table <- function(metadata) {
+  lo_records <- metadata$learning_objectives
+  lo_to_review <- metadata$lo_to_review
+
+  if (length(lo_records) == 0L) {
+    return(data.frame(
+      lo_id = character(),
+      bloom = character(),
+      review_traceability_ids = character(),
+      review_count = integer(),
+      mapping_status = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  rows <- lapply(lo_records, function(item) {
+    lo_id <- normalize_text(item$id)
+    linked_rq <- vapply(
+      lo_to_review,
+      function(m) {
+        if (identical(normalize_text(m$lo_id), lo_id)) normalize_text(m$review_question_id) else ""
+      },
+      character(1L)
+    )
+
+    linked_rq <- linked_rq[nzchar(linked_rq)]
+
+    data.frame(
+      lo_id = lo_id,
+      bloom = tolower(normalize_text(item$bloom)),
+      review_traceability_ids = join_unique_ids(linked_rq),
+      review_count = length(unique(linked_rq)),
+      mapping_status = if (length(linked_rq) > 0L) "mapped" else "unmapped",
+      stringsAsFactors = FALSE
+    )
+  })
+
+  out <- do.call(rbind, rows)
+  out[order(out$lo_id), , drop = FALSE]
+}
+
+write_markdown_report <- function(
+  coverage,
+  bloom_summary,
+  workshop_entity,
+  review_entity,
+  lo_to_workshop,
+  lo_to_review,
+  path
+) {
   lines <- c(
     "# Learning Objective Coverage Report",
     "",
@@ -204,6 +390,101 @@ write_markdown_report <- function(coverage, bloom_summary, path) {
     }
   }
 
+  lines <- c(lines, "", "## Workshop Exercise Traceability (Entity -> LO)", "")
+  lines <- c(lines, "| Workshop Traceability ID | Workshop | Exercise | Chunk | Linked LO IDs | LO Count | Status |")
+  lines <- c(lines, "|---|---|---|---:|---|---:|---|")
+
+  if (nrow(workshop_entity) == 0L) {
+    lines <- c(lines, "| _none_ | - | - | - | - | - | - |")
+  } else {
+    for (i in seq_len(nrow(workshop_entity))) {
+      row <- workshop_entity[i, , drop = FALSE]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %s | %s | %d | %s | %d | %s |",
+          row$workshop_traceability_id,
+          ifelse(nzchar(row$workshop_id), row$workshop_id, "-"),
+          ifelse(nzchar(row$exercise), row$exercise, "-"),
+          row$chunk,
+          ifelse(nzchar(row$lo_ids), row$lo_ids, "-"),
+          row$lo_count,
+          row$mapping_status
+        )
+      )
+    }
+  }
+
+  lines <- c(lines, "", "## Review Question Traceability (Entity -> LO)", "")
+  lines <- c(lines, "| Review Traceability ID | Chapter | Ordinal | Linked LO IDs | LO Count | Status |")
+  lines <- c(lines, "|---|---:|---:|---|---:|---|")
+
+  if (nrow(review_entity) == 0L) {
+    lines <- c(lines, "| _none_ | - | - | - | - | - |")
+  } else {
+    for (i in seq_len(nrow(review_entity))) {
+      row <- review_entity[i, , drop = FALSE]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %d | %d | %s | %d | %s |",
+          row$review_traceability_id,
+          row$chapter,
+          row$ordinal,
+          ifelse(nzchar(row$lo_ids), row$lo_ids, "-"),
+          row$lo_count,
+          row$mapping_status
+        )
+      )
+    }
+  }
+
+  lines <- c(lines, "", "## Learning Objectives -> Workshop Exercises", "")
+  lines <- c(lines, "| LO ID | Bloom | Linked Workshop IDs | Workshop Count | Status |")
+  lines <- c(lines, "|---|---|---|---:|---|")
+
+  if (nrow(lo_to_workshop) == 0L) {
+    lines <- c(lines, "| _none_ | - | - | - | - |")
+  } else {
+    for (i in seq_len(nrow(lo_to_workshop))) {
+      row <- lo_to_workshop[i, , drop = FALSE]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %s | %s | %d | %s |",
+          row$lo_id,
+          ifelse(nzchar(row$bloom), row$bloom, "-"),
+          ifelse(nzchar(row$workshop_traceability_ids), row$workshop_traceability_ids, "-"),
+          row$workshop_count,
+          row$mapping_status
+        )
+      )
+    }
+  }
+
+  lines <- c(lines, "", "## Learning Objectives -> Review Questions", "")
+  lines <- c(lines, "| LO ID | Bloom | Linked Review IDs | Review Count | Status |")
+  lines <- c(lines, "|---|---|---|---:|---|")
+
+  if (nrow(lo_to_review) == 0L) {
+    lines <- c(lines, "| _none_ | - | - | - | - |")
+  } else {
+    for (i in seq_len(nrow(lo_to_review))) {
+      row <- lo_to_review[i, , drop = FALSE]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %s | %s | %d | %s |",
+          row$lo_id,
+          ifelse(nzchar(row$bloom), row$bloom, "-"),
+          ifelse(nzchar(row$review_traceability_ids), row$review_traceability_ids, "-"),
+          row$review_count,
+          row$mapping_status
+        )
+      )
+    }
+  }
+
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   writeLines(lines, path)
 }
@@ -222,19 +503,43 @@ main <- function() {
 
   coverage <- build_lo_coverage_table(metadata)
   bloom_summary <- build_bloom_summary(coverage)
+  workshop_entity <- build_workshop_entity_table(metadata)
+  review_entity <- build_review_entity_table(metadata)
+  lo_to_workshop <- build_lo_to_workshop_table(metadata)
+  lo_to_review <- build_lo_to_review_table(metadata)
 
   dir.create(args$output_dir, recursive = TRUE, showWarnings = FALSE)
 
   coverage_csv <- file.path(args$output_dir, "learning-objective-coverage.csv")
   bloom_csv <- file.path(args$output_dir, "learning-objective-bloom-summary.csv")
+  workshop_entity_csv <- file.path(args$output_dir, "workshop-exercise-to-lo.csv")
+  review_entity_csv <- file.path(args$output_dir, "review-question-to-lo.csv")
+  lo_to_workshop_csv <- file.path(args$output_dir, "lo-to-workshop-links.csv")
+  lo_to_review_csv <- file.path(args$output_dir, "lo-to-review-links.csv")
   coverage_md <- file.path(args$output_dir, "learning-objective-coverage.md")
 
   utils::write.csv(coverage, coverage_csv, row.names = FALSE)
   utils::write.csv(bloom_summary, bloom_csv, row.names = FALSE)
-  write_markdown_report(coverage, bloom_summary, coverage_md)
+  utils::write.csv(workshop_entity, workshop_entity_csv, row.names = FALSE)
+  utils::write.csv(review_entity, review_entity_csv, row.names = FALSE)
+  utils::write.csv(lo_to_workshop, lo_to_workshop_csv, row.names = FALSE)
+  utils::write.csv(lo_to_review, lo_to_review_csv, row.names = FALSE)
+  write_markdown_report(
+    coverage,
+    bloom_summary,
+    workshop_entity,
+    review_entity,
+    lo_to_workshop,
+    lo_to_review,
+    coverage_md
+  )
 
   message("Generated ", coverage_csv)
   message("Generated ", bloom_csv)
+  message("Generated ", workshop_entity_csv)
+  message("Generated ", review_entity_csv)
+  message("Generated ", lo_to_workshop_csv)
+  message("Generated ", lo_to_review_csv)
   message("Generated ", coverage_md)
 }
 

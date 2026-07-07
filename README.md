@@ -149,6 +149,10 @@ Generated outputs (default directory `generated/traceability/`):
 
 - `learning-objective-coverage.csv`
 - `learning-objective-bloom-summary.csv`
+- `workshop-exercise-to-lo.csv`
+- `review-question-to-lo.csv`
+- `lo-to-workshop-links.csv`
+- `lo-to-review-links.csv`
 - `learning-objective-coverage.md`
 
 ### Assumptions and limitations
