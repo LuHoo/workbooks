@@ -370,3 +370,22 @@
   workshop_id: WX-regression-analysis-5.9-2
 - lo_id: LO-C5-01
   workshop_id: WX-regression-analysis-5.9-3
+
+- lo_id: LO-C5S5.1-01
+  workshop_id: WX-regression-analysis-5.1-1
+- lo_id: LO-C5S5.2-01
+  workshop_id: WX-regression-analysis-5.2-1
+- lo_id: LO-C5S5.3-01
+  workshop_id: WX-regression-analysis-5.3-1
+- lo_id: LO-C5S5.4-01
+  workshop_id: WX-regression-analysis-5.4-1
+- lo_id: LO-C5S5.5-01
+  workshop_id: WX-regression-analysis-5.5-1
+- lo_id: LO-C5S5.6-01
+  workshop_id: WX-regression-analysis-5.6-1
+- lo_id: LO-C5S5.7-01
+  workshop_id: WX-regression-analysis-5.7-1
+- lo_id: LO-C5S5.8-01
+  workshop_id: WX-regression-analysis-5.8-1
+- lo_id: LO-C5S5.9-01
+  workshop_id: WX-regression-analysis-5.9-1
