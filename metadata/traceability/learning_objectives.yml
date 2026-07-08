@@ -1,29 +1,51 @@
+- id: LO-C1-01
+  chapter: 1
+  scope: chapter
+  text: Apply core chapter 1 audit data analysis concepts in workshop exercises.
+  bloom: apply
+  status: active
+- id: LO-C3-01
+  chapter: 3
+  scope: chapter
+  text: Apply core chapter 3 audit data analysis concepts in workshop exercises.
+  bloom: apply
+  status: active
+- id: LO-C4-01
+  chapter: 4
+  scope: chapter
+  text: Apply core chapter 4 audit data analysis concepts in workshop exercises.
+  bloom: apply
+  status: active
+- id: LO-C5-01
+  chapter: 5
+  scope: chapter
+  text: Apply core chapter 5 audit data analysis concepts in workshop exercises.
+  bloom: apply
+  status: active
 - id: LO-C6-01
   chapter: 6
   scope: chapter
   text: Explain the rationale of chi-square goodness-of-fit testing in an audit context.
   bloom: understand
   status: active
-
-- id: LO-C6S6.2-01
-  chapter: 6
-  scope: section
-  section: "6.2"
-  text: Apply Benford-based expected frequencies to interpret observed-versus-expected deviations.
-  bloom: apply
-  status: active
-
-- id: LO-C6S6.2-02
-  chapter: 6
-  scope: section
-  section: "6.2"
-  text: Evaluate whether identified digit anomalies warrant additional audit procedures.
-  bloom: evaluate
-  status: active
-
 - id: LO-C6-02
   chapter: 6
   scope: chapter
   text: Distinguish statistical evidence of anomaly from conclusive evidence of fraud.
   bloom: analyze
+  status: active
+- id: LO-C6S6.2-01
+  chapter: 6
+  scope: section
+  section: '6.2'
+  text: Apply Benford-based expected frequencies to interpret observed-versus-expected
+    deviations.
+  bloom: apply
+  status: active
+- id: LO-C6S6.2-02
+  chapter: 6
+  scope: section
+  section: '6.2'
+  text: Evaluate whether identified digit anomalies warrant additional audit procedures.
+  bloom: evaluate
   status: active
