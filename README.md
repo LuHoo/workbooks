@@ -114,6 +114,52 @@ Unsupported or malformed structures fail with explicit errors.
 - Add new validations in Stage 7 if they do not alter current output semantics.
 - Add CLI options only when they preserve default behavior.
 
+### Traceability Metadata Ingestion
+
+The exporter can now read learning-objective traceability metadata from
+`metadata/traceability/`.
+
+Current behavior in this milestone:
+
+- metadata loading and ID validation are performed when metadata files are
+	present;
+- exporter output remains unchanged (report generation is implemented in
+	follow-up issues);
+- ingestion can be configured via CLI flags.
+
+CLI flags:
+
+- `--traceability-dir <path>` to override metadata location;
+- `--traceability-strict` to fail when the metadata directory exists but
+	required files are missing;
+- `--no-traceability` to skip metadata loading.
+
+## Learning Objective Coverage Reports
+
+Generate learning-objective coverage reports from traceability metadata:
+
+`Rscript scripts/generate-traceability-reports.R`
+
+Optional flags:
+
+- `--metadata-dir <path>` to override metadata source directory;
+- `--output-dir <path>` to override report output directory.
+
+Generated outputs (default directory `generated/traceability/`):
+
+- `learning-objective-coverage.csv`
+- `learning-objective-bloom-summary.csv`
+- `workshop-exercise-to-lo.csv`
+- `review-question-to-lo.csv`
+- `lo-to-workshop-links.csv`
+- `lo-to-review-links.csv`
+- `traceability-exceptions.csv`
+- `learning-objective-coverage.md`
+
+Contributor workflow documentation:
+
+- `docs/traceability/contributor-workflow.md`
+
 ### Assumptions and limitations
 
 - `knitr` is required.
