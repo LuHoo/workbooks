@@ -156,6 +156,10 @@ Generated outputs (default directory `generated/traceability/`):
 - `traceability-exceptions.csv`
 - `learning-objective-coverage.md`
 
+Contributor workflow documentation:
+
+- `docs/traceability/contributor-workflow.md`
+
 ### Assumptions and limitations
 
 - `knitr` is required.
