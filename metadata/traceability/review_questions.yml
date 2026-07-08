@@ -12,3 +12,13 @@
   chapter: 6
   ordinal: 3
   source_file: review_questions.tex
+
+- id: RQ-C6-012
+  chapter: 6
+  ordinal: 12
+  source_file: review_questions.tex
+
+- id: RQ-C6-013
+  chapter: 6
+  ordinal: 13
+  source_file: review_questions.tex
