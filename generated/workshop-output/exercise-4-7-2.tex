@@ -13,9 +13,11 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-multiple <- mus_obj(bv = accounts_receivable$amount,
-                    id = accounts_receivable$invoice,
-                    pm = 36730)
+multiple <- mus_obj(
+  bv = accounts_receivable$amount,
+  id = accounts_receivable$invoice,
+  pm = 36730
+)
 multiple <- size(multiple)
 multiple$n
 \end{Verbatim}
