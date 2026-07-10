@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/LuHoo/ada/schemas/workshop-ir-v1.json",
+  "title": "ADA Workshop Intermediate Representation v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at_utc",
+    "source",
+    "chapter",
+    "directives",
+    "chapter_blocks",
+    "exercises"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "workshop-ir/1.0.0"
+    },
+    "generated_at_utc": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "required": ["file_path", "line_count"],
+      "properties": {
+        "file_path": { "type": "string" },
+        "line_count": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "chapter": {
+      "type": "object",
+      "required": ["chapter_id", "workshop_id", "chapter_number", "title"],
+      "properties": {
+        "chapter_id": { "type": "string" },
+        "workshop_id": { "type": "string" },
+        "chapter_number": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "directives": {
+      "type": "object",
+      "required": ["supported", "observed"],
+      "properties": {
+        "supported": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "observed": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "chapter_blocks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/block" }
+    },
+    "exercises": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exercise" }
+    }
+  },
+  "$defs": {
+    "source_span": {
+      "type": "object",
+      "required": ["start_line", "end_line"],
+      "properties": {
+        "start_line": { "type": "integer", "minimum": 1 },
+        "end_line": { "type": "integer", "minimum": 1 },
+        "heading_line": { "type": "integer", "minimum": 1 },
+        "fence_open_line": { "type": "integer", "minimum": 1 },
+        "fence_close_line": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "traceability": {
+      "type": "object",
+      "required": ["source_file", "source_block_key"],
+      "properties": {
+        "source_file": { "type": "string" },
+        "source_block_key": { "type": "string" },
+        "workshop_identity_hint": {
+          "type": "object",
+          "properties": {
+            "exercise": { "type": "string" },
+            "chunk_index_within_exercise": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "block": {
+      "type": "object",
+      "required": [
+        "block_id",
+        "block_type",
+        "sequence",
+        "support_only",
+        "source_span",
+        "content",
+        "traceability"
+      ],
+      "properties": {
+        "block_id": { "type": "string" },
+        "block_type": {
+          "type": "string",
+          "enum": ["narrative", "code"]
+        },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "support_only": { "type": "boolean" },
+        "source_span": { "$ref": "#/$defs/source_span" },
+        "content": {
+          "type": "object",
+          "properties": {
+            "narrative_lines": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "chunk_header": { "type": "string" },
+            "code_lines": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "language": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "traceability": { "$ref": "#/$defs/traceability" }
+      },
+      "additionalProperties": false
+    },
+    "exercise": {
+      "type": "object",
+      "required": [
+        "exercise_id",
+        "exercise_ref",
+        "ordinal",
+        "label",
+        "source_span",
+        "blocks"
+      ],
+      "properties": {
+        "exercise_id": { "type": "string" },
+        "exercise_ref": { "type": "string" },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "label": { "type": "string" },
+        "source_span": { "$ref": "#/$defs/source_span" },
+        "blocks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/block" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
