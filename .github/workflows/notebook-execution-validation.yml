@@ -69,8 +69,8 @@ jobs:
         run: |
           python --version
           python - <<'PY'
-          import rpy2
-          print('rpy2', rpy2.__version__)
+          import importlib.metadata
+          print('rpy2', importlib.metadata.version('rpy2'))
           PY
           R --version | head -n 1
           Rscript -e "cat('FSaudit', as.character(packageVersion('FSaudit')), '\n')"
