@@ -368,6 +368,15 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
     for line in lines:
         updated = re.sub(r"^\s*\(([A-Za-z_][A-Za-z0-9_]*)\s*<-\s*(.+)\)\s*$", r"\1 = \2", line)
         updated = updated.replace("<-", "=")
+        updated = re.sub(r"\bRNGkind\s*\(.*\)", "# RNGkind() is R-specific; NumPy RNG is used in Python", updated)
+        updated = re.sub(r"\bset\.seed\s*\(([^)]*)\)", r"np.random.seed(\1)", updated)
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[sample\(N,\s*n\),\s*\]\s*$",
+            r"\1 = \2.iloc[np.random.choice(N, size=n, replace=False), :]",
+            updated,
+        )
+        updated = re.sub(r"\bnames\s*\(([^)]+)\)", r"\1.columns.tolist()", updated)
+        updated = re.sub(r"\bhead\s*\(([^,\)]+)\)", r"\1.head()", updated)
         updated = re.sub(r"\bTRUE\b", "True", updated)
         updated = re.sub(r"\bFALSE\b", "False", updated)
         updated = updated.replace("lower.tail", "lower_tail")
@@ -459,6 +468,40 @@ def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
+def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "from pathlib import Path",
+        "import sys",
+        "",
+        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
+        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
+        "        if str(_candidate) not in sys.path:",
+        "            sys.path.insert(0, str(_candidate))",
+        "        break",
+        "else:",
+        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
+        "",
+        "from ada_fsaudit_bridge import load_dataset",
+        "",
+        "salaries = load_dataset('salaries')",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"population-estimation-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "population-estimation-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
 def is_r_heavy_code_block(lines: List[str]) -> bool:
     joined = "\n".join(lines)
     patterns = [
@@ -485,6 +528,11 @@ def make_python_viz_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
         "import matplotlib.pyplot as plt",
         "import seaborn as sns",
         "from scipy.stats import chi2, norm",
+        "",
+        "def head(obj, n=6):",
+        "    if hasattr(obj, 'head'):",
+        "        return obj.head(n)",
+        "    return obj[:n]",
         "",
         "sns.set_theme(style='whitegrid')",
     ]
@@ -758,6 +806,8 @@ def render_notebook(
 
     if requires_fsaudit:
         cells.append(make_fsaudit_bootstrap_cell(ir))
+    if chapter_number == "2":
+        cells.append(make_population_estimation_bootstrap_cell(ir))
     if requires_python_viz_bootstrap:
         cells.append(make_python_viz_bootstrap_cell(ir))
     if requires_r_compat:
