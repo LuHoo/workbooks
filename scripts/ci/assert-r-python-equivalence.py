@@ -34,8 +34,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--chapters",
-        default="1,3,4,5,6",
-        help="Comma-separated chapter list to validate (default: 1,3,4,5,6).",
+        default="1,2,3,4,5,6",
+        help="Comma-separated chapter list to validate (default: 1,2,3,4,5,6).",
     )
     parser.add_argument(
         "--abs-tol",
@@ -74,6 +74,30 @@ out <- list(
   chi2_q05 = qchisq(0.05, 9),
   f_crit = f_crit,
   f_sf = pf(f_crit, 25, 23, lower.tail = FALSE)
+)
+cat(toJSON(out, auto_unbox = TRUE, digits = NA))
+""",
+                "2": """
+suppressPackageStartupMessages(library(jsonlite))
+if (!requireNamespace("FSaudit", quietly = TRUE)) {
+    stop("FSaudit is required for chapter 2 equivalence checks")
+}
+
+N <- 2222
+n <- 50
+alpha <- 0.025
+t_975 <- qt(0.975, df = n - 1)
+t_005 <- qt(0.005, df = n - 1)
+E <- 300000
+s <- 1537.551
+gamma <- E^2 / (N * t_975^2 * s^2)
+
+out <- list(
+    t_975 = t_975,
+    t_005 = t_005,
+    fpc_n = N / (1 + gamma),
+    lower_prop_hyper = FSaudit::lower(k = 31, popn = 2222, n = 50, alpha = alpha),
+    upper_prop_hyper = FSaudit::upper(k = 31, popn = 2222, n = 50, alpha = alpha)
 )
 cat(toJSON(out, auto_unbox = TRUE, digits = NA))
 """,
@@ -182,6 +206,23 @@ def python_metrics(chapter: str) -> dict[str, Any]:
         return {
             "upper_hyper": upper_bound(k=2, popn=3500, n=100, alpha=0.05),
             "lower_hyper": lower_bound(k=2, popn=3500, n=100, alpha=0.05),
+        }
+
+    if chapter == "2":
+        N = 2222
+        n = 50
+        alpha = 0.025
+        t_975 = t.ppf(0.975, df=n - 1)
+        t_005 = t.ppf(0.005, df=n - 1)
+        E = 300000
+        s = 1537.551
+        gamma = E**2 / (N * t_975**2 * s**2)
+        return {
+            "t_975": float(t_975),
+            "t_005": float(t_005),
+            "fpc_n": float(N / (1 + gamma)),
+            "lower_prop_hyper": lower_bound(k=31, popn=2222, n=50, alpha=alpha),
+            "upper_prop_hyper": upper_bound(k=31, popn=2222, n=50, alpha=alpha),
         }
 
     if chapter == "4":

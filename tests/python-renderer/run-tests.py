@@ -187,6 +187,25 @@ class RendererTestCase(unittest.TestCase):
         heading_refs = self.collect_heading_refs(nb_json)
         self.assertEqual(heading_refs[0], "1.1")
 
+    def test_orchestrator_generates_population_estimation_notebook(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-ch2-"))
+        cmd = [
+            "Rscript",
+            str(ORCHESTRATOR_SCRIPT),
+            "--config-id",
+            "population-estimation",
+            "--output-dir",
+            str(out_dir),
+        ]
+        subprocess.run(cmd, cwd=REPO_ROOT, check=True, capture_output=True, text=True)
+
+        out_nb = out_dir / "population-estimation" / "chapter-2.ipynb"
+        self.assertTrue(out_nb.exists())
+
+        nb_json = self.read_json(out_nb)
+        heading_refs = self.collect_heading_refs(nb_json)
+        self.assertEqual(heading_refs[0], "2.1")
+
     def test_fsaudit_workshops_emit_bridge_bootstrap_and_python_overrides(self):
         cases = [
             (
