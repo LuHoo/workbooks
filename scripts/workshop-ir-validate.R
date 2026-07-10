@@ -348,7 +348,10 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
     }
 
     for (exercise in ir$exercises) {
-      expected <- config$expected_chunks[[exercise$exercise_ref]]
+      expected <- NULL
+      if (exercise$exercise_ref %in% names(config$expected_chunks)) {
+        expected <- config$expected_chunks[[exercise$exercise_ref]]
+      }
       if (!is.null(expected)) {
         actual <- get_exercise_code_count(exercise)
         if (!identical(as.integer(expected), as.integer(actual))) {

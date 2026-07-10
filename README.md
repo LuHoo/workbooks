@@ -182,6 +182,32 @@ The suite covers:
 - round-trip segment consistency (legacy parser vs IR adapter);
 - exporter output compatibility (`--parser-engine legacy` vs `--parser-engine ir`).
 
+## Python Notebook Renderer (IR-Based)
+
+Generate deterministic Python `.ipynb` outputs from canonical workshop IR:
+
+- batch generation from configured workshop sources:
+	- `Rscript scripts/export-python-notebooks.R`
+- single configured workshop id:
+	- `Rscript scripts/export-python-notebooks.R --config-id probability-distributions`
+- direct renderer invocation with pre-generated IR JSON:
+	- `python3 scripts/workshop-ir-python-renderer.py --input-ir <ir.json> --output-notebook <chapter.ipynb> --target-language python`
+
+Renderer guarantees:
+
+- consumes canonical IR only;
+- preserves exercise ordering and numbering from IR;
+- applies Python overrides from directive-aware IR metadata;
+- emits deterministic notebook JSON for unchanged input.
+
+Architecture and mapping details:
+
+- `docs/architecture/workshop-ir-python-renderer.md`
+
+Renderer tests:
+
+- `python3 tests/python-renderer/run-tests.py`
+
 ### Traceability Metadata Ingestion
 
 The exporter can now read learning-objective traceability metadata from
