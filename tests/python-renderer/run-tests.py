@@ -294,6 +294,27 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("[validate-metadata]", proc.stderr + proc.stdout)
         self.assertIn("missing metadata.ada_renderer", proc.stderr + proc.stdout)
 
+    def test_probability_notebook_includes_r_stats_compat_shim(self):
+        source = REPO_ROOT / "notebooks" / "support" / "probability-distributions" / "support.Rmd"
+        ir_path = self.parse_ir(source)
+
+        out_path = Path(tempfile.mkstemp(prefix="nb-prob-", suffix=".ipynb")[1])
+        self.render_ipynb(ir_path, out_path)
+
+        nb_json = self.read_json(out_path)
+        code_cells = [
+            "".join(cell.get("source", []))
+            for cell in nb_json["cells"]
+            if cell.get("cell_type") == "code"
+        ]
+        code_text = "\n".join(code_cells)
+
+        self.assertIn("def dhyper", code_text)
+        self.assertIn("def qf", code_text)
+        self.assertIn("def qchisq", code_text)
+        self.assertNotIn("<-", code_text)
+        self.assertNotIn("lower.tail", code_text)
+
 
 if __name__ == "__main__":
     unittest.main()

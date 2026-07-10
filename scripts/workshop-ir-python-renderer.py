@@ -4,6 +4,7 @@ import argparse
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -352,6 +353,91 @@ def make_fsaudit_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
+def requires_r_stats_compat(lines: List[str]) -> bool:
+    joined = "\n".join(lines)
+    return bool(
+        re.search(r"\b(dhyper|phyper|dbinom|pbinom|pnorm|dnorm|dpois|ppois|dchisq|pchisq|qchisq|pt|pf|qf)\s*\(", joined)
+        or "<-" in joined
+        or "lower.tail" in joined
+    )
+
+
+def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
+    out: List[str] = []
+    for line in lines:
+        updated = re.sub(r"^\s*\(([A-Za-z_][A-Za-z0-9_]*)\s*<-\s*(.+)\)\s*$", r"\1 = \2", line)
+        updated = updated.replace("<-", "=")
+        updated = re.sub(r"\bTRUE\b", "True", updated)
+        updated = re.sub(r"\bFALSE\b", "False", updated)
+        updated = updated.replace("lower.tail", "lower_tail")
+        out.append(updated)
+    return out
+
+
+def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "from math import sqrt",
+        "from scipy.stats import binom, chi2, f, hypergeom, norm, poisson, t",
+        "",
+        "def dhyper(x, m, n, k):",
+        "    return hypergeom.pmf(x, M=m + n, n=m, N=k)",
+        "",
+        "def phyper(q, m, n, k, lower_tail=True):",
+        "    return hypergeom.cdf(q, M=m + n, n=m, N=k) if lower_tail else hypergeom.sf(q, M=m + n, n=m, N=k)",
+        "",
+        "def dbinom(x, size, prob):",
+        "    return binom.pmf(x, size, prob)",
+        "",
+        "def pbinom(q, size, prob, lower_tail=True):",
+        "    return binom.cdf(q, size, prob) if lower_tail else binom.sf(q, size, prob)",
+        "",
+        "def pnorm(q, mean=0.0, sd=1.0):",
+        "    return norm.cdf(q, loc=mean, scale=sd)",
+        "",
+        "def dnorm(x, mean=0.0, sd=1.0):",
+        "    return norm.pdf(x, loc=mean, scale=sd)",
+        "",
+        "def dpois(x, lambda_):",
+        "    return poisson.pmf(x, mu=lambda_)",
+        "",
+        "def ppois(q, lambda_, lower_tail=True):",
+        "    return poisson.cdf(q, mu=lambda_) if lower_tail else poisson.sf(q, mu=lambda_)",
+        "",
+        "def dchisq(x, df):",
+        "    return chi2.pdf(x, df=df)",
+        "",
+        "def pchisq(q, df, lower_tail=True):",
+        "    return chi2.cdf(q, df=df) if lower_tail else chi2.sf(q, df=df)",
+        "",
+        "def qchisq(p, df, lower_tail=True):",
+        "    return chi2.ppf(p, df=df) if lower_tail else chi2.isf(p, df=df)",
+        "",
+        "def pt(q, df, lower_tail=True):",
+        "    return t.cdf(q, df=df) if lower_tail else t.sf(q, df=df)",
+        "",
+        "def pf(q, df1, df2, lower_tail=True):",
+        "    return f.cdf(q, dfn=df1, dfd=df2) if lower_tail else f.sf(q, dfn=df1, dfd=df2)",
+        "",
+        "def qf(p, df1, df2, lower_tail=True):",
+        "    return f.ppf(p, dfn=df1, dfd=df2) if lower_tail else f.isf(p, dfn=df1, dfd=df2)",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"r-stats-compat:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "r-stats-compat-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
 def as_markdown_cell(source_lines: List[str], seed: str, traceability: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "cell_type": "markdown",
@@ -439,14 +525,24 @@ def render_notebook(
 
     resolved_by_exercise: List[tuple[Dict[str, Any], List[Dict[str, Any]]]] = []
     requires_fsaudit = False
+    requires_r_compat = False
     for exercise in exercises:
         resolved_blocks = resolve_blocks_for_language(exercise, target_language=target_language, chapter=chapter_number)
         if any(block_requires(block, "fsaudit") for block in resolved_blocks):
             requires_fsaudit = True
+        for block in resolved_blocks:
+            if block.get("block_type") != "code":
+                continue
+            content = block.get("content", {}) if isinstance(block.get("content"), dict) else {}
+            source_lines = normalize_lines(content.get("code_lines", []))
+            if requires_r_stats_compat(source_lines):
+                requires_r_compat = True
         resolved_by_exercise.append((exercise, resolved_blocks))
 
     if requires_fsaudit:
         cells.append(make_fsaudit_bootstrap_cell(ir))
+    if requires_r_compat:
+        cells.append(make_r_stats_compat_bootstrap_cell(ir))
 
     for exercise, resolved_blocks in resolved_by_exercise:
         ex_ref = str(exercise.get("exercise_ref"))
@@ -477,6 +573,8 @@ def render_notebook(
                 )
             elif block_type == "code":
                 source_lines = normalize_lines(content.get("code_lines", []))
+                if requires_r_compat:
+                    source_lines = normalize_r_style_code_for_python(source_lines)
                 cells.append(
                     as_code_cell(
                         source_lines,
