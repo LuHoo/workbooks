@@ -68,7 +68,8 @@ jobs:
 
       - name: Install test dependencies
         run: |
-          Rscript -e "install.packages(c('jsonlite', 'knitr', 'FSaudit'), repos='https://cloud.r-project.org')"
+          Rscript -e "install.packages(c('jsonlite', 'knitr', 'remotes'), repos='https://cloud.r-project.org')"
+          Rscript -e "remotes::install_github('LuHoo/FSaudit', upgrade = 'never', dependencies = TRUE)"
           python -m pip install --upgrade pip
           python -m pip install rpy2==3.6.7 pandas==2.3.3 scipy==1.15.3
 
