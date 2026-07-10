@@ -6,9 +6,12 @@ on:
       - "scripts/workshop-ir.R"
       - "scripts/workshop-ir-validate.R"
       - "scripts/workshop-ir-adapter.R"
+      - "scripts/workshop-ir-python-renderer.py"
+      - "scripts/export-python-notebooks.R"
       - "scripts/workshop-ir-schema-v1.json"
       - "scripts/export-workshop-output.R"
       - "tests/workshop-ir/**"
+      - "tests/python-renderer/**"
       - "docs/architecture/workshop-ir-*.md"
       - "README.md"
       - ".github/workflows/workshop-ir-tests.yml"
@@ -18,9 +21,12 @@ on:
       - "scripts/workshop-ir.R"
       - "scripts/workshop-ir-validate.R"
       - "scripts/workshop-ir-adapter.R"
+      - "scripts/workshop-ir-python-renderer.py"
+      - "scripts/export-python-notebooks.R"
       - "scripts/workshop-ir-schema-v1.json"
       - "scripts/export-workshop-output.R"
       - "tests/workshop-ir/**"
+      - "tests/python-renderer/**"
       - "docs/architecture/workshop-ir-*.md"
       - "README.md"
       - ".github/workflows/workshop-ir-tests.yml"
@@ -48,3 +54,7 @@ jobs:
       - name: Run workshop IR test harness
         run: |
           Rscript tests/workshop-ir/run-tests.R
+
+      - name: Run Python renderer test harness
+        run: |
+          python3 tests/python-renderer/run-tests.py
