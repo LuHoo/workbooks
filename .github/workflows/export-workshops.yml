@@ -33,6 +33,10 @@ jobs:
         with:
           r-version: "4.3.1"
 
+      - name: Install minimal R test dependencies
+        run: |
+          Rscript -e "install.packages('jsonlite', repos='https://cloud.r-project.org')"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
