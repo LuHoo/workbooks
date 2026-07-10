@@ -12,6 +12,7 @@ PARSER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir.R"
 RENDERER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir-python-renderer.py"
 ORCHESTRATOR_SCRIPT = REPO_ROOT / "scripts" / "export-python-notebooks.R"
 EXPORTER_SCRIPT = REPO_ROOT / "scripts" / "export-python-workshop.py"
+STRICT_GUARDRAIL_SCRIPT = REPO_ROOT / "scripts" / "ci" / "check-generated-python-notebooks.py"
 GOLDEN_NOTEBOOK = REPO_ROOT / "tests" / "python-renderer" / "fixtures" / "directive-valid-python.ipynb"
 
 
@@ -319,7 +320,8 @@ class RendererTestCase(unittest.TestCase):
         source = REPO_ROOT / "notebooks" / "support" / "goodness-of-fit" / "support.Rmd"
         ir_path = self.parse_ir(source)
 
-        out_path = Path(tempfile.mkstemp(prefix="nb-gof-", suffix=".ipynb")[1])
+        out_dir = Path(tempfile.mkdtemp(prefix="nb-gof-"))
+        out_path = out_dir / "chapter-6.ipynb"
         self.render_ipynb(ir_path, out_path)
 
         nb_json = self.read_json(out_path)
@@ -335,6 +337,19 @@ class RendererTestCase(unittest.TestCase):
         self.assertNotIn("def ada_run_r", code_text)
         self.assertNotIn("ada_run_r(", code_text)
         self.assertNotIn("library(", code_text)
+
+        subprocess.run(
+            [
+                "python3",
+                str(STRICT_GUARDRAIL_SCRIPT),
+                "--input-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
 
 
 if __name__ == "__main__":

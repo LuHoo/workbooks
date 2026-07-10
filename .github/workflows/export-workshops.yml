@@ -65,6 +65,11 @@ jobs:
         run: |
           Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks
 
+      - name: Enforce strict Python output guardrail
+        run: |
+          python3 scripts/ci/check-generated-python-notebooks.py \
+            --input-dir generated/python-notebooks
+
       - name: Execute representative R workshops
         run: |
           Rscript scripts/ci/execute-r-workshop-smoke.R
