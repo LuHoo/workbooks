@@ -153,6 +153,20 @@ Allowed values for `--parser-engine`:
 - `legacy` (default)
 - `ir`
 
+## Workshop IR Test Harness
+
+Run the IR-focused regression test suite:
+
+- `Rscript tests/workshop-ir/run-tests.R`
+
+The suite covers:
+
+- golden summary checks for deterministic extraction;
+- malformed source diagnostics;
+- IR validation checks;
+- round-trip segment consistency (legacy parser vs IR adapter);
+- exporter output compatibility (`--parser-engine legacy` vs `--parser-engine ir`).
+
 ### Assumptions and limitations
 
 - `knitr` is required.

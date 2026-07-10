@@ -1,0 +1,23 @@
+---
+title: "Workshop Chapter 9"
+---
+
+## Chapter 9. Example
+
+### Exercise 9.1 Example one
+
+Intro text.
+
+```{r}
+x <- 1
+x
+```
+
+More text.
+
+### Exercise 9.2 Example two
+
+```{r}
+z <- x + 1
+z
+```
