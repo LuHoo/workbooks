@@ -20,7 +20,7 @@ for (workshop in workshops) {
   if (!file.exists(workshop)) {
     stop(
       "Missing workshop notebook: ", workshop,
-      ". Remediation: ensure notebooks/workshops content is present before CI execution."
+      ". Remediation: ensure notebooks/workshops submodule content is checked out (actions/checkout with submodules: recursive) before CI execution."
     )
   }
 
