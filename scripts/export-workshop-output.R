@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
 source("scripts/workshop-export-config.R", chdir = FALSE)
+source("scripts/workshop-ir-adapter.R", chdir = FALSE)
 
 # Static-analysis hint: function is provided by sourced config script.
 resolve_workshop_export_config <- get("resolve_workshop_export_config", mode = "function")
@@ -13,7 +14,7 @@ ensure_dependencies <- function() {
 }
 
 parse_cli_args <- function(args) {
-  out <- list(input = NULL, output = NULL)
+  out <- list(input = NULL, output = NULL, parser_engine = "legacy")
   i <- 1L
   while (i <= length(args)) {
     arg <- args[[i]]
@@ -25,6 +26,10 @@ parse_cli_args <- function(args) {
       i <- i + 1L
       if (i > length(args)) stop("Missing value after --output")
       out$output <- args[[i]]
+    } else if (identical(arg, "--parser-engine")) {
+      i <- i + 1L
+      if (i > length(args)) stop("Missing value after --parser-engine")
+      out$parser_engine <- args[[i]]
     } else if (identical(arg, "--help") || identical(arg, "-h")) {
       out$help <- TRUE
     } else {
@@ -38,7 +43,9 @@ parse_cli_args <- function(args) {
 print_help <- function() {
   cat(
     "Usage:\n",
-    "  Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <output.tex>\n\n",
+    "  Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <output.tex> [options]\n\n",
+    "Options:\n",
+    "  --parser-engine <legacy|ir>   Parser backend (default: legacy).\n\n",
     "Example:\n",
     "  Rscript scripts/export-workshop-output.R \\\n",
     "    --input notebooks/support/probability-distributions/support.Rmd \\\n",
@@ -368,18 +375,31 @@ export_single_chunk <- function(input_path, output_path) {
     )
   }
 
-  source_lines <- read_source_lines(config$source)
-  validate_supported_constructs(source_lines, config$source)
-  publishable <- strip_support_only(source_lines, config$source)
+  parser_engine <- "legacy"
+  if (!is.null(getOption("ada.workshop.parser.engine"))) {
+    parser_engine <- getOption("ada.workshop.parser.engine")
+  }
+  if (!parser_engine %in% c("legacy", "ir")) {
+    stop("Unsupported parser engine: ", parser_engine, ". Use legacy or ir.")
+  }
 
-  all_segments <- list()
-  for (exercise in names(config$expected_chunks)) {
-    all_segments[[exercise]] <- extract_exercise_segments(
-      publishable,
-      exercise,
-      config$expected_chunks[[exercise]],
-      config$source
-    )
+  all_segments <- if (identical(parser_engine, "ir")) {
+    load_ir_segments(input_path = config$source, config = config)
+  } else {
+    source_lines <- read_source_lines(config$source)
+    validate_supported_constructs(source_lines, config$source)
+    publishable <- strip_support_only(source_lines, config$source)
+
+    segments <- list()
+    for (exercise in names(config$expected_chunks)) {
+      segments[[exercise]] <- extract_exercise_segments(
+        publishable,
+        exercise,
+        config$expected_chunks[[exercise]],
+        config$source
+      )
+    }
+    segments
   }
   segments <- all_segments[[target$exercise]]
 
@@ -416,10 +436,18 @@ build_output_path <- function(output_dir, exercise, chunk_index) {
   file.path(output_dir, sprintf("exercise-%s-%d.tex", exercise_slug, chunk_index))
 }
 
-export_workshop_by_config <- function(config, output_dir = "generated/workshop-output") {
+export_workshop_by_config <- function(config, output_dir = "generated/workshop-output", parser_engine = "legacy") {
   if (is.null(config) || is.null(config$source) || is.null(config$expected_chunks)) {
     stop("Invalid workshop export configuration supplied.")
   }
+
+  if (!parser_engine %in% c("legacy", "ir")) {
+    stop("Unsupported parser engine: ", parser_engine, ". Use legacy or ir.")
+  }
+
+  old_engine <- getOption("ada.workshop.parser.engine")
+  options(ada.workshop.parser.engine = parser_engine)
+  on.exit(options(ada.workshop.parser.engine = old_engine), add = TRUE)
 
   for (exercise in names(config$expected_chunks)) {
     for (i in seq_len(config$expected_chunks[[exercise]])) {
@@ -428,7 +456,7 @@ export_workshop_by_config <- function(config, output_dir = "generated/workshop-o
   }
 }
 
-export_workshop_by_config_id <- function(config_id, output_dir = "generated/workshop-output") {
+export_workshop_by_config_id <- function(config_id, output_dir = "generated/workshop-output", parser_engine = "legacy") {
   config <- resolve_workshop_export_config_by_id(config_id)
   if (is.null(config)) {
     stop(
@@ -436,7 +464,7 @@ export_workshop_by_config_id <- function(config_id, output_dir = "generated/work
       ". Add it to scripts/workshop-export-config.R."
     )
   }
-  export_workshop_by_config(config, output_dir = output_dir)
+  export_workshop_by_config(config, output_dir = output_dir, parser_engine = parser_engine)
 }
 
 main <- function() {
@@ -448,6 +476,9 @@ main <- function() {
   if (is.null(args$input) || is.null(args$output)) {
     stop("Both --input and --output are required. Use --help for usage.")
   }
+  old_engine <- getOption("ada.workshop.parser.engine")
+  options(ada.workshop.parser.engine = args$parser_engine)
+  on.exit(options(ada.workshop.parser.engine = old_engine), add = TRUE)
   export_single_chunk(args$input, args$output)
 }
 

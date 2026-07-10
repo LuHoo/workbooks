@@ -114,6 +114,45 @@ Unsupported or malformed structures fail with explicit errors.
 - Add new validations in Stage 7 if they do not alter current output semantics.
 - Add CLI options only when they preserve default behavior.
 
+## Workshop IR (v1)
+
+A canonical, versioned Intermediate Representation (IR) can be generated from
+`support.Rmd` notebooks.
+
+Schema and docs:
+
+- `scripts/workshop-ir-schema-v1.json`
+- `docs/architecture/workshop-ir-schema-v1.md`
+
+Generate IR JSON:
+
+- `Rscript scripts/workshop-ir.R --input notebooks/support/probability-distributions/support.Rmd --pretty`
+
+## Workshop IR Validation
+
+Validate parsed IR structure and compatibility with workshop export configuration:
+
+- `Rscript scripts/workshop-ir-validate.R --input notebooks/support/probability-distributions/support.Rmd --config-id probability-distributions --pretty`
+
+Validation spec:
+
+- `docs/architecture/workshop-ir-validation.md`
+
+## Optional IR Parser Integration
+
+The canonical exporter supports an optional parser backend switch. Default behavior
+is unchanged.
+
+- Default (legacy parser):
+	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex>`
+- IR parser path:
+	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex> --parser-engine ir`
+
+Allowed values for `--parser-engine`:
+
+- `legacy` (default)
+- `ir`
+
 ### Assumptions and limitations
 
 - `knitr` is required.
