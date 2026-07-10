@@ -203,10 +203,27 @@ Renderer guarantees:
 Architecture and mapping details:
 
 - `docs/architecture/workshop-ir-python-renderer.md`
+- `docs/architecture/fsaudit-rpy2-bridge.md`
 
 Renderer tests:
 
 - `python3 tests/python-renderer/run-tests.py`
+
+Bridge/runtime tests:
+
+- `python -m unittest tests/python-renderer/test_fsaudit_bridge.py`
+
+The FSAudit-backed Python notebooks for chapters 3 and 4 rely on the reusable
+`ada_fsaudit_bridge` module at the repository root. Setup, reproducibility,
+public API, and troubleshooting guidance are documented in
+`docs/architecture/fsaudit-rpy2-bridge.md`.
+
+Recommended validated notebook runtime:
+
+- Python 3.10
+- R 4.3.1
+- FSaudit 0.3.4+
+- rpy2 3.6.7
 
 ### Traceability Metadata Ingestion
 

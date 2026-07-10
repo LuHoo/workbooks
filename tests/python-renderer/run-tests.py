@@ -60,6 +60,13 @@ class RendererTestCase(unittest.TestCase):
                 refs.append(match.group(1))
         return refs
 
+    def collect_code_text(self, notebook_json):
+        return "\n".join(
+            "".join(cell.get("source", []))
+            for cell in notebook_json["cells"]
+            if cell.get("cell_type") == "code"
+        )
+
     def test_chapter_rendering_preserves_exercise_order(self):
         source = REPO_ROOT / "notebooks" / "support" / "probability-distributions" / "support.Rmd"
         ir_path = self.parse_ir(source)
@@ -176,6 +183,33 @@ class RendererTestCase(unittest.TestCase):
         nb_json = self.read_json(out_nb)
         heading_refs = self.collect_heading_refs(nb_json)
         self.assertEqual(heading_refs[0], "1.1")
+
+    def test_fsaudit_workshops_emit_bridge_bootstrap_and_python_overrides(self):
+        cases = [
+            (
+                REPO_ROOT / "notebooks" / "support" / "hypothesis-testing" / "support.Rmd",
+                ["att_sample", "mus_sample", "upper_bound", "ada_set_context"],
+            ),
+            (
+                REPO_ROOT / "notebooks" / "support" / "auxiliary-variables-and-stratification" / "support.Rmd",
+                ["cvs_sample", "load_dataset", "configure_environment()", "ada_set_context"],
+            ),
+        ]
+
+        for source, required_tokens in cases:
+            with self.subTest(source=source.name):
+                ir_path = self.parse_ir(source)
+                out_path = Path(tempfile.mkstemp(prefix="nb-bridge-", suffix=".ipynb")[1])
+                self.render_ipynb(ir_path, out_path)
+                nb_json = self.read_json(out_path)
+                code_text = self.collect_code_text(nb_json)
+
+                self.assertIn("from ada_fsaudit_bridge import", code_text)
+                for token in required_tokens:
+                    self.assertIn(token, code_text)
+
+                for forbidden in ["library(FSaudit)", "<-", "RNGkind(", "phyper("]:
+                    self.assertNotIn(forbidden, code_text)
 
 
 if __name__ == "__main__":
