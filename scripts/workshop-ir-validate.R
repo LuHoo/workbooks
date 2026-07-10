@@ -47,7 +47,16 @@ append_diag <- function(diags, diag) {
 
 get_exercise_code_count <- function(exercise) {
   sum(vapply(exercise$blocks, function(block) {
-    identical(block$block_type, "code") && !isTRUE(block$support_only)
+    authoring_context <- block$authoring_context
+    lang_scope <- if (is.list(authoring_context) && !is.null(authoring_context$lang_scope)) {
+      authoring_context$lang_scope
+    } else {
+      "shared"
+    }
+
+    identical(block$block_type, "code") &&
+      !isTRUE(block$support_only) &&
+      identical(lang_scope, "shared")
   }, logical(1L)))
 }
 

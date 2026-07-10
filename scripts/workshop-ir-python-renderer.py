@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -167,11 +168,17 @@ def get_authoring_context(block: Dict[str, Any]) -> Dict[str, Any]:
             "kind": "any",
             "requires": [],
         }
+    requires = ctx.get("requires", [])
+    if isinstance(requires, str):
+        requires = [requires]
+    elif not isinstance(requires, list):
+        requires = list(requires) if requires is not None else []
+
     return {
         "lang_scope": ctx.get("lang_scope", "shared"),
         "mode": ctx.get("mode", "base"),
         "kind": ctx.get("kind", "any"),
-        "requires": ctx.get("requires", []),
+        "requires": requires,
         "override_target_block_id": ctx.get("override_target_block_id"),
     }
 
@@ -259,7 +266,15 @@ def resolve_blocks_for_language(
                     remediation="use matching block types for override and target",
                 )
 
-            effective[target_pos] = block
+            merged_block = copy.deepcopy(block)
+            target_ctx = get_authoring_context(target_block)
+            override_ctx = get_authoring_context(block)
+            merged_ctx = dict(override_ctx)
+            inherited_requires = list(target_ctx.get("requires", []))
+            if inherited_requires and not merged_ctx.get("requires"):
+                merged_ctx["requires"] = inherited_requires
+            merged_block["authoring_context"] = merged_ctx
+            effective[target_pos] = merged_block
             override_targets_used.add(target_id)
             continue
 
@@ -273,6 +288,68 @@ def resolve_blocks_for_language(
         )
 
     return effective
+
+
+def block_requires(block: Dict[str, Any], capability: str) -> bool:
+    ctx = get_authoring_context(block)
+    requires = ctx.get("requires", []) or []
+    return capability in requires
+
+
+def make_fsaudit_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "from pathlib import Path",
+        "import sys",
+        "import pandas as pd",
+        "",
+        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
+        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
+        "        if str(_candidate) not in sys.path:",
+        "            sys.path.insert(0, str(_candidate))",
+        "        break",
+        "else:",
+        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
+        "",
+        "from ada_fsaudit_bridge import (",
+        "    att_sample,",
+        "    configure_environment,",
+        "    cvs_sample,",
+        "    load_dataset,",
+        "    lower_bound,",
+        "    mus_sample,",
+        "    set_notebook_context,",
+        "    upper_bound,",
+        ")",
+        "from scipy.stats import hypergeom",
+        "",
+        f"ADA_WORKSHOP_ID = {json.dumps(workshop_id)}",
+        f"ADA_CHAPTER = {json.dumps(chapter_number)}",
+        f"ADA_NOTEBOOK_SOURCE = {json.dumps(source_file)}",
+        "",
+        "def ada_set_context(exercise_ref: str) -> None:",
+        "    set_notebook_context(",
+        "        chapter=ADA_CHAPTER,",
+        "        exercise=exercise_ref,",
+        "        notebook=f'{ADA_WORKSHOP_ID}:{ADA_NOTEBOOK_SOURCE}',",
+        "    )",
+        "",
+        "configure_environment()",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"fsaudit-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "fsaudit-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
 
 
 def as_markdown_cell(source_lines: List[str], seed: str, traceability: Dict[str, Any]) -> Dict[str, Any]:
@@ -360,7 +437,18 @@ def render_notebook(
 
     exercises = select_exercises(ir["exercises"], exercise_refs, chapter_number)
 
+    resolved_by_exercise: List[tuple[Dict[str, Any], List[Dict[str, Any]]]] = []
+    requires_fsaudit = False
     for exercise in exercises:
+        resolved_blocks = resolve_blocks_for_language(exercise, target_language=target_language, chapter=chapter_number)
+        if any(block_requires(block, "fsaudit") for block in resolved_blocks):
+            requires_fsaudit = True
+        resolved_by_exercise.append((exercise, resolved_blocks))
+
+    if requires_fsaudit:
+        cells.append(make_fsaudit_bootstrap_cell(ir))
+
+    for exercise, resolved_blocks in resolved_by_exercise:
         ex_ref = str(exercise.get("exercise_ref"))
         label = str(exercise.get("label") or f"Exercise {ex_ref}")
         heading_lines = [f"## {label}"]
@@ -372,7 +460,6 @@ def render_notebook(
             )
         )
 
-        resolved_blocks = resolve_blocks_for_language(exercise, target_language=target_language, chapter=chapter_number)
         for block in resolved_blocks:
             block_id = str(block.get("block_id"))
             block_type = block.get("block_type")

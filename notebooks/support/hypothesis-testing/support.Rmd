@@ -19,17 +19,31 @@ source("../../../R/notebook-utils.R")
 The results on page 119 are obtained with the `FSaudit` package, first by creating an attribute object, filling it with the parameters of the test, and then applying the `size()` function.
 The relevant parameters are the significance level `alpha`, the number of deviations in the population $M$ `popdev`, the population size $N$ `popn`, and the critical region `c`.
 
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r} 
 library(FSaudit)
 mySample <- att_obj(alpha = .1, popdev = 60, popn = 1200, c = 0)
 mySample <- size(mySample)
 mySample$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.1")
+mySample = att_sample(alpha=0.1, popdev=60, popn=1200, c=0).size()
+mySample.n
+```
+<!-- ADA:END -->
 The sample size increases as we increase the critical region to `c = 2`.
 ```{r}
 mySample <- size(mySample, c = 2)
 mySample$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.1")
+mySample.size(c=2).n
+```
+<!-- ADA:END -->
 
 This result is obtained using the default Hypergeometric distribution. To obtain the sample size with the binomial approximation, as in Table 5.3, we specify the distribution when setting up the attribute object.
 
@@ -43,6 +57,13 @@ mySample2 <- att_obj(
 mySample2 <- size(mySample2)
 mySample2$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.1")
+mySample2 = att_sample(alpha=0.1, tdr=0.05, c=2, dist="binom").size()
+mySample2.n
+```
+<!-- ADA:END -->
 
 ### Exercise 4.2. Significance levels
 
@@ -51,6 +72,12 @@ On page 120 we calculated significance levels for the occurrence of finding one 
 phyper(q = 1, m = 60, n = 1140, k = 45)
 phyper(q = 2, m = 60, n = 1140, k = 102)
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+hypergeom.cdf(1, 1200, 60, 45)
+hypergeom.cdf(2, 1200, 60, 102)
+```
+<!-- ADA:END -->
 Refer to Equation 2.1.
 Remember that `R` uses `q` for the number of errors found $k$, `m` for the number of deviations in the population $M$, `n` for the number of correct items $N - M$, and `k` for the sample size $n$.
 
@@ -61,6 +88,11 @@ On page 121 we also calculated the Type II error, for a scenario with no errors 
 ```{r}
 phyper(0, m = 24, n = 1176, k = 45, lower.tail = FALSE)
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+hypergeom.sf(0, 1200, 24, 45)
+```
+<!-- ADA:END -->
 
 ### Exercise 4.4. One-sided upper bounds
 
@@ -70,9 +102,16 @@ The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
 upper(popn = 1200, n = 102, k = 0, alpha = 0.10) / 1200
 upper(popn = 1200, n = 102, k = 3, alpha = 0.10) / 1200
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+upper_bound(k=0, popn=1200, n=102, alpha=0.10) / 1200
+upper_bound(k=3, popn=1200, n=102, alpha=0.10) / 1200
+```
+<!-- ADA:END -->
 
 ### Exercise 4.5. Case: European innovation subsidies
 The sample size in the *Case: European innovation subsidies* depends on the critical region chosen. When the null hypothesis $H_0 : M \geq 120,000$ is rejected when the sample yields no errors, the critical region is $\{k | k = 0\}$. We first create an `mus_obj` object, and load it with the parameters.
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 subsidies <- mus_obj(
   cl = 0.95,
@@ -84,18 +123,38 @@ subsidies <- size(subsidies,
 )
 subsidies$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.5")
+subsidies = mus_sample(cl=0.95, popBv=12000000, pm=120000).size(ee=0)
+subsidies.n
+```
+<!-- ADA:END -->
 This result is exactly equal to that of the fixed-attribute sample:
 ```{r}
 myAttSample <- att_obj(alpha = 0.05, popn = 12000000, popdev = 120000)
 myAttSample <- size(myAttSample, c = 0)
 myAttSample$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.5")
+myAttSample = att_sample(alpha=0.05, popn=12000000, popdev=120000).size(c=0)
+myAttSample.n
+```
+<!-- ADA:END -->
 To build a margin for one error, we may increase the critical region to $\{k | k \leq 1\}$, resulting in a sample size of $n =$ 473.
 
 ```{r}
 myAttSample <- size(myAttSample, c = 1)
 myAttSample$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.5")
+myAttSample.size(c=1).n
+```
+<!-- ADA:END -->
 
 In MUS, we increase the critical region by anticipating on the expected error (in monetary terms) in the population. Thus, in applications where selected items are either completely correct or completely incorrect, it is easier to calculate the minimum required sample size using the `att_obj` than using the `mus_obj`.
 
@@ -103,6 +162,7 @@ In MUS, we increase the critical region by anticipating on the expected error (i
 
 We start by setting up the MUS object `ar` (for Accounts Receivable) in `R` with the `FSaudit` package and first verify that the number of sampling units `popn` and the total book value `popBv` of the sampling frame match those in the population. Notice that these statistics are calculated as soon as the object is loaded with the detail amounts.
 
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 ar <- mus_obj(
   bv = accounts_receivable$amount,
@@ -111,6 +171,17 @@ ar <- mus_obj(
 ar$popn
 ar$popBv
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.6")
+accounts_receivable = load_dataset("accounts_receivable")
+ar = mus_sample(
+  bv=accounts_receivable["amount"],
+  id=accounts_receivable["invoice"],
+)
+ar.popn, ar.popBv
+```
+<!-- ADA:END -->
 Sample size calculation is invoked with the relevant values from the *Case: Accounts receivable circularization*.
 
 ```{r}
@@ -120,6 +191,12 @@ ar <- size(ar,
 )
 ar$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.6")
+ar.size(cl=0.95, pm=450000, ee=100000, evalMeth="Stringer").n
+```
+<!-- ADA:END -->
 Compare this with the sample size calculated using fixed-attribute sampling.
 
 ```{r}
@@ -130,6 +207,14 @@ ar2$n
 ar2 <- size(ar2, c = 2)
 ar2$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.6")
+ar2 = att_sample(alpha=0.05, popn=13500000, popdev=450000).size(c=1)
+ar2.n
+ar2.size(c=2).n
+```
+<!-- ADA:END -->
 
 We can therefore infer that with an expected error of `ee = 100000`, we can tolerate between one and two 100% errors.
 
@@ -139,9 +224,16 @@ If we draw a sample of size $n = 1,100$ from the `accounts_receivable` populatio
 
 For example, the data file `accounts_receivable`, that comes with the `FSaudit` package, has the following six largest amounts:
 
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 accounts_receivable[order(-accounts_receivable$amount), ][1:6, 1:3]
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.7")
+accounts_receivable.sort_values("amount", ascending=False).iloc[:6, :3]
+```
+<!-- ADA:END -->
 
 We set up a new `mus_obj` and use a materiality of `pm = 36730` to arrive at a sample size of 1100.
 
@@ -154,6 +246,17 @@ multiple <- mus_obj(
 multiple <- size(multiple)
 multiple$n
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.7")
+multiple = mus_sample(
+  bv=accounts_receivable["amount"],
+  id=accounts_receivable["invoice"],
+  pm=36730,
+).size()
+multiple.n
+```
+<!-- ADA:END -->
 
 We select the sample with the selection method `selMeth = "random"` and order it in decreasing order, displaying the six largest book values.
 
@@ -162,12 +265,21 @@ multiple <- select(multiple, selMeth = "random", seed = 1)
 sample <- multiple$sample
 head(sample[order(-sample$bv), ])
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.7")
+multiple.select(selMeth="random", seed=1)
+sample = multiple.sample
+sample.sort_values("bv", ascending=False).head()
+```
+<!-- ADA:END -->
 This example demonstrates that invoices 201719763 and 201710344 were selected twice.
 
 ### Exercise 4.8. Stringer bound
 
 We continue the case study sample, and select the sample, now with the "randomized fixed" selection method.
 
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 ar <- select(ar,
   selMeth = "randomized.fixed",
@@ -175,16 +287,36 @@ ar <- select(ar,
 )
 head(ar$sample)
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.8")
+ar.select(selMeth="randomized.fixed", seed=345)
+ar.sample.head()
+```
+<!-- ADA:END -->
 
 Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values into a data frame.
 
 ```{r}
 myResults <- data.frame(item = ar$sample$item, av = ar$sample$bv)
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.8")
+myResults = ar.sample.loc[:, ["item", "bv"]].rename(columns={"bv": "av"}).copy()
+myResults
+```
+<!-- ADA:END -->
 Table 5.4. lists the three invoices (items 16, 52, and 124), that are assumed to be in error.
 ```{r}
 myResults[c(16, 52, 124), ]
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.8")
+myResults.iloc[[15, 51, 123], :]
+```
+<!-- ADA:END -->
 We update the audit values of the erroneous items.
 ```{r}
 myResults[16, 2] <- 4438.82
@@ -192,18 +324,39 @@ myResults[52, 2] <- 0
 myResults[124, 2] <- 5531.38
 myResults[c(16, 52, 124), ]
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.8")
+myResults.iloc[15, 1] = 4438.82
+myResults.iloc[51, 1] = 0
+myResults.iloc[123, 1] = 5531.38
+myResults.iloc[[15, 51, 123], :]
+```
+<!-- ADA:END -->
 
 The updated list of audit values is then submitted to the MUS object for evaluation.
 
 ```{r}
 ar <- evaluate(ar, av = myResults$av, evalMeth = "stringer")
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.8")
+ar.evaluate(av=myResults["av"], evalMeth="stringer")
+```
+<!-- ADA:END -->
 
 The results of the Stringer bound evaluation as presented in Tables 5.6 and 5.7 are stored in the `Precision calculation` attribute.
 
 ```{r}
 ar$evalResults$Over$`Precision calculation`
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.8")
+ar.eval_results["Over"]["Precision calculation"]
+```
+<!-- ADA:END -->
 
 The upper bounds $M_U$ in Table 5.5 are calculated with the `upper` function from the `FSaudit` package.
 
@@ -213,21 +366,39 @@ upper(k = 1, popn = 13500000, n = 145, alpha = .05)
 upper(k = 2, popn = 13500000, n = 145, alpha = .05)
 upper(k = 3, popn = 13500000, n = 145, alpha = .05)
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+upper_bound(k=0, popn=13500000, n=145, alpha=0.05)
+upper_bound(k=1, popn=13500000, n=145, alpha=0.05)
+upper_bound(k=2, popn=13500000, n=145, alpha=0.05)
+upper_bound(k=3, popn=13500000, n=145, alpha=0.05)
+```
+<!-- ADA:END -->
 
 ### Exercise 4.9. Cell evaluation
 
 The results of the cell evaluation method, as presented in Table 5.8, can also be obtained, by changing the evaluation method.
 
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 options(width = 70)
 ar <- evaluate(ar, av = myResults$av, evalMeth = "cell")
 ar$evalResults$Over$`Precision calculation`
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.9")
+pd.set_option("display.width", 70)
+ar.evaluate(av=myResults["av"], evalMeth="cell")
+ar.eval_results["Over"]["Precision calculation"]
+```
+<!-- ADA:END -->
 
 ### Exercise 4.10. PPS estimation
 
 Finally, we present results from the `pps` evaluation method. For this purpose, we use audit values stored in the variable `av2`. The total error amount reflected in `av2` is 450,000.
 
+<!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 ar <- evaluate(ar,
   av = myResults$av2,
@@ -235,6 +406,14 @@ ar <- evaluate(ar,
 )
 ar$evalResults$`Error estimate`
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.10")
+myResults["av2"] = accounts_receivable.set_index("invoice").loc[myResults["item"], "av2"].to_numpy()
+ar.evaluate(av=myResults["av2"], evalMeth="pps")
+ar.eval_results["Error estimate"]
+```
+<!-- ADA:END -->
 A two-sided prediction interval around the PPS estimate is calculated according to Equations 5.6 and 5.7.
 
 ```{r}
@@ -242,6 +421,14 @@ ar$evalResults$`pps estimate`
 ar$evalResults$`Lower bound`
 ar$evalResults$`Upper bound`
 ```
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+ada_set_context("4.10")
+ar.eval_results["pps estimate"]
+ar.eval_results["Lower bound"]
+ar.eval_results["Upper bound"]
+```
+<!-- ADA:END -->
 
 
 

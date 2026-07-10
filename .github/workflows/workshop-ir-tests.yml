@@ -3,6 +3,9 @@ name: Workshop IR Tests
 on:
   push:
     paths:
+      - "ada_fsaudit_bridge/**"
+      - "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"
+      - "notebooks/support/hypothesis-testing/support.Rmd"
       - "scripts/workshop-ir.R"
       - "scripts/workshop-ir-validate.R"
       - "scripts/workshop-ir-adapter.R"
@@ -12,12 +15,16 @@ on:
       - "scripts/export-workshop-output.R"
       - "tests/workshop-ir/**"
       - "tests/python-renderer/**"
+      - "docs/architecture/fsaudit-rpy2-bridge.md"
       - "docs/architecture/workshop-ir-*.md"
       - "README.md"
       - ".github/workflows/workshop-ir-tests.yml"
 
   pull_request:
     paths:
+      - "ada_fsaudit_bridge/**"
+      - "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"
+      - "notebooks/support/hypothesis-testing/support.Rmd"
       - "scripts/workshop-ir.R"
       - "scripts/workshop-ir-validate.R"
       - "scripts/workshop-ir-adapter.R"
@@ -27,6 +34,7 @@ on:
       - "scripts/export-workshop-output.R"
       - "tests/workshop-ir/**"
       - "tests/python-renderer/**"
+      - "docs/architecture/fsaudit-rpy2-bridge.md"
       - "docs/architecture/workshop-ir-*.md"
       - "README.md"
       - ".github/workflows/workshop-ir-tests.yml"
@@ -40,16 +48,39 @@ jobs:
   workshop-ir-tests:
     runs-on: ubuntu-latest
 
+    env:
+      PYTHON_VERSION: "3.10"
+      R_VERSION: "4.3.1"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ env.R_VERSION }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install test dependencies
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          Rscript -e "install.packages(c('jsonlite', 'knitr'), repos='https://cloud.r-project.org')"
+          Rscript -e "install.packages(c('jsonlite', 'knitr', 'remotes'), repos='https://cloud.r-project.org')"
+          Rscript -e "remotes::install_github('LuHoo/FSaudit', upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
+          python -m pip install --upgrade pip
+          python -m pip install rpy2==3.6.7 pandas==2.3.3 scipy==1.15.3
+
+      - name: Capture validated notebook runtime
+        run: |
+          py_ver="$(python --version | awk '{print $2}')"
+          r_ver="$(R --version | awk 'NR==1{print $3}')"
+          fsaudit_ver="$(Rscript -e "cat(as.character(packageVersion('FSaudit')))")"
+          echo "Validated notebook runtime: Python ${py_ver}, R ${r_ver}, FSaudit ${fsaudit_ver}"
 
       - name: Run workshop IR test harness
         run: |
@@ -58,3 +89,7 @@ jobs:
       - name: Run Python renderer test harness
         run: |
           python3 tests/python-renderer/run-tests.py
+
+      - name: Run FSAudit bridge smoke suite
+        run: |
+          python -m unittest tests/python-renderer/test_fsaudit_bridge.py
