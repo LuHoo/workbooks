@@ -67,9 +67,11 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install test dependencies
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Rscript -e "install.packages(c('jsonlite', 'knitr', 'remotes'), repos='https://cloud.r-project.org')"
-          Rscript -e "remotes::install_github('LuHoo/FSaudit', upgrade = 'never', dependencies = TRUE)"
+          Rscript -e "remotes::install_github('LuHoo/FSaudit', upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
           python -m pip install --upgrade pip
           python -m pip install rpy2==3.6.7 pandas==2.3.3 scipy==1.15.3
 
