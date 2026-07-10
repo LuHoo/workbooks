@@ -13,6 +13,7 @@ RENDERER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir-python-renderer.py"
 ORCHESTRATOR_SCRIPT = REPO_ROOT / "scripts" / "export-python-notebooks.R"
 EXPORTER_SCRIPT = REPO_ROOT / "scripts" / "export-python-workshop.py"
 STRICT_GUARDRAIL_SCRIPT = REPO_ROOT / "scripts" / "ci" / "check-generated-python-notebooks.py"
+EQUIVALENCE_SCRIPT = REPO_ROOT / "scripts" / "ci" / "assert-r-python-equivalence.py"
 GOLDEN_NOTEBOOK = REPO_ROOT / "tests" / "python-renderer" / "fixtures" / "directive-valid-python.ipynb"
 
 
@@ -344,6 +345,20 @@ class RendererTestCase(unittest.TestCase):
                 str(STRICT_GUARDRAIL_SCRIPT),
                 "--input-dir",
                 str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+    def test_r_python_equivalence_phase1(self):
+        subprocess.run(
+            [
+                "python3",
+                str(EQUIVALENCE_SCRIPT),
+                "--chapters",
+                "1,6",
             ],
             cwd=REPO_ROOT,
             check=True,
