@@ -24,6 +24,12 @@ expect_identical <- function(actual, expected, message) {
   }
 }
 
+expect_contains <- function(values, expected, message) {
+  if (!expected %in% values) {
+    stop(message)
+  }
+}
+
 expect_error_pattern <- function(expr, pattern, message) {
   err <- NULL
   tryCatch(
@@ -111,6 +117,24 @@ run_malformed_tests <- function() {
     "IR-PARSE.*duplicate exercise reference",
     "Duplicate exercise refs should fail with actionable parse error"
   )
+
+  expect_error_pattern(
+    parse_support_notebook_to_ir("tests/workshop-ir/fixtures/malformed-directive-unclosed-begin.Rmd"),
+    "IR-PARSE.*unclosed ADA directive region",
+    "Unclosed ADA directive should fail with actionable parse error"
+  )
+
+  expect_error_pattern(
+    parse_support_notebook_to_ir("tests/workshop-ir/fixtures/malformed-directive-nested-begin.Rmd"),
+    "IR-PARSE.*nested ADA directive region",
+    "Nested ADA directives should fail with actionable parse error"
+  )
+
+  expect_error_pattern(
+    parse_support_notebook_to_ir("tests/workshop-ir/fixtures/malformed-directive-dangling-requires.Rmd"),
+    "IR-PARSE.*capability annotation is not attached to a following code block",
+    "Dangling ADA:REQUIRES should fail with actionable parse error"
+  )
 }
 
 run_validation_tests <- function() {
@@ -119,6 +143,65 @@ run_validation_tests <- function() {
     strict = TRUE
   )
   expect_identical(length(diagnostics), 0L, "Valid fixture should have no validation diagnostics")
+}
+
+run_directive_parser_tests <- function() {
+  ir <- parse_support_notebook_to_ir(
+    input_path = "tests/workshop-ir/fixtures/directive-valid-support.Rmd",
+    workshop_id = "fixture-workshop"
+  )
+
+  expect_contains(ir$directives$observed, "ADA:BEGIN", "Directive fixture should observe ADA:BEGIN")
+  expect_contains(ir$directives$observed, "ADA:END", "Directive fixture should observe ADA:END")
+  expect_contains(ir$directives$observed, "ADA:REQUIRES", "Directive fixture should observe ADA:REQUIRES")
+  expect_identical(length(ir$directives$instances), 5L, "Directive fixture should emit directive instances")
+
+  blocks <- ir$exercises[[1L]]$blocks
+  expect_identical(blocks[[3L]]$authoring_context$mode, "override", "Narrative override block should have override mode")
+  expect_identical(blocks[[3L]]$authoring_context$lang_scope, "python", "Narrative override block should be python scoped")
+  expect_identical(
+    blocks[[3L]]$authoring_context$override_target_block_id,
+    blocks[[1L]]$block_id,
+    "Narrative override should target prior shared narrative block"
+  )
+  expect_identical(
+    blocks[[4L]]$authoring_context$override_target_block_id,
+    blocks[[2L]]$block_id,
+    "Code override should target prior shared code block"
+  )
+  expect_identical(
+    blocks[[5L]]$authoring_context$requires,
+    "fsaudit",
+    "ADA:REQUIRES should be attached to following code block"
+  )
+}
+
+run_directive_validation_tests <- function() {
+  diagnostics <- validate_support_notebook_ir(
+    input_path = "tests/workshop-ir/fixtures/directive-valid-support.Rmd",
+    strict = TRUE
+  )
+  expect_identical(length(diagnostics), 0L, "Directive fixture should have no validation diagnostics")
+
+  ir_dup <- parse_support_notebook_to_ir("tests/workshop-ir/fixtures/directive-valid-support.Rmd")
+  ir_dup$exercises[[1L]]$blocks[[4L]]$authoring_context$override_target_block_id <-
+    ir_dup$exercises[[1L]]$blocks[[3L]]$authoring_context$override_target_block_id
+  dup_diags <- validate_workshop_ir(ir_dup, source_path = "directive-valid-support.Rmd", strict = FALSE)
+  dup_codes <- vapply(dup_diags, function(diag) diag$code, character(1L))
+  expect_contains(dup_codes, "E241", "Duplicate override target/language should produce E241")
+
+  ir_only_shared <- parse_support_notebook_to_ir("tests/workshop-ir/fixtures/directive-valid-support.Rmd")
+  ir_only_shared$exercises[[1L]]$blocks[[5L]]$authoring_context$mode <- "only"
+  ir_only_shared$exercises[[1L]]$blocks[[5L]]$authoring_context$lang_scope <- "shared"
+  only_shared_diags <- validate_workshop_ir(ir_only_shared, source_path = "directive-valid-support.Rmd", strict = FALSE)
+  only_shared_codes <- vapply(only_shared_diags, function(diag) diag$code, character(1L))
+  expect_contains(only_shared_codes, "E242", "mode=only with shared lang_scope should produce E242")
+
+  ir_bad_cap <- parse_support_notebook_to_ir("tests/workshop-ir/fixtures/directive-valid-support.Rmd")
+  ir_bad_cap$exercises[[1L]]$blocks[[5L]]$authoring_context$requires <- c("badcap")
+  bad_cap_diags <- validate_workshop_ir(ir_bad_cap, source_path = "directive-valid-support.Rmd", strict = FALSE)
+  bad_cap_codes <- vapply(bad_cap_diags, function(diag) diag$code, character(1L))
+  expect_contains(bad_cap_codes, "E244", "Unsupported capability should produce E244")
 }
 
 run_round_trip_consistency_test <- function() {
@@ -184,6 +267,8 @@ main <- function() {
   run_golden_test()
   run_malformed_tests()
   run_validation_tests()
+  run_directive_parser_tests()
+  run_directive_validation_tests()
   run_round_trip_consistency_test()
   run_exporter_compatibility_test()
 

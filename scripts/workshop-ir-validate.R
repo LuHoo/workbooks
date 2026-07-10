@@ -3,6 +3,17 @@
 source("scripts/workshop-ir.R", chdir = FALSE)
 source("scripts/workshop-export-config.R", chdir = FALSE)
 
+WORKSHOP_IR_ACCEPTED_SCHEMA_VERSIONS <- c("workshop-ir/1.0.0", "workshop-ir/1.1.0")
+WORKSHOP_IR_SUPPORTED_DIRECTIVE_NAMES <- c(
+  "SUPPORT-ONLY:START",
+  "SUPPORT-ONLY:END",
+  "ADA:BEGIN",
+  "ADA:END",
+  "ADA:REQUIRES"
+)
+WORKSHOP_IR_SUPPORTED_LANG_SCOPES <- c("shared", "python")
+WORKSHOP_IR_SUPPORTED_CAPABILITIES <- c("fsaudit")
+
 resolve_workshop_export_config <- get("resolve_workshop_export_config", mode = "function")
 resolve_workshop_export_config_by_id <- get("resolve_workshop_export_config_by_id", mode = "function")
 
@@ -62,7 +73,7 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
 
   diagnostics <- list()
 
-  if (!identical(ir$schema_version, WORKSHOP_IR_SCHEMA_VERSION)) {
+  if (!ir$schema_version %in% WORKSHOP_IR_ACCEPTED_SCHEMA_VERSIONS) {
     diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
       category = "IR-MODEL",
       code = "E101",
@@ -70,7 +81,7 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
       line = 1L,
       block = "schema_version",
       message = paste0("unsupported schema version '", ir$schema_version, "'"),
-      remediation = paste0("use schema version ", WORKSHOP_IR_SCHEMA_VERSION)
+      remediation = paste0("use one of: ", paste(WORKSHOP_IR_ACCEPTED_SCHEMA_VERSIONS, collapse = ", "))
     ))
   }
 
@@ -127,10 +138,27 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
     }
   }
 
+  if (!is.null(ir$directives$instances)) {
+    for (instance in ir$directives$instances) {
+      if (!instance$name %in% WORKSHOP_IR_SUPPORTED_DIRECTIVE_NAMES) {
+        diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+          category = "IR-DIRECTIVE",
+          code = "E201",
+          file = source_path,
+          line = instance$source_span$start_line,
+          block = instance$name,
+          message = paste0("unsupported directive instance '", instance$name, "' in IR"),
+          remediation = "ensure parser emits only supported directives"
+        ))
+      }
+    }
+  }
+
   exercise_refs <- character()
   expected_ordinal <- 1L
 
   for (exercise in ir$exercises) {
+    override_keys <- character()
     if (!identical(exercise$ordinal, expected_ordinal)) {
       diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
         category = "IR-MODEL",
@@ -218,6 +246,88 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
             message = "code block missing code_lines",
             remediation = "ensure parser emits code_lines for every code block"
           ))
+        }
+      }
+
+      if (!is.null(block$authoring_context)) {
+        ctx <- block$authoring_context
+
+        if (!ctx$lang_scope %in% WORKSHOP_IR_SUPPORTED_LANG_SCOPES) {
+          diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+            category = "IR-DIRECTIVE",
+            code = "E230",
+            file = source_path,
+            line = block$source_span$start_line,
+            block = block$block_id,
+            message = paste0("unsupported language scope '", ctx$lang_scope, "'"),
+            remediation = paste0("use one of: ", paste(WORKSHOP_IR_SUPPORTED_LANG_SCOPES, collapse = ", "))
+          ))
+        }
+
+        if (identical(ctx$mode, "override")) {
+          if (is.null(ctx$override_target_block_id) || !nzchar(ctx$override_target_block_id)) {
+            diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+              category = "IR-DIRECTIVE",
+              code = "E240",
+              file = source_path,
+              line = block$source_span$start_line,
+              block = block$block_id,
+              message = "override block missing override_target_block_id",
+              remediation = "ensure override directives resolve a valid prior shared block"
+            ))
+          } else {
+            key <- paste(ctx$override_target_block_id, ctx$lang_scope, sep = "::")
+            if (key %in% override_keys) {
+              diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+                category = "IR-DIRECTIVE",
+                code = "E241",
+                file = source_path,
+                line = block$source_span$start_line,
+                block = block$block_id,
+                message = "duplicate override for same target block and language",
+                remediation = "keep only one override per target block/language"
+              ))
+            }
+            override_keys <- c(override_keys, key)
+          }
+        }
+
+        if (identical(ctx$mode, "only") && identical(ctx$lang_scope, "shared")) {
+          diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+            category = "IR-DIRECTIVE",
+            code = "E242",
+            file = source_path,
+            line = block$source_span$start_line,
+            block = block$block_id,
+            message = "mode=only with lang_scope=shared is invalid",
+            remediation = "use a non-shared language scope for mode=only"
+          ))
+        }
+
+        if (!is.null(ctx$requires) && length(ctx$requires) > 0L) {
+          if (!identical(block$block_type, "code")) {
+            diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+              category = "IR-DIRECTIVE",
+              code = "E243",
+              file = source_path,
+              line = block$source_span$start_line,
+              block = block$block_id,
+              message = "capability requirements are only valid on code blocks",
+              remediation = "move ADA:REQUIRES to directly above a code block"
+            ))
+          }
+          unknown_caps <- setdiff(ctx$requires, WORKSHOP_IR_SUPPORTED_CAPABILITIES)
+          if (length(unknown_caps) > 0L) {
+            diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+              category = "IR-DIRECTIVE",
+              code = "E244",
+              file = source_path,
+              line = block$source_span$start_line,
+              block = block$block_id,
+              message = paste0("unsupported capability requirements: ", paste(unknown_caps, collapse = ", ")),
+              remediation = paste0("use one of: ", paste(WORKSHOP_IR_SUPPORTED_CAPABILITIES, collapse = ", "))
+            ))
+          }
         }
       }
     }

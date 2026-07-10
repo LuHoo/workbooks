@@ -1,5 +1,5 @@
 {
-  "schema_version": "workshop-ir/1.0.0",
+  "schema_version": "workshop-ir/1.1.0",
   "chapter": {
     "chapter_id": "CH-fixture-workshop",
     "workshop_id": "fixture-workshop",
@@ -7,8 +7,9 @@
     "title": "Workshop Chapter 9"
   },
   "directives": {
-    "supported": ["SUPPORT-ONLY:START", "SUPPORT-ONLY:END"],
-    "observed": []
+    "supported": ["SUPPORT-ONLY:START", "SUPPORT-ONLY:END", "ADA:BEGIN", "ADA:END", "ADA:REQUIRES"],
+    "observed": [],
+    "instances": []
   },
   "chapter_blocks": [
     {

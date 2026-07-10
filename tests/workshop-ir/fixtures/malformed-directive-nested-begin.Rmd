@@ -1,0 +1,10 @@
+---
+title: "Malformed Nested Directive"
+---
+
+## Exercise 9.1
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+First directive region.
+<!-- ADA:BEGIN lang=python mode=only kind=narrative -->
+Second nested directive region.
+<!-- ADA:END -->
