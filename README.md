@@ -153,6 +153,13 @@ Allowed values for `--parser-engine`:
 - `legacy` (default)
 - `ir`
 
+Migration and rollback guidance:
+
+- `docs/architecture/workshop-ir-migration-and-rollback.md`
+
+Rollback is immediate by switching parser selection back to legacy (or omitting
+`--parser-engine`, which defaults to legacy).
+
 ## Workshop IR Test Harness
 
 Run the IR-focused regression test suite:
