@@ -315,6 +315,27 @@ class RendererTestCase(unittest.TestCase):
         self.assertNotIn("<-", code_text)
         self.assertNotIn("lower.tail", code_text)
 
+    def test_goodness_of_fit_notebook_uses_python_plotting_conversion(self):
+        source = REPO_ROOT / "notebooks" / "support" / "goodness-of-fit" / "support.Rmd"
+        ir_path = self.parse_ir(source)
+
+        out_path = Path(tempfile.mkstemp(prefix="nb-gof-", suffix=".ipynb")[1])
+        self.render_ipynb(ir_path, out_path)
+
+        nb_json = self.read_json(out_path)
+        code_cells = [
+            "".join(cell.get("source", []))
+            for cell in nb_json["cells"]
+            if cell.get("cell_type") == "code"
+        ]
+        code_text = "\n".join(code_cells)
+
+        self.assertIn("import matplotlib.pyplot as plt", code_text)
+        self.assertIn("import seaborn as sns", code_text)
+        self.assertNotIn("def ada_run_r", code_text)
+        self.assertNotIn("ada_run_r(", code_text)
+        self.assertNotIn("library(", code_text)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -61,6 +61,7 @@ Pinned in `.binder/requirements.txt`:
 
 - notebook tooling (`jupyter`, `jupyterlab`, `nbclient`, `nbformat`, `ipykernel`)
 - data/scientific stack (`numpy`, `pandas`, `scipy`)
+- plotting stack for Python workshop rendering (`matplotlib`, `seaborn`)
 - interoperability layer (`rpy2==3.6.7`)
 
 To preserve CI/Binder reproducibility while improving local developer ergonomics,
