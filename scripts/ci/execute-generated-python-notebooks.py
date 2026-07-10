@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import importlib.metadata
 import json
 import os
 import platform
@@ -57,7 +58,7 @@ def runtime_details() -> dict:
         "cwd": os.getcwd(),
         "r_version": run(["R", "--version"]).splitlines()[0] if shutil_which("R") else "R not found",
         "fsaudit_version": run(["Rscript", "-e", "cat(as.character(packageVersion('FSaudit')))"]) if shutil_which("Rscript") else "Rscript not found",
-        "rpy2_version": run([sys.executable, "-c", "import rpy2; print(rpy2.__version__)"]),
+        "rpy2_version": importlib.metadata.version("rpy2"),
     }
     return details
 

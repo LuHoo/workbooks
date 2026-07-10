@@ -63,6 +63,14 @@ Pinned in `.binder/requirements.txt`:
 - data/scientific stack (`numpy`, `pandas`, `scipy`)
 - interoperability layer (`rpy2==3.6.7`)
 
+To preserve CI/Binder reproducibility while improving local developer ergonomics,
+SciPy uses Python-version-aware constraints:
+
+- Python `< 3.14`: pinned to the validated baseline (`scipy==1.15.3`)
+- Python `>= 3.14`: compatible forward range (`scipy>=1.16.0,<2`)
+
+CI/Binder remains authoritative on Python 3.10.
+
 ## CI Execution Architecture
 
 Workflow: `.github/workflows/notebook-execution-validation.yml`
