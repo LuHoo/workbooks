@@ -114,7 +114,7 @@ Unsupported or malformed structures fail with explicit errors.
 - Add new validations in Stage 7 if they do not alter current output semantics.
 - Add CLI options only when they preserve default behavior.
 
-## Workshop IR (v1)
+## Workshop IR (v1.1)
 
 A canonical, versioned Intermediate Representation (IR) can be generated from
 `support.Rmd` notebooks.
@@ -123,6 +123,14 @@ Schema and docs:
 
 - `scripts/workshop-ir-schema-v1.json`
 - `docs/architecture/workshop-ir-schema-v1.md`
+- `docs/architecture/workshop-ir-directives.md`
+- `docs/authoring/language-aware-directives.md`
+
+Directive support in v1.1:
+
+- parser-level support for `ADA:BEGIN`, `ADA:END`, and `ADA:REQUIRES`;
+- deterministic per-block `authoring_context` metadata;
+- emitted directive event records in `directives.instances`.
 
 Generate IR JSON:
 
