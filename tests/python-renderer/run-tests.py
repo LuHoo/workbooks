@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 PARSER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir.R"
 RENDERER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir-python-renderer.py"
 ORCHESTRATOR_SCRIPT = REPO_ROOT / "scripts" / "export-python-notebooks.R"
+EXPORTER_SCRIPT = REPO_ROOT / "scripts" / "export-python-workshop.py"
 GOLDEN_NOTEBOOK = REPO_ROOT / "tests" / "python-renderer" / "fixtures" / "directive-valid-python.ipynb"
 
 
@@ -210,6 +211,88 @@ class RendererTestCase(unittest.TestCase):
 
                 for forbidden in ["library(FSaudit)", "<-", "RNGkind(", "phyper("]:
                     self.assertNotIn(forbidden, code_text)
+
+    def test_python_exporter_uses_generated_notebook_metadata(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-export-"))
+        subprocess.run(
+            [
+                "Rscript",
+                str(ORCHESTRATOR_SCRIPT),
+                "--config-id",
+                "probability-distributions",
+                "--output-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        notebook_path = out_dir / "probability-distributions" / "chapter-1.ipynb"
+        tex_path = out_dir / "workshop-export.tex"
+
+        subprocess.run(
+            [
+                "python3",
+                str(EXPORTER_SCRIPT),
+                "--input",
+                str(notebook_path),
+                "--output",
+                str(tex_path),
+                "--expect-generated-metadata",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        tex_text = tex_path.read_text(encoding="utf-8")
+        self.assertIn("generated from notebooks/support/probability-distributions/support.Rmd", tex_text)
+        self.assertIn("Workshop: probability-distributions (chapter 1)", tex_text)
+
+    def test_python_exporter_reports_missing_generated_metadata(self):
+        notebook_path = Path(tempfile.mkstemp(prefix="legacy-nb-", suffix=".ipynb")[1])
+        notebook_path.write_text(
+            json.dumps(
+                {
+                    "nbformat": 4,
+                    "nbformat_minor": 5,
+                    "metadata": {},
+                    "cells": [
+                        {
+                            "cell_type": "markdown",
+                            "metadata": {},
+                            "source": ["## Exercise 1.1 Demo"],
+                        }
+                    ],
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        tex_path = Path(tempfile.mkstemp(prefix="legacy-tex-", suffix=".tex")[1])
+
+        proc = subprocess.run(
+            [
+                "python3",
+                str(EXPORTER_SCRIPT),
+                "--input",
+                str(notebook_path),
+                "--output",
+                str(tex_path),
+                "--expect-generated-metadata",
+            ],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("[validate-metadata]", proc.stderr + proc.stdout)
+        self.assertIn("missing metadata.ada_renderer", proc.stderr + proc.stdout)
 
 
 if __name__ == "__main__":
