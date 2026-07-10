@@ -74,7 +74,10 @@ jobs:
 
       - name: Capture validated notebook runtime
         run: |
-          echo "Validated notebook runtime: Python $(python --version | awk '{print $2}'), R $(R --version | head -n 1 | awk '{print $3}'), FSaudit $(Rscript -e \"cat(as.character(packageVersion('FSaudit')))\")"
+          py_ver="$(python --version | awk '{print $2}')"
+          r_ver="$(R --version | awk 'NR==1{print $3}')"
+          fsaudit_ver="$(Rscript -e "cat(as.character(packageVersion('FSaudit')))")"
+          echo "Validated notebook runtime: Python ${py_ver}, R ${r_ver}, FSaudit ${fsaudit_ver}"
 
       - name: Run workshop IR test harness
         run: |
