@@ -1,0 +1,8 @@
+---
+title: "Malformed Directive"
+---
+
+## Exercise 9.1
+Base narrative.
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+Python narrative override without close.
