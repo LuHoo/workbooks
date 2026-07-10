@@ -2,10 +2,13 @@
 
 source("scripts/workshop-export-config.R", chdir = FALSE)
 source("scripts/workshop-ir-adapter.R", chdir = FALSE)
+source("scripts/traceability-metadata.R", chdir = FALSE)
 
 # Static-analysis hint: function is provided by sourced config script.
 resolve_workshop_export_config <- get("resolve_workshop_export_config", mode = "function")
 resolve_workshop_export_config_by_id <- get("resolve_workshop_export_config_by_id", mode = "function")
+load_traceability_metadata <- get("load_traceability_metadata", mode = "function")
+build_workshop_traceability_id <- get("build_workshop_traceability_id", mode = "function")
 
 ensure_dependencies <- function() {
   if (!requireNamespace("knitr", quietly = TRUE)) {
@@ -14,7 +17,14 @@ ensure_dependencies <- function() {
 }
 
 parse_cli_args <- function(args) {
-  out <- list(input = NULL, output = NULL, parser_engine = "legacy")
+  out <- list(
+    input = NULL,
+    output = NULL,
+    parser_engine = "legacy",
+    traceability_dir = "metadata/traceability",
+    enable_traceability = TRUE,
+    traceability_strict = FALSE
+  )
   i <- 1L
   while (i <= length(args)) {
     arg <- args[[i]]
@@ -30,6 +40,14 @@ parse_cli_args <- function(args) {
       i <- i + 1L
       if (i > length(args)) stop("Missing value after --parser-engine")
       out$parser_engine <- args[[i]]
+    } else if (identical(arg, "--traceability-dir")) {
+      i <- i + 1L
+      if (i > length(args)) stop("Missing value after --traceability-dir")
+      out$traceability_dir <- args[[i]]
+    } else if (identical(arg, "--no-traceability")) {
+      out$enable_traceability <- FALSE
+    } else if (identical(arg, "--traceability-strict")) {
+      out$traceability_strict <- TRUE
     } else if (identical(arg, "--help") || identical(arg, "-h")) {
       out$help <- TRUE
     } else {
@@ -46,6 +64,9 @@ print_help <- function() {
     "  Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <output.tex> [options]\n\n",
     "Options:\n",
     "  --parser-engine <legacy|ir>   Parser backend (default: legacy).\n\n",
+    "  --traceability-dir <path>   Path to traceability metadata directory (default: metadata/traceability)\n",
+    "  --traceability-strict       Fail if metadata directory exists but required files are missing\n",
+    "  --no-traceability           Skip traceability metadata loading\n\n",
     "Example:\n",
     "  Rscript scripts/export-workshop-output.R \\\n",
     "    --input notebooks/support/probability-distributions/support.Rmd \\\n",
@@ -354,7 +375,14 @@ parse_output_target <- function(output_path) {
   list(exercise = exercise, chunk_index = chunk_index)
 }
 
-export_single_chunk <- function(input_path, output_path) {
+export_single_chunk <- function(
+  input_path,
+  output_path,
+  traceability = NULL,
+  traceability_dir = "metadata/traceability",
+  enable_traceability = TRUE,
+  traceability_strict = FALSE
+) {
   ensure_dependencies()
 
   config <- resolve_workshop_export_config(input_path)
@@ -366,6 +394,22 @@ export_single_chunk <- function(input_path, output_path) {
   }
 
   target <- parse_output_target(output_path)
+
+  if (isTRUE(enable_traceability)) {
+    if (is.null(traceability)) {
+      traceability <- load_traceability_metadata(
+        metadata_dir = traceability_dir,
+        strict = traceability_strict
+      )
+    }
+
+    if (isTRUE(traceability$enabled)) {
+      # Sub-issue 3: verify exporter can resolve and ingest traceability metadata.
+      # Coverage and exception reporting are implemented in follow-up sub-issues.
+      invisible(build_workshop_traceability_id(config$id, target$exercise, target$chunk_index))
+    }
+  }
+
   expected_chunk_count <- config$expected_chunks[[target$exercise]]
   if (is.null(expected_chunk_count)) {
     stop(
@@ -436,7 +480,14 @@ build_output_path <- function(output_dir, exercise, chunk_index) {
   file.path(output_dir, sprintf("exercise-%s-%d.tex", exercise_slug, chunk_index))
 }
 
-export_workshop_by_config <- function(config, output_dir = "generated/workshop-output", parser_engine = "legacy") {
+export_workshop_by_config <- function(
+  config,
+  output_dir = "generated/workshop-output",
+  parser_engine = "legacy",
+  traceability_dir = "metadata/traceability",
+  enable_traceability = TRUE,
+  traceability_strict = FALSE
+) {
   if (is.null(config) || is.null(config$source) || is.null(config$expected_chunks)) {
     stop("Invalid workshop export configuration supplied.")
   }
@@ -449,14 +500,35 @@ export_workshop_by_config <- function(config, output_dir = "generated/workshop-o
   options(ada.workshop.parser.engine = parser_engine)
   on.exit(options(ada.workshop.parser.engine = old_engine), add = TRUE)
 
+  traceability <- NULL
+  if (isTRUE(enable_traceability)) {
+    traceability <- load_traceability_metadata(
+      metadata_dir = traceability_dir,
+      strict = traceability_strict
+    )
+  }
   for (exercise in names(config$expected_chunks)) {
     for (i in seq_len(config$expected_chunks[[exercise]])) {
-      export_single_chunk(config$source, build_output_path(output_dir, exercise, i))
+      export_single_chunk(
+        config$source,
+        build_output_path(output_dir, exercise, i),
+        traceability = traceability,
+        traceability_dir = traceability_dir,
+        enable_traceability = enable_traceability,
+        traceability_strict = traceability_strict
+      )
     }
   }
 }
 
-export_workshop_by_config_id <- function(config_id, output_dir = "generated/workshop-output", parser_engine = "legacy") {
+export_workshop_by_config_id <- function(
+  config_id,
+  output_dir = "generated/workshop-output",
+  parser_engine = "legacy",
+  traceability_dir = "metadata/traceability",
+  enable_traceability = TRUE,
+  traceability_strict = FALSE
+) {
   config <- resolve_workshop_export_config_by_id(config_id)
   if (is.null(config)) {
     stop(
@@ -464,7 +536,14 @@ export_workshop_by_config_id <- function(config_id, output_dir = "generated/work
       ". Add it to scripts/workshop-export-config.R."
     )
   }
-  export_workshop_by_config(config, output_dir = output_dir, parser_engine = parser_engine)
+  export_workshop_by_config(
+    config,
+    output_dir = output_dir,
+    parser_engine = parser_engine,
+    traceability_dir = traceability_dir,
+    enable_traceability = enable_traceability,
+    traceability_strict = traceability_strict
+  )
 }
 
 main <- function() {
@@ -479,7 +558,14 @@ main <- function() {
   old_engine <- getOption("ada.workshop.parser.engine")
   options(ada.workshop.parser.engine = args$parser_engine)
   on.exit(options(ada.workshop.parser.engine = old_engine), add = TRUE)
-  export_single_chunk(args$input, args$output)
+
+  export_single_chunk(
+    args$input,
+    args$output,
+    traceability_dir = args$traceability_dir,
+    enable_traceability = args$enable_traceability,
+    traceability_strict = args$traceability_strict
+  )
 }
 
 if (sys.nframe() == 0L) {

@@ -1,0 +1,114 @@
+- id: LO-C1-01
+  chapter: 1
+  scope: chapter
+  text: Define a probability distribution and explain its role in describing possible outcomes of an experiment.
+  bloom: apply
+  status: active
+- id: LO-C3-01
+  chapter: 3
+  scope: chapter
+  text: Define point estimation and interval estimation for population parameters.
+  bloom: apply
+  status: active
+- id: LO-C4-01
+  chapter: 4
+  scope: chapter
+  text: Define auxiliary variables and stratification in the context of sampling.
+  bloom: apply
+  status: active
+- id: LO-C5-01
+  chapter: 5
+  scope: chapter
+  text: "Define regression analysis and identify its primary components: dependent variable, independent variable, and error term."
+  bloom: apply
+  status: active
+- id: LO-C5S5.1-01
+  chapter: 5
+  scope: section
+  section: '5.1'
+  text: "Define regression analysis and identify its primary components: dependent variable, independent variable, and error term."
+  bloom: understand
+  status: active
+- id: LO-C5S5.2-01
+  chapter: 5
+  scope: section
+  section: '5.2'
+  text: "List the key assumptions underlying regression analysis: linearity in the parameters, random sampling, sample variation, and zero-conditional mean of errors."
+  bloom: understand
+  status: active
+- id: LO-C5S5.3-01
+  chapter: 5
+  scope: section
+  section: '5.3'
+  text: Identify steps for summarizing and plotting data to explore relationships.
+  bloom: apply
+  status: active
+- id: LO-C5S5.4-01
+  chapter: 5
+  scope: section
+  section: '5.4'
+  text: Define linear regression and describe key components like predictors, response, and error terms.
+  bloom: apply
+  status: active
+- id: LO-C5S5.5-01
+  chapter: 5
+  scope: section
+  section: '5.5'
+  text: List common diagnostic tools for detecting outliers and influential observations.
+  bloom: analyze
+  status: active
+- id: LO-C5S5.6-01
+  chapter: 5
+  scope: section
+  section: '5.6'
+  text: State the purpose of analysis of variance (ANOVA) in the context of regression models.
+  bloom: understand
+  status: active
+- id: LO-C5S5.7-01
+  chapter: 5
+  scope: section
+  section: '5.7'
+  text: Identify the assumptions underlying linear regression (e.g., normality, homoscedasticity, independence).
+  bloom: analyze
+  status: active
+- id: LO-C5S5.8-01
+  chapter: 5
+  scope: section
+  section: '5.8'
+  text: Recall the null and alternative hypotheses for testing coefficients and the overall model.
+  bloom: evaluate
+  status: active
+- id: LO-C5S5.9-01
+  chapter: 5
+  scope: section
+  section: '5.9'
+  text: State the definitions of confidence and prediction intervals, and define the difference between predictions for new data points and predictions for mean responses.
+  bloom: apply
+  status: active
+- id: LO-C6-01
+  chapter: 6
+  scope: chapter
+  text: Define goodness of fit and explain its purpose in statistical analysis.
+  bloom: understand
+  status: active
+- id: LO-C6-02
+  chapter: 6
+  scope: chapter
+  text: Distinguish statistical evidence of anomaly from conclusive evidence of fraud.
+  bloom: analyze
+  status: active
+- id: LO-C6S6.2-01
+  chapter: 6
+  scope: section
+  section: '6.2'
+  text: Apply Benford-based expected frequencies to interpret observed-versus-expected
+    deviations.
+  bloom: apply
+  status: active
+- id: LO-C6S6.2-02
+  chapter: 6
+  scope: section
+  section: '6.2'
+  text: Evaluate whether identified digit anomalies warrant additional audit procedures.
+  bloom: evaluate
+  status: active

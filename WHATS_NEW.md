@@ -6,6 +6,7 @@
 ### Methodological improvements
 - Tightened and refined the level of assurance standards used in the book
 - Revised the annual evaluation in the regression chapter by using a covariance-aware prediction interval and aligning the audit workflow with professional practice
+- Revised the Regression Analysis chapter learning objectives so they emphasize audit judgement, evidential evaluation, and professional interpretation rather than section-by-section statistical procedure execution
 
 ### Clarifications
 - Made various minor edits and updates to improve clarity
@@ -17,6 +18,7 @@
 - Adjusted paper layout for print-on-demand publishing
 - Added missing graphics and improved overall visual presentation
 - Reformatted learning objectives for better readability
+- Consolidated the Regression Analysis chapter learning objectives into one chapter-level section and removed repeated section-level objective blocks
 
 ### New material
 - Added comprehensive coverage of uniform distribution (Section 6.4)

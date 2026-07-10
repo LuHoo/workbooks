@@ -23,3 +23,6 @@ notebooks/**/*.html
 notebooks/**/*_files/
 
 *.html
+
+# macOS Finder metadata
+.DS_Store

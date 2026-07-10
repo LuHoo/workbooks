@@ -48,7 +48,7 @@ You have performed other audit procedures to provide assurance regarding revenue
 \end{itemize}
 
 \bigskip
-Use the data of US SteamCo from 2011 to 2013 (the estimation period) to model the relationship between revenue and steam production, measured by mass in units of thousands of pounds, as well as cooling and heating degree day data. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period. 
+Use the data of US SteamCo from 2011 to 2013 (the estimation period) to model the relationship between revenue and steam production, measured by mass in units of thousands of pounds, as well as cooling and heating degree day data. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period.
 
 Use the model thus derived to develop expectations for 2014 (the hold-out period).
 
@@ -57,49 +57,49 @@ Use the model thus derived to develop expectations for 2014 (the hold-out period
 \section*{Objective}
 How strong is the relationship between revenue and production? Are there any influential observations in the estimation dataset? What is the expected amount of revenue, given the amount of steam produced? Should other variables be considered to improve the expectations? What is the acceptable difference for these expectations? What is the level of assurance that can be derived from this procedure?
 
-\section{What is regression analysis}
-\label{sec:what_is_regression_analysis}
-
-\subsection*{Learning objectives}
-At the end of this section you will be able to
+\section*{Learning objectives}
+At the end of this chapter you will be able to
 
 \bigskip
 \noindent \textsc{remember}
 
 \begin{itemize}
-\item define regression analysis and identify its primary components: dependent variable, independent variable, and error term.
-\item state the key purposes of regression analysis, including prediction, explanation, and hypothesis testing.
-\item recall the differences between exploratory and confirmatory data analysis.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain how regression identifies relationships between variables and distinguishes correlation from causation.
-\item describe the differences between exploratory data analysis (EDA) and confirmatory data analysis (CDA) in the context of regression.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item use a simple linear regression model to explore the relationship between two variables in a dataset.
-\item generate summary statistics and plots (e.g., scatterplots) to visualize potential relationships.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item compare EDA and CDA approaches in terms of their goals and methodologies.
-\item assess the appropriateness of linear regression for a given dataset based on initial exploration.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item justify the choice of simple linear regression as a starting point for analyzing relationships in data.
-\item critique the limitations of simple regression for more complex, real-world relationships.
-\end{itemize}
-\noindent \textsc{create}
-\begin{itemize}
-\item formulate hypotheses to be tested using regression based on EDA insights.
+\item identify the purpose of regression analysis in substantive analytical procedures and the role of expectations, residuals, and prediction uncertainty in evaluating audit evidence.
 \end{itemize}
 
+\noindent \textsc{understand}
+\begin{itemize}
+\item explain when regression analysis is suitable for an audit problem, taking into account the plausibility of the underlying business relationship and the availability of relevant data.
+\item explain why model assumptions, diagnostics, and data quality affect the evidential value of regression results.
+\end{itemize}
+
+\noindent \textsc{apply}
+\begin{itemize}
+\item use regression output, prediction uncertainty, and materiality to assess whether recorded amounts are consistent with audit expectations.
+\end{itemize}
+
+\noindent \textsc{analyze}
+\begin{itemize}
+\item interpret regression relationships and unusual observations in terms of underlying business processes, audit risk, and possible explanations.
+\end{itemize}
+
+\noindent \textsc{evaluate}
+\begin{itemize}
+\item evaluate whether a regression model can be relied upon as audit evidence and whether further investigation, adjustment, or alternative procedures are required.
+\item assess whether the evidence obtained from a regression analysis is sufficient to support an audit conclusion at the required level of assurance.
+\end{itemize}
+
+\noindent \textsc{create}
+\begin{itemize}
+\item communicate the results, limitations, and audit implications of a regression analysis in a manner appropriate for audit documentation and professional discussion.
+\end{itemize}
+
+\section{What is regression analysis}
+\label{sec:what_is_regression_analysis}
 \subsection{Introduction to regression analysis} % (fold)
 \label{sub:quick_overview}
 
-Regression analysis is a frequently applied statistical technique that serves as a basis for studying and characterizing the relationship between a \emph{hlblue}\index{response variable}\index{variable!response} or \hlblue{dependent variable}\index{dependent variable}\index{variable!dependent} and one or more \hlblue{predictors}\index{predictor}\index{variable!predictor} or \hlblue{independent variables}\index{independent variable}\index{variable!independent}. 
+Regression analysis is a frequently applied statistical technique that serves as a basis for studying and characterizing the relationship between a \hlblue{response variable}\index{response variable}\index{variable!response} or \hlblue{dependent variable}\index{dependent variable}\index{variable!dependent} and one or more \hlblue{predictors}\index{predictor}\index{variable!predictor} or \hlblue{independent variables}\index{independent variable}\index{variable!independent}. 
 
 % Exercise \ref{ex:summarizing_and_plotting}
 Figure \ref{fig:H7_scatterplot} shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the \textit{Case: US SteamCo}. 
@@ -186,6 +186,21 @@ As can be seen from the above examples, regression analysis can be used as an ex
 
 % subsection purposes_of_regression_analysis (end)
 
+\subsection{Regression as Audit Evidence}
+\label{sub:regression_as_audit_evidence}
+
+In an audit context, regression analysis is not performed for the purpose of estimating coefficients as such, but as a means of obtaining audit evidence. The technique allows the auditor to formalise relationships observed in the data and to use these relationships to form expectations, identify unusual observations, and assess the plausibility of recorded amounts.
+
+More specifically, regression analysis may be used to address questions such as whether observed relationships are consistent with the underlying business processes, which factors plausibly explain variation in the data, and what values would reasonably have been expected under normal circumstances. In this sense, a regression model serves as a structured representation of the auditor’s understanding of the entity and its environment.
+
+The usefulness of such a model does not depend solely on the ability to estimate it, but on the extent to which it can be relied upon. Before the results of a regression analysis can be used as audit evidence, the auditor must evaluate whether the model provides a sufficiently reliable basis for drawing conclusions. This evaluation requires consideration of the quality and relevance of the data, the validity of the assumptions underlying the model, and the presence of alternative explanations for the observed patterns.
+
+The procedures discussed in this chapter—ranging from model specification and estimation to residual analysis, influence diagnostics, and the construction of prediction intervals—should be viewed in this light. Each of these procedures contributes to the assessment of whether the model can be used to support an audit conclusion.
+
+Regression analysis does not eliminate uncertainty. Rather, it provides a disciplined framework within which uncertainty can be analysed and communicated. The role of the auditor is therefore not to accept the output of a model uncritically, but to evaluate it in the context of the audit, taking into account both its strengths and its limitations.
+
+Accordingly, the central question that underlies this chapter is not whether a regression model can be estimated, but whether it can be relied upon as a source of audit evidence in the exercise of professional judgement.
+
 \subsection{Overview of this chapter} % (fold)
 \label{sub:overview_of_this_chapter}
 
@@ -262,39 +277,6 @@ Section \ref{sec:auditor_response} marks the transition from statistical model v
 \label{sec:assumptions_underlying_regression_results}
 
 % ### **7.2. Assumption Underlying Regression Results**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item list the key assumptions underlying regression analysis: linearity in the parameters, random sampling, sample variation, and zero-conditional mean of errors.
-\item define the meaning of each assumption in the context of regression analysis.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain why each assumption is important for the validity of regression results.
-\item discuss the implications of violating assumptions such as non-linearity or biased sampling.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item identify potential violations of regression assumptions in a dataset using diagnostic tools (e.g., residual plots).
-\item demonstrate how to deal with non-linearity in practice.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item assess how different violations of assumptions (e.g., heteroskedasticity, omitted variable bias) affect regression coefficients and predictions.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item recommend solutions for addressing assumption violations, such as transformations or alternative modeling approaches.
-\end{itemize}
-\noindent \textsc{create}
-\begin{itemize}
-\item develop a checklist for verifying regression assumptions before interpreting results.
-\end{itemize}
-
 The calculation underlying the regression results presented in this chapter is based on a number of assumptions, some of which need to be satisfied to obtain \emph{unbiased estimates} of the slope and intercept coefficients, and others to allow conventional statistical tests of the model parameters and the creation of a prediction interval around the expectation. The resulting model and prediction uncertainty may then be used as evidence in the separate audit hypothesis test.
 
 It is important to make this distinction: if the first group of assumptions is satisfied but one or more from the second group are violated, we still have a valid regression model that can serve the purposes of an explanatory data analysis. If the model is to produce prediction intervals and serve as audit evidence, all assumptions relevant to those predictions need to be validated. This model validation remains distinct from evaluating the recorded amount under the audit hypotheses.
@@ -376,44 +358,6 @@ In most applications of regression analysis in auditing, the zero-conditional me
 \label{sec:obtaining_and_testing_data}
 
 % ### **7.3. Obtaining and Testing Data**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item identify steps for summarizing and plotting data to explore re\-la\-tionships.
-\item recall methods for testing the relevance and independence of independent variables (e.g., correlation analysis, variance inflation factor).
-\item describe the purpose of splitting data into estimation and hold-out sets.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain the role of data wrangling in preparing datasets for regression analysis.
-\item discuss why testing independent variables is essential for model reliability.
-\item illustrate the importance of separating estimation and validation data for model evaluation.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item perform data wrangling tasks, such as handling missing values, recoding variables, and generating summary statistics.
-\item use visualizations (e.g., histograms, scatterplots, boxplots) to explore data distributions and relationships.
-\item split a dataset into estimation and hold-out sets to prepare for model development and validation.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item evaluate the quality and relevance of independent variables for inclusion in a regression model.
-\item compare different approaches for data splitting and their effects on model evaluation.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item justify the use of specific independent variables based on theoretical and empirical considerations.
-\item critique the adequacy of data wrangling and exploration steps in ensuring data quality.
-\end{itemize}
-\noindent \textsc{create}
-\begin{itemize}
-\item design a workflow for obtaining, preparing, and validating data for a regression project.
-\end{itemize}
-
 \subsection{Obtaining data}
 \label{sub:obtaining_data}
 
@@ -594,36 +538,6 @@ This is repeated for each observation, giving a robust measure of model performa
 \label{sec:modeling}
 
 % ### **7.4. Modelling**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item define linear regression and describe key components like predictors, response, and error terms.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain the purpose of transformations and interactions in regression models.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item perform stepwise regression procedures to identify significant predictors.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item compare different models (with or without transformations and interactions) to determine the best fit based on criteria like adjusted $r^2$ or AIC.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item critique the limitations of stepwise regression and suggest alternative variable selection methods.
-\end{itemize}
-\noindent \textsc{create}
-\begin{itemize}
-\item design a regression model with appropriate transformations and interactions to optimize predictive accuracy.
-\end{itemize}
-
 The next step in the execution of the analytical procedure is to create the model. In many cases, a simple linear regression may suffice our needs, but it is important to stress that there are many modeling techniques to choose from. In this section we first discuss some of the considerations we go through when selecting a modeling technique (Section \ref{sub:model_selection}), and then we dive into simple linear regression (Section \ref{sub:simple_linear_regression}). We then discuss what happens when we add independent variables to the model (Section \ref{sub:multiple_regression}), including data disaggregation (Section \ref{sub:disaggregation_ch07}). We briefly touch on lead and lagged effects (Section \ref{sub:time_lag}). Section \ref{sub:transformations} introduces transformations. We finish the discussion on modeling in Section \ref{sub:alternative_modeling_techniques} with an overview of alternative modeling techniques.
 
 \subsection{Model selection} % (fold)
@@ -1131,32 +1045,6 @@ BSTS models can adjust for heteroskedasticity, autocorrelation, and non-normalit
 \label{sec:diagnostics_checking}
 
 % ### **7.5. Diagnostics Checking**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item list common diagnostic tools for detecting outliers and influential observations (e.g., residual plots, Cook’s distance).
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item describe the impact of outliers in $x$, $y$, or both on model coefficients and predictions.
-\end{itemize}
-\noindent \textsc{create}
-\begin{itemize}
-\item use diagnostic metrics (e.g., leverage values, standardized residuals) to identify problematic observations.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item differentiate between types of outliers (e.g., high leverage, large residuals) and assess their impact on model validity.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item recommend strategies for handling outliers and justify their ap\-pro\-priateness for the given context.
-\end{itemize}
-
 A first step in checking the diagnostics of the model is to plot the residuals against each of the independent variables used, as well as against the fitted values $\hat{y}$. The purpose of these plot is to detect patterns or relationships between the independent variables and the residuals. If the plot exhibits any systematic patterns, it could indicate issues with the assumptions of the linear regression model. Figure \ref{fig:H7_residualPlots_mod2} shows these plots for \ttblue{mod.2}, developed in Section \ref{sub:disaggregation_ch07}.
 
 The blue lines in the plot show the best attempt at fitting a nonlinear model. None of the plots suggest that a nonlinear model fits the data better.
@@ -1460,33 +1348,6 @@ For the \emph{Case: US SteamCo}, the largest VIF in \ttblue{mod.1} is 5.60 (for 
 \label{sec:analysis_of_variance}
 
 % ### **7.6. Analysis of Variance**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item state the purpose of analysis of variance (ANOVA) in the context of regression models.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain the partitioning of total variation into explained and residual components (SST = SSR + SSE).
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item calculate $F$ statistics and interpret their significance for testing model fit.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item assess whether a significant $F$ statistic aligns with the results of individual coefficient tests.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item compare the use of ANOVA in linear models versus other types of models (e.g., non-linear regression).
-\end{itemize}
-% ---
-
 In this section, we focus on the model quality. If one of the purposes of regression analysis is to explain the variation in the dependent variable, \hlblue{analysis of variance}\index{analysis of variance} or \emph{anova}\index{anova} assists in describing how each independent variable explains this variation and how much remains unexplained. 
 
 In statistical analysis, the terms \emph{variation} and \emph{variance} are frequently encountered, each carrying distinct implications despite their apparent similarity. While both concepts pertain to the dispersion or spread of data points around a central tendency, they diverge subtly in their mathematical formulations and interpretations. Specifically, \emph{total variation} denotes the aggregate of squared deviations between individual data points ($y_i$) and the sample mean ($\bar{y}$), encapsulating the entirety of variability within a dataset. In contrast, \emph{variance} represents a refined measure, derived from the total variation, wherein the summation of squared deviations is divided by the degrees of freedom, $n - 1$. This adjustment compensates for the tendency of sample variance to underestimate the population variance, thereby yielding an unbiased estimator. Consequently, while both metrics elucidate the extent of dispersion in a dataset, the incorporation of degrees of freedom renders variance a more nuanced and statistically robust measure compared to total variation.
@@ -1781,32 +1642,6 @@ We continue the development of our analysis using \ttblue{mod.3}.
 \label{sec:testing_model_assumptions}
 
 % ### **7.7. Testing Model Assumptions**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item identify the assumptions underlying linear regression (e.g., normality, homoscedasticity, independence).
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain the implications of violations of assumptions on regression results.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item perform statistical tests for normality, hetero\-skedasticity, and auto\-correlation.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item interpret diagnostic plots (e.g., residuals vs. fitted values) to evaluate assumptions visually.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item recommend corrective actions (e.g., transformations, robust standard errors) for violated assumptions.
-\end{itemize}
-
 We discuss the assumptions for obtaining unbiased estimates in Section \ref{sec:assumptions_underlying_regression_results}. The second set of assumptions supports conventional statistical inference about the model and the construction of prediction intervals. The three assumptions are as follows:
 
 \begin{itemize}
@@ -2131,32 +1966,6 @@ In some cases, variables may remain due to data availability or to support futur
 \label{sec:testing_significance}
 
 % ### **7.8. Testing Significance of Coefficients and the Model**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item recall the null and alternative hypotheses for testing coefficients and the overall model.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain the relationship between $t$ tests for coefficients and the $F$ test for the model.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item conduct hypothesis tests for individual coefficients and interpret $p$values.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item assess the practical significance of coefficients beyond statistical significance.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item critique the implications of multicollinearity on significance testing.
-\end{itemize}
-
 \subsection{Testing significance of independent variables} % (fold)
 \label{sub:testing_significance_of_independent_variables}
 
@@ -2251,37 +2060,6 @@ H_1 : \text{At least one of the } \beta_j \neq 0
 \label{sec:expectations}
 
 % ### **7.9. Creating Expectations**
-\subsection*{Learning objectives}
-At the end of this section you will be able to
-
-\bigskip
-\noindent \textsc{remember}
-
-\begin{itemize}
-\item state the definitions of confidence and prediction intervals, and define the difference between predictions for new data points and predictions for mean responses.
-\item recall that audit assurance is the complement of Type I error risk.
-\end{itemize}
-\noindent \textsc{understand}
-\begin{itemize}
-\item explain the steps involved in making predictions from a regression model and the key differences between confidence intervals and prediction intervals.
-\item describe how assurance quantifies the probability of not incorrectly concluding that the account is not materially misstated.
-\end{itemize}
-\noindent \textsc{apply}
-\begin{itemize}
-\item construct and interpret confidence and prediction intervals using regression output for a given dataset.
-\item calculate assurance levels based on prediction intervals and (per\-for\-mance) materiality.
-\end{itemize}
-\noindent \textsc{analyze}
-\begin{itemize}
-\item compare predicted values with observed values to evaluate the model’s performance and assess why prediction intervals are wider than confidence intervals.
-\item examine how assurance levels change with different significance levels and data variability.
-\end{itemize}
-\noindent \textsc{evaluate}
-\begin{itemize}
-\item recommend when to use confidence versus prediction intervals in practice, and justify their use in specific applications.
-\item interpret assurance levels to assess the reliability of conclusions drawn from the regression analysis.
-\end{itemize}
-
 In the previous sections, a regression model was constructed based on data from a baseline period of 36 months, explaining the monthly revenue by accounting for \ttblue{production} and the number of cooling degree days (\ttblue{coolDD}), while taking account for different relationships between summer and winter months. To forecast revenue for the current year, this model can be applied to new data, beginning with a expectation for January.
 
 For the first month of the hold-out set (January 2014), the model can generate an expectation of revenue using the known values of the explanatory variables: production (606,400), coolDD (0), and whether the month is a summer month. Since January is not a summer month, the interaction terms involving \ttblue{summer} will drop out of the equation. Table \ref{tab:expectation_january} shows the detail calculation of the expectation.
