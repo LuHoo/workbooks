@@ -385,6 +385,39 @@ class RendererTestCase(unittest.TestCase):
             text=True,
         )
 
+    def test_regression_runtime_guardrails_for_chapters_2_3_5(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-regression-"))
+        subprocess.run(
+            [
+                "Rscript",
+                str(ORCHESTRATOR_SCRIPT),
+                "--output-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        chapter2_nb = self.read_json(out_dir / "population-estimation" / "chapter-2.ipynb")
+        chapter3_nb = self.read_json(out_dir / "auxiliary-variables-and-stratification" / "chapter-3.ipynb")
+        chapter5_nb = self.read_json(out_dir / "regression-analysis" / "chapter-5.ipynb")
+
+        chapter2_code = self.collect_code_text(chapter2_nb)
+        chapter3_code = self.collect_code_text(chapter3_nb)
+        chapter5_code = self.collect_code_text(chapter5_nb)
+
+        self.assertIn("N = len(salaries)", chapter2_code)
+        self.assertNotIn("np.random.choice(N, size=n, replace=False)", chapter2_code.split("N = len(salaries)")[0])
+        self.assertNotIn("sample1$gross", chapter2_code)
+
+        self.assertNotIn(".loc[3:4, \"mpu\"]", chapter3_code)
+        self.assertIn(".iloc[3:4 + 1", chapter3_code)
+
+        self.assertIn("USSteamCo = load_dataset('USSteamCo')", chapter5_code)
+        self.assertNotIn("summary(USSteamCo)", chapter5_code)
+
 
 if __name__ == "__main__":
     unittest.main()

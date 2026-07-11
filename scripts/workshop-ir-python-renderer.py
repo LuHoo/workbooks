@@ -375,8 +375,24 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
             r"\1 = \2.iloc[np.random.choice(N, size=n, replace=False), :]",
             updated,
         )
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[sample\(([^,]+),\s*([^)]+)\),\s*\]\s*$",
+            r"\1 = \2.iloc[np.random.choice(\3, size=\4, replace=False), :]",
+            updated,
+        )
         updated = re.sub(r"\bnames\s*\(([^)]+)\)", r"\1.columns.tolist()", updated)
         updated = re.sub(r"\bhead\s*\(([^,\)]+)\)", r"\1.head()", updated)
+        def _replace_dollar_accessor(match: re.Match[str]) -> str:
+            return f'{match.group(1)}["{match.group(2)}"]'
+
+        updated = re.sub(
+            r"\b([A-Za-z_][A-Za-z0-9_]*)\$([A-Za-z_][A-Za-z0-9_]*)",
+            _replace_dollar_accessor,
+            updated,
+        )
+        updated = re.sub(r"\bmean\s*\(", "np.mean(", updated)
+        updated = re.sub(r"\bsd\s*\(", "np.std(", updated)
+        updated = re.sub(r"\bsummary\s*\(([^)]+)\)", r"\1.describe(include='all')", updated)
         updated = re.sub(r"\bTRUE\b", "True", updated)
         updated = re.sub(r"\bFALSE\b", "False", updated)
         updated = updated.replace("lower.tail", "lower_tail")
@@ -385,6 +401,19 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bc\(([^()]*)\)", r"np.array([\1])", updated)
         updated = re.sub(r"\bround\s*\(", "r_round(", updated)
         updated = updated.replace("^", "**")
+        # R slices like df[3:4, "col"] are position-based and end-inclusive.
+        def _replace_loc_slice(match: re.Match[str]) -> str:
+            base = match.group(1)
+            start = match.group(2)
+            end = match.group(3)
+            col = match.group(4)
+            return f"{base}.iloc[{start}:{end} + 1, {base}.columns.get_loc(\"{col}\")]"
+
+        updated = re.sub(
+            r"(.+)\.loc\[\s*(\d+)\s*:\s*(\d+)\s*,\s*\"([^\"]+)\"\s*\]$",
+            _replace_loc_slice,
+            updated,
+        )
         out.append(updated)
     return out
 
@@ -433,6 +462,9 @@ def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
         "",
         "def pt(q, df, lower_tail=True):",
         "    return t.cdf(q, df=df) if lower_tail else t.sf(q, df=df)",
+        "",
+        "def qt(p, df):",
+        "    return t.ppf(p, df=df)",
         "",
         "def pf(q, df1, df2, lower_tail=True):",
         "    return f.cdf(q, dfn=df1, dfd=df2) if lower_tail else f.sf(q, dfn=df1, dfd=df2)",
@@ -484,9 +516,16 @@ def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, A
         "else:",
         "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
         "",
-        "from ada_fsaudit_bridge import load_dataset",
+        "from ada_fsaudit_bridge import load_dataset, lower_bound, upper_bound",
         "",
         "salaries = load_dataset('salaries')",
+        "N = len(salaries)",
+        "",
+        "def lower(k, n, alpha, popn=None, dist=None):",
+        "    return lower_bound(k=k, n=n, alpha=alpha, popn=popn, dist=dist)",
+        "",
+        "def upper(k, n, alpha, popn=None, dist=None):",
+        "    return upper_bound(k=k, n=n, alpha=alpha, popn=popn, dist=dist)",
     ]
     return as_code_cell(
         lines,
@@ -495,6 +534,40 @@ def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, A
             "exercise_id": None,
             "exercise_ref": None,
             "block_id": "population-estimation-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
+def make_regression_analysis_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "from pathlib import Path",
+        "import sys",
+        "",
+        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
+        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
+        "        if str(_candidate) not in sys.path:",
+        "            sys.path.insert(0, str(_candidate))",
+        "        break",
+        "else:",
+        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
+        "",
+        "from ada_fsaudit_bridge import load_dataset",
+        "",
+        "USSteamCo = load_dataset('USSteamCo')",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"regression-analysis-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "regression-analysis-bootstrap",
             "source_file": source_file,
             "source_block_key": "bootstrap",
             "source_span": None,
@@ -512,6 +585,12 @@ def is_r_heavy_code_block(lines: List[str]) -> bool:
         r"\bdata\.frame\s*\(",
         r"\btribble\s*\(",
         r"\bpivot_longer\s*\(",
+        r"\blm\s*\(",
+        r"\bstep\s*\(",
+        r"\bscatterplot\s*\(",
+        r"\bcorrplot\s*\(",
+        r"\bas\.Date\s*\(",
+        r"\bformula\s*\(",
         r"::",
     ]
     return any(re.search(pattern, joined) for pattern in patterns)
@@ -808,6 +887,8 @@ def render_notebook(
         cells.append(make_fsaudit_bootstrap_cell(ir))
     if chapter_number == "2":
         cells.append(make_population_estimation_bootstrap_cell(ir))
+    if chapter_number == "5":
+        cells.append(make_regression_analysis_bootstrap_cell(ir))
     if requires_python_viz_bootstrap:
         cells.append(make_python_viz_bootstrap_cell(ir))
     if requires_r_compat:
@@ -844,7 +925,7 @@ def render_notebook(
                 source_lines = normalize_lines(content.get("code_lines", []))
                 if is_r_heavy_code_block(source_lines):
                     source_lines = convert_r_heavy_block_to_python(source_lines)
-                elif requires_r_compat:
+                else:
                     source_lines = normalize_r_style_code_for_python(source_lines)
                 cells.append(
                     as_code_cell(
