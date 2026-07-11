@@ -20,7 +20,7 @@ R_ONLY_PATTERNS = [
     re.compile(r"\bchisq\.test\s*\("),
     re.compile(r"\bbind_rows\s*\("),
     re.compile(r"\bsubset\s*\("),
-    re.compile(r"::"),
+    re.compile(r"\b[A-Za-z][A-Za-z0-9_.]*\s*::\s*[A-Za-z][A-Za-z0-9_.]*\b"),
 ]
 
 
@@ -60,7 +60,19 @@ def check_notebook(path: Path) -> list[Violation]:
             continue
         source = normalize_source(cell)
 
+        # Chapter 5 intentionally includes an R bridge bootstrap that loads R
+        # packages via ro.r("... library(...) ..."); this is expected Python code.
+        trace = cell.get("metadata", {}).get("traceability", {})
+        block_id = trace.get("block_id")
+
         for pattern in R_ONLY_PATTERNS:
+            if (
+                pattern.pattern == r"\blibrary\s*\("
+                and block_id == "regression-analysis-bootstrap"
+                and "ro.r(" in source
+            ):
+                continue
+
             match = pattern.search(source)
             if not match:
                 continue

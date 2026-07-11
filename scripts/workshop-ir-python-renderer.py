@@ -458,15 +458,129 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bTRUE\b", "True", updated)
         updated = re.sub(r"\bFALSE\b", "False", updated)
         updated = updated.replace("lower.tail", "lower_tail")
+        # Prefer native SciPy names/semantics over R-style compatibility aliases.
+        updated = re.sub(
+            r"\bdhyper\s*\(\s*x\s*=\s*([^,]+)\s*,\s*m\s*=\s*([^,]+)\s*,\s*n\s*=\s*([^,]+)\s*,\s*k\s*=\s*([^)]+)\)",
+            r"hypergeom.pmf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bdhyper\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)",
+            r"hypergeom.pmf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bphyper\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"hypergeom.sf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bphyper\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)",
+            r"hypergeom.cdf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(r"\bdbinom\s*\(\s*x\s*=\s*([^,]+)\s*,\s*size\s*=\s*([^,]+)\s*,\s*prob\s*=\s*([^)]+)\)", r"binom.pmf(\1, \2, \3)", updated)
+        updated = re.sub(r"\bdbinom\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"binom.pmf(\1, \2, \3)", updated)
+        updated = re.sub(
+            r"\bpbinom\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"binom.sf(\1, \2, \3)",
+            updated,
+        )
+        updated = re.sub(r"\bpbinom\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"binom.cdf(\1, \2, \3)", updated)
+        updated = re.sub(r"\bdpois\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"poisson.pmf(\1, mu=\2)", updated)
+        updated = re.sub(
+            r"\bppois\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"poisson.sf(\1, mu=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bppois\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"poisson.cdf(\1, mu=\2)", updated)
+        updated = re.sub(r"\bpnorm\s*\(", "norm.cdf(", updated)
+        updated = re.sub(r"\bdnorm\s*\(", "norm.pdf(", updated)
+        if "norm.cdf(" in updated:
+            updated = re.sub(r"\bq\s*=", "x=", updated)
+        updated = re.sub(r"\bmean\s*=", "loc=", updated)
+        updated = re.sub(r"\bsd\s*=", "scale=", updated)
+        updated = re.sub(
+            r"\bpchisq\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpchisq\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bpchisq\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"chi2.cdf(\1, df=\2)", updated)
+        updated = re.sub(r"\bpchisq\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"chi2.cdf(\1, df=\2)", updated)
+        updated = re.sub(
+            r"\bqchisq\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.isf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bqchisq\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.isf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bqchisq\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"chi2.ppf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqchisq\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"chi2.ppf(\1, df=\2)", updated)
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"t.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"t.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.cdf(\1, df=\2)", updated)
+        updated = re.sub(r"\bpt\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"t.cdf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqt\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqt\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
+        updated = re.sub(
+            r"\bpf\s*\(\s*q\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.sf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.sf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(r"\bpf\s*\(\s*q\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^)]+)\)", r"f.cdf(\1, dfn=\2, dfd=\3)", updated)
+        updated = re.sub(r"\bpf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"f.cdf(\1, dfn=\2, dfd=\3)", updated)
+        updated = re.sub(
+            r"\bqf\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.isf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bqf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.isf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(r"\bqf\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^)]+)\)", r"f.ppf(\1, dfn=\2, dfd=\3)", updated)
+        updated = re.sub(r"\bqf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"f.ppf(\1, dfn=\2, dfd=\3)", updated)
         updated = re.sub(r"\blength\s*\(", "len(", updated)
-        updated = re.sub(r"\bchisq\.test\s*\(", "chisq_test(", updated)
+        updated = re.sub(
+            r"\bchisq\.test\s*\(\s*x\s*=\s*([^,]+)\s*,\s*p\s*=\s*([^)]+)\)",
+            r"(lambda _obs, _p: chisquare(f_obs=_obs, f_exp=_obs.sum() * (_p / _p.sum())))(np.asarray(\1, dtype=float), np.asarray(\2, dtype=float))",
+            updated,
+        )
+        updated = re.sub(
+            r"\bchisq\.test\s*\(\s*([^,]+)\s*,\s*([^)]+)\)",
+            r"(lambda _obs, _p: chisquare(f_obs=_obs, f_exp=_obs.sum() * (_p / _p.sum())))(np.asarray(\1, dtype=float), np.asarray(\2, dtype=float))",
+            updated,
+        )
         updated = re.sub(r"\bc\(([^()]*)\)", r"np.array([\1])", updated)
         updated = re.sub(
             r"^\s*([A-Za-z_][A-Za-z0-9_]*)\[\"([A-Za-z_][A-Za-z0-9_]*)\"\]\s*=\s*np\.array\((\[.*\])\)\s*$",
             _replace_vector_recycle,
             updated,
         )
-        updated = re.sub(r"\bround\s*\(", "r_round(", updated)
+        updated = re.sub(r"\bround\s*\(", "np.round(", updated)
         updated = updated.replace("^", "**")
         # R slices like df[3:4, "col"] are position-based and end-inclusive.
         def _replace_loc_slice(match: re.Match[str]) -> str:
@@ -493,65 +607,6 @@ def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
         "import numpy as np",
         "from math import sqrt",
         "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
-        "",
-        "def dhyper(x, m, n, k):",
-        "    return hypergeom.pmf(x, M=m + n, n=m, N=k)",
-        "",
-        "def phyper(q, m, n, k, lower_tail=True):",
-        "    return hypergeom.cdf(q, M=m + n, n=m, N=k) if lower_tail else hypergeom.sf(q, M=m + n, n=m, N=k)",
-        "",
-        "def dbinom(x, size, prob):",
-        "    return binom.pmf(x, size, prob)",
-        "",
-        "def pbinom(q, size, prob, lower_tail=True):",
-        "    return binom.cdf(q, size, prob) if lower_tail else binom.sf(q, size, prob)",
-        "",
-        "def pnorm(q, mean=0.0, sd=1.0):",
-        "    return norm.cdf(q, loc=mean, scale=sd)",
-        "",
-        "def dnorm(x, mean=0.0, sd=1.0):",
-        "    return norm.pdf(x, loc=mean, scale=sd)",
-        "",
-        "def dpois(x, lambda_):",
-        "    return poisson.pmf(x, mu=lambda_)",
-        "",
-        "def ppois(q, lambda_, lower_tail=True):",
-        "    return poisson.cdf(q, mu=lambda_) if lower_tail else poisson.sf(q, mu=lambda_)",
-        "",
-        "def dchisq(x, df):",
-        "    return chi2.pdf(x, df=df)",
-        "",
-        "def pchisq(q, df, lower_tail=True):",
-        "    return chi2.cdf(q, df=df) if lower_tail else chi2.sf(q, df=df)",
-        "",
-        "def qchisq(p, df, lower_tail=True):",
-        "    return chi2.ppf(p, df=df) if lower_tail else chi2.isf(p, df=df)",
-        "",
-        "def pt(q, df, lower_tail=True):",
-        "    return t.cdf(q, df=df) if lower_tail else t.sf(q, df=df)",
-        "",
-        "def qt(p, df):",
-        "    return t.ppf(p, df=df)",
-        "",
-        "def pf(q, df1, df2, lower_tail=True):",
-        "    return f.cdf(q, dfn=df1, dfd=df2) if lower_tail else f.sf(q, dfn=df1, dfd=df2)",
-        "",
-        "def qf(p, df1, df2, lower_tail=True):",
-        "    return f.ppf(p, dfn=df1, dfd=df2) if lower_tail else f.isf(p, dfn=df1, dfd=df2)",
-        "",
-        "def chisq_test(x, p):",
-        "    observed = np.asarray(x, dtype=float)",
-        "    probs = np.asarray(p, dtype=float)",
-        "    probs = probs / probs.sum()",
-        "    expected = observed.sum() * probs",
-        "    statistic, p_value = chisquare(f_obs=observed, f_exp=expected)",
-        "    return {'statistic': statistic, 'p_value': p_value, 'df': len(observed) - 1}",
-        "",
-        "def r_round(x, digits=0):",
-        "    arr = np.asarray(x)",
-        "    if arr.ndim == 0:",
-        "        return round(float(arr), digits)",
-        "    return np.round(arr, digits)",
     ]
     return as_code_cell(
         lines,
@@ -609,6 +664,29 @@ def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, A
             "exercise_id": None,
             "exercise_ref": None,
             "block_id": "population-estimation-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
+def make_probability_distributions_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "import numpy as np",
+        "from math import sqrt",
+        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"probability-distributions-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "probability-distributions-bootstrap",
             "source_file": source_file,
             "source_block_key": "bootstrap",
             "source_span": None,
@@ -851,6 +929,13 @@ def make_python_viz_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
 
 def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> List[str]:
     raw = "\n".join(lines)
+    if chapter_number == "2" and "library(FSaudit)" in raw and "names(salaries)" in raw and "nrow(salaries)" in raw:
+        return [
+            "display(list(salaries.columns))",
+            "N = len(salaries)",
+            "print(N)",
+        ]
+
     if "library(ggplot2)" in raw and "theme_set(" in raw:
         return [
             "# Python equivalent setup for plotting and data manipulation",
@@ -1234,7 +1319,13 @@ def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> Li
 
     if chapter_number == "5" and "qqPlot(ussteamco.mod.2" in raw:
         return [
-            "fig = qqplot(ussteamco_mod_2.resid, line='45')",
+            "resid_std_mod2 = (ussteamco_mod_2.resid - ussteamco_mod_2.resid.mean()) / ussteamco_mod_2.resid.std(ddof=1)",
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "qqplot(resid_std_mod2, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)",
+            "ax.set_title('QQ Plot of Standardized Residuals (mod.2)')",
+            "ax.set_xlabel('Theoretical Quantiles')",
+            "ax.set_ylabel('Standardized Residuals')",
+            "ax.grid(alpha=0.25)",
             "plt.tight_layout()",
             "plt.show()",
         ]
@@ -1345,7 +1436,13 @@ def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> Li
 
     if chapter_number == "5" and "qqPlot(ussteamco.mod.3" in raw:
         return [
-            "fig = qqplot(ussteamco_mod_3.resid, line='45')",
+            "resid_std_mod3 = (ussteamco_mod_3.resid - ussteamco_mod_3.resid.mean()) / ussteamco_mod_3.resid.std(ddof=1)",
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "qqplot(resid_std_mod3, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)",
+            "ax.set_title('QQ Plot of Standardized Residuals (mod.3)')",
+            "ax.set_xlabel('Theoretical Quantiles')",
+            "ax.set_ylabel('Standardized Residuals')",
+            "ax.grid(alpha=0.25)",
             "plt.tight_layout()",
             "plt.show()",
         ]
@@ -1825,11 +1922,13 @@ def render_notebook(
         cells.append(make_fsaudit_bootstrap_cell(ir))
     if chapter_number == "2":
         cells.append(make_population_estimation_bootstrap_cell(ir))
+    if chapter_number == "1":
+        cells.append(make_probability_distributions_bootstrap_cell(ir))
     if chapter_number == "5":
         cells.append(make_regression_analysis_bootstrap_cell(ir))
     if requires_python_viz_bootstrap:
         cells.append(make_python_viz_bootstrap_cell(ir))
-    if requires_r_compat and chapter_number != "5":
+    if requires_r_compat and chapter_number != "1":
         cells.append(make_r_stats_compat_bootstrap_cell(ir))
 
     for exercise, resolved_blocks in resolved_by_exercise:

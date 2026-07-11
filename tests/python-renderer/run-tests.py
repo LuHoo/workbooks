@@ -3,6 +3,7 @@
 import json
 import re
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -330,9 +331,13 @@ class RendererTestCase(unittest.TestCase):
         ]
         code_text = "\n".join(code_cells)
 
-        self.assertIn("def dhyper", code_text)
-        self.assertIn("def qf", code_text)
-        self.assertIn("def qchisq", code_text)
+        self.assertIn("from scipy.stats import", code_text)
+        self.assertIn("hypergeom.pmf", code_text)
+        self.assertIn("f.isf", code_text)
+        self.assertIn("chi2.ppf", code_text)
+        self.assertNotIn("def dhyper", code_text)
+        self.assertNotIn("def qf", code_text)
+        self.assertNotIn("def qchisq", code_text)
         self.assertNotIn("<-", code_text)
         self.assertNotIn("lower.tail", code_text)
 
@@ -374,7 +379,7 @@ class RendererTestCase(unittest.TestCase):
     def test_r_python_equivalence_phase1(self):
         subprocess.run(
             [
-                "python3",
+                sys.executable,
                 str(EQUIVALENCE_SCRIPT),
                 "--chapters",
                 "1,6",
