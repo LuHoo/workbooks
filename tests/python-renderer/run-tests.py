@@ -427,6 +427,14 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("USSteamCo[\"summer\"] = np.resize(np.array([", chapter5_code)
         self.assertIn("np.linspace(x_min, x_max, num=n)", chapter5_code)
         self.assertNotIn("summary(USSteamCo)", chapter5_code)
+        self.assertIn("ada_run_r(", chapter5_code)
+        self.assertNotIn("Skipped unsupported R-heavy code block in Python export", chapter5_code)
+        self.assertIn("fig, axes = plt.subplots(2, 2, figsize=(12, 8))", chapter5_code)
+        self.assertIn("ax_right = ax_left.twinx()", chapter5_code)
+        self.assertIn("cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()", chapter5_code)
+        self.assertIn("sns.heatmap(cor_ussteam", chapter5_code)
+        self.assertNotIn("hist_revenue <-", chapter5_code)
+        self.assertNotIn("corrplot(cor_ussteam", chapter5_code)
 
     def test_hypothesis_notebook_displays_multiple_eval_outputs(self):
         out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-ch4-"))
