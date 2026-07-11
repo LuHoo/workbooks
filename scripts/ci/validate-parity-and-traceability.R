@@ -160,6 +160,145 @@ run_lo_mapping_parity <- function(config, metadata) {
   check
 }
 
+get_authoring_context <- function(block) {
+  ctx <- block$authoring_context
+  if (is.null(ctx) || !is.list(ctx)) {
+    return(list(lang_scope = "shared", mode = "base", requires = character(), override_target_block_id = NULL))
+  }
+  requires <- ctx$requires
+  if (is.null(requires)) {
+    requires <- character()
+  }
+  list(
+    lang_scope = if (!is.null(ctx$lang_scope)) as.character(ctx$lang_scope) else "shared",
+    mode = if (!is.null(ctx$mode)) as.character(ctx$mode) else "base",
+    requires = as.character(requires),
+    override_target_block_id = if (!is.null(ctx$override_target_block_id)) as.character(ctx$override_target_block_id) else NULL
+  )
+}
+
+block_requires <- function(block, capability) {
+  ctx <- get_authoring_context(block)
+  capability %in% ctx$requires
+}
+
+resolve_blocks_for_python <- function(exercise) {
+  blocks <- exercise$blocks
+  effective <- list()
+  shared_base_index <- list()
+
+  for (block in blocks) {
+    if (isTRUE(block$support_only)) {
+      next
+    }
+
+    ctx <- get_authoring_context(block)
+    mode <- ctx$mode
+    lang_scope <- ctx$lang_scope
+    block_id <- as.character(block$block_id)
+
+    if (identical(mode, "base")) {
+      if (!identical(lang_scope, "shared")) {
+        next
+      }
+      shared_base_index[[block_id]] <- length(effective) + 1L
+      effective[[length(effective) + 1L]] <- block
+      next
+    }
+
+    if (identical(mode, "only")) {
+      if (identical(lang_scope, "python")) {
+        effective[[length(effective) + 1L]] <- block
+      }
+      next
+    }
+
+    if (identical(mode, "override")) {
+      if (!identical(lang_scope, "python")) {
+        next
+      }
+      target_id <- ctx$override_target_block_id
+      if (is.null(target_id) || is.null(shared_base_index[[target_id]])) {
+        next
+      }
+      pos <- shared_base_index[[target_id]]
+      target_ctx <- get_authoring_context(effective[[pos]])
+      merged <- block
+      merged_ctx <- get_authoring_context(merged)
+      if (length(merged_ctx$requires) == 0L && length(target_ctx$requires) > 0L) {
+        merged$authoring_context$requires <- target_ctx$requires
+      }
+      effective[[pos]] <- merged
+      next
+    }
+  }
+
+  effective
+}
+
+extract_notebook_traceability_block_ids <- function(notebook_path) {
+  notebook <- jsonlite::fromJSON(notebook_path, simplifyVector = FALSE)
+  ids <- character()
+  for (cell in notebook$cells) {
+    if (!identical(cell$cell_type, "code")) {
+      next
+    }
+    tr <- cell$metadata$traceability
+    if (is.null(tr) || is.null(tr$block_id)) {
+      next
+    }
+    ids <- c(ids, as.character(tr$block_id))
+  }
+  unique(ids)
+}
+
+run_fsaudit_coverage <- function(config, notebooks_dir) {
+  check <- list(status = "ok", errors = list(), warnings = list())
+  chapter <- as.character(sub("\\..*$", "", names(config$expected_chunks)[[1L]]))
+  notebook_path <- file.path(notebooks_dir, config$id, paste0("chapter-", chapter, ".ipynb"))
+
+  if (!file.exists(notebook_path)) {
+    check <- add_check_error(check, paste0("Generated notebook not found: ", notebook_path))
+    check$status <- "failed"
+    return(check)
+  }
+
+  ir <- parse_support_notebook_to_ir(input_path = config$source)
+  required_ids <- character()
+  for (exercise in ir$exercises) {
+    effective <- resolve_blocks_for_python(exercise)
+    for (block in effective) {
+      if (!identical(as.character(block$block_type), "code")) {
+        next
+      }
+      if (!block_requires(block, "fsaudit")) {
+        next
+      }
+      required_ids <- c(required_ids, as.character(block$block_id))
+    }
+  }
+  required_ids <- unique(required_ids)
+
+  if (length(required_ids) == 0L) {
+    check$status <- "skipped"
+    check$warnings <- c(check$warnings, list("No FSAudit-required blocks for this workshop"))
+    return(check)
+  }
+
+  present_ids <- extract_notebook_traceability_block_ids(notebook_path)
+  missing_ids <- setdiff(required_ids, present_ids)
+
+  if (length(missing_ids) > 0L) {
+    check <- add_check_error(
+      check,
+      paste0("Missing FSAudit-required block IDs in generated notebook: ", paste(missing_ids, collapse = ", "))
+    )
+    check$status <- "failed"
+  }
+
+  check
+}
+
 extract_source_exercise_refs <- function(source_path) {
   ir <- parse_support_notebook_to_ir(input_path = source_path)
   vapply(ir$exercises, function(ex) as.character(ex$exercise_ref), character(1L))
@@ -282,10 +421,12 @@ emit_summary <- function(report) {
   for (ws in report$workshops) {
     parity <- ws$checks$exercise_parity
     lo_parity <- ws$checks$lo_mapping_parity
+    fsaudit_cov <- ws$checks$fsaudit_coverage
     cat(
       "- ", ws$workshop_id,
       ": exercise_parity=", parity$status,
       ", lo_mapping_parity=", lo_parity$status,
+      ", fsaudit_coverage=", fsaudit_cov$status,
       "\n",
       sep = ""
     )
@@ -302,6 +443,16 @@ emit_summary <- function(report) {
     if (length(lo_parity$warnings) > 0L) {
       for (msg in lo_parity$warnings) {
         cat("::warning title=LO mapping parity::", ws$workshop_id, " :: ", msg, "\n", sep = "")
+      }
+    }
+    if (length(fsaudit_cov$errors) > 0L) {
+      for (msg in fsaudit_cov$errors) {
+        cat("::error title=FSAudit coverage::", ws$workshop_id, " :: ", msg, "\n", sep = "")
+      }
+    }
+    if (length(fsaudit_cov$warnings) > 0L) {
+      for (msg in fsaudit_cov$warnings) {
+        cat("::warning title=FSAudit coverage::", ws$workshop_id, " :: ", msg, "\n", sep = "")
       }
     }
   }
@@ -335,6 +486,7 @@ main <- function() {
   for (idx in seq_along(configs)) {
     report$workshops[[idx]]$checks$exercise_parity <- run_exercise_parity(configs[[idx]], args$notebooks_dir)
     report$workshops[[idx]]$checks$lo_mapping_parity <- run_lo_mapping_parity(configs[[idx]], metadata)
+    report$workshops[[idx]]$checks$fsaudit_coverage <- run_fsaudit_coverage(configs[[idx]], args$notebooks_dir)
 
     if (identical(report$workshops[[idx]]$checks$exercise_parity$status, "failed")) {
       report$status <- "failed"
@@ -343,6 +495,10 @@ main <- function() {
     if (identical(report$workshops[[idx]]$checks$lo_mapping_parity$status, "failed")) {
       report$status <- "failed"
       report$errors <- c(report$errors, report$workshops[[idx]]$checks$lo_mapping_parity$errors)
+    }
+    if (identical(report$workshops[[idx]]$checks$fsaudit_coverage$status, "failed")) {
+      report$status <- "failed"
+      report$errors <- c(report$errors, report$workshops[[idx]]$checks$fsaudit_coverage$errors)
     }
   }
 
