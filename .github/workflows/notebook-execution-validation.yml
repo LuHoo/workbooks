@@ -9,7 +9,9 @@ on:
       - "scripts/workshop-ir-*.R"
       - "scripts/workshop-ir-*.py"
       - "scripts/ci/**"
+      - "scripts/traceability-*.R"
       - "ada_fsaudit_bridge/**"
+      - "metadata/traceability/**"
       - ".binder/**"
       - ".github/workflows/notebook-execution-validation.yml"
   pull_request:
@@ -20,7 +22,9 @@ on:
       - "scripts/workshop-ir-*.R"
       - "scripts/workshop-ir-*.py"
       - "scripts/ci/**"
+      - "scripts/traceability-*.R"
       - "ada_fsaudit_bridge/**"
+      - "metadata/traceability/**"
       - ".binder/**"
       - ".github/workflows/notebook-execution-validation.yml"
   workflow_dispatch:
@@ -123,6 +127,15 @@ jobs:
         run: |
           Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks
 
+      - name: Validate parity and traceability quality gates
+        run: |
+          Rscript scripts/ci/validate-parity-and-traceability.R \
+            --chapters 1,2,3,4,5,6 \
+            --notebooks-dir generated/python-notebooks \
+            --metadata-dir metadata/traceability \
+            --output-json generated/traceability/parity-report.json \
+            --output-summary generated/traceability/parity-report.txt
+
       - name: Enforce strict Python output guardrail
         run: |
           python3 scripts/ci/check-generated-python-notebooks.py \
@@ -155,3 +168,10 @@ jobs:
         with:
           name: notebook-execution-artifacts
           path: generated/notebook-execution-artifacts
+
+      - name: Upload parity and traceability reports
+        if: ${{ always() && hashFiles('generated/traceability/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-traceability-reports
+          path: generated/traceability
