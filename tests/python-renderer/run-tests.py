@@ -411,11 +411,20 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("N = len(salaries)", chapter2_code)
         self.assertNotIn("np.random.choice(N, size=n, replace=False)", chapter2_code.split("N = len(salaries)")[0])
         self.assertNotIn("sample1$gross", chapter2_code)
+        self.assertIn("if dist is None:", chapter2_code)
+        self.assertIn("dist = 'hyper'", chapter2_code)
+        self.assertIn("if popn is None and dist == 'binom':", chapter2_code)
+        self.assertIn("popn = n", chapter2_code)
 
         self.assertNotIn(".loc[3:4, \"mpu\"]", chapter3_code)
         self.assertIn(".iloc[3:4 + 1", chapter3_code)
 
         self.assertIn("USSteamCo = load_dataset('USSteamCo')", chapter5_code)
+        self.assertIn("except Exception:", chapter5_code)
+        self.assertIn("importr('aicpa')", chapter5_code)
+        self.assertIn("data('USSteamCo', package='aicpa')", chapter5_code)
+        self.assertIn("USSteamCo = pd.DataFrame({", chapter5_code)
+        self.assertIn("USSteamCo[\"summer\"] = np.resize(np.array([", chapter5_code)
         self.assertNotIn("summary(USSteamCo)", chapter5_code)
 
 
