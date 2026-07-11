@@ -12,6 +12,8 @@ PARSER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir.R"
 RENDERER_SCRIPT = REPO_ROOT / "scripts" / "workshop-ir-python-renderer.py"
 ORCHESTRATOR_SCRIPT = REPO_ROOT / "scripts" / "export-python-notebooks.R"
 EXPORTER_SCRIPT = REPO_ROOT / "scripts" / "export-python-workshop.py"
+STRICT_GUARDRAIL_SCRIPT = REPO_ROOT / "scripts" / "ci" / "check-generated-python-notebooks.py"
+EQUIVALENCE_SCRIPT = REPO_ROOT / "scripts" / "ci" / "assert-r-python-equivalence.py"
 GOLDEN_NOTEBOOK = REPO_ROOT / "tests" / "python-renderer" / "fixtures" / "directive-valid-python.ipynb"
 
 
@@ -185,6 +187,25 @@ class RendererTestCase(unittest.TestCase):
         heading_refs = self.collect_heading_refs(nb_json)
         self.assertEqual(heading_refs[0], "1.1")
 
+    def test_orchestrator_generates_population_estimation_notebook(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-ch2-"))
+        cmd = [
+            "Rscript",
+            str(ORCHESTRATOR_SCRIPT),
+            "--config-id",
+            "population-estimation",
+            "--output-dir",
+            str(out_dir),
+        ]
+        subprocess.run(cmd, cwd=REPO_ROOT, check=True, capture_output=True, text=True)
+
+        out_nb = out_dir / "population-estimation" / "chapter-2.ipynb"
+        self.assertTrue(out_nb.exists())
+
+        nb_json = self.read_json(out_nb)
+        heading_refs = self.collect_heading_refs(nb_json)
+        self.assertEqual(heading_refs[0], "2.1")
+
     def test_fsaudit_workshops_emit_bridge_bootstrap_and_python_overrides(self):
         cases = [
             (
@@ -293,6 +314,148 @@ class RendererTestCase(unittest.TestCase):
         self.assertNotEqual(proc.returncode, 0)
         self.assertIn("[validate-metadata]", proc.stderr + proc.stdout)
         self.assertIn("missing metadata.ada_renderer", proc.stderr + proc.stdout)
+
+    def test_probability_notebook_includes_r_stats_compat_shim(self):
+        source = REPO_ROOT / "notebooks" / "support" / "probability-distributions" / "support.Rmd"
+        ir_path = self.parse_ir(source)
+
+        out_path = Path(tempfile.mkstemp(prefix="nb-prob-", suffix=".ipynb")[1])
+        self.render_ipynb(ir_path, out_path)
+
+        nb_json = self.read_json(out_path)
+        code_cells = [
+            "".join(cell.get("source", []))
+            for cell in nb_json["cells"]
+            if cell.get("cell_type") == "code"
+        ]
+        code_text = "\n".join(code_cells)
+
+        self.assertIn("def dhyper", code_text)
+        self.assertIn("def qf", code_text)
+        self.assertIn("def qchisq", code_text)
+        self.assertNotIn("<-", code_text)
+        self.assertNotIn("lower.tail", code_text)
+
+    def test_goodness_of_fit_notebook_uses_python_plotting_conversion(self):
+        source = REPO_ROOT / "notebooks" / "support" / "goodness-of-fit" / "support.Rmd"
+        ir_path = self.parse_ir(source)
+
+        out_dir = Path(tempfile.mkdtemp(prefix="nb-gof-"))
+        out_path = out_dir / "chapter-6.ipynb"
+        self.render_ipynb(ir_path, out_path)
+
+        nb_json = self.read_json(out_path)
+        code_cells = [
+            "".join(cell.get("source", []))
+            for cell in nb_json["cells"]
+            if cell.get("cell_type") == "code"
+        ]
+        code_text = "\n".join(code_cells)
+
+        self.assertIn("import matplotlib.pyplot as plt", code_text)
+        self.assertIn("import seaborn as sns", code_text)
+        self.assertNotIn("def ada_run_r", code_text)
+        self.assertNotIn("ada_run_r(", code_text)
+        self.assertNotIn("library(", code_text)
+
+        subprocess.run(
+            [
+                "python3",
+                str(STRICT_GUARDRAIL_SCRIPT),
+                "--input-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+    def test_r_python_equivalence_phase1(self):
+        subprocess.run(
+            [
+                "python3",
+                str(EQUIVALENCE_SCRIPT),
+                "--chapters",
+                "1,6",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+    def test_regression_runtime_guardrails_for_chapters_2_3_5(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-regression-"))
+        subprocess.run(
+            [
+                "Rscript",
+                str(ORCHESTRATOR_SCRIPT),
+                "--output-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        chapter2_nb = self.read_json(out_dir / "population-estimation" / "chapter-2.ipynb")
+        chapter3_nb = self.read_json(out_dir / "auxiliary-variables-and-stratification" / "chapter-3.ipynb")
+        chapter5_nb = self.read_json(out_dir / "regression-analysis" / "chapter-5.ipynb")
+
+        chapter2_code = self.collect_code_text(chapter2_nb)
+        chapter3_code = self.collect_code_text(chapter3_nb)
+        chapter5_code = self.collect_code_text(chapter5_nb)
+
+        self.assertIn("N = len(salaries)", chapter2_code)
+        self.assertNotIn("np.random.choice(N, size=n, replace=False)", chapter2_code.split("N = len(salaries)")[0])
+        self.assertNotIn("sample1$gross", chapter2_code)
+        self.assertIn("if dist is None:", chapter2_code)
+        self.assertIn("dist = 'hyper'", chapter2_code)
+        self.assertIn("if popn is None and dist == 'binom':", chapter2_code)
+        self.assertIn("popn = n", chapter2_code)
+
+        self.assertNotIn(".loc[3:4, \"mpu\"]", chapter3_code)
+        self.assertIn(".iloc[3:4 + 1", chapter3_code)
+
+        self.assertIn("USSteamCo = load_dataset('USSteamCo')", chapter5_code)
+        self.assertIn("except Exception:", chapter5_code)
+        self.assertIn("importr('aicpa')", chapter5_code)
+        self.assertIn("data('USSteamCo', package='aicpa')", chapter5_code)
+        self.assertIn("USSteamCo = pd.DataFrame({", chapter5_code)
+        self.assertIn("USSteamCo[\"summer\"] = np.resize(np.array([", chapter5_code)
+        self.assertIn("np.linspace(x_min, x_max, num=n)", chapter5_code)
+        self.assertNotIn("summary(USSteamCo)", chapter5_code)
+
+    def test_hypothesis_notebook_displays_multiple_eval_outputs(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-ch4-"))
+        subprocess.run(
+            [
+                "Rscript",
+                str(ORCHESTRATOR_SCRIPT),
+                "--config-id",
+                "hypothesis-testing",
+                "--output-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        chapter4_nb = self.read_json(out_dir / "hypothesis-testing" / "chapter-4.ipynb")
+        chapter4_code = self.collect_code_text(chapter4_nb)
+
+        self.assertIn("display(ar.eval_results[\"pps estimate\"])", chapter4_code)
+        self.assertIn("display(ar.eval_results[\"Lower bound\"])", chapter4_code)
+        self.assertIn("display(ar.eval_results[\"Upper bound\"])", chapter4_code)
+        self.assertIn("ada_set_context(\"4.10\")", chapter4_code)
+        self.assertNotIn("display(ada_set_context(\"4.10\"))", chapter4_code)
+        self.assertNotIn("display())", chapter4_code)
+        self.assertIn("ar = mus_sample(", chapter4_code)
+        self.assertNotIn("display(myResults.iloc[15, 1] = 4438.82)", chapter4_code)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Verifying Binder runtime toolchain"
+python --version
+R --version | head -n 1
+
+python - <<'PY'
+import importlib
+for module in ["nbclient", "nbformat", "rpy2", "pandas", "scipy"]:
+    importlib.import_module(module)
+print("Python notebook dependencies import successfully")
+PY
+
+Rscript - <<'RS'
+stopifnot(requireNamespace("FSaudit", quietly = TRUE))
+stopifnot(requireNamespace("aicpa", quietly = TRUE))
+cat("R Binder dependencies load successfully\n")
+RS

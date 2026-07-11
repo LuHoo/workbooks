@@ -225,6 +225,27 @@ Recommended validated notebook runtime:
 - FSaudit 0.3.4+
 - rpy2 3.6.7
 
+## Binder and Notebook Execution Validation
+
+Binder and CI execution architecture for dual-language workshop support is
+documented in:
+
+- `docs/architecture/binder-notebook-execution.md`
+
+Binder configuration lives in `.binder/` and is designed to support both:
+
+- R workshop notebooks (`notebooks/workshops/*.Rmd`)
+- generated Python notebooks (`generated/python-notebooks/**/*.ipynb`)
+
+CI execution workflow:
+
+- `.github/workflows/notebook-execution-validation.yml`
+
+Publication gating:
+
+- `.github/workflows/export-workshops.yml` now requires notebook execution
+	validation to pass before export/publication can proceed.
+
 ### Traceability Metadata Ingestion
 
 The exporter can now read learning-objective traceability metadata from

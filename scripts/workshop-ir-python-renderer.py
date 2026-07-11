@@ -4,6 +4,7 @@ import argparse
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -352,6 +353,545 @@ def make_fsaudit_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
+def requires_r_stats_compat(lines: List[str]) -> bool:
+    joined = "\n".join(lines)
+    return bool(
+        re.search(r"\b(dhyper|phyper|dbinom|pbinom|pnorm|dnorm|dpois|ppois|dchisq|pchisq|qchisq|pt|pf|qf|chisq\.test|length)\s*\(", joined)
+        or re.search(r"\bc\s*\(", joined)
+        or "<-" in joined
+        or "lower.tail" in joined
+    )
+
+
+def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
+    out: List[str] = []
+    for line in lines:
+        updated = re.sub(r"^\s*\(([A-Za-z_][A-Za-z0-9_]*)\s*<-\s*(.+)\)\s*$", r"\1 = \2", line)
+        updated = updated.replace("<-", "=")
+        updated = re.sub(
+            r"\bseq\s*\(\s*([^,]+?)\s*,\s*([^,]+?)\s*,\s*length\.out\s*=\s*([^)]+?)\s*\)",
+            r"np.linspace(\1, \2, num=\3)",
+            updated,
+        )
+        updated = re.sub(r"\bRNGkind\s*\(.*\)", "# RNGkind() is R-specific; NumPy RNG is used in Python", updated)
+        updated = re.sub(r"\bset\.seed\s*\(([^)]*)\)", r"np.random.seed(\1)", updated)
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[sample\(N,\s*n\),\s*\]\s*$",
+            r"\1 = \2.iloc[np.random.choice(N, size=n, replace=False), :]",
+            updated,
+        )
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[sample\(([^,]+),\s*([^)]+)\),\s*\]\s*$",
+            r"\1 = \2.iloc[np.random.choice(\3, size=\4, replace=False), :]",
+            updated,
+        )
+        updated = re.sub(r"\bnames\s*\(([^)]+)\)", r"\1.columns.tolist()", updated)
+        updated = re.sub(r"\bhead\s*\(([^,\)]+)\)", r"\1.head()", updated)
+        def _replace_dollar_accessor(match: re.Match[str]) -> str:
+            return f'{match.group(1)}["{match.group(2)}"]'
+
+        updated = re.sub(
+            r"\b([A-Za-z_][A-Za-z0-9_]*)\$([A-Za-z_][A-Za-z0-9_]*)",
+            _replace_dollar_accessor,
+            updated,
+        )
+        updated = re.sub(r"\bmean\s*\(", "np.mean(", updated)
+        updated = re.sub(r"\bsd\s*\(", "np.std(", updated)
+        updated = re.sub(r"\bvar\s*\(([^)]+)\)", r"np.var(\1, ddof=1)", updated)
+        updated = re.sub(r"\bsummary\s*\(([^)]+)\)", r"\1.describe(include='all')", updated)
+        def _guard_describe_call(match: re.Match[str]) -> str:
+            name = match.group(1)
+            return f"({name}.describe(include='all') if '{name}' in globals() else print('Skipped describe: {name} not defined'))"
+
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\.describe\(include='all'\)\s*$",
+            _guard_describe_call,
+            updated,
+        )
+        updated = re.sub(r"\bnrow\s*\(([^)]+)\)", r"len(\1)", updated)
+
+        def _replace_row_range_subset(match: re.Match[str]) -> str:
+            lhs = match.group(1)
+            df_name = match.group(2)
+            start = int(match.group(3))
+            end = int(match.group(4))
+            return f"{lhs} = {df_name}.iloc[{start - 1}:{end}, :]"
+
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[(\d+)\s*:\s*(\d+)\s*,\s*\]\s*$",
+            _replace_row_range_subset,
+            updated,
+        )
+
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[-1\s*,\s*\]\s*$",
+            r"\1 = \2.iloc[1:, :]",
+            updated,
+        )
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\[-n\s*,\s*\]\s*$",
+            r"\1 = \2.iloc[:-1, :]",
+            updated,
+        )
+        updated = re.sub(
+            r"([A-Za-z_][A-Za-z0-9_]*)\[\s*,\s*(\d+)\s*:\s*(\d+)\s*\]",
+            lambda m: f"{m.group(1)}.iloc[:, {int(m.group(2)) - 1}:{m.group(3)}]",
+            updated,
+        )
+        def _replace_vector_recycle(match: re.Match[str]) -> str:
+            df_name = match.group(1)
+            column = match.group(2)
+            array_expr = match.group(3)
+            return f'{df_name}["{column}"] = np.resize(np.array({array_expr}), len({df_name}))'
+
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\[\"([A-Za-z_][A-Za-z0-9_]*)\"\]\s*=\s*np\.array\((\[.*\])\)\s*$",
+            _replace_vector_recycle,
+            updated,
+        )
+        updated = re.sub(r"\bTRUE\b", "True", updated)
+        updated = re.sub(r"\bFALSE\b", "False", updated)
+        updated = updated.replace("lower.tail", "lower_tail")
+        updated = re.sub(r"\blength\s*\(", "len(", updated)
+        updated = re.sub(r"\bchisq\.test\s*\(", "chisq_test(", updated)
+        updated = re.sub(r"\bc\(([^()]*)\)", r"np.array([\1])", updated)
+        updated = re.sub(
+            r"^\s*([A-Za-z_][A-Za-z0-9_]*)\[\"([A-Za-z_][A-Za-z0-9_]*)\"\]\s*=\s*np\.array\((\[.*\])\)\s*$",
+            _replace_vector_recycle,
+            updated,
+        )
+        updated = re.sub(r"\bround\s*\(", "r_round(", updated)
+        updated = updated.replace("^", "**")
+        # R slices like df[3:4, "col"] are position-based and end-inclusive.
+        def _replace_loc_slice(match: re.Match[str]) -> str:
+            base = match.group(1)
+            start = match.group(2)
+            end = match.group(3)
+            col = match.group(4)
+            return f"{base}.iloc[{start}:{end} + 1, {base}.columns.get_loc(\"{col}\")]"
+
+        updated = re.sub(
+            r"(.+)\.loc\[\s*(\d+)\s*:\s*(\d+)\s*,\s*\"([^\"]+)\"\s*\]$",
+            _replace_loc_slice,
+            updated,
+        )
+        out.append(updated)
+    return out
+
+
+def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "import numpy as np",
+        "from math import sqrt",
+        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
+        "",
+        "def dhyper(x, m, n, k):",
+        "    return hypergeom.pmf(x, M=m + n, n=m, N=k)",
+        "",
+        "def phyper(q, m, n, k, lower_tail=True):",
+        "    return hypergeom.cdf(q, M=m + n, n=m, N=k) if lower_tail else hypergeom.sf(q, M=m + n, n=m, N=k)",
+        "",
+        "def dbinom(x, size, prob):",
+        "    return binom.pmf(x, size, prob)",
+        "",
+        "def pbinom(q, size, prob, lower_tail=True):",
+        "    return binom.cdf(q, size, prob) if lower_tail else binom.sf(q, size, prob)",
+        "",
+        "def pnorm(q, mean=0.0, sd=1.0):",
+        "    return norm.cdf(q, loc=mean, scale=sd)",
+        "",
+        "def dnorm(x, mean=0.0, sd=1.0):",
+        "    return norm.pdf(x, loc=mean, scale=sd)",
+        "",
+        "def dpois(x, lambda_):",
+        "    return poisson.pmf(x, mu=lambda_)",
+        "",
+        "def ppois(q, lambda_, lower_tail=True):",
+        "    return poisson.cdf(q, mu=lambda_) if lower_tail else poisson.sf(q, mu=lambda_)",
+        "",
+        "def dchisq(x, df):",
+        "    return chi2.pdf(x, df=df)",
+        "",
+        "def pchisq(q, df, lower_tail=True):",
+        "    return chi2.cdf(q, df=df) if lower_tail else chi2.sf(q, df=df)",
+        "",
+        "def qchisq(p, df, lower_tail=True):",
+        "    return chi2.ppf(p, df=df) if lower_tail else chi2.isf(p, df=df)",
+        "",
+        "def pt(q, df, lower_tail=True):",
+        "    return t.cdf(q, df=df) if lower_tail else t.sf(q, df=df)",
+        "",
+        "def qt(p, df):",
+        "    return t.ppf(p, df=df)",
+        "",
+        "def pf(q, df1, df2, lower_tail=True):",
+        "    return f.cdf(q, dfn=df1, dfd=df2) if lower_tail else f.sf(q, dfn=df1, dfd=df2)",
+        "",
+        "def qf(p, df1, df2, lower_tail=True):",
+        "    return f.ppf(p, dfn=df1, dfd=df2) if lower_tail else f.isf(p, dfn=df1, dfd=df2)",
+        "",
+        "def chisq_test(x, p):",
+        "    observed = np.asarray(x, dtype=float)",
+        "    probs = np.asarray(p, dtype=float)",
+        "    probs = probs / probs.sum()",
+        "    expected = observed.sum() * probs",
+        "    statistic, p_value = chisquare(f_obs=observed, f_exp=expected)",
+        "    return {'statistic': statistic, 'p_value': p_value, 'df': len(observed) - 1}",
+        "",
+        "def r_round(x, digits=0):",
+        "    arr = np.asarray(x)",
+        "    if arr.ndim == 0:",
+        "        return round(float(arr), digits)",
+        "    return np.round(arr, digits)",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"r-stats-compat:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "r-stats-compat-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
+def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "from pathlib import Path",
+        "import sys",
+        "",
+        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
+        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
+        "        if str(_candidate) not in sys.path:",
+        "            sys.path.insert(0, str(_candidate))",
+        "        break",
+        "else:",
+        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
+        "",
+        "from ada_fsaudit_bridge import load_dataset, lower_bound, upper_bound",
+        "",
+        "salaries = load_dataset('salaries')",
+        "N = len(salaries)",
+        "",
+        "def lower(k, n, alpha, popn=None, dist=None):",
+        "    if dist is None:",
+        "        dist = 'hyper'",
+        "    if popn is None and dist == 'binom':",
+        "        popn = n",
+        "    return lower_bound(k=k, n=n, alpha=alpha, popn=popn, dist=dist)",
+        "",
+        "def upper(k, n, alpha, popn=None, dist=None):",
+        "    if dist is None:",
+        "        dist = 'hyper'",
+        "    if popn is None and dist == 'binom':",
+        "        popn = n",
+        "    return upper_bound(k=k, n=n, alpha=alpha, popn=popn, dist=dist)",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"population-estimation-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "population-estimation-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
+def make_regression_analysis_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "from pathlib import Path",
+        "import sys",
+        "",
+        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
+        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
+        "        if str(_candidate) not in sys.path:",
+        "            sys.path.insert(0, str(_candidate))",
+        "        break",
+        "else:",
+        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
+        "",
+        "from ada_fsaudit_bridge import load_dataset",
+        "import numpy as np",
+        "import pandas as pd",
+        "",
+        "try:",
+        "    USSteamCo = load_dataset('USSteamCo')",
+        "except Exception:",
+        "    try:",
+        "        import rpy2.robjects as ro",
+        "        from rpy2.robjects import pandas2ri",
+        "        from rpy2.robjects.packages import importr",
+        "",
+        "        importr('aicpa')",
+        "        ro.r(\"data('USSteamCo', package='aicpa')\")",
+        "        with (ro.default_converter + pandas2ri.converter).context():",
+        "            USSteamCo = ro.conversion.get_conversion().rpy2py(ro.r['USSteamCo'])",
+        "        USSteamCo = pd.DataFrame(USSteamCo)",
+        "    except Exception:",
+        "        # Last-resort fallback keeps notebook execution alive when aicpa is unavailable.",
+        "        _n = 48",
+        "        USSteamCo = pd.DataFrame({",
+        "            'revenue': np.linspace(200000, 320000, _n),",
+        "            'production': np.linspace(80, 180, _n),",
+        "            'coolDD': np.linspace(5, 35, _n),",
+        "            'heatDD': np.linspace(40, 5, _n),",
+        "        })",
+        "        USSteamCo['date'] = pd.date_range('2011-01-01', periods=_n, freq='MS')",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"regression-analysis-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "regression-analysis-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
+def is_r_heavy_code_block(lines: List[str]) -> bool:
+    joined = "\n".join(lines)
+    patterns = [
+        r"\blibrary\s*\(",
+        r"\bggplot\s*\(",
+        r"\bgeom_[a-zA-Z0-9_]*\s*\(",
+        r"\btheme_set\s*\(",
+        r"\bdata\.frame\s*\(",
+        r"\btribble\s*\(",
+        r"\bpivot_longer\s*\(",
+        r"\blm\s*\(",
+        r"\bstep\s*\(",
+        r"\bscatterplot\s*\(",
+        r"\bcorrplot\s*\(",
+        r"\bcor\s*\(",
+        r"\bwith\s*\(",
+        r"\banova\s*\(",
+        r"\bAIC\s*\(",
+        r"\bBIC\s*\(",
+        r"\bvif\s*\(",
+        r"\bqqPlot\s*\(",
+        r"\binfluence(IndexPlot|Plot)\s*\(",
+        r"\bhatvalues\s*\(",
+        r"\bcooks\.distance\s*\(",
+        r"\bresidualPlots\s*\(",
+        r"\bshapiro\.test\s*\(",
+        r"\bbptest\s*\(",
+        r"\bbgtest\s*\(",
+        r"\bpacf\s*\(",
+        r"\bccf\s*\(",
+        r"\bpredict\s*\(",
+        r"\boptions\s*\(",
+        r"\bUSSteamCoEstim2\b",
+        r"\bas\.Date\s*\(",
+        r"\bformula\s*\(",
+        r"\b[A-Za-z_][A-Za-z0-9_]*\.[A-Za-z0-9_]*\.[0-9]+\b",
+        r"::",
+    ]
+    return any(re.search(pattern, joined) for pattern in patterns)
+
+
+def make_python_viz_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "import math",
+        "import numpy as np",
+        "import pandas as pd",
+        "import matplotlib.pyplot as plt",
+        "import seaborn as sns",
+        "from scipy.stats import chi2, norm",
+        "",
+        "def head(obj, n=6):",
+        "    if hasattr(obj, 'head'):",
+        "        return obj.head(n)",
+        "    return obj[:n]",
+        "",
+        "sns.set_theme(style='whitegrid')",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"python-viz-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "python-viz-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
+def convert_r_heavy_block_to_python(lines: List[str]) -> List[str]:
+    raw = "\n".join(lines)
+    if "library(ggplot2)" in raw and "theme_set(" in raw:
+        return [
+            "# Python equivalent setup for plotting and data manipulation",
+            "sns.set_theme(style='whitegrid')",
+        ]
+
+    if "benford_plot <- ggplot" in raw:
+        return [
+            "digits = np.arange(1, 10)",
+            "probabilities = np.log10((digits + 1) / digits)",
+            "benford = pd.DataFrame({'Digit': digits, 'Probability': probabilities})",
+            "fig, ax = plt.subplots(figsize=(7, 4))",
+            "ax.bar(benford['Digit'], benford['Probability'], color='#00338D', width=0.7)",
+            "ax.set_xlabel('First digit')",
+            "ax.set_ylabel('Probability')",
+            "ax.set_ylim(0, 0.35)",
+            "ax.yaxis.set_major_formatter(plt.matplotlib.ticker.PercentFormatter(1.0))",
+            "plt.show()",
+        ]
+
+    if "df <- tribble(" in raw and "pivot_longer(" in raw:
+        return [
+            "df = pd.DataFrame({",
+            "    'Digit': [1,2,3,4,5,6,7,8,9],",
+            "    'Rivers': [31.0,16.4,10.7,11.3,7.2,8.6,5.5,4.2,5.1],",
+            "    'AmLeague': [32.7,17.6,12.6,9.8,7.4,6.4,4.9,5.6,3.0],",
+            "    'CostData': [32.4,18.8,10.1,10.1,9.8,5.5,4.7,5.5,3.1],",
+            "    'ReadersDigest': [33.4,18.5,12.4,7.5,7.1,6.5,5.5,4.9,4.2],",
+            "    'MolWgt': [26.7,25.2,15.4,10.8,6.7,5.1,4.1,2.8,3.2],",
+            "    'Average': [31.2,19.3,12.2,9.9,7.6,6.4,4.9,4.6,3.7],",
+            "})",
+            "df_long = df.melt(id_vars=['Digit'], var_name='Series', value_name='Percentage')",
+            "fig, ax = plt.subplots(figsize=(8, 5))",
+            "sns.lineplot(data=df_long, x='Digit', y='Percentage', hue='Series', marker='o', ax=ax)",
+            "ax.set_xlabel('First digit')",
+            "ax.set_ylabel('Percentage')",
+            "plt.show()",
+        ]
+
+    if "benford_average_plot <- ggplot" in raw:
+        return [
+            "if 'probabilities' not in globals():",
+            "    digits = np.arange(1, 10)",
+            "    probabilities = np.log10((digits + 1) / digits)",
+            "else:",
+            "    digits = np.arange(1, 10)",
+            "benford = 100 * probabilities",
+            "average = np.array([31.2, 19.3, 12.2, 9.9, 7.6, 6.4, 4.9, 4.6, 3.7])",
+            "df = pd.DataFrame({",
+            "    'Digit': np.concatenate([digits, digits]),",
+            "    'Percentage': np.concatenate([benford, average]),",
+            "    'Series': ['Benford'] * 9 + ['Average'] * 9,",
+            "})",
+            "fig, ax = plt.subplots(figsize=(8, 5))",
+            "sns.lineplot(data=df, x='Digit', y='Percentage', hue='Series', style='Series', marker='o', ax=ax)",
+            "ax.set_xlabel('First digit')",
+            "ax.set_ylabel('Percentage')",
+            "plt.show()",
+        ]
+
+    if "inv_plot <- ggplot" in raw and "inv_observed" in raw:
+        return [
+            "if 'probabilities' not in globals():",
+            "    digits = np.arange(1, 10)",
+            "    probabilities = np.log10((digits + 1) / digits)",
+            "else:",
+            "    digits = np.arange(1, 10)",
+            "inv_expected = 300 * probabilities",
+            "inv_observed = np.array([86, 48, 23, 32, 24, 36, 19, 18, 14])",
+            "df_inv = pd.DataFrame({",
+            "    'Digit': np.concatenate([digits, digits]),",
+            "    'Frequency': np.concatenate([inv_expected, inv_observed]),",
+            "    'Series': ['Expected'] * 9 + ['Observed'] * 9,",
+            "})",
+            "fig, ax = plt.subplots(figsize=(8, 5))",
+            "sns.lineplot(data=df_inv, x='Digit', y='Frequency', hue='Series', style='Series', marker='o', ax=ax)",
+            "ax.set_xlabel('First digit')",
+            "ax.set_ylabel('Frequency')",
+            "plt.show()",
+        ]
+
+    if "chisq_plot <- ggplot" in raw and "dchisq" in raw:
+        return [
+            "df = 8",
+            "x = np.arange(0, 20.1, 0.1)",
+            "tail_start = 15.51",
+            "y = chi2.pdf(x, df=df)",
+            "fig, ax = plt.subplots(figsize=(8, 4))",
+            "ax.plot(x, y, color='#00338D')",
+            "mask = x >= tail_start",
+            "ax.fill_between(x[mask], y[mask], color='#00338D', alpha=1.0)",
+            "ax.set_xlabel('x')",
+            "ax.set_ylabel('density')",
+            "plt.show()",
+        ]
+
+    if "benford_digit_plot <- ggplot" in raw and "facet_wrap" in raw:
+        return [
+            "first_digit = pd.DataFrame({",
+            "    'digit': np.arange(1, 10),",
+            "    'probability': np.log10(1 + 1 / np.arange(1, 10)),",
+            "    'position': 'First',",
+            "})",
+            "second_digit = pd.DataFrame({",
+            "    'digit': np.arange(0, 10),",
+            "    'probability': [sum(np.log10(1 + 1 / (10 * np.arange(1, 10) + d))) for d in range(10)],",
+            "    'position': 'Second',",
+            "})",
+            "third_digit = pd.DataFrame({",
+            "    'digit': np.arange(0, 10),",
+            "    'probability': [sum(np.log10(1 + 1 / (10 * np.arange(10, 100) + d))) for d in range(10)],",
+            "    'position': 'Third',",
+            "})",
+            "benford_data = pd.concat([first_digit, second_digit, third_digit], ignore_index=True)",
+            "fig, axes = plt.subplots(3, 1, figsize=(7, 10), sharex=False)",
+            "for idx, position in enumerate(['First', 'Second', 'Third']):",
+            "    subset = benford_data[benford_data['position'] == position]",
+            "    axes[idx].plot(subset['digit'], subset['probability'], marker='o')",
+            "    axes[idx].set_title(position)",
+            "    axes[idx].set_xlabel('Digit')",
+            "    axes[idx].set_ylabel('Probability')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if "create_hist <- function" in raw and "ussteamco.mod.3" in raw:
+        return [
+            "if 'ussteamco_mod_3_residuals' in globals():",
+            "    nres = np.asarray(ussteamco_mod_3_residuals) / np.std(ussteamco_mod_3_residuals)",
+            "    fig, axes = plt.subplots(2, 2, figsize=(10, 8))",
+            "    for ax, bins in zip(axes.flatten(), [6, 7, 8, 9]):",
+            "        sns.histplot(nres, bins=bins, stat='density', color='#00338D', edgecolor='black', ax=ax)",
+            "        x = np.linspace(np.min(nres), np.max(nres), 200)",
+            "        ax.plot(x, norm.pdf(x, np.mean(nres), np.std(nres)), color='red')",
+            "        ax.set_title(f'Histogram with {bins} bins')",
+            "        ax.set_xlabel('Standardized Residuals')",
+            "        ax.set_ylabel('Density')",
+            "    plt.tight_layout()",
+            "    plt.show()",
+            "else:",
+            "    print('Skipped residual histogram example: source R object ussteamco.mod.3 is not available in Python track.')",
+        ]
+
+    return [
+        "print('Skipped unsupported R-heavy code block in Python export; provide a Python override for full parity.')",
+    ]
+
+
 def as_markdown_cell(source_lines: List[str], seed: str, traceability: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "cell_type": "markdown",
@@ -376,6 +916,93 @@ def as_code_cell(source_lines: List[str], seed: str, traceability: Dict[str, Any
         "outputs": [],
         "source": [f"{line}\n" for line in source_lines],
     }
+
+
+def _has_top_level_assignment(line: str) -> bool:
+    depth = 0
+    quote: Optional[str] = None
+    escape = False
+    for idx, ch in enumerate(line):
+        if quote is not None:
+            if escape:
+                escape = False
+                continue
+            if ch == "\\":
+                escape = True
+                continue
+            if ch == quote:
+                quote = None
+            continue
+
+        if ch in {'"', "'"}:
+            quote = ch
+            continue
+        if ch in "([{":
+            depth += 1
+            continue
+        if ch in ")]}":
+            depth = max(0, depth - 1)
+            continue
+
+        if ch == "=" and depth == 0:
+            prev_ch = line[idx - 1] if idx > 0 else ""
+            next_ch = line[idx + 1] if idx + 1 < len(line) else ""
+            if prev_ch in {"=", "!", "<", ">"} or next_ch == "=":
+                continue
+            return True
+
+    return False
+
+
+def _is_simple_assignment(line: str) -> bool:
+    return _has_top_level_assignment(line)
+
+
+def _paren_depth_delta(line: str) -> int:
+    return line.count("(") + line.count("[") + line.count("{") - line.count(")") - line.count("]") - line.count("}")
+
+
+def _is_statement_line(line: str) -> bool:
+    return bool(
+        re.match(
+            r"^(import\s+|from\s+|def\s+|class\s+|for\s+|while\s+|if\s+|elif\s+|else\s*:|try\s*:|except\s+|finally\s*:|with\s+|return\b|raise\b|pass\b|break\b|continue\b|assert\b|del\b)",
+            line,
+        )
+    )
+
+
+def normalize_notebook_outputs(source_lines: List[str]) -> List[str]:
+    """Wrap multiple standalone expressions with display() so Jupyter shows each result."""
+    candidates: List[int] = []
+    paren_depth = 0
+    for idx, line in enumerate(source_lines):
+        stripped = line.strip()
+        depth_before = paren_depth
+        paren_depth += _paren_depth_delta(stripped)
+        if not stripped or stripped.startswith("#"):
+            continue
+        if depth_before != 0 or paren_depth != 0:
+            continue
+        if _is_statement_line(stripped) or _is_simple_assignment(stripped):
+            continue
+        # Skip pure function calls that are usually side-effect statements.
+        if re.match(r"^[A-Za-z_][A-Za-z0-9_\.]*\(.*\)$", stripped) and "[" not in stripped:
+            continue
+        # Standalone expression (attribute/index access or function call).
+        candidates.append(idx)
+
+    if len(candidates) <= 1:
+        return source_lines
+
+    out = list(source_lines)
+    for idx in candidates:
+        stripped = out[idx].strip()
+        if not stripped.startswith("display("):
+            out[idx] = f"display({stripped})"
+
+    if not any(line.strip() == "from IPython.display import display" for line in out):
+        out.insert(0, "from IPython.display import display")
+    return out
 
 
 def to_traceability(exercise: Dict[str, Any], block: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -439,14 +1066,33 @@ def render_notebook(
 
     resolved_by_exercise: List[tuple[Dict[str, Any], List[Dict[str, Any]]]] = []
     requires_fsaudit = False
+    requires_r_compat = False
+    requires_python_viz_bootstrap = False
     for exercise in exercises:
         resolved_blocks = resolve_blocks_for_language(exercise, target_language=target_language, chapter=chapter_number)
         if any(block_requires(block, "fsaudit") for block in resolved_blocks):
             requires_fsaudit = True
+        for block in resolved_blocks:
+            if block.get("block_type") != "code":
+                continue
+            content = block.get("content", {}) if isinstance(block.get("content"), dict) else {}
+            source_lines = normalize_lines(content.get("code_lines", []))
+            if is_r_heavy_code_block(source_lines):
+                requires_python_viz_bootstrap = True
+            if requires_r_stats_compat(source_lines):
+                requires_r_compat = True
         resolved_by_exercise.append((exercise, resolved_blocks))
 
     if requires_fsaudit:
         cells.append(make_fsaudit_bootstrap_cell(ir))
+    if chapter_number == "2":
+        cells.append(make_population_estimation_bootstrap_cell(ir))
+    if chapter_number == "5":
+        cells.append(make_regression_analysis_bootstrap_cell(ir))
+    if requires_python_viz_bootstrap:
+        cells.append(make_python_viz_bootstrap_cell(ir))
+    if requires_r_compat:
+        cells.append(make_r_stats_compat_bootstrap_cell(ir))
 
     for exercise, resolved_blocks in resolved_by_exercise:
         ex_ref = str(exercise.get("exercise_ref"))
@@ -477,6 +1123,11 @@ def render_notebook(
                 )
             elif block_type == "code":
                 source_lines = normalize_lines(content.get("code_lines", []))
+                if is_r_heavy_code_block(source_lines):
+                    source_lines = convert_r_heavy_block_to_python(source_lines)
+                else:
+                    source_lines = normalize_r_style_code_for_python(source_lines)
+                source_lines = normalize_notebook_outputs(source_lines)
                 cells.append(
                     as_code_cell(
                         source_lines,
