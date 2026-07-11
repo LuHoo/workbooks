@@ -37,7 +37,7 @@ phyper(1, 17, 314, 60, lower.tail = FALSE)
  
 ### Exercise 1.2 Binomial distribution
  
-The relevant `R functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and `$\pi$ = M / N`.
+The relevant `R` functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and $\pi = M / N$.
  
 ```{r}
 dbinom(x = 1, size = 60, prob = 17 / 331)
@@ -51,8 +51,8 @@ They require two parameter values as arguments: the number of errors $k$ and the
 For the *Case: Number of students* remember that $n = 60$ and $\pi = 17 / 331$.
  
 ```{r}
-dpois(1, 60 * 17/ 331)
-dpois(3, 60 * 17/ 331)
+dpois(1, 60 * 17 / 331)
+dpois(3, 60 * 17 / 331)
 ```
  
 The probability of finding one error is 14.14%.
@@ -60,7 +60,7 @@ The probability of finding one error is 14.14%.
 To calculate the probability of finding no more than one error in the sample of 60 Ph.D.s, use
  
 ```{r}
-ppois(1, 60 * 17/ 331)
+ppois(1, 60 * 17 / 331)
 ```
  
 ### Exercise 1.4 Normal distribution
@@ -68,7 +68,7 @@ ppois(1, 60 * 17/ 331)
 In `R` we use the function `pnorm`, that uses the arguments `q` for the sampling result that we evaluate, `mean` for the population mean, and `sd` for the standard deviation of the mean.
  
 ```{r}
-pnorm(q = 1012, mean = 1030, sd = 115.26/sqrt(200))
+pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
 ```
  
 Note that the syntax is more elaborate than what we have done so far. In `R` we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
@@ -78,7 +78,7 @@ There are two advantages to using argument names and values. First, the command 
 ```{r}
 pnorm(1012, 1030, 115.26 / sqrt(200))
 pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
-pnorm(sd = 115.26/sqrt(200), mean = 1030, q = 1012)
+pnorm(sd = 115.26 / sqrt(200), mean = 1030, q = 1012)
 ```
  
 ### Exercise 1.5 Student's $t$ distribution
