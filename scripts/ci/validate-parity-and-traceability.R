@@ -83,6 +83,83 @@ build_report <- function(configs) {
   )
 }
 
+workshop_metadata_index <- function(metadata, workshop_id) {
+  wx_rows <- Filter(function(item) identical(as.character(item$workshop_id), workshop_id), metadata$workshop_exercises)
+  wx_by_id <- setNames(wx_rows, vapply(wx_rows, function(item) as.character(item$id), character(1L)))
+
+  lo_by_id <- setNames(metadata$learning_objectives, vapply(metadata$learning_objectives, function(item) as.character(item$id), character(1L)))
+
+  links_by_wx <- list()
+  for (link in metadata$lo_to_workshop) {
+    wx_id <- as.character(link$workshop_id)
+    lo_id <- as.character(link$lo_id)
+    links_by_wx[[wx_id]] <- unique(c(links_by_wx[[wx_id]], lo_id))
+  }
+
+  list(wx_by_id = wx_by_id, lo_by_id = lo_by_id, links_by_wx = links_by_wx)
+}
+
+run_lo_mapping_parity <- function(config, metadata) {
+  check <- list(status = "ok", errors = list(), warnings = list())
+  chapter <- as.character(sub("\\..*$", "", names(config$expected_chunks)[[1L]]))
+
+  idx <- workshop_metadata_index(metadata, config$id)
+
+  if (length(idx$wx_by_id) == 0L) {
+    check$status <- "skipped"
+    check$warnings <- c(
+      check$warnings,
+      list("No workshop_exercises metadata available for this workshop; LO parity not evaluated")
+    )
+    return(check)
+  }
+
+  for (exercise_ref in names(config$expected_chunks)) {
+    exercise_wx <- Filter(function(item) identical(as.character(item$exercise), exercise_ref), idx$wx_by_id)
+
+    if (length(exercise_wx) == 0L) {
+      check <- add_check_error(check, paste0("No workshop_exercises metadata for exercise ", exercise_ref))
+      next
+    }
+
+    exercise_lo <- unique(unlist(lapply(exercise_wx, function(item) {
+      wx_id <- as.character(item$id)
+      idx$links_by_wx[[wx_id]]
+    }), use.names = FALSE))
+
+    if (length(exercise_lo) == 0L) {
+      check <- add_check_error(check, paste0("No LO mappings for exercise ", exercise_ref))
+      next
+    }
+
+    for (lo_id in exercise_lo) {
+      lo <- idx$lo_by_id[[lo_id]]
+      if (is.null(lo)) {
+        check <- add_check_error(check, paste0("Mapped LO not found in metadata: ", lo_id, " (exercise ", exercise_ref, ")"))
+        next
+      }
+
+      lo_chapter <- as.character(lo$chapter)
+      if (!identical(lo_chapter, chapter)) {
+        check <- add_check_error(
+          check,
+          paste0(
+            "LO chapter mismatch for exercise ", exercise_ref,
+            ": LO ", lo_id, " is chapter ", lo_chapter,
+            " but workshop chapter is ", chapter
+          )
+        )
+      }
+    }
+  }
+
+  if (length(check$errors) > 0L) {
+    check$status <- "failed"
+  }
+
+  check
+}
+
 extract_source_exercise_refs <- function(source_path) {
   ir <- parse_support_notebook_to_ir(input_path = source_path)
   vapply(ir$exercises, function(ex) as.character(ex$exercise_ref), character(1L))
@@ -204,10 +281,27 @@ emit_summary <- function(report) {
   cat("Parity/Traceability validation summary\n")
   for (ws in report$workshops) {
     parity <- ws$checks$exercise_parity
-    cat("- ", ws$workshop_id, ": exercise_parity=", parity$status, "\n", sep = "")
+    lo_parity <- ws$checks$lo_mapping_parity
+    cat(
+      "- ", ws$workshop_id,
+      ": exercise_parity=", parity$status,
+      ", lo_mapping_parity=", lo_parity$status,
+      "\n",
+      sep = ""
+    )
     if (length(parity$errors) > 0L) {
       for (msg in parity$errors) {
         cat("::error title=Exercise parity::", ws$workshop_id, " :: ", msg, "\n", sep = "")
+      }
+    }
+    if (length(lo_parity$errors) > 0L) {
+      for (msg in lo_parity$errors) {
+        cat("::error title=LO mapping parity::", ws$workshop_id, " :: ", msg, "\n", sep = "")
+      }
+    }
+    if (length(lo_parity$warnings) > 0L) {
+      for (msg in lo_parity$warnings) {
+        cat("::warning title=LO mapping parity::", ws$workshop_id, " :: ", msg, "\n", sep = "")
       }
     }
   }
@@ -233,11 +327,22 @@ main <- function() {
   report <- build_report(configs)
   report$status <- "ok"
 
+  metadata <- load_traceability_metadata(metadata_dir = args$metadata_dir, strict = TRUE)
+  if (!isTRUE(metadata$enabled)) {
+    stop("Traceability metadata is required for LO parity checks")
+  }
+
   for (idx in seq_along(configs)) {
     report$workshops[[idx]]$checks$exercise_parity <- run_exercise_parity(configs[[idx]], args$notebooks_dir)
+    report$workshops[[idx]]$checks$lo_mapping_parity <- run_lo_mapping_parity(configs[[idx]], metadata)
+
     if (identical(report$workshops[[idx]]$checks$exercise_parity$status, "failed")) {
       report$status <- "failed"
       report$errors <- c(report$errors, report$workshops[[idx]]$checks$exercise_parity$errors)
+    }
+    if (identical(report$workshops[[idx]]$checks$lo_mapping_parity$status, "failed")) {
+      report$status <- "failed"
+      report$errors <- c(report$errors, report$workshops[[idx]]$checks$lo_mapping_parity$errors)
     }
   }
 
