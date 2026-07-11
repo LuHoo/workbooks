@@ -368,6 +368,11 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
     for line in lines:
         updated = re.sub(r"^\s*\(([A-Za-z_][A-Za-z0-9_]*)\s*<-\s*(.+)\)\s*$", r"\1 = \2", line)
         updated = updated.replace("<-", "=")
+        updated = re.sub(
+            r"\bseq\s*\(\s*([^,]+?)\s*,\s*([^,]+?)\s*,\s*length\.out\s*=\s*([^)]+?)\s*\)",
+            r"np.linspace(\1, \2, num=\3)",
+            updated,
+        )
         updated = re.sub(r"\bRNGkind\s*\(.*\)", "# RNGkind() is R-specific; NumPy RNG is used in Python", updated)
         updated = re.sub(r"\bset\.seed\s*\(([^)]*)\)", r"np.random.seed(\1)", updated)
         updated = re.sub(
@@ -913,8 +918,48 @@ def as_code_cell(source_lines: List[str], seed: str, traceability: Dict[str, Any
     }
 
 
+def _has_top_level_assignment(line: str) -> bool:
+    depth = 0
+    quote: Optional[str] = None
+    escape = False
+    for idx, ch in enumerate(line):
+        if quote is not None:
+            if escape:
+                escape = False
+                continue
+            if ch == "\\":
+                escape = True
+                continue
+            if ch == quote:
+                quote = None
+            continue
+
+        if ch in {'"', "'"}:
+            quote = ch
+            continue
+        if ch in "([{":
+            depth += 1
+            continue
+        if ch in ")]}":
+            depth = max(0, depth - 1)
+            continue
+
+        if ch == "=" and depth == 0:
+            prev_ch = line[idx - 1] if idx > 0 else ""
+            next_ch = line[idx + 1] if idx + 1 < len(line) else ""
+            if prev_ch in {"=", "!", "<", ">"} or next_ch == "=":
+                continue
+            return True
+
+    return False
+
+
 def _is_simple_assignment(line: str) -> bool:
-    return bool(re.match(r"^[A-Za-z_][A-Za-z0-9_\[\]\"'\.]*\s*=", line))
+    return _has_top_level_assignment(line)
+
+
+def _paren_depth_delta(line: str) -> int:
+    return line.count("(") + line.count("[") + line.count("{") - line.count(")") - line.count("]") - line.count("}")
 
 
 def _is_statement_line(line: str) -> bool:
@@ -929,9 +974,14 @@ def _is_statement_line(line: str) -> bool:
 def normalize_notebook_outputs(source_lines: List[str]) -> List[str]:
     """Wrap multiple standalone expressions with display() so Jupyter shows each result."""
     candidates: List[int] = []
+    paren_depth = 0
     for idx, line in enumerate(source_lines):
         stripped = line.strip()
+        depth_before = paren_depth
+        paren_depth += _paren_depth_delta(stripped)
         if not stripped or stripped.startswith("#"):
+            continue
+        if depth_before != 0 or paren_depth != 0:
             continue
         if _is_statement_line(stripped) or _is_simple_assignment(stripped):
             continue

@@ -425,6 +425,7 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("data('USSteamCo', package='aicpa')", chapter5_code)
         self.assertIn("USSteamCo = pd.DataFrame({", chapter5_code)
         self.assertIn("USSteamCo[\"summer\"] = np.resize(np.array([", chapter5_code)
+        self.assertIn("np.linspace(x_min, x_max, num=n)", chapter5_code)
         self.assertNotIn("summary(USSteamCo)", chapter5_code)
 
     def test_hypothesis_notebook_displays_multiple_eval_outputs(self):
@@ -452,6 +453,9 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("display(ar.eval_results[\"Upper bound\"])", chapter4_code)
         self.assertIn("ada_set_context(\"4.10\")", chapter4_code)
         self.assertNotIn("display(ada_set_context(\"4.10\"))", chapter4_code)
+        self.assertNotIn("display())", chapter4_code)
+        self.assertIn("ar = mus_sample(", chapter4_code)
+        self.assertNotIn("display(myResults.iloc[15, 1] = 4438.82)", chapter4_code)
 
 
 if __name__ == "__main__":
