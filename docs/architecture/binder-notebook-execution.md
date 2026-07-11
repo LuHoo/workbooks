@@ -136,6 +136,11 @@ Artifacts:
 upstream job for publication/export. If notebook execution fails, publication is
 blocked.
 
+During export publication, generated Python notebooks are copied from
+`generated/python-notebooks/**/chapter-<n>.ipynb` to the Binder-facing
+`notebooks/workshops` repository root using the naming convention
+`Workshop <n> (Python).ipynb`.
+
 ## Contributor Guidance
 
 Run the validation flow locally:
