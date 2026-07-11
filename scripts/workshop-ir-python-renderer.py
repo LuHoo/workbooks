@@ -401,7 +401,13 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bsummary\s*\(([^)]+)\)", r"\1.describe(include='all')", updated)
         def _guard_describe_call(match: re.Match[str]) -> str:
             name = match.group(1)
-            return f"({name}.describe(include='all') if '{name}' in globals() else print('Skipped describe: {name} not defined'))"
+            return (
+                f"(("
+                f"{name}.summary() if hasattr({name}, 'summary') else "
+                f"{name}.describe(include='all') if hasattr({name}, 'describe') else "
+                f"print('Skipped summary/describe: {name} has no compatible method')"
+                f") if '{name}' in globals() else print('Skipped summary/describe: {name} not defined'))"
+            )
 
         updated = re.sub(
             r"^\s*([A-Za-z_][A-Za-z0-9_]*)\.describe\(include='all'\)\s*$",
@@ -452,15 +458,129 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bTRUE\b", "True", updated)
         updated = re.sub(r"\bFALSE\b", "False", updated)
         updated = updated.replace("lower.tail", "lower_tail")
+        # Prefer native SciPy names/semantics over R-style compatibility aliases.
+        updated = re.sub(
+            r"\bdhyper\s*\(\s*x\s*=\s*([^,]+)\s*,\s*m\s*=\s*([^,]+)\s*,\s*n\s*=\s*([^,]+)\s*,\s*k\s*=\s*([^)]+)\)",
+            r"hypergeom.pmf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bdhyper\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)",
+            r"hypergeom.pmf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bphyper\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"hypergeom.sf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bphyper\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)",
+            r"hypergeom.cdf(\1, M=(\2) + (\3), n=\2, N=\4)",
+            updated,
+        )
+        updated = re.sub(r"\bdbinom\s*\(\s*x\s*=\s*([^,]+)\s*,\s*size\s*=\s*([^,]+)\s*,\s*prob\s*=\s*([^)]+)\)", r"binom.pmf(\1, \2, \3)", updated)
+        updated = re.sub(r"\bdbinom\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"binom.pmf(\1, \2, \3)", updated)
+        updated = re.sub(
+            r"\bpbinom\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"binom.sf(\1, \2, \3)",
+            updated,
+        )
+        updated = re.sub(r"\bpbinom\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"binom.cdf(\1, \2, \3)", updated)
+        updated = re.sub(r"\bdpois\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"poisson.pmf(\1, mu=\2)", updated)
+        updated = re.sub(
+            r"\bppois\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"poisson.sf(\1, mu=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bppois\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"poisson.cdf(\1, mu=\2)", updated)
+        updated = re.sub(r"\bpnorm\s*\(", "norm.cdf(", updated)
+        updated = re.sub(r"\bdnorm\s*\(", "norm.pdf(", updated)
+        if "norm.cdf(" in updated:
+            updated = re.sub(r"\bq\s*=", "x=", updated)
+        updated = re.sub(r"\bmean\s*=", "loc=", updated)
+        updated = re.sub(r"\bsd\s*=", "scale=", updated)
+        updated = re.sub(
+            r"\bpchisq\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpchisq\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bpchisq\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"chi2.cdf(\1, df=\2)", updated)
+        updated = re.sub(r"\bpchisq\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"chi2.cdf(\1, df=\2)", updated)
+        updated = re.sub(
+            r"\bqchisq\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.isf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bqchisq\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"chi2.isf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bqchisq\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"chi2.ppf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqchisq\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"chi2.ppf(\1, df=\2)", updated)
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"t.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"t.sf(\1, df=\2)",
+            updated,
+        )
+        updated = re.sub(r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.cdf(\1, df=\2)", updated)
+        updated = re.sub(r"\bpt\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"t.cdf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqt\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
+        updated = re.sub(r"\bqt\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
+        updated = re.sub(
+            r"\bpf\s*\(\s*q\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.sf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.sf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(r"\bpf\s*\(\s*q\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^)]+)\)", r"f.cdf(\1, dfn=\2, dfd=\3)", updated)
+        updated = re.sub(r"\bpf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"f.cdf(\1, dfn=\2, dfd=\3)", updated)
+        updated = re.sub(
+            r"\bqf\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.isf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bqf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
+            r"f.isf(\1, dfn=\2, dfd=\3)",
+            updated,
+        )
+        updated = re.sub(r"\bqf\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df1\s*=\s*([^,]+)\s*,\s*df2\s*=\s*([^)]+)\)", r"f.ppf(\1, dfn=\2, dfd=\3)", updated)
+        updated = re.sub(r"\bqf\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)", r"f.ppf(\1, dfn=\2, dfd=\3)", updated)
         updated = re.sub(r"\blength\s*\(", "len(", updated)
-        updated = re.sub(r"\bchisq\.test\s*\(", "chisq_test(", updated)
+        updated = re.sub(
+            r"\bchisq\.test\s*\(\s*x\s*=\s*([^,]+)\s*,\s*p\s*=\s*([^)]+)\)",
+            r"(lambda _obs, _p: chisquare(f_obs=_obs, f_exp=_obs.sum() * (_p / _p.sum())))(np.asarray(\1, dtype=float), np.asarray(\2, dtype=float))",
+            updated,
+        )
+        updated = re.sub(
+            r"\bchisq\.test\s*\(\s*([^,]+)\s*,\s*([^)]+)\)",
+            r"(lambda _obs, _p: chisquare(f_obs=_obs, f_exp=_obs.sum() * (_p / _p.sum())))(np.asarray(\1, dtype=float), np.asarray(\2, dtype=float))",
+            updated,
+        )
         updated = re.sub(r"\bc\(([^()]*)\)", r"np.array([\1])", updated)
         updated = re.sub(
             r"^\s*([A-Za-z_][A-Za-z0-9_]*)\[\"([A-Za-z_][A-Za-z0-9_]*)\"\]\s*=\s*np\.array\((\[.*\])\)\s*$",
             _replace_vector_recycle,
             updated,
         )
-        updated = re.sub(r"\bround\s*\(", "r_round(", updated)
+        updated = re.sub(r"\bround\s*\(", "np.round(", updated)
         updated = updated.replace("^", "**")
         # R slices like df[3:4, "col"] are position-based and end-inclusive.
         def _replace_loc_slice(match: re.Match[str]) -> str:
@@ -487,65 +607,6 @@ def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
         "import numpy as np",
         "from math import sqrt",
         "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
-        "",
-        "def dhyper(x, m, n, k):",
-        "    return hypergeom.pmf(x, M=m + n, n=m, N=k)",
-        "",
-        "def phyper(q, m, n, k, lower_tail=True):",
-        "    return hypergeom.cdf(q, M=m + n, n=m, N=k) if lower_tail else hypergeom.sf(q, M=m + n, n=m, N=k)",
-        "",
-        "def dbinom(x, size, prob):",
-        "    return binom.pmf(x, size, prob)",
-        "",
-        "def pbinom(q, size, prob, lower_tail=True):",
-        "    return binom.cdf(q, size, prob) if lower_tail else binom.sf(q, size, prob)",
-        "",
-        "def pnorm(q, mean=0.0, sd=1.0):",
-        "    return norm.cdf(q, loc=mean, scale=sd)",
-        "",
-        "def dnorm(x, mean=0.0, sd=1.0):",
-        "    return norm.pdf(x, loc=mean, scale=sd)",
-        "",
-        "def dpois(x, lambda_):",
-        "    return poisson.pmf(x, mu=lambda_)",
-        "",
-        "def ppois(q, lambda_, lower_tail=True):",
-        "    return poisson.cdf(q, mu=lambda_) if lower_tail else poisson.sf(q, mu=lambda_)",
-        "",
-        "def dchisq(x, df):",
-        "    return chi2.pdf(x, df=df)",
-        "",
-        "def pchisq(q, df, lower_tail=True):",
-        "    return chi2.cdf(q, df=df) if lower_tail else chi2.sf(q, df=df)",
-        "",
-        "def qchisq(p, df, lower_tail=True):",
-        "    return chi2.ppf(p, df=df) if lower_tail else chi2.isf(p, df=df)",
-        "",
-        "def pt(q, df, lower_tail=True):",
-        "    return t.cdf(q, df=df) if lower_tail else t.sf(q, df=df)",
-        "",
-        "def qt(p, df):",
-        "    return t.ppf(p, df=df)",
-        "",
-        "def pf(q, df1, df2, lower_tail=True):",
-        "    return f.cdf(q, dfn=df1, dfd=df2) if lower_tail else f.sf(q, dfn=df1, dfd=df2)",
-        "",
-        "def qf(p, df1, df2, lower_tail=True):",
-        "    return f.ppf(p, dfn=df1, dfd=df2) if lower_tail else f.isf(p, dfn=df1, dfd=df2)",
-        "",
-        "def chisq_test(x, p):",
-        "    observed = np.asarray(x, dtype=float)",
-        "    probs = np.asarray(p, dtype=float)",
-        "    probs = probs / probs.sum()",
-        "    expected = observed.sum() * probs",
-        "    statistic, p_value = chisquare(f_obs=observed, f_exp=expected)",
-        "    return {'statistic': statistic, 'p_value': p_value, 'df': len(observed) - 1}",
-        "",
-        "def r_round(x, digits=0):",
-        "    arr = np.asarray(x)",
-        "    if arr.ndim == 0:",
-        "        return round(float(arr), digits)",
-        "    return np.round(arr, digits)",
     ]
     return as_code_cell(
         lines,
@@ -610,6 +671,29 @@ def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, A
     )
 
 
+def make_probability_distributions_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
+    chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
+    workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
+    source_file = str(ir.get("source", {}).get("file_path", ""))
+    lines = [
+        "import numpy as np",
+        "from math import sqrt",
+        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
+    ]
+    return as_code_cell(
+        lines,
+        seed=f"probability-distributions-bootstrap:{workshop_id}:{chapter_number}",
+        traceability={
+            "exercise_id": None,
+            "exercise_ref": None,
+            "block_id": "probability-distributions-bootstrap",
+            "source_file": source_file,
+            "source_block_key": "bootstrap",
+            "source_span": None,
+        },
+    )
+
+
 def make_regression_analysis_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     chapter_number = str(ir.get("chapter", {}).get("chapter_number", ""))
     workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
@@ -629,30 +713,131 @@ def make_regression_analysis_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any
         "from ada_fsaudit_bridge import load_dataset",
         "import numpy as np",
         "import pandas as pd",
+        "import statsmodels.formula.api as smf",
+        "from scipy.stats import shapiro as shapiro_test, t as t_dist",
+        "from statsmodels.graphics.gofplots import qqplot",
+        "from statsmodels.graphics.regressionplots import influence_plot",
+        "from statsmodels.graphics.tsaplots import plot_pacf",
+        "from statsmodels.stats.anova import anova_lm",
+        "from statsmodels.stats.diagnostic import acorr_breusch_godfrey, het_breuschpagan",
+        "from statsmodels.stats.outliers_influence import variance_inflation_factor",
         "",
-        "try:",
-        "    USSteamCo = load_dataset('USSteamCo')",
-        "except Exception:",
+        "def _model_formula(response, terms):",
+        "    rhs = ' + '.join(terms) if terms else '1'",
+        "    return f'{response} ~ {rhs}'",
+        "",
+        "def fit_lm(name, formula, data):",
+        "    model = smf.ols(formula=formula, data=data).fit()",
+        "    globals()[name] = model",
+        "    return model",
+        "",
+        "def brief_model(name):",
+        "    model = globals()[name]",
+        "    print(f'Coefficients for {name}:')",
+        "    print(model.params)",
+        "    print(f'R-squared: {model.rsquared:.4f}')",
+        "    print(f'Adj. R-squared: {model.rsquared_adj:.4f}')",
+        "",
+        "def summary_model(name):",
+        "    print(globals()[name].summary())",
+        "",
+        "def stepwise_aic(data, response, candidates, direction='both', start_terms=None):",
+        "    current_terms = list(start_terms or [])",
+        "    best_model = smf.ols(formula=_model_formula(response, current_terms), data=data).fit()",
+        "    improved = True",
+        "    while improved:",
+        "        improved = False",
+        "        options = []",
+        "        if direction in ('forward', 'both'):",
+        "            for term in candidates:",
+        "                if term in current_terms:",
+        "                    continue",
+        "                trial_terms = current_terms + [term]",
+        "                trial = smf.ols(formula=_model_formula(response, trial_terms), data=data).fit()",
+        "                options.append((trial.aic, 'add', term, trial, trial_terms))",
+        "        if direction in ('backward', 'both') and current_terms:",
+        "            for term in list(current_terms):",
+        "                trial_terms = [t for t in current_terms if t != term]",
+        "                trial = smf.ols(formula=_model_formula(response, trial_terms), data=data).fit()",
+        "                options.append((trial.aic, 'drop', term, trial, trial_terms))",
+        "",
+        "        if not options:",
+        "            break",
+        "",
+        "        options.sort(key=lambda x: x[0])",
+        "        next_aic, action, term, next_model, next_terms = options[0]",
+        "        if next_aic + 1e-9 < best_model.aic:",
+        "            best_model = next_model",
+        "            current_terms = next_terms",
+        "            improved = True",
+        "",
+        "    return best_model, current_terms",
+        "",
+        "def model_vif(name, data):",
+        "    model = globals()[name]",
+        "    exog = model.model.exog",
+        "    exog_names = model.model.exog_names",
+        "    rows = []",
+        "    for i, var_name in enumerate(exog_names):",
+        "        if var_name == 'Intercept':",
+        "            continue",
+        "        rows.append((var_name, variance_inflation_factor(exog, i)))",
+        "    result = pd.DataFrame(rows, columns=['term', 'vif'])",
+        "    print(result)",
+        "    return result",
+        "",
+        "def model_anova(name, typ=1):",
+        "    model = globals()[name]",
+        "    table = anova_lm(model, typ=typ)",
+        "    print(table)",
+        "    return table",
+        "",
+        "def ada_run_r(code):",
         "    try:",
         "        import rpy2.robjects as ro",
-        "        from rpy2.robjects import pandas2ri",
-        "        from rpy2.robjects.packages import importr",
+        "        from rpy2.robjects import numpy2ri, pandas2ri",
         "",
-        "        importr('aicpa')",
-        "        ro.r(\"data('USSteamCo', package='aicpa')\")",
-        "        with (ro.default_converter + pandas2ri.converter).context():",
-        "            USSteamCo = ro.conversion.get_conversion().rpy2py(ro.r['USSteamCo'])",
-        "        USSteamCo = pd.DataFrame(USSteamCo)",
-        "    except Exception:",
-        "        # Last-resort fallback keeps notebook execution alive when aicpa is unavailable.",
-        "        _n = 48",
-        "        USSteamCo = pd.DataFrame({",
-        "            'revenue': np.linspace(200000, 320000, _n),",
-        "            'production': np.linspace(80, 180, _n),",
-        "            'coolDD': np.linspace(5, 35, _n),",
-        "            'heatDD': np.linspace(40, 5, _n),",
-        "        })",
-        "        USSteamCo['date'] = pd.date_range('2011-01-01', periods=_n, freq='MS')",
+        "        with (ro.default_converter + pandas2ri.converter + numpy2ri.converter).context():",
+        "            for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:",
+        "                if _name in globals():",
+        "                    ro.globalenv[_name] = globals()[_name]",
+        "",
+        "            ro.r(\"if (requireNamespace('aicpa', quietly=TRUE)) library(aicpa)\")",
+        "            ro.r(\"if (requireNamespace('FSaudit', quietly=TRUE)) library(FSaudit)\")",
+        "            ro.r(\"if (requireNamespace('car', quietly=TRUE)) library(car)\")",
+        "            ro.r(\"if (requireNamespace('lmtest', quietly=TRUE)) library(lmtest)\")",
+        "            _result = ro.r(code)",
+        "",
+        "            _env_names = set(str(_n) for _n in ro.r('ls()'))",
+        "            for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:",
+        "                if _name in _env_names:",
+        "                    _value = ro.globalenv[_name]",
+        "                    _converted = ro.conversion.get_conversion().rpy2py(_value)",
+        "                    if hasattr(_converted, 'columns'):",
+        "                        globals()[_name] = pd.DataFrame(_converted)",
+        "                    else:",
+        "                        globals()[_name] = _converted",
+        "",
+        "            return _result",
+        "    except Exception as _exc:",
+        "        print(f'R bridge execution skipped for this block: {_exc}')",
+        "",
+        "try:",
+        "    import contextlib",
+        "    import io",
+        "    _stderr_buffer = io.StringIO()",
+        "    with contextlib.redirect_stderr(_stderr_buffer):",
+        "        USSteamCo = load_dataset('USSteamCo')",
+        "except Exception:",
+        "    # Last-resort fallback keeps notebook execution alive when the dataset is unavailable.",
+        "    _n = 48",
+        "    USSteamCo = pd.DataFrame({",
+        "        'revenue': np.linspace(200000, 320000, _n),",
+        "        'production': np.linspace(80, 180, _n),",
+        "        'coolDD': np.linspace(5, 35, _n),",
+        "        'heatDD': np.linspace(40, 5, _n),",
+        "    })",
+        "    USSteamCo['date'] = pd.date_range('2011-01-01', periods=_n, freq='MS')",
     ]
     return as_code_cell(
         lines,
@@ -742,8 +927,15 @@ def make_python_viz_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
-def convert_r_heavy_block_to_python(lines: List[str]) -> List[str]:
+def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> List[str]:
     raw = "\n".join(lines)
+    if chapter_number == "2" and "library(FSaudit)" in raw and "names(salaries)" in raw and "nrow(salaries)" in raw:
+        return [
+            "display(list(salaries.columns))",
+            "N = len(salaries)",
+            "print(N)",
+        ]
+
     if "library(ggplot2)" in raw and "theme_set(" in raw:
         return [
             "# Python equivalent setup for plotting and data manipulation",
@@ -887,6 +1079,647 @@ def convert_r_heavy_block_to_python(lines: List[str]) -> List[str]:
             "    print('Skipped residual histogram example: source R object ussteamco.mod.3 is not available in Python track.')",
         ]
 
+    if chapter_number == "5" and "hist_revenue <-" in raw and "grid.arrange(" in raw:
+        return [
+            "fig, axes = plt.subplots(2, 2, figsize=(12, 8))",
+            "plot_specs = [",
+            "    ('revenue', 4_000_000, 'Revenue'),",
+            "    ('production', 50_000, 'Production'),",
+            "    ('coolDD', 50, 'Cooling degree days'),",
+            "    ('heatDD', 100, 'Heating degree days'),",
+            "]",
+            "for ax, (column, binwidth, title) in zip(axes.flatten(), plot_specs):",
+            "    series = USSteamCoEstim[column].dropna()",
+            "    if series.empty:",
+            "        ax.set_title(f'{title} (no data)')",
+            "        continue",
+            "    bins = np.arange(series.min(), series.max() + binwidth, binwidth)",
+            "    if len(bins) < 2:",
+            "        bins = 10",
+            "    sns.histplot(series, bins=bins, color='#00338D', edgecolor='white', ax=ax)",
+            "    ax.set_title(title)",
+            "    ax.set_xlabel(column)",
+            "    ax.set_ylabel('Count')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "time_series_plot <- ggplot" in raw and "sec.axis = sec_axis" in raw:
+        return [
+            "fig, ax_left = plt.subplots(figsize=(10, 5))",
+            "ax_right = ax_left.twinx()",
+            "ax_left.plot(USSteamCoEstim['date'], USSteamCoEstim['revenue'], color='#00338D', label='Revenue')",
+            "ax_right.plot(USSteamCoEstim['date'], USSteamCoEstim['production'], color='#BC204B', label='Production')",
+            "ax_left.set_ylabel('Revenue ($)', color='#00338D')",
+            "ax_right.set_ylabel('Production (x 1000 lb)', color='#BC204B')",
+            "ax_left.set_xlabel('Date')",
+            "fig.autofmt_xdate()",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "scatter_plot <- ggplot" in raw and "aes(x = production, y = revenue)" in raw:
+        return [
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)",
+            "ax.set_xlabel('Production (x 1000 lb)')",
+            "ax.set_ylabel('Revenue ($)')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "scatterplot(revenue ~ production" in raw:
+        return [
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)",
+            "ax.set_xlabel('production')",
+            "ax.set_ylabel('revenue')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "(cor_ussteam <- cor(USSteamCoEstim[, 2:5]))" in raw:
+        return [
+            "cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()",
+            "display(cor_ussteam)",
+        ]
+
+    if chapter_number == "5" and "corrplot(cor_ussteam" in raw:
+        return [
+            "if 'cor_ussteam' not in globals():",
+            "    cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()",
+            "fig, ax = plt.subplots(figsize=(7, 6))",
+            "sns.heatmap(cor_ussteam, vmin=-1, vmax=1, cmap='coolwarm', annot=True, fmt='.2f', ax=ax)",
+            "ax.set_title('Correlation matrix')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if (
+        chapter_number == "5"
+        and "USSteamCo$date" in raw
+        and "seq(as.Date" in raw
+        and "by = \"month\"" in raw
+    ):
+        return [
+            "USSteamCo['date'] = pd.date_range('2011-01-01', periods=len(USSteamCo), freq='MS')",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.0 <- lm(revenue ~ production" in raw and "brief(" in raw:
+        return [
+            "ussteamco_mod_0 = fit_lm('ussteamco_mod_0', 'revenue ~ production', USSteamCoEstim)",
+            "brief_model('ussteamco_mod_0')",
+        ]
+
+    if chapter_number == "5" and "summary(ussteamco.mod.0)" in raw:
+        return [
+            "summary_model('ussteamco_mod_0')",
+        ]
+
+    if chapter_number == "5" and "model_forward <- lm(revenue ~ 1" in raw and "direction = \"forward\"" in raw:
+        return [
+            "model_forward, model_forward_terms = stepwise_aic(",
+            "    USSteamCoEstim,",
+            "    response='revenue',",
+            "    candidates=['production', 'coolDD', 'heatDD'],",
+            "    direction='forward',",
+            "    start_terms=[],",
+            ")",
+            "print('Forward terms:', model_forward_terms)",
+            "print(model_forward.summary())",
+        ]
+
+    if chapter_number == "5" and "model_backward <- lm(revenue ~ production + coolDD + heatDD" in raw:
+        return [
+            "model_backward, model_backward_terms = stepwise_aic(",
+            "    USSteamCoEstim,",
+            "    response='revenue',",
+            "    candidates=['production', 'coolDD', 'heatDD'],",
+            "    direction='backward',",
+            "    start_terms=['production', 'coolDD', 'heatDD'],",
+            ")",
+            "print('Backward terms:', model_backward_terms)",
+            "print(model_backward.summary())",
+        ]
+
+    if chapter_number == "5" and "fit_both <- lm(revenue ~ 1" in raw and "direction = \"both\"" in raw:
+        return [
+            "fit_both, fit_both_terms = stepwise_aic(",
+            "    USSteamCoEstim,",
+            "    response='revenue',",
+            "    candidates=['production', 'coolDD', 'heatDD'],",
+            "    direction='both',",
+            "    start_terms=[],",
+            ")",
+            "print('Both-directions terms:', fit_both_terms)",
+            "print(fit_both.summary())",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.1 <- lm(revenue ~ production + coolDD + heatDD" in raw:
+        return [
+            "ussteamco_mod_1 = fit_lm('ussteamco_mod_1', 'revenue ~ production + coolDD + heatDD', USSteamCoEstim)",
+            "summary_model('ussteamco_mod_1')",
+        ]
+
+    if chapter_number == "5" and "USSteamCoEstim$summer_fact <- factor" in raw:
+        return [
+            "plot_df = USSteamCoEstim.copy()",
+            "plot_df['summer_fact'] = plot_df['summer'].map({0: 'No', 1: 'Yes'})",
+            "fig, ax = plt.subplots(figsize=(8, 5))",
+            "sns.scatterplot(data=plot_df, x='production', y='revenue', hue='summer_fact', palette={'No': '#00338D', 'Yes': '#BC204B'}, ax=ax)",
+            "sns.regplot(data=plot_df[plot_df['summer_fact'] == 'No'], x='production', y='revenue', scatter=False, color='#00338D', ax=ax)",
+            "sns.regplot(data=plot_df[plot_df['summer_fact'] == 'Yes'], x='production', y='revenue', scatter=False, color='#BC204B', ax=ax)",
+            "ax.set_xlabel('Production')",
+            "ax.set_ylabel('Revenue')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.2 <- lm(" in raw and "production * summer" in raw:
+        return [
+            "ussteamco_mod_2 = fit_lm('ussteamco_mod_2', 'revenue ~ production * summer + coolDD * summer + heatDD * summer', USSteamCoEstim)",
+            "summary_model('ussteamco_mod_2')",
+        ]
+
+    if chapter_number == "5" and "with(" in raw and "ccf(" in raw:
+        return [
+            "x = USSteamCoEstim['production'].to_numpy()",
+            "y = USSteamCoEstim['revenue'].to_numpy()",
+            "max_lag = 4",
+            "lags = np.arange(-max_lag, max_lag + 1)",
+            "corrs = []",
+            "for lag in lags:",
+            "    if lag < 0:",
+            "        corr = np.corrcoef(x[:lag], y[-lag:])[0, 1]",
+            "    elif lag > 0:",
+            "        corr = np.corrcoef(x[lag:], y[:-lag])[0, 1]",
+            "    else:",
+            "        corr = np.corrcoef(x, y)[0, 1]",
+            "    corrs.append(corr)",
+            "fig, ax = plt.subplots(figsize=(7, 4))",
+            "ax.stem(lags, corrs, basefmt=' ')",
+            "ax.set_xlabel('Lag')",
+            "ax.set_ylabel('Cross-correlation')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "USSteamCoEstim$resid <- residuals(ussteamco.mod.2" in raw:
+        return [
+            "USSteamCoEstim = USSteamCoEstim.copy()",
+            "USSteamCoEstim['resid'] = ussteamco_mod_2.resid",
+            "predictors = ['production', 'coolDD', 'heatDD', 'summer']",
+            "fig, axes = plt.subplots(3, 2, figsize=(12, 12))",
+            "for ax, var in zip(axes.flatten()[:4], predictors):",
+            "    sns.scatterplot(x=USSteamCoEstim[var], y=USSteamCoEstim['resid'], color='#00338D', ax=ax)",
+            "    ax.axhline(0, linestyle='dotted', color='black')",
+            "    ax.set_xlabel(var)",
+            "    ax.set_ylabel('resid')",
+            "fitted_vals = ussteamco_mod_2.fittedvalues",
+            "sns.scatterplot(x=fitted_vals, y=USSteamCoEstim['resid'], color='#00338D', ax=axes.flatten()[4])",
+            "axes.flatten()[4].axhline(0, linestyle='dotted', color='black')",
+            "axes.flatten()[4].set_xlabel('Fitted Values')",
+            "axes.flatten()[4].set_ylabel('resid')",
+            "axes.flatten()[5].axis('off')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "influenceIndexPlot(ussteamco.mod.2)" in raw:
+        return [
+            "influence = ussteamco_mod_2.get_influence()",
+            "fig, axes = plt.subplots(3, 1, figsize=(10, 10), sharex=True)",
+            "axes[0].plot(influence.hat_matrix_diag, marker='o')",
+            "axes[0].set_ylabel('Leverage')",
+            "axes[1].plot(influence.resid_studentized_external, marker='o')",
+            "axes[1].set_ylabel('Studentized residual')",
+            "axes[2].plot(influence.cooks_distance[0], marker='o')",
+            "axes[2].set_ylabel(\"Cook's distance\")",
+            "axes[2].set_xlabel('Observation')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "hatvals.mod.2 <- hatvalues(ussteamco.mod.2)" in raw:
+        return [
+            "hatvals_mod_2 = ussteamco_mod_2.get_influence().hat_matrix_diag",
+            "display(pd.Series(hatvals_mod_2, name='hatvalues'))",
+        ]
+
+    if chapter_number == "5" and "hatvals.mod.2[order(hatvals.mod.2" in raw:
+        return [
+            "top_hat_idx = np.argsort(hatvals_mod_2)[-3:][::-1]",
+            "display(pd.Series(hatvals_mod_2[top_hat_idx], index=top_hat_idx + 1, name='top_hatvalues'))",
+        ]
+
+    if chapter_number == "5" and "sum(hatvals.mod.2)" in raw:
+        return [
+            "print(np.sum(hatvals_mod_2))",
+        ]
+
+    if chapter_number == "5" and "qqPlot(ussteamco.mod.2" in raw:
+        return [
+            "resid_std_mod2 = (ussteamco_mod_2.resid - ussteamco_mod_2.resid.mean()) / ussteamco_mod_2.resid.std(ddof=1)",
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "qqplot(resid_std_mod2, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)",
+            "ax.set_title('QQ Plot of Standardized Residuals (mod.2)')",
+            "ax.set_xlabel('Theoretical Quantiles')",
+            "ax.set_ylabel('Standardized Residuals')",
+            "ax.grid(alpha=0.25)",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "cooks.mod.2 <- cooks.distance(ussteamco.mod.2)" in raw:
+        return [
+            "cooks_mod_2 = ussteamco_mod_2.get_influence().cooks_distance[0]",
+            "display(pd.Series(cooks_mod_2, name='cooks_distance'))",
+        ]
+
+    if chapter_number == "5" and "cooks.mod.2[order(cooks.mod.2" in raw:
+        return [
+            "top_cooks_idx = np.argsort(cooks_mod_2)[-3:][::-1]",
+            "display(pd.Series(cooks_mod_2[top_cooks_idx], index=top_cooks_idx + 1, name='top_cooks_distance'))",
+        ]
+
+    if chapter_number == "5" and "influencePlot(ussteamco.mod.2" in raw:
+        return [
+            "fig, ax = plt.subplots(figsize=(8, 6))",
+            "influence_plot(ussteamco_mod_2, ax=ax, criterion='cooks')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "USSteamCoEstim2 <- USSteamCoEstim" in raw and "fit_22" in raw:
+        return [
+            "USSteamCoEstim2 = USSteamCoEstim.copy()",
+            "p5 = np.quantile(ussteamco_mod_2.resid, 0.05)",
+            "fit_22 = ussteamco_mod_2.fittedvalues.iloc[21]",
+            "USSteamCoEstim2.loc[USSteamCoEstim2.index[21], 'revenue'] = fit_22 + p5",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer" in raw:
+        return [
+            "ussteamco_mod_3 = fit_lm('ussteamco_mod_3', 'revenue ~ (production + heatDD + coolDD) * summer', USSteamCoEstim2)",
+            "brief_model('ussteamco_mod_3')",
+        ]
+
+    if chapter_number == "5" and "vif(ussteamco.mod.1)" in raw:
+        return [
+            "model_vif('ussteamco_mod_1', USSteamCoEstim)",
+        ]
+
+    if chapter_number == "5" and "vif(ussteamco.mod.3" in raw:
+        return [
+            "model_vif('ussteamco_mod_3', USSteamCoEstim2)",
+        ]
+
+    if chapter_number == "5" and "anova(ussteamco.mod.0)" in raw:
+        return [
+            "anova_ussteamco_mod_0 = model_anova('ussteamco_mod_0', typ=1)",
+        ]
+
+    if chapter_number == "5" and "anova.mod.0 <- anova(ussteamco.mod.0)" in raw:
+        return [
+            "anova_mod_0 = model_anova('ussteamco_mod_0', typ=1)",
+            "print(anova_mod_0['sum_sq'].iloc[0] + anova_mod_0['sum_sq'].iloc[1])",
+        ]
+
+    if chapter_number == "5" and "(anova.mod.1 <- anova(ussteamco.mod.1))" in raw:
+        return [
+            "anova_mod_1 = model_anova('ussteamco_mod_1', typ=1)",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.1b <- lm(revenue ~ heatDD + coolDD + production" in raw:
+        return [
+            "ussteamco_mod_1b = fit_lm('ussteamco_mod_1b', 'revenue ~ heatDD + coolDD + production', USSteamCoEstim)",
+            "anova_mod_1b = anova_lm(ussteamco_mod_1b, typ=1)",
+            "print(anova_mod_1b)",
+        ]
+
+    if chapter_number == "5" and "Anova(ussteamco.mod.1)" in raw:
+        return [
+            "anova_mod_1_type2 = model_anova('ussteamco_mod_1', typ=2)",
+        ]
+
+    if chapter_number == "5" and "(anova.mod.3 <- anova(ussteamco.mod.3))" in raw:
+        return [
+            "anova_mod_3 = model_anova('ussteamco_mod_3', typ=1)",
+        ]
+
+    if chapter_number == "5" and "AIC(ussteamco.mod.0)" in raw:
+        return [
+            "print('AIC ussteamco_mod_0:', ussteamco_mod_0.aic)",
+            "print('AIC model_backward:', model_backward.aic)",
+            "print('AIC ussteamco_mod_1:', ussteamco_mod_1.aic)",
+            "print('AIC ussteamco_mod_2:', ussteamco_mod_2.aic)",
+        ]
+
+    if chapter_number == "5" and "BIC(ussteamco.mod.0)" in raw:
+        return [
+            "print('BIC ussteamco_mod_0:', ussteamco_mod_0.bic)",
+            "print('BIC model_backward:', model_backward.bic)",
+            "print('BIC ussteamco_mod_1:', ussteamco_mod_1.bic)",
+            "print('BIC ussteamco_mod_2:', ussteamco_mod_2.bic)",
+        ]
+
+    if chapter_number == "5" and "# Calculate normalized residuals" in raw and "hist_stand_res" in raw:
+        return [
+            "nres = ussteamco_mod_3.resid / np.std(ussteamco_mod_3.resid)",
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "sns.histplot(nres, bins=np.arange(-2.55, 1.65 + 0.7, 0.7), stat='density', color='#00338D', ax=ax)",
+            "x_vals = np.linspace(nres.min(), nres.max(), 200)",
+            "ax.plot(x_vals, norm.pdf(x_vals, np.mean(nres), np.std(nres)), color='black')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "qqPlot(ussteamco.mod.3" in raw:
+        return [
+            "resid_std_mod3 = (ussteamco_mod_3.resid - ussteamco_mod_3.resid.mean()) / ussteamco_mod_3.resid.std(ddof=1)",
+            "fig, ax = plt.subplots(figsize=(7, 5))",
+            "qqplot(resid_std_mod3, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)",
+            "ax.set_title('QQ Plot of Standardized Residuals (mod.3)')",
+            "ax.set_xlabel('Theoretical Quantiles')",
+            "ax.set_ylabel('Standardized Residuals')",
+            "ax.grid(alpha=0.25)",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "shapiro.test(ussteamco.mod.3$residuals)" in raw:
+        return [
+            "shapiro_stat, shapiro_p = shapiro_test(ussteamco_mod_3.resid)",
+            "print({'W': shapiro_stat, 'p_value': shapiro_p})",
+        ]
+
+    if chapter_number == "5" and "residualPlots(ussteamco.mod.3" in raw:
+        return [
+            "resid = ussteamco_mod_3.resid",
+            "fitted = ussteamco_mod_3.fittedvalues",
+            "predictors = ['production', 'coolDD', 'heatDD', 'summer']",
+            "fig, axes = plt.subplots(2, 3, figsize=(14, 8))",
+            "for ax, col in zip(axes.flatten()[:4], predictors):",
+            "    sns.scatterplot(x=USSteamCoEstim2[col], y=resid, color='#00338D', ax=ax)",
+            "    ax.axhline(0, color='black', linestyle='dotted')",
+            "    ax.set_xlabel(col)",
+            "    ax.set_ylabel('Residuals')",
+            "sns.scatterplot(x=fitted, y=resid, color='#00338D', ax=axes.flatten()[4])",
+            "axes.flatten()[4].axhline(0, color='black', linestyle='dotted')",
+            "axes.flatten()[4].set_xlabel('Fitted')",
+            "axes.flatten()[4].set_ylabel('Residuals')",
+            "axes.flatten()[5].axis('off')",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "bptest(ussteamco.mod.3)" in raw:
+        return [
+            "bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_3.resid, ussteamco_mod_3.model.exog)",
+            "print({'LM statistic': bp_stat, 'p_value': bp_p})",
+        ]
+
+    if chapter_number == "5" and "pacf(ussteamco.mod.3$residuals)" in raw:
+        return [
+            "fig, ax = plt.subplots(figsize=(7, 4))",
+            "plot_pacf(ussteamco_mod_3.resid, lags=10, method='ywm', ax=ax)",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "bgtest(ussteamco.mod.3" in raw:
+        return [
+            "bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, nlags=3)",
+            "print({'LM statistic': bg_lm, 'p_value': bg_p})",
+        ]
+
+    if chapter_number == "5" and "(rho <- arima(ussteamco.mod.3$residuals" in raw:
+        return [
+            "rho = np.corrcoef(ussteamco_mod_3.resid[1:], ussteamco_mod_3.resid[:-1])[0, 1]",
+            "print(rho)",
+        ]
+
+    if chapter_number == "5" and "# Create lagged variables, dropping the first observation" in raw and "trans$prod_summer" in raw:
+        return [
+            "n = len(USSteamCoEstim2)",
+            "trans = USSteamCoEstim2.iloc[1:, :].copy()",
+            "lag = USSteamCoEstim2.iloc[:-1, :].copy()",
+            "trans['prod_summer'] = trans['production'] * trans['summer']",
+            "trans['heat_summer'] = trans['heatDD'] * trans['summer']",
+            "trans['cool_summer'] = trans['coolDD'] * trans['summer']",
+            "lag['prod_summer'] = lag['production'] * lag['summer']",
+            "lag['heat_summer'] = lag['heatDD'] * lag['summer']",
+            "lag['cool_summer'] = lag['coolDD'] * lag['summer']",
+            "trans['revenue_adj'] = trans['revenue'].to_numpy() - rho * lag['revenue'].to_numpy()",
+            "trans['production_adj'] = trans['production'].to_numpy() - rho * lag['production'].to_numpy()",
+            "trans['heatDD_adj'] = trans['heatDD'].to_numpy() - rho * lag['heatDD'].to_numpy()",
+            "trans['coolDD_adj'] = trans['coolDD'].to_numpy() - rho * lag['coolDD'].to_numpy()",
+            "trans['summer_adj'] = trans['summer'].to_numpy() - rho * lag['summer'].to_numpy()",
+            "trans['prod_summer_adj'] = trans['prod_summer'].to_numpy() - rho * lag['prod_summer'].to_numpy()",
+            "trans['heat_summer_adj'] = trans['heat_summer'].to_numpy() - rho * lag['heat_summer'].to_numpy()",
+            "trans['cool_summer_adj'] = trans['cool_summer'].to_numpy() - rho * lag['cool_summer'].to_numpy()",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.4 <- lm(" in raw and "revenue_adj" in raw:
+        return [
+            "ussteamco_mod_4 = fit_lm('ussteamco_mod_4', 'revenue_adj ~ production_adj + heatDD_adj + coolDD_adj + summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj', trans)",
+            "summary_model('ussteamco_mod_4')",
+        ]
+
+    if chapter_number == "5" and "pacf(ussteamco.mod.4$residuals)" in raw and "bgtest(ussteamco.mod.4" in raw:
+        return [
+            "fig, ax = plt.subplots(figsize=(7, 4))",
+            "plot_pacf(ussteamco_mod_4.resid, lags=10, method='ywm', ax=ax)",
+            "plt.tight_layout()",
+            "plt.show()",
+            "bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_4, nlags=3)",
+            "print({'LM statistic': bg_lm, 'p_value': bg_p})",
+        ]
+
+    if chapter_number == "5" and "ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD) * summer" in raw:
+        return [
+            "ussteamco_mod_5_start = fit_lm('ussteamco_mod_5_start', 'revenue ~ (production + coolDD + heatDD) * summer', USSteamCoEstim2)",
+            "candidates = ['production', 'coolDD', 'heatDD', 'summer', 'production:summer', 'coolDD:summer', 'heatDD:summer']",
+            "ussteamco_mod_5, ussteamco_mod_5_terms = stepwise_aic(",
+            "    USSteamCoEstim2,",
+            "    response='revenue',",
+            "    candidates=candidates,",
+            "    direction='backward',",
+            "    start_terms=candidates,",
+            ")",
+            "print('Refined terms:', ussteamco_mod_5_terms)",
+        ]
+
+    if chapter_number == "5" and "summary(ussteamco.mod.5)" in raw and "options(" in raw:
+        return [
+            "summary_model('ussteamco_mod_5')",
+        ]
+
+    if chapter_number == "5" and "bptest(ussteamco.mod.5)" in raw and "shapiro.test(ussteamco.mod.5$residuals)" in raw:
+        return [
+            "bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_5.resid, ussteamco_mod_5.model.exog)",
+            "bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_5, nlags=3)",
+            "sw_stat, sw_p = shapiro_test(ussteamco_mod_5.resid)",
+            "print({'bp_lm': bp_stat, 'bp_p': bp_p, 'bg_lm': bg_lm, 'bg_p': bg_p, 'shapiro_W': sw_stat, 'shapiro_p': sw_p})",
+        ]
+
+    if chapter_number == "5" and raw.strip() == "summary(ussteamco.mod.5)":
+        return [
+            "summary_model('ussteamco_mod_5')",
+        ]
+
+    if chapter_number == "5" and "# Create a data frame for the true line over the extended range" in raw:
+        return [
+            "true_line = pd.DataFrame({'x': x_extended, 'y': beta_0 + beta_1 * x_extended})",
+            "mean_x = np.mean(x_values)",
+            "S_xx = np.sum((x_values - mean_x) ** 2)",
+            "se_fit_true = sigma * np.sqrt(1 / n + ((x_extended - mean_x) ** 2) / S_xx)",
+            "t_value = t_dist.ppf(1 - alpha / 2, df=n - 2)",
+            "ci_upper_true = (beta_0 + beta_1 * x_extended) + t_value * se_fit_true",
+            "ci_lower_true = (beta_0 + beta_1 * x_extended) - t_value * se_fit_true",
+            "ci_bounds_true = pd.DataFrame({'x': x_extended, 'ci_lower': ci_lower_true, 'ci_upper': ci_upper_true})",
+        ]
+
+    if chapter_number == "5" and "# Initialize a data frame to store the simulated regression lines" in raw:
+        return [
+            "_line_frames = []",
+            "for i in range(1, int(rep) + 1):",
+            "    epsilon = np.random.normal(loc=0.0, scale=sigma, size=n)",
+            "    y_values = beta_0 + beta_1 * x_values + epsilon",
+            "    slope_i, intercept_i = np.polyfit(x_values, y_values, deg=1)",
+            "    predicted_values = intercept_i + slope_i * x_extended",
+            "    _line_frames.append(pd.DataFrame({'x': x_extended, 'y': predicted_values, 'rep': i}))",
+            "simulated_lines = pd.concat(_line_frames, ignore_index=True)",
+        ]
+
+    if chapter_number == "5" and "regression_lines_plot <- ggplot() +" in raw:
+        return [
+            "fig, ax = plt.subplots(figsize=(10, 6))",
+            "for _, _grp in simulated_lines.groupby('rep'):",
+            "    ax.plot(_grp['x'], _grp['y'], color='#00338D', alpha=0.1)",
+            "ax.plot(true_line['x'], true_line['y'], color='#E36877', linewidth=1)",
+            "ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_lower'], color='#E36877', linewidth=1)",
+            "ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_upper'], color='#E36877', linewidth=1)",
+            "ax.set_title(f\"{rep} Regression Lines with Confidence Interval Based on True Model\")",
+            "ax.set_xlabel('x')",
+            "ax.set_ylabel('y')",
+            "ax.set_xlim(x_extended_min, x_extended_max)",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "# Calculate the standard error for prediction interval" in raw:
+        return [
+            "alpha_pred = 0.01",
+            "t_value_pred = t_dist.ppf(1 - alpha_pred / 2, df=n - 2)",
+            "se_pred = sigma * np.sqrt(1 + 1 / n + ((x_extended - mean_x) ** 2) / S_xx)",
+            "pi_upper_true = (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred",
+            "pi_lower_true = (beta_0 + beta_1 * x_extended) - t_value_pred * se_pred",
+            "pi_bounds_true = pd.DataFrame({'x': x_extended, 'pi_lower': pi_lower_true, 'pi_upper': pi_upper_true})",
+            "fig, ax = plt.subplots(figsize=(10, 6))",
+            "ax.fill_between(pi_bounds_true['x'], pi_bounds_true['pi_lower'], pi_bounds_true['pi_upper'], color='#00338D', alpha=0.15)",
+            "ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_lower'], color='#00338D', linewidth=1, linestyle='--')",
+            "ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_upper'], color='#00338D', linewidth=1, linestyle='--')",
+            "ax.plot(true_line['x'], true_line['y'], color='#00338D', linewidth=1.5)",
+            "ax.set_xlabel('x')",
+            "ax.set_ylabel('y')",
+            "ax.set_xlim(x_extended_min, x_extended_max)",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "(predictions <- predict(" in raw:
+        return [
+            "predictions = ussteamco_mod_5.get_prediction(USSteamCoHold).summary_frame(alpha=0.01)",
+            "predictions = predictions.rename(columns={'mean': 'fit', 'obs_ci_lower': 'lwr', 'obs_ci_upper': 'upr'})",
+            "display(predictions[['fit', 'lwr', 'upr']])",
+        ]
+
+    if chapter_number == "5" and "comparison <- cbind(" in raw:
+        return [
+            "comparison = pd.DataFrame({",
+            "    'Month': USSteamCoHold.index.astype(str),",
+            "    'Recorded': USSteamCoHold['revenue'].to_numpy(),",
+            "    'Lower': np.round(predictions['lwr'].to_numpy(), 0),",
+            "    'Expected': np.round(predictions['fit'].to_numpy(), 0),",
+            "    'Upper': np.round(predictions['upr'].to_numpy(), 0),",
+            "})",
+            "comparison['Difference'] = comparison['Recorded'] - comparison['Expected']",
+            "display(comparison)",
+            "print(comparison['Recorded'].sum())",
+            "print(comparison['Expected'].sum())",
+            "print(comparison['Difference'].sum())",
+        ]
+
+    if chapter_number == "5" and "# Convert predictions to a data frame and add the date column" in raw:
+        return [
+            "pred_df = pd.DataFrame({",
+            "    'date': USSteamCoHold['date'].to_numpy(),",
+            "    'recorded': USSteamCoHold['revenue'].to_numpy(),",
+            "    'lwr': predictions['lwr'].to_numpy(),",
+            "    'fit': predictions['fit'].to_numpy(),",
+            "    'upr': predictions['upr'].to_numpy(),",
+            "})",
+            "pred_df['outside'] = (pred_df['recorded'] < pred_df['lwr']) | (pred_df['recorded'] > pred_df['upr'])",
+            "fig, ax = plt.subplots(figsize=(10, 5))",
+            "ax.plot(pred_df['date'], pred_df['fit'], color='#00338D', label='Expectation')",
+            "ax.fill_between(pred_df['date'], pred_df['lwr'], pred_df['upr'], color='#00338D', alpha=0.2)",
+            "ax.plot(pred_df['date'], pred_df['recorded'], color='#E36877', label='Recorded')",
+            "outliers = pred_df[pred_df['outside']]",
+            "ax.scatter(outliers['date'], outliers['recorded'], color='#E36877', s=30)",
+            "ax.set_xlabel('Month in 2014')",
+            "ax.set_ylabel('Revenue ($)')",
+            "ax.legend(loc='best')",
+            "fig.autofmt_xdate()",
+            "plt.tight_layout()",
+            "plt.show()",
+        ]
+
+    if chapter_number == "5" and "# Residual degrees of freedom" in raw and "annual_prediction" in raw:
+        return [
+            "df_res = int(ussteamco_mod_5.df_resid)",
+            "monthly_predictions = pred_df['fit'].to_numpy()",
+            "annual_prediction = monthly_predictions.sum()",
+            "new_df = USSteamCoHold.copy()",
+            "X_hold = smf.ols(ussteamco_mod_5.model.formula, data=new_df).exog",
+            "one = np.ones(X_hold.shape[0])",
+            "vcov = ussteamco_mod_5.cov_params().to_numpy()",
+            "var_mean_annual = float(one.T @ X_hold @ vcov @ X_hold.T @ one)",
+            "sigma2 = ussteamco_mod_5.mse_resid",
+            "var_future_annual = X_hold.shape[0] * sigma2",
+            "annual_var = var_mean_annual + var_future_annual",
+            "annual_se = np.sqrt(annual_var)",
+            "t_score = t_dist.ppf(0.995, df=df_res)",
+            "annual_lower = annual_prediction - t_score * annual_se",
+            "annual_upper = annual_prediction + t_score * annual_se",
+            "print('Variance from coefficient uncertainty:', var_mean_annual)",
+            "print('Variance from future residual variation:', var_future_annual)",
+            "print('Lower Bound:', round(annual_lower, 0))",
+            "print('Annual Prediction:', round(annual_prediction, 0))",
+            "print('Upper Bound:', round(annual_upper, 0))",
+            "print('Annual prediction standard error:', round(annual_se, 0))",
+        ]
+
+    if chapter_number == "5" and "storm_adjustment <- 8000000" in raw:
+        return [
+            "storm_adjustment = 8_000_000",
+            "pred_df['fit_adj'] = pred_df['fit']",
+            "pred_df['lwr_adj'] = pred_df['lwr']",
+            "pred_df['upr_adj'] = pred_df['upr']",
+            "march_row = pred_df['date'].dt.strftime('%b') == 'Mar'",
+            "pred_df.loc[march_row, 'fit_adj'] = pred_df.loc[march_row, 'fit_adj'] - storm_adjustment",
+            "pred_df.loc[march_row, 'lwr_adj'] = pred_df.loc[march_row, 'lwr_adj'] - storm_adjustment",
+            "pred_df.loc[march_row, 'upr_adj'] = pred_df.loc[march_row, 'upr_adj'] - storm_adjustment",
+            "pred_df['outside_adj'] = (pred_df['recorded'] < pred_df['lwr_adj']) | (pred_df['recorded'] > pred_df['upr_adj'])",
+            "display(pred_df)",
+            ]
+
+    if chapter_number == "5":
+        raw = "\n".join(lines)
+        return [
+            f"ada_run_r({json.dumps(raw)})",
+        ]
+
     return [
         "print('Skipped unsupported R-heavy code block in Python export; provide a Python override for full parity.')",
     ]
@@ -996,9 +1829,11 @@ def normalize_notebook_outputs(source_lines: List[str]) -> List[str]:
 
     out = list(source_lines)
     for idx in candidates:
-        stripped = out[idx].strip()
+        original = out[idx]
+        stripped = original.strip()
         if not stripped.startswith("display("):
-            out[idx] = f"display({stripped})"
+            leading_ws = original[: len(original) - len(original.lstrip())]
+            out[idx] = f"{leading_ws}display({stripped})"
 
     if not any(line.strip() == "from IPython.display import display" for line in out):
         out.insert(0, "from IPython.display import display")
@@ -1087,11 +1922,13 @@ def render_notebook(
         cells.append(make_fsaudit_bootstrap_cell(ir))
     if chapter_number == "2":
         cells.append(make_population_estimation_bootstrap_cell(ir))
+    if chapter_number == "1":
+        cells.append(make_probability_distributions_bootstrap_cell(ir))
     if chapter_number == "5":
         cells.append(make_regression_analysis_bootstrap_cell(ir))
     if requires_python_viz_bootstrap:
         cells.append(make_python_viz_bootstrap_cell(ir))
-    if requires_r_compat:
+    if requires_r_compat and chapter_number != "1":
         cells.append(make_r_stats_compat_bootstrap_cell(ir))
 
     for exercise, resolved_blocks in resolved_by_exercise:
@@ -1124,7 +1961,7 @@ def render_notebook(
             elif block_type == "code":
                 source_lines = normalize_lines(content.get("code_lines", []))
                 if is_r_heavy_code_block(source_lines):
-                    source_lines = convert_r_heavy_block_to_python(source_lines)
+                    source_lines = convert_r_heavy_block_to_python(source_lines, chapter_number)
                 else:
                     source_lines = normalize_r_style_code_for_python(source_lines)
                 source_lines = normalize_notebook_outputs(source_lines)

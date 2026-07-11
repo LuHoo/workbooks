@@ -3,6 +3,7 @@
 import json
 import re
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -330,9 +331,13 @@ class RendererTestCase(unittest.TestCase):
         ]
         code_text = "\n".join(code_cells)
 
-        self.assertIn("def dhyper", code_text)
-        self.assertIn("def qf", code_text)
-        self.assertIn("def qchisq", code_text)
+        self.assertIn("from scipy.stats import", code_text)
+        self.assertIn("hypergeom.pmf", code_text)
+        self.assertIn("f.isf", code_text)
+        self.assertIn("chi2.ppf", code_text)
+        self.assertNotIn("def dhyper", code_text)
+        self.assertNotIn("def qf", code_text)
+        self.assertNotIn("def qchisq", code_text)
         self.assertNotIn("<-", code_text)
         self.assertNotIn("lower.tail", code_text)
 
@@ -374,7 +379,7 @@ class RendererTestCase(unittest.TestCase):
     def test_r_python_equivalence_phase1(self):
         subprocess.run(
             [
-                "python3",
+                sys.executable,
                 str(EQUIVALENCE_SCRIPT),
                 "--chapters",
                 "1,6",
@@ -421,12 +426,23 @@ class RendererTestCase(unittest.TestCase):
 
         self.assertIn("USSteamCo = load_dataset('USSteamCo')", chapter5_code)
         self.assertIn("except Exception:", chapter5_code)
-        self.assertIn("importr('aicpa')", chapter5_code)
-        self.assertIn("data('USSteamCo', package='aicpa')", chapter5_code)
+        self.assertIn("with contextlib.redirect_stderr(_stderr_buffer):", chapter5_code)
+        self.assertNotIn("importr('aicpa')", chapter5_code)
+        self.assertNotIn("data('USSteamCo', package='aicpa')", chapter5_code)
         self.assertIn("USSteamCo = pd.DataFrame({", chapter5_code)
         self.assertIn("USSteamCo[\"summer\"] = np.resize(np.array([", chapter5_code)
         self.assertIn("np.linspace(x_min, x_max, num=n)", chapter5_code)
         self.assertNotIn("summary(USSteamCo)", chapter5_code)
+        self.assertIn("model_forward.summary() if hasattr(model_forward, 'summary')", chapter5_code)
+        self.assertNotIn("model_forward.describe(include='all') if 'model_forward' in globals()", chapter5_code)
+        self.assertIn("ada_run_r(", chapter5_code)
+        self.assertNotIn("Skipped unsupported R-heavy code block in Python export", chapter5_code)
+        self.assertIn("fig, axes = plt.subplots(2, 2, figsize=(12, 8))", chapter5_code)
+        self.assertIn("ax_right = ax_left.twinx()", chapter5_code)
+        self.assertIn("cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()", chapter5_code)
+        self.assertIn("sns.heatmap(cor_ussteam", chapter5_code)
+        self.assertNotIn("hist_revenue <-", chapter5_code)
+        self.assertNotIn("corrplot(cor_ussteam", chapter5_code)
 
     def test_hypothesis_notebook_displays_multiple_eval_outputs(self):
         out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-ch4-"))
