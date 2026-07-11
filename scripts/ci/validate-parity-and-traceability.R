@@ -17,7 +17,8 @@ parse_args <- function(args) {
     notebooks_dir = "generated/python-notebooks",
     metadata_dir = "metadata/traceability",
     chapters = "1,2,3,4,5,6",
-    output_json = NULL
+    output_json = NULL,
+    output_summary = NULL
   )
 
   i <- 1L
@@ -35,6 +36,9 @@ parse_args <- function(args) {
     } else if (identical(arg, "--output-json")) {
       i <- i + 1L
       out$output_json <- args[[i]]
+    } else if (identical(arg, "--output-summary")) {
+      i <- i + 1L
+      out$output_summary <- args[[i]]
     } else if (identical(arg, "--help") || identical(arg, "-h")) {
       out$help <- TRUE
     } else {
@@ -55,6 +59,7 @@ print_help <- function() {
     "  --metadata-dir <path>   Traceability metadata directory (default: metadata/traceability)\n",
     "  --chapters <list>       Comma-separated chapter list (default: 1,2,3,4,5,6)\n",
     "  --output-json <path>    Optional output path for machine-readable report\n",
+    "  --output-summary <path> Optional output path for human-readable summary\n",
     sep = ""
   )
 }
@@ -100,7 +105,7 @@ workshop_metadata_index <- function(metadata, workshop_id) {
 }
 
 run_lo_mapping_parity <- function(config, metadata) {
-  check <- list(status = "ok", errors = list(), warnings = list())
+  check <- list(status = "ok", errors = list(), warnings = list(), details = list(exercises = list()))
   chapter <- as.character(sub("\\..*$", "", names(config$expected_chunks)[[1L]]))
 
   idx <- workshop_metadata_index(metadata, config$id)
@@ -126,6 +131,11 @@ run_lo_mapping_parity <- function(config, metadata) {
       wx_id <- as.character(item$id)
       idx$links_by_wx[[wx_id]]
     }), use.names = FALSE))
+
+    check$details$exercises[[exercise_ref]] <- list(
+      workshop_traceability_ids = vapply(exercise_wx, function(item) as.character(item$id), character(1L)),
+      mapped_lo_ids = exercise_lo
+    )
 
     if (length(exercise_lo) == 0L) {
       check <- add_check_error(check, paste0("No LO mappings for exercise ", exercise_ref))
@@ -253,7 +263,7 @@ extract_notebook_traceability_block_ids <- function(notebook_path) {
 }
 
 run_fsaudit_coverage <- function(config, notebooks_dir) {
-  check <- list(status = "ok", errors = list(), warnings = list())
+  check <- list(status = "ok", errors = list(), warnings = list(), details = list())
   chapter <- as.character(sub("\\..*$", "", names(config$expected_chunks)[[1L]]))
   notebook_path <- file.path(notebooks_dir, config$id, paste0("chapter-", chapter, ".ipynb"))
 
@@ -278,6 +288,7 @@ run_fsaudit_coverage <- function(config, notebooks_dir) {
     }
   }
   required_ids <- unique(required_ids)
+  check$details$required_block_ids <- required_ids
 
   if (length(required_ids) == 0L) {
     check$status <- "skipped"
@@ -287,6 +298,8 @@ run_fsaudit_coverage <- function(config, notebooks_dir) {
 
   present_ids <- extract_notebook_traceability_block_ids(notebook_path)
   missing_ids <- setdiff(required_ids, present_ids)
+  check$details$present_block_ids <- present_ids
+  check$details$missing_block_ids <- missing_ids
 
   if (length(missing_ids) > 0L) {
     check <- add_check_error(
@@ -335,7 +348,7 @@ add_check_error <- function(check, message) {
 }
 
 run_exercise_parity <- function(config, notebooks_dir) {
-  check <- list(status = "ok", errors = list(), warnings = list())
+  check <- list(status = "ok", errors = list(), warnings = list(), details = list())
 
   chapter <- as.character(sub("\\..*$", "", names(config$expected_chunks)[[1L]]))
   notebook_path <- file.path(notebooks_dir, config$id, paste0("chapter-", chapter, ".ipynb"))
@@ -343,6 +356,12 @@ run_exercise_parity <- function(config, notebooks_dir) {
   source_refs_all <- extract_source_exercise_refs(config$source)
   source_refs <- source_refs_all[source_refs_all %in% expected_refs]
   notebook_refs <- extract_notebook_exercise_refs(notebook_path)
+
+  check$details <- list(
+    expected_refs = expected_refs,
+    source_refs = source_refs,
+    notebook_refs = notebook_refs
+  )
 
   if (!file.exists(notebook_path)) {
     check <- add_check_error(check, paste0("Generated notebook not found: ", notebook_path))
@@ -417,18 +436,19 @@ run_exercise_parity <- function(config, notebooks_dir) {
 }
 
 emit_summary <- function(report) {
-  cat("Parity/Traceability validation summary\n")
+  lines <- c("Parity/Traceability validation summary")
   for (ws in report$workshops) {
     parity <- ws$checks$exercise_parity
     lo_parity <- ws$checks$lo_mapping_parity
     fsaudit_cov <- ws$checks$fsaudit_coverage
-    cat(
-      "- ", ws$workshop_id,
-      ": exercise_parity=", parity$status,
-      ", lo_mapping_parity=", lo_parity$status,
-      ", fsaudit_coverage=", fsaudit_cov$status,
-      "\n",
-      sep = ""
+    lines <- c(
+      lines,
+      paste0(
+        "- ", ws$workshop_id,
+        ": exercise_parity=", parity$status,
+        ", lo_mapping_parity=", lo_parity$status,
+        ", fsaudit_coverage=", fsaudit_cov$status
+      )
     )
     if (length(parity$errors) > 0L) {
       for (msg in parity$errors) {
@@ -456,6 +476,8 @@ emit_summary <- function(report) {
       }
     }
   }
+  cat(paste(lines, collapse = "\n"), "\n", sep = "")
+  lines
 }
 
 main <- function() {
@@ -510,7 +532,12 @@ main <- function() {
     writeLines(jsonlite::toJSON(report, auto_unbox = TRUE, pretty = TRUE), args$output_json)
   }
 
-  emit_summary(report)
+  summary_lines <- emit_summary(report)
+
+  if (!is.null(args$output_summary)) {
+    dir.create(dirname(args$output_summary), recursive = TRUE, showWarnings = FALSE)
+    writeLines(summary_lines, args$output_summary)
+  }
 
   if (identical(report$status, "failed")) {
     quit(status = 1L)
