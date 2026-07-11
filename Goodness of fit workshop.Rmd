@@ -17,14 +17,14 @@ output:
 To run the exercises in this workshop, we need to load a few packages.
 
 ```{r setup}
-library(ggplot2)         # Data visualization
+library(ggplot2) # Data visualization
 # library(aicpa)           # Contains US SteamCo data
 # library(car)             # Companion to Applied Regression
-library(gridExtra)       # Arrange multiple grid-based plots
-library(tidyr)           # Data tidying (reshape and transform)
+library(gridExtra) # Arrange multiple grid-based plots
+library(tidyr) # Data tidying (reshape and transform)
 library(tidyverse)
 # library(corrplot)        # Correlation matrix visualization
-library(lmtest)          # Diagnostic tests for linear models
+library(lmtest) # Diagnostic tests for linear models
 # library(latex2exp)       # Use LaTeX expressions in plots
 # library(scales)
 library(kthemes)
@@ -102,7 +102,7 @@ benford <- data.frame(
 )
 
 # Figure
-ggplot(benford, aes(x = Digit, y = Probability)) +
+benford_plot <- ggplot(benford, aes(x = Digit, y = Probability)) +
   geom_col(fill = "#00338D", width = 0.7) +
   scale_y_continuous(
     limits = c(0, 0.35),
@@ -113,7 +113,9 @@ ggplot(benford, aes(x = Digit, y = Probability)) +
     x = "First digit",
     y = "Probability"
   ) # +
-  # theme_minimal(base_size = 12)
+# theme_minimal(base_size = 12)
+
+benford_plot
 ```
 
 ### Examples from Benford
@@ -126,12 +128,12 @@ df <- tribble(
   1, 31.0, 32.7, 32.4, 33.4, 26.7, 31.2,
   2, 16.4, 17.6, 18.8, 18.5, 25.2, 19.3,
   3, 10.7, 12.6, 10.1, 12.4, 15.4, 12.2,
-  4, 11.3,  9.8, 10.1,  7.5, 10.8,  9.9,
-  5,  7.2,  7.4,  9.8,  7.1,  6.7,  7.6,
-  6,  8.6,  6.4,  5.5,  6.5,  5.1,  6.4,
-  7,  5.5,  4.9,  4.7,  5.5,  4.1,  4.9,
-  8,  4.2,  5.6,  5.5,  4.9,  2.8,  4.6,
-  9,  5.1,  3.0,  3.1,  4.2,  3.2,  3.7
+  4, 11.3, 9.8, 10.1, 7.5, 10.8, 9.9,
+  5, 7.2, 7.4, 9.8, 7.1, 6.7, 7.6,
+  6, 8.6, 6.4, 5.5, 6.5, 5.1, 6.4,
+  7, 5.5, 4.9, 4.7, 5.5, 4.1, 4.9,
+  8, 4.2, 5.6, 5.5, 4.9, 2.8, 4.6,
+  9, 5.1, 3.0, 3.1, 4.2, 3.2, 3.7
 )
 
 df_long <- pivot_longer(
@@ -141,17 +143,23 @@ df_long <- pivot_longer(
   values_to = "Percentage"
 )
 
-ggplot(df_long,
-       aes(x = Digit,
-           y = Percentage,
-           color = Series)) +
+benford_examples_plot <- ggplot(
+  df_long,
+  aes(
+    x = Digit,
+    y = Percentage,
+    color = Series
+  )
+) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   scale_x_continuous(breaks = 1:9) +
   labs(
     x = "First digit",
     y = "Percentage"
-  ) 
+  )
+
+benford_examples_plot
 ```
 
 ### Comparison of average with theoretical
@@ -171,18 +179,24 @@ df <- data.frame(
 )
 
 # Plot
-ggplot(df,
-       aes(x = Digit,
-           y = Percentage,
-           color = Series,
-           linetype = Series)) +
+benford_average_plot <- ggplot(
+  df,
+  aes(
+    x = Digit,
+    y = Percentage,
+    color = Series,
+    linetype = Series
+  )
+) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   scale_x_continuous(breaks = 1:9) +
   labs(
     x = "First digit",
     y = "Percentage"
-  ) 
+  )
+
+benford_average_plot
 ```
 ## Inventory data
 
@@ -201,11 +215,15 @@ df_inv <- data.frame(
 )
 
 # Plot
-inv_plot <- ggplot(df_inv,
-       aes(x = Digit,
-           y = Frequency,
-           color = Series,
-           linetype = Series)) +
+inv_plot <- ggplot(
+  df_inv,
+  aes(
+    x = Digit,
+    y = Frequency,
+    color = Series,
+    linetype = Series
+  )
+) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   scale_x_continuous(breaks = 1:9) +
@@ -214,7 +232,7 @@ inv_plot <- ggplot(df_inv,
   labs(
     x = "First digit",
     y = "Frequency"
-  ) 
+  )
 
 inv_plot
 ```
@@ -237,9 +255,9 @@ sum(round(((inv_observed - inv_expected)^2 / inv_expected), 2))
 Critical region
 ```{r}
 # Parameters
-df <- 8  # Degrees of freedom
-x <- seq(0, 20, by = 0.1)  # Range of x values
-tail_start <- 15.51  # Starting point for the shaded tail
+df <- 8 # Degrees of freedom
+x <- seq(0, 20, by = 0.1) # Range of x values
+tail_start <- 15.51 # Starting point for the shaded tail
 
 # Create a data frame for the chi-square distribution
 data <- data.frame(
@@ -248,7 +266,7 @@ data <- data.frame(
 )
 
 # Create the plot
-ggplot(data, aes(x = x, y = y)) +
+chisq_plot <- ggplot(data, aes(x = x, y = y)) +
   geom_line(color = "#00338D", size = 1) +
   geom_area(
     data = subset(data, x >= tail_start),
@@ -256,7 +274,9 @@ ggplot(data, aes(x = x, y = y)) +
     fill = "#00338D",
     alpha = 1
   ) +
-  labs(x="x", y="density")
+  labs(x = "x", y = "density")
+
+chisq_plot
 ```
 
 
@@ -271,21 +291,21 @@ chisq.test(x = inv_observed, p = probabilities)
 # First digit probabilities
 first_digit <- data.frame(
   digit = 1:9,
-  probability = log10(1 + 1/1:9),
+  probability = log10(1 + 1 / 1:9),
   position = "First"
 )
 
 # Second digit probabilities
 second_digit <- data.frame(
   digit = 0:9,
-  probability = sapply(0:9, function(d) sum(log10(1 + 1/(10 * 1:9 + d)))),
+  probability = sapply(0:9, function(d) sum(log10(1 + 1 / (10 * 1:9 + d)))),
   position = "Second"
 )
 
 # Third digit probabilities
 third_digit <- data.frame(
   digit = 0:9,
-  probability = sapply(0:9, function(d) sum(log10(1 + 1/(10 * 10:99 + d)))),
+  probability = sapply(0:9, function(d) sum(log10(1 + 1 / (10 * 10:99 + d)))),
   position = "Third"
 )
 
@@ -293,7 +313,7 @@ third_digit <- data.frame(
 benford_data <- bind_rows(first_digit, second_digit, third_digit)
 
 # Create line plots
-ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
+benford_digit_plot <- ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
   geom_line() +
   geom_point() +
   facet_wrap(~position, ncol = 1, scales = "free_x") +
@@ -302,6 +322,8 @@ ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
     y = "Probability"
   ) +
   theme(legend.position = "none")
+
+benford_digit_plot
 ```
 
 
@@ -319,14 +341,21 @@ model3 <- as.data.frame(nres)
 create_hist <- function(bins) {
   ggplot(model3, aes(nres)) +
     geom_histogram(aes(y = after_stat(density)),
-                   breaks = seq(min(nres), max(nres), length.out = bins + 1),
-                   fill = "#00338D", color = "black") +
-    stat_function(fun = dnorm,
-                  args = list(mean = mean(model3$nres),
-                              sd = sd(model3$nres)),
-                  color = "red", size = 1) +
-    labs(title = paste("Histogram with", bins, "bins"),
-         x = "Standardized Residuals", y = "Density") +
+      breaks = seq(min(nres), max(nres), length.out = bins + 1),
+      fill = "#00338D", color = "black"
+    ) +
+    stat_function(
+      fun = dnorm,
+      args = list(
+        mean = mean(model3$nres),
+        sd = sd(model3$nres)
+      ),
+      color = "red", size = 1
+    ) +
+    labs(
+      title = paste("Histogram with", bins, "bins"),
+      x = "Standardized Residuals", y = "Density"
+    ) +
     theme_minimal()
 }
 
