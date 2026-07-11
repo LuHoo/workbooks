@@ -103,6 +103,33 @@ On Python notebook execution failure, diagnostics include:
 Artifacts are written to `generated/notebook-execution-artifacts/` and uploaded
 in CI.
 
+## Dedicated Binder Readiness Validation
+
+Workflow: `.github/workflows/binder-readiness.yml`
+
+This workflow is intentionally independent from export/publication workflows and
+targets Binder readiness directly.
+
+Phasing:
+
+1. PR-time: `repo2docker` build smoke check for this repository.
+2. Post-merge/nightly: mybinder launch smoke check with longer timeout.
+
+Launch smoke behavior:
+
+- polls Binder build/launch event stream on `mybinder.org`;
+- fails if Binder does not reach `ready` state before timeout;
+- probes configured `urlpath` (default `lab`) and fails on non-success status;
+- writes detailed logs for artifact upload.
+
+Default launch target is `LuHoo/workbooks` because Binder usage is linked from
+`LuHoo/audit-data-analysis` to that repository.
+
+Artifacts:
+
+- `generated/traceability/binder-repo2docker-smoke.log`
+- `generated/traceability/binder-launch-smoke.log`
+
 ## Publication Gating
 
 `export-workshops.yml` includes `notebook-execution-validation` as a required
