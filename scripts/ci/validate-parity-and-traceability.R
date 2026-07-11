@@ -6,6 +6,12 @@ source("scripts/traceability-metadata.R", chdir = FALSE)
 
 SCRIPT_VERSION <- "0.1.0"
 
+ensure_jsonlite <- function() {
+  if (!requireNamespace("jsonlite", quietly = TRUE)) {
+    stop("jsonlite is required for parity/traceability validation")
+  }
+}
+
 parse_args <- function(args) {
   out <- list(
     notebooks_dir = "generated/python-notebooks",
@@ -77,9 +83,134 @@ build_report <- function(configs) {
   )
 }
 
+extract_source_exercise_refs <- function(source_path) {
+  ir <- parse_support_notebook_to_ir(input_path = source_path)
+  vapply(ir$exercises, function(ex) as.character(ex$exercise_ref), character(1L))
+}
+
+extract_notebook_exercise_refs <- function(notebook_path) {
+  if (!file.exists(notebook_path)) {
+    return(character())
+  }
+
+  notebook <- jsonlite::fromJSON(notebook_path, simplifyVector = FALSE)
+  refs <- character()
+
+  for (cell in notebook$cells) {
+    if (!identical(cell$cell_type, "markdown")) {
+      next
+    }
+    lines <- unlist(cell$source)
+    for (line in lines) {
+      match <- regexec("^##\\s*Exercise\\s+([0-9]+\\.[0-9]+)", line, perl = TRUE)
+      hit <- regmatches(line, match)[[1L]]
+      if (length(hit) == 2L) {
+        refs <- c(refs, hit[[2L]])
+      }
+    }
+  }
+
+  refs
+}
+
+add_check_error <- function(check, message) {
+  check$errors <- c(check$errors, list(message))
+  check
+}
+
+run_exercise_parity <- function(config, notebooks_dir) {
+  check <- list(status = "ok", errors = list(), warnings = list())
+
+  chapter <- as.character(sub("\\..*$", "", names(config$expected_chunks)[[1L]]))
+  notebook_path <- file.path(notebooks_dir, config$id, paste0("chapter-", chapter, ".ipynb"))
+  expected_refs <- names(config$expected_chunks)
+  source_refs_all <- extract_source_exercise_refs(config$source)
+  source_refs <- source_refs_all[source_refs_all %in% expected_refs]
+  notebook_refs <- extract_notebook_exercise_refs(notebook_path)
+
+  if (!file.exists(notebook_path)) {
+    check <- add_check_error(check, paste0("Generated notebook not found: ", notebook_path))
+    check$status <- "failed"
+    return(check)
+  }
+
+  missing_expected_in_source <- setdiff(expected_refs, source_refs_all)
+  if (length(missing_expected_in_source) > 0L) {
+    check <- add_check_error(
+      check,
+      paste0("Expected exercises missing in source: ", paste(missing_expected_in_source, collapse = ", "))
+    )
+  }
+
+  unexpected_source_refs <- setdiff(source_refs_all, expected_refs)
+  if (length(unexpected_source_refs) > 0L) {
+    check$warnings <- c(
+      check$warnings,
+      list(paste0("Source has exercises outside configured export set: ", paste(unexpected_source_refs, collapse = ", ")))
+    )
+  }
+
+  source_dups <- unique(source_refs[duplicated(source_refs)])
+  if (length(source_dups) > 0L) {
+    check <- add_check_error(check, paste0("Duplicate exercises in source: ", paste(source_dups, collapse = ", ")))
+  }
+
+  notebook_dups <- unique(notebook_refs[duplicated(notebook_refs)])
+  if (length(notebook_dups) > 0L) {
+    check <- add_check_error(check, paste0("Duplicate exercises in notebook: ", paste(notebook_dups, collapse = ", ")))
+  }
+
+  if (length(expected_refs) != length(notebook_refs)) {
+    check <- add_check_error(
+      check,
+      paste0("Exercise count mismatch (expected=", length(expected_refs), ", notebook=", length(notebook_refs), ")")
+    )
+  }
+
+  missing_in_notebook <- setdiff(expected_refs, notebook_refs)
+  if (length(missing_in_notebook) > 0L) {
+    check <- add_check_error(
+      check,
+      paste0("Exercises missing in notebook: ", paste(missing_in_notebook, collapse = ", "))
+    )
+  }
+
+  unexpected_in_notebook <- setdiff(notebook_refs, expected_refs)
+  if (length(unexpected_in_notebook) > 0L) {
+    check <- add_check_error(
+      check,
+      paste0("Unexpected notebook exercises: ", paste(unexpected_in_notebook, collapse = ", "))
+    )
+  }
+
+  if (!identical(expected_refs, notebook_refs)) {
+    check <- add_check_error(
+      check,
+      paste0(
+        "Exercise order mismatch. expected=[", paste(expected_refs, collapse = ", "),
+        "] notebook=[", paste(notebook_refs, collapse = ", "), "]"
+      )
+    )
+  }
+
+  if (length(check$errors) > 0L) {
+    check$status <- "failed"
+  }
+
+  check
+}
+
 emit_summary <- function(report) {
-  cat("Parity/Traceability gate scaffold initialized.\n")
-  cat("Target workshops:", length(report$workshops), "\n")
+  cat("Parity/Traceability validation summary\n")
+  for (ws in report$workshops) {
+    parity <- ws$checks$exercise_parity
+    cat("- ", ws$workshop_id, ": exercise_parity=", parity$status, "\n", sep = "")
+    if (length(parity$errors) > 0L) {
+      for (msg in parity$errors) {
+        cat("::error title=Exercise parity::", ws$workshop_id, " :: ", msg, "\n", sep = "")
+      }
+    }
+  }
 }
 
 main <- function() {
@@ -89,16 +220,26 @@ main <- function() {
     return(invisible(NULL))
   }
 
+  ensure_jsonlite()
+
   chapter_filter <- strsplit(args$chapters, ",", fixed = TRUE)[[1]]
   chapter_filter <- trimws(chapter_filter)
 
   configs <- get_workshop_export_configs()
   configs <- Filter(function(cfg) {
-    startsWith(names(cfg$expected_chunks)[[1]], paste0(chapter_filter, "."))
+    any(startsWith(names(cfg$expected_chunks)[[1]], paste0(chapter_filter, ".")))
   }, configs)
 
   report <- build_report(configs)
   report$status <- "ok"
+
+  for (idx in seq_along(configs)) {
+    report$workshops[[idx]]$checks$exercise_parity <- run_exercise_parity(configs[[idx]], args$notebooks_dir)
+    if (identical(report$workshops[[idx]]$checks$exercise_parity$status, "failed")) {
+      report$status <- "failed"
+      report$errors <- c(report$errors, report$workshops[[idx]]$checks$exercise_parity$errors)
+    }
+  }
 
   if (!is.null(args$output_json)) {
     dir.create(dirname(args$output_json), recursive = TRUE, showWarnings = FALSE)
@@ -109,6 +250,10 @@ main <- function() {
   }
 
   emit_summary(report)
+
+  if (identical(report$status, "failed")) {
+    quit(status = 1L)
+  }
 }
 
 if (sys.nframe() == 0L) {
