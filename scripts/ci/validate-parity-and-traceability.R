@@ -342,6 +342,30 @@ extract_notebook_exercise_refs <- function(notebook_path) {
   refs
 }
 
+extract_notebook_unsupported_placeholders <- function(notebook_path) {
+  if (!file.exists(notebook_path)) {
+    return(integer())
+  }
+
+  notebook <- jsonlite::fromJSON(notebook_path, simplifyVector = FALSE)
+  indices <- integer()
+  code_index <- 0L
+  marker <- "Skipped unsupported R-heavy code block in Python export"
+
+  for (cell in notebook$cells) {
+    if (!identical(cell$cell_type, "code")) {
+      next
+    }
+    code_index <- code_index + 1L
+    text <- paste(unlist(cell$source), collapse = "")
+    if (grepl(marker, text, fixed = TRUE)) {
+      indices <- c(indices, code_index)
+    }
+  }
+
+  indices
+}
+
 add_check_error <- function(check, message) {
   check$errors <- c(check$errors, list(message))
   check
@@ -356,11 +380,13 @@ run_exercise_parity <- function(config, notebooks_dir) {
   source_refs_all <- extract_source_exercise_refs(config$source)
   source_refs <- source_refs_all[source_refs_all %in% expected_refs]
   notebook_refs <- extract_notebook_exercise_refs(notebook_path)
+  unsupported_placeholders <- extract_notebook_unsupported_placeholders(notebook_path)
 
   check$details <- list(
     expected_refs = expected_refs,
     source_refs = source_refs,
-    notebook_refs = notebook_refs
+    notebook_refs = notebook_refs,
+    unsupported_placeholder_code_cells = unsupported_placeholders
   )
 
   if (!file.exists(notebook_path)) {
@@ -424,6 +450,16 @@ run_exercise_parity <- function(config, notebooks_dir) {
       paste0(
         "Exercise order mismatch. expected=[", paste(expected_refs, collapse = ", "),
         "] notebook=[", paste(notebook_refs, collapse = ", "), "]"
+      )
+    )
+  }
+
+  if (length(unsupported_placeholders) > 0L) {
+    check <- add_check_error(
+      check,
+      paste0(
+        "Unsupported R-heavy placeholders present in generated notebook code cells: ",
+        paste(unsupported_placeholders, collapse = ", ")
       )
     )
   }
