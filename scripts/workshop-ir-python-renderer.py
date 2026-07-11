@@ -913,6 +913,48 @@ def as_code_cell(source_lines: List[str], seed: str, traceability: Dict[str, Any
     }
 
 
+def _is_simple_assignment(line: str) -> bool:
+    return bool(re.match(r"^[A-Za-z_][A-Za-z0-9_\[\]\"'\.]*\s*=", line))
+
+
+def _is_statement_line(line: str) -> bool:
+    return bool(
+        re.match(
+            r"^(import\s+|from\s+|def\s+|class\s+|for\s+|while\s+|if\s+|elif\s+|else\s*:|try\s*:|except\s+|finally\s*:|with\s+|return\b|raise\b|pass\b|break\b|continue\b|assert\b|del\b)",
+            line,
+        )
+    )
+
+
+def normalize_notebook_outputs(source_lines: List[str]) -> List[str]:
+    """Wrap multiple standalone expressions with display() so Jupyter shows each result."""
+    candidates: List[int] = []
+    for idx, line in enumerate(source_lines):
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if _is_statement_line(stripped) or _is_simple_assignment(stripped):
+            continue
+        # Skip pure function calls that are usually side-effect statements.
+        if re.match(r"^[A-Za-z_][A-Za-z0-9_\.]*\(.*\)$", stripped) and "[" not in stripped:
+            continue
+        # Standalone expression (attribute/index access or function call).
+        candidates.append(idx)
+
+    if len(candidates) <= 1:
+        return source_lines
+
+    out = list(source_lines)
+    for idx in candidates:
+        stripped = out[idx].strip()
+        if not stripped.startswith("display("):
+            out[idx] = f"display({stripped})"
+
+    if not any(line.strip() == "from IPython.display import display" for line in out):
+        out.insert(0, "from IPython.display import display")
+    return out
+
+
 def to_traceability(exercise: Dict[str, Any], block: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     base = {
         "exercise_id": exercise.get("exercise_id"),
@@ -1035,6 +1077,7 @@ def render_notebook(
                     source_lines = convert_r_heavy_block_to_python(source_lines)
                 else:
                     source_lines = normalize_r_style_code_for_python(source_lines)
+                source_lines = normalize_notebook_outputs(source_lines)
                 cells.append(
                     as_code_cell(
                         source_lines,

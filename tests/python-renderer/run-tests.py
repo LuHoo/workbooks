@@ -427,6 +427,32 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("USSteamCo[\"summer\"] = np.resize(np.array([", chapter5_code)
         self.assertNotIn("summary(USSteamCo)", chapter5_code)
 
+    def test_hypothesis_notebook_displays_multiple_eval_outputs(self):
+        out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-ch4-"))
+        subprocess.run(
+            [
+                "Rscript",
+                str(ORCHESTRATOR_SCRIPT),
+                "--config-id",
+                "hypothesis-testing",
+                "--output-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        chapter4_nb = self.read_json(out_dir / "hypothesis-testing" / "chapter-4.ipynb")
+        chapter4_code = self.collect_code_text(chapter4_nb)
+
+        self.assertIn("display(ar.eval_results[\"pps estimate\"])", chapter4_code)
+        self.assertIn("display(ar.eval_results[\"Lower bound\"])", chapter4_code)
+        self.assertIn("display(ar.eval_results[\"Upper bound\"])", chapter4_code)
+        self.assertIn("ada_set_context(\"4.10\")", chapter4_code)
+        self.assertNotIn("display(ada_set_context(\"4.10\"))", chapter4_code)
+
 
 if __name__ == "__main__":
     unittest.main()
