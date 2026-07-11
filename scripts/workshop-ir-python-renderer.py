@@ -401,7 +401,13 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bsummary\s*\(([^)]+)\)", r"\1.describe(include='all')", updated)
         def _guard_describe_call(match: re.Match[str]) -> str:
             name = match.group(1)
-            return f"({name}.describe(include='all') if '{name}' in globals() else print('Skipped describe: {name} not defined'))"
+            return (
+                f"(("
+                f"{name}.summary() if hasattr({name}, 'summary') else "
+                f"{name}.describe(include='all') if hasattr({name}, 'describe') else "
+                f"print('Skipped summary/describe: {name} has no compatible method')"
+                f") if '{name}' in globals() else print('Skipped summary/describe: {name} not defined'))"
+            )
 
         updated = re.sub(
             r"^\s*([A-Za-z_][A-Za-z0-9_]*)\.describe\(include='all'\)\s*$",
@@ -1726,9 +1732,11 @@ def normalize_notebook_outputs(source_lines: List[str]) -> List[str]:
 
     out = list(source_lines)
     for idx in candidates:
-        stripped = out[idx].strip()
+        original = out[idx]
+        stripped = original.strip()
         if not stripped.startswith("display("):
-            out[idx] = f"display({stripped})"
+            leading_ws = original[: len(original) - len(original.lstrip())]
+            out[idx] = f"{leading_ws}display({stripped})"
 
     if not any(line.strip() == "from IPython.display import display" for line in out):
         out.insert(0, "from IPython.display import display")
