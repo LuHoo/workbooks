@@ -23,12 +23,12 @@ If you start in JupyterLab and want R workshops, open the RStudio link above.
 
 ## Python Workshops (Jupyter Notebooks)
 
-- [Chapter 1 notebook: Workshop 1 (Python)](Workshop%201%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%201%20%28Python%29.ipynb)
-- [Chapter 2 notebook: Workshop 2 (Python)](Workshop%202%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%202%20%28Python%29.ipynb)
-- [Chapter 3 notebook: Workshop 3 (Python)](Workshop%203%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%203%20%28Python%29.ipynb)
-- [Chapter 4 notebook: Workshop 4 (Python)](Workshop%204%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%204%20%28Python%29.ipynb)
-- [Chapter 5 notebook: Workshop 5 (Python)](Workshop%205%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%205%20%28Python%29.ipynb)
-- [Chapter 6 notebook: Workshop 6 (Python)](Workshop%206%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%206%20%28Python%29.ipynb)
+- [Chapter 1: Probability distributions](Workshop%201%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%201%20%28Python%29.ipynb)
+- [Chapter 2: Estimating the population mean and proportion](Workshop%202%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%202%20%28Python%29.ipynb)
+- [Chapter 3: Estimation with auxiliary variables and stratification](Workshop%203%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%203%20%28Python%29.ipynb)
+- [Chapter 4: Hypothesis testing](Workshop%204%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%204%20%28Python%29.ipynb)
+- [Chapter 5: Regression analysis](Workshop%205%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%205%20%28Python%29.ipynb)
+- [Chapter 6: Goodness of fit](Workshop%206%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%206%20%28Python%29.ipynb)
 
 These R workbooks are generated from canonical support notebooks in the
 private `ada` repository. Do not edit them directly; changes are made in
