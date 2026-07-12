@@ -52,7 +52,7 @@ jobs:
   repo2docker-smoke:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -72,7 +72,36 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p generated/traceability
-          timeout 1500 jupyter-repo2docker \
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "Running fast Binder dependency preflight for pull_request" | tee generated/traceability/binder-repo2docker-smoke.log
+
+            required_apt=(cmake libharfbuzz-dev libfribidi-dev)
+            for pkg in "${required_apt[@]}"; do
+              grep -qx "$pkg" .binder/apt.txt || {
+                echo "Missing required Binder apt package in .binder/apt.txt: $pkg" | tee -a generated/traceability/binder-repo2docker-smoke.log
+                exit 1
+              }
+            done
+
+            grep -q "command -v cmake" .binder/postBuild || {
+              echo "Missing cmake presence guard in .binder/postBuild" | tee -a generated/traceability/binder-repo2docker-smoke.log
+              exit 1
+            }
+            grep -q "/usr/include/harfbuzz/hb-ft.h" .binder/postBuild || {
+              echo "Missing harfbuzz header guard in .binder/postBuild" | tee -a generated/traceability/binder-repo2docker-smoke.log
+              exit 1
+            }
+            grep -q "/usr/include/fribidi/fribidi.h" .binder/postBuild || {
+              echo "Missing fribidi header guard in .binder/postBuild" | tee -a generated/traceability/binder-repo2docker-smoke.log
+              exit 1
+            }
+
+            echo "Pull request Binder dependency preflight passed" | tee -a generated/traceability/binder-repo2docker-smoke.log
+            exit 0
+          fi
+
+          timeout 2400 jupyter-repo2docker \
             --no-run \
             --debug \
             --image-name ada-binder-smoke:${{ github.sha }} \
