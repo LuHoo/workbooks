@@ -11,6 +11,7 @@ source("scripts/workshop-ir.R", chdir = FALSE)
 source("scripts/workshop-ir-validate.R", chdir = FALSE)
 source("scripts/export-workshop-output.R", chdir = FALSE)
 source("scripts/workshop-ir-adapter.R", chdir = FALSE)
+source("scripts/notebook-manifest.R", chdir = FALSE)
 
 expect_true <- function(condition, message) {
   if (!isTRUE(condition)) {
@@ -44,6 +45,49 @@ expect_error_pattern <- function(expr, pattern, message) {
   if (!grepl(pattern, err)) {
     stop(paste0(message, " (error was: ", err, ")"))
   }
+}
+
+extract_python_override_lines <- function(lines) {
+  in_python_override <- FALSE
+  collected <- character()
+
+  for (line in lines) {
+    trimmed <- trimws(line)
+    if (grepl("^<!--\\s*ADA:BEGIN\\b", trimmed)) {
+      in_python_override <- grepl("\\blang=python\\b", trimmed)
+      next
+    }
+    if (grepl("^<!--\\s*ADA:END\\s*-->$", trimmed)) {
+      in_python_override <- FALSE
+      next
+    }
+    if (!in_python_override) {
+      next
+    }
+
+    if (identical(trimmed, "```{r}") || identical(trimmed, "```")) {
+      next
+    }
+
+    if (nzchar(trimmed)) {
+      collected <- c(collected, trimmed)
+    }
+  }
+
+  unique(collected)
+}
+
+extract_python_signature_lines <- function(lines) {
+  override_lines <- extract_python_override_lines(lines)
+  Filter(
+    function(line) {
+      grepl(
+        "ada_set_context\\(|\\batt_sample\\(|\\bhypergeom\\.|\\bnorm\\.|\\bt\\.|\\bf\\.|\\.[A-Za-z_][A-Za-z0-9_]*\\(|\\.[A-Za-z_][A-Za-z0-9_]*$",
+        line
+      )
+    },
+    override_lines
+  )
 }
 
 summarize_ir_for_golden <- function(ir) {
@@ -259,6 +303,97 @@ run_exporter_compatibility_test <- function() {
   expect_identical(ir_tex, legacy_tex, "IR parser engine output must equal legacy output")
 }
 
+run_workshop_publication_filter_test <- function() {
+  output_dir <- tempfile("workshop-publication-")
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+  export_out <- system2(
+    "Rscript",
+    c(
+      "scripts/export-workshops.R",
+      "--output-dir", output_dir,
+      "--slug", "auxiliary-variables-and-stratification",
+      "--slug", "hypothesis-testing"
+    ),
+    stdout = TRUE,
+    stderr = TRUE
+  )
+  export_status <- attr(export_out, "status")
+  if (!is.null(export_status) && export_status != 0L) {
+    stop("Workshop publication export failed: ", paste(export_out, collapse = "\n"))
+  }
+
+  target_slugs <- c("auxiliary-variables-and-stratification", "hypothesis-testing")
+  target_notebooks <- Filter(function(notebook) notebook$slug %in% target_slugs, notebooks)
+
+  for (notebook in target_notebooks) {
+    generated_path <- file.path(output_dir, basename(notebook$output))
+    expect_true(file.exists(generated_path), paste0("Expected generated output: ", generated_path))
+
+    generated_lines <- readLines(generated_path, warn = FALSE)
+    expect_true(
+      !any(grepl("ADA:BEGIN lang=python", generated_lines, fixed = TRUE)),
+      paste0("Published Rmd leaked ADA:BEGIN lang=python in ", generated_path)
+    )
+    expect_true(
+      !any(grepl("ADA:END", generated_lines, fixed = TRUE)),
+      paste0("Published Rmd leaked ADA:END in ", generated_path)
+    )
+    expect_true(
+      any(grepl("^```\\{r", generated_lines)),
+      paste0("Expected executable R chunks in generated workshop ", generated_path)
+    )
+
+    source_lines <- readLines(notebook$source, warn = FALSE)
+    python_override_lines <- extract_python_signature_lines(source_lines)
+    leaked_lines <- Filter(
+      function(py_line) any(grepl(py_line, generated_lines, fixed = TRUE)),
+      python_override_lines
+    )
+    expect_identical(
+      length(leaked_lines),
+      0L,
+      paste0(
+        "Published Rmd leaked python override statements in ", generated_path,
+        ": ", paste(leaked_lines, collapse = " | ")
+      )
+    )
+  }
+}
+
+run_python_export_override_smoke_test <- function() {
+  output_dir <- tempfile("python-notebooks-")
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+  render_out <- system2(
+    "Rscript",
+    c(
+      "scripts/export-python-notebooks.R",
+      "--config-id", "hypothesis-testing",
+      "--output-dir", output_dir
+    ),
+    stdout = TRUE,
+    stderr = TRUE
+  )
+  render_status <- attr(render_out, "status")
+  if (!is.null(render_status) && render_status != 0L) {
+    stop("Python notebook export failed: ", paste(render_out, collapse = "\n"))
+  }
+
+  notebook_path <- file.path(output_dir, "hypothesis-testing", "chapter-4.ipynb")
+  expect_true(file.exists(notebook_path), paste0("Expected generated notebook: ", notebook_path))
+
+  notebook_text <- paste(readLines(notebook_path, warn = FALSE), collapse = "\n")
+  expect_true(
+    grepl("att_sample\\(", notebook_text),
+    "Generated Python notebook lost expected python override call att_sample(...)"
+  )
+  expect_true(
+    grepl("ada_set_context", notebook_text),
+    "Generated Python notebook lost expected python override context bootstrap"
+  )
+}
+
 main <- function() {
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
     stop("jsonlite is required for workshop IR tests")
@@ -271,6 +406,8 @@ main <- function() {
   run_directive_validation_tests()
   run_round_trip_consistency_test()
   run_exporter_compatibility_test()
+  run_workshop_publication_filter_test()
+  run_python_export_override_smoke_test()
 
   cat("All workshop IR tests passed.\n")
 }
