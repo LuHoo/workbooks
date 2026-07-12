@@ -1,6 +1,18 @@
 # Workbooks for Audit Data Analysis
 
-Interactive workshop notebooks accompanying Volume 1 of the book:
+Interactive workshop notebooks accompanying Volume 1 of the book.
+
+## Launch on Binder
+
+Choose the interface that matches your workshop type:
+
+- R workshops (R Markdown): [Open Binder in RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+- Python workshops (Jupyter notebooks): [Open Binder in JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/)
+
+If you start in RStudio and want Python notebooks, open the JupyterLab link above.
+If you start in JupyterLab and want R workshops, open the RStudio link above.
+
+## R Workshops (R Markdown)
 
 - [Chapter 1: Probability distributions](Probability%20distributions%20workshop.Rmd)
 - [Chapter 2: Estimating the population mean and proportion](Estimating%20the%20population%20mean%20and%20proportion%20workshop.Rmd)
@@ -9,9 +21,19 @@ Interactive workshop notebooks accompanying Volume 1 of the book:
 - [Chapter 5: Regression analysis](Regression%20analysis%20workshop.Rmd)
 - [Chapter 6: Goodness of fit](Goodness%20of%20fit%20workshop.Rmd)
 
+## Python Workshops (Jupyter Notebooks)
+
+- [Chapter 1 notebook: Workshop 1 (Python)](Workshop%201%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%201%20%28Python%29.ipynb)
+- [Chapter 2 notebook: Workshop 2 (Python)](Workshop%202%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%202%20%28Python%29.ipynb)
+- [Chapter 3 notebook: Workshop 3 (Python)](Workshop%203%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%203%20%28Python%29.ipynb)
+- [Chapter 4 notebook: Workshop 4 (Python)](Workshop%204%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%204%20%28Python%29.ipynb)
+- [Chapter 5 notebook: Workshop 5 (Python)](Workshop%205%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%205%20%28Python%29.ipynb)
+- [Chapter 6 notebook: Workshop 6 (Python)](Workshop%206%20(Python).ipynb) - [Launch in Binder JupyterLab](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/Workshop%206%20%28Python%29.ipynb)
+
 These R workbooks are generated from canonical support notebooks in the
 private `ada` repository. Do not edit them directly; changes are made in
 `ada` and exported here so that the book-support notebooks and Binder
 workbooks cannot drift apart.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+[![Binder (RStudio)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+[![Binder (JupyterLab)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/)
