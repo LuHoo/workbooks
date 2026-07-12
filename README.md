@@ -250,6 +250,20 @@ CI execution workflow:
 
 - `.github/workflows/notebook-execution-validation.yml`
 
+Local-first validation quickstart:
+
+- Combined local gate first:
+  - `bash scripts/ci/local-notebook-validation-gate.sh`
+- For standalone Python validation commands, prefer the project venv interpreter:
+  - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks`
+  - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
+  - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
+
+Hosted Binder run policy:
+
+- Run full hosted Binder validation only after local-first checks are green.
+- Trigger full hosted Binder checks deliberately via manual workflow dispatch (`workflow_dispatch`) instead of on every development push.
+
 Publication gating:
 
 - `.github/workflows/export-workshops.yml` now requires notebook execution
