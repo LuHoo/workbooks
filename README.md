@@ -14,12 +14,12 @@ If you start in JupyterLab and want R workshops, open the RStudio link above.
 
 ## R Workshops (R Markdown)
 
-- [Chapter 1: Probability distributions](Probability%20distributions%20workshop.Rmd)
-- [Chapter 2: Estimating the population mean and proportion](Estimating%20the%20population%20mean%20and%20proportion%20workshop.Rmd)
-- [Chapter 3: Estimation with auxiliary variables and stratification](Estimation%20with%20auxiliary%20variables%20and%20stratification%20workshop.Rmd)
-- [Chapter 4: Hypothesis testing](Hypothesis%20testing%20workshop.Rmd)
-- [Chapter 5: Regression analysis](Regression%20analysis%20workshop.Rmd)
-- [Chapter 6: Goodness of fit](Goodness%20of%20fit%20workshop.Rmd)
+- [Chapter 1: Probability distributions](Probability%20distributions%20workshop.Rmd) - [Launch in Binder RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+- [Chapter 2: Estimating the population mean and proportion](Estimating%20the%20population%20mean%20and%20proportion%20workshop.Rmd) - [Launch in Binder RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+- [Chapter 3: Estimation with auxiliary variables and stratification](Estimation%20with%20auxiliary%20variables%20and%20stratification%20workshop.Rmd) - [Launch in Binder RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+- [Chapter 4: Hypothesis testing](Hypothesis%20testing%20workshop.Rmd) - [Launch in Binder RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+- [Chapter 5: Regression analysis](Regression%20analysis%20workshop.Rmd) - [Launch in Binder RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
+- [Chapter 6: Goodness of fit](Goodness%20of%20fit%20workshop.Rmd) - [Launch in Binder RStudio](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
 
 ## Python Workshops (Jupyter Notebooks)
 
