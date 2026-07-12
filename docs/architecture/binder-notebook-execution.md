@@ -55,6 +55,25 @@ Installed by `.binder/install.R` and mirrored in CI install steps:
   - `LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418`
   - `LuHoo/aicpa@4a49d0357544eb22ed3314005af2f82b3cf0f53a`
 
+### System dependencies (`.binder/apt.txt`)
+
+Installed by repo2docker before R/Python package installation.
+
+Current Binder system packages:
+
+- `libcurl4-openssl-dev`, `libssl-dev`, `libxml2-dev`, `libgit2-dev`
+  - needed by common R network/XML/git dependency chains.
+- `cmake`
+  - required by `nloptr` source builds (`CMake was not found on the PATH` when absent).
+- `libharfbuzz-dev`, `libfribidi-dev`
+  - required by `textshaping`/`systemfonts` source builds (`hb-ft.h` and related shaping headers).
+
+Maintenance guidance:
+
+- keep OS-level Binder deps in `.binder/apt.txt` as the single source of truth;
+- avoid introducing a parallel Dockerfile-based package install path unless Binder architecture changes;
+- when adding an R/Python package that compiles native code, first document and add required OS headers/tools in `.binder/apt.txt`, then mirror rationale here.
+
 ### Python dependencies
 
 Pinned in `.binder/requirements.txt`:
@@ -130,6 +149,8 @@ Artifacts:
 
 - `generated/traceability/binder-repo2docker-smoke.log`
 - `generated/traceability/binder-launch-smoke.log`
+
+`postBuild` includes lightweight dependency assertions for critical system tools/headers (including `cmake`, harfbuzz, and fribidi) so missing Binder apt dependencies fail fast with actionable messages.
 
 ## Publication Gating
 

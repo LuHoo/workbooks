@@ -2,3 +2,6 @@ libcurl4-openssl-dev
 libssl-dev
 libxml2-dev
 libgit2-dev
+cmake
+libharfbuzz-dev
+libfribidi-dev

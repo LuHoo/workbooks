@@ -237,6 +237,15 @@ Binder configuration lives in `.binder/` and is designed to support both:
 - R workshop notebooks (`notebooks/workshops/*.Rmd`)
 - generated Python notebooks (`generated/python-notebooks/**/*.ipynb`)
 
+Binder system packages are managed in `.binder/apt.txt`.
+
+For native R package build paths, maintain these required OS dependencies there:
+
+- `cmake` (required by `nloptr` source builds)
+- `libharfbuzz-dev` and `libfribidi-dev` (required by `textshaping`/`systemfonts` headers)
+
+See `docs/architecture/binder-notebook-execution.md` for full dependency flow and maintainer guidance.
+
 CI execution workflow:
 
 - `.github/workflows/notebook-execution-validation.yml`
