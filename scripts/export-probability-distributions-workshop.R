@@ -3,7 +3,7 @@
 source("scripts/export-workshop-output.R", chdir = FALSE)
 source("scripts/workshop-export-config.R", chdir = FALSE)
 
-export_workshop_by_config_id("probability-distributions")
+export_workshop_by_config_id("probability-distributions", parser_engine = "ir")
 
 config <- resolve_workshop_export_config_by_id("probability-distributions")
 if (is.null(config)) {
