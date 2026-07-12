@@ -204,6 +204,7 @@ Architecture and mapping details:
 
 - `docs/architecture/workshop-ir-python-renderer.md`
 - `docs/architecture/fsaudit-rpy2-bridge.md`
+- `docs/architecture/workshop-model-renderer-separation.md`
 
 Renderer tests:
 

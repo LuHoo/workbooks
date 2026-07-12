@@ -11,6 +11,9 @@ source("scripts/workshop-ir.R", chdir = FALSE)
 source("scripts/workshop-ir-validate.R", chdir = FALSE)
 source("scripts/export-workshop-output.R", chdir = FALSE)
 source("scripts/workshop-ir-adapter.R", chdir = FALSE)
+source("scripts/workshop-model.R", chdir = FALSE)
+source("scripts/workshop-renderer-latex.R", chdir = FALSE)
+source("scripts/workshop-renderer.R", chdir = FALSE)
 source("scripts/notebook-manifest.R", chdir = FALSE)
 
 expect_true <- function(condition, message) {
@@ -303,6 +306,58 @@ run_exporter_compatibility_test <- function() {
   expect_identical(ir_tex, legacy_tex, "IR parser engine output must equal legacy output")
 }
 
+run_workshop_model_boundary_test <- function() {
+  config <- resolve_workshop_export_config_by_id("probability-distributions")
+  model <- build_workshop_model(input_path = config$source, config = config, strict = TRUE)
+
+  expect_identical(class(model), "workshop_model", "Expected workshop_model class")
+  expect_identical(model$schema_version, WORKSHOP_IR_SCHEMA_VERSION, "Workshop model schema version mismatch")
+  expect_true(length(model$exercises) > 0L, "Workshop model should include exercises")
+
+  first_exercise <- model$exercises[[1L]]
+  expect_true(!is.null(first_exercise$blocks), "Workshop model exercise should include blocks")
+}
+
+run_renderer_boundary_test <- function() {
+  config <- resolve_workshop_export_config_by_id("probability-distributions")
+  model <- build_workshop_model(input_path = config$source, config = config, strict = TRUE)
+  all_segments <- build_all_segments_from_ir(ir = model$ir, config = config, source_file = config$source)
+
+  renderer <- create_workshop_renderer("latex")
+  rendered_lines <- render_workshop_chunk(
+    renderer = renderer,
+    all_segments = all_segments,
+    config = config,
+    target_exercise = "1.1",
+    target_chunk_index = 1L
+  )
+
+  tmp_rendered <- tempfile("rendered-latex-", fileext = ".tex")
+  writeLines(rendered_lines, tmp_rendered, useBytes = TRUE)
+  rendered_lines <- readLines(tmp_rendered, warn = FALSE)
+
+  tmp_expected <- tempfile("expected-latex-", fileext = "-exercise-1-1-1.tex")
+  expected_target <- file.path(dirname(tmp_expected), "exercise-1-1-1.tex")
+  export_out <- system2(
+    "Rscript",
+    c(
+      "scripts/export-workshop-output.R",
+      "--input", config$source,
+      "--output", expected_target,
+      "--parser-engine", "ir"
+    ),
+    stdout = TRUE,
+    stderr = TRUE
+  )
+  export_status <- attr(export_out, "status")
+  if (!is.null(export_status) && export_status != 0L) {
+    stop("Renderer boundary expectation export failed: ", paste(export_out, collapse = "\n"))
+  }
+
+  expected_lines <- readLines(expected_target, warn = FALSE)
+  expect_identical(rendered_lines, expected_lines, "Renderer boundary output must match exporter output")
+}
+
 run_workshop_publication_filter_test <- function() {
   output_dir <- tempfile("workshop-publication-")
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
@@ -406,6 +461,8 @@ main <- function() {
   run_directive_validation_tests()
   run_round_trip_consistency_test()
   run_exporter_compatibility_test()
+  run_workshop_model_boundary_test()
+  run_renderer_boundary_test()
   run_workshop_publication_filter_test()
   run_python_export_override_smoke_test()
 

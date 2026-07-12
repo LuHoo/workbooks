@@ -2,6 +2,9 @@
 
 source("scripts/workshop-export-config.R", chdir = FALSE)
 source("scripts/workshop-ir-adapter.R", chdir = FALSE)
+source("scripts/workshop-model.R", chdir = FALSE)
+source("scripts/workshop-renderer-latex.R", chdir = FALSE)
+source("scripts/workshop-renderer.R", chdir = FALSE)
 source("scripts/traceability-metadata.R", chdir = FALSE)
 
 # Static-analysis hint: function is provided by sourced config script.
@@ -428,7 +431,8 @@ export_single_chunk <- function(
   }
 
   all_segments <- if (identical(parser_engine, "ir")) {
-    load_ir_segments(input_path = config$source, config = config)
+    model <- build_workshop_model(input_path = config$source, config = config)
+    build_all_segments_from_ir(ir = model$ir, config = config, source_file = config$source)
   } else {
     source_lines <- read_source_lines(config$source)
     validate_supported_constructs(source_lines, config$source)
@@ -445,32 +449,14 @@ export_single_chunk <- function(
     }
     segments
   }
-  segments <- all_segments[[target$exercise]]
-
-  if (target$chunk_index < 1L || target$chunk_index > length(segments$chunks)) {
-    stop(
-      "Chunk index ", target$chunk_index,
-      " out of bounds for exercise ", target$exercise,
-      " (has ", length(segments$chunks), " chunk(s))."
-    )
-  }
-
-  chunk_env <- prepare_chunk_environment(
-    all_segments,
-    config,
-    target$exercise,
-    target$chunk_index
+  renderer <- create_workshop_renderer("latex")
+  generated <- render_workshop_chunk(
+    renderer = renderer,
+    all_segments = all_segments,
+    config = config,
+    target_exercise = target$exercise,
+    target_chunk_index = target$chunk_index
   )
-  body <- render_r_chunk_to_latex(segments$chunks[[target$chunk_index]], chunk_env)
-  prose_before <- if (target$chunk_index == 1L) {
-    markdown_to_latex(segments$prose[[target$chunk_index]], chunk_env, config$source)
-  } else {
-    character()
-  }
-  prose_after <- markdown_to_latex(segments$prose[[target$chunk_index + 1L]], chunk_env, config$source)
-
-  generated <- compose_tex_document(config$source, prose_before, body, prose_after)
-  validate_generated_output(generated)
   write_output(generated, output_path)
   message("Generated ", output_path)
 }
