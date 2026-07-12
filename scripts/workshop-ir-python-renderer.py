@@ -302,17 +302,7 @@ def make_fsaudit_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
     source_file = str(ir.get("source", {}).get("file_path", ""))
     lines = [
-        "from pathlib import Path",
-        "import sys",
         "import pandas as pd",
-        "",
-        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
-        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
-        "        if str(_candidate) not in sys.path:",
-        "            sys.path.insert(0, str(_candidate))",
-        "        break",
-        "else:",
-        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
         "",
         "from ada_fsaudit_bridge import (",
         "    att_sample,",
@@ -627,17 +617,6 @@ def make_population_estimation_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, A
     workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
     source_file = str(ir.get("source", {}).get("file_path", ""))
     lines = [
-        "from pathlib import Path",
-        "import sys",
-        "",
-        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
-        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
-        "        if str(_candidate) not in sys.path:",
-        "            sys.path.insert(0, str(_candidate))",
-        "        break",
-        "else:",
-        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
-        "",
         "from ada_fsaudit_bridge import load_dataset, lower_bound, upper_bound",
         "",
         "salaries = load_dataset('salaries')",
@@ -699,17 +678,6 @@ def make_regression_analysis_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any
     workshop_id = str(ir.get("chapter", {}).get("workshop_id", ""))
     source_file = str(ir.get("source", {}).get("file_path", ""))
     lines = [
-        "from pathlib import Path",
-        "import sys",
-        "",
-        "for _candidate in [Path.cwd(), *Path.cwd().parents]:",
-        "    if (_candidate / 'ada_fsaudit_bridge').exists():",
-        "        if str(_candidate) not in sys.path:",
-        "            sys.path.insert(0, str(_candidate))",
-        "        break",
-        "else:",
-        "    raise ModuleNotFoundError('Could not locate ada_fsaudit_bridge from the current notebook working directory.')",
-        "",
         "from ada_fsaudit_bridge import load_dataset",
         "import numpy as np",
         "import pandas as pd",

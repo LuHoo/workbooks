@@ -7,7 +7,7 @@ R --version | head -n 1
 
 python - <<'PY'
 import importlib
-for module in ["nbclient", "nbformat", "rpy2", "pandas", "scipy"]:
+for module in ["nbclient", "nbformat", "rpy2", "pandas", "scipy", "ada_fsaudit_bridge"]:
     importlib.import_module(module)
 print("Python notebook dependencies import successfully")
 PY
