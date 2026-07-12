@@ -118,6 +118,7 @@ Phasing:
 Launch smoke behavior:
 
 - polls Binder build/launch event stream on `mybinder.org`;
+- sends `Accept: text/event-stream` on `/build` requests (required by current BinderHub deployments);
 - fails if Binder does not reach `ready` state before timeout;
 - probes configured `urlpath` (default `lab`) and fails on non-success status;
 - writes detailed logs for artifact upload.
@@ -135,6 +136,11 @@ Artifacts:
 `export-workshops.yml` includes `notebook-execution-validation` as a required
 upstream job for publication/export. If notebook execution fails, publication is
 blocked.
+
+During export publication, generated Python notebooks are copied from
+`generated/python-notebooks/**/chapter-<n>.ipynb` to the Binder-facing
+`notebooks/workshops` repository root using the naming convention
+`Workshop <n> (Python).ipynb`.
 
 ## Contributor Guidance
 
