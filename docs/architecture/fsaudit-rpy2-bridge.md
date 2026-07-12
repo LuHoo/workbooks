@@ -89,8 +89,7 @@ The Python renderer injects a shared bootstrap cell at the top of generated note
 
 That bootstrap cell:
 
-- locates the repository root dynamically;
-- adds the repository root to `sys.path` when needed;
+- imports `ada_fsaudit_bridge` as an installed Python package;
 - imports the bridge API and `scipy.stats.hypergeom`;
 - defines `ada_set_context(exercise_ref)` for exercise-scoped diagnostics;
 - calls `configure_environment()` once.
@@ -193,7 +192,15 @@ If FSaudit is installed in a non-default R library, configure that path through:
 
 ### `Could not locate ada_fsaudit_bridge`
 
-Run the notebook from within the repository workspace or ensure the repository root is available in `sys.path`.
+Install the bridge package in the active environment.
+
+For local development from this repository root:
+
+```bash
+python -m pip install -e .
+```
+
+For Binder publication targets, ensure `.binder/requirements.txt` includes `-e .` and the bridge package source directory is present in the Binder repo.
 
 ### `FSaudit R package is not installed`
 

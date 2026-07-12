@@ -234,6 +234,9 @@ class RendererTestCase(unittest.TestCase):
                 for forbidden in ["library(FSaudit)", "<-", "RNGkind(", "phyper("]:
                     self.assertNotIn(forbidden, code_text)
 
+                for forbidden_bootstrap in ["Path.cwd()", "sys.path.insert(", "Could not locate ada_fsaudit_bridge"]:
+                    self.assertNotIn(forbidden_bootstrap, code_text)
+
     def test_python_exporter_uses_generated_notebook_metadata(self):
         out_dir = Path(tempfile.mkdtemp(prefix="python-notebooks-export-"))
         subprocess.run(
