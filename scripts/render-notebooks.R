@@ -8,6 +8,10 @@ if (!mode %in% c("workshops", "canonical", "all")) {
   stop("Use workshops, canonical, or all")
 }
 
+if (mode %in% c("workshops", "all")) {
+  export_workshops()
+}
+
 for (notebook in notebooks) {
   if (mode %in% c("canonical", "all")) {
     rmarkdown::render(notebook$source, output_format = "html_document")
