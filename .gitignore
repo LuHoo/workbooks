@@ -34,3 +34,6 @@ __pycache__/
 # Local Python virtual environments
 .venv/
 venv/
+
+# Generated Python notebook build artifacts
+generated/python-notebooks/
