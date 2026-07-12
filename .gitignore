@@ -30,3 +30,7 @@ notebooks/**/*_files/
 # Python cache artifacts
 __pycache__/
 *.pyc
+
+# Local Python virtual environments
+.venv/
+venv/

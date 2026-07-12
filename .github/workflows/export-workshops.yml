@@ -6,7 +6,13 @@ on:
     paths:
       - "notebooks/support/**/support.Rmd"
       - "scripts/export-workshops.R"
+      - "scripts/export-python-notebooks.R"
+      - "scripts/publish-python-notebooks.R"
       - "scripts/notebook-manifest.R"
+      - "scripts/workshop-export-config.R"
+      - "scripts/workshop-ir.R"
+      - "scripts/workshop-ir-validate.R"
+      - "scripts/workshop-ir-python-renderer.py"
       - ".github/workflows/export-workshops.yml"
 
   workflow_dispatch:
@@ -156,15 +162,44 @@ jobs:
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
       - name: Configure Git identity
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Install R export dependencies
+        run: |
+          Rscript -e "install.packages('jsonlite', repos='https://cloud.r-project.org')"
 
       - name: Export workshops
-        run: Rscript scripts/export-workshops.R
-
-      - name: Configure Git identity
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          Rscript scripts/export-workshops.R
+          Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks
+          Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops
+
+      - name: Commit and publish workbooks
+        run: |
+          git submodule foreach 'git status --short'
+
+          cd notebooks/workshops
+          git add .
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "Update generated workbooks from ada"
+            git push origin HEAD:main
+          else
+            echo "No changes in workbooks."
+          fi
+
+          cd ../..
+          if ! git diff --quiet notebooks/workshops; then
+            git add notebooks/workshops
+            git commit -m "Update workbooks submodule"
+            git push
+          else
+            echo "No submodule pointer change."
+          fi
