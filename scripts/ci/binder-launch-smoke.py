@@ -64,6 +64,11 @@ def binder_build_stream_url(target_repo: str, target_ref: str, urlpath: str) -> 
     return f"https://mybinder.org/build/gh/{target_repo}/{encoded_ref}?urlpath={encoded_urlpath}"
 
 
+def binder_stream_headers() -> dict[str, str]:
+    # BinderHub requires explicit SSE negotiation for /build requests.
+    return {"Accept": "text/event-stream"}
+
+
 def stream_until_ready(args: argparse.Namespace, log_lines: list[str]) -> BinderReadyPayload:
     url = binder_build_stream_url(args.target_repo, args.target_ref, args.urlpath)
     append_log(log_lines, f"Connecting to Binder event stream: {url}")
@@ -71,9 +76,17 @@ def stream_until_ready(args: argparse.Namespace, log_lines: list[str]) -> Binder
     start = time.monotonic()
     ready_payload: BinderReadyPayload | None = None
 
-    with requests.get(url, stream=True, timeout=(15, args.event_timeout_seconds)) as resp:
-        resp.raise_for_status()
+    with requests.get(
+        url,
+        stream=True,
+        timeout=(15, args.event_timeout_seconds),
+        headers=binder_stream_headers(),
+    ) as resp:
         append_log(log_lines, f"Binder stream HTTP status: {resp.status_code}")
+
+        content_type = resp.headers.get("content-type", "")
+        if resp.status_code >= 400 and "text/event-stream" not in content_type:
+            resp.raise_for_status()
 
         for raw_line in resp.iter_lines(decode_unicode=True):
             elapsed = time.monotonic() - start
@@ -113,6 +126,11 @@ def stream_until_ready(args: argparse.Namespace, log_lines: list[str]) -> Binder
                     token=(str(payload.get("token")).strip() if payload.get("token") is not None else None),
                 )
                 break
+
+        if ready_payload is None and resp.status_code >= 400:
+            raise RuntimeError(
+                f"Binder stream request failed with HTTP {resp.status_code} for {url}"
+            )
 
     if ready_payload is None or not ready_payload.base_url:
         raise RuntimeError("Binder stream ended before providing a ready URL.")

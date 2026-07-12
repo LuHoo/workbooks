@@ -118,6 +118,7 @@ Phasing:
 Launch smoke behavior:
 
 - polls Binder build/launch event stream on `mybinder.org`;
+- sends `Accept: text/event-stream` on `/build` requests (required by current BinderHub deployments);
 - fails if Binder does not reach `ready` state before timeout;
 - probes configured `urlpath` (default `lab`) and fails on non-success status;
 - writes detailed logs for artifact upload.
