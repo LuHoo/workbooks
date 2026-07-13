@@ -2,6 +2,17 @@
 
 source("scripts/workshop-export-config.R", chdir = FALSE)
 
+resolve_python_bin <- function() {
+  python_bin <- Sys.which("python3")
+  if (!nzchar(python_bin)) {
+    python_bin <- Sys.which("python")
+  }
+  if (!nzchar(python_bin)) {
+    stop("Python executable not found. Install python3 or add python to PATH.")
+  }
+  python_bin
+}
+
 ensure_jsonlite <- function() {
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
     stop("jsonlite is required for published notebook provenance checks")
@@ -93,8 +104,28 @@ print_help <- function() {
   )
 }
 
+validate_notebook_hygiene <- function(input_dir, python_bin = resolve_python_bin()) {
+  guardrail_script <- file.path("scripts", "ci", "check-generated-python-notebooks.py")
+  if (!file.exists(guardrail_script)) {
+    stop("Missing guardrail script: ", guardrail_script)
+  }
+
+  message("Validating generated Python notebook hygiene before publication")
+  status <- system2(
+    python_bin,
+    args = c(guardrail_script, "--input-dir", input_dir)
+  )
+  if (!identical(status, 0L)) {
+    stop(
+      "Python notebook hygiene validation failed for ", input_dir,
+      ". Publication aborted before any notebook copy/sync."
+    )
+  }
+}
+
 publish_python_notebooks <- function(input_dir, output_dir) {
   ensure_jsonlite()
+  validate_notebook_hygiene(input_dir)
 
   configs <- get_workshop_export_configs()
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)

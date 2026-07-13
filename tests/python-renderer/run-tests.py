@@ -19,6 +19,48 @@ GOLDEN_NOTEBOOK = REPO_ROOT / "tests" / "python-renderer" / "fixtures" / "direct
 
 
 class RendererTestCase(unittest.TestCase):
+    def make_notebook(self, cells):
+        notebook_path = Path(tempfile.mkstemp(prefix="guardrail-nb-", suffix=".ipynb")[1])
+        notebook_path.write_text(
+            json.dumps(
+                {
+                    "nbformat": 4,
+                    "nbformat_minor": 5,
+                    "metadata": {
+                        "ada_renderer": {
+                            "target_language": "python",
+                            "workshop_id": "test-workshop",
+                            "chapter_number": 99,
+                            "source_file": "notebooks/support/test-workshop/support.Rmd",
+                        }
+                    },
+                    "cells": cells,
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return notebook_path
+
+    def run_strict_guardrail(self, notebook_paths):
+        out_dir = Path(tempfile.mkdtemp(prefix="guardrail-dir-"))
+        for notebook_path in notebook_paths:
+            target = out_dir / notebook_path.name
+            target.write_bytes(notebook_path.read_bytes())
+
+        return subprocess.run(
+            [
+                "python3",
+                str(STRICT_GUARDRAIL_SCRIPT),
+                "--input-dir",
+                str(out_dir),
+            ],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
     def parse_ir(self, source_rmd: Path) -> Path:
         tmp_ir = Path(tempfile.mkstemp(prefix="ir-", suffix=".json")[1])
         source_arg = str(source_rmd)
@@ -113,6 +155,93 @@ class RendererTestCase(unittest.TestCase):
         self.assertTrue(any("x = 1" in src for src in code_cells))
         self.assertFalse(any("x <- 1" in src for src in code_cells))
         self.assertTrue(any("fs_audit()" in src for src in code_cells))
+
+    def test_strict_guardrail_accepts_clean_distribution_notebook(self):
+        notebook_path = self.make_notebook(
+            [
+                {
+                    "cell_type": "code",
+                    "metadata": {},
+                    "execution_count": None,
+                    "outputs": [],
+                    "source": ["print('clean')\n"],
+                }
+            ]
+        )
+
+        proc = self.run_strict_guardrail([notebook_path])
+
+        self.assertEqual(proc.returncode, 0)
+        self.assertIn("passed", proc.stdout)
+
+    def test_strict_guardrail_rejects_outputs(self):
+        notebook_path = self.make_notebook(
+            [
+                {
+                    "cell_type": "code",
+                    "metadata": {},
+                    "execution_count": None,
+                    "outputs": [{"output_type": "stream", "name": "stdout", "text": ["hello\n"]}],
+                    "source": ["print('dirty')\n"],
+                }
+            ]
+        )
+
+        proc = self.run_strict_guardrail([notebook_path])
+
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("Notebook:", proc.stdout)
+        self.assertIn("Cell 1: outputs present (1 outputs)", proc.stdout)
+
+    def test_strict_guardrail_rejects_execution_counts(self):
+        notebook_path = self.make_notebook(
+            [
+                {
+                    "cell_type": "code",
+                    "metadata": {},
+                    "execution_count": 12,
+                    "outputs": [],
+                    "source": ["1 + 1\n"],
+                }
+            ]
+        )
+
+        proc = self.run_strict_guardrail([notebook_path])
+
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("Cell 1: execution_count is 12", proc.stdout)
+
+    def test_strict_guardrail_reports_multiple_notebooks_and_both_violations(self):
+        first = self.make_notebook(
+            [
+                {
+                    "cell_type": "code",
+                    "metadata": {},
+                    "execution_count": 8,
+                    "outputs": [{"output_type": "execute_result", "data": {"text/plain": ["8"]}, "metadata": {}, "execution_count": 8}],
+                    "source": ["4 + 4\n"],
+                }
+            ]
+        )
+        second = self.make_notebook(
+            [
+                {
+                    "cell_type": "code",
+                    "metadata": {},
+                    "execution_count": None,
+                    "outputs": [],
+                    "source": ["library(dplyr)\n"],
+                }
+            ]
+        )
+
+        proc = self.run_strict_guardrail([first, second])
+
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("Cell 1: execution_count is 8", proc.stdout)
+        self.assertIn("Cell 1: outputs present (1 outputs)", proc.stdout)
+        self.assertIn("raw R-only construct matched", proc.stdout)
+        self.assertIn("Validation failed: 2 notebooks", proc.stdout)
 
     def test_renderer_is_deterministic_for_same_ir(self):
         source = REPO_ROOT / "notebooks" / "support" / "probability-distributions" / "support.Rmd"

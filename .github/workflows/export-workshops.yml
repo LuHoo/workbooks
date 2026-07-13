@@ -180,6 +180,14 @@ jobs:
         run: |
           Rscript scripts/export-workshops.R
           Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks
+
+      - name: Validate Python notebook hygiene before publication
+        run: |
+          python3 scripts/ci/check-generated-python-notebooks.py \
+            --input-dir generated/python-notebooks
+
+      - name: Publish Python notebooks
+        run: |
           Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops
 
       - name: Commit and publish workbooks
