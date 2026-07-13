@@ -253,10 +253,16 @@ Local-first validation quickstart:
 
 - Combined local gate first:
   - `bash scripts/ci/local-notebook-validation-gate.sh`
+- Deterministic generation verification (two isolated runs, inventory/hash/semantic checks):
+	- `bash scripts/ci/verify-deterministic-notebook-generation.sh`
 - For standalone Python validation commands, prefer the project venv interpreter:
   - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks`
   - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
   - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
+
+Architecture details and deterministic contract:
+
+- `docs/architecture/deterministic-notebook-generation.md`
 
 Hosted Binder run policy:
 
