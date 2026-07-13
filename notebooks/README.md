@@ -3,7 +3,7 @@
 Each Volume 1 chapter has one authored R notebook at
 `support/<semantic-chapter>/support.Rmd`. These canonical notebooks contain both the workshop exercises and
 the private support calculations used while maintaining the book. Chapter
-numbers live in `scripts/notebook-manifest.R`; filenames do not change when a
+numbers and publication names live in `scripts/workshop-export-config.R`; filenames do not change when a
 volume is reorganized.
 
 Material enclosed by the exact marker lines

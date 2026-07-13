@@ -34,7 +34,6 @@ Note on path naming:
 - Canonical source layer is authoritative:
   - `notebooks/support/**/support.Rmd`
   - `scripts/workshop-export-config.R`
-  - `scripts/notebook-manifest.R`
   - `metadata/traceability/*.yml`
 - Generated artifacts are rebuildable and must not be repaired manually.
 - Publication is synchronization of validated generated artifacts, not authoring.
@@ -45,7 +44,7 @@ Note on path naming:
 | Recovery surface | Authoritative upstream source | Authoritative producer | Canonical regeneration command | Expected output location | Validation command | Committed | Temporary | Published to another repo |
 |---|---|---|---|---|---|---|---|---|
 | Workshop IR snapshots | `notebooks/support/**/support.Rmd` + config | `scripts/workshop-ir.R` | `Rscript scripts/workshop-ir.R --input <support.Rmd> --output <ir.json>` | temp path or `generated/ir/` | `Rscript scripts/workshop-ir-validate.R --input <support.Rmd> --config-id <id>` | usually no | no | no |
-| Generated student Rmd notebooks | support notebooks + `scripts/notebook-manifest.R` | `scripts/export-workshops.R` | `Rscript scripts/export-workshops.R [--slug <slug>] [--output-dir <dir>]` | default `notebooks/workshops/*.Rmd` or chosen output dir | directive leakage checks via deterministic verifier; optional render smoke | yes (in submodule target) | no | yes (`workbooks`) |
+| Generated student Rmd notebooks | support notebooks + `scripts/workshop-export-config.R` | `scripts/export-workshops.R` | `Rscript scripts/export-workshops.R [--slug <slug>] [--output-dir <dir>]` | default `notebooks/workshops/*.Rmd` or chosen output dir | directive leakage checks via deterministic verifier; optional render smoke | yes (in submodule target) | no | yes (`workbooks`) |
 | Generated distribution ipynb notebooks | support notebooks + workshop config + IR renderer | `scripts/export-python-notebooks.R` -> `scripts/workshop-ir-python-renderer.py` | `Rscript scripts/export-python-notebooks.R [--config-id <id>] --output-dir <dir>` | `generated/python-notebooks/**/chapter-*.ipynb` | `python3 scripts/ci/check-generated-python-notebooks.py --input-dir <dir>` | no | no | copied onward |
 | Published Python notebook names/paths | generated ipynb staging | `scripts/publish-python-notebooks.R` | `Rscript scripts/publish-python-notebooks.R --input-dir <generated> --output-dir <target>` | `notebooks/workshops/Workshop <n> (Python).ipynb` | metadata/provenance validation is built into publish script | yes (submodule) | no | yes (`workbooks`) |
 | Temporary executed Python notebooks | generated ipynb staging | `scripts/ci/execute-generated-python-notebooks.py` | `python3 scripts/ci/execute-generated-python-notebooks.py --input-dir <dir> --artifacts-dir <dir>` | `generated/notebook-execution-artifacts/executed/` | inspect `python-notebook-execution-report.json` | no | yes | no |

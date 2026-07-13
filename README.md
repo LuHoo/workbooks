@@ -35,7 +35,7 @@ Example:
 
 ### Notes
 
-- Workshop-specific settings are isolated in `scripts/workshop-export-config.R`.
+- Workshop-specific settings and publication naming metadata are isolated in `scripts/workshop-export-config.R`.
 - The exporter fails loudly for unsupported constructs and malformed marker blocks.
 - Chapter scripts remain as thin compatibility wrappers that delegate to the
 	canonical exporter via configuration:
@@ -116,6 +116,7 @@ Unsupported or malformed structures fail with explicit errors.
 ### Extension points (approved path)
 
 - Add new workshop/chapter mappings in `scripts/workshop-export-config.R`.
+- `scripts/notebook-manifest.R` is a derived compatibility layer and should not be edited by hand.
 - Use `export_workshop_by_config_id(...)` for wrapper-level batch export.
 - Add new validations in Stage 7 if they do not alter current output semantics.
 - Add CLI options only when they preserve default behavior.
