@@ -2,6 +2,55 @@
 
 source("scripts/workshop-export-config.R", chdir = FALSE)
 
+ensure_jsonlite <- function() {
+  if (!requireNamespace("jsonlite", quietly = TRUE)) {
+    stop("jsonlite is required for published notebook provenance checks")
+  }
+}
+
+validate_generated_notebook_provenance <- function(notebook_path) {
+  notebook <- jsonlite::fromJSON(notebook_path, simplifyVector = FALSE)
+  metadata <- notebook$metadata
+  if (is.null(metadata) || !is.list(metadata)) {
+    stop("Missing notebook metadata in generated notebook: ", notebook_path)
+  }
+
+  ada_renderer <- metadata$ada_renderer
+  if (is.null(ada_renderer) || !is.list(ada_renderer)) {
+    stop(
+      "Missing metadata.ada_renderer in generated notebook: ", notebook_path,
+      ". Regenerate with scripts/export-python-notebooks.R before publishing."
+    )
+  }
+
+  required_fields <- c("chapter_number", "workshop_id", "source_file", "target_language")
+  missing_fields <- required_fields[!vapply(required_fields, function(field) {
+    !is.null(ada_renderer[[field]]) && nzchar(as.character(ada_renderer[[field]]))
+  }, logical(1L))]
+
+  if (length(missing_fields) > 0L) {
+    stop(
+      "Missing required metadata.ada_renderer fields in ", notebook_path,
+      ": ", paste(missing_fields, collapse = ", ")
+    )
+  }
+
+  if (!identical(as.character(ada_renderer$target_language), "python")) {
+    stop(
+      "Invalid metadata.ada_renderer.target_language in ", notebook_path,
+      ": expected 'python'"
+    )
+  }
+
+  source_file <- as.character(ada_renderer$source_file)
+  if (grepl("^/", source_file)) {
+    stop("Absolute source_file path is not allowed in notebook metadata: ", notebook_path)
+  }
+  if (grepl("/tmp/|/var/folders/", source_file)) {
+    stop("Environment-specific source_file path is not allowed in notebook metadata: ", notebook_path)
+  }
+}
+
 parse_args <- function(args) {
   out <- list(
     input_dir = "generated/python-notebooks",
@@ -60,6 +109,8 @@ extract_chapter_number <- function(config) {
 }
 
 publish_python_notebooks <- function(input_dir, output_dir) {
+  ensure_jsonlite()
+
   configs <- get_workshop_export_configs()
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -74,6 +125,8 @@ publish_python_notebooks <- function(input_dir, output_dir) {
     if (!file.exists(input_path)) {
       stop("Missing generated notebook for config '", config$id, "': ", input_path)
     }
+
+    validate_generated_notebook_provenance(input_path)
 
     if (!isTRUE(file.copy(input_path, output_path, overwrite = TRUE))) {
       stop("Failed to publish notebook: ", input_path, " -> ", output_path)

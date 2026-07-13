@@ -1,5 +1,7 @@
 # Workshop IR Language-Aware Directives
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This specification defines language-aware authoring directives for `support.Rmd`
 files and their representation in workshop IR.
 

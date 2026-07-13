@@ -1,6 +1,9 @@
 # Workshop IR Validation Model
 
-This document specifies validation behavior for workshop-ir/1.0.0.
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
+This document specifies validation behavior for workshop-ir/1.0.0 and
+workshop-ir/1.1.0.
 Implementation entry point: scripts/workshop-ir-validate.R
 
 ## Validation goals
@@ -36,7 +39,7 @@ Category values:
 
 ## Structural validation rules
 
-- schema_version must equal workshop-ir/1.0.0.
+- schema_version must be one of accepted versions (`workshop-ir/1.0.0`, `workshop-ir/1.1.0`).
 - required top-level fields must be present.
 - source.line_count must be positive.
 - exercise ordinals must be contiguous and start at 1.

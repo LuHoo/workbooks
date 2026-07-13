@@ -1,5 +1,7 @@
 # Binder and Notebook Execution Validation
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This document describes the Binder environment and CI execution pipeline for
 R workshops and generated Python notebooks.
 

@@ -1,5 +1,7 @@
 # Workshop IR Migration and Rollback Strategy
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This document defines how to operate the workshop IR path now that IR is the
 canonical default exporter backend.
 
