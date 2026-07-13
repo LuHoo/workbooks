@@ -3,6 +3,10 @@
 **Status:** Proposed
 **Related issues:** #108, #89, #90, Reference System (future issue)
 
+Implementation overview for current-state architecture:
+
+- `docs/architecture/notebook-generation-and-publication.md`
+
 ---
 
 # Purpose

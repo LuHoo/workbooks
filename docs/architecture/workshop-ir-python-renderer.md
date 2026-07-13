@@ -1,5 +1,7 @@
 # Workshop IR Python Notebook Renderer
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This document specifies the deterministic IR-to-notebook renderer introduced for
 Python workshop output generation.
 

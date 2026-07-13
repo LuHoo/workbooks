@@ -1,5 +1,7 @@
 # FSAudit rpy2 Bridge
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This document describes the reusable Python interoperability layer for FSAudit-backed workshop notebooks.
 
 ## Goals

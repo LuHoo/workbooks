@@ -1,5 +1,7 @@
 # Parity and Traceability Quality Gates
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 ## Purpose
 
 Issue #100 introduces CI-enforced parity and traceability gates that complement existing runtime notebook execution checks.
