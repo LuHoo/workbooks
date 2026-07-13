@@ -20,49 +20,71 @@ def parse_args() -> argparse.Namespace:
         description="Export a Python workshop notebook to a LaTeX snippet."
     )
     parser.add_argument("--input", required=True, help="Path to input .ipynb")
-    parser.add_argument("--output", required=True, help="Path to output .tex")
+    parser.add_argument("--output", help="Path to output .tex")
+    parser.add_argument(
+        "--chunk-output-dir",
+        help=(
+            "Directory for per-exercise chunk TeX output "
+            "(exercise-<chapter>-<exercise>-<chunk>.tex)."
+        ),
+    )
+    parser.add_argument(
+        "--expected-chunks",
+        help=(
+            "Comma-separated exercise chunk counts, for example "
+            "'1.1:3,1.2:1'. Required with --chunk-output-dir."
+        ),
+    )
+    parser.add_argument(
+        "--fallback-output-dir",
+        help=(
+            "Optional directory with existing workshop chunk files to reuse "
+            "light-blue output blocks when notebook cells have no outputs."
+        ),
+    )
     parser.add_argument(
         "--expect-generated-metadata",
         action="store_true",
         help="Require generated-notebook metadata. Use for IR-rendered notebooks.",
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if not args.output and not args.chunk_output_dir:
+        parser.error("Provide either --output or --chunk-output-dir.")
+    if args.chunk_output_dir and not args.expected_chunks:
+        parser.error("--expected-chunks is required with --chunk-output-dir.")
+    return args
 
 
 def escape_latex(text: str) -> str:
-    text = text.replace("\\", r"\textbackslash{}")
-    text = text.replace("%", r"\%")
-    text = text.replace("&", r"\&")
-    text = text.replace("_", r"\_")
-    text = text.replace("#", r"\#")
+    text = re.sub(r"(?<!\\)%", r"\\%", text)
+    text = re.sub(r"(?<!\\)&", r"\\&", text)
+    text = re.sub(r"(?<!\\)_", r"\\_", text)
+    text = re.sub(r"(?<!\\)#", r"\\#", text)
     return text
 
 
 def convert_inline(text: str) -> str:
+    token_re = re.compile(r"`[^`]*`|\$[^$]*\$|\\\([^)]*\\\)|\\\[[^]]*\\\]|\*[^*]+\*")
     parts = []
-    i = 0
-    while i < len(text):
-        if text[i] == "`":
-            j = text.find("`", i + 1)
-            if j == -1:
-                parts.append(escape_latex(text[i:]))
-                break
-            parts.append(r"\ttblue{" + escape_latex(text[i + 1 : j]) + "}")
-            i = j + 1
-            continue
-        if text[i] == "*":
-            j = text.find("*", i + 1)
-            if j == -1:
-                parts.append(escape_latex(text[i:]))
-                break
-            parts.append(r"\emph{" + escape_latex(text[i + 1 : j]) + "}")
-            i = j + 1
-            continue
-        j = i
-        while j < len(text) and text[j] not in "`*":
-            j += 1
-        parts.append(escape_latex(text[i:j]))
-        i = j
+    cursor = 0
+
+    for match in token_re.finditer(text):
+        start, end = match.span()
+        if start > cursor:
+            parts.append(escape_latex(text[cursor:start]))
+        token = text[start:end]
+        if token.startswith("`"):
+            parts.append(r"\ttblue{" + escape_latex(token[1:-1]) + "}")
+        elif token.startswith("$") or token.startswith(r"\(") or token.startswith(r"\["):
+            parts.append(token)
+        else:
+            parts.append(r"\emph{" + escape_latex(token[1:-1]) + "}")
+        cursor = end
+
+    if cursor < len(text):
+        parts.append(escape_latex(text[cursor:]))
+
     return "".join(parts)
 
 
@@ -134,21 +156,304 @@ def collect_output_text(outputs: list[dict]) -> list[str]:
     return lines
 
 
+def _leading_spaces(line: str) -> int:
+    return len(line) - len(line.lstrip(" "))
+
+
+def strip_internal_workflow_lines(source_lines: list[str]) -> list[str]:
+    filtered: list[str] = []
+    skipping_set_context_def = False
+    def_indent = 0
+
+    for line in source_lines:
+        stripped = line.strip()
+
+        # Internal context sync helper should not be shown to students.
+        if not skipping_set_context_def and re.match(r"^\s*def\s+ada_set_context\s*\(", line):
+            skipping_set_context_def = True
+            def_indent = _leading_spaces(line)
+            continue
+
+        if skipping_set_context_def:
+            if not stripped:
+                continue
+            current_indent = _leading_spaces(line)
+            if current_indent > def_indent:
+                continue
+            skipping_set_context_def = False
+
+        # Context calls are workflow-internal and should not appear in book output.
+        if re.match(r"^\s*ada_set_context\s*\(.*\)\s*;?\s*$", line):
+            continue
+
+        filtered.append(line)
+
+    return filtered
+
+
 def render_code_cell(source_lines: list[str], output_lines: list[str]) -> list[str]:
+    source_lines = strip_internal_workflow_lines(source_lines)
     out = [r"\begin{Verbatim}[commandchars=\\\{\}]"]
     for line in source_lines:
         if line.strip():
-            out.append(r"\textcolor{KPMG_blue}{" + line + "}")
+            out.append(r"\textcolor{ada_blue}{" + line + "}")
         else:
             out.append("")
     if output_lines:
         for line in output_lines:
             if line.strip():
-                out.append(r"\textcolor{KPMG_light_blue}{" + line + "}")
+                out.append(r"\textcolor{ada_light_blue}{" + line + "}")
             else:
                 out.append("")
     out.append(r"\end{Verbatim}")
     return out
+
+
+def parse_expected_chunks(spec: str) -> dict[str, int]:
+    parsed: dict[str, int] = {}
+    for entry in spec.split(","):
+        item = entry.strip()
+        if not item:
+            continue
+        if ":" not in item:
+            raise ValueError(
+                f"Invalid --expected-chunks entry '{item}'. Expected format <exercise>:<count>."
+            )
+        exercise_ref, count_text = item.split(":", 1)
+        exercise_ref = exercise_ref.strip()
+        count_text = count_text.strip()
+        if not exercise_ref or not count_text:
+            raise ValueError(
+                f"Invalid --expected-chunks entry '{item}'. Expected format <exercise>:<count>."
+            )
+        count = int(count_text)
+        if count < 1:
+            raise ValueError(f"Expected chunk count must be >= 1 for exercise '{exercise_ref}'.")
+        parsed[exercise_ref] = count
+    if not parsed:
+        raise ValueError("--expected-chunks produced no exercise entries.")
+    return parsed
+
+
+def split_exercise_heading(lines: list[str]) -> tuple[str, str, list[str]] | None:
+    for idx, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        match = re.match(r"^##\s+Exercise\s+([0-9]+\.[0-9]+)(?:\.|\s+)(.*)$", stripped)
+        if not match:
+            return None
+        exercise_ref = match.group(1)
+        title = match.group(2).strip()
+        remaining = lines[idx + 1 :]
+        return exercise_ref, title, remaining
+    return None
+
+
+def markdown_lines_to_workshop_latex(lines: list[str]) -> list[str]:
+    out: list[str] = []
+    in_display_math = False
+    paragraph_start = True
+    for line in lines:
+        stripped = line.strip()
+        if stripped in {"$$", r"\[", r"\]"}:
+            out.append(line)
+            in_display_math = not in_display_math
+            if not in_display_math:
+                paragraph_start = True
+            continue
+        if in_display_math:
+            out.append(line)
+            continue
+        if not stripped:
+            out.append("")
+            paragraph_start = True
+            continue
+        prefix = r"\noindent " if paragraph_start else ""
+        out.append(prefix + convert_inline(line))
+        paragraph_start = False
+    return out
+
+
+def render_verbatim_block(lines: list[str], color: str) -> list[str]:
+    if not lines:
+        return []
+    out = [rf"\begin{{Verbatim}}[breaklines=true,formatcom=\color{{{color}}}]"]
+    out.extend(lines)
+    out.append(r"\end{Verbatim}")
+    return out
+
+
+def collect_fallback_output_lines(chunk_tex_path: Path) -> list[str]:
+    if not chunk_tex_path.exists():
+        return []
+
+    lines = chunk_tex_path.read_text(encoding="utf-8").splitlines()
+    output_blocks: list[list[str]] = []
+    in_output = False
+    current: list[str] = []
+
+    for line in lines:
+        if line.startswith(r"\begin{Verbatim}") and "ada_light_blue" in line:
+            in_output = True
+            current = []
+            continue
+        if in_output and line.strip() == r"\end{Verbatim}":
+            output_blocks.append(current)
+            in_output = False
+            current = []
+            continue
+        if in_output:
+            current.append(line)
+
+    flattened: list[str] = []
+    for block in output_blocks:
+        if flattened and block:
+            flattened.append("")
+        flattened.extend(block)
+    while flattened and not flattened[-1].strip():
+        flattened.pop()
+    return flattened
+
+
+def finalize_exercise(exercise: dict | None) -> None:
+    if exercise is None:
+        return
+    chunks = exercise["chunks"]
+    pending = exercise["pending_prose"]
+    if chunks:
+        chunks[-1]["prose_after"] = pending
+
+
+def collect_exercise_chunks(notebook: dict) -> dict[str, list[dict]]:
+    exercises: dict[str, list[dict]] = {}
+    current: dict | None = None
+
+    for cell in notebook.get("cells", []):
+        cell_type = cell.get("cell_type")
+        source_lines = normalize_source(cell.get("source", []))
+
+        if cell_type == "markdown":
+            heading = split_exercise_heading(source_lines)
+            if heading is not None:
+                finalize_exercise(current)
+                exercise_ref, _title, remaining_lines = heading
+                current = {
+                    "exercise_ref": exercise_ref,
+                    "chunks": [],
+                    "pending_prose": markdown_lines_to_workshop_latex(remaining_lines),
+                }
+                exercises[exercise_ref] = current["chunks"]
+                continue
+
+            if current is not None:
+                current["pending_prose"].extend(markdown_lines_to_workshop_latex(source_lines))
+            continue
+
+        if cell_type != "code" or current is None:
+            continue
+
+        code_lines = strip_internal_workflow_lines(source_lines)
+        chunk = {
+            "source": code_lines,
+            "output": collect_output_text(cell.get("outputs", [])),
+            "prose_before": current["pending_prose"],
+            "prose_after": [],
+        }
+        current["chunks"].append(chunk)
+        current["pending_prose"] = []
+
+    finalize_exercise(current)
+    return exercises
+
+
+def compose_chunk_tex(source_ref: str, prose_before: list[str], body_blocks: list[str], prose_after: list[str]) -> list[str]:
+    header = [
+        "% -----------------------------------------------------------------------------",
+        "% This file is automatically generated.",
+        "% Do not edit manually.",
+        f"% Source: {source_ref}",
+        "% -----------------------------------------------------------------------------",
+        "",
+        "",
+    ]
+    compact_wrapper = [
+        r"\par\addvspace{\topsep}",
+        r"\begingroup",
+        r"\fvset{listparameters={%",
+        r"  \setlength{\topsep}{0pt}%",
+        r"  \setlength{\partopsep}{0pt}%",
+        r"  \setlength{\parsep}{0pt}%",
+        r"  \setlength{\itemsep}{0pt}%",
+        r"}}",
+    ]
+    compact_wrapper.extend(body_blocks)
+    compact_wrapper.extend([
+        r"\endgroup",
+        r"\par\addvspace{\topsep}",
+    ])
+
+    generated = header + prose_before + [""] + compact_wrapper + prose_after
+    while generated and not generated[-1].strip():
+        generated.pop()
+    return generated
+
+
+def chunk_output_path(chunk_output_dir: Path, exercise_ref: str, chunk_index: int) -> Path:
+    exercise_slug = exercise_ref.replace(".", "-")
+    return chunk_output_dir / f"exercise-{exercise_slug}-{chunk_index}.tex"
+
+
+def export_notebook_chunks(
+    input_path: Path,
+    chunk_output_dir: Path,
+    expected_chunks: dict[str, int],
+    fallback_output_dir: Path | None,
+    expect_generated_metadata: bool,
+) -> None:
+    notebook = load_notebook(input_path)
+    validate_notebook_shape(notebook, input_path)
+    source_ref, _ada_renderer = metadata_export_context(
+        notebook,
+        input_path,
+        expect_generated_metadata,
+    )
+
+    chunks_by_exercise = collect_exercise_chunks(notebook)
+
+    for exercise_ref, expected_count in expected_chunks.items():
+        actual_chunks = chunks_by_exercise.get(exercise_ref, [])
+        if len(actual_chunks) != expected_count:
+            raise ExportValidationError(
+                stage="validate-chunks",
+                notebook_path=input_path,
+                issue=(
+                    f"exercise {exercise_ref} has {len(actual_chunks)} code chunks; "
+                    f"expected {expected_count}"
+                ),
+                remediation="Regenerate notebook and verify exercise/chunk mapping metadata and directives.",
+            )
+
+        for idx, chunk in enumerate(actual_chunks, start=1):
+            output_lines = chunk["output"]
+            if not output_lines and fallback_output_dir is not None:
+                fallback_path = chunk_output_path(fallback_output_dir, exercise_ref, idx)
+                output_lines = collect_fallback_output_lines(fallback_path)
+
+            body = []
+            body.extend(render_verbatim_block(chunk["source"], "ada_blue"))
+            if output_lines:
+                body.extend(render_verbatim_block(output_lines, "ada_light_blue"))
+
+            output_lines_tex = compose_chunk_tex(
+                source_ref=source_ref,
+                prose_before=chunk["prose_before"],
+                body_blocks=body,
+                prose_after=chunk["prose_after"],
+            )
+            output_path = chunk_output_path(chunk_output_dir, exercise_ref, idx)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text("\n".join(output_lines_tex) + "\n", encoding="utf-8")
 
 
 def load_notebook(input_path: Path) -> dict:
@@ -295,16 +600,28 @@ def export_notebook(input_path: Path, output_path: Path, expect_generated_metada
 def main() -> None:
     args = parse_args()
     input_path = Path(args.input)
-    output_path = Path(args.output)
 
     if not input_path.exists():
         raise FileNotFoundError(f"Input notebook does not exist: {input_path}")
 
-    export_notebook(
-        input_path,
-        output_path,
-        expect_generated_metadata=args.expect_generated_metadata,
-    )
+    if args.output:
+        output_path = Path(args.output)
+        export_notebook(
+            input_path,
+            output_path,
+            expect_generated_metadata=args.expect_generated_metadata,
+        )
+
+    if args.chunk_output_dir:
+        expected_chunks = parse_expected_chunks(args.expected_chunks)
+        fallback_dir = Path(args.fallback_output_dir) if args.fallback_output_dir else None
+        export_notebook_chunks(
+            input_path=input_path,
+            chunk_output_dir=Path(args.chunk_output_dir),
+            expected_chunks=expected_chunks,
+            fallback_output_dir=fallback_dir,
+            expect_generated_metadata=args.expect_generated_metadata,
+        )
 
 
 if __name__ == "__main__":
