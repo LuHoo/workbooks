@@ -23,7 +23,7 @@ parse_cli_args <- function(args) {
   out <- list(
     input = NULL,
     output = NULL,
-    parser_engine = "legacy",
+    parser_engine = "ir",
     traceability_dir = "metadata/traceability",
     enable_traceability = TRUE,
     traceability_strict = FALSE
@@ -61,12 +61,14 @@ parse_cli_args <- function(args) {
   out
 }
 
+parse_export_cli_args <- parse_cli_args
+
 print_help <- function() {
   cat(
     "Usage:\n",
     "  Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <output.tex> [options]\n\n",
     "Options:\n",
-    "  --parser-engine <legacy|ir>   Parser backend (default: legacy).\n\n",
+    "  --parser-engine <legacy|ir>   Parser backend (default: ir).\n\n",
     "  --traceability-dir <path>   Path to traceability metadata directory (default: metadata/traceability)\n",
     "  --traceability-strict       Fail if metadata directory exists but required files are missing\n",
     "  --no-traceability           Skip traceability metadata loading\n\n",
@@ -181,182 +183,6 @@ extract_exercise_segments <- function(lines, exercise, expected_chunk_count, sou
   list(chunks = chunks, prose = prose)
 }
 
-# Stage 4: Transform R code and output.
-verbatim_hook <- function(color) {
-  function(x, options) {
-    text <- paste(x, collapse = "\n")
-    text <- gsub("[[:blank:]]+(?=\\n|$)", "", text, perl = TRUE)
-    if (!length(x) || !nzchar(text)) return("")
-    paste0(
-      "\\begin{Verbatim}[breaklines=true,formatcom=\\color{", color, "}]\n",
-      text,
-      if (grepl("\\n$", text)) "" else "\n",
-      "\\end{Verbatim}\n"
-    )
-  }
-}
-
-render_r_chunk_to_latex <- function(chunk_lines, envir) {
-  old_hooks <- knitr::knit_hooks$get(c("source", "output"))
-  on.exit(knitr::knit_hooks$set(source = old_hooks$source, output = old_hooks$output), add = TRUE)
-  knitr::knit_hooks$set(
-    source = verbatim_hook("ada_blue"),
-    output = verbatim_hook("ada_light_blue")
-  )
-
-  options(width = 65)
-  body <- knitr::knit(text = chunk_lines, quiet = TRUE, envir = envir)
-  sub("\\n+$", "", body)
-}
-
-# Stage 5: Transform Markdown/LaTeX.
-escape_latex <- function(text) {
-  # Normalize accidental repeated escapes (e.g., \\_ -> \_).
-  text <- gsub("(\\\\\\\\)+([_%&#])", "\\\\\\\\\\2", text, perl = TRUE)
-  # Escape only symbols that are not already escaped.
-  text <- gsub("(?<!\\\\)%", "\\\\%", text, perl = TRUE)
-  text <- gsub("(?<!\\\\)&", "\\\\&", text, perl = TRUE)
-  text <- gsub("(?<!\\\\)_", "\\\\_", text, perl = TRUE)
-  gsub("(?<!\\\\)#", "\\\\#", text, perl = TRUE)
-}
-
-evaluate_inline_r <- function(text, inline_env, source_file) {
-  inline_r <- gregexpr("`r [^`]+`", text, perl = TRUE)[[1L]]
-  while (!identical(inline_r[[1L]], -1L)) {
-    token_length <- attr(inline_r, "match.length")[[1L]]
-    token <- substr(text, inline_r[[1L]], inline_r[[1L]] + token_length - 1L)
-    expression <- substr(token, 4L, nchar(token) - 1L)
-    value <- tryCatch(
-      paste(eval(parse(text = expression), envir = inline_env), collapse = " "),
-      error = function(e) {
-        stop(
-          "Failed to evaluate inline R expression '", expression,
-          "' in ", source_file, ": ", conditionMessage(e)
-        )
-      }
-    )
-    text <- sub("`r [^`]+`", value, text, perl = TRUE)
-    inline_r <- gregexpr("`r [^`]+`", text, perl = TRUE)[[1L]]
-  }
-  text
-}
-
-convert_inline <- function(text, inline_env, source_file) {
-  text <- evaluate_inline_r(text, inline_env, source_file)
-  pattern <- "`[^`]*`|\\$[^$]*\\$|\\*[^*]+\\*"
-  matches <- gregexpr(pattern, text, perl = TRUE)[[1L]]
-  if (identical(matches[[1L]], -1L)) return(escape_latex(text))
-
-  lengths <- attr(matches, "match.length")
-  result <- character()
-  cursor <- 1L
-  for (i in seq_along(matches)) {
-    start <- matches[[i]]
-    if (start > cursor) result <- c(result, escape_latex(substr(text, cursor, start - 1L)))
-    token <- substr(text, start, start + lengths[[i]] - 1L)
-    if (startsWith(token, "`")) {
-      result <- c(result, paste0("\\ttblue{", escape_latex(substr(token, 2L, nchar(token) - 1L)), "}"))
-    } else if (startsWith(token, "$")) {
-      result <- c(result, token)
-    } else {
-      result <- c(result, paste0("\\emph{", escape_latex(substr(token, 2L, nchar(token) - 1L)), "}"))
-    }
-    cursor <- start + lengths[[i]]
-  }
-  if (cursor <= nchar(text)) result <- c(result, escape_latex(substr(text, cursor, nchar(text))))
-  paste0(result, collapse = "")
-}
-
-markdown_to_latex <- function(lines, inline_env, source_file) {
-  in_display_math <- FALSE
-  paragraph_start <- TRUE
-  converted <- character(length(lines))
-  for (i in seq_along(lines)) {
-    trimmed <- trimws(lines[[i]])
-    if (identical(trimmed, "$$") || identical(trimmed, "\\[") || identical(trimmed, "\\]")) {
-      converted[[i]] <- lines[[i]]
-      in_display_math <- !in_display_math
-      if (!in_display_math) paragraph_start <- TRUE
-    } else if (in_display_math || !nzchar(trimmed)) {
-      converted[[i]] <- if (nzchar(trimmed)) lines[[i]] else ""
-      if (!in_display_math && !nzchar(trimmed)) paragraph_start <- TRUE
-    } else {
-      converted[[i]] <- paste0(
-        if (paragraph_start) "\\noindent " else "",
-        convert_inline(lines[[i]], inline_env, source_file)
-      )
-      paragraph_start <- FALSE
-    }
-  }
-  converted
-}
-
-prepare_chunk_environment <- function(all_segments, config, target_exercise, target_chunk_index) {
-  env <- .GlobalEnv
-
-  for (exercise in names(config$expected_chunks)) {
-    segments <- all_segments[[exercise]]
-    if (is.null(segments)) {
-      stop("Missing parsed segments for configured exercise ", exercise)
-    }
-    chunk_count <- length(segments$chunks)
-    max_chunk <- chunk_count
-    if (identical(exercise, target_exercise)) {
-      max_chunk <- target_chunk_index - 1L
-    }
-
-    if (max_chunk >= 1L) {
-      for (i in seq_len(max_chunk)) {
-        knitr::knit(text = segments$chunks[[i]], quiet = TRUE, envir = env)
-      }
-    }
-
-    if (identical(exercise, target_exercise)) {
-      break
-    }
-  }
-
-  env
-}
-
-# Stage 6: Apply spacing and formatting rules.
-compose_tex_document <- function(source_file, prose_before, body, prose_after) {
-  header <- c(
-    "% -----------------------------------------------------------------------------",
-    "% This file is automatically generated.",
-    "% Do not edit manually.",
-    paste0("% Source: ", source_file),
-    "% -----------------------------------------------------------------------------",
-    ""
-  )
-  compact_wrapper <- c(
-    "\\par\\addvspace{\\topsep}",
-    "\\begingroup",
-    "\\fvset{listparameters={%",
-    "  \\setlength{\\topsep}{0pt}%",
-    "  \\setlength{\\partopsep}{0pt}%",
-    "  \\setlength{\\parsep}{0pt}%",
-    "  \\setlength{\\itemsep}{0pt}%",
-    "}}",
-    body,
-    "\\endgroup",
-    "\\par\\addvspace{\\topsep}"
-  )
-  generated <- c(header, prose_before, compact_wrapper, prose_after)
-  while (length(generated) && !nzchar(generated[[length(generated)]])) {
-    generated <- head(generated, -1L)
-  }
-  generated
-}
-
-# Stage 7: Validate generated output.
-validate_generated_output <- function(lines) {
-  if (!length(lines)) stop("Generated output is empty.")
-  if (!any(grepl("^\\\\begin\\{Verbatim\\}", lines))) {
-    stop("Generated output does not contain a Verbatim block.")
-  }
-}
-
 # Stage 8: Write the final .tex file.
 write_output <- function(lines, output_path) {
   dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
@@ -422,7 +248,7 @@ export_single_chunk <- function(
     )
   }
 
-  parser_engine <- "legacy"
+  parser_engine <- "ir"
   if (!is.null(getOption("ada.workshop.parser.engine"))) {
     parser_engine <- getOption("ada.workshop.parser.engine")
   }
@@ -469,7 +295,7 @@ build_output_path <- function(output_dir, exercise, chunk_index) {
 export_workshop_by_config <- function(
   config,
   output_dir = "generated/workshop-output",
-  parser_engine = "legacy",
+  parser_engine = "ir",
   traceability_dir = "metadata/traceability",
   enable_traceability = TRUE,
   traceability_strict = FALSE
@@ -510,7 +336,7 @@ export_workshop_by_config <- function(
 export_workshop_by_config_id <- function(
   config_id,
   output_dir = "generated/workshop-output",
-  parser_engine = "legacy",
+  parser_engine = "ir",
   traceability_dir = "metadata/traceability",
   enable_traceability = TRUE,
   traceability_strict = FALSE

@@ -2,16 +2,15 @@
 
 Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
 
-This document defines how to adopt the workshop IR path safely while preserving
-current exporter behavior by default.
+This document defines how to operate the workshop IR path now that IR is the
+canonical default exporter backend.
 
 ## Current default behavior
 
-The canonical exporter defaults to the legacy parser engine.
+The canonical exporter defaults to the IR parser engine.
 
-- Command behavior remains unchanged unless `--parser-engine ir` is explicitly
-  provided.
-- Existing wrapper scripts continue to use legacy behavior by default.
+- Command behavior uses IR unless an explicit parser override is provided.
+- Wrapper scripts call IR explicitly for architectural clarity.
 
 ## Adapter-first migration approach
 
@@ -27,46 +26,29 @@ Flow during migration:
 
 This allows parser evolution without changing renderer behavior.
 
-## Recommended rollout phases
+## Cutover completion
 
-1. Foundation
+Cutover is complete:
 
-- Land schema, parser, validation, and adapter with legacy default.
-- Keep all production commands on legacy parser.
-
-2. Shadow verification
-
-- Run side-by-side checks in CI or local scripts:
-  - legacy parser output
-  - IR parser output
-- Enforce no-diff expectations for selected representative chunks.
-
-3. Controlled opt-in
-
-- Enable `--parser-engine ir` for selected workflows/chapters.
-- Expand coverage as confidence grows.
-
-4. Default switch (future issue)
-
-- Switch default parser only after sustained compatibility evidence.
-- Keep legacy path available for rollback until deprecation decision.
+- IR is default for CLI and exporter APIs.
+- Full export-set equivalence (legacy vs IR) is regression-tested.
+- Legacy remains available only through explicit parser selection.
 
 ## Rollback plan
 
 Immediate rollback requires no code revert:
 
-- Stop passing `--parser-engine ir`.
-- Use default legacy parser behavior.
+- Pass `--parser-engine legacy` explicitly.
 
 If optional integrations were added to automation, rollback means:
 
-- revert pipeline settings to `legacy` parser engine;
+- set pipeline settings to explicit `legacy` parser engine;
 - rerun compatibility test suite to confirm baseline.
 
 ## Operational guardrails
 
 - Keep parser errors actionable and file/line-specific.
-- Run `tests/workshop-ir/run-tests.R` before enabling IR path broadly.
+- Run `tests/workshop-ir/run-tests.R` to validate IR default behavior and legacy rollback compatibility.
 - Preserve output contract for generated workshop chunks.
 - Treat parser-engine changes as operational toggles, not renderer changes.
 

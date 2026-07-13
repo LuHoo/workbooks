@@ -26,6 +26,11 @@ build_exercise_segments_from_ir <- function(ir, exercise_ref, expected_chunk_cou
       next
     }
 
+    context <- block$authoring_context
+    if (!is.null(context$lang_scope) && !identical(context$lang_scope, "shared")) {
+      next
+    }
+
     if (identical(block$block_type, "narrative")) {
       pending_prose <- c(pending_prose, block$content$narrative_lines)
     } else if (identical(block$block_type, "code")) {
