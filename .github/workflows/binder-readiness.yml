@@ -2,6 +2,10 @@ name: Binder Readiness
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
     paths:
       - ".binder/**"
       - "scripts/ci/binder-launch-smoke.py"

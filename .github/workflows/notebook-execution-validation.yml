@@ -15,6 +15,10 @@ on:
       - ".binder/**"
       - ".github/workflows/notebook-execution-validation.yml"
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
     paths:
       - "notebooks/support/**/support.Rmd"
       - "notebooks/workshops/**"
