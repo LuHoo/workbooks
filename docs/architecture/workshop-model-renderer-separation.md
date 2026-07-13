@@ -1,5 +1,7 @@
 # Workshop Model and Renderer Separation
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This document describes the architectural separation introduced for workshop export so that parsing and semantic interpretation are reusable across renderers.
 
 ## Current Architecture

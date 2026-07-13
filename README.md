@@ -1,6 +1,12 @@
 # audit-data-analysis
 Audit Data Analysis
 
+## Architecture overview
+
+Canonical architecture overview:
+
+- `docs/architecture/notebook-generation-and-publication.md`
+
 ## Workshop Exporter CLI
 
 Workshop exercise `.tex` chunks are generated through a single command-line entry point:

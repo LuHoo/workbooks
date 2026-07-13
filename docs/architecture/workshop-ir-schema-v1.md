@@ -1,5 +1,7 @@
 # Workshop IR Schema v1
 
+Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
+
 This document defines the canonical intermediate representation (IR) for
 chapter workshop sources under notebooks/support/**/support.Rmd.
 
