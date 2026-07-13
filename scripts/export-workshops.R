@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-source("scripts/notebook-manifest.R", chdir = FALSE)
+source("scripts/workshop-export-config.R", chdir = FALSE)
 
 normalize_line <- function(line) {
   trimws(line)
@@ -101,6 +101,7 @@ build_output_path <- function(notebook, output_dir = NULL) {
 }
 
 resolve_notebooks <- function(slugs = NULL) {
+  notebooks <- get_notebook_manifest()
   if (is.null(slugs) || !length(slugs)) {
     return(notebooks)
   }

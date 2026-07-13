@@ -1,8 +1,21 @@
+make_workshop_export_config <- function(id, chapter, title, expected_chunks) {
+  list(
+    id = id,
+    chapter = as.integer(chapter),
+    title = title,
+    source = file.path("notebooks", "support", id, "support.Rmd"),
+    expected_chunks = expected_chunks,
+    r_workshop_output = file.path("notebooks", "workshops", paste0(title, " workshop.Rmd")),
+    published_python_output = sprintf("Workshop %d (Python).ipynb", as.integer(chapter))
+  )
+}
+
 get_workshop_export_configs <- function() {
   list(
-    list(
+    make_workshop_export_config(
       id = "probability-distributions",
-      source = "notebooks/support/probability-distributions/support.Rmd",
+      chapter = 1L,
+      title = "Probability distributions",
       expected_chunks = c(
         "1.1" = 3L,
         "1.2" = 1L,
@@ -13,9 +26,10 @@ get_workshop_export_configs <- function() {
         "1.7" = 2L
       )
     ),
-    list(
+    make_workshop_export_config(
       id = "population-estimation",
-      source = "notebooks/support/population-estimation/support.Rmd",
+      chapter = 2L,
+      title = "Estimating the population mean and proportion",
       expected_chunks = c(
         "2.1" = 2L,
         "2.2" = 2L,
@@ -25,9 +39,10 @@ get_workshop_export_configs <- function() {
         "2.6" = 2L
       )
     ),
-    list(
+    make_workshop_export_config(
       id = "auxiliary-variables-and-stratification",
-      source = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      chapter = 3L,
+      title = "Estimation with auxiliary variables and stratification",
       expected_chunks = c(
         "3.1" = 1L,
         "3.2" = 7L,
@@ -40,9 +55,10 @@ get_workshop_export_configs <- function() {
         "3.9" = 7L
       )
     ),
-    list(
+    make_workshop_export_config(
       id = "hypothesis-testing",
-      source = "notebooks/support/hypothesis-testing/support.Rmd",
+      chapter = 4L,
+      title = "Hypothesis testing",
       expected_chunks = c(
         "4.1" = 3L,
         "4.2" = 1L,
@@ -56,9 +72,10 @@ get_workshop_export_configs <- function() {
         "4.10" = 2L
       )
     ),
-    list(
+    make_workshop_export_config(
       id = "regression-analysis",
-      source = "notebooks/support/regression-analysis/support.Rmd",
+      chapter = 5L,
+      title = "Regression analysis",
       expected_chunks = c(
         "5.1" = 1L,
         "5.2" = 1L,
@@ -97,15 +114,40 @@ get_workshop_export_configs <- function() {
         "5.35" = 2L
       )
     ),
-    list(
+    make_workshop_export_config(
       id = "goodness-of-fit",
-      source = "notebooks/support/goodness-of-fit/support.Rmd",
+      chapter = 6L,
+      title = "Goodness of fit",
       expected_chunks = c(
         "6.1" = 1L,
         "6.2" = 18L
       )
     )
   )
+}
+
+as_notebook_manifest_entry <- function(config) {
+  list(
+    slug = config$id,
+    chapter = config$chapter,
+    title = config$title,
+    source = config$source,
+    output = config$r_workshop_output
+  )
+}
+
+get_notebook_manifest <- function() {
+  lapply(get_workshop_export_configs(), as_notebook_manifest_entry)
+}
+
+resolve_notebook_manifest_entry_by_slug <- function(slug) {
+  notebooks <- get_notebook_manifest()
+  for (notebook in notebooks) {
+    if (identical(notebook$slug, slug)) {
+      return(notebook)
+    }
+  }
+  NULL
 }
 
 resolve_workshop_export_config <- function(input_path) {

@@ -93,21 +93,6 @@ print_help <- function() {
   )
 }
 
-extract_chapter_number <- function(config) {
-  refs <- names(config$expected_chunks)
-  if (length(refs) == 0L) {
-    stop("Config has no expected chunk references: ", config$id)
-  }
-
-  chapter_part <- strsplit(refs[[1]], "\\.", fixed = FALSE)[[1]][[1]]
-  chapter_number <- suppressWarnings(as.integer(chapter_part))
-  if (is.na(chapter_number)) {
-    stop("Could not extract chapter number from expected chunk id: ", refs[[1]])
-  }
-
-  chapter_number
-}
-
 publish_python_notebooks <- function(input_dir, output_dir) {
   ensure_jsonlite()
 
@@ -117,9 +102,9 @@ publish_python_notebooks <- function(input_dir, output_dir) {
   expected_files <- character(0L)
 
   for (config in configs) {
-    chapter_number <- extract_chapter_number(config)
+    chapter_number <- config$chapter
     input_path <- file.path(input_dir, config$id, paste0("chapter-", chapter_number, ".ipynb"))
-    output_name <- sprintf("Workshop %d (Python).ipynb", chapter_number)
+    output_name <- config$published_python_output
     output_path <- file.path(output_dir, output_name)
 
     if (!file.exists(input_path)) {

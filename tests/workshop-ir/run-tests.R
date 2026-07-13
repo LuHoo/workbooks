@@ -14,7 +14,8 @@ source("scripts/workshop-ir-adapter.R", chdir = FALSE)
 source("scripts/workshop-model.R", chdir = FALSE)
 source("scripts/workshop-renderer-latex.R", chdir = FALSE)
 source("scripts/workshop-renderer.R", chdir = FALSE)
-source("scripts/notebook-manifest.R", chdir = FALSE)
+
+notebooks <- get_notebook_manifest()
 
 expect_true <- function(condition, message) {
   if (!isTRUE(condition)) {

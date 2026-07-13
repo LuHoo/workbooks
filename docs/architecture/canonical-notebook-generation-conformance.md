@@ -33,7 +33,7 @@ Note: the ADR text is treated as authoritative for this report even though the e
 
 ## 1) Canonical authoring sources
 
-Classification: `partially conforms`
+Classification: `conforms`
 
 Implementation (files/functions):
 
@@ -42,21 +42,21 @@ Implementation (files/functions):
   - `get_workshop_export_configs()`
   - `resolve_workshop_export_config()`
   - `resolve_workshop_export_config_by_id()`
-- Public R notebook registry: `scripts/notebook-manifest.R`
+- Derived compatibility manifest: `scripts/notebook-manifest.R`
 
 Conformance evidence:
 
 - Canonical support notebooks are consistently referenced as `notebooks/support/<slug>/support.Rmd`.
 - Both R chunk export and Python notebook export resolve source paths through config.
+- Public R notebook metadata is now derived from `scripts/workshop-export-config.R` via `get_notebook_manifest()`.
 
 Gaps / duplicated paths / obsolete logic:
 
-- Canonical source mapping is duplicated across `scripts/workshop-export-config.R` and `scripts/notebook-manifest.R`.
 - `support/analytical-procedures/support.Rmd` is documented as canonical/private-only in `notebooks/README.md` but is outside the configured export graph; this is intentional but increases drift risk if undocumented in ADR form.
 
 Smallest remediation:
 
-- Introduce one authoritative source manifest consumed by both `workshop-export-config.R` and `notebook-manifest.R`.
+- Keep `scripts/workshop-export-config.R` as the only hand-authored workshop registry and derive compatibility views from it.
 
 ## 2) Workshop Model / IR parsing
 
@@ -370,8 +370,7 @@ Smallest remediation:
 ## Highest-value minimal remediations (ordered)
 
 1. Commit the ADR text into a stable in-repo path (for example `docs/architecture/canonical-notebook-generation.md`), and cross-link all implementation docs to that single ADR.
-2. Collapse duplicate source manifests (`workshop-export-config.R` and `notebook-manifest.R`) into one authoritative registry.
-3. Remove non-canonical Python-to-LaTeX fallback path (`notebooks/python/workshop02_python.ipynb`) after migration.
-4. Add pre-publish notebook hygiene check (enforce output-free distribution notebooks).
-5. Decide and document one authoritative Binder config owner and add drift detection between root and submodule Binder files.
-6. Define and implement first-class semantic reference handling in IR + export validation.
+2. Remove non-canonical Python-to-LaTeX fallback path (`notebooks/python/workshop02_python.ipynb`) after migration.
+3. Add pre-publish notebook hygiene check (enforce output-free distribution notebooks).
+4. Decide and document one authoritative Binder config owner and add drift detection between root and submodule Binder files.
+5. Define and implement first-class semantic reference handling in IR + export validation.

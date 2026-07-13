@@ -44,7 +44,7 @@ Canonical source model is split across content, config, and metadata:
   - `notebooks/support/**/support.Rmd`
 - Workshop export configuration:
   - `scripts/workshop-export-config.R`
-- Public R notebook manifest metadata:
+- Derived compatibility manifest for older callers:
   - `scripts/notebook-manifest.R`
 - Traceability metadata:
   - `metadata/traceability/*.yml`
@@ -65,9 +65,8 @@ Ownership boundary:
 
 Current-state note:
 
-- Registry data is currently duplicated between
-  `scripts/workshop-export-config.R` and `scripts/notebook-manifest.R`
-  (documented gap tracked in issue #131).
+- `scripts/workshop-export-config.R` is the only hand-authored workshop registry.
+- `scripts/notebook-manifest.R` is a derived compatibility layer produced from that registry at load time.
 
 ## 3. Parsing and Neutral Representation
 
