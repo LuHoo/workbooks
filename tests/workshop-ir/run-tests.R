@@ -306,6 +306,62 @@ run_exporter_compatibility_test <- function() {
   expect_identical(ir_tex, legacy_tex, "IR parser engine output must equal legacy output")
 }
 
+run_default_parser_cutover_test <- function() {
+  parsed <- parse_export_cli_args(character())
+  expect_identical(parsed$parser_engine, "ir", "CLI parser_engine default must be ir")
+
+  cfg_default <- eval(formals(export_workshop_by_config)$parser_engine)
+  expect_identical(cfg_default, "ir", "export_workshop_by_config default parser_engine must be ir")
+
+  cfg_id_default <- eval(formals(export_workshop_by_config_id)$parser_engine)
+  expect_identical(cfg_id_default, "ir", "export_workshop_by_config_id default parser_engine must be ir")
+}
+
+run_full_export_set_equivalence_test <- function() {
+  default_dir <- tempfile("default-workshop-output-")
+  ir_dir <- tempfile("ir-workshop-output-")
+  dir.create(default_dir, recursive = TRUE, showWarnings = FALSE)
+  dir.create(ir_dir, recursive = TRUE, showWarnings = FALSE)
+
+  runner_script <- tempfile("workshop-export-set-", fileext = ".R")
+  writeLines(c(
+    "args <- commandArgs(trailingOnly = TRUE)",
+    "out_dir <- args[[1L]]",
+    "engine <- args[[2L]]",
+    "source('scripts/export-workshop-output.R', chdir = FALSE)",
+    "configs <- get_workshop_export_configs()",
+    "for (config in configs) {",
+    "  if (identical(engine, 'default')) {",
+    "    export_workshop_by_config(config = config, output_dir = out_dir, enable_traceability = FALSE)",
+    "  } else {",
+    "    export_workshop_by_config(config = config, output_dir = out_dir, parser_engine = engine, enable_traceability = FALSE)",
+    "  }",
+    "}"
+  ), runner_script)
+
+  default_run <- system2("Rscript", c(runner_script, default_dir, "default"), stdout = TRUE, stderr = TRUE)
+  default_status <- attr(default_run, "status")
+  if (!is.null(default_status) && default_status != 0L) {
+    stop("Default export-set run failed: ", paste(default_run, collapse = "\n"))
+  }
+
+  ir_run <- system2("Rscript", c(runner_script, ir_dir, "ir"), stdout = TRUE, stderr = TRUE)
+  ir_status <- attr(ir_run, "status")
+  if (!is.null(ir_status) && ir_status != 0L) {
+    stop("Explicit IR export-set run failed: ", paste(ir_run, collapse = "\n"))
+  }
+
+  legacy_files <- sort(list.files(default_dir, pattern = "\\.tex$", recursive = TRUE, full.names = FALSE))
+  ir_files <- sort(list.files(ir_dir, pattern = "\\.tex$", recursive = TRUE, full.names = FALSE))
+  expect_identical(ir_files, legacy_files, "Default and explicit IR export sets must produce identical file lists")
+
+  for (rel_path in legacy_files) {
+    legacy_lines <- readLines(file.path(default_dir, rel_path), warn = FALSE)
+    ir_lines <- readLines(file.path(ir_dir, rel_path), warn = FALSE)
+    expect_identical(ir_lines, legacy_lines, paste0("Default-vs-IR output drift detected for ", rel_path))
+  }
+}
+
 run_workshop_model_boundary_test <- function() {
   config <- resolve_workshop_export_config_by_id("probability-distributions")
   model <- build_workshop_model(input_path = config$source, config = config, strict = TRUE)
@@ -460,7 +516,9 @@ main <- function() {
   run_directive_parser_tests()
   run_directive_validation_tests()
   run_round_trip_consistency_test()
+  run_default_parser_cutover_test()
   run_exporter_compatibility_test()
+  run_full_export_set_equivalence_test()
   run_workshop_model_boundary_test()
   run_renderer_boundary_test()
   run_workshop_publication_filter_test()

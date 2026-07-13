@@ -22,6 +22,9 @@ The canonical chunk exporter entry point is:
 
 `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex>`
 
+This command uses the Workshop IR parser path by default. To force legacy as a
+rollback path, pass `--parser-engine legacy`.
+
 For example:
 
 `Rscript scripts/export-workshop-output.R --input notebooks/support/probability-distributions/support.Rmd --output generated/workshop-output/exercise-1-1-1.tex`

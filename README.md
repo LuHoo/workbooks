@@ -148,25 +148,23 @@ Validation spec:
 
 ## Optional IR Parser Integration
 
-The canonical exporter supports an optional parser backend switch. Default behavior
-is unchanged.
+The canonical exporter uses the Workshop IR parser path by default.
 
-- Default (legacy parser):
+- Default (IR parser):
 	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex>`
-- IR parser path:
-	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex> --parser-engine ir`
+- Legacy rollback path (explicit opt-in):
+	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex> --parser-engine legacy`
 
 Allowed values for `--parser-engine`:
 
-- `legacy` (default)
-- `ir`
+- `ir` (default)
+- `legacy` (explicit rollback path)
 
 Migration and rollback guidance:
 
 - `docs/architecture/workshop-ir-migration-and-rollback.md`
 
-Rollback is immediate by switching parser selection back to legacy (or omitting
-`--parser-engine`, which defaults to legacy).
+Rollback is immediate by explicitly passing `--parser-engine legacy`.
 
 ## Workshop IR Test Harness
 
@@ -255,10 +253,18 @@ Local-first validation quickstart:
 
 - Combined local gate first:
   - `bash scripts/ci/local-notebook-validation-gate.sh`
+- Deterministic generation verification (two isolated runs, inventory/hash/semantic checks):
+	- `bash scripts/ci/verify-deterministic-notebook-generation.sh`
 - For standalone Python validation commands, prefer the project venv interpreter:
   - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks`
   - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
   - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
+
+Architecture details and deterministic contract:
+
+- `docs/architecture/deterministic-notebook-generation.md`
+- `docs/architecture/artifact-provenance-and-ownership.md`
+- `docs/architecture/recovery-and-regeneration.md`
 
 Hosted Binder run policy:
 

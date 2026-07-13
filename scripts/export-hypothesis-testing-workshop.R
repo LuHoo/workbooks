@@ -2,4 +2,4 @@
 
 source("scripts/export-workshop-output.R", chdir = FALSE)
 
-export_workshop_by_config_id("hypothesis-testing")
+export_workshop_by_config_id("hypothesis-testing", parser_engine = "ir")
