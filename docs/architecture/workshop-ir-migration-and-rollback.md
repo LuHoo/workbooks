@@ -2,6 +2,8 @@
 
 Canonical overview: `docs/architecture/notebook-generation-and-publication.md`
 
+Deprecation governance: `docs/architecture/legacy-parser-deprecation-policy.md`
+
 This document defines how to operate the workshop IR path now that IR is the
 canonical default exporter backend.
 
@@ -34,6 +36,17 @@ Cutover is complete:
 - Full export-set equivalence (legacy vs IR) is regression-tested.
 - Legacy remains available only through explicit parser selection.
 
+## Deprecation governance during transition
+
+Legacy availability is governed by explicit checkpoint-based policy, not by a
+fixed removal date.
+
+- Decision criteria and milestones are defined in
+	`docs/architecture/legacy-parser-deprecation-policy.md`.
+- Legacy mode remains rollback-capable during transition.
+- Advancement toward retirement consideration requires all policy criteria to be
+	satisfied at review checkpoints.
+
 ## Rollback plan
 
 Immediate rollback requires no code revert:
@@ -44,6 +57,9 @@ If optional integrations were added to automation, rollback means:
 
 - set pipeline settings to explicit `legacy` parser engine;
 - rerun compatibility test suite to confirm baseline.
+
+Rollback use remains valid during transition and should be treated as an
+operational safeguard, not as a default-state architecture change.
 
 ## Operational guardrails
 

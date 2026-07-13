@@ -39,6 +39,13 @@ Note on path naming:
 - Publication is synchronization of validated generated artifacts, not authoring.
 - Deterministic rebuilds are expected for unchanged canonical inputs.
 
+Legacy parser policy note:
+
+- Legacy parser fallback is governed by
+  `docs/architecture/legacy-parser-deprecation-policy.md`.
+- During transition, fallback remains valid for recovery, but should not be
+  treated as routine default operation.
+
 ## Phase 1: Recovery Surface Inventory
 
 | Recovery surface | Authoritative upstream source | Authoritative producer | Canonical regeneration command | Expected output location | Validation command | Committed | Temporary | Published to another repo |
@@ -512,6 +519,12 @@ Warnings:
 - Always inspect affected files before rollback.
 - Avoid mixed states (new source + old generated outputs) by regenerating after rollback.
 
+Legacy parser fallback warning:
+
+- If rollback uses `--parser-engine legacy`, record rationale in the associated
+  issue/PR/release notes and re-evaluate advancement criteria at the next
+  deprecation checkpoint.
+
 ## Phase 9: Recovery Decision Tree
 
 ```mermaid
@@ -540,6 +553,8 @@ This runbook links to:
 
 - canonical/conformance context:
   - `docs/architecture/canonical-notebook-generation-conformance.md`
+- legacy parser lifecycle governance:
+  - `docs/architecture/legacy-parser-deprecation-policy.md`
 - permissions/publication boundaries:
   - `docs/architecture/generation-publication-permissions-audit.md`
 - deterministic generation contract:
