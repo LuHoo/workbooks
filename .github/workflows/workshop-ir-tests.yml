@@ -22,6 +22,10 @@ on:
       - ".github/workflows/workshop-ir-tests.yml"
 
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
     paths:
       - "ada_fsaudit_bridge/**"
       - "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"

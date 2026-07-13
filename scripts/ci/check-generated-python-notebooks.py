@@ -28,13 +28,13 @@ R_ONLY_PATTERNS = [
 class Violation:
     notebook_path: str
     cell_number: int
-    pattern: str
-    snippet: str
+    violation_type: str
+    detail: str
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Fail when generated Python notebooks contain raw R-only constructs."
+        description="Fail when generated Python notebooks contain publication-blocking hygiene issues or raw R-only constructs."
     )
     parser.add_argument(
         "--input-dir",
@@ -58,6 +58,29 @@ def check_notebook(path: Path) -> list[Violation]:
     for index, cell in enumerate(notebook.get("cells", []), start=1):
         if cell.get("cell_type") != "code":
             continue
+
+        execution_count = cell.get("execution_count")
+        if execution_count is not None:
+            violations.append(
+                Violation(
+                    notebook_path=str(path),
+                    cell_number=index,
+                    violation_type="execution_count",
+                    detail=f"execution_count is {execution_count}",
+                )
+            )
+
+        outputs = cell.get("outputs")
+        if isinstance(outputs, list) and len(outputs) > 0:
+            violations.append(
+                Violation(
+                    notebook_path=str(path),
+                    cell_number=index,
+                    violation_type="outputs",
+                    detail=f"outputs present ({len(outputs)} outputs)",
+                )
+            )
+
         source = normalize_source(cell)
 
         # Chapter 5 intentionally includes an R bridge bootstrap that loads R
@@ -81,12 +104,38 @@ def check_notebook(path: Path) -> list[Violation]:
                 Violation(
                     notebook_path=str(path),
                     cell_number=index,
-                    pattern=pattern.pattern,
-                    snippet=snippet.replace("\n", "\\n"),
+                    violation_type="raw_r_construct",
+                    detail=(
+                        f"raw R-only construct matched {pattern.pattern}; "
+                        f"snippet: {snippet.replace(chr(10), '\\n')}"
+                    ),
                 )
             )
 
     return violations
+
+
+def report_violations(violations: list[Violation]) -> None:
+    by_notebook: dict[str, list[Violation]] = {}
+    for violation in violations:
+        by_notebook.setdefault(violation.notebook_path, []).append(violation)
+
+    print("Strict Python notebook guardrail failed")
+    for notebook_path in sorted(by_notebook):
+        print()
+        print(f"Notebook: {notebook_path}")
+        for violation in by_notebook[notebook_path]:
+            print(f"  Cell {violation.cell_number}: {violation.detail}")
+
+    notebook_count = len(by_notebook)
+    print()
+    print(
+        f"Validation failed: {notebook_count} notebook"
+        f"{'s' if notebook_count != 1 else ''} contain execution artifacts or raw R-only constructs."
+    )
+    print(
+        "Remediation: regenerate clean distribution notebooks; do not publish executed notebooks or notebooks with raw R-only syntax."
+    )
 
 
 def main() -> None:
@@ -104,17 +153,10 @@ def main() -> None:
         violations.extend(check_notebook(notebook))
 
     if not violations:
-        print("Strict Python notebook guardrail passed: no raw R-only constructs detected")
+        print("Strict Python notebook guardrail passed: no execution artifacts or raw R-only constructs detected")
         return
 
-    print("Strict Python notebook guardrail failed")
-    for violation in violations:
-        print("---")
-        print(f"Notebook: {violation.notebook_path}")
-        print(f"Cell: {violation.cell_number}")
-        print(f"Matched pattern: {violation.pattern}")
-        print(f"Snippet: {violation.snippet}")
-    print("Remediation: add or fix Python overrides so generated Python notebooks do not emit raw R-only syntax.")
+    report_violations(violations)
     raise SystemExit(1)
 
 
