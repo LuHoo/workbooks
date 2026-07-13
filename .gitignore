@@ -26,3 +26,14 @@ notebooks/**/*_files/
 
 # macOS Finder metadata
 .DS_Store
+
+# Python cache artifacts
+__pycache__/
+*.pyc
+
+# Local Python virtual environments
+.venv/
+venv/
+
+# Generated Python notebook build artifacts
+generated/python-notebooks/

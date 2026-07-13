@@ -14,6 +14,18 @@ get_workshop_export_configs <- function() {
       )
     ),
     list(
+      id = "population-estimation",
+      source = "notebooks/support/population-estimation/support.Rmd",
+      expected_chunks = c(
+        "2.1" = 2L,
+        "2.2" = 2L,
+        "2.3" = 6L,
+        "2.4" = 2L,
+        "2.5" = 2L,
+        "2.6" = 2L
+      )
+    ),
+    list(
       id = "auxiliary-variables-and-stratification",
       source = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
       expected_chunks = c(

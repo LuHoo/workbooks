@@ -114,6 +114,162 @@ Unsupported or malformed structures fail with explicit errors.
 - Add new validations in Stage 7 if they do not alter current output semantics.
 - Add CLI options only when they preserve default behavior.
 
+## Workshop IR (v1.1)
+
+A canonical, versioned Intermediate Representation (IR) can be generated from
+`support.Rmd` notebooks.
+
+Schema and docs:
+
+- `scripts/workshop-ir-schema-v1.json`
+- `docs/architecture/workshop-ir-schema-v1.md`
+- `docs/architecture/workshop-ir-directives.md`
+- `docs/authoring/language-aware-directives.md`
+
+Directive support in v1.1:
+
+- parser-level support for `ADA:BEGIN`, `ADA:END`, and `ADA:REQUIRES`;
+- deterministic per-block `authoring_context` metadata;
+- emitted directive event records in `directives.instances`.
+
+Generate IR JSON:
+
+- `Rscript scripts/workshop-ir.R --input notebooks/support/probability-distributions/support.Rmd --pretty`
+
+## Workshop IR Validation
+
+Validate parsed IR structure and compatibility with workshop export configuration:
+
+- `Rscript scripts/workshop-ir-validate.R --input notebooks/support/probability-distributions/support.Rmd --config-id probability-distributions --pretty`
+
+Validation spec:
+
+- `docs/architecture/workshop-ir-validation.md`
+
+## Optional IR Parser Integration
+
+The canonical exporter supports an optional parser backend switch. Default behavior
+is unchanged.
+
+- Default (legacy parser):
+	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex>`
+- IR parser path:
+	- `Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <exercise-*.tex> --parser-engine ir`
+
+Allowed values for `--parser-engine`:
+
+- `legacy` (default)
+- `ir`
+
+Migration and rollback guidance:
+
+- `docs/architecture/workshop-ir-migration-and-rollback.md`
+
+Rollback is immediate by switching parser selection back to legacy (or omitting
+`--parser-engine`, which defaults to legacy).
+
+## Workshop IR Test Harness
+
+Run the IR-focused regression test suite:
+
+- `Rscript tests/workshop-ir/run-tests.R`
+
+The suite covers:
+
+- golden summary checks for deterministic extraction;
+- malformed source diagnostics;
+- IR validation checks;
+- round-trip segment consistency (legacy parser vs IR adapter);
+- exporter output compatibility (`--parser-engine legacy` vs `--parser-engine ir`).
+
+## Python Notebook Renderer (IR-Based)
+
+Generate deterministic Python `.ipynb` outputs from canonical workshop IR:
+
+- batch generation from configured workshop sources:
+	- `Rscript scripts/export-python-notebooks.R`
+- single configured workshop id:
+	- `Rscript scripts/export-python-notebooks.R --config-id probability-distributions`
+- direct renderer invocation with pre-generated IR JSON:
+	- `python3 scripts/workshop-ir-python-renderer.py --input-ir <ir.json> --output-notebook <chapter.ipynb> --target-language python`
+
+Renderer guarantees:
+
+- consumes canonical IR only;
+- preserves exercise ordering and numbering from IR;
+- applies Python overrides from directive-aware IR metadata;
+- emits deterministic notebook JSON for unchanged input.
+
+Architecture and mapping details:
+
+- `docs/architecture/workshop-ir-python-renderer.md`
+- `docs/architecture/fsaudit-rpy2-bridge.md`
+- `docs/architecture/workshop-model-renderer-separation.md`
+
+Renderer tests:
+
+- `python3 tests/python-renderer/run-tests.py`
+
+Bridge/runtime tests:
+
+- `python -m unittest tests/python-renderer/test_fsaudit_bridge.py`
+
+The FSAudit-backed Python notebooks for chapters 3 and 4 rely on the reusable
+`ada_fsaudit_bridge` module at the repository root. Setup, reproducibility,
+public API, and troubleshooting guidance are documented in
+`docs/architecture/fsaudit-rpy2-bridge.md`.
+
+Recommended validated notebook runtime:
+
+- Python 3.10
+- R 4.3.1
+- FSaudit 0.3.4+
+- rpy2 3.6.7
+
+## Binder and Notebook Execution Validation
+
+Binder and CI execution architecture for dual-language workshop support is
+documented in:
+
+- `docs/architecture/binder-notebook-execution.md`
+
+Binder configuration lives in `.binder/` and is designed to support both:
+
+- R workshop notebooks (`notebooks/workshops/*.Rmd`)
+- generated Python notebooks (`generated/python-notebooks/**/*.ipynb`)
+
+Binder system packages are managed in `.binder/apt.txt`.
+
+For native R package build paths, maintain these required OS dependencies there:
+
+- `cmake` (required by `nloptr` source builds)
+- `libharfbuzz-dev` and `libfribidi-dev` (required by `textshaping`/`systemfonts` headers)
+
+See `docs/architecture/binder-notebook-execution.md` for full dependency flow and maintainer guidance.
+
+CI execution workflow:
+
+- `.github/workflows/notebook-execution-validation.yml`
+
+Local-first validation quickstart:
+
+- Combined local gate first:
+  - `bash scripts/ci/local-notebook-validation-gate.sh`
+- For standalone Python validation commands, prefer the project venv interpreter:
+  - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks`
+  - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
+  - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
+
+Hosted Binder run policy:
+
+- Run full hosted Binder validation only after local-first checks are green.
+- Trigger full hosted Binder checks deliberately via manual workflow dispatch (`workflow_dispatch`) instead of on every development push.
+
+Publication gating:
+
+- `.github/workflows/export-workshops.yml` now requires notebook execution
+	validation to pass before export/publication can proceed.
+
 ### Traceability Metadata Ingestion
 
 The exporter can now read learning-objective traceability metadata from

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ada-fsaudit-bridge"
+version = "0.1.0"
+description = "Reusable Python bridge for FSaudit-backed ADA workshop notebooks"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=2.2",
+  "pandas>=2.3",
+  "scipy>=1.15",
+  "rpy2>=3.5",
+]
+
+[tool.setuptools.packages.find]
+include = ["ada_fsaudit_bridge", "ada_fsaudit_bridge.*"]

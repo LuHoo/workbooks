@@ -1,0 +1,21 @@
+---
+title: "Directive Fixture"
+---
+
+## Exercise 9.1
+Base narrative.
+```{r}
+x <- 1
+```
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+Python narrative override.
+<!-- ADA:END -->
+<!-- ADA:BEGIN lang=python mode=override kind=code -->
+```{r}
+x = 1
+```
+<!-- ADA:END -->
+<!-- ADA:REQUIRES capability=fsaudit -->
+```{r}
+fs_audit()
+```

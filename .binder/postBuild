@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Verifying Binder runtime toolchain"
+python --version
+R --version | head -n 1
+
+if ! command -v cmake >/dev/null 2>&1; then
+    echo "Missing required system dependency: cmake"
+    exit 1
+fi
+
+if [ ! -f /usr/include/harfbuzz/hb-ft.h ]; then
+    echo "Missing required harfbuzz header: /usr/include/harfbuzz/hb-ft.h"
+    exit 1
+fi
+
+if [ ! -f /usr/include/fribidi/fribidi.h ]; then
+    echo "Missing required fribidi header: /usr/include/fribidi/fribidi.h"
+    exit 1
+fi
+
+echo "System Binder dependencies present: cmake, harfbuzz headers, fribidi headers"
+
+python - <<'PY'
+import importlib
+for module in ["nbclient", "nbformat", "rpy2", "pandas", "scipy", "ada_fsaudit_bridge"]:
+    importlib.import_module(module)
+print("Python notebook dependencies import successfully")
+PY
+
+Rscript - <<'RS'
+stopifnot(requireNamespace("FSaudit", quietly = TRUE))
+stopifnot(requireNamespace("aicpa", quietly = TRUE))
+cat("R Binder dependencies load successfully\n")
+RS

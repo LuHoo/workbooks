@@ -1,0 +1,7 @@
+---
+title: "Malformed Requires Directive"
+---
+
+## Exercise 9.1
+<!-- ADA:REQUIRES capability=fsaudit -->
+This line is narrative, so no code block consumes the capability marker.
