@@ -251,6 +251,8 @@ Gaps / duplicated paths / obsolete logic:
 Smallest remediation:
 
 - Keep legacy path but add deprecation criteria/timeline in architecture docs.
+- Track criteria and checkpoints in
+  `docs/architecture/legacy-parser-deprecation-policy.md`.
 
 ## 9) Python notebook-to-LaTeX rendering
 

@@ -111,9 +111,11 @@ Scripts:
 
 Current-state note:
 
-- Parser engine defaults to `legacy`.
-- Optional `--parser-engine ir` routes through IR + adapter while reusing the
-  same downstream renderer.
+- Parser engine defaults to `ir`.
+- Explicit `--parser-engine legacy` remains available as rollback mode while
+  transition policy is active.
+- Deprecation governance and review checkpoints are defined in
+  `docs/architecture/legacy-parser-deprecation-policy.md`.
 
 ### 4.2 Student-facing R notebooks
 
@@ -315,6 +317,9 @@ Reproducibility verification methods currently available:
     for Python renderer regressions, fix renderer or revert renderer change and
     regenerate.
 
+- Legacy parser lifecycle governance:
+  - `docs/architecture/legacy-parser-deprecation-policy.md`
+
 Specialized references:
 
 - `docs/architecture/workshop-ir-migration-and-rollback.md`
@@ -433,7 +438,7 @@ Current implemented:
 
 - IR parser/validator/model exists and is production-used for Python generation.
 - R workshop publication generation still uses direct source filtering path.
-- LaTeX export defaults to legacy parser with optional IR adapter path.
+- LaTeX export defaults to IR parser with explicit legacy rollback mode.
 - Publication is separated from generation and from execution validation.
 - Binder launch smoke targets `LuHoo/workbooks` as runtime-facing repository.
 

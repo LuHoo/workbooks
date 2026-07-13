@@ -170,6 +170,7 @@ Allowed values for `--parser-engine`:
 Migration and rollback guidance:
 
 - `docs/architecture/workshop-ir-migration-and-rollback.md`
+- `docs/architecture/legacy-parser-deprecation-policy.md`
 
 Rollback is immediate by explicitly passing `--parser-engine legacy`.
 

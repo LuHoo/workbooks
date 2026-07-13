@@ -25,3 +25,7 @@
 - Completed the goodness of fit chapter with full treatment and applications
 - Extended chapter content through the workshop section with review questions
 - Integrated cross-references to Volume 2 throughout the text
+
+### Architecture and workflow
+- Issue #111: Completed Python workshop export parity in the book flow, including embedded Workshop Python sections in the correct chapter files and consistent generated include wiring.
+- Issue #137: Added explicit legacy parser deprecation governance with checkpoint-based criteria, documented transition hold conditions, and preserved explicit rollback mode (`--parser-engine legacy`) during transition.

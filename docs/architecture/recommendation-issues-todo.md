@@ -37,17 +37,17 @@ Duplicate recommendations across documents were deduplicated to one tracking iss
 ## Priority TODO (ordered with dependencies)
 
 1. Foundation architecture references
-   - https://github.com/LuHoo/ada/issues/130
+   - https://github.com/LuHoo/ada/issues/130 done
    - Why first: provides stable architecture contract used by downstream implementation and validation issues.
 
 2. Canonical source and producer authority
-   - https://github.com/LuHoo/ada/issues/131
-   - https://github.com/LuHoo/ada/issues/90
+   - https://github.com/LuHoo/ada/issues/131 done 
+   - https://github.com/LuHoo/ada/issues/90. done
    - Depends on: #130
    - Why now: removes producer ambiguity before adding stronger gates.
 
 3. Remove transitional and fallback generation paths
-   - https://github.com/LuHoo/ada/issues/111
+   - https://github.com/LuHoo/ada/issues/111 done
    - https://github.com/LuHoo/ada/issues/137
    - Depends on: #131, #90
    - Why now: reduces divergence and clarifies single authoritative generation flow.
