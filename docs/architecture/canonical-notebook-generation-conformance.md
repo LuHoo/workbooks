@@ -3,6 +3,10 @@
 Date: 2026-07-13  
 Scope: local/static inspection only (no workflow execution, no code changes)
 
+Related policy:
+
+- `docs/architecture/artifact-provenance-and-ownership.md`
+
 ## Context and source-of-truth note
 
 This review is anchored to the Architecture Decision Record text provided by the project owner on 2026-07-13:

@@ -37,3 +37,6 @@ venv/
 
 # Generated Python notebook build artifacts
 generated/python-notebooks/
+
+# Temporary execution artifacts (local/CI diagnostics)
+generated/notebook-execution-artifacts/

@@ -263,6 +263,7 @@ Local-first validation quickstart:
 Architecture details and deterministic contract:
 
 - `docs/architecture/deterministic-notebook-generation.md`
+- `docs/architecture/artifact-provenance-and-ownership.md`
 
 Hosted Binder run policy:
 
