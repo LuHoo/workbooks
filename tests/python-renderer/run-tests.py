@@ -448,6 +448,220 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("[validate-metadata]", proc.stderr + proc.stdout)
         self.assertIn("missing metadata.ada_renderer", proc.stderr + proc.stdout)
 
+    def test_python_exporter_chunk_mode_writes_expected_chunk_tex(self):
+        notebook_path = Path(tempfile.mkstemp(prefix="chunk-nb-", suffix=".ipynb")[1])
+        notebook_path.write_text(
+            json.dumps(
+                {
+                    "nbformat": 4,
+                    "nbformat_minor": 5,
+                    "metadata": {
+                        "ada_renderer": {
+                            "target_language": "python",
+                            "workshop_id": "probability-distributions",
+                            "chapter_number": 1,
+                            "source_file": "notebooks/support/probability-distributions/support.Rmd",
+                        }
+                    },
+                    "cells": [
+                        {
+                            "cell_type": "markdown",
+                            "metadata": {},
+                            "source": ["## Exercise 1.1. Demo exercise\n", "Demonstration prose line.\n"],
+                        },
+                        {
+                            "cell_type": "code",
+                            "metadata": {},
+                            "execution_count": None,
+                            "outputs": [
+                                {
+                                    "output_type": "stream",
+                                    "name": "stdout",
+                                    "text": ["42\\n"],
+                                }
+                            ],
+                            "source": [
+                                "def ada_set_context(exercise_ref):\n",
+                                "    pass\n",
+                                "ada_set_context(\"1.1\")\n",
+                                "x = 40 + 2\n",
+                                "print(x)\n",
+                            ],
+                        },
+                        {
+                            "cell_type": "markdown",
+                            "metadata": {},
+                            "source": ["After-result note.\n"],
+                        },
+                    ],
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+        out_dir = Path(tempfile.mkdtemp(prefix="chunk-tex-out-"))
+        subprocess.run(
+            [
+                "python3",
+                str(EXPORTER_SCRIPT),
+                "--input",
+                str(notebook_path),
+                "--chunk-output-dir",
+                str(out_dir),
+                "--expected-chunks",
+                "1.1:1",
+                "--expect-generated-metadata",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        chunk_tex = (out_dir / "exercise-1-1-1.tex").read_text(encoding="utf-8")
+        self.assertIn("Demonstration prose line.", chunk_tex)
+        self.assertIn("x = 40 + 2", chunk_tex)
+        self.assertIn("print(x)", chunk_tex)
+        self.assertIn("42", chunk_tex)
+        self.assertIn("After-result note.", chunk_tex)
+        self.assertNotIn("ada_set_context", chunk_tex)
+
+    def test_python_exporter_chunk_mode_uses_fallback_output_blocks(self):
+        notebook_path = Path(tempfile.mkstemp(prefix="chunk-fallback-nb-", suffix=".ipynb")[1])
+        notebook_path.write_text(
+            json.dumps(
+                {
+                    "nbformat": 4,
+                    "nbformat_minor": 5,
+                    "metadata": {
+                        "ada_renderer": {
+                            "target_language": "python",
+                            "workshop_id": "probability-distributions",
+                            "chapter_number": 1,
+                            "source_file": "notebooks/support/probability-distributions/support.Rmd",
+                        }
+                    },
+                    "cells": [
+                        {
+                            "cell_type": "markdown",
+                            "metadata": {},
+                            "source": ["## Exercise 1.1. Demo exercise\n"],
+                        },
+                        {
+                            "cell_type": "code",
+                            "metadata": {},
+                            "execution_count": None,
+                            "outputs": [],
+                            "source": ["print('no output in notebook')\n"],
+                        },
+                    ],
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+        out_dir = Path(tempfile.mkdtemp(prefix="chunk-fallback-out-"))
+        fallback_dir = Path(tempfile.mkdtemp(prefix="chunk-fallback-src-"))
+        fallback_file = fallback_dir / "exercise-1-1-1.tex"
+        fallback_file.write_text(
+            "\n".join(
+                [
+                    r"\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]",
+                    "fallback-result-line",
+                    r"\end{Verbatim}",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+        subprocess.run(
+            [
+                "python3",
+                str(EXPORTER_SCRIPT),
+                "--input",
+                str(notebook_path),
+                "--chunk-output-dir",
+                str(out_dir),
+                "--expected-chunks",
+                "1.1:1",
+                "--fallback-output-dir",
+                str(fallback_dir),
+                "--expect-generated-metadata",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        chunk_tex = (out_dir / "exercise-1-1-1.tex").read_text(encoding="utf-8")
+        self.assertIn("no output in notebook", chunk_tex)
+        self.assertIn("fallback-result-line", chunk_tex)
+
+    def test_python_exporter_hides_context_calls_in_single_file_mode(self):
+        notebook_path = Path(tempfile.mkstemp(prefix="single-context-nb-", suffix=".ipynb")[1])
+        notebook_path.write_text(
+            json.dumps(
+                {
+                    "nbformat": 4,
+                    "nbformat_minor": 5,
+                    "metadata": {
+                        "ada_renderer": {
+                            "target_language": "python",
+                            "workshop_id": "probability-distributions",
+                            "chapter_number": 1,
+                            "source_file": "notebooks/support/probability-distributions/support.Rmd",
+                        }
+                    },
+                    "cells": [
+                        {
+                            "cell_type": "markdown",
+                            "metadata": {},
+                            "source": ["## Exercise 1.1. Demo\n"],
+                        },
+                        {
+                            "cell_type": "code",
+                            "metadata": {},
+                            "execution_count": None,
+                            "outputs": [],
+                            "source": [
+                                "def ada_set_context(exercise_ref):\n",
+                                "    return None\n",
+                                "ada_set_context(\"1.1\")\n",
+                                "print('visible')\n",
+                            ],
+                        },
+                    ],
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+        tex_path = Path(tempfile.mkstemp(prefix="single-context-", suffix=".tex")[1])
+        subprocess.run(
+            [
+                "python3",
+                str(EXPORTER_SCRIPT),
+                "--input",
+                str(notebook_path),
+                "--output",
+                str(tex_path),
+                "--expect-generated-metadata",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        tex_text = tex_path.read_text(encoding="utf-8")
+        self.assertNotIn("ada_set_context", tex_text)
+        self.assertIn("print('visible')", tex_text)
+
     def test_probability_notebook_includes_r_stats_compat_shim(self):
         source = REPO_ROOT / "notebooks" / "support" / "probability-distributions" / "support.Rmd"
         ir_path = self.parse_ir(source)
