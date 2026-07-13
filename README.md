@@ -264,6 +264,7 @@ Architecture details and deterministic contract:
 
 - `docs/architecture/deterministic-notebook-generation.md`
 - `docs/architecture/artifact-provenance-and-ownership.md`
+- `docs/architecture/recovery-and-regeneration.md`
 
 Hosted Binder run policy:
 
