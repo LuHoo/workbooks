@@ -1,0 +1,11 @@
+libcurl4-openssl-dev
+libssl-dev
+libxml2-dev
+libgit2-dev
+cmake
+libnlopt-dev
+gfortran
+libblas-dev
+liblapack-dev
+libharfbuzz-dev
+libfribidi-dev
