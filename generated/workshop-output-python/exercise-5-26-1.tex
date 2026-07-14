@@ -5,7 +5,7 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of the lagged value from the dependent variable and from each predictor. The transformed model can then be estimated by ordinary least squares.
+\noindent A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This notebook shows the transformation explicitly rather than calling a separate named routine. We first estimate the lag-1 autocorrelation in the residuals, then quasi-difference the response and the predictors, and finally refit the model to the transformed data.
 We first estimate an AR(1) model on the residuals from \ttblue{mod.3}.
 
 \par\addvspace{\topsep}

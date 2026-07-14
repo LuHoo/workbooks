@@ -7,7 +7,7 @@
 
 \noindent This transformation follows $y_t - \rho y_{t-1} = \beta_0(1-\rho) + \sum_j \beta_j(x_{j,t} - \rho x_{j,t-1}) + u_t$.
 For interaction terms, the interaction is treated as a predictor in its own right. Thus, if \(z_t=x_t s_t\), the transformed interaction is $z_t-\rho z_{t-1} = x_t s_t-\rho x_{t-1}s_{t-1}$.
-It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
+It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. This is why the notebook keeps the AR(1) correction terminology here: the chapter is emphasizing the manual transformation itself, not introducing a separate Cochran-Orcutt procedure by name. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
 
 \par\addvspace{\topsep}
 \begingroup

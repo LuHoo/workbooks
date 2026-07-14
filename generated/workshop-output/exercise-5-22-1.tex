@@ -16,6 +16,24 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
+AIC(model_forward)
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
+[1] 1150.277
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
+AIC(model_backward)
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
+[1] 1150.277
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
+AIC(fit_both)
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
+[1] 1150.277
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 AIC(ussteamco.mod.0)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
@@ -41,9 +59,13 @@ AIC(ussteamco.mod.2)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The AIC values shown above can be compared directly because all four models are fitted to the same response data (\ttblue{USSteamCoEstim}). Model \ttblue{mod.3} is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of \ttblue{mod.3} is not directly comparable with those of the earlier models. Instead, \ttblue{mod.3} should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
+\noindent The first three AIC values correspond to the final fitted objects returned by the forward, backward, and both-direction stepwise procedures. They are identical because \ttblue{model\_forward}, \ttblue{model\_backward}, and \ttblue{fit\_both} all end at the same model, namely \ttblue{revenue ~ production + heatDD}.
 
-\noindent The AIC value of the \ttblue{model\_backward} does not quite match the output of the \ttblue{step} function. This can be explained as follows.
+\noindent The AIC values of \ttblue{mod.0}, \ttblue{model\_backward}, \ttblue{mod.1}, and \ttblue{mod.2} can also be compared directly because all four models are fitted to the same response data (\ttblue{USSteamCoEstim}). Model \ttblue{mod.3} is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of \ttblue{mod.3} is not directly comparable with those of the earlier models. Instead, \ttblue{mod.3} should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
+
+\noindent The \ttblue{step()} output shows a different sequence of AIC values because, at each step, it compares the current model with candidate one-step additions or deletions. For example, the forward search starts at AIC = 1114.66 for the intercept-only model, moves to AIC = 1096.56 after adding \ttblue{heatDD}, and then moves to AIC = 1046.11 after adding \ttblue{production}. The backward search starts from the full model at AIC = 1047.68, then drops \ttblue{coolDD} and reaches the same final model at AIC = 1046.11.
+
+\noindent Those \ttblue{step()} AIC numbers do not exactly match the values returned by \ttblue{AIC()} for the final fitted objects. The reason is that \ttblue{step()} reports an AIC-like criterion that is sufficient for comparing candidate models within the procedure, while \ttblue{AIC()} reports the full Gaussian AIC for the fitted model object.
 
 \noindent The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
@@ -53,7 +75,7 @@ where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the
 $\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right) \right]$,
 leading to the AIC expression
 $\text{AIC} = n \left[\log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
-In contrast, the \ttblue{step()} function in R reports AIC values based on a deviance-like approximation, that omits constant terms unrelated to model comparison:
+In contrast, the \ttblue{step()} function in R reports AIC values based on a deviance-like approximation that omits constant terms unrelated to model comparison:
 $\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
 The difference between the two expressions is a constant shift of
 $n \cdot (\log(2\pi) + 1) + 2$.

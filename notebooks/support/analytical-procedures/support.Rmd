@@ -201,10 +201,18 @@ plot2
 
 <!-- SUPPORT-ONLY:START -->
 ```{r}
-# Save the plot as a PDF
+# Save the precise-model plot as a PDF
 pdf_file_path <- save_book_figure(
   plot,
   "H6_Expected_diff_precise.pdf",
+  width = 10,
+  height = 6.18
+)
+
+# Save the less-precise plot as a PDF
+pdf_file_path_less_precise <- save_book_figure(
+  plot2,
+  "H6_Expected_diff_less_precise.pdf",
   width = 10,
   height = 6.18
 )
@@ -312,7 +320,7 @@ comparison_plot <- generate_comparison_plot(materiality, std_precise, std_less_p
 # Sla de plot op als PDF
 save_book_figure(
   comparison_plot,
-  "comparison_precise_vs_less_precise.pdf",
+  "H6_prediction_intervals_precise_less_precise.pdf",
   width = 10,
   height = 6.18
 )

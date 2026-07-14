@@ -13,35 +13,36 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-# Create lagged variables, dropping the first observation
-n <- nrow(USSteamCoEstim2)
+# Split the data into the current period t and the lagged period t - 1
+n_obs_mod3 <- nrow(USSteamCoEstim2)
+current_period <- USSteamCoEstim2[-1, ]
+lagged_period <- USSteamCoEstim2[-n_obs_mod3, ]
 
-# Current period t and lagged period t - 1
-trans <- USSteamCoEstim2[-1, ]
-lag <- USSteamCoEstim2[-n, ]
+# Build the interaction terms before applying the AR(1) transformation
+current_period$prod_summer <- current_period$production * current_period$summer
+current_period$heat_summer <- current_period$heatDD * current_period$summer
+current_period$cool_summer <- current_period$coolDD * current_period$summer
 
-# Construct original interaction terms first
-trans$prod_summer <- trans$production * trans$summer
-trans$heat_summer <- trans$heatDD * trans$summer
-trans$cool_summer <- trans$coolDD * trans$summer
+lagged_period$prod_summer <- lagged_period$production * lagged_period$summer
+lagged_period$heat_summer <- lagged_period$heatDD * lagged_period$summer
+lagged_period$cool_summer <- lagged_period$coolDD * lagged_period$summer
 
-lag$prod_summer <- lag$production * lag$summer
-lag$heat_summer <- lag$heatDD * lag$summer
-lag$cool_summer <- lag$coolDD * lag$summer
+# Start from the current-period data and add the transformed variables
+transformed_data <- current_period
 
-# Transform dependent variable
-trans$revenue_adj <- trans$revenue - rho * lag$revenue
+# Quasi-difference the response
+transformed_data$revenue_adj <- current_period$revenue - rho * lagged_period$revenue
 
-# Transform independent variables
-trans$production_adj <- trans$production - rho * lag$production
-trans$heatDD_adj <- trans$heatDD - rho * lag$heatDD
-trans$coolDD_adj <- trans$coolDD - rho * lag$coolDD
-trans$summer_adj <- trans$summer - rho * lag$summer
+# Quasi-difference the main effects
+transformed_data$production_adj <- current_period$production - rho * lagged_period$production
+transformed_data$heatDD_adj <- current_period$heatDD - rho * lagged_period$heatDD
+transformed_data$coolDD_adj <- current_period$coolDD - rho * lagged_period$coolDD
+transformed_data$summer_adj <- current_period$summer - rho * lagged_period$summer
 
-# Transform interaction terms
-trans$prod_summer_adj <- trans$prod_summer - rho * lag$prod_summer
-trans$heat_summer_adj <- trans$heat_summer - rho * lag$heat_summer
-trans$cool_summer_adj <- trans$cool_summer - rho * lag$cool_summer
+# Quasi-difference the interaction terms
+transformed_data$prod_summer_adj <- current_period$prod_summer - rho * lagged_period$prod_summer
+transformed_data$heat_summer_adj <- current_period$heat_summer - rho * lagged_period$heat_summer
+transformed_data$cool_summer_adj <- current_period$cool_summer - rho * lagged_period$cool_summer
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

@@ -388,6 +388,7 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bmean\s*\(", "np.mean(", updated)
         updated = re.sub(r"\bsd\s*\(", "np.std(", updated)
         updated = re.sub(r"\bvar\s*\(([^)]+)\)", r"np.var(\1, ddof=1)", updated)
+        updated = re.sub(r"\bcat\s*\(", "print(", updated)
         updated = re.sub(r"\bsummary\s*\(([^)]+)\)", r"\1.describe(include='all')", updated)
         def _guard_describe_call(match: re.Match[str]) -> str:
             name = match.group(1)
@@ -515,6 +516,16 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
         updated = re.sub(r"\bqchisq\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"chi2.ppf(\1, df=\2)", updated)
         updated = re.sub(r"\bqchisq\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"chi2.ppf(\1, df=\2)", updated)
         updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*ncp\s*=\s*([^,\)]+)\s*\)",
+            r"nct.cdf(\1, df=\2, nc=\3)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*([^,\)]+)\s*\)",
+            r"nct.cdf(\1, df=\2, nc=\3)",
+            updated,
+        )
+        updated = re.sub(
             r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*lower_tail\s*=\s*False\s*\)",
             r"t.sf(\1, df=\2)",
             updated,
@@ -596,7 +607,7 @@ def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     lines = [
         "import numpy as np",
         "from math import sqrt",
-        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
+        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, nct, norm, poisson, t",
     ]
     return as_code_cell(
         lines,
@@ -868,6 +879,9 @@ def is_r_heavy_code_block(lines: List[str]) -> bool:
         r"\bpredict\s*\(",
         r"\boptions\s*\(",
         r"\bUSSteamCoEstim2\b",
+        r"\bannual_difference\b",
+        r"\bADR_lower\b",
+        r"\bADR_upper\b",
         r"\bas\.Date\s*\(",
         r"\bformula\s*\(",
         r"\b[A-Za-z_][A-Za-z0-9_]*\.[A-Za-z0-9_]*\.[0-9]+\b",
@@ -1481,30 +1495,34 @@ def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> Li
             "print(rho)",
         ]
 
-    if chapter_number == "5" and "# Create lagged variables, dropping the first observation" in raw and "trans$prod_summer" in raw:
+    if chapter_number == "5" and (
+        ("# Create lagged variables, dropping the first observation" in raw and "trans$prod_summer" in raw)
+        or ("current_period <- USSteamCoEstim2[-1, ]" in raw and "transformed_data$prod_summer_adj" in raw)
+    ):
         return [
-            "n = len(USSteamCoEstim2)",
-            "trans = USSteamCoEstim2.iloc[1:, :].copy()",
-            "lag = USSteamCoEstim2.iloc[:-1, :].copy()",
-            "trans['prod_summer'] = trans['production'] * trans['summer']",
-            "trans['heat_summer'] = trans['heatDD'] * trans['summer']",
-            "trans['cool_summer'] = trans['coolDD'] * trans['summer']",
-            "lag['prod_summer'] = lag['production'] * lag['summer']",
-            "lag['heat_summer'] = lag['heatDD'] * lag['summer']",
-            "lag['cool_summer'] = lag['coolDD'] * lag['summer']",
-            "trans['revenue_adj'] = trans['revenue'].to_numpy() - rho * lag['revenue'].to_numpy()",
-            "trans['production_adj'] = trans['production'].to_numpy() - rho * lag['production'].to_numpy()",
-            "trans['heatDD_adj'] = trans['heatDD'].to_numpy() - rho * lag['heatDD'].to_numpy()",
-            "trans['coolDD_adj'] = trans['coolDD'].to_numpy() - rho * lag['coolDD'].to_numpy()",
-            "trans['summer_adj'] = trans['summer'].to_numpy() - rho * lag['summer'].to_numpy()",
-            "trans['prod_summer_adj'] = trans['prod_summer'].to_numpy() - rho * lag['prod_summer'].to_numpy()",
-            "trans['heat_summer_adj'] = trans['heat_summer'].to_numpy() - rho * lag['heat_summer'].to_numpy()",
-            "trans['cool_summer_adj'] = trans['cool_summer'].to_numpy() - rho * lag['cool_summer'].to_numpy()",
+            "n_obs_mod3 = len(USSteamCoEstim2)",
+            "current_period = USSteamCoEstim2.iloc[1:, :].copy()",
+            "lagged_period = USSteamCoEstim2.iloc[:-1, :].copy()",
+            "current_period['prod_summer'] = current_period['production'] * current_period['summer']",
+            "current_period['heat_summer'] = current_period['heatDD'] * current_period['summer']",
+            "current_period['cool_summer'] = current_period['coolDD'] * current_period['summer']",
+            "lagged_period['prod_summer'] = lagged_period['production'] * lagged_period['summer']",
+            "lagged_period['heat_summer'] = lagged_period['heatDD'] * lagged_period['summer']",
+            "lagged_period['cool_summer'] = lagged_period['coolDD'] * lagged_period['summer']",
+            "transformed_data = current_period.copy()",
+            "transformed_data['revenue_adj'] = current_period['revenue'].to_numpy() - rho * lagged_period['revenue'].to_numpy()",
+            "transformed_data['production_adj'] = current_period['production'].to_numpy() - rho * lagged_period['production'].to_numpy()",
+            "transformed_data['heatDD_adj'] = current_period['heatDD'].to_numpy() - rho * lagged_period['heatDD'].to_numpy()",
+            "transformed_data['coolDD_adj'] = current_period['coolDD'].to_numpy() - rho * lagged_period['coolDD'].to_numpy()",
+            "transformed_data['summer_adj'] = current_period['summer'].to_numpy() - rho * lagged_period['summer'].to_numpy()",
+            "transformed_data['prod_summer_adj'] = current_period['prod_summer'].to_numpy() - rho * lagged_period['prod_summer'].to_numpy()",
+            "transformed_data['heat_summer_adj'] = current_period['heat_summer'].to_numpy() - rho * lagged_period['heat_summer'].to_numpy()",
+            "transformed_data['cool_summer_adj'] = current_period['cool_summer'].to_numpy() - rho * lagged_period['cool_summer'].to_numpy()",
         ]
 
     if chapter_number == "5" and "ussteamco.mod.4 <- lm(" in raw and "revenue_adj" in raw:
         return [
-            "ussteamco_mod_4 = fit_lm('ussteamco_mod_4', 'revenue_adj ~ production_adj + heatDD_adj + coolDD_adj + summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj', trans)",
+            "ussteamco_mod_4 = fit_lm('ussteamco_mod_4', 'revenue_adj ~ production_adj + heatDD_adj + coolDD_adj + summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj', transformed_data)",
             "summary_model('ussteamco_mod_4')",
         ]
 
@@ -1539,10 +1557,20 @@ def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> Li
 
     if chapter_number == "5" and "bptest(ussteamco.mod.5)" in raw and "shapiro.test(ussteamco.mod.5$residuals)" in raw:
         return [
-            "bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_5.resid, ussteamco_mod_5.model.exog)",
-            "bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_5, nlags=3)",
             "sw_stat, sw_p = shapiro_test(ussteamco_mod_5.resid)",
-            "print({'bp_lm': bp_stat, 'bp_p': bp_p, 'bg_lm': bg_lm, 'bg_p': bg_p, 'shapiro_W': sw_stat, 'shapiro_p': sw_p})",
+            "print({'shapiro_W': sw_stat, 'shapiro_p': sw_p})",
+            "bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_5.resid, ussteamco_mod_5.model.exog)",
+            "print({'bp_lm': bp_stat, 'bp_p': bp_p})",
+            "bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_5, nlags=3)",
+            "print({'bg_lm': bg_lm, 'bg_p': bg_p})",
+        ]
+
+    if chapter_number == "5" and "summary.mod.5$fstatistic" in raw:
+        return [
+            "f_stat = float(ussteamco_mod_5.fvalue)",
+            "df_model = int(ussteamco_mod_5.df_model)",
+            "df_resid = int(ussteamco_mod_5.df_resid)",
+            "print({'value': f_stat, 'numdf': df_model, 'dendf': df_resid})",
         ]
 
     if chapter_number == "5" and raw.strip() == "summary(ussteamco.mod.5)":
@@ -1695,6 +1723,72 @@ def convert_r_heavy_block_to_python(lines: List[str], chapter_number: str) -> Li
             "pred_df['outside_adj'] = (pred_df['recorded'] < pred_df['lwr_adj']) | (pred_df['recorded'] > pred_df['upr_adj'])",
             "display(pred_df)",
             ]
+
+    if chapter_number == "5" and "annual_prediction_adj <- sum(pred_df$fit_adj)" in raw:
+        return [
+            "annual_prediction_adj = pred_df['fit_adj'].sum()",
+            "print(annual_prediction_adj)",
+        ]
+
+    if chapter_number == "5" and "monthly_expectations_adj <- pred_df$fit_adj" in raw and "annual_prediction <- sum(monthly_expectations_adj)" in raw:
+        return [
+            "monthly_expectations_adj = pred_df['fit_adj'].to_numpy()",
+            "annual_prediction = monthly_expectations_adj.sum()",
+        ]
+
+    if chapter_number == "5" and "annual_recorded <- sum(USSteamCoHold$revenue)" in raw and "annual_difference <- annual_recorded - annual_prediction" in raw:
+        return [
+            "annual_recorded = USSteamCoHold['revenue'].sum()",
+            "annual_difference = annual_recorded - annual_prediction",
+            "print('Recorded annual revenue:', annual_recorded)",
+            "print('Expected annual revenue:', annual_prediction)",
+            "print('Difference:', annual_difference)",
+            "print('Annual prediction standard error:', annual_se)",
+        ]
+
+    if chapter_number == "5" and "PM <- 15000000" in raw and "delta <- PM / annual_se" in raw:
+        return [
+            "PM = 15_000_000",
+            "beta = 0.01",
+            "df = df_res",
+            "delta = PM / annual_se",
+            "c_L = t_dist.ppf(beta / 2, df=df)",
+            "c_U = t_dist.ppf(1 - beta / 2, df=df)",
+            "ADR_lower = c_L * annual_se",
+            "ADR_upper = c_U * annual_se",
+            "print('Acceptable Difference Range for the annual difference:')",
+            "print('Lower bound:', ADR_lower)",
+            "print('Upper bound:', ADR_upper)",
+        ]
+
+    if chapter_number == "5" and "recorded_lower <- annual_prediction + ADR_lower" in raw and "recorded_upper <- annual_prediction + ADR_upper" in raw:
+        return [
+            "recorded_lower = annual_prediction + ADR_lower",
+            "recorded_upper = annual_prediction + ADR_upper",
+            "print('Acceptable bounds for recorded annual revenue:')",
+            "print('Lower bound:', recorded_lower)",
+            "print('Annual expectation:', annual_prediction)",
+            "print('Upper bound:', recorded_upper)",
+        ]
+
+    if chapter_number == "5" and "assurance_over <- 1 - pt(c_U, df = df, ncp = delta)" in raw and "assurance_under <- pt(c_L, df = df, ncp = -delta)" in raw:
+        return [
+            "from scipy.stats import nct",
+            "assurance_over = 1 - nct.cdf(c_U, df=df, nc=delta)",
+            "assurance_under = nct.cdf(c_L, df=df, nc=-delta)",
+            "print('Achieved assurance for detecting overstatement:', round(assurance_over * 100, 1), '%')",
+            "print('Achieved assurance for detecting understatement:', round(assurance_under * 100, 1), '%')",
+        ]
+
+    if chapter_number == "5" and "if (annual_difference < ADR_lower)" in raw and "ADR_upper" in raw:
+        return [
+            "if annual_difference < ADR_lower:",
+            "    print('The annual difference indicates a potential understatement requiring investigation.')",
+            "elif annual_difference > ADR_upper:",
+            "    print('The annual difference indicates a potential overstatement requiring investigation.')",
+            "else:",
+            "    print('The annual difference falls within the acceptable difference range.')",
+        ]
 
     if chapter_number == "5":
         raw = "\n".join(lines)

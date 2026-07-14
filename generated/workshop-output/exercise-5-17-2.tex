@@ -16,8 +16,9 @@
 ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
   data = USSteamCoEstim2
 )
+ussteamco.mod.3$call$data <- model.frame(ussteamco.mod.3)
 
-brief(ussteamco.mod.3)
+car::brief(ussteamco.mod.3)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
            (Intercept) production heatDD  coolDD  summer
