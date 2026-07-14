@@ -10,6 +10,11 @@ if ! command -v cmake >/dev/null 2>&1; then
     exit 1
 fi
 
+if [ ! -f /usr/include/nlopt.h ]; then
+    echo "Missing required NLopt header: /usr/include/nlopt.h"
+    exit 1
+fi
+
 if [ ! -f /usr/include/harfbuzz/hb-ft.h ]; then
     echo "Missing required harfbuzz header: /usr/include/harfbuzz/hb-ft.h"
     exit 1
@@ -20,7 +25,7 @@ if [ ! -f /usr/include/fribidi/fribidi.h ]; then
     exit 1
 fi
 
-echo "System Binder dependencies present: cmake, harfbuzz headers, fribidi headers"
+echo "System Binder dependencies present: cmake, nlopt, harfbuzz headers, fribidi headers"
 
 python - <<'PY'
 import importlib
@@ -32,5 +37,9 @@ PY
 Rscript - <<'RS'
 stopifnot(requireNamespace("FSaudit", quietly = TRUE))
 stopifnot(requireNamespace("aicpa", quietly = TRUE))
-cat("R Binder dependencies load successfully\n")
+stopifnot(requireNamespace("car", quietly = TRUE))
+stopifnot(requireNamespace("pbkrtest", quietly = TRUE))
+stopifnot(requireNamespace("lme4", quietly = TRUE))
+stopifnot(requireNamespace("nloptr", quietly = TRUE))
+cat("R Binder dependencies load successfully (FSaudit, aicpa, car, pbkrtest, lme4, nloptr)\n")
 RS

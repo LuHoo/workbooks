@@ -191,6 +191,15 @@ jobs:
         run: |
           Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops
 
+      - name: Sync Binder config to workbooks publication repository
+        run: |
+          mkdir -p notebooks/workshops/.binder
+          cp .binder/runtime.txt notebooks/workshops/.binder/runtime.txt
+          cp .binder/install.R notebooks/workshops/.binder/install.R
+          cp .binder/requirements.txt notebooks/workshops/.binder/requirements.txt
+          cp .binder/postBuild notebooks/workshops/.binder/postBuild
+          cp .binder/apt.txt notebooks/workshops/.binder/apt.txt
+
       - name: Verify published notebooks follow generated artifact policy
         run: |
           python3 scripts/ci/check-generated-python-notebooks.py \

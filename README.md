@@ -246,9 +246,16 @@ Binder configuration lives in `.binder/` and is designed to support both:
 
 Binder system packages are managed in `.binder/apt.txt`.
 
+Runtime installation policy:
+
+- Binder notebooks must not install packages interactively at runtime.
+- All R/Python and system dependencies are provisioned at image build time.
+- Notebook startup performs dependency validation only and fails with explicit diagnostics when prerequisites are missing.
+
 For native R package build paths, maintain these required OS dependencies there:
 
 - `cmake` (required by `nloptr` source builds)
+- `libnlopt-dev`, `gfortran`, `libblas-dev`, `liblapack-dev` (required for the `nloptr`/`lme4` dependency chain)
 - `libharfbuzz-dev` and `libfribidi-dev` (required by `textshaping`/`systemfonts` headers)
 
 See `docs/architecture/binder-notebook-execution.md` for full dependency flow and maintainer guidance.
