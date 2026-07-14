@@ -48,12 +48,12 @@ Duplicate recommendations across documents were deduplicated to one tracking iss
 
 3. Remove transitional and fallback generation paths
    - https://github.com/LuHoo/ada/issues/111 done
-   - https://github.com/LuHoo/ada/issues/137
+   - https://github.com/LuHoo/ada/issues/137 done
    - Depends on: #131, #90
    - Why now: reduces divergence and clarifies single authoritative generation flow.
 
 4. Add hard publication and edit-safety guardrails
-   - https://github.com/LuHoo/ada/issues/132
+   - https://github.com/LuHoo/ada/issues/132 done
    - https://github.com/LuHoo/ada/issues/141
    - https://github.com/LuHoo/ada/issues/133
    - Depends on: #131

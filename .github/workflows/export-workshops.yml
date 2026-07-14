@@ -184,7 +184,8 @@ jobs:
       - name: Validate Python notebook hygiene before publication
         run: |
           python3 scripts/ci/check-generated-python-notebooks.py \
-            --input-dir generated/python-notebooks
+            --input-dir generated/python-notebooks \
+            --checks hygiene
 
       - name: Publish Python notebooks
         run: |
