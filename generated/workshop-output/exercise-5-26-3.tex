@@ -18,7 +18,7 @@ ussteamco.mod.4 <- lm(
     production_adj + heatDD_adj + coolDD_adj +
     summer_adj + prod_summer_adj +
     heat_summer_adj + cool_summer_adj,
-  data = trans
+  data = transformed_data
 )
 
 summary(ussteamco.mod.4)
@@ -28,7 +28,7 @@ summary(ussteamco.mod.4)
 Call:
 lm(formula = revenue_adj ~ production_adj + heatDD_adj + coolDD_adj +
     summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj,
-    data = trans)
+    data = transformed_data)
 
 Residuals:
      Min       1Q   Median       3Q      Max
@@ -58,4 +58,4 @@ F-statistic: 43.75 on 7 and 27 DF,  p-value: 4.137e-13
 
 \noindent For interaction terms, the interaction is treated as a predictor in its own right. Thus, if \(z\_t=x\_t s\_t\), the transformed interaction is $z_t-\rho z_{t-1} = x_t s_t-\rho x_{t-1}s_{t-1}$.
 
-\noindent It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
+\noindent It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. This is why the notebook keeps the AR(1) correction terminology here: the chapter is emphasizing the manual transformation itself, not introducing a separate Cochran-Orcutt procedure by name. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.

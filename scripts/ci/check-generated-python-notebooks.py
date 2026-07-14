@@ -127,6 +127,7 @@ def check_notebook(path: Path, include_raw_r_checks: bool) -> list[Violation]:
             if not match:
                 continue
             snippet = source[max(0, match.start() - 80) : min(len(source), match.end() + 120)]
+            snippet_preview = snippet.replace(chr(10), "\\n")
             violations.append(
                 Violation(
                     notebook_path=str(path),
@@ -134,7 +135,7 @@ def check_notebook(path: Path, include_raw_r_checks: bool) -> list[Violation]:
                     violation_type="raw_r_construct",
                     detail=(
                         f"raw R-only construct matched {pattern.pattern}; "
-                        f"snippet: {snippet.replace(chr(10), '\\n')}"
+                        f"snippet: {snippet_preview}"
                     ),
                 )
             )

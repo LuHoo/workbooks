@@ -6,134 +6,148 @@
 % Workshop: regression-analysis (chapter 5)
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{from ada_fsaudit_bridge import load_dataset}
+\textcolor{ada_blue}{from ada\_fsaudit\_bridge import load\_dataset}
 \textcolor{ada_blue}{import numpy as np}
 \textcolor{ada_blue}{import pandas as pd}
 \textcolor{ada_blue}{import statsmodels.formula.api as smf}
-\textcolor{ada_blue}{from scipy.stats import shapiro as shapiro_test, t as t_dist}
+\textcolor{ada_blue}{from scipy.stats import shapiro as shapiro\_test, t as t\_dist}
 \textcolor{ada_blue}{from statsmodels.graphics.gofplots import qqplot}
-\textcolor{ada_blue}{from statsmodels.graphics.regressionplots import influence_plot}
-\textcolor{ada_blue}{from statsmodels.graphics.tsaplots import plot_pacf}
-\textcolor{ada_blue}{from statsmodels.stats.anova import anova_lm}
-\textcolor{ada_blue}{from statsmodels.stats.diagnostic import acorr_breusch_godfrey, het_breuschpagan}
-\textcolor{ada_blue}{from statsmodels.stats.outliers_influence import variance_inflation_factor}
+\textcolor{ada_blue}{from statsmodels.graphics.regressionplots import influence\_plot}
+\textcolor{ada_blue}{from statsmodels.graphics.tsaplots import plot\_pacf}
+\textcolor{ada_blue}{from statsmodels.stats.anova import anova\_lm}
+\textcolor{ada_blue}{from statsmodels.stats.diagnostic import acorr\_breusch\_godfrey, het\_breuschpagan}
+\textcolor{ada_blue}{from statsmodels.stats.outliers\_influence import variance\_inflation\_factor}
 
-\textcolor{ada_blue}{def _model_formula(response, terms):}
+\textcolor{ada_blue}{def \_model\_formula(response, terms):}
 \textcolor{ada_blue}{    rhs = ' + '.join(terms) if terms else '1'}
-\textcolor{ada_blue}{    return f'{response} ~ {rhs}'}
+\textcolor{ada_blue}{    return f'\{response\} ~ \{rhs\}'}
 
-\textcolor{ada_blue}{def fit_lm(name, formula, data):}
+\textcolor{ada_blue}{def fit\_lm(name, formula, data):}
 \textcolor{ada_blue}{    model = smf.ols(formula=formula, data=data).fit()}
 \textcolor{ada_blue}{    globals()[name] = model}
 \textcolor{ada_blue}{    return model}
 
-\textcolor{ada_blue}{def brief_model(name):}
+\textcolor{ada_blue}{def brief\_model(name):}
 \textcolor{ada_blue}{    model = globals()[name]}
-\textcolor{ada_blue}{    print(f'Coefficients for {name}:')}
+\textcolor{ada_blue}{    print(f'Coefficients for \{name\}:')}
 \textcolor{ada_blue}{    print(model.params)}
-\textcolor{ada_blue}{    print(f'R-squared: {model.rsquared:.4f}')}
-\textcolor{ada_blue}{    print(f'Adj. R-squared: {model.rsquared_adj:.4f}')}
+\textcolor{ada_blue}{    print(f'R-squared: \{model.rsquared:.4f\}')}
+\textcolor{ada_blue}{    print(f'Adj. R-squared: \{model.rsquared\_adj:.4f\}')}
 
-\textcolor{ada_blue}{def summary_model(name):}
+\textcolor{ada_blue}{def summary\_model(name):}
 \textcolor{ada_blue}{    print(globals()[name].summary())}
 
-\textcolor{ada_blue}{def stepwise_aic(data, response, candidates, direction='both', start_terms=None):}
-\textcolor{ada_blue}{    current_terms = list(start_terms or [])}
-\textcolor{ada_blue}{    best_model = smf.ols(formula=_model_formula(response, current_terms), data=data).fit()}
+\textcolor{ada_blue}{def stepwise\_aic(data, response, candidates, direction='both', start\_terms=None):}
+\textcolor{ada_blue}{    current\_terms = list(start\_terms or [])}
+\textcolor{ada_blue}{    best\_model = smf.ols(formula=\_model\_formula(response, current\_terms), data=data).fit()}
 \textcolor{ada_blue}{    improved = True}
 \textcolor{ada_blue}{    while improved:}
 \textcolor{ada_blue}{        improved = False}
 \textcolor{ada_blue}{        options = []}
 \textcolor{ada_blue}{        if direction in ('forward', 'both'):}
 \textcolor{ada_blue}{            for term in candidates:}
-\textcolor{ada_blue}{                if term in current_terms:}
+\textcolor{ada_blue}{                if term in current\_terms:}
 \textcolor{ada_blue}{                    continue}
-\textcolor{ada_blue}{                trial_terms = current_terms + [term]}
-\textcolor{ada_blue}{                trial = smf.ols(formula=_model_formula(response, trial_terms), data=data).fit()}
-\textcolor{ada_blue}{                options.append((trial.aic, 'add', term, trial, trial_terms))}
-\textcolor{ada_blue}{        if direction in ('backward', 'both') and current_terms:}
-\textcolor{ada_blue}{            for term in list(current_terms):}
-\textcolor{ada_blue}{                trial_terms = [t for t in current_terms if t != term]}
-\textcolor{ada_blue}{                trial = smf.ols(formula=_model_formula(response, trial_terms), data=data).fit()}
-\textcolor{ada_blue}{                options.append((trial.aic, 'drop', term, trial, trial_terms))}
+\textcolor{ada_blue}{                trial\_terms = current\_terms + [term]}
+\textcolor{ada_blue}{                trial = smf.ols(formula=\_model\_formula(response, trial\_terms), data=data).fit()}
+\textcolor{ada_blue}{                options.append((trial.aic, 'add', term, trial, trial\_terms))}
+\textcolor{ada_blue}{        if direction in ('backward', 'both') and current\_terms:}
+\textcolor{ada_blue}{            for term in list(current\_terms):}
+\textcolor{ada_blue}{                trial\_terms = [t for t in current\_terms if t != term]}
+\textcolor{ada_blue}{                trial = smf.ols(formula=\_model\_formula(response, trial\_terms), data=data).fit()}
+\textcolor{ada_blue}{                options.append((trial.aic, 'drop', term, trial, trial\_terms))}
 
 \textcolor{ada_blue}{        if not options:}
 \textcolor{ada_blue}{            break}
 
 \textcolor{ada_blue}{        options.sort(key=lambda x: x[0])}
-\textcolor{ada_blue}{        next_aic, action, term, next_model, next_terms = options[0]}
-\textcolor{ada_blue}{        if next_aic + 1e-9 < best_model.aic:}
-\textcolor{ada_blue}{            best_model = next_model}
-\textcolor{ada_blue}{            current_terms = next_terms}
+\textcolor{ada_blue}{        next\_aic, action, term, next\_model, next\_terms = options[0]}
+\textcolor{ada_blue}{        if next\_aic + 1e-9 < best\_model.aic:}
+\textcolor{ada_blue}{            best\_model = next\_model}
+\textcolor{ada_blue}{            current\_terms = next\_terms}
 \textcolor{ada_blue}{            improved = True}
 
-\textcolor{ada_blue}{    return best_model, current_terms}
+\textcolor{ada_blue}{    return best\_model, current\_terms}
 
-\textcolor{ada_blue}{def model_vif(name, data):}
+\textcolor{ada_blue}{def model\_vif(name, data):}
 \textcolor{ada_blue}{    model = globals()[name]}
 \textcolor{ada_blue}{    exog = model.model.exog}
-\textcolor{ada_blue}{    exog_names = model.model.exog_names}
+\textcolor{ada_blue}{    exog\_names = model.model.exog\_names}
 \textcolor{ada_blue}{    rows = []}
-\textcolor{ada_blue}{    for i, var_name in enumerate(exog_names):}
-\textcolor{ada_blue}{        if var_name == 'Intercept':}
+\textcolor{ada_blue}{    for i, var\_name in enumerate(exog\_names):}
+\textcolor{ada_blue}{        if var\_name == 'Intercept':}
 \textcolor{ada_blue}{            continue}
-\textcolor{ada_blue}{        rows.append((var_name, variance_inflation_factor(exog, i)))}
+\textcolor{ada_blue}{        rows.append((var\_name, variance\_inflation\_factor(exog, i)))}
 \textcolor{ada_blue}{    result = pd.DataFrame(rows, columns=['term', 'vif'])}
 \textcolor{ada_blue}{    print(result)}
 \textcolor{ada_blue}{    return result}
 
-\textcolor{ada_blue}{def model_anova(name, typ=1):}
+\textcolor{ada_blue}{def model\_anova(name, typ=1):}
 \textcolor{ada_blue}{    model = globals()[name]}
-\textcolor{ada_blue}{    table = anova_lm(model, typ=typ)}
+\textcolor{ada_blue}{    table = anova\_lm(model, typ=typ)}
 \textcolor{ada_blue}{    print(table)}
 \textcolor{ada_blue}{    return table}
 
-\textcolor{ada_blue}{def ada_run_r(code):}
-\textcolor{ada_blue}{    try:}
-\textcolor{ada_blue}{        import rpy2.robjects as ro}
-\textcolor{ada_blue}{        from rpy2.robjects import numpy2ri, pandas2ri}
+\textcolor{ada_blue}{def \_ensure\_required\_r\_packages(ro, packages):}
+\textcolor{ada_blue}{    missing = []}
+\textcolor{ada_blue}{    for pkg in packages:}
+\textcolor{ada_blue}{        available = bool(ro.r(f"requireNamespace('\{pkg\}', quietly=TRUE)")[0])}
+\textcolor{ada_blue}{        if not available:}
+\textcolor{ada_blue}{            missing.append(pkg)}
+\textcolor{ada_blue}{    if missing:}
+\textcolor{ada_blue}{        missing\_str = ', '.join(missing)}
+\textcolor{ada_blue}{        raise RuntimeError(}
+\textcolor{ada_blue}{            "Required R package(s) not available: " + missing\_str + ". "}
+\textcolor{ada_blue}{            "This notebook expects all dependencies to be preinstalled by the Binder image. "}
+\textcolor{ada_blue}{            "Please rebuild or verify the Binder environment; runtime package installation is disabled."}
+\textcolor{ada_blue}{        )}
 
-\textcolor{ada_blue}{        with (ro.default_converter + pandas2ri.converter + numpy2ri.converter).context():}
-\textcolor{ada_blue}{            for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
-\textcolor{ada_blue}{                if _name in globals():}
-\textcolor{ada_blue}{                    ro.globalenv[_name] = globals()[_name]}
+\textcolor{ada_blue}{def ada\_run\_r(code):}
+\textcolor{ada_blue}{    import rpy2.robjects as ro}
+\textcolor{ada_blue}{    from rpy2.robjects import numpy2ri, pandas2ri}
 
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('aicpa', quietly=TRUE)) library(aicpa)")}
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('FSaudit', quietly=TRUE)) library(FSaudit)")}
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('car', quietly=TRUE)) library(car)")}
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('lmtest', quietly=TRUE)) library(lmtest)")}
-\textcolor{ada_blue}{            _result = ro.r(code)}
+\textcolor{ada_blue}{    required = ['aicpa', 'FSaudit', 'car', 'lmtest', 'pbkrtest', 'lme4', 'nloptr']}
+\textcolor{ada_blue}{    \_ensure\_required\_r\_packages(ro, required)}
 
-\textcolor{ada_blue}{            _env_names = set(str(_n) for _n in ro.r('ls()'))}
-\textcolor{ada_blue}{            for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
-\textcolor{ada_blue}{                if _name in _env_names:}
-\textcolor{ada_blue}{                    _value = ro.globalenv[_name]}
-\textcolor{ada_blue}{                    _converted = ro.conversion.get_conversion().rpy2py(_value)}
-\textcolor{ada_blue}{                    if hasattr(_converted, 'columns'):}
-\textcolor{ada_blue}{                        globals()[_name] = pd.DataFrame(_converted)}
-\textcolor{ada_blue}{                    else:}
-\textcolor{ada_blue}{                        globals()[_name] = _converted}
+\textcolor{ada_blue}{    with (ro.default\_converter + pandas2ri.converter + numpy2ri.converter).context():}
+\textcolor{ada_blue}{        for \_name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
+\textcolor{ada_blue}{            if \_name in globals():}
+\textcolor{ada_blue}{                ro.globalenv[\_name] = globals()[\_name]}
 
-\textcolor{ada_blue}{            return _result}
-\textcolor{ada_blue}{    except Exception as _exc:}
-\textcolor{ada_blue}{        print(f'R bridge execution skipped for this block: {_exc}')}
+\textcolor{ada_blue}{        ro.r("library(aicpa)")}
+\textcolor{ada_blue}{        ro.r("library(FSaudit)")}
+\textcolor{ada_blue}{        ro.r("library(car)")}
+\textcolor{ada_blue}{        ro.r("library(lmtest)")}
+\textcolor{ada_blue}{        \_result = ro.r(code)}
+
+\textcolor{ada_blue}{        \_env\_names = set(str(\_n) for \_n in ro.r('ls()'))}
+\textcolor{ada_blue}{        for \_name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
+\textcolor{ada_blue}{            if \_name in \_env\_names:}
+\textcolor{ada_blue}{                \_value = ro.globalenv[\_name]}
+\textcolor{ada_blue}{                \_converted = ro.conversion.get\_conversion().rpy2py(\_value)}
+\textcolor{ada_blue}{                if hasattr(\_converted, 'columns'):}
+\textcolor{ada_blue}{                    globals()[\_name] = pd.DataFrame(\_converted)}
+\textcolor{ada_blue}{                else:}
+\textcolor{ada_blue}{                    globals()[\_name] = \_converted}
+
+\textcolor{ada_blue}{        return \_result}
 
 \textcolor{ada_blue}{try:}
 \textcolor{ada_blue}{    import contextlib}
 \textcolor{ada_blue}{    import io}
-\textcolor{ada_blue}{    _stderr_buffer = io.StringIO()}
-\textcolor{ada_blue}{    with contextlib.redirect_stderr(_stderr_buffer):}
-\textcolor{ada_blue}{        USSteamCo = load_dataset('USSteamCo')}
+\textcolor{ada_blue}{    \_stderr\_buffer = io.StringIO()}
+\textcolor{ada_blue}{    with contextlib.redirect\_stderr(\_stderr\_buffer):}
+\textcolor{ada_blue}{        USSteamCo = load\_dataset('USSteamCo')}
 \textcolor{ada_blue}{except Exception:}
-\textcolor{ada_blue}{    # Last-resort fallback keeps notebook execution alive when the dataset is unavailable.}
-\textcolor{ada_blue}{    _n = 48}
-\textcolor{ada_blue}{    USSteamCo = pd.DataFrame({}
-\textcolor{ada_blue}{        'revenue': np.linspace(200000, 320000, _n),}
-\textcolor{ada_blue}{        'production': np.linspace(80, 180, _n),}
-\textcolor{ada_blue}{        'coolDD': np.linspace(5, 35, _n),}
-\textcolor{ada_blue}{        'heatDD': np.linspace(40, 5, _n),}
-\textcolor{ada_blue}{    })}
-\textcolor{ada_blue}{    USSteamCo['date'] = pd.date_range('2011-01-01', periods=_n, freq='MS')}
+\textcolor{ada_blue}{    \# Last-resort fallback keeps notebook execution alive when the dataset is unavailable.}
+\textcolor{ada_blue}{    \_n = 48}
+\textcolor{ada_blue}{    USSteamCo = pd.DataFrame(\{}
+\textcolor{ada_blue}{        'revenue': np.linspace(200000, 320000, \_n),}
+\textcolor{ada_blue}{        'production': np.linspace(80, 180, \_n),}
+\textcolor{ada_blue}{        'coolDD': np.linspace(5, 35, \_n),}
+\textcolor{ada_blue}{        'heatDD': np.linspace(40, 5, \_n),}
+\textcolor{ada_blue}{    \})}
+\textcolor{ada_blue}{    USSteamCo['date'] = pd.date\_range('2011-01-01', periods=\_n, freq='MS')}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -149,13 +163,13 @@
 \textcolor{ada_blue}{        return obj.head(n)}
 \textcolor{ada_blue}{    return obj[:n]}
 
-\textcolor{ada_blue}{sns.set_theme(style='whitegrid')}
+\textcolor{ada_blue}{sns.set\_theme(style='whitegrid')}
 \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{import numpy as np}
 \textcolor{ada_blue}{from math import sqrt}
-\textcolor{ada_blue}{from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t}
+\textcolor{ada_blue}{from scipy.stats import binom, chi2, chisquare, f, hypergeom, nct, norm, poisson, t}
 \end{Verbatim}
 
 
@@ -166,8 +180,8 @@
 To run the exercises in this workshop, we need to load a few packages.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{# Python equivalent setup for plotting and data manipulation}
-\textcolor{ada_blue}{sns.set_theme(style='whitegrid')}
+\textcolor{ada_blue}{\# Python equivalent setup for plotting and data manipulation}
+\textcolor{ada_blue}{sns.set\_theme(style='whitegrid')}
 \end{Verbatim}
 
 
@@ -199,6 +213,7 @@ The \ttblue{summary} command produces summary statistics of all variables in the
 \end{Verbatim}
 
 We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 5.4.4.
+The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, \ttblue{R} recycles this 12-month pattern across the four years automatically. Later, when we include \ttblue{summer} in a regression model, the \ttblue{lm} function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{USSteamCo["summer"] = np.resize(np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]), len(USSteamCo))}
@@ -207,7 +222,7 @@ We create a dummy variable to distinguish between heating months and cooling mon
 We reformat the month variable, that has a character type, into the \ttblue{date} variable.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{USSteamCo['date'] = pd.date_range('2011-01-01', periods=len(USSteamCo), freq='MS')}
+\textcolor{ada_blue}{USSteamCo['date'] = pd.date\_range('2011-01-01', periods=len(USSteamCo), freq='MS')}
 \end{Verbatim}
 
 We split the data file into an estimation set and a hold-out set.
@@ -221,25 +236,25 @@ Figure 5.2 shows the histograms of the data in the US SteamCo estimation set.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, axes = plt.subplots(2, 2, figsize=(12, 8))}
-\textcolor{ada_blue}{plot_specs = [}
-\textcolor{ada_blue}{    ('revenue', 4_000_000, 'Revenue'),}
-\textcolor{ada_blue}{    ('production', 50_000, 'Production'),}
+\textcolor{ada_blue}{plot\_specs = [}
+\textcolor{ada_blue}{    ('revenue', 4\_000\_000, 'Revenue'),}
+\textcolor{ada_blue}{    ('production', 50\_000, 'Production'),}
 \textcolor{ada_blue}{    ('coolDD', 50, 'Cooling degree days'),}
 \textcolor{ada_blue}{    ('heatDD', 100, 'Heating degree days'),}
 \textcolor{ada_blue}{]}
-\textcolor{ada_blue}{for ax, (column, binwidth, title) in zip(axes.flatten(), plot_specs):}
+\textcolor{ada_blue}{for ax, (column, binwidth, title) in zip(axes.flatten(), plot\_specs):}
 \textcolor{ada_blue}{    series = USSteamCoEstim[column].dropna()}
 \textcolor{ada_blue}{    if series.empty:}
-\textcolor{ada_blue}{        ax.set_title(f'{title} (no data)')}
+\textcolor{ada_blue}{        ax.set\_title(f'\{title\} (no data)')}
 \textcolor{ada_blue}{        continue}
 \textcolor{ada_blue}{    bins = np.arange(series.min(), series.max() + binwidth, binwidth)}
 \textcolor{ada_blue}{    if len(bins) < 2:}
 \textcolor{ada_blue}{        bins = 10}
-\textcolor{ada_blue}{    sns.histplot(series, bins=bins, color='#00338D', edgecolor='white', ax=ax)}
-\textcolor{ada_blue}{    ax.set_title(title)}
-\textcolor{ada_blue}{    ax.set_xlabel(column)}
-\textcolor{ada_blue}{    ax.set_ylabel('Count')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{    sns.histplot(series, bins=bins, color='\#00338D', edgecolor='white', ax=ax)}
+\textcolor{ada_blue}{    ax.set\_title(title)}
+\textcolor{ada_blue}{    ax.set\_xlabel(column)}
+\textcolor{ada_blue}{    ax.set\_ylabel('Count')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -247,15 +262,15 @@ Figure 5.3 shows the time-series plots for the same dataset.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{fig, ax_left = plt.subplots(figsize=(10, 5))}
-\textcolor{ada_blue}{ax_right = ax_left.twinx()}
-\textcolor{ada_blue}{display(ax_left.plot(USSteamCoEstim['date'], USSteamCoEstim['revenue'], color='#00338D', label='Revenue'))}
-\textcolor{ada_blue}{display(ax_right.plot(USSteamCoEstim['date'], USSteamCoEstim['production'], color='#BC204B', label='Production'))}
-\textcolor{ada_blue}{ax_left.set_ylabel('Revenue ($)', color='#00338D')}
-\textcolor{ada_blue}{ax_right.set_ylabel('Production (x 1000 lb)', color='#BC204B')}
-\textcolor{ada_blue}{ax_left.set_xlabel('Date')}
-\textcolor{ada_blue}{fig.autofmt_xdate()}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{fig, ax\_left = plt.subplots(figsize=(10, 5))}
+\textcolor{ada_blue}{ax\_right = ax\_left.twinx()}
+\textcolor{ada_blue}{display(ax\_left.plot(USSteamCoEstim['date'], USSteamCoEstim['revenue'], color='\#00338D', label='Revenue'))}
+\textcolor{ada_blue}{display(ax\_right.plot(USSteamCoEstim['date'], USSteamCoEstim['production'], color='\#BC204B', label='Production'))}
+\textcolor{ada_blue}{ax\_left.set\_ylabel('Revenue (\$)', color='\#00338D')}
+\textcolor{ada_blue}{ax\_right.set\_ylabel('Production (x 1000 lb)', color='\#BC204B')}
+\textcolor{ada_blue}{ax\_left.set\_xlabel('Date')}
+\textcolor{ada_blue}{fig.autofmt\_xdate()}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -263,10 +278,10 @@ Figure 5.1 shows a scatter plot of the independent variable production ($x$-axis
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 5))}
-\textcolor{ada_blue}{sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)}
-\textcolor{ada_blue}{ax.set_xlabel('Production (x 1000 lb)')}
-\textcolor{ada_blue}{ax.set_ylabel('Revenue ($)')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='\#00338D', ax=ax)}
+\textcolor{ada_blue}{ax.set\_xlabel('Production (x 1000 lb)')}
+\textcolor{ada_blue}{ax.set\_ylabel('Revenue (\$)')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -274,10 +289,10 @@ The enhanced scatter plot in Figure 5.4 is obtained by running the following cod
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 5))}
-\textcolor{ada_blue}{sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)}
-\textcolor{ada_blue}{ax.set_xlabel('production')}
-\textcolor{ada_blue}{ax.set_ylabel('revenue')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='\#00338D', ax=ax)}
+\textcolor{ada_blue}{ax.set\_xlabel('production')}
+\textcolor{ada_blue}{ax.set\_ylabel('revenue')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -290,11 +305,11 @@ The enhanced scatter plot in Figure 5.4 is obtained by running the following cod
 
 
 Figure 5.4 shows that there is a positive (increasing) relationship: as production increases, so does revenue.
-We use the function \ttblue{lm} (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set \ttblue{USSteamCoEstim}, as explained in Section 5.1.1. A brief summary of the model is obtained with the function \ttblue{brief}.
+We use the function \ttblue{lm} (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set \ttblue{USSteamCoEstim}, as explained in Section 5.1.1. A brief summary of the model is obtained with \ttblue{car::brief()}, which is part of the \ttblue{car} package loaded in Exercise 5.1.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_0 = fit_lm('ussteamco_mod_0', 'revenue ~ production', USSteamCoEstim)}
-\textcolor{ada_blue}{brief_model('ussteamco_mod_0')}
+\textcolor{ada_blue}{ussteamco\_mod\_0 = fit\_lm('ussteamco\_mod\_0', 'revenue ~ production', USSteamCoEstim)}
+\textcolor{ada_blue}{brief\_model('ussteamco\_mod\_0')}
 \end{Verbatim}
 
 The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$, and the estimate of the slope $\beta_1$, $b_1 = 18.99$.
@@ -309,10 +324,10 @@ The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$, and the estimate of 
 A full summary of \ttblue{mod.0} can be obtained with the \ttblue{summary} function.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{summary_model('ussteamco_mod_0')}
+\textcolor{ada_blue}{summary\_model('ussteamco\_mod\_0')}
 \end{Verbatim}
 
-In addition to the statistics produced by \ttblue{brief}, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
+In addition to the statistics produced by \ttblue{car::brief()}, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
 
 
 \end{exercise}
@@ -324,19 +339,19 @@ In addition to the statistics produced by \ttblue{brief}, it provides insight in
 The correlations in Table 5.3 are calculated using the \ttblue{cor} function.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()}
-\textcolor{ada_blue}{display(cor_ussteam)}
+\textcolor{ada_blue}{cor\_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()}
+\textcolor{ada_blue}{display(cor\_ussteam)}
 \end{Verbatim}
 
 The correlogram in Figure 5.5 is produced by
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{if 'cor_ussteam' not in globals():}
-\textcolor{ada_blue}{    cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()}
+\textcolor{ada_blue}{if 'cor\_ussteam' not in globals():}
+\textcolor{ada_blue}{    cor\_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 6))}
-\textcolor{ada_blue}{sns.heatmap(cor_ussteam, vmin=-1, vmax=1, cmap='coolwarm', annot=True, fmt='.2f', ax=ax)}
-\textcolor{ada_blue}{ax.set_title('Correlation matrix')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{sns.heatmap(cor\_ussteam, vmin=-1, vmax=1, cmap='coolwarm', annot=True, fmt='.2f', ax=ax)}
+\textcolor{ada_blue}{ax.set\_title('Correlation matrix')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -352,15 +367,15 @@ The \ttblue{step} function can be used to implement both backward and forward me
 We start with the forward method. From a model that only uses the constant (\ttblue{revenue $\sim$ 1}), we add variables one by one. The variable that the largest effect on the criterion, in this example, the default AIC, is selected for inclusion in the model.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{model_forward, model_forward_terms = stepwise_aic(}
+\textcolor{ada_blue}{model\_forward, model\_forward\_terms = stepwise\_aic(}
 \textcolor{ada_blue}{    USSteamCoEstim,}
 \textcolor{ada_blue}{    response='revenue',}
 \textcolor{ada_blue}{    candidates=['production', 'coolDD', 'heatDD'],}
 \textcolor{ada_blue}{    direction='forward',}
-\textcolor{ada_blue}{    start_terms=[],}
+\textcolor{ada_blue}{    start\_terms=[],}
 \textcolor{ada_blue}{)}
-\textcolor{ada_blue}{print('Forward terms:', model_forward_terms)}
-\textcolor{ada_blue}{print(model_forward.summary())}
+\textcolor{ada_blue}{print('Forward terms:', model\_forward\_terms)}
+\textcolor{ada_blue}{print(model\_forward.summary())}
 \end{Verbatim}
 
 Starting with AIC = 1114.66 of a model with only a constant, \ttblue{R} evaluates the inclusion of each of the available independent variables and their effect on the resulting AIC. In the first step, it appears that including \ttblue{heatDD} has the best effect on AIC, as it reduces from 1114.66 to 1096.56.
@@ -368,36 +383,36 @@ Using this value of AIC = 1096.56 as the new starting value, \ttblue{R} evaluate
 In the last step, we see that including \ttblue{coolDD} does not further reduce the AIC, leading to the final model \ttblue{revenue $\sim$ heatDD + production}. The summary of this model is:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{((model_forward.summary() if hasattr(model_forward, 'summary') else model_forward.describe(include='all') if hasattr(model_forward, 'describe') else print('Skipped summary/describe: model_forward has no compatible method')) if 'model_forward' in globals() else print('Skipped summary/describe: model_forward not defined'))}
+\textcolor{ada_blue}{((model\_forward.summary() if hasattr(model\_forward, 'summary') else model\_forward.describe(include='all') if hasattr(model\_forward, 'describe') else print('Skipped summary/describe: model\_forward has no compatible method')) if 'model\_forward' in globals() else print('Skipped summary/describe: model\_forward not defined'))}
 \end{Verbatim}
 
 Next, we show an example of the backward method, starting with the full model and eliminating variables one by one.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{model_backward, model_backward_terms = stepwise_aic(}
+\textcolor{ada_blue}{model\_backward, model\_backward\_terms = stepwise\_aic(}
 \textcolor{ada_blue}{    USSteamCoEstim,}
 \textcolor{ada_blue}{    response='revenue',}
 \textcolor{ada_blue}{    candidates=['production', 'coolDD', 'heatDD'],}
 \textcolor{ada_blue}{    direction='backward',}
-\textcolor{ada_blue}{    start_terms=['production', 'coolDD', 'heatDD'],}
+\textcolor{ada_blue}{    start\_terms=['production', 'coolDD', 'heatDD'],}
 \textcolor{ada_blue}{)}
-\textcolor{ada_blue}{print('Backward terms:', model_backward_terms)}
-\textcolor{ada_blue}{print(model_backward.summary())}
+\textcolor{ada_blue}{print('Backward terms:', model\_backward\_terms)}
+\textcolor{ada_blue}{print(model\_backward.summary())}
 \end{Verbatim}
 
 We observe that this strategy results into the exact same model.
 To run the stepwise procedure in both directions, we use the following code.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{fit_both, fit_both_terms = stepwise_aic(}
+\textcolor{ada_blue}{fit\_both, fit\_both\_terms = stepwise\_aic(}
 \textcolor{ada_blue}{    USSteamCoEstim,}
 \textcolor{ada_blue}{    response='revenue',}
 \textcolor{ada_blue}{    candidates=['production', 'coolDD', 'heatDD'],}
 \textcolor{ada_blue}{    direction='both',}
-\textcolor{ada_blue}{    start_terms=[],}
+\textcolor{ada_blue}{    start\_terms=[],}
 \textcolor{ada_blue}{)}
-\textcolor{ada_blue}{print('Both-directions terms:', fit_both_terms)}
-\textcolor{ada_blue}{print(fit_both.summary())}
+\textcolor{ada_blue}{print('Both-directions terms:', fit\_both\_terms)}
+\textcolor{ada_blue}{print(fit\_both.summary())}
 \end{Verbatim}
 
 
@@ -411,8 +426,8 @@ To run the stepwise procedure in both directions, we use the following code.
 We now regress $y$ = \ttblue{revenue} on $x_1$ = \ttblue{production}, $x_2$ = \ttblue{coolDD}, and $x_3$ = \ttblue{heatDD}.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_1 = fit_lm('ussteamco_mod_1', 'revenue ~ production + coolDD + heatDD', USSteamCoEstim)}
-\textcolor{ada_blue}{summary_model('ussteamco_mod_1')}
+\textcolor{ada_blue}{ussteamco\_mod\_1 = fit\_lm('ussteamco\_mod\_1', 'revenue ~ production + coolDD + heatDD', USSteamCoEstim)}
+\textcolor{ada_blue}{summary\_model('ussteamco\_mod\_1')}
 \end{Verbatim}
 
 Adding the additional variables \ttblue{coolDD} and \ttblue{heatDD} has improved the fit of the model. The residual standard deviation decreased from 4,112,487 for \ttblue{mod.0} to 1,980,698 for \ttblue{mod.1}. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods.
@@ -429,33 +444,33 @@ The scatterplot in Figure 5.6 is prepared using
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 5))}
-\textcolor{ada_blue}{sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)}
-\textcolor{ada_blue}{ax.set_xlabel('production')}
-\textcolor{ada_blue}{ax.set_ylabel('revenue')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='\#00338D', ax=ax)}
+\textcolor{ada_blue}{ax.set\_xlabel('production')}
+\textcolor{ada_blue}{ax.set\_ylabel('revenue')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{plot_df = USSteamCoEstim.copy()}
-\textcolor{ada_blue}{plot_df['summer_fact'] = plot_df['summer'].map({0: 'No', 1: 'Yes'})}
+\textcolor{ada_blue}{plot\_df = USSteamCoEstim.copy()}
+\textcolor{ada_blue}{plot\_df['summer\_fact'] = plot\_df['summer'].map(\{0: 'No', 1: 'Yes'\})}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(8, 5))}
-\textcolor{ada_blue}{sns.scatterplot(data=plot_df, x='production', y='revenue', hue='summer_fact', palette={'No': '#00338D', 'Yes': '#BC204B'}, ax=ax)}
-\textcolor{ada_blue}{display(sns.regplot(data=plot_df[plot_df['summer_fact'] == 'No'], x='production', y='revenue', scatter=False, color='#00338D', ax=ax))}
-\textcolor{ada_blue}{display(sns.regplot(data=plot_df[plot_df['summer_fact'] == 'Yes'], x='production', y='revenue', scatter=False, color='#BC204B', ax=ax))}
-\textcolor{ada_blue}{ax.set_xlabel('Production')}
-\textcolor{ada_blue}{ax.set_ylabel('Revenue')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{sns.scatterplot(data=plot\_df, x='production', y='revenue', hue='summer\_fact', palette=\{'No': '\#00338D', 'Yes': '\#BC204B'\}, ax=ax)}
+\textcolor{ada_blue}{display(sns.regplot(data=plot\_df[plot\_df['summer\_fact'] == 'No'], x='production', y='revenue', scatter=False, color='\#00338D', ax=ax))}
+\textcolor{ada_blue}{display(sns.regplot(data=plot\_df[plot\_df['summer\_fact'] == 'Yes'], x='production', y='revenue', scatter=False, color='\#BC204B', ax=ax))}
+\textcolor{ada_blue}{ax.set\_xlabel('Production')}
+\textcolor{ada_blue}{ax.set\_ylabel('Revenue')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
 Note the special operator \ttblue{|}, that can be expressed as 'given the value of'. To call this relationship, we use
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_2 = fit_lm('ussteamco_mod_2', 'revenue ~ production * summer + coolDD * summer + heatDD * summer', USSteamCoEstim)}
-\textcolor{ada_blue}{summary_model('ussteamco_mod_2')}
+\textcolor{ada_blue}{ussteamco\_mod\_2 = fit\_lm('ussteamco\_mod\_2', 'revenue ~ production * summer + coolDD * summer + heatDD * summer', USSteamCoEstim)}
+\textcolor{ada_blue}{summary\_model('ussteamco\_mod\_2')}
 \end{Verbatim}
 
 The formula specified in the \ttblue{lm} function, \ttblue{revenue $\sim$ production * summer + coolDD * summer + heatDD * summer} can also be written as \ttblue{revenue $\sim$ (production + coolDD + heatDD) * summer}.
@@ -471,10 +486,10 @@ As a result, this further improved the fit of the model. The residual standard d
 The cross-correlation plot in Figure 5.7 is created by running:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{x = USSteamCoEstim['production'].to_numpy()}
-\textcolor{ada_blue}{y = USSteamCoEstim['revenue'].to_numpy()}
-\textcolor{ada_blue}{max_lag = 4}
-\textcolor{ada_blue}{lags = np.arange(-max_lag, max_lag + 1)}
+\textcolor{ada_blue}{x = USSteamCoEstim['production'].to\_numpy()}
+\textcolor{ada_blue}{y = USSteamCoEstim['revenue'].to\_numpy()}
+\textcolor{ada_blue}{max\_lag = 4}
+\textcolor{ada_blue}{lags = np.arange(-max\_lag, max\_lag + 1)}
 \textcolor{ada_blue}{corrs = []}
 \textcolor{ada_blue}{for lag in lags:}
 \textcolor{ada_blue}{    if lag < 0:}
@@ -486,9 +501,9 @@ The cross-correlation plot in Figure 5.7 is created by running:
 \textcolor{ada_blue}{    corrs.append(corr)}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 4))}
 \textcolor{ada_blue}{ax.stem(lags, corrs, basefmt=' ')}
-\textcolor{ada_blue}{ax.set_xlabel('Lag')}
-\textcolor{ada_blue}{ax.set_ylabel('Cross-correlation')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{ax.set\_xlabel('Lag')}
+\textcolor{ada_blue}{ax.set\_ylabel('Cross-correlation')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -506,21 +521,21 @@ The residual plots in Figure 5.9 are obtained by:
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
 \textcolor{ada_blue}{USSteamCoEstim = USSteamCoEstim.copy()}
-\textcolor{ada_blue}{USSteamCoEstim['resid'] = ussteamco_mod_2.resid}
+\textcolor{ada_blue}{USSteamCoEstim['resid'] = ussteamco\_mod\_2.resid}
 \textcolor{ada_blue}{predictors = ['production', 'coolDD', 'heatDD', 'summer']}
 \textcolor{ada_blue}{fig, axes = plt.subplots(3, 2, figsize=(12, 12))}
 \textcolor{ada_blue}{for ax, var in zip(axes.flatten()[:4], predictors):}
-\textcolor{ada_blue}{    display(sns.scatterplot(x=USSteamCoEstim[var], y=USSteamCoEstim['resid'], color='#00338D', ax=ax))}
+\textcolor{ada_blue}{    display(sns.scatterplot(x=USSteamCoEstim[var], y=USSteamCoEstim['resid'], color='\#00338D', ax=ax))}
 \textcolor{ada_blue}{    ax.axhline(0, linestyle='dotted', color='black')}
-\textcolor{ada_blue}{    ax.set_xlabel(var)}
-\textcolor{ada_blue}{    ax.set_ylabel('resid')}
-\textcolor{ada_blue}{fitted_vals = ussteamco_mod_2.fittedvalues}
-\textcolor{ada_blue}{display(sns.scatterplot(x=fitted_vals, y=USSteamCoEstim['resid'], color='#00338D', ax=axes.flatten()[4]))}
+\textcolor{ada_blue}{    ax.set\_xlabel(var)}
+\textcolor{ada_blue}{    ax.set\_ylabel('resid')}
+\textcolor{ada_blue}{fitted\_vals = ussteamco\_mod\_2.fittedvalues}
+\textcolor{ada_blue}{display(sns.scatterplot(x=fitted\_vals, y=USSteamCoEstim['resid'], color='\#00338D', ax=axes.flatten()[4]))}
 \textcolor{ada_blue}{display(axes.flatten()[4].axhline(0, linestyle='dotted', color='black'))}
-\textcolor{ada_blue}{display(axes.flatten()[4].set_xlabel('Fitted Values'))}
-\textcolor{ada_blue}{display(axes.flatten()[4].set_ylabel('resid'))}
+\textcolor{ada_blue}{display(axes.flatten()[4].set\_xlabel('Fitted Values'))}
+\textcolor{ada_blue}{display(axes.flatten()[4].set\_ylabel('resid'))}
 \textcolor{ada_blue}{display(axes.flatten()[5].axis('off'))}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -536,16 +551,16 @@ Figure 5.10 provides the Influence index plots. From bottom to top: Leverage poi
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{influence = ussteamco_mod_2.get_influence()}
+\textcolor{ada_blue}{influence = ussteamco\_mod\_2.get\_influence()}
 \textcolor{ada_blue}{fig, axes = plt.subplots(3, 1, figsize=(10, 10), sharex=True)}
-\textcolor{ada_blue}{display(axes[0].plot(influence.hat_matrix_diag, marker='o'))}
-\textcolor{ada_blue}{display(axes[0].set_ylabel('Leverage'))}
-\textcolor{ada_blue}{display(axes[1].plot(influence.resid_studentized_external, marker='o'))}
-\textcolor{ada_blue}{display(axes[1].set_ylabel('Studentized residual'))}
-\textcolor{ada_blue}{display(axes[2].plot(influence.cooks_distance[0], marker='o'))}
-\textcolor{ada_blue}{display(axes[2].set_ylabel("Cook's distance"))}
-\textcolor{ada_blue}{display(axes[2].set_xlabel('Observation'))}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{display(axes[0].plot(influence.hat\_matrix\_diag, marker='o'))}
+\textcolor{ada_blue}{display(axes[0].set\_ylabel('Leverage'))}
+\textcolor{ada_blue}{display(axes[1].plot(influence.resid\_studentized\_external, marker='o'))}
+\textcolor{ada_blue}{display(axes[1].set\_ylabel('Studentized residual'))}
+\textcolor{ada_blue}{display(axes[2].plot(influence.cooks\_distance[0], marker='o'))}
+\textcolor{ada_blue}{display(axes[2].set\_ylabel("Cook's distance"))}
+\textcolor{ada_blue}{display(axes[2].set\_xlabel('Observation'))}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -560,21 +575,21 @@ Figure 5.10 provides the Influence index plots. From bottom to top: Leverage poi
 We obtain the hat-values of a model by running the \ttblue{hatvalues} function on it.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{hatvals_mod_2 = ussteamco_mod_2.get_influence().hat_matrix_diag}
-\textcolor{ada_blue}{display(pd.Series(hatvals_mod_2, name='hatvalues'))}
+\textcolor{ada_blue}{hatvals\_mod\_2 = ussteamco\_mod\_2.get\_influence().hat\_matrix\_diag}
+\textcolor{ada_blue}{display(pd.Series(hatvals\_mod\_2, name='hatvalues'))}
 \end{Verbatim}
 
 The three largest hat-values are then summarized by
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{top_hat_idx = np.argsort(hatvals_mod_2)[-3:][::-1]}
-\textcolor{ada_blue}{display(pd.Series(hatvals_mod_2[top_hat_idx], index=top_hat_idx + 1, name='top_hatvalues'))}
+\textcolor{ada_blue}{top\_hat\_idx = np.argsort(hatvals\_mod\_2)[-3:][::-1]}
+\textcolor{ada_blue}{display(pd.Series(hatvals\_mod\_2[top\_hat\_idx], index=top\_hat\_idx + 1, name='top\_hatvalues'))}
 \end{Verbatim}
 
 The sum of the hat-values is equal to $k + 1$.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{print(np.sum(hatvals_mod_2))}
+\textcolor{ada_blue}{print(np.sum(hatvals\_mod\_2))}
 \end{Verbatim}
 
 
@@ -588,14 +603,14 @@ The sum of the hat-values is equal to $k + 1$.
 Figure 5.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{resid_std_mod2 = (ussteamco_mod_2.resid - ussteamco_mod_2.resid.mean()) / ussteamco_mod_2.resid.std(ddof=1)}
+\textcolor{ada_blue}{resid\_std\_mod2 = (ussteamco\_mod\_2.resid - ussteamco\_mod\_2.resid.mean()) / ussteamco\_mod\_2.resid.std(ddof=1)}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 5))}
-\textcolor{ada_blue}{qqplot(resid_std_mod2, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)}
-\textcolor{ada_blue}{ax.set_title('QQ Plot of Standardized Residuals (mod.2)')}
-\textcolor{ada_blue}{ax.set_xlabel('Theoretical Quantiles')}
-\textcolor{ada_blue}{ax.set_ylabel('Standardized Residuals')}
+\textcolor{ada_blue}{qqplot(resid\_std\_mod2, line='45', fit=True, ax=ax, color='\#00338D', alpha=0.8)}
+\textcolor{ada_blue}{ax.set\_title('QQ Plot of Standardized Residuals (mod.2)')}
+\textcolor{ada_blue}{ax.set\_xlabel('Theoretical Quantiles')}
+\textcolor{ada_blue}{ax.set\_ylabel('Standardized Residuals')}
 \textcolor{ada_blue}{ax.grid(alpha=0.25)}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -610,15 +625,15 @@ Figure 5.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three la
 We obtain the Cook's distances of a model by running the \ttblue{cooks.distance} function on it.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{cooks_mod_2 = ussteamco_mod_2.get_influence().cooks_distance[0]}
-\textcolor{ada_blue}{display(pd.Series(cooks_mod_2, name='cooks_distance'))}
+\textcolor{ada_blue}{cooks\_mod\_2 = ussteamco\_mod\_2.get\_influence().cooks\_distance[0]}
+\textcolor{ada_blue}{display(pd.Series(cooks\_mod\_2, name='cooks\_distance'))}
 \end{Verbatim}
 
 The three largest Cook's distances are then summarized by
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{top_cooks_idx = np.argsort(cooks_mod_2)[-3:][::-1]}
-\textcolor{ada_blue}{display(pd.Series(cooks_mod_2[top_cooks_idx], index=top_cooks_idx + 1, name='top_cooks_distance'))}
+\textcolor{ada_blue}{top\_cooks\_idx = np.argsort(cooks\_mod\_2)[-3:][::-1]}
+\textcolor{ada_blue}{display(pd.Series(cooks\_mod\_2[top\_cooks\_idx], index=top\_cooks\_idx + 1, name='top\_cooks\_distance'))}
 \end{Verbatim}
 
 
@@ -633,8 +648,8 @@ Figure 5.12 shows the hat-values, Studentized residuals, and Cook’s distances 
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(8, 6))}
-\textcolor{ada_blue}{influence_plot(ussteamco_mod_2, ax=ax, criterion='cooks')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{influence\_plot(ussteamco\_mod\_2, ax=ax, criterion='cooks')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -650,16 +665,16 @@ Define the new estimation set. We replace the original value of observation 22 w
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{USSteamCoEstim2 = USSteamCoEstim.copy()}
-\textcolor{ada_blue}{p5 = np.quantile(ussteamco_mod_2.resid, 0.05)}
-\textcolor{ada_blue}{fit_22 = ussteamco_mod_2.fittedvalues.iloc[21]}
-\textcolor{ada_blue}{USSteamCoEstim2.loc[USSteamCoEstim2.index[21], 'revenue'] = fit_22 + p5}
+\textcolor{ada_blue}{p5 = np.quantile(ussteamco\_mod\_2.resid, 0.05)}
+\textcolor{ada_blue}{fit\_22 = ussteamco\_mod\_2.fittedvalues.iloc[21]}
+\textcolor{ada_blue}{USSteamCoEstim2.loc[USSteamCoEstim2.index[21], 'revenue'] = fit\_22 + p5}
 \end{Verbatim}
 
 We then fit a new linear model.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_3 = fit_lm('ussteamco_mod_3', 'revenue ~ (production + heatDD + coolDD) * summer', USSteamCoEstim2)}
-\textcolor{ada_blue}{brief_model('ussteamco_mod_3')}
+\textcolor{ada_blue}{ussteamco\_mod\_3 = fit\_lm('ussteamco\_mod\_3', 'revenue ~ (production + heatDD + coolDD) * summer', USSteamCoEstim2)}
+\textcolor{ada_blue}{brief\_model('ussteamco\_mod\_3')}
 \end{Verbatim}
 
 
@@ -673,14 +688,14 @@ We then fit a new linear model.
 To assess multicollinearity for a model without interaction terms, such as \ttblue{mod.1}, we use the standard \ttblue{vif()} function.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{model_vif('ussteamco_mod_1', USSteamCoEstim)}
+\textcolor{ada_blue}{model\_vif('ussteamco\_mod\_1', USSteamCoEstim)}
 \end{Verbatim}
 
 A common rule of thumb is that VIF values greater than 10 indicate substantial multicollinearity. Since none of the VIF values exceeds this threshold, we conclude that there is no evidence of serious variance inflation in \ttblue{mod.1}.
 For models that include interaction terms, such as \ttblue{mod.3}, we use the \ttblue{vif()} function with the additional option \ttblue{type = "predictor"}. This reports the Generalized Variance Inflation Factor (GVIF) and its adjusted value, \(GVIF^{1/(2df)}\).
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{model_vif('ussteamco_mod_3', USSteamCoEstim2)}
+\textcolor{ada_blue}{model\_vif('ussteamco\_mod\_3', USSteamCoEstim2)}
 \end{Verbatim}
 
 The adjusted GVIF places predictors with different degrees of freedom on a comparable scale. For a predictor with one degree of freedom, the adjusted GVIF equals the square root of the ordinary VIF. Consequently, the conventional VIF threshold of 10 corresponds to an adjusted GVIF of approximately \(\sqrt{10} \approx 3.16\). Since none of the reported values exceeds 3.16, we conclude that \ttblue{mod.3} does not exhibit problematic multicollinearity.
@@ -695,7 +710,7 @@ The adjusted GVIF places predictors with different degrees of freedom on a compa
 Table 5.5 provides the analysis of variance for \ttblue{mod.0}. We apply the \ttblue{anova()} command to perform this analysis.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{anova_ussteamco_mod_0 = model_anova('ussteamco_mod_0', typ=1)}
+\textcolor{ada_blue}{anova\_ussteamco\_mod\_0 = model\_anova('ussteamco\_mod\_0', typ=1)}
 \end{Verbatim}
 
 The variance of $y$, $s_y^2 = \frac{\sum(y_i - \bar{y})^2}{n - 1}$, is obtained from
@@ -707,25 +722,32 @@ The variance of $y$, $s_y^2 = \frac{\sum(y_i - \bar{y})^2}{n - 1}$, is obtained 
 Total Sum of Squares $\sum(y_i - \bar{y})^2$ is calculated as
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{mean_y = np.mean(USSteamCoEstim["revenue"])}
-\textcolor{ada_blue}{variation = USSteamCoEstim["revenue"] - mean_y}
-\textcolor{ada_blue}{squared_variation = variation**2}
-\textcolor{ada_blue}{total_sum_of_squares = sum(squared_variation)}
+\textcolor{ada_blue}{mean\_y = np.mean(USSteamCoEstim["revenue"])}
+\textcolor{ada_blue}{variation = USSteamCoEstim["revenue"] - mean\_y}
+\textcolor{ada_blue}{squared\_variation = variation**2}
+\textcolor{ada_blue}{total\_sum\_of\_squares = sum(squared\_variation)}
 \end{Verbatim}
 
 Total Sum of Squares is the sum of the elements in the \ttblue{Sum Sq} column of the Analysis of Variance Table.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{anova_ussteamco_mod_0 = model_anova('ussteamco_mod_0', typ=1)}
+\textcolor{ada_blue}{anova\_ussteamco\_mod\_0 = model\_anova('ussteamco\_mod\_0', typ=1)}
 \end{Verbatim}
 
 When we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{total_sum_of_squares / 35}
+\textcolor{ada_blue}{n\_obs = len(USSteamCoEstim)}
+\textcolor{ada_blue}{total\_sum\_of\_squares / (n\_obs - 1)}
 \end{Verbatim}
 
-This shows how variance is linked to variation.
+As a quick cross-check, we can also reverse the variance formula and recover Total Sum of Squares directly.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{np.var(USSteamCoEstim["revenue"], ddof=1) * (n\_obs - 1)}
+\end{Verbatim}
+
+This equality holds because \ttblue{var()} divides by $n - 1$. It is a useful consistency check, but the step-by-step calculation above remains the clearer way to see how Total Sum of Squares is built from the deviations around the mean.
 
 
 \end{exercise}
@@ -737,21 +759,21 @@ This shows how variance is linked to variation.
 We now turn to a model with multiple independent variables, for example, \ttblue{mod.1}, introduced in Section 5.4.3.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{anova_mod_1 = model_anova('ussteamco_mod_1', typ=1)}
+\textcolor{ada_blue}{anova\_mod\_1 = model\_anova('ussteamco\_mod\_1', typ=1)}
 \end{Verbatim}
 
 Declaring the independent variables in a different order shows that the calculation of the sum of squares is in sequential order.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_1b = fit_lm('ussteamco_mod_1b', 'revenue ~ heatDD + coolDD + production', USSteamCoEstim)}
-\textcolor{ada_blue}{anova_mod_1b = anova_lm(ussteamco_mod_1b, typ=1)}
-\textcolor{ada_blue}{print(anova_mod_1b)}
+\textcolor{ada_blue}{ussteamco\_mod\_1b = fit\_lm('ussteamco\_mod\_1b', 'revenue ~ heatDD + coolDD + production', USSteamCoEstim)}
+\textcolor{ada_blue}{anova\_mod\_1b = anova\_lm(ussteamco\_mod\_1b, typ=1)}
+\textcolor{ada_blue}{print(anova\_mod\_1b)}
 \end{Verbatim}
 
 To address this issue, an alternative version of the analysis of variance, referred to as Type II tests, is used. Instead of measuring the contribution of each independent variable sequentially, the analysis shows the contribution of each independent variable if it was the last independent variable added to the model. The analysis is obtained using the command \ttblue{Anova} (with capital A) from the \ttblue{car} package.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{anova_mod_1_type2 = model_anova('ussteamco_mod_1', typ=2)}
+\textcolor{ada_blue}{anova\_mod\_1\_type2 = model\_anova('ussteamco\_mod\_1', typ=2)}
 \end{Verbatim}
 
 We see that the marginal effect of adding \ttblue{production}, assuming \ttblue{coolDD} and \ttblue{heatDD} have already been entered into the model, is 1.8260e+14. This is equal to the result obtained from the earlier \ttblue{anova} command on \ttblue{mod.1b}. We also see that the added value of entering \ttblue{coolDD} into the model is limited: its sum of squares is much lower than that of the other two variables, and its related $F$ value is not significant.
@@ -767,7 +789,7 @@ We have no clear preference for either \ttblue{anova} or \ttblue{Anova}, they bo
 The analysis of variance of \ttblue{mod.3} is as follows:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{anova_mod_3 = model_anova('ussteamco_mod_3', typ=1)}
+\textcolor{ada_blue}{anova\_mod\_3 = model\_anova('ussteamco\_mod\_3', typ=1)}
 \end{Verbatim}
 
 
@@ -781,14 +803,16 @@ The analysis of variance of \ttblue{mod.3} is as follows:
 We compare the performance of models with four different statistics, the Multiple $r^2$, Adjusted $r^2$ (both obtained from the \ttblue{summary} function), and the AIC and BIC values. These last two can be called with their own respective commands.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{print('AIC ussteamco_mod_0:', ussteamco_mod_0.aic)}
-\textcolor{ada_blue}{print('AIC model_backward:', model_backward.aic)}
-\textcolor{ada_blue}{print('AIC ussteamco_mod_1:', ussteamco_mod_1.aic)}
-\textcolor{ada_blue}{print('AIC ussteamco_mod_2:', ussteamco_mod_2.aic)}
+\textcolor{ada_blue}{print('AIC ussteamco\_mod\_0:', ussteamco\_mod\_0.aic)}
+\textcolor{ada_blue}{print('AIC model\_backward:', model\_backward.aic)}
+\textcolor{ada_blue}{print('AIC ussteamco\_mod\_1:', ussteamco\_mod\_1.aic)}
+\textcolor{ada_blue}{print('AIC ussteamco\_mod\_2:', ussteamco\_mod\_2.aic)}
 \end{Verbatim}
 
-The AIC values shown above can be compared directly because all four models are fitted to the same response data (\ttblue{USSteamCoEstim}). Model \ttblue{mod.3} is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of \ttblue{mod.3} is not directly comparable with those of the earlier models. Instead, \ttblue{mod.3} should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
-The AIC value of the \ttblue{model\_backward} does not quite match the output of the \ttblue{step} function. This can be explained as follows.
+The first three AIC values correspond to the final fitted objects returned by the forward, backward, and both-direction stepwise procedures. They are identical because \ttblue{model\_forward}, \ttblue{model\_backward}, and \ttblue{fit\_both} all end at the same model, namely \ttblue{revenue ~ production + heatDD}.
+The AIC values of \ttblue{mod.0}, \ttblue{model\_backward}, \ttblue{mod.1}, and \ttblue{mod.2} can also be compared directly because all four models are fitted to the same response data (\ttblue{USSteamCoEstim}). Model \ttblue{mod.3} is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of \ttblue{mod.3} is not directly comparable with those of the earlier models. Instead, \ttblue{mod.3} should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
+The \ttblue{step()} output shows a different sequence of AIC values because, at each step, it compares the current model with candidate one-step additions or deletions. For example, the forward search starts at AIC = 1114.66 for the intercept-only model, moves to AIC = 1096.56 after adding \ttblue{heatDD}, and then moves to AIC = 1046.11 after adding \ttblue{production}. The backward search starts from the full model at AIC = 1047.68, then drops \ttblue{coolDD} and reaches the same final model at AIC = 1046.11.
+Those \ttblue{step()} AIC numbers do not exactly match the values returned by \ttblue{AIC()} for the final fitted objects. The reason is that \ttblue{step()} reports an AIC-like criterion that is sufficient for comparing candidate models within the procedure, while \ttblue{AIC()} reports the full Gaussian AIC for the fitted model object.
 The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
 where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters.
@@ -796,7 +820,7 @@ For a linear regression model with normally distributed errors, this log-likelih
 $\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right) \right]$,
 leading to the AIC expression
 $\text{AIC} = n \left[\log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
-In contrast, the \ttblue{step()} function in R reports AIC values based on a deviance-like approximation, that omits constant terms unrelated to model comparison:
+In contrast, the \ttblue{step()} function in R reports AIC values based on a deviance-like approximation that omits constant terms unrelated to model comparison:
 $\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
 The difference between the two expressions is a constant shift of
 $n \cdot (\log(2\pi) + 1) + 2$.
@@ -805,10 +829,10 @@ The additional +2 arises because R’s AIC() function evaluates the likelihood b
 Similarly, the BIC values are obtained as follows.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{print('BIC ussteamco_mod_0:', ussteamco_mod_0.bic)}
-\textcolor{ada_blue}{print('BIC model_backward:', model_backward.bic)}
-\textcolor{ada_blue}{print('BIC ussteamco_mod_1:', ussteamco_mod_1.bic)}
-\textcolor{ada_blue}{print('BIC ussteamco_mod_2:', ussteamco_mod_2.bic)}
+\textcolor{ada_blue}{print('BIC ussteamco\_mod\_0:', ussteamco\_mod\_0.bic)}
+\textcolor{ada_blue}{print('BIC model\_backward:', model\_backward.bic)}
+\textcolor{ada_blue}{print('BIC ussteamco\_mod\_1:', ussteamco\_mod\_1.bic)}
+\textcolor{ada_blue}{print('BIC ussteamco\_mod\_2:', ussteamco\_mod\_2.bic)}
 \end{Verbatim}
 
 The same consideration applies to the BIC. The BIC values of \ttblue{mod.0}, \ttblue{model\_backward}, \ttblue{mod.1}, and \ttblue{mod.2} may be compared directly because they are based on the same response data. The BIC of \ttblue{mod.3} should not be interpreted as evidence that the winsorized model is better or worse than the previous models, because it is based on a different dataset.
@@ -823,34 +847,34 @@ The same consideration applies to the BIC. The BIC values of \ttblue{mod.0}, \tt
 We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 5.14 is obtained by:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{nres = ussteamco_mod_3.resid / np.std(ussteamco_mod_3.resid)}
+\textcolor{ada_blue}{nres = ussteamco\_mod\_3.resid / np.std(ussteamco\_mod\_3.resid)}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 5))}
-\textcolor{ada_blue}{sns.histplot(nres, bins=np.arange(-2.55, 1.65 + 0.7, 0.7), stat='density', color='#00338D', ax=ax)}
-\textcolor{ada_blue}{x_vals = np.linspace(nres.min(), nres.max(), 200)}
-\textcolor{ada_blue}{ax.plot(x_vals, norm.pdf(x_vals, np.mean(nres), np.std(nres)), color='black')}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{sns.histplot(nres, bins=np.arange(-2.55, 1.65 + 0.7, 0.7), stat='density', color='\#00338D', ax=ax)}
+\textcolor{ada_blue}{x\_vals = np.linspace(nres.min(), nres.max(), 200)}
+\textcolor{ada_blue}{ax.plot(x\_vals, norm.pdf(x\_vals, np.mean(nres), np.std(nres)), color='black')}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
 The QQ plot is produced by:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{resid_std_mod3 = (ussteamco_mod_3.resid - ussteamco_mod_3.resid.mean()) / ussteamco_mod_3.resid.std(ddof=1)}
+\textcolor{ada_blue}{resid\_std\_mod3 = (ussteamco\_mod\_3.resid - ussteamco\_mod\_3.resid.mean()) / ussteamco\_mod\_3.resid.std(ddof=1)}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 5))}
-\textcolor{ada_blue}{qqplot(resid_std_mod3, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)}
-\textcolor{ada_blue}{ax.set_title('QQ Plot of Standardized Residuals (mod.3)')}
-\textcolor{ada_blue}{ax.set_xlabel('Theoretical Quantiles')}
-\textcolor{ada_blue}{ax.set_ylabel('Standardized Residuals')}
+\textcolor{ada_blue}{qqplot(resid\_std\_mod3, line='45', fit=True, ax=ax, color='\#00338D', alpha=0.8)}
+\textcolor{ada_blue}{ax.set\_title('QQ Plot of Standardized Residuals (mod.3)')}
+\textcolor{ada_blue}{ax.set\_xlabel('Theoretical Quantiles')}
+\textcolor{ada_blue}{ax.set\_ylabel('Standardized Residuals')}
 \textcolor{ada_blue}{ax.grid(alpha=0.25)}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
 The Shapiro-Wilk normality test is executed through the \ttblue{shapiro.test} function from the \ttblue{stats} package.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{shapiro_stat, shapiro_p = shapiro_test(ussteamco_mod_3.resid)}
-\textcolor{ada_blue}{print({'W': shapiro_stat, 'p_value': shapiro_p})}
+\textcolor{ada_blue}{shapiro\_stat, shapiro\_p = shapiro\_test(ussteamco\_mod\_3.resid)}
+\textcolor{ada_blue}{print(\{'W': shapiro\_stat, 'p\_value': shapiro\_p\})}
 \end{Verbatim}
 
 
@@ -861,33 +885,33 @@ The Shapiro-Wilk normality test is executed through the \ttblue{shapiro.test} fu
 \textbf{Testing heteroskedasticity}
 
 
-To test the asumption of constant variance, we can employ visual means, such as the \ttblue{residualPlots} in Figure 5.15. We can construct it as follows.
+To test the assumption of constant variance, we can employ visual means, such as the \ttblue{residualPlots} in Figure 5.15. We can construct it as follows.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{resid = ussteamco_mod_3.resid}
-\textcolor{ada_blue}{fitted = ussteamco_mod_3.fittedvalues}
+\textcolor{ada_blue}{resid = ussteamco\_mod\_3.resid}
+\textcolor{ada_blue}{fitted = ussteamco\_mod\_3.fittedvalues}
 \textcolor{ada_blue}{predictors = ['production', 'coolDD', 'heatDD', 'summer']}
 \textcolor{ada_blue}{fig, axes = plt.subplots(2, 3, figsize=(14, 8))}
 \textcolor{ada_blue}{for ax, col in zip(axes.flatten()[:4], predictors):}
-\textcolor{ada_blue}{    display(sns.scatterplot(x=USSteamCoEstim2[col], y=resid, color='#00338D', ax=ax))}
+\textcolor{ada_blue}{    display(sns.scatterplot(x=USSteamCoEstim2[col], y=resid, color='\#00338D', ax=ax))}
 \textcolor{ada_blue}{    ax.axhline(0, color='black', linestyle='dotted')}
-\textcolor{ada_blue}{    ax.set_xlabel(col)}
-\textcolor{ada_blue}{    ax.set_ylabel('Residuals')}
-\textcolor{ada_blue}{display(sns.scatterplot(x=fitted, y=resid, color='#00338D', ax=axes.flatten()[4]))}
+\textcolor{ada_blue}{    ax.set\_xlabel(col)}
+\textcolor{ada_blue}{    ax.set\_ylabel('Residuals')}
+\textcolor{ada_blue}{display(sns.scatterplot(x=fitted, y=resid, color='\#00338D', ax=axes.flatten()[4]))}
 \textcolor{ada_blue}{display(axes.flatten()[4].axhline(0, color='black', linestyle='dotted'))}
-\textcolor{ada_blue}{display(axes.flatten()[4].set_xlabel('Fitted'))}
-\textcolor{ada_blue}{display(axes.flatten()[4].set_ylabel('Residuals'))}
+\textcolor{ada_blue}{display(axes.flatten()[4].set\_xlabel('Fitted'))}
+\textcolor{ada_blue}{display(axes.flatten()[4].set\_ylabel('Residuals'))}
 \textcolor{ada_blue}{display(axes.flatten()[5].axis('off'))}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
 The formal statistical test is the Breusch-Pagan test.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_3.resid, ussteamco_mod_3.model.exog)}
-\textcolor{ada_blue}{print({'LM statistic': bp_stat, 'p_value': bp_p})}
+\textcolor{ada_blue}{bp\_stat, bp\_p, \_, \_ = het\_breuschpagan(ussteamco\_mod\_3.resid, ussteamco\_mod\_3.model.exog)}
+\textcolor{ada_blue}{print(\{'LM statistic': bp\_stat, 'p\_value': bp\_p\})}
 \end{Verbatim}
 
 
@@ -902,16 +926,16 @@ We use the \ttblue{pacf} plot from Figure 5.17 to see if autocorrelation is pres
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 4))}
-\textcolor{ada_blue}{plot_pacf(ussteamco_mod_3.resid, lags=10, method='ywm', ax=ax)}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{plot\_pacf(ussteamco\_mod\_3.resid, lags=10, method='ywm', ax=ax)}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
 The Breusch-Godfrey test is executed through \ttblue{bgtest}.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, nlags=3)}
-\textcolor{ada_blue}{print({'LM statistic': bg_lm, 'p_value': bg_p})}
+\textcolor{ada_blue}{bg\_lm, bg\_p, \_, \_ = acorr\_breusch\_godfrey(ussteamco\_mod\_3, nlags=3)}
+\textcolor{ada_blue}{print(\{'LM statistic': bg\_lm, 'p\_value': bg\_p\})}
 \end{Verbatim}
 
 The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
@@ -923,54 +947,55 @@ The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hy
 \textbf{First-order autocorrelation correction}
 
 
-A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of the lagged value from the dependent variable and from each predictor. The transformed model can then be estimated by ordinary least squares.
+A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This notebook shows the transformation explicitly rather than calling a separate named routine. We first estimate the lag-1 autocorrelation in the residuals, then quasi-difference the response and the predictors, and finally refit the model to the transformed data.
 We first estimate an AR(1) model on the residuals from \ttblue{mod.3}.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{rho = np.corrcoef(ussteamco_mod_3.resid[1:], ussteamco_mod_3.resid[:-1])[0, 1]}
+\textcolor{ada_blue}{rho = np.corrcoef(ussteamco\_mod\_3.resid[1:], ussteamco\_mod\_3.resid[:-1])[0, 1]}
 \textcolor{ada_blue}{print(rho)}
 \end{Verbatim}
 
-Then we transform all variables using the estimated \(\rho\). When the model includes interaction terms, we first construct the interaction terms in their original form and then transform those interaction terms. We should not multiply separately transformed variables.
+Then we transform all variables using the estimated \(\rho\). When the model includes interaction terms, we first construct the interaction terms in their original form and only then transform those interaction terms. We should not multiply separately transformed main effects.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{n = len(USSteamCoEstim2)}
-\textcolor{ada_blue}{trans = USSteamCoEstim2.iloc[1:, :].copy()}
-\textcolor{ada_blue}{lag = USSteamCoEstim2.iloc[:-1, :].copy()}
-\textcolor{ada_blue}{trans['prod_summer'] = trans['production'] * trans['summer']}
-\textcolor{ada_blue}{trans['heat_summer'] = trans['heatDD'] * trans['summer']}
-\textcolor{ada_blue}{trans['cool_summer'] = trans['coolDD'] * trans['summer']}
-\textcolor{ada_blue}{lag['prod_summer'] = lag['production'] * lag['summer']}
-\textcolor{ada_blue}{lag['heat_summer'] = lag['heatDD'] * lag['summer']}
-\textcolor{ada_blue}{lag['cool_summer'] = lag['coolDD'] * lag['summer']}
-\textcolor{ada_blue}{trans['revenue_adj'] = trans['revenue'].to_numpy() - rho * lag['revenue'].to_numpy()}
-\textcolor{ada_blue}{trans['production_adj'] = trans['production'].to_numpy() - rho * lag['production'].to_numpy()}
-\textcolor{ada_blue}{trans['heatDD_adj'] = trans['heatDD'].to_numpy() - rho * lag['heatDD'].to_numpy()}
-\textcolor{ada_blue}{trans['coolDD_adj'] = trans['coolDD'].to_numpy() - rho * lag['coolDD'].to_numpy()}
-\textcolor{ada_blue}{trans['summer_adj'] = trans['summer'].to_numpy() - rho * lag['summer'].to_numpy()}
-\textcolor{ada_blue}{trans['prod_summer_adj'] = trans['prod_summer'].to_numpy() - rho * lag['prod_summer'].to_numpy()}
-\textcolor{ada_blue}{trans['heat_summer_adj'] = trans['heat_summer'].to_numpy() - rho * lag['heat_summer'].to_numpy()}
-\textcolor{ada_blue}{trans['cool_summer_adj'] = trans['cool_summer'].to_numpy() - rho * lag['cool_summer'].to_numpy()}
+\textcolor{ada_blue}{n\_obs\_mod3 = len(USSteamCoEstim2)}
+\textcolor{ada_blue}{current\_period = USSteamCoEstim2.iloc[1:, :].copy()}
+\textcolor{ada_blue}{lagged\_period = USSteamCoEstim2.iloc[:-1, :].copy()}
+\textcolor{ada_blue}{current\_period['prod\_summer'] = current\_period['production'] * current\_period['summer']}
+\textcolor{ada_blue}{current\_period['heat\_summer'] = current\_period['heatDD'] * current\_period['summer']}
+\textcolor{ada_blue}{current\_period['cool\_summer'] = current\_period['coolDD'] * current\_period['summer']}
+\textcolor{ada_blue}{lagged\_period['prod\_summer'] = lagged\_period['production'] * lagged\_period['summer']}
+\textcolor{ada_blue}{lagged\_period['heat\_summer'] = lagged\_period['heatDD'] * lagged\_period['summer']}
+\textcolor{ada_blue}{lagged\_period['cool\_summer'] = lagged\_period['coolDD'] * lagged\_period['summer']}
+\textcolor{ada_blue}{transformed\_data = current\_period.copy()}
+\textcolor{ada_blue}{transformed\_data['revenue\_adj'] = current\_period['revenue'].to\_numpy() - rho * lagged\_period['revenue'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['production\_adj'] = current\_period['production'].to\_numpy() - rho * lagged\_period['production'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['heatDD\_adj'] = current\_period['heatDD'].to\_numpy() - rho * lagged\_period['heatDD'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['coolDD\_adj'] = current\_period['coolDD'].to\_numpy() - rho * lagged\_period['coolDD'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['summer\_adj'] = current\_period['summer'].to\_numpy() - rho * lagged\_period['summer'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['prod\_summer\_adj'] = current\_period['prod\_summer'].to\_numpy() - rho * lagged\_period['prod\_summer'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['heat\_summer\_adj'] = current\_period['heat\_summer'].to\_numpy() - rho * lagged\_period['heat\_summer'].to\_numpy()}
+\textcolor{ada_blue}{transformed\_data['cool\_summer\_adj'] = current\_period['cool\_summer'].to\_numpy() - rho * lagged\_period['cool\_summer'].to\_numpy()}
 \end{Verbatim}
 
 We fit a new model using the transformed variables.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_4 = fit_lm('ussteamco_mod_4', 'revenue_adj ~ production_adj + heatDD_adj + coolDD_adj + summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj', trans)}
-\textcolor{ada_blue}{summary_model('ussteamco_mod_4')}
+\textcolor{ada_blue}{ussteamco\_mod\_4 = fit\_lm('ussteamco\_mod\_4', 'revenue\_adj ~ production\_adj + heatDD\_adj + coolDD\_adj + summer\_adj + prod\_summer\_adj + heat\_summer\_adj + cool\_summer\_adj', transformed\_data)}
+\textcolor{ada_blue}{summary\_model('ussteamco\_mod\_4')}
 \end{Verbatim}
 
 This transformation follows $y_t - \rho y_{t-1} = \beta_0(1-\rho) + \sum_j \beta_j(x_{j,t} - \rho x_{j,t-1}) + u_t$.
 For interaction terms, the interaction is treated as a predictor in its own right. Thus, if \(z_t=x_t s_t\), the transformed interaction is $z_t-\rho z_{t-1} = x_t s_t-\rho x_{t-1}s_{t-1}$.
-It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
+It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. This is why the notebook keeps the AR(1) correction terminology here: the chapter is emphasizing the manual transformation itself, not introducing a separate Cochran-Orcutt procedure by name. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(7, 4))}
-\textcolor{ada_blue}{plot_pacf(ussteamco_mod_4.resid, lags=10, method='ywm', ax=ax)}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{plot\_pacf(ussteamco\_mod\_4.resid, lags=10, method='ywm', ax=ax)}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
-\textcolor{ada_blue}{bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_4, nlags=3)}
-\textcolor{ada_blue}{print({'LM statistic': bg_lm, 'p_value': bg_p})}
+\textcolor{ada_blue}{bg\_lm, bg\_p, \_, \_ = acorr\_breusch\_godfrey(ussteamco\_mod\_4, nlags=3)}
+\textcolor{ada_blue}{print(\{'LM statistic': bg\_lm, 'p\_value': bg\_p\})}
 \end{Verbatim}
 
 
@@ -983,16 +1008,16 @@ It is not obtained by multiplying the transformed variables. The first observati
 When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base \ttblue{R} function \ttblue{step()} enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{ussteamco_mod_5_start = fit_lm('ussteamco_mod_5_start', 'revenue ~ (production + coolDD + heatDD) * summer', USSteamCoEstim2)}
+\textcolor{ada_blue}{ussteamco\_mod\_5\_start = fit\_lm('ussteamco\_mod\_5\_start', 'revenue ~ (production + coolDD + heatDD) * summer', USSteamCoEstim2)}
 \textcolor{ada_blue}{candidates = ['production', 'coolDD', 'heatDD', 'summer', 'production:summer', 'coolDD:summer', 'heatDD:summer']}
-\textcolor{ada_blue}{ussteamco_mod_5, ussteamco_mod_5_terms = stepwise_aic(}
+\textcolor{ada_blue}{ussteamco\_mod\_5, ussteamco\_mod\_5\_terms = stepwise\_aic(}
 \textcolor{ada_blue}{    USSteamCoEstim2,}
 \textcolor{ada_blue}{    response='revenue',}
 \textcolor{ada_blue}{    candidates=candidates,}
 \textcolor{ada_blue}{    direction='backward',}
-\textcolor{ada_blue}{    start_terms=candidates,}
+\textcolor{ada_blue}{    start\_terms=candidates,}
 \textcolor{ada_blue}{)}
-\textcolor{ada_blue}{print('Refined terms:', ussteamco_mod_5_terms)}
+\textcolor{ada_blue}{print('Refined terms:', ussteamco\_mod\_5\_terms)}
 \end{Verbatim}
 
 
@@ -1003,10 +1028,10 @@ When a model includes interaction terms, it is important to respect the hierarch
 \textbf{Coefficient test of the refined model}
 
 
-The summary of this model is:
+We first inspect the full summary of the refined model, which contains the coefficient estimates together with their standard errors, $t$ statistics, and $p$ values.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{summary_model('ussteamco_mod_5')}
+\textcolor{ada_blue}{summary\_model('ussteamco\_mod\_5')}
 \end{Verbatim}
 
 
@@ -1017,13 +1042,15 @@ The summary of this model is:
 \textbf{Re-running the model assumption tests}
 
 
-We re-run the model assumption tests.
+We re-run the model assumption tests in the same order used earlier in the chapter: normality first, then heteroskedasticity, and finally autocorrelation.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_5.resid, ussteamco_mod_5.model.exog)}
-\textcolor{ada_blue}{bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_5, nlags=3)}
-\textcolor{ada_blue}{sw_stat, sw_p = shapiro_test(ussteamco_mod_5.resid)}
-\textcolor{ada_blue}{print({'bp_lm': bp_stat, 'bp_p': bp_p, 'bg_lm': bg_lm, 'bg_p': bg_p, 'shapiro_W': sw_stat, 'shapiro_p': sw_p})}
+\textcolor{ada_blue}{sw\_stat, sw\_p = shapiro\_test(ussteamco\_mod\_5.resid)}
+\textcolor{ada_blue}{print(\{'shapiro\_W': sw\_stat, 'shapiro\_p': sw\_p\})}
+\textcolor{ada_blue}{bp\_stat, bp\_p, \_, \_ = het\_breuschpagan(ussteamco\_mod\_5.resid, ussteamco\_mod\_5.model.exog)}
+\textcolor{ada_blue}{print(\{'bp\_lm': bp\_stat, 'bp\_p': bp\_p\})}
+\textcolor{ada_blue}{bg\_lm, bg\_p, \_, \_ = acorr\_breusch\_godfrey(ussteamco\_mod\_5, nlags=3)}
+\textcolor{ada_blue}{print(\{'bg\_lm': bg\_lm, 'bg\_p': bg\_p\})}
 \end{Verbatim}
 
 
@@ -1034,10 +1061,13 @@ We re-run the model assumption tests.
 \textbf{Testing significance}
 
 
-The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
+Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{summary_model('ussteamco_mod_5')}
+\textcolor{ada_blue}{f\_stat = float(ussteamco\_mod\_5.fvalue)}
+\textcolor{ada_blue}{df\_model = int(ussteamco\_mod\_5.df\_model)}
+\textcolor{ada_blue}{df\_resid = int(ussteamco\_mod\_5.df\_resid)}
+\textcolor{ada_blue}{print(\{'value': f\_stat, 'numdf': df\_model, 'dendf': df\_resid\})}
 \end{Verbatim}
 
 
@@ -1045,51 +1075,52 @@ The $F$ statistic used for testing the significance of the model as a whole can 
 \end{exercise}
 
 \begin{exercise}
-\textbf{Visualizing the uncertainty in the model parameters}
+\textbf{Showcase: Visualizing the uncertainty in the model parameters}
 
 
+This exercise is a showcase rather than part of the US SteamCo case workflow. It supports Figure 5.20 by illustrating a general idea: repeated samples from the same underlying regression model produce different fitted lines, even when the true relationship is unchanged.
 First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{np.random.seed(123) # Set seed for reproducibility}
-\textcolor{ada_blue}{beta_0 = 2 # True intercept}
-\textcolor{ada_blue}{beta_1 = 1.5 # True slope}
-\textcolor{ada_blue}{n = 11 # Number of points to sample}
-\textcolor{ada_blue}{x_min = 0 # Minimum value of x}
-\textcolor{ada_blue}{x_max = 10 # Maximum value of x}
-\textcolor{ada_blue}{x_values = np.linspace(x_min, x_max, num=n) # x values modelled}
-\textcolor{ada_blue}{sigma = 5 # Standard deviation of the noise}
-\textcolor{ada_blue}{rep = 200 # Number of replications}
-\textcolor{ada_blue}{alpha = 0.05 # Significance level for 95% confidence interval}
-\textcolor{ada_blue}{x_extended_min = x_min - (x_max - x_min) / 2 # Extended x range minimum}
-\textcolor{ada_blue}{x_extended_max = x_max + (x_max - x_min) / 2 # Extended x range maximum}
-\textcolor{ada_blue}{x_extended = np.linspace(x_extended_min, x_extended_max, num=100) # Plot range}
+\textcolor{ada_blue}{np.random.seed(123) \# Set seed for reproducibility}
+\textcolor{ada_blue}{beta\_0 = 2 \# True intercept}
+\textcolor{ada_blue}{beta\_1 = 1.5 \# True slope}
+\textcolor{ada_blue}{n = 11 \# Number of points to sample}
+\textcolor{ada_blue}{x\_min = 0 \# Minimum value of x}
+\textcolor{ada_blue}{x\_max = 10 \# Maximum value of x}
+\textcolor{ada_blue}{x\_values = np.linspace(x\_min, x\_max, num=n) \# x values modelled}
+\textcolor{ada_blue}{sigma = 5 \# Standard deviation of the noise}
+\textcolor{ada_blue}{rep = 200 \# Number of replications}
+\textcolor{ada_blue}{alpha = 0.05 \# Significance level for 95\% confidence interval}
+\textcolor{ada_blue}{x\_extended\_min = x\_min - (x\_max - x\_min) / 2 \# Extended x range minimum}
+\textcolor{ada_blue}{x\_extended\_max = x\_max + (x\_max - x\_min) / 2 \# Extended x range maximum}
+\textcolor{ada_blue}{x\_extended = np.linspace(x\_extended\_min, x\_extended\_max, num=100) \# Plot range}
 \end{Verbatim}
 
 We first calculate the true regression line, along with its confidence interval.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{true_line = pd.DataFrame({'x': x_extended, 'y': beta_0 + beta_1 * x_extended})}
-\textcolor{ada_blue}{mean_x = np.mean(x_values)}
-\textcolor{ada_blue}{S_xx = np.sum((x_values - mean_x) ** 2)}
-\textcolor{ada_blue}{se_fit_true = sigma * np.sqrt(1 / n + ((x_extended - mean_x) ** 2) / S_xx)}
-\textcolor{ada_blue}{t_value = t_dist.ppf(1 - alpha / 2, df=n - 2)}
-\textcolor{ada_blue}{ci_upper_true = (beta_0 + beta_1 * x_extended) + t_value * se_fit_true}
-\textcolor{ada_blue}{ci_lower_true = (beta_0 + beta_1 * x_extended) - t_value * se_fit_true}
-\textcolor{ada_blue}{ci_bounds_true = pd.DataFrame({'x': x_extended, 'ci_lower': ci_lower_true, 'ci_upper': ci_upper_true})}
+\textcolor{ada_blue}{true\_line = pd.DataFrame(\{'x': x\_extended, 'y': beta\_0 + beta\_1 * x\_extended\})}
+\textcolor{ada_blue}{mean\_x = np.mean(x\_values)}
+\textcolor{ada_blue}{S\_xx = np.sum((x\_values - mean\_x) ** 2)}
+\textcolor{ada_blue}{se\_fit\_true = sigma * np.sqrt(1 / n + ((x\_extended - mean\_x) ** 2) / S\_xx)}
+\textcolor{ada_blue}{t\_value = t\_dist.ppf(1 - alpha / 2, df=n - 2)}
+\textcolor{ada_blue}{ci\_upper\_true = (beta\_0 + beta\_1 * x\_extended) + t\_value * se\_fit\_true}
+\textcolor{ada_blue}{ci\_lower\_true = (beta\_0 + beta\_1 * x\_extended) - t\_value * se\_fit\_true}
+\textcolor{ada_blue}{ci\_bounds\_true = pd.DataFrame(\{'x': x\_extended, 'ci\_lower': ci\_lower\_true, 'ci\_upper': ci\_upper\_true\})}
 \end{Verbatim}
 
 Next, we sample $n$ points from a normal distribution, to generate $y$ values for each $x$ value and fit the corresponding regression line. We repeat this process \ttblue{rep} times.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{_line_frames = []}
+\textcolor{ada_blue}{\_line\_frames = []}
 \textcolor{ada_blue}{for i in range(1, int(rep) + 1):}
 \textcolor{ada_blue}{    epsilon = np.random.normal(loc=0.0, scale=sigma, size=n)}
-\textcolor{ada_blue}{    y_values = beta_0 + beta_1 * x_values + epsilon}
-\textcolor{ada_blue}{    slope_i, intercept_i = np.polyfit(x_values, y_values, deg=1)}
-\textcolor{ada_blue}{    predicted_values = intercept_i + slope_i * x_extended}
-\textcolor{ada_blue}{    _line_frames.append(pd.DataFrame({'x': x_extended, 'y': predicted_values, 'rep': i}))}
-\textcolor{ada_blue}{simulated_lines = pd.concat(_line_frames, ignore_index=True)}
+\textcolor{ada_blue}{    y\_values = beta\_0 + beta\_1 * x\_values + epsilon}
+\textcolor{ada_blue}{    slope\_i, intercept\_i = np.polyfit(x\_values, y\_values, deg=1)}
+\textcolor{ada_blue}{    predicted\_values = intercept\_i + slope\_i * x\_extended}
+\textcolor{ada_blue}{    \_line\_frames.append(pd.DataFrame(\{'x': x\_extended, 'y': predicted\_values, 'rep': i\}))}
+\textcolor{ada_blue}{simulated\_lines = pd.concat(\_line\_frames, ignore\_index=True)}
 \end{Verbatim}
 
 All the elements created earlier are now plotted on a single canvas.
@@ -1097,16 +1128,16 @@ All the elements created earlier are now plotted on a single canvas.
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(10, 6))}
-\textcolor{ada_blue}{for _, _grp in simulated_lines.groupby('rep'):}
-\textcolor{ada_blue}{    display(ax.plot(_grp['x'], _grp['y'], color='#00338D', alpha=0.1))}
-\textcolor{ada_blue}{display(ax.plot(true_line['x'], true_line['y'], color='#E36877', linewidth=1))}
-\textcolor{ada_blue}{display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_lower'], color='#E36877', linewidth=1))}
-\textcolor{ada_blue}{display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_upper'], color='#E36877', linewidth=1))}
-\textcolor{ada_blue}{ax.set_title(f"{rep} Regression Lines with Confidence Interval Based on True Model")}
-\textcolor{ada_blue}{ax.set_xlabel('x')}
-\textcolor{ada_blue}{ax.set_ylabel('y')}
-\textcolor{ada_blue}{ax.set_xlim(x_extended_min, x_extended_max)}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{for \_, \_grp in simulated\_lines.groupby('rep'):}
+\textcolor{ada_blue}{    display(ax.plot(\_grp['x'], \_grp['y'], color='\#00338D', alpha=0.1))}
+\textcolor{ada_blue}{display(ax.plot(true\_line['x'], true\_line['y'], color='\#E36877', linewidth=1))}
+\textcolor{ada_blue}{display(ax.plot(ci\_bounds\_true['x'], ci\_bounds\_true['ci\_lower'], color='\#E36877', linewidth=1))}
+\textcolor{ada_blue}{display(ax.plot(ci\_bounds\_true['x'], ci\_bounds\_true['ci\_upper'], color='\#E36877', linewidth=1))}
+\textcolor{ada_blue}{ax.set\_title(f"\{rep\} Regression Lines with Confidence Interval Based on True Model")}
+\textcolor{ada_blue}{ax.set\_xlabel('x')}
+\textcolor{ada_blue}{ax.set\_ylabel('y')}
+\textcolor{ada_blue}{ax.set\_xlim(x\_extended\_min, x\_extended\_max)}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -1116,28 +1147,29 @@ The resulting graph is shown in Figure 5.20.
 \end{exercise}
 
 \begin{exercise}
-\textbf{Confidence and prediction intervals}
+\textbf{Showcase: Confidence and prediction intervals}
 
 
+This exercise is also an illustration rather than a case step. It stays in the student notebook because it introduces the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation before we return to the case-based forecasting exercises.
 Figure 5.18 shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{alpha_pred = 0.01}
-\textcolor{ada_blue}{t_value_pred = t_dist.ppf(1 - alpha_pred / 2, df=n - 2)}
-\textcolor{ada_blue}{se_pred = sigma * np.sqrt(1 + 1 / n + ((x_extended - mean_x) ** 2) / S_xx)}
-\textcolor{ada_blue}{pi_upper_true = (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred}
-\textcolor{ada_blue}{pi_lower_true = (beta_0 + beta_1 * x_extended) - t_value_pred * se_pred}
-\textcolor{ada_blue}{pi_bounds_true = pd.DataFrame({'x': x_extended, 'pi_lower': pi_lower_true, 'pi_upper': pi_upper_true})}
+\textcolor{ada_blue}{alpha\_pred = 0.01}
+\textcolor{ada_blue}{t\_value\_pred = t\_dist.ppf(1 - alpha\_pred / 2, df=n - 2)}
+\textcolor{ada_blue}{se\_pred = sigma * np.sqrt(1 + 1 / n + ((x\_extended - mean\_x) ** 2) / S\_xx)}
+\textcolor{ada_blue}{pi\_upper\_true = (beta\_0 + beta\_1 * x\_extended) + t\_value\_pred * se\_pred}
+\textcolor{ada_blue}{pi\_lower\_true = (beta\_0 + beta\_1 * x\_extended) - t\_value\_pred * se\_pred}
+\textcolor{ada_blue}{pi\_bounds\_true = pd.DataFrame(\{'x': x\_extended, 'pi\_lower': pi\_lower\_true, 'pi\_upper': pi\_upper\_true\})}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(10, 6))}
-\textcolor{ada_blue}{display(ax.fill_between(pi_bounds_true['x'], pi_bounds_true['pi_lower'], pi_bounds_true['pi_upper'], color='#00338D', alpha=0.15))}
-\textcolor{ada_blue}{display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_lower'], color='#00338D', linewidth=1, linestyle='--'))}
-\textcolor{ada_blue}{display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_upper'], color='#00338D', linewidth=1, linestyle='--'))}
-\textcolor{ada_blue}{display(ax.plot(true_line['x'], true_line['y'], color='#00338D', linewidth=1.5))}
-\textcolor{ada_blue}{ax.set_xlabel('x')}
-\textcolor{ada_blue}{ax.set_ylabel('y')}
-\textcolor{ada_blue}{ax.set_xlim(x_extended_min, x_extended_max)}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{display(ax.fill\_between(pi\_bounds\_true['x'], pi\_bounds\_true['pi\_lower'], pi\_bounds\_true['pi\_upper'], color='\#00338D', alpha=0.15))}
+\textcolor{ada_blue}{display(ax.plot(ci\_bounds\_true['x'], ci\_bounds\_true['ci\_lower'], color='\#00338D', linewidth=1, linestyle='--'))}
+\textcolor{ada_blue}{display(ax.plot(ci\_bounds\_true['x'], ci\_bounds\_true['ci\_upper'], color='\#00338D', linewidth=1, linestyle='--'))}
+\textcolor{ada_blue}{display(ax.plot(true\_line['x'], true\_line['y'], color='\#00338D', linewidth=1.5))}
+\textcolor{ada_blue}{ax.set\_xlabel('x')}
+\textcolor{ada_blue}{ax.set\_ylabel('y')}
+\textcolor{ada_blue}{ax.set\_xlim(x\_extended\_min, x\_extended\_max)}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -1152,8 +1184,8 @@ Figure 5.18 shows a regression line with a dotted confidence interval and a shad
 The function \ttblue{predict} creates expectations, when data from \ttblue{newdata} are evaluated with a certain \ttblue{object}. The optional \ttblue{interval} is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The \ttblue{level} specifies the confidence level of the interval.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{predictions = ussteamco_mod_5.get_prediction(USSteamCoHold).summary_frame(alpha=0.01)}
-\textcolor{ada_blue}{predictions = predictions.rename(columns={'mean': 'fit', 'obs_ci_lower': 'lwr', 'obs_ci_upper': 'upr'})}
+\textcolor{ada_blue}{predictions = ussteamco\_mod\_5.get\_prediction(USSteamCoHold).summary\_frame(alpha=0.01)}
+\textcolor{ada_blue}{predictions = predictions.rename(columns=\{'mean': 'fit', 'obs\_ci\_lower': 'lwr', 'obs\_ci\_upper': 'upr'\})}
 \textcolor{ada_blue}{display(predictions[['fit', 'lwr', 'upr']])}
 \end{Verbatim}
 
@@ -1161,13 +1193,13 @@ Compare the recorded revenue with the expectations.
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{comparison = pd.DataFrame({}
+\textcolor{ada_blue}{comparison = pd.DataFrame(\{}
 \textcolor{ada_blue}{    'Month': USSteamCoHold.index.astype(str),}
-\textcolor{ada_blue}{    'Recorded': USSteamCoHold['revenue'].to_numpy(),}
-\textcolor{ada_blue}{    'Lower': np.round(predictions['lwr'].to_numpy(), 0),}
-\textcolor{ada_blue}{    'Expected': np.round(predictions['fit'].to_numpy(), 0),}
-\textcolor{ada_blue}{    'Upper': np.round(predictions['upr'].to_numpy(), 0),}
-\textcolor{ada_blue}{})}
+\textcolor{ada_blue}{    'Recorded': USSteamCoHold['revenue'].to\_numpy(),}
+\textcolor{ada_blue}{    'Lower': np.round(predictions['lwr'].to\_numpy(), 0),}
+\textcolor{ada_blue}{    'Expected': np.round(predictions['fit'].to\_numpy(), 0),}
+\textcolor{ada_blue}{    'Upper': np.round(predictions['upr'].to\_numpy(), 0),}
+\textcolor{ada_blue}{\})}
 \textcolor{ada_blue}{comparison['Difference'] = comparison['Recorded'] - comparison['Expected']}
 \textcolor{ada_blue}{display(comparison)}
 \textcolor{ada_blue}{display(print(comparison['Recorded'].sum()))}
@@ -1187,25 +1219,25 @@ In Figure 5.19 we have plotted expectations against the recorded values of reven
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \textcolor{ada_blue}{from IPython.display import display}
-\textcolor{ada_blue}{pred_df = pd.DataFrame({}
-\textcolor{ada_blue}{    'date': USSteamCoHold['date'].to_numpy(),}
-\textcolor{ada_blue}{    'recorded': USSteamCoHold['revenue'].to_numpy(),}
-\textcolor{ada_blue}{    'lwr': predictions['lwr'].to_numpy(),}
-\textcolor{ada_blue}{    'fit': predictions['fit'].to_numpy(),}
-\textcolor{ada_blue}{    'upr': predictions['upr'].to_numpy(),}
-\textcolor{ada_blue}{})}
-\textcolor{ada_blue}{pred_df['outside'] = (pred_df['recorded'] < pred_df['lwr']) | (pred_df['recorded'] > pred_df['upr'])}
+\textcolor{ada_blue}{pred\_df = pd.DataFrame(\{}
+\textcolor{ada_blue}{    'date': USSteamCoHold['date'].to\_numpy(),}
+\textcolor{ada_blue}{    'recorded': USSteamCoHold['revenue'].to\_numpy(),}
+\textcolor{ada_blue}{    'lwr': predictions['lwr'].to\_numpy(),}
+\textcolor{ada_blue}{    'fit': predictions['fit'].to\_numpy(),}
+\textcolor{ada_blue}{    'upr': predictions['upr'].to\_numpy(),}
+\textcolor{ada_blue}{\})}
+\textcolor{ada_blue}{pred\_df['outside'] = (pred\_df['recorded'] < pred\_df['lwr']) | (pred\_df['recorded'] > pred\_df['upr'])}
 \textcolor{ada_blue}{fig, ax = plt.subplots(figsize=(10, 5))}
-\textcolor{ada_blue}{display(ax.plot(pred_df['date'], pred_df['fit'], color='#00338D', label='Expectation'))}
-\textcolor{ada_blue}{display(ax.fill_between(pred_df['date'], pred_df['lwr'], pred_df['upr'], color='#00338D', alpha=0.2))}
-\textcolor{ada_blue}{display(ax.plot(pred_df['date'], pred_df['recorded'], color='#E36877', label='Recorded'))}
-\textcolor{ada_blue}{outliers = pred_df[pred_df['outside']]}
-\textcolor{ada_blue}{display(ax.scatter(outliers['date'], outliers['recorded'], color='#E36877', s=30))}
-\textcolor{ada_blue}{ax.set_xlabel('Month in 2014')}
-\textcolor{ada_blue}{ax.set_ylabel('Revenue ($)')}
+\textcolor{ada_blue}{display(ax.plot(pred\_df['date'], pred\_df['fit'], color='\#00338D', label='Expectation'))}
+\textcolor{ada_blue}{display(ax.fill\_between(pred\_df['date'], pred\_df['lwr'], pred\_df['upr'], color='\#00338D', alpha=0.2))}
+\textcolor{ada_blue}{display(ax.plot(pred\_df['date'], pred\_df['recorded'], color='\#E36877', label='Recorded'))}
+\textcolor{ada_blue}{outliers = pred\_df[pred\_df['outside']]}
+\textcolor{ada_blue}{display(ax.scatter(outliers['date'], outliers['recorded'], color='\#E36877', s=30))}
+\textcolor{ada_blue}{ax.set\_xlabel('Month in 2014')}
+\textcolor{ada_blue}{ax.set\_ylabel('Revenue (\$)')}
 \textcolor{ada_blue}{ax.legend(loc='best')}
-\textcolor{ada_blue}{fig.autofmt_xdate()}
-\textcolor{ada_blue}{plt.tight_layout()}
+\textcolor{ada_blue}{fig.autofmt\_xdate()}
+\textcolor{ada_blue}{plt.tight\_layout()}
 \textcolor{ada_blue}{plt.show()}
 \end{Verbatim}
 
@@ -1218,46 +1250,130 @@ In Figure 5.19 we have plotted expectations against the recorded values of reven
 
 
 We use Equations 5.29 and 5.30 to construct a prediction interval for total revenue for the year under audit. The annual expectation is the sum of the 12 monthly expectations.
-The prediction standard error of the annual total is calculated directly from the design matrix for the hold-out observations. This accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients.
+To keep the derivation transparent, we first collect the monthly expectations, then combine them into an annual expectation, and finally compute the prediction standard error of that annual total. The design-matrix calculation accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients in all 12 months.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{df_res = int(ussteamco_mod_5.df_resid)}
-\textcolor{ada_blue}{monthly_predictions = pred_df['fit'].to_numpy()}
-\textcolor{ada_blue}{annual_prediction = monthly_predictions.sum()}
-\textcolor{ada_blue}{new_df = USSteamCoHold.copy()}
-\textcolor{ada_blue}{X_hold = smf.ols(ussteamco_mod_5.model.formula, data=new_df).exog}
-\textcolor{ada_blue}{one = np.ones(X_hold.shape[0])}
-\textcolor{ada_blue}{vcov = ussteamco_mod_5.cov_params().to_numpy()}
-\textcolor{ada_blue}{var_mean_annual = float(one.T @ X_hold @ vcov @ X_hold.T @ one)}
-\textcolor{ada_blue}{sigma2 = ussteamco_mod_5.mse_resid}
-\textcolor{ada_blue}{var_future_annual = X_hold.shape[0] * sigma2}
-\textcolor{ada_blue}{annual_var = var_mean_annual + var_future_annual}
-\textcolor{ada_blue}{annual_se = np.sqrt(annual_var)}
-\textcolor{ada_blue}{t_score = t_dist.ppf(0.995, df=df_res)}
-\textcolor{ada_blue}{annual_lower = annual_prediction - t_score * annual_se}
-\textcolor{ada_blue}{annual_upper = annual_prediction + t_score * annual_se}
-\textcolor{ada_blue}{print('Variance from coefficient uncertainty:', var_mean_annual)}
-\textcolor{ada_blue}{print('Variance from future residual variation:', var_future_annual)}
-\textcolor{ada_blue}{print('Lower Bound:', round(annual_lower, 0))}
-\textcolor{ada_blue}{print('Annual Prediction:', round(annual_prediction, 0))}
-\textcolor{ada_blue}{print('Upper Bound:', round(annual_upper, 0))}
-\textcolor{ada_blue}{print('Annual prediction standard error:', round(annual_se, 0))}
+\textcolor{ada_blue}{df\_res = int(ussteamco\_mod\_5.df\_resid)}
+\textcolor{ada_blue}{monthly\_predictions = pred\_df['fit'].to\_numpy()}
+\textcolor{ada_blue}{annual\_prediction = monthly\_predictions.sum()}
+\textcolor{ada_blue}{new\_df = USSteamCoHold.copy()}
+\textcolor{ada_blue}{X\_hold = smf.ols(ussteamco\_mod\_5.model.formula, data=new\_df).exog}
+\textcolor{ada_blue}{one = np.ones(X\_hold.shape[0])}
+\textcolor{ada_blue}{vcov = ussteamco\_mod\_5.cov\_params().to\_numpy()}
+\textcolor{ada_blue}{var\_mean\_annual = float(one.T @ X\_hold @ vcov @ X\_hold.T @ one)}
+\textcolor{ada_blue}{sigma2 = ussteamco\_mod\_5.mse\_resid}
+\textcolor{ada_blue}{var\_future\_annual = X\_hold.shape[0] * sigma2}
+\textcolor{ada_blue}{annual\_var = var\_mean\_annual + var\_future\_annual}
+\textcolor{ada_blue}{annual\_se = np.sqrt(annual\_var)}
+\textcolor{ada_blue}{t\_score = t\_dist.ppf(0.995, df=df\_res)}
+\textcolor{ada_blue}{annual\_lower = annual\_prediction - t\_score * annual\_se}
+\textcolor{ada_blue}{annual\_upper = annual\_prediction + t\_score * annual\_se}
+\textcolor{ada_blue}{print('Variance from coefficient uncertainty:', var\_mean\_annual)}
+\textcolor{ada_blue}{print('Variance from future residual variation:', var\_future\_annual)}
+\textcolor{ada_blue}{print('Lower Bound:', round(annual\_lower, 0))}
+\textcolor{ada_blue}{print('Annual Prediction:', round(annual\_prediction, 0))}
+\textcolor{ada_blue}{print('Upper Bound:', round(annual\_upper, 0))}
+\textcolor{ada_blue}{print('Annual prediction standard error:', round(annual\_se, 0))}
 \end{Verbatim}
 
 The first variance component, \ttblue{var\_mean\_annual}, captures the uncertainty in the estimated regression coefficients. The second component, \ttblue{var\_future\_annual}, captures the future residual variation of the 12 monthly observations. The latter is calculated under the assumption that the future residual errors are uncorrelated.
 Adjust the March prediction based on the corroborated evidence for the winter conditions and disruptions.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ada_blue}{storm_adjustment = 8_000_000}
-\textcolor{ada_blue}{pred_df['fit_adj'] = pred_df['fit']}
-\textcolor{ada_blue}{pred_df['lwr_adj'] = pred_df['lwr']}
-\textcolor{ada_blue}{pred_df['upr_adj'] = pred_df['upr']}
-\textcolor{ada_blue}{march_row = pred_df['date'].dt.strftime('%b') == 'Mar'}
-\textcolor{ada_blue}{pred_df.loc[march_row, 'fit_adj'] = pred_df.loc[march_row, 'fit_adj'] - storm_adjustment}
-\textcolor{ada_blue}{pred_df.loc[march_row, 'lwr_adj'] = pred_df.loc[march_row, 'lwr_adj'] - storm_adjustment}
-\textcolor{ada_blue}{pred_df.loc[march_row, 'upr_adj'] = pred_df.loc[march_row, 'upr_adj'] - storm_adjustment}
-\textcolor{ada_blue}{pred_df['outside_adj'] = (pred_df['recorded'] < pred_df['lwr_adj']) | (pred_df['recorded'] > pred_df['upr_adj'])}
-\textcolor{ada_blue}{display(pred_df)}
+\textcolor{ada_blue}{storm\_adjustment = 8\_000\_000}
+\textcolor{ada_blue}{pred\_df['fit\_adj'] = pred\_df['fit']}
+\textcolor{ada_blue}{pred\_df['lwr\_adj'] = pred\_df['lwr']}
+\textcolor{ada_blue}{pred\_df['upr\_adj'] = pred\_df['upr']}
+\textcolor{ada_blue}{march\_row = pred\_df['date'].dt.strftime('\%b') == 'Mar'}
+\textcolor{ada_blue}{pred\_df.loc[march\_row, 'fit\_adj'] = pred\_df.loc[march\_row, 'fit\_adj'] - storm\_adjustment}
+\textcolor{ada_blue}{pred\_df.loc[march\_row, 'lwr\_adj'] = pred\_df.loc[march\_row, 'lwr\_adj'] - storm\_adjustment}
+\textcolor{ada_blue}{pred\_df.loc[march\_row, 'upr\_adj'] = pred\_df.loc[march\_row, 'upr\_adj'] - storm\_adjustment}
+\textcolor{ada_blue}{pred\_df['outside\_adj'] = (pred\_df['recorded'] < pred\_df['lwr\_adj']) | (pred\_df['recorded'] > pred\_df['upr\_adj'])}
+\textcolor{ada_blue}{display(pred\_df)}
+\end{Verbatim}
+
+For the annual calculations in the next exercise, the adjusted annual expectation is the sum of the adjusted monthly expectations.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{annual\_prediction\_adj = sum(pred\_df["fit\_adj"])}
+\textcolor{ada_blue}{annual\_prediction\_adj}
+\end{Verbatim}
+
+
+
+\end{exercise}
+
+\begin{exercise}
+\textbf{Level of assurance for the annual prediction}
+
+
+We now compare the recorded annual revenue with the annual expectation. Consistent with the convention used throughout the book, the difference is defined as the recorded amount minus the expectation.
+We use the numbers adjusted for the winter storm conditions.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{monthly\_expectations\_adj = pred\_df["fit\_adj"]}
+\textcolor{ada_blue}{annual\_prediction = sum(monthly\_expectations\_adj)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{annual\_recorded = USSteamCoHold['revenue'].sum()}
+\textcolor{ada_blue}{annual\_difference = annual\_recorded - annual\_prediction}
+\textcolor{ada_blue}{print('Recorded annual revenue:', annual\_recorded)}
+\textcolor{ada_blue}{print('Expected annual revenue:', annual\_prediction)}
+\textcolor{ada_blue}{print('Difference:', annual\_difference)}
+\textcolor{ada_blue}{print('Annual prediction standard error:', annual\_se)}
+\end{Verbatim}
+
+Next, we set the audit parameters and construct the acceptable difference range. The acceptable difference range is expressed around zero, because it is applied to the difference between the recorded amount and the expectation.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{PM = 15\_000\_000}
+\textcolor{ada_blue}{beta = 0.01}
+\textcolor{ada_blue}{df = df\_res}
+\textcolor{ada_blue}{delta = PM / annual\_se}
+\textcolor{ada_blue}{c\_L = t\_dist.ppf(beta / 2, df=df)}
+\textcolor{ada_blue}{c\_U = t\_dist.ppf(1 - beta / 2, df=df)}
+\textcolor{ada_blue}{ADR\_lower = c\_L * annual\_se}
+\textcolor{ada_blue}{ADR\_upper = c\_U * annual\_se}
+\textcolor{ada_blue}{print('Acceptable Difference Range for the annual difference:')}
+\textcolor{ada_blue}{print('Lower bound:', ADR\_lower)}
+\textcolor{ada_blue}{print('Upper bound:', ADR\_upper)}
+\end{Verbatim}
+
+The quantities \ttblue{c\_L} and \ttblue{c\_U} are standardized decision bounds. Multiplying them by \ttblue{annual\_se} converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{recorded\_lower = annual\_prediction + ADR\_lower}
+\textcolor{ada_blue}{recorded\_upper = annual\_prediction + ADR\_upper}
+\textcolor{ada_blue}{print('Acceptable bounds for recorded annual revenue:')}
+\textcolor{ada_blue}{print('Lower bound:', recorded\_lower)}
+\textcolor{ada_blue}{print('Annual expectation:', annual\_prediction)}
+\textcolor{ada_blue}{print('Upper bound:', recorded\_upper)}
+\end{Verbatim}
+
+The achieved assurance is calculated using the non-central \(t\) distribution. A material overstatement shifts the distribution of the standardized difference to the right. A material understatement shifts it to the left.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{\# Achieved assurance when controlling efficiency risk}
+\textcolor{ada_blue}{assurance\_over = 1 - nct.cdf(c\_U, df=df, nc=delta)}
+\textcolor{ada_blue}{assurance\_under = nct.cdf(c\_L, df=df, nc=-delta)}
+\textcolor{ada_blue}{print("Achieved assurance for detecting overstatement:",}
+\textcolor{ada_blue}{    np.round(assurance\_over * 100, 1), "\%\textbackslash{}n")}
+\textcolor{ada_blue}{print("Achieved assurance for detecting understatement:",}
+\textcolor{ada_blue}{    np.round(assurance\_under * 100, 1), "\%\textbackslash{}n")}
+\end{Verbatim}
+
+With the current implementation and the audit parameters above, the achieved assurance is approximately 29.4\% in each direction.
+Finally, we evaluate the observed annual difference.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{if annual\_difference < ADR\_lower:}
+\textcolor{ada_blue}{    print('The annual difference indicates a potential understatement requiring investigation.')}
+\textcolor{ada_blue}{elif annual\_difference > ADR\_upper:}
+\textcolor{ada_blue}{    print('The annual difference indicates a potential overstatement requiring investigation.')}
+\textcolor{ada_blue}{else:}
+\textcolor{ada_blue}{    print('The annual difference falls within the acceptable difference range.')}
 \end{Verbatim}
 
 

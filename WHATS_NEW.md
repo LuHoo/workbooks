@@ -12,6 +12,8 @@
 - Made various minor edits and updates to improve clarity
 - Refined the US SteamCo case study by incorporating the investigation of the March 2014 winter storm before the annual evaluation
 - Clarified the winsorization procedure in the regression chapter. The text now correctly explains that the workshop winsorizes regression residuals before reconstructing the adjusted response, matching the accompanying R code and examples.
+- Corrected generated Python workshop code rendering so LaTeX-sensitive characters are escaped consistently inside colorized verbatim blocks.
+- Added and aligned missing Chapter 6 figure outputs with expected include names to remove missing-file build failures in Volume 2.
 
 ### Layout and readability
 - Improved spacing of figures and tables to avoid overfull/underfull text warnings
@@ -29,3 +31,4 @@
 ### Architecture and workflow
 - Issue #111: Completed Python workshop export parity in the book flow, including embedded Workshop Python sections in the correct chapter files and consistent generated include wiring.
 - Issue #137: Added explicit legacy parser deprecation governance with checkpoint-based criteria, documented transition hold conditions, and preserved explicit rollback mode (`--parser-engine legacy`) during transition.
+- Aligned Volume 2 preamble support for generated verbatim chunks by enabling `fvextra`, matching exporter output options used by generated workshop files.

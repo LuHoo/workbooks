@@ -5,7 +5,7 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We re-run the model assumption tests.
+\noindent We re-run the model assumption tests in the same order used earlier in the chapter: normality first, then heteroskedasticity, and finally autocorrelation.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -15,6 +15,16 @@
   \setlength{\parsep}{0pt}%
   \setlength{\itemsep}{0pt}%
 }}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
+shapiro.test(ussteamco.mod.5$residuals)
+\end{Verbatim}
+\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
+
+	Shapiro-Wilk normality test
+
+data:  ussteamco.mod.5$residuals
+W = 0.9487536, p-value = 0.0955396
+\end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 bptest(ussteamco.mod.5)
 \end{Verbatim}
@@ -35,16 +45,6 @@ bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
 
 data:  ussteamco.mod.5
 LM test = 5.199184, df = 3, p-value = 0.15778
-\end{Verbatim}
-\begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-shapiro.test(ussteamco.mod.5$residuals)
-\end{Verbatim}
-\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-
-	Shapiro-Wilk normality test
-
-data:  ussteamco.mod.5$residuals
-W = 0.9487536, p-value = 0.0955396
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

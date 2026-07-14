@@ -64,6 +64,16 @@ def escape_latex(text: str) -> str:
     return text
 
 
+def escape_latex_code(text: str) -> str:
+    backslash_token = "LATEXBACKSLASHTOKEN"
+    text = text.replace("\\", backslash_token)
+    text = text.replace("{", r"\{")
+    text = text.replace("}", r"\}")
+    text = text.replace("$", r"\$")
+    text = escape_latex(text)
+    return text.replace(backslash_token, r"\textbackslash{}")
+
+
 def convert_inline(text: str) -> str:
     token_re = re.compile(r"`[^`]*`|\$[^$]*\$|\\\([^)]*\\\)|\\\[[^]]*\\\]|\*[^*]+\*")
     parts = []
@@ -196,13 +206,13 @@ def render_code_cell(source_lines: list[str], output_lines: list[str]) -> list[s
     out = [r"\begin{Verbatim}[commandchars=\\\{\}]"]
     for line in source_lines:
         if line.strip():
-            out.append(r"\textcolor{ada_blue}{" + line + "}")
+            out.append(r"\textcolor{ada_blue}{" + escape_latex_code(line) + "}")
         else:
             out.append("")
     if output_lines:
         for line in output_lines:
             if line.strip():
-                out.append(r"\textcolor{ada_light_blue}{" + line + "}")
+                out.append(r"\textcolor{ada_light_blue}{" + escape_latex_code(line) + "}")
             else:
                 out.append("")
     out.append(r"\end{Verbatim}")

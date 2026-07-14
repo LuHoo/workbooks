@@ -60,8 +60,8 @@ Duplicate recommendations across documents were deduplicated to one tracking iss
    - Why now: prevents bad artifacts from being published and tightens repository integrity.
 
 5. Execution and validation reliability
-   - https://github.com/LuHoo/ada/issues/135
-   - https://github.com/LuHoo/ada/issues/134
+   - https://github.com/LuHoo/ada/issues/135 done
+   - https://github.com/LuHoo/ada/issues/134 done
    - https://github.com/LuHoo/ada/issues/136
    - Depends on: #132, #133
    - Why now: builds dependable, consistent quality signals after guardrails exist.
