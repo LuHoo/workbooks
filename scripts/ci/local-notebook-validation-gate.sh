@@ -14,6 +14,12 @@ Rscript scripts/export-python-notebooks.R --output-dir "${OUT_DIR}"
 echo "[gate] Checking strict Python guardrail"
 python3 scripts/ci/check-generated-python-notebooks.py --input-dir "${OUT_DIR}"
 
+echo "[gate] Enforcing generated artifact edit policy for published notebooks"
+python3 scripts/ci/check-generated-python-notebooks.py \
+  --input-dir "${OUT_DIR}" \
+  --checks hygiene \
+  --published-dir notebooks/workshops
+
 echo "[gate] Running R/Python equivalence checks"
 python3 scripts/ci/assert-r-python-equivalence.py --chapters 1,6
 python3 scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6

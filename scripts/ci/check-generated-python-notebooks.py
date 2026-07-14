@@ -32,6 +32,13 @@ class Violation:
     detail: str
 
 
+@dataclass
+class ArtifactPolicyViolation:
+    artifact_path: str
+    generated_path: str
+    reason: str
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fail when generated Python notebooks contain publication-blocking hygiene issues or raw R-only constructs."
@@ -48,6 +55,14 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Validation profile: 'strict' checks hygiene + raw R-only constructs; "
             "'hygiene' checks only outputs/execution_count hygiene (for pre-publication gates)."
+        ),
+    )
+    parser.add_argument(
+        "--published-dir",
+        help=(
+            "Optional directory containing published Python notebooks "
+            "(e.g. notebooks/workshops). When provided, validates generated-artifact "
+            "edit policy by checking that published notebooks match canonical generated outputs."
         ),
     )
     return parser.parse_args()
@@ -146,6 +161,140 @@ def report_hygiene_violations(violations: list[Violation]) -> None:
     print("Publication aborted.")
 
 
+def canonical_notebook_json(path: Path) -> str:
+    notebook = json.loads(path.read_text(encoding="utf-8"))
+    return json.dumps(notebook, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+
+
+def relpath_or_abs(path: Path) -> str:
+    try:
+        return str(path.relative_to(Path.cwd()))
+    except ValueError:
+        return str(path)
+
+
+def collect_expected_published_mapping(
+    generated_notebooks: list[Path],
+) -> tuple[dict[str, Path], list[ArtifactPolicyViolation]]:
+    expected: dict[str, Path] = {}
+    violations: list[ArtifactPolicyViolation] = []
+
+    for generated_path in generated_notebooks:
+        notebook = json.loads(generated_path.read_text(encoding="utf-8"))
+        renderer_meta = notebook.get("metadata", {}).get("ada_renderer", {})
+        chapter_number = renderer_meta.get("chapter_number")
+
+        try:
+            chapter = int(chapter_number)
+        except (TypeError, ValueError):
+            violations.append(
+                ArtifactPolicyViolation(
+                    artifact_path="<unknown>",
+                    generated_path=relpath_or_abs(generated_path),
+                    reason=(
+                        "Missing or invalid metadata.ada_renderer.chapter_number in generated notebook; "
+                        "cannot determine published artifact mapping."
+                    ),
+                )
+            )
+            continue
+
+        published_name = f"Workshop {chapter} (Python).ipynb"
+        if published_name in expected:
+            violations.append(
+                ArtifactPolicyViolation(
+                    artifact_path=published_name,
+                    generated_path=relpath_or_abs(generated_path),
+                    reason=(
+                        "Multiple generated notebooks map to the same published artifact name; "
+                        "workshop chapter mapping is ambiguous."
+                    ),
+                )
+            )
+            continue
+        expected[published_name] = generated_path
+
+    return expected, violations
+
+
+def check_generated_artifact_edit_policy(
+    generated_notebooks: list[Path],
+    published_dir: Path,
+) -> list[ArtifactPolicyViolation]:
+    violations: list[ArtifactPolicyViolation] = []
+    expected, mapping_violations = collect_expected_published_mapping(generated_notebooks)
+    violations.extend(mapping_violations)
+
+    for published_name, generated_path in sorted(expected.items()):
+        artifact_path = published_dir / published_name
+        if not artifact_path.exists():
+            violations.append(
+                ArtifactPolicyViolation(
+                    artifact_path=relpath_or_abs(artifact_path),
+                    generated_path=relpath_or_abs(generated_path),
+                    reason=(
+                        "Published artifact is missing for this generated notebook mapping."
+                    ),
+                )
+            )
+            continue
+
+        if canonical_notebook_json(generated_path) != canonical_notebook_json(artifact_path):
+            violations.append(
+                ArtifactPolicyViolation(
+                    artifact_path=relpath_or_abs(artifact_path),
+                    generated_path=relpath_or_abs(generated_path),
+                    reason=(
+                        "Published artifact content differs from canonical generated notebook output. "
+                        "This indicates manual edits or out-of-sync publication artifacts."
+                    ),
+                )
+            )
+
+    published_python = sorted(published_dir.glob("Workshop * (Python).ipynb"))
+    expected_names = set(expected.keys())
+    for artifact_path in published_python:
+        if artifact_path.name in expected_names:
+            continue
+        violations.append(
+            ArtifactPolicyViolation(
+                artifact_path=relpath_or_abs(artifact_path),
+                generated_path="<no canonical generated counterpart>",
+                reason=(
+                    "Published Python notebook does not map to current workshop export configuration."
+                ),
+            )
+        )
+
+    return violations
+
+
+def report_artifact_policy_violations(violations: list[ArtifactPolicyViolation]) -> None:
+    print("Generated artifact policy violation detected.")
+
+    for violation in violations:
+        print()
+        print("Artifact:")
+        print(f"  {violation.artifact_path}")
+        print()
+        print("This file is generated and must not be edited directly.")
+        print()
+        print("Reason:")
+        print(f"  {violation.reason}")
+        print(f"  Expected generated source: {violation.generated_path}")
+        print()
+        print("Remediation:")
+        print("  1. Update canonical source content under notebooks/support/**/support.Rmd.")
+        print("  2. Regenerate Python notebooks:")
+        print("     Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks")
+        print("  3. Republish mapped notebooks:")
+        print("     Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops")
+        print("  4. Commit regenerated outputs.")
+
+    print()
+    print("Validation failed.")
+
+
 def report_violations(violations: list[Violation]) -> None:
     by_notebook: dict[str, list[Violation]] = {}
     for violation in violations:
@@ -172,6 +321,7 @@ def report_violations(violations: list[Violation]) -> None:
 def main() -> None:
     args = parse_args()
     input_dir = Path(args.input_dir)
+    published_dir = Path(args.published_dir) if args.published_dir else None
     include_raw_r_checks = args.checks == "strict"
 
     notebooks = sorted(input_dir.rglob("*.ipynb"))
@@ -184,18 +334,36 @@ def main() -> None:
     for notebook in notebooks:
         violations.extend(check_notebook(notebook, include_raw_r_checks=include_raw_r_checks))
 
-    if not violations:
+    if violations:
+        if include_raw_r_checks:
+            report_violations(violations)
+        else:
+            report_hygiene_violations(violations)
+        raise SystemExit(1)
+
+    if published_dir is not None:
+        if not published_dir.exists():
+            raise FileNotFoundError(
+                f"Published notebook directory not found: {published_dir}. "
+                "Remediation: ensure the workbooks submodule is checked out before policy validation."
+            )
+
+        artifact_policy_violations = check_generated_artifact_edit_policy(notebooks, published_dir)
+        if artifact_policy_violations:
+            report_artifact_policy_violations(artifact_policy_violations)
+            raise SystemExit(1)
+
         if include_raw_r_checks:
             print("Strict Python notebook guardrail passed: no execution artifacts or raw R-only constructs detected")
         else:
             print("Notebook hygiene check passed: no outputs or execution_count artifacts detected")
+        print("Generated artifact edit-policy check passed: published notebooks match canonical generated outputs")
         return
 
     if include_raw_r_checks:
-        report_violations(violations)
+        print("Strict Python notebook guardrail passed: no execution artifacts or raw R-only constructs detected")
     else:
-        report_hygiene_violations(violations)
-    raise SystemExit(1)
+        print("Notebook hygiene check passed: no outputs or execution_count artifacts detected")
 
 
 if __name__ == "__main__":
