@@ -25,7 +25,7 @@ python3 scripts/ci/assert-r-python-equivalence.py --chapters 1,6
 python3 scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6
 
 echo "[gate] Running R smoke execution"
-Rscript scripts/ci/execute-r-workshop-smoke.R
+Rscript scripts/ci/execute-r-workshop-smoke.R --policy deterministic-sampling-v2
 
 echo "[gate] Executing generated Python notebooks"
 python3 scripts/ci/execute-generated-python-notebooks.py \

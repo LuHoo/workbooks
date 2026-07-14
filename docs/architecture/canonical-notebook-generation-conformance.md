@@ -171,7 +171,7 @@ Smallest remediation:
 
 ## 6) Controlled notebook execution
 
-Classification: `partially conforms`
+Classification: `conforms`
 
 Implementation (files/functions):
 
@@ -185,14 +185,16 @@ Conformance evidence:
 
 - Execution flow is ordered and explicitly gated (generate -> guardrail -> parity -> execute).
 - Python execution uses per-cell timeout and artifact output.
+- R execution policy is now explicit and deterministic (`deterministic-sampling-v2`) with enforced selection in `scripts/ci/execute-r-workshop-smoke.R`.
+- Local gate and CI call the same R execution script/policy, so local/CI behavior is aligned.
 
 Gaps / duplicated paths / obsolete logic:
 
-- R execution is smoke-only for two notebooks, not full workshop coverage.
+- Policy is sampling-based (not full R notebook coverage) by design.
 
 Smallest remediation:
 
-- Expand R execution set to all exported R workshop notebooks (or define/document explicit chapter sampling policy in ADR).
+- If stronger guarantees are required later, add a full-coverage mode and promote it to default policy.
 
 ## 7) Executed-notebook validation
 
