@@ -41,6 +41,15 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Directory containing generated Python notebooks.",
     )
+    parser.add_argument(
+        "--checks",
+        choices=["strict", "hygiene"],
+        default="strict",
+        help=(
+            "Validation profile: 'strict' checks hygiene + raw R-only constructs; "
+            "'hygiene' checks only outputs/execution_count hygiene (for pre-publication gates)."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -51,7 +60,7 @@ def normalize_source(cell: dict) -> str:
     return str(source)
 
 
-def check_notebook(path: Path) -> list[Violation]:
+def check_notebook(path: Path, include_raw_r_checks: bool) -> list[Violation]:
     notebook = json.loads(path.read_text(encoding="utf-8"))
     violations: list[Violation] = []
 
@@ -80,6 +89,9 @@ def check_notebook(path: Path) -> list[Violation]:
                     detail=f"outputs present ({len(outputs)} outputs)",
                 )
             )
+
+        if not include_raw_r_checks:
+            continue
 
         source = normalize_source(cell)
 
@@ -115,6 +127,25 @@ def check_notebook(path: Path) -> list[Violation]:
     return violations
 
 
+def report_hygiene_violations(violations: list[Violation]) -> None:
+    by_notebook: dict[str, list[Violation]] = {}
+    for violation in violations:
+        by_notebook.setdefault(violation.notebook_path, []).append(violation)
+
+    print("Notebook hygiene check failed.")
+    for notebook_path in sorted(by_notebook):
+        print()
+        print(notebook_path)
+        for violation in by_notebook[notebook_path]:
+            if violation.violation_type == "outputs":
+                print(f"  Cell {violation.cell_number}: contains outputs")
+            elif violation.violation_type == "execution_count":
+                print(f"  Cell {violation.cell_number}: execution_count={violation.detail.removeprefix('execution_count is ')}")
+
+    print()
+    print("Publication aborted.")
+
+
 def report_violations(violations: list[Violation]) -> None:
     by_notebook: dict[str, list[Violation]] = {}
     for violation in violations:
@@ -141,6 +172,7 @@ def report_violations(violations: list[Violation]) -> None:
 def main() -> None:
     args = parse_args()
     input_dir = Path(args.input_dir)
+    include_raw_r_checks = args.checks == "strict"
 
     notebooks = sorted(input_dir.rglob("*.ipynb"))
     if not notebooks:
@@ -150,13 +182,19 @@ def main() -> None:
 
     violations: list[Violation] = []
     for notebook in notebooks:
-        violations.extend(check_notebook(notebook))
+        violations.extend(check_notebook(notebook, include_raw_r_checks=include_raw_r_checks))
 
     if not violations:
-        print("Strict Python notebook guardrail passed: no execution artifacts or raw R-only constructs detected")
+        if include_raw_r_checks:
+            print("Strict Python notebook guardrail passed: no execution artifacts or raw R-only constructs detected")
+        else:
+            print("Notebook hygiene check passed: no outputs or execution_count artifacts detected")
         return
 
-    report_violations(violations)
+    if include_raw_r_checks:
+        report_violations(violations)
+    else:
+        report_hygiene_violations(violations)
     raise SystemExit(1)
 
 
