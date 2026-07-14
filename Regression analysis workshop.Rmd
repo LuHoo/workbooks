@@ -49,6 +49,8 @@ summary(USSteamCo)
 
 We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 5.4.4.
 
+The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, `R` recycles this 12-month pattern across the four years automatically. Later, when we include `summer` in a regression model, the `lm` function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
+
 ```{r}
 USSteamCo$summer <- c(0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0)
 ```
@@ -151,11 +153,11 @@ scatterplot(revenue ~ production,
 
 Figure 5.4 shows that there is a positive (increasing) relationship: as production increases, so does revenue.
 
-We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with the function `brief`.
+We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with `car::brief()`, which is part of the `car` package loaded in Exercise 5.1.
 
 ```{r}
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
-brief(ussteamco.mod.0)
+car::brief(ussteamco.mod.0)
 ```
 The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$, and the estimate of the slope $\beta_1$, $b_1 = 18.99$.
 
@@ -166,7 +168,7 @@ A full summary of `mod.0` can be obtained with the `summary` function.
 ```{r}
 summary(ussteamco.mod.0)
 ```
-In addition to the statistics produced by `brief`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
+In addition to the statistics produced by `car::brief()`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
 
 ### Exercise 5.6. Correlations and correlogram
 
@@ -478,7 +480,7 @@ ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
   data = USSteamCoEstim2
 )
 
-brief(ussteamco.mod.3)
+car::brief(ussteamco.mod.3)
 ```
 
 ## Exercise 5.18. Multicollinearity
@@ -532,10 +534,17 @@ anova.mod.0$`Sum Sq`[1] + anova.mod.0$`Sum Sq`[2]
 When we divide Total Sum of Squares by $n - 1$, we get the variance of $y$.
 
 ```{r}
-total_sum_of_squares / 35
+n_obs <- nrow(USSteamCoEstim)
+total_sum_of_squares / (n_obs - 1)
 ```
 
-This shows how variance is linked to variation.
+As a quick cross-check, we can also reverse the variance formula and recover Total Sum of Squares directly.
+
+```{r}
+var(USSteamCoEstim$revenue) * (n_obs - 1)
+```
+
+This equality holds because `var()` divides by $n - 1$. It is a useful consistency check, but the step-by-step calculation above remains the clearer way to see how Total Sum of Squares is built from the deviations around the mean.
 
 ## Exercise 5.20. Anova Type I and Type II
 
@@ -576,14 +585,21 @@ The analysis of variance of `mod.3` is as follows:
 We compare the performance of models with four different statistics, the Multiple $r^2$, Adjusted $r^2$ (both obtained from the `summary` function), and the AIC and BIC values. These last two can be called with their own respective commands.
 
 ```{r}
+AIC(model_forward)
+AIC(model_backward)
+AIC(fit_both)
 AIC(ussteamco.mod.0)
 AIC(model_backward)
 AIC(ussteamco.mod.1)
 AIC(ussteamco.mod.2)
 ```
-The AIC values shown above can be compared directly because all four models are fitted to the same response data (`USSteamCoEstim`). Model `mod.3` is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of `mod.3` is not directly comparable with those of the earlier models. Instead, `mod.3` should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
+The first three AIC values correspond to the final fitted objects returned by the forward, backward, and both-direction stepwise procedures. They are identical because `model_forward`, `model_backward`, and `fit_both` all end at the same model, namely `revenue ~ production + heatDD`.
 
-The AIC value of the `model_backward` does not quite match the output of the `step` function. This can be explained as follows.
+The AIC values of `mod.0`, `model_backward`, `mod.1`, and `mod.2` can also be compared directly because all four models are fitted to the same response data (`USSteamCoEstim`). Model `mod.3` is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of `mod.3` is not directly comparable with those of the earlier models. Instead, `mod.3` should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
+
+The `step()` output shows a different sequence of AIC values because, at each step, it compares the current model with candidate one-step additions or deletions. For example, the forward search starts at AIC = 1114.66 for the intercept-only model, moves to AIC = 1096.56 after adding `heatDD`, and then moves to AIC = 1046.11 after adding `production`. The backward search starts from the full model at AIC = 1047.68, then drops `coolDD` and reaches the same final model at AIC = 1046.11.
+
+Those `step()` AIC numbers do not exactly match the values returned by `AIC()` for the final fitted objects. The reason is that `step()` reports an AIC-like criterion that is sufficient for comparing candidate models within the procedure, while `AIC()` reports the full Gaussian AIC for the fitted model object.
 
 The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
@@ -593,7 +609,7 @@ For a linear regression model with normally distributed errors, this log-likelih
 $\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right) \right]$,
 leading to the AIC expression
 $\text{AIC} = n \left[\log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
-In contrast, the `step()` function in R reports AIC values based on a deviance-like approximation, that omits constant terms unrelated to model comparison:
+In contrast, the `step()` function in R reports AIC values based on a deviance-like approximation that omits constant terms unrelated to model comparison:
 $\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
 The difference between the two expressions is a constant shift of
 $n \cdot (\log(2\pi) + 1) + 2$.
@@ -646,7 +662,7 @@ shapiro.test(ussteamco.mod.3$residuals)
 
 ## Exercise 5.24. Testing heteroskedasticity
 
-To test the asumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 5.15. We can construct it as follows.
+To test the assumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 5.15. We can construct it as follows.
 
 ```{r}
 residualPlots(ussteamco.mod.3,
@@ -678,7 +694,7 @@ The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hy
 
 ## Exercise 5.26. First-order autocorrelation correction
 
-A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of the lagged value from the dependent variable and from each predictor. The transformed model can then be estimated by ordinary least squares.
+A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This notebook shows the transformation explicitly rather than calling a separate named routine. We first estimate the lag-1 autocorrelation in the residuals, then quasi-difference the response and the predictors, and finally refit the model to the transformed data.
 
 We first estimate an AR(1) model on the residuals from `mod.3`.
 
@@ -688,38 +704,39 @@ We first estimate an AR(1) model on the residuals from `mod.3`.
 )$coef[1])
 ```
 
-Then we transform all variables using the estimated \(\rho\). When the model includes interaction terms, we first construct the interaction terms in their original form and then transform those interaction terms. We should not multiply separately transformed variables.
+Then we transform all variables using the estimated \(\rho\). When the model includes interaction terms, we first construct the interaction terms in their original form and only then transform those interaction terms. We should not multiply separately transformed main effects.
 
 ```{r}
-# Create lagged variables, dropping the first observation
-n <- nrow(USSteamCoEstim2)
+# Split the data into the current period t and the lagged period t - 1
+n_obs_mod3 <- nrow(USSteamCoEstim2)
+current_period <- USSteamCoEstim2[-1, ]
+lagged_period <- USSteamCoEstim2[-n_obs_mod3, ]
 
-# Current period t and lagged period t - 1
-trans <- USSteamCoEstim2[-1, ]
-lag <- USSteamCoEstim2[-n, ]
+# Build the interaction terms before applying the AR(1) transformation
+current_period$prod_summer <- current_period$production * current_period$summer
+current_period$heat_summer <- current_period$heatDD * current_period$summer
+current_period$cool_summer <- current_period$coolDD * current_period$summer
 
-# Construct original interaction terms first
-trans$prod_summer <- trans$production * trans$summer
-trans$heat_summer <- trans$heatDD * trans$summer
-trans$cool_summer <- trans$coolDD * trans$summer
+lagged_period$prod_summer <- lagged_period$production * lagged_period$summer
+lagged_period$heat_summer <- lagged_period$heatDD * lagged_period$summer
+lagged_period$cool_summer <- lagged_period$coolDD * lagged_period$summer
 
-lag$prod_summer <- lag$production * lag$summer
-lag$heat_summer <- lag$heatDD * lag$summer
-lag$cool_summer <- lag$coolDD * lag$summer
+# Start from the current-period data and add the transformed variables
+transformed_data <- current_period
 
-# Transform dependent variable
-trans$revenue_adj <- trans$revenue - rho * lag$revenue
+# Quasi-difference the response
+transformed_data$revenue_adj <- current_period$revenue - rho * lagged_period$revenue
 
-# Transform independent variables
-trans$production_adj <- trans$production - rho * lag$production
-trans$heatDD_adj <- trans$heatDD - rho * lag$heatDD
-trans$coolDD_adj <- trans$coolDD - rho * lag$coolDD
-trans$summer_adj <- trans$summer - rho * lag$summer
+# Quasi-difference the main effects
+transformed_data$production_adj <- current_period$production - rho * lagged_period$production
+transformed_data$heatDD_adj <- current_period$heatDD - rho * lagged_period$heatDD
+transformed_data$coolDD_adj <- current_period$coolDD - rho * lagged_period$coolDD
+transformed_data$summer_adj <- current_period$summer - rho * lagged_period$summer
 
-# Transform interaction terms
-trans$prod_summer_adj <- trans$prod_summer - rho * lag$prod_summer
-trans$heat_summer_adj <- trans$heat_summer - rho * lag$heat_summer
-trans$cool_summer_adj <- trans$cool_summer - rho * lag$cool_summer
+# Quasi-difference the interaction terms
+transformed_data$prod_summer_adj <- current_period$prod_summer - rho * lagged_period$prod_summer
+transformed_data$heat_summer_adj <- current_period$heat_summer - rho * lagged_period$heat_summer
+transformed_data$cool_summer_adj <- current_period$cool_summer - rho * lagged_period$cool_summer
 ```
 
 We fit a new model using the transformed variables.
@@ -730,7 +747,7 @@ ussteamco.mod.4 <- lm(
     production_adj + heatDD_adj + coolDD_adj +
     summer_adj + prod_summer_adj +
     heat_summer_adj + cool_summer_adj,
-  data = trans
+  data = transformed_data
 )
 
 summary(ussteamco.mod.4)
@@ -740,7 +757,7 @@ This transformation follows $y_t - \rho y_{t-1} = \beta_0(1-\rho) + \sum_j \beta
 
 For interaction terms, the interaction is treated as a predictor in its own right. Thus, if \(z_t=x_t s_t\), the transformed interaction is $z_t-\rho z_{t-1} = x_t s_t-\rho x_{t-1}s_{t-1}$.
 
-It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the `pacf` plot and running the Breusch-Godfrey test.
+It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. This is why the notebook keeps the AR(1) correction terminology here: the chapter is emphasizing the manual transformation itself, not introducing a separate Cochran-Orcutt procedure by name. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the `pacf` plot and running the Breusch-Godfrey test.
 
 ```{r}
 pacf(ussteamco.mod.4$residuals)
@@ -762,7 +779,7 @@ ussteamco.mod.5 <- step(ussteamco.mod.5,
 
 ## Exercise 5.28. Coefficient test of the refined model
 
-The summary of this model is:
+We first inspect the full summary of the refined model, which contains the coefficient estimates together with their standard errors, $t$ statistics, and $p$ values.
 
 ```{r}
 options(scipen = 999)
@@ -772,23 +789,26 @@ summary(ussteamco.mod.5)
 
 ## Exercise 5.29. Re-running the model assumption tests
 
-We re-run the model assumption tests.
+We re-run the model assumption tests in the same order used earlier in the chapter: normality first, then heteroskedasticity, and finally autocorrelation.
 
 ```{r}
+shapiro.test(ussteamco.mod.5$residuals)
 bptest(ussteamco.mod.5)
 bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
-shapiro.test(ussteamco.mod.5$residuals)
 ```
 
 ## Exercise 5.30. Testing significance
 
-The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
+Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests.
 
 ```{r}
-summary(ussteamco.mod.5)
+summary.mod.5 <- summary(ussteamco.mod.5)
+summary.mod.5$fstatistic
 ```
 
-### Exercise 5.31. Visualizing the uncertainty in the model parameters
+### Exercise 5.31. Showcase: Visualizing the uncertainty in the model parameters
+
+This exercise is a showcase rather than part of the US SteamCo case workflow. It supports Figure 5.20 by illustrating a general idea: repeated samples from the same underlying regression model produce different fitted lines, even when the true relationship is unchanged.
 
 First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
 
@@ -886,7 +906,9 @@ regression_lines_plot
 
 The resulting graph is shown in Figure 5.20.
 
-## Exercise 5.32. Confidence and prediction intervals
+## Exercise 5.32. Showcase: Confidence and prediction intervals
+
+This exercise is also an illustration rather than a case step. It stays in the student notebook because it introduces the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation before we return to the case-based forecasting exercises.
 
 Figure 5.18 shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
 
@@ -1022,17 +1044,17 @@ expectations_plot
 
 We use Equations 5.29 and 5.30 to construct a prediction interval for total revenue for the year under audit. The annual expectation is the sum of the 12 monthly expectations.
 
-The prediction standard error of the annual total is calculated directly from the design matrix for the hold-out observations. This accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients.
+To keep the derivation transparent, we first collect the monthly expectations, then combine them into an annual expectation, and finally compute the prediction standard error of that annual total. The design-matrix calculation accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients in all 12 months.
 
 ```{r}
 # Residual degrees of freedom
 df_res <- ussteamco.mod.5$df.residual
 
-# Monthly predictions
-monthly_predictions <- pred_df$fit
+# Monthly expectations from Exercise 5.34
+monthly_expectations <- pred_df$fit
 
-# Annual expectation
-annual_prediction <- sum(monthly_predictions)
+# Combined annual expectation
+annual_prediction <- sum(monthly_expectations)
 
 # Construct the design matrix for the hold-out observations
 X_hold <- model.matrix(
@@ -1043,23 +1065,25 @@ X_hold <- model.matrix(
 # Vector of ones for summing the 12 monthly predictions
 one <- rep(1, nrow(X_hold))
 
-# Variance component from uncertainty in the estimated coefficients
+# Equation 5.38: variance contribution from uncertainty in the estimated regression coefficients
 var_mean_annual <- as.numeric(
   t(one) %*% X_hold %*% vcov(ussteamco.mod.5) %*% t(X_hold) %*% one
 )
 
-# Variance component from future residual variation
+# Equation 5.39: variance contribution from the future residual variation of 12 monthly observations
 sigma2 <- summary(ussteamco.mod.5)$sigma^2
 var_future_annual <- nrow(X_hold) * sigma2
 
-# Prediction variance and prediction standard error of the annual total
+# Equation 5.40: total prediction variance of the annual amount
 annual_var <- var_mean_annual + var_future_annual
+
+# Equation 5.41: prediction standard error of the annual amount
 annual_se <- sqrt(annual_var)
 
-# t-score for a 99% prediction interval
+# Equation 5.42: critical value for a 99% prediction interval
 t_score <- qt(0.995, df = df_res)
 
-# 99% prediction interval for the annual total
+# Equation 5.43: 99% prediction interval for the annual total
 annual_lower <- annual_prediction - t_score * annual_se
 annual_upper <- annual_prediction + t_score * annual_se
 
@@ -1093,4 +1117,100 @@ pred_df$upr_adj[march_row] <- pred_df$upr[march_row] - storm_adjustment
 
 pred_df$outside_adj <- with(pred_df, recorded < lwr_adj | recorded > upr_adj)
 pred_df
+```
+
+For the annual calculations in the next exercise, the adjusted annual expectation is the sum of the adjusted monthly expectations.
+
+```{r}
+annual_prediction_adj <- sum(pred_df$fit_adj)
+annual_prediction_adj
+```
+
+## Exercise 5.36. Level of assurance for the annual prediction
+
+We now compare the recorded annual revenue with the annual expectation. Consistent with the convention used throughout the book, the difference is defined as the recorded amount minus the expectation.
+
+We use the numbers adjusted for the winter storm conditions.
+```{r}
+monthly_expectations_adj <- pred_df$fit_adj
+annual_prediction <- sum(monthly_expectations_adj)
+```
+
+```{r}
+# Difference convention: recorded amount minus expectation
+annual_recorded <- sum(USSteamCoHold$revenue)
+annual_difference <- annual_recorded - annual_prediction
+
+cat("Recorded annual revenue:", annual_recorded, "\n")
+cat("Expected annual revenue:", annual_prediction, "\n")
+cat("Difference:", annual_difference, "\n")
+cat("Annual prediction standard error:", annual_se, "\n")
+```
+
+Next, we set the audit parameters and construct the acceptable difference range. The acceptable difference range is expressed around zero, because it is applied to the difference between the recorded amount and the expectation.
+
+```{r}
+# Set audit parameters
+PM <- 15000000         # Performance materiality
+beta <- 0.01           # Efficiency risk used for the acceptable difference range
+df <- df_res
+
+# Equation 5.44: standardized materiality
+delta <- PM / annual_se
+
+# Critical values for a two-sided 99% acceptable difference range
+c_L <- qt(beta / 2, df = df)
+c_U <- qt(1 - beta / 2, df = df)
+
+# Acceptable difference range for the annual difference
+ADR_lower <- c_L * annual_se
+ADR_upper <- c_U * annual_se
+
+cat("Acceptable Difference Range for the annual difference:\n")
+cat("Lower bound:", ADR_lower, "\n")
+cat("Upper bound:", ADR_upper, "\n")
+```
+
+The quantities `c_L` and `c_U` are standardized decision bounds. Multiplying them by `annual_se` converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+
+```{r}
+# Acceptable bounds for recorded annual revenue
+recorded_lower <- annual_prediction + ADR_lower
+recorded_upper <- annual_prediction + ADR_upper
+
+cat("Acceptable bounds for recorded annual revenue:\n")
+cat("Lower bound:", recorded_lower, "\n")
+cat("Annual expectation:", annual_prediction, "\n")
+cat("Upper bound:", recorded_upper, "\n")
+```
+
+The achieved assurance is calculated using the non-central \(t\) distribution. A material overstatement shifts the distribution of the standardized difference to the right. A material understatement shifts it to the left.
+
+```{r}
+# Achieved assurance when controlling efficiency risk
+
+assurance_over <- 1 - pt(c_U, df = df, ncp = delta)
+assurance_under <- pt(c_L, df = df, ncp = -delta)
+
+cat("Achieved assurance for detecting overstatement:",
+    round(assurance_over * 100, 1), "%\n")
+
+cat("Achieved assurance for detecting understatement:",
+    round(assurance_under * 100, 1), "%\n")
+```
+
+With the current implementation and the audit parameters above, the achieved assurance is approximately 29.4% in each direction.
+
+Finally, we evaluate the observed annual difference.
+
+```{r}
+# Conclusion for the observed annual difference
+
+if (annual_difference < ADR_lower) {
+  cat("The annual difference indicates a potential understatement requiring investigation.\n")
+} else if (annual_difference > ADR_upper) {
+  cat("The annual difference indicates a potential overstatement requiring investigation.\n")
+} else {
+  cat("The annual difference falls within the acceptable difference range.\n")
+}
 ```
