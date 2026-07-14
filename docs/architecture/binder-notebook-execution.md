@@ -118,7 +118,7 @@ Pipeline:
 
 1. install pinned R and Python dependencies;
 2. generate Python notebooks from canonical support sources;
-3. execute representative R workshop notebooks;
+3. execute deterministic sampled R workshop notebooks (policy `deterministic-sampling-v2`);
 4. execute generated Python notebooks with `nbclient`;
 5. upload execution artifacts.
 
@@ -126,6 +126,19 @@ Runner scripts:
 
 - `scripts/ci/execute-r-workshop-smoke.R`
 - `scripts/ci/execute-generated-python-notebooks.py`
+
+R workshop execution coverage policy:
+
+- Policy name: `deterministic-sampling-v2`
+- Executed notebooks:
+  - `notebooks/workshops/Hypothesis testing workshop.Rmd`
+  - `notebooks/workshops/Regression analysis workshop.Rmd`
+- Why these notebooks:
+  - together cover inferential/runtime integration and the heaviest modeling path in the current workshop set.
+- Guarantee provided:
+  - if either selected notebook fails to knit, CI/local execution gate fails.
+- Not guaranteed:
+  - full execution coverage for all generated/published R workshop notebooks.
 
 ## Diagnostics
 
@@ -190,7 +203,7 @@ Run the validation flow locally:
 
 ```bash
 Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks
-Rscript scripts/ci/execute-r-workshop-smoke.R
+Rscript scripts/ci/execute-r-workshop-smoke.R --policy deterministic-sampling-v2
 python3 scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts
 ```
 

@@ -226,12 +226,31 @@ Current-state note:
   - `scripts/ci/execute-r-workshop-smoke.R`
   - `scripts/ci/execute-generated-python-notebooks.py`
 - Proves:
-  - strict notebook hygiene checks, parity checks, representative execution,
+  - strict notebook hygiene checks, parity checks, deterministic sampled R execution,
     runtime viability for generated notebooks.
 - Does not prove:
-  - hosted Binder service availability or publication repo drift on remote.
+  - hosted Binder service availability, publication repo drift on remote, or
+    full R workshop execution coverage.
 - Local availability: yes.
 - Required when: before publication/export and before hosted checks.
+
+R workshop execution coverage policy:
+
+- Policy name: `deterministic-sampling-v2`
+- Policy name: `deterministic-sampling-v2`
+- Enforced by: `scripts/ci/execute-r-workshop-smoke.R`
+- Invoked by:
+  - `.github/workflows/notebook-execution-validation.yml`
+  - `.github/workflows/export-workshops.yml`
+  - `scripts/ci/local-notebook-validation-gate.sh`
+- Deterministic selection set:
+  - `notebooks/workshops/Hypothesis testing workshop.Rmd`
+  - `notebooks/workshops/Regression analysis workshop.Rmd`
+- Guarantee provided:
+  - execution gate validates runtime health and integration for this representative, fixed subset;
+    failure in any selected notebook fails the execution gate.
+- Not guaranteed:
+  - successful execution of every generated/published R workshop notebook.
 
 ### Layer 4: Hosted publication and Binder validation
 
