@@ -140,36 +140,11 @@ jobs:
             --output-json generated/traceability/parity-report.json \
             --output-summary generated/traceability/parity-report.txt
 
-      - name: Enforce strict Python output guardrail
+      - name: Run shared notebook execution validations
         run: |
-          python3 scripts/ci/check-generated-python-notebooks.py \
-            --input-dir generated/python-notebooks
-
-      - name: Enforce generated notebook artifact edit policy
-        run: |
-          python3 scripts/ci/check-generated-python-notebooks.py \
+          bash scripts/ci/run-common-notebook-validations.sh \
             --input-dir generated/python-notebooks \
-            --checks hygiene \
-            --published-dir notebooks/workshops
-
-      - name: "Assert R/Python equivalence (phase 1: chapter 1 and 6)"
-        run: |
-          python3 scripts/ci/assert-r-python-equivalence.py \
-            --chapters 1,6
-
-      - name: "Assert R/Python equivalence (phase 2: all supported chapters)"
-        run: |
-          python3 scripts/ci/assert-r-python-equivalence.py \
-            --chapters 1,2,3,4,5,6
-
-      - name: Execute representative R workshops
-        run: |
-          Rscript scripts/ci/execute-r-workshop-smoke.R
-
-      - name: Execute generated Python notebooks
-        run: |
-          python3 scripts/ci/execute-generated-python-notebooks.py \
-            --input-dir generated/python-notebooks \
+            --published-dir notebooks/workshops \
             --artifacts-dir generated/notebook-execution-artifacts \
             --timeout 600
 
