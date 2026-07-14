@@ -55,7 +55,7 @@ Duplicate recommendations across documents were deduplicated to one tracking iss
 4. Add hard publication and edit-safety guardrails
    - https://github.com/LuHoo/ada/issues/132 done
    - https://github.com/LuHoo/ada/issues/141 done
-   - https://github.com/LuHoo/ada/issues/133
+   - https://github.com/LuHoo/ada/issues/133 done
    - Depends on: #131
    - Why now: prevents bad artifacts from being published and tightens repository integrity.
 
