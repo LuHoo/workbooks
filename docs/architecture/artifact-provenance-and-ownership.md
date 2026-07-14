@@ -236,7 +236,11 @@ Provenance source layers:
    - `scripts/publish-python-notebooks.R` now validates required `metadata.ada_renderer` fields and rejects absolute/temp source paths before publication copy.
 2. Temporary artifact commit guardrail
    - `.gitignore` now ignores `generated/notebook-execution-artifacts/`.
-3. Policy documentation
+3. Generated artifact edit-policy guardrail
+   - `scripts/ci/check-generated-python-notebooks.py --checks hygiene --published-dir notebooks/workshops` validates that published Python notebooks match canonical generated outputs.
+   - Validation fails when published notebook artifacts are manually edited or out-of-sync with generated mapping.
+   - Remediation is explicit: update canonical source, regenerate, republish, and commit regenerated artifacts.
+4. Policy documentation
    - this document defines ownership, provenance minimums, and correction flow.
 
 ## Optional Machine-Readable Manifest Decision
