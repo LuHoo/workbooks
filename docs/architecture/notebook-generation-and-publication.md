@@ -258,6 +258,22 @@ Current-state note:
 | `notebooks/workshops/*.Rmd` (published student Rmd) | published in `LuHoo/workbooks` via submodule | generated | do not edit generated content directly |
 | `generated/python-notebooks/**/chapter-*.ipynb` | `LuHoo/ada` | generated | do not edit; regenerate |
 | `notebooks/workshops/Workshop <n> (Python).ipynb` | `LuHoo/workbooks` publication target | generated | do not edit generated content directly |
+
+Generated Python notebook artifact edit-policy enforcement:
+
+- Validator: `scripts/ci/check-generated-python-notebooks.py`
+- Policy mode: `--checks hygiene --published-dir notebooks/workshops`
+- Enforcement rule: every published Python notebook must match the canonical
+  generated notebook mapping for its chapter.
+- Violation behavior: fail with remediation guidance to modify canonical source,
+  regenerate, and republish; direct/manual edits to published generated notebooks
+  are rejected.
+
+CI integration for policy enforcement:
+
+- Pull request/runtime validation: `.github/workflows/notebook-execution-validation.yml`
+- Publication workflow validation: `.github/workflows/export-workshops.yml`
+- Local mirrored gate: `scripts/ci/local-notebook-validation-gate.sh`
 | Binder runtime config under `.binder/` | `LuHoo/ada` (current tooling owner) | canonical runtime config | allowed with validation |
 | Binder runtime config under `notebooks/workshops/.binder/` | `LuHoo/workbooks` | canonical in that repo | allowed in that repo; keep ownership/drift explicit |
 

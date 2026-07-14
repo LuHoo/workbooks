@@ -191,6 +191,13 @@ jobs:
         run: |
           Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops
 
+      - name: Verify published notebooks follow generated artifact policy
+        run: |
+          python3 scripts/ci/check-generated-python-notebooks.py \
+            --input-dir generated/python-notebooks \
+            --checks hygiene \
+            --published-dir notebooks/workshops
+
       - name: Commit and publish workbooks
         run: |
           git submodule foreach 'git status --short'

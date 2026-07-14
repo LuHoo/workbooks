@@ -145,6 +145,13 @@ jobs:
           python3 scripts/ci/check-generated-python-notebooks.py \
             --input-dir generated/python-notebooks
 
+      - name: Enforce generated notebook artifact edit policy
+        run: |
+          python3 scripts/ci/check-generated-python-notebooks.py \
+            --input-dir generated/python-notebooks \
+            --checks hygiene \
+            --published-dir notebooks/workshops
+
       - name: "Assert R/Python equivalence (phase 1: chapter 1 and 6)"
         run: |
           python3 scripts/ci/assert-r-python-equivalence.py \

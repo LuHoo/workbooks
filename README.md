@@ -265,8 +265,30 @@ Local-first validation quickstart:
 	- `bash scripts/ci/verify-deterministic-notebook-generation.sh`
 - For standalone Python validation commands, prefer the project venv interpreter:
   - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks`
+  - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks --checks hygiene --published-dir notebooks/workshops`
   - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
   - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
+
+### Generated Notebook Artifact Edit Policy
+
+Policy scope:
+
+- Generated published Python notebooks under `notebooks/workshops/Workshop <n> (Python).ipynb` are not source-authored files.
+- Canonical source-of-truth content remains under `notebooks/support/**/support.Rmd`.
+
+Enforcement behavior:
+
+- CI and local validation fail when a published Python notebook differs from its canonical generated counterpart in `generated/python-notebooks/**/chapter-<n>.ipynb`.
+- Manual edits to published generated notebooks are treated as policy violations.
+
+Approved write path:
+
+1. Edit canonical source (`notebooks/support/**/support.Rmd`).
+2. Regenerate Python notebooks:
+	- `Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks`
+3. Republish mapped notebook artifacts:
+	- `Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops`
+4. Commit regenerated outputs.
 
 Architecture details and deterministic contract:
 
