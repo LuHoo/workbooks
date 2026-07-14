@@ -45,6 +45,11 @@ Binder files are located under `.binder/`:
 - `apt.txt`: system libraries required for R package builds.
 - `postBuild`: sanity checks for critical runtime imports.
 
+Policy constraint:
+
+- Runtime package installation is not allowed in Binder notebook startup paths.
+- Dependencies must be resolved at image build time only.
+
 ## Dependency Management
 
 ### R dependencies
@@ -57,6 +62,11 @@ Installed by `.binder/install.R` and mirrored in CI install steps:
   - `LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418`
   - `LuHoo/aicpa@4a49d0357544eb22ed3314005af2f82b3cf0f53a`
 
+Build-time verification:
+
+- `.binder/install.R` now verifies required package availability after installation using `requireNamespace(...)` checks.
+- Build fails if required packages are missing; no success message is emitted before verification.
+
 ### System dependencies (`.binder/apt.txt`)
 
 Installed by repo2docker before R/Python package installation.
@@ -67,8 +77,15 @@ Current Binder system packages:
   - needed by common R network/XML/git dependency chains.
 - `cmake`
   - required by `nloptr` source builds (`CMake was not found on the PATH` when absent).
+- `libnlopt-dev`, `gfortran`, `libblas-dev`, `liblapack-dev`
+  - required by the `car -> pbkrtest -> lme4 -> nloptr` chain on Linux Binder builds.
 - `libharfbuzz-dev`, `libfribidi-dev`
   - required by `textshaping`/`systemfonts` source builds (`hb-ft.h` and related shaping headers).
+
+Snapshot/reproducibility update:
+
+- Binder R package installation now uses a pinned Posit Package Manager snapshot (`2024-10-15`) for Linux Jammy in `.binder/install.R`.
+- This removes live-CRAN drift, improves reproducibility, and increases binary package availability versus unconstrained repository resolution.
 
 Maintenance guidance:
 
@@ -153,6 +170,8 @@ Artifacts:
 - `generated/traceability/binder-launch-smoke.log`
 
 `postBuild` includes lightweight dependency assertions for critical system tools/headers (including `cmake`, harfbuzz, and fribidi) so missing Binder apt dependencies fail fast with actionable messages.
+
+`postBuild` also validates that key R packages (`FSaudit`, `aicpa`, `car`, `pbkrtest`, `lme4`, `nloptr`) are available immediately at runtime.
 
 ## Publication Gating
 

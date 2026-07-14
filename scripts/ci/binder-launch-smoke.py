@@ -74,68 +74,86 @@ def stream_until_ready(args: argparse.Namespace, log_lines: list[str]) -> Binder
     append_log(log_lines, f"Connecting to Binder event stream: {url}")
 
     start = time.monotonic()
-    ready_payload: BinderReadyPayload | None = None
+    attempt = 0
+    last_error: str | None = None
 
-    with requests.get(
-        url,
-        stream=True,
-        timeout=(15, args.event_timeout_seconds),
-        headers=binder_stream_headers(),
-    ) as resp:
-        append_log(log_lines, f"Binder stream HTTP status: {resp.status_code}")
-
-        content_type = resp.headers.get("content-type", "")
-        if resp.status_code >= 400 and "text/event-stream" not in content_type:
-            resp.raise_for_status()
-
-        for raw_line in resp.iter_lines(decode_unicode=True):
-            elapsed = time.monotonic() - start
-            if elapsed > args.build_timeout_seconds:
-                raise TimeoutError(
-                    f"Binder did not reach ready state within {args.build_timeout_seconds} seconds."
-                )
-
-            if raw_line is None:
-                continue
-            line = raw_line.strip()
-            if not line:
-                continue
-            if not line.startswith("data:"):
-                continue
-
-            payload_text = line[len("data:") :].strip()
-            if payload_text in ("", "null"):
-                continue
-
-            try:
-                payload = json.loads(payload_text)
-            except json.JSONDecodeError:
-                append_log(log_lines, f"Non-JSON event payload: {payload_text}")
-                continue
-
-            phase = payload.get("phase")
-            message = payload.get("message")
-            append_log(log_lines, f"phase={phase} message={message}")
-
-            if phase in {"failed", "error"}:
-                raise RuntimeError(f"Binder build failed for {args.target_repo}@{args.target_ref}: {message}")
-
-            if phase == "ready":
-                ready_payload = BinderReadyPayload(
-                    base_url=str(payload.get("url", "")).strip(),
-                    token=(str(payload.get("token")).strip() if payload.get("token") is not None else None),
-                )
-                break
-
-        if ready_payload is None and resp.status_code >= 400:
-            raise RuntimeError(
-                f"Binder stream request failed with HTTP {resp.status_code} for {url}"
+    while True:
+        elapsed = time.monotonic() - start
+        if elapsed > args.build_timeout_seconds:
+            detail = f" Last stream error: {last_error}" if last_error else ""
+            raise TimeoutError(
+                f"Binder did not reach ready state within {args.build_timeout_seconds} seconds.{detail}"
             )
 
-    if ready_payload is None or not ready_payload.base_url:
-        raise RuntimeError("Binder stream ended before providing a ready URL.")
+        attempt += 1
+        append_log(log_lines, f"Opening Binder stream attempt {attempt}")
 
-    return ready_payload
+        try:
+            with requests.get(
+                url,
+                stream=True,
+                timeout=(15, args.event_timeout_seconds),
+                headers=binder_stream_headers(),
+            ) as resp:
+                append_log(log_lines, f"Binder stream HTTP status: {resp.status_code}")
+
+                content_type = resp.headers.get("content-type", "")
+                if resp.status_code >= 400 and "text/event-stream" not in content_type:
+                    resp.raise_for_status()
+
+                saw_event = False
+                for raw_line in resp.iter_lines(decode_unicode=True):
+                    saw_event = True
+                    elapsed = time.monotonic() - start
+                    if elapsed > args.build_timeout_seconds:
+                        raise TimeoutError(
+                            f"Binder did not reach ready state within {args.build_timeout_seconds} seconds."
+                        )
+
+                    if raw_line is None:
+                        continue
+                    line = raw_line.strip()
+                    if not line:
+                        continue
+                    if not line.startswith("data:"):
+                        continue
+
+                    payload_text = line[len("data:") :].strip()
+                    if payload_text in ("", "null"):
+                        continue
+
+                    try:
+                        payload = json.loads(payload_text)
+                    except json.JSONDecodeError:
+                        append_log(log_lines, f"Non-JSON event payload: {payload_text}")
+                        continue
+
+                    phase = payload.get("phase")
+                    message = payload.get("message")
+                    append_log(log_lines, f"phase={phase} message={message}")
+
+                    if phase in {"failed", "error"}:
+                        raise RuntimeError(f"Binder build failed for {args.target_repo}@{args.target_ref}: {message}")
+
+                    if phase == "ready":
+                        ready_payload = BinderReadyPayload(
+                            base_url=str(payload.get("url", "")).strip(),
+                            token=(str(payload.get("token")).strip() if payload.get("token") is not None else None),
+                        )
+                        if not ready_payload.base_url:
+                            raise RuntimeError("Binder ready event did not include a launch URL.")
+                        return ready_payload
+
+                if not saw_event:
+                    append_log(log_lines, "Binder event stream closed without events; retrying.")
+                else:
+                    append_log(log_lines, "Binder event stream closed before ready; retrying.")
+
+        except requests.exceptions.RequestException as exc:
+            last_error = str(exc)
+            append_log(log_lines, f"Transient Binder stream error: {exc}. Retrying.")
+
+        time.sleep(2)
 
 
 def build_probe_url(base_url: str, urlpath: str, token: str | None) -> str:
