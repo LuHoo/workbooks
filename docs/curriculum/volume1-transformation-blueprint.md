@@ -4,45 +4,51 @@ authors:
   - Lucas Hoogduin
   - Paul Touw
 status: Draft
-version: 1.0
+version: 1.1
 created: 2026-07-16
-related_issue: "#<issue-number>"
+related_documents:
+  - competency-model.md
+  - volume1-curriculum-map.md
 ---
 
 # Volume 1 Transformation Blueprint
 
 ## Audit Data Analysis – Volume 1
 
-### Version 1.0 – Strategic Redesign Proposal
+### Strategic Redesign Proposal
 
-***
+---
 
 # Executive Summary
 
-Volume 1 is already a strong statistics-for-auditors textbook. However, the proposed competency model suggests a shift from:
+Volume 1 is already a strong statistics-for-auditors textbook.
 
-> "Teaching statistical methods"
+However, the proposed competency model suggests a transition from:
+
+> Teaching statistical methods
 
 towards:
 
-> "Teaching how auditors use statistical evidence to support professional judgments."
+> Teaching how auditors use statistical evidence to support professional judgment.
 
 The statistical content remains largely unchanged.
 
 The transformation primarily affects:
 
-* learning objectives;
-* chapter architecture;
-* review questions;
-* workshop design;
-* case conclusions;
-* narrative flow.
+- learning objectives;
+- chapter architecture;
+- exercises;
+- concept questions;
+- audit questions;
+- workshop design;
+- case conclusions;
+- narrative flow.
 
 The key principle is:
 
-> Every chapter should explicitly develop Technical Skills, Statistical Reasoning, and Professional Judgment. [\[ada_volume1.pdf \| PDF\]](https://onedrive-global.kpmg.com/personal/hoogduin_lucas_kpmg_nl/Documents/Microsoft%20Copilot%20Chat%20Files/ada_volume1.pdf)
+> Every chapter should explicitly develop Technical Skills, Statistical Reasoning, and Professional Judgment.
 
-***
+---
 
 # The New Educational Framework
 
@@ -52,18 +58,18 @@ Students learn how to perform analyses.
 
 Typical verbs:
 
-* calculate
-* estimate
-* execute
-* construct
-* reproduce
-* implement
+- calculate
+- estimate
+- execute
+- construct
+- reproduce
+- implement
 
-Question:
+Central question:
 
 > How do I perform the analysis?
 
-***
+---
 
 ## Level 2: Statistical Reasoning
 
@@ -71,18 +77,18 @@ Students learn how to think statistically.
 
 Typical verbs:
 
-* select
-* interpret
-* compare
-* explain
-* assess
-* justify
+- select
+- interpret
+- compare
+- explain
+- assess
+- justify
 
-Question:
+Central question:
 
 > Why is this method appropriate?
 
-***
+---
 
 ## Level 3: Professional Judgment
 
@@ -90,22 +96,40 @@ Students learn how to use evidence.
 
 Typical verbs:
 
-* evaluate
-* conclude
-* determine
-* defend
-* recommend
-* communicate
+- evaluate
+- conclude
+- determine
+- defend
+- recommend
+- communicate
 
-Question:
+Central question:
 
 > What should the auditor conclude?
 
-***
+---
+
+# Assessment Philosophy
+
+The three competency levels should not be assessed through identical educational mechanisms.
+
+Different competencies require different forms of learning.
+
+| Competency | Primary Learning Mechanism |
+|------------|----------------------------|
+| Technical Skills | Exercises |
+| Statistical Reasoning | Exercises and Concept Questions |
+| Professional Judgment | Audit Questions and Case Discussions |
+
+Accordingly, not every learning objective should be represented by both an exercise and a question.
+
+The educational mechanism should match the nature of the competency being developed.
+
+---
 
 # Proposed Chapter Architecture
 
-Each substantive chapter should use the same intellectual pathway:
+Each substantive chapter should follow the same intellectual pathway:
 
 ```text
 Audit Problem
@@ -123,15 +147,15 @@ Professional Judgment
 
 Students should never leave a chapter at the statistical output.
 
-The chapter should end with:
+The chapter should always end with the question:
 
-> "What does this imply for the audit?"
+> What does this imply for the audit?
 
-***
+---
 
 # Chapter-by-Chapter Transformation
 
-***
+---
 
 # Chapter 1
 
@@ -143,74 +167,91 @@ Primarily technical.
 
 Students learn:
 
-* hypergeometric distribution;
-* binomial distribution;
-* Poisson distribution;
-* normal distribution;
-* t distribution;
-* χ² distribution;
-* F distribution. [\[ada_volume1.pdf \| PDF\]](https://onedrive-global.kpmg.com/personal/hoogduin_lucas_kpmg_nl/Documents/Microsoft%20Copilot%20Chat%20Files/ada_volume1.pdf)
+- hypergeometric distributions;
+- binomial distributions;
+- Poisson distributions;
+- normal distributions;
+- t distributions;
+- χ² distributions;
+- F distributions.
 
-***
+---
 
 ## Desired Position
 
 ### Technical Skills
 
-Student can:
+Students can:
 
-* calculate probabilities;
-* use distribution functions in R and Python;
-* perform distribution approximations.
+- calculate probabilities;
+- use distribution functions in R and Python;
+- perform distribution approximations.
 
-***
+---
 
 ### Statistical Reasoning
 
-Student can:
+Students can:
 
-* determine which distribution applies;
-* justify approximations;
-* explain the assumptions behind sampling models.
+- determine which distribution applies;
+- justify approximations;
+- explain the assumptions behind sampling models.
 
-***
-
-### Professional Judgment
-
-Student can:
-
-* determine whether observed sample results are unusual;
-* assess whether observed deviations warrant further audit attention;
-* explain uncertainty to a non-statistical audience.
-
-***
-
-## Additional Review Questions
-
-### Technical
-
-Calculate:
-
-* P(k=0)
-* confidence limits
-* approximation conditions
-
-### Reasoning
-
-Explain:
-
-* Why hypergeometric instead of binomial?
-* Why not use a normal approximation?
+---
 
 ### Professional Judgment
 
-Suppose a sample reveals four deviations.
+Students can:
 
-Does this indicate a potential control issue?
+- determine whether observed sample results are unusual;
+- assess whether observed deviations warrant further audit attention;
+- explain uncertainty to a non-statistical audience.
 
-Why?
+---
 
-***
+## Suggested End-of-Chapter Activities
+
+### Exercises (Technical Skills)
+
+Demonstrate your ability to perform the analysis.
+
+Examples:
+
+- Calculate P(k = 0).
+- Calculate confidence limits.
+- Determine whether approximation conditions are satisfied.
+
+---
+
+### Concept Questions (Statistical Reasoning)
+
+Demonstrate your understanding of the analysis.
+
+Examples:
+
+- Why is the hypergeometric distribution more appropriate than the binomial distribution in this situation?
+- Under what conditions would a normal approximation be justified?
+- Why might a normal approximation be inappropriate?
+- Which assumptions underlie the selected probability model?
+
+---
+
+### Audit Questions (Professional Judgment)
+
+Demonstrate your ability to use statistical evidence in an audit context.
+
+Example scenario:
+
+A sample reveals four deviations.
+
+Questions:
+
+- Does this indicate a potential control issue?
+- What additional information would you require before reaching a conclusion?
+- Would additional audit procedures be appropriate?
+- How would you communicate these findings to the engagement partner?
+
+---
 
 # Chapter 2
 
@@ -218,58 +259,59 @@ Why?
 
 ### Current Position
 
-Strong on methodology.
+Strongly focused on methodology.
 
-Focus:
+Topics include:
 
-* confidence intervals;
-* sample size calculations;
-* proportions;
-* finite-population corrections. [\[ada_volume1.pdf \| PDF\]](https://onedrive-global.kpmg.com/personal/hoogduin_lucas_kpmg_nl/Documents/Microsoft%20Copilot%20Chat%20Files/ada_volume1.pdf)
+- confidence intervals;
+- sample size calculations;
+- proportion estimation;
+- finite-population corrections.
 
-***
+---
 
 ## Desired Position
 
 ### Technical Skills
 
-Student can:
+Students can:
 
-* calculate estimates and intervals;
-* determine sample size;
-* compute correction factors.
+- calculate estimates and confidence intervals;
+- determine sample sizes;
+- calculate correction factors.
 
-***
+---
 
 ### Statistical Reasoning
 
-Student can:
+Students can:
 
-* explain the relationship between confidence and precision;
-* determine when assumptions are valid;
-* select appropriate estimation approaches.
+- explain the relationship between confidence and precision;
+- determine whether assumptions are satisfied;
+- select appropriate estimation approaches.
 
-***
+---
 
 ### Professional Judgment
 
-Student can:
+Students can:
 
-* determine whether evidence is sufficiently persuasive;
-* assess residual uncertainty;
-* judge whether further testing is needed.
+- determine whether evidence is sufficiently persuasive;
+- assess residual uncertainty;
+- determine whether further testing is needed.
 
-***
+---
 
 ## New Professional Discussion
 
-Every estimate should conclude with:
+Every estimate should conclude with explicit discussion of:
 
-* What uncertainty remains?
-* Is this uncertainty acceptable?
-* What audit risk remains?
+- What uncertainty remains?
+- Is that uncertainty acceptable?
+- What audit risk remains?
+- Is additional work required?
 
-***
+---
 
 # Chapter 3
 
@@ -279,61 +321,61 @@ Every estimate should conclude with:
 
 Heavily quantitative.
 
-Focus:
+Topics include:
 
-* MPU;
-* regression;
-* difference estimation;
-* ratio estimation;
-* stratification. [\[ada_volume1.pdf \| PDF\]](https://onedrive-global.kpmg.com/personal/hoogduin_lucas_kpmg_nl/Documents/Microsoft%20Copilot%20Chat%20Files/ada_volume1.pdf)
+- MPU estimation;
+- regression estimation;
+- difference estimation;
+- ratio estimation;
+- stratification.
 
-***
+---
 
 ## Desired Position
 
 ### Technical Skills
 
-Student can:
+Students can:
 
-* perform alternative estimations;
-* stratify populations;
-* allocate samples.
+- perform alternative estimation techniques;
+- stratify populations;
+- allocate samples.
 
-***
+---
 
 ### Statistical Reasoning
 
-Student can:
+Students can:
 
-* select an estimator;
-* explain estimator trade-offs;
-* assess when stratification is beneficial.
+- select an estimator;
+- explain estimator trade-offs;
+- assess whether stratification is beneficial.
 
-***
+---
 
 ### Professional Judgment
 
-Student can:
+Students can:
 
-* defend estimator choices;
-* justify audit decisions using estimation outcomes;
-* evaluate whether precision achieved is sufficient.
+- defend estimator choices;
+- justify audit decisions using estimation outcomes;
+- evaluate whether achieved precision is sufficient.
 
-***
+---
 
 ## Major Opportunity
 
-Introduce a recurring box:
+Introduce a recurring feature:
 
 ### Auditor's Decision
 
 Example:
 
-> Why would an auditor prefer regression estimation despite its greater complexity?
+> Why would an auditor prefer regression estimation despite its additional complexity?
 
-This bridges methodology and audit practice.
+This feature creates a direct bridge between methodology and audit practice.
 
-***
+---
 
 # Chapter 4
 
@@ -341,57 +383,57 @@ This bridges methodology and audit practice.
 
 ### Current Position
 
-Closest to the proposed framework already.
+Already closely aligned with the proposed framework.
 
-Focus:
+Topics include:
 
-* audit decisions;
-* acceptance/rejection;
-* attribute sampling;
-* MUS;
-* interpretation.
+- audit decisions;
+- acceptance and rejection;
+- attribute sampling;
+- MUS;
+- interpretation of results.
 
-***
+---
 
 ## Desired Position
 
 ### Technical Skills
 
-Student can:
+Students can:
 
-* determine sample size;
-* evaluate samples;
-* calculate bounds.
+- determine sample sizes;
+- evaluate samples;
+- calculate statistical bounds.
 
-***
+---
 
 ### Statistical Reasoning
 
-Student can:
+Students can:
 
-* understand Type I and Type II risks;
-* interpret OC curves;
-* explain decision thresholds.
+- explain Type I and Type II risks;
+- interpret operating characteristic curves;
+- justify decision thresholds.
 
-***
+---
 
 ### Professional Judgment
 
-Student can:
+Students can:
 
-* determine whether sufficient audit evidence exists;
-* assess whether additional procedures are warranted;
-* defend a sampling conclusion.
+- determine whether sufficient audit evidence exists;
+- assess whether additional procedures are warranted;
+- defend sampling conclusions.
 
-***
+---
 
 ## Recommendation
 
-Make this chapter the benchmark for the whole book.
+This chapter should become the benchmark for the remainder of the book.
 
-Many later chapters should emulate its audit-oriented reasoning style.
+Its audit-oriented reasoning should serve as the model for later chapters.
 
-***
+---
 
 # Chapter 5
 
@@ -403,48 +445,48 @@ Technically excellent.
 
 Potentially the chapter most affected by the redesign.
 
-***
+---
 
-## Technical Skills
+### Technical Skills
 
-Student can:
+Students can:
 
-* build models;
-* perform diagnostics;
-* calculate predictions;
-* test assumptions.
+- build regression models;
+- perform diagnostics;
+- calculate predictions;
+- test assumptions.
 
-***
+---
 
-## Statistical Reasoning
+### Statistical Reasoning
 
-Student can:
+Students can:
 
-* determine whether assumptions hold;
-* evaluate model validity;
-* understand significance versus relevance.
+- determine whether assumptions hold;
+- evaluate model validity;
+- distinguish significance from relevance.
 
-***
+---
 
-## Professional Judgment
+### Professional Judgment
 
-Student can:
+Students can:
 
-* assess whether the model provides persuasive audit evidence;
-* evaluate whether the model supports substantive analytical procedures;
-* determine whether the resulting assurance is sufficient.
+- assess whether a model provides persuasive audit evidence;
+- determine whether analytical procedures are reliable;
+- assess whether resulting assurance is sufficient.
 
-***
+---
 
 ## Critical Addition
 
-New recurring question:
+Introduce a recurring question:
 
 > If this model were challenged during inspection, could you defend its use?
 
-That single question elevates the chapter substantially.
+This single question links statistical validity to professional accountability.
 
-***
+---
 
 # Chapter 6
 
@@ -454,51 +496,52 @@ That single question elevates the chapter substantially.
 
 Focuses on:
 
-* χ² analysis;
-* Benford’s Law;
-* anomaly detection.
+- χ² analysis;
+- Benford's Law;
+- anomaly detection.
 
-***
+---
 
 ## Desired Position
 
 ### Technical Skills
 
-Student can:
+Students can:
 
-* perform goodness-of-fit testing;
-* conduct Benford analyses.
+- perform goodness-of-fit tests;
+- perform Benford analyses.
 
-***
+---
 
 ### Statistical Reasoning
 
-Student can:
+Students can:
 
-* evaluate appropriateness of expected distributions;
-* interpret deviations appropriately.
+- evaluate expected distributions;
+- assess assumptions;
+- interpret deviations appropriately.
 
-***
+---
 
 ### Professional Judgment
 
-Student can:
+Students can:
 
-* distinguish anomaly detection from evidence of fraud;
-* determine appropriate follow-up procedures;
-* avoid overinterpreting statistical findings.
+- distinguish anomaly detection from evidence of fraud;
+- determine appropriate follow-up procedures;
+- avoid overinterpreting statistical findings.
 
-***
+---
 
 ## Important Message
 
-Students should repeatedly hear:
+Students should repeatedly encounter the message:
 
 > Benford deviations are not conclusions.
 >
 > They are audit leads.
 
-***
+---
 
 # Workshops Transformation
 
@@ -506,147 +549,184 @@ Current workshop structure:
 
 ```text
 Theory
-→ Code
-→ Output
+    ↓
+Code
+    ↓
+Output
 ```
 
-Proposed structure:
+Future workshop structure:
 
 ```text
 Theory
-→ Code
-→ Output
-→ Interpretation
-→ Audit Evaluation
+    ↓
+Execution
+    ↓
+Interpretation
+    ↓
+Audit Evaluation
 ```
 
-***
+where:
 
-# New Standard Workshop Template
+- Execution primarily develops Technical Skills;
+- Interpretation primarily develops Statistical Reasoning;
+- Audit Evaluation primarily develops Professional Judgment.
+
+---
+
+# Standard Workshop Template
 
 ## Part A – Execute
 
-Run analysis.
+Purpose:
 
-***
+Develop Technical Skills.
+
+Examples:
+
+- run analyses;
+- calculate values;
+- reproduce results.
+
+---
 
 ## Part B – Interpret
 
+Purpose:
+
+Develop Statistical Reasoning.
+
 Questions:
 
-* What does the output mean?
-* Which assumptions are visible?
+- What does the output mean?
+- What assumptions are involved?
+- Are the assumptions reasonable?
+- What are the limitations?
 
-***
+---
 
 ## Part C – Audit Evaluation
 
+Purpose:
+
+Develop Professional Judgment.
+
 Questions:
 
-* What evidence was obtained?
-* What uncertainty remains?
-* What conclusion may be drawn?
-* What further procedures are indicated?
+- What evidence was obtained?
+- What uncertainty remains?
+- What conclusion may be drawn?
+- What additional procedures, if any, are needed?
 
-***
+---
 
-# Review Questions Blueprint
+# End-of-Chapter Activities Blueprint
 
-Each chapter receives three sections.
+Each chapter should contain three categories of learning activities aligned with the competency model.
 
-***
+---
 
-## Section A
+## Exercises (Technical Skills)
 
-### Technical Skills
+Purpose:
 
-Computational.
-
-Examples:
-
-* Calculate.
-* Construct.
-* Estimate.
-
-***
-
-## Section B
-
-### Statistical Reasoning
-
-Interpretative.
+> Can the student perform the analysis?
 
 Examples:
 
-* Explain.
-* Compare.
-* Justify.
+- Calculate.
+- Construct.
+- Estimate.
+- Execute.
 
-***
+---
 
-## Section C
+## Concept Questions (Statistical Reasoning)
 
-### Professional Judgment
+Purpose:
 
-Audit-focused.
+> Can the student explain and justify the analysis?
 
 Examples:
 
-* Evaluate.
-* Conclude.
-* Recommend.
+- Explain.
+- Compare.
+- Interpret.
+- Justify.
 
-***
+---
+
+## Audit Questions (Professional Judgment)
+
+Purpose:
+
+> Can the student use the analysis to support an audit decision?
+
+Examples:
+
+- Evaluate.
+- Conclude.
+- Recommend.
+- Defend.
+
+---
 
 # Learning Objectives Blueprint
 
-Current learning objectives already follow Bloom's taxonomy reasonably well. The redesign should not replace Bloom.
+The redesign does not replace Bloom's taxonomy.
 
-Instead:
+Instead, the competency model and Bloom's taxonomy operate together.
 
 ```text
 Bloom Taxonomy
         ×
-Competency Layer
+Competency Model
 ```
 
-Every chapter should contain objectives spanning:
+Each chapter should include objectives spanning:
 
-| Competency            | Bloom Focus          |
-| --------------------- | -------------------- |
-| Technical Skills      | Remember / Apply     |
-| Statistical Reasoning | Understand / Analyze |
-| Professional Judgment | Evaluate / Create    |
+| Competency | Dominant Bloom Levels |
+|------------|-----------------------|
+| Technical Skills | Remember, Apply |
+| Statistical Reasoning | Understand, Analyze |
+| Professional Judgment | Evaluate, Create |
 
-***
+---
 
 # Changes to Cases
 
 Current cases often end with:
 
-> an estimate;
->
-> a confidence interval;
->
-> a p-value.
+- a point estimate;
+- a confidence interval;
+- a p-value.
 
-Future cases should end with:
+Future cases should conclude with:
 
 ### Audit Evaluation
 
+What was learned?
+
 ### Remaining Uncertainty
+
+What remains unknown?
 
 ### Possible Actions
 
+What options are available?
+
 ### Recommended Conclusion
 
-***
+What should the auditor conclude?
+
+---
 
 # Changes to Front Matter
 
 ## New Introductory Figure
 
-Introduce the model:
+Introduce the competency model:
 
 ```text
 Professional Judgment
@@ -656,17 +736,18 @@ Statistical Reasoning
 Technical Skills
 ```
 
-Explain:
+Explain that:
 
-* software increasingly performs calculations;
-* auditors remain responsible for conclusions;
-* therefore all three levels are required.
+- software increasingly performs calculations;
+- auditors remain responsible for conclusions;
+- statistical competence includes more than execution alone;
+- all three competency levels are required.
 
-***
+---
 
 # Proposed Tagging System
 
-Throughout the book add margin icons:
+Introduce margin indicators throughout the book.
 
 ### TS
 
@@ -680,27 +761,58 @@ Statistical Reasoning
 
 Professional Judgment
 
-This allows instructors to tailor courses more easily.
+This enables instructors and students to see which competency is being developed.
 
-***
+---
 
 # Definition of Success
 
 A student who completes Volume 1 should be able to:
 
-### Technical Skills
+## Technical Skills
 
-Perform modern statistical analyses.
+Perform modern statistical analyses used in auditing.
 
-### Statistical Reasoning
+## Statistical Reasoning
 
-Select and justify statistical methods.
+Select, explain, justify and evaluate statistical methods.
 
-### Professional Judgment
+## Professional Judgment
 
-Use statistical evidence to support audit conclusions.
+Use statistical evidence to support defensible audit conclusions.
 
-***
+---
+
+# Implementation Roadmap
+
+## Phase 1 – Curriculum Design
+
+- Competency Model
+- Volume 1 Transformation Blueprint
+- Volume 1 Curriculum Map
+
+## Phase 2 – Pilot Chapter
+
+- Chapter 2 redesign
+- Workshop redesign
+- Exercises
+- Concept Questions
+- Audit Questions
+
+## Phase 3 – Volume-Wide Rollout
+
+- Chapter 1–6 implementation
+- Case redesign
+- Workshop redesign
+- End-of-chapter activity redesign
+
+## Phase 4 – External Positioning
+
+- University positioning document
+- Bachelor curriculum mapping
+- Post-master curriculum mapping
+
+---
 
 # Final Positioning Statement
 
