@@ -24,7 +24,8 @@ The competency model serves as the foundation for:
 - Volume 2;
 - learning objectives;
 - workshops;
-- review questions;
+- concept questions;
+- audit questions;
 - instructor materials;
 - curriculum mapping;
 - positioning towards universities and professional education providers.
@@ -462,31 +463,68 @@ Primary competency:
 
 ---
 
-# Implications for Review Questions
+# Implications for End-of-Chapter Activities
 
-Each chapter should contain three categories of review questions.
+Each chapter should contain three categories of learning activities that correspond to the three competency levels in the Competency Model.
 
-## Technical Skills
+## Exercises (Technical Skills)
 
 Focus:
 
 > Can the student perform the analysis?
 
+Typical activities include:
+
+- calculations;
+- software implementation;
+- replication of results;
+- construction of statistical models;
+- execution of statistical procedures.
+
 ---
 
-## Statistical Reasoning
+## Concept Questions (Statistical Reasoning)
 
 Focus:
 
-> Can the student explain and justify the analysis?
+> Can the student explain, interpret, and justify the analysis?
+
+Typical activities include:
+
+- explaining assumptions;
+- comparing alternative methods;
+- interpreting statistical output;
+- evaluating limitations;
+- selecting appropriate techniques.
 
 ---
 
-## Professional Judgment
+## Audit Questions (Professional Judgment)
 
 Focus:
 
-> Can the student use the analysis in an audit context?
+> Can the student use the analysis to support an audit decision?
+
+Typical activities include:
+
+- evaluating audit evidence;
+- assessing uncertainty;
+- determining whether audit objectives have been achieved;
+- recommending additional procedures;
+- defending audit conclusions.
+
+---
+
+The three activity types serve different educational purposes:
+
+| Activity Type | Primary Competency |
+|---------------|-------------------|
+| Exercises | Technical Skills |
+| Concept Questions | Statistical Reasoning |
+| Audit Questions | Professional Judgment |
+
+Not every learning objective should be assessed through every activity type. Instead, each competency should primarily be developed through the educational mechanism that best supports it.
+
 
 ---
 
