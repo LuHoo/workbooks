@@ -31,6 +31,29 @@ The chapter therefore becomes the first example of statistically informed audit 
 
 ---
 
+# Professional Judgment in Volume 1
+
+Within Volume 1, Professional Judgment focuses on evaluating statistical evidence rather than determining audit strategy.
+
+Students are expected to assess:
+
+- what conclusions are supported by the evidence;
+- what conclusions are not supported by the evidence;
+- how much uncertainty remains;
+- whether available evidence is persuasive.
+
+Students are not yet expected to determine detailed audit responses, engagement strategies, or follow-up procedures. Those topics belong primarily to Volume 2.
+
+The central Volume 1 question is:
+
+> What does the available evidence allow the auditor to conclude?
+
+rather than:
+
+> What should the auditor do next?
+
+---
+
 # Current Structure
 
 Chapter 5 currently consists of:
@@ -181,11 +204,11 @@ After completing this chapter, the student can:
 After completing this chapter, the student can:
 
 - determine whether a regression model provides persuasive audit evidence;
-- evaluate whether unexpected deviations require investigation;
-- determine whether analytical procedures achieve their audit objective;
-- assess whether additional procedures are necessary;
-- defend the use of a regression model during inspection or review;
-- formulate audit conclusions based on model results.
+- assess the strength and limitations of conclusions supported by a model;
+- distinguish supported conclusions from unsupported conclusions;
+- evaluate the uncertainty associated with model results;
+- determine whether analytical procedures have achieved their stated objective;
+- formulate audit conclusions that are consistent with the available evidence.
 
 ---
 
@@ -435,10 +458,11 @@ Professional Judgment
 
 Questions:
 
-- Would you rely on this model?
-- Does this model provide persuasive audit evidence?
-- Is additional testing required?
-- How would you defend the model during inspection?
+- What evidence has been obtained?
+- How persuasive is that evidence?
+- What uncertainty remains?
+- Which conclusions are supported by the evidence?
+- Which conclusions are not yet supported?
 
 ---
 
@@ -494,9 +518,9 @@ What is the difference between explanation and prediction?
 
 The model passes all statistical tests, but management cannot provide a plausible explanation for the observed relationships.
 
-Would you rely on the model?
+What conclusions can reasonably be supported by the model results?
 
-Why or why not?
+What uncertainty remains?
 
 ---
 
@@ -516,7 +540,7 @@ What audit conclusion would you draw?
 
 A regulator challenges the use of your model.
 
-How would you defend it?
+Which characteristics of the model strengthen or weaken the persuasiveness of the evidence obtained?
 
 ---
 
@@ -534,7 +558,9 @@ Explain your reasoning.
 
 The model identifies a significant unexplained deviation.
 
-What would your next audit step be?
+Does the available evidence support the conclusion that the recorded amount is materially misstated?
+
+Explain your reasoning.
 
 ---
 
