@@ -4,7 +4,7 @@ authors:
   - Lucas Hoogduin
   - Paul Touw
 status: Draft
-version: 1.1
+version: 2.0
 created: 2026-07-16
 related_documents:
   - competency-model.md
@@ -23,15 +23,15 @@ related_documents:
 
 Volume 1 is already a strong statistics-for-auditors textbook.
 
-However, the proposed competency model suggests a transition from:
+However, the revised Competency Model suggests a transition from:
 
 > Teaching statistical methods
 
 towards:
 
-> Teaching how auditors use statistical evidence to support professional judgment.
+> Teaching auditors how to evaluate statistical evidence and determine which conclusions are supported by that evidence.
 
-The statistical content remains largely unchanged.
+The statistical content of Volume 1 remains largely unchanged.
 
 The transformation primarily affects:
 
@@ -44,44 +44,781 @@ The transformation primarily affects:
 - case conclusions;
 - narrative flow.
 
-The key principle is:
+The central design principle is:
 
 > Every chapter should explicitly develop Technical Skills, Statistical Reasoning, and Professional Judgment.
 
+A second principle emerged from the Chapter 5 pilot redesign:
+
+> Professional Judgment in Volume 1 focuses on evidence evaluation rather than audit response.
+
+Students should learn how to evaluate evidence.
+
+They are not yet expected to determine the full audit response to that evidence.
+
+That progression is reserved for Volume 2.
+
 ---
 
-# The New Educational Framework
+# Educational Objective of Volume 1
 
-## Level 1: Technical Skills
+The purpose of Volume 1 is to develop students who can:
+
+1. Perform statistical analyses.
+2. Understand and justify statistical methods.
+3. Evaluate statistical evidence.
+4. Determine what conclusions are supported by that evidence.
+
+The book should therefore follow a progression from:
+
+```text
+Calculation
+        ↓
+Interpretation
+        ↓
+Evidence Evaluation
+        ↓
+Supported Conclusion
+```
+
+rather than ending with the statistical result itself.
+
+---
+
+# The Volume 1 Competency Model
+
+## Technical Skills
 
 Students learn how to perform analyses.
 
-Typical verbs:
-
-- calculate
-- estimate
-- execute
-- construct
-- reproduce
-- implement
-
-Central question:
+Guiding question:
 
 > How do I perform the analysis?
 
+Examples:
+
+- calculating probabilities;
+- constructing confidence intervals;
+- fitting regression models;
+- executing statistical procedures in software.
+
 ---
 
-## Level 2: Statistical Reasoning
+## Statistical Reasoning
 
-Students learn how to think statistically.
+Students learn how to understand and justify analyses.
 
-Typical verbs:
+Guiding question:
 
-- select
-- interpret
-- compare
-- explain
-- assess
+> Why is this method appropriate?
+
+Examples:
+
+- selecting methods;
+- evaluating assumptions;
+- interpreting results;
+- assessing limitations.
+
+---
+
+## Professional Judgment
+
+Students learn how to evaluate evidence.
+
+Guiding question:
+
+> What conclusions are supported by the available evidence?
+
+Examples:
+
+- evaluating uncertainty;
+- identifying supported conclusions;
+- identifying unsupported conclusions;
+- assessing the strength of evidence;
+- avoiding overinterpretation.
+
+Professional Judgment in Volume 1 is therefore evidence-focused rather than action-focused.
+
+---
+
+# Assessment Philosophy
+
+The three competencies should not be assessed through identical educational mechanisms.
+
+Different competencies require different forms of learning.
+
+| Competency | Primary Learning Mechanism |
+|------------|----------------------------|
+| Technical Skills | Exercises |
+| Statistical Reasoning | Exercises and Concept Questions |
+| Professional Judgment | Audit Questions and Cases |
+
+Not every learning objective should appear in every educational format.
+
+The educational mechanism should match the nature of the competency being developed.
+
+---
+
+# Proposed Chapter Architecture
+
+Every substantive chapter should follow a common structure:
+
+```text
+Audit Problem
+        ↓
+Statistical Method
+        ↓
+Technical Execution
+        ↓
+Statistical Interpretation
+        ↓
+Evidence Evaluation
+        ↓
+Supported Conclusion
+```
+
+Students should never leave a chapter at the statistical output.
+
+Every chapter should explicitly address:
+
+> What conclusions are supported by the available evidence?
+
+and
+
+> What uncertainty remains?
+
+---
+
+# Chapter-by-Chapter Transformation
+
+---
+
+# Chapter 1
+
+## Probability Distributions
+
+### Current Position
+
+Primarily technical.
+
+Students learn:
+
+- hypergeometric distribution;
+- binomial distribution;
+- Poisson distribution;
+- normal distribution;
+- t distribution;
+- χ² distribution;
+- F distribution.
+
+---
+
+## Desired Position
+
+### Technical Skills
+
+Students can:
+
+- calculate probabilities;
+- use distribution functions in R and Python;
+- perform distribution approximations.
+
+### Statistical Reasoning
+
+Students can:
+
+- determine which distribution applies;
+- justify approximations;
+- explain assumptions underlying probability models.
+
+### Professional Judgment
+
+Students can:
+
+- assess whether observed outcomes appear unusual;
+- evaluate uncertainty associated with sample results;
+- explain the implications of probabilistic evidence.
+
+---
+
+## Suggested End-of-Chapter Activities
+
+### Exercises
+
+Examples:
+
+- Calculate P(k = 0).
+- Calculate confidence limits.
+- Evaluate approximation conditions.
+
+### Concept Questions
+
+Examples:
+
+- Why is the hypergeometric distribution more appropriate than the binomial distribution?
+- Under what conditions is a normal approximation appropriate?
+- Which assumptions underlie the selected probability model?
+
+### Audit Questions
+
+Examples:
+
+- Does the observed result appear unusual?
+- How much uncertainty remains?
+- What conclusions are supported by the available evidence?
+
+---
+
+# Chapter 2
+
+## Estimation
+
+### Current Position
+
+Strongly focused on estimation methodology.
+
+Topics include:
+
+- confidence intervals;
+- sample-size determination;
+- proportion estimation;
+- finite-population corrections.
+
+---
+
+## Desired Position
+
+### Technical Skills
+
+Students can:
+
+- calculate estimates;
+- construct confidence intervals;
+- calculate sample sizes.
+
+### Statistical Reasoning
+
+Students can:
+
+- explain the relationship between precision and confidence;
+- assess estimation assumptions;
+- select appropriate estimation approaches.
+
+### Professional Judgment
+
+Students can:
+
+- determine whether evidence is persuasive;
+- assess residual uncertainty;
+- determine which conclusions are supported by the estimate.
+
+---
+
+## New Discussion Theme
+
+Every estimate should explicitly raise the questions:
+
+- What does the estimate tell us?
+- What does the estimate not tell us?
+- What uncertainty remains?
+- Which conclusions are justified?
+
+---
+
+# Chapter 3
+
+## Auxiliary Variables and Stratification
+
+### Current Position
+
+Primarily quantitative.
+
+Topics include:
+
+- MPU estimation;
+- ratio estimation;
+- difference estimation;
+- regression estimation;
+- stratification.
+
+---
+
+## Desired Position
+
+### Technical Skills
+
+Students can:
+
+- perform alternative estimation methods;
+- stratify populations;
+- allocate samples.
+
+### Statistical Reasoning
+
+Students can:
+
+- select estimators;
+- compare estimator performance;
+- evaluate stratification strategies.
+
+### Professional Judgment
+
+Students can:
+
+- evaluate the strength of evidence generated by alternative estimators;
+- assess whether achieved precision is sufficient;
+- determine which conclusions are supported.
+
+---
+
+## New Recurring Feature
+
+### Evaluating the Evidence
+
+Example:
+
+> Does the additional precision obtained through regression estimation materially strengthen the conclusions supported by the evidence?
+
+---
+
+# Chapter 4
+
+## Hypothesis Testing and Audit Sampling
+
+### Current Position
+
+Already strongly connected to audit applications.
+
+Topics include:
+
+- acceptance and rejection;
+- attribute sampling;
+- MUS;
+- interpretation of results.
+
+---
+
+## Desired Position
+
+### Technical Skills
+
+Students can:
+
+- determine sample sizes;
+- evaluate samples;
+- calculate confidence bounds.
+
+### Statistical Reasoning
+
+Students can:
+
+- explain Type I and Type II risk;
+- interpret operating characteristic curves;
+- justify decision thresholds.
+
+### Professional Judgment
+
+Students can:
+
+- evaluate sampling evidence;
+- assess sampling uncertainty;
+- determine which conclusions are supported by the sample results.
+
+---
+
+## Recommendation
+
+This chapter should become the benchmark for connecting statistical methods to evidence evaluation.
+
+---
+
+# Chapter 5
+
+## Regression Analysis
+
+### Current Position
+
+Technically sophisticated and highly relevant to auditing.
+
+---
+
+## Desired Position
+
+### Technical Skills
+
+Students can:
+
+- build regression models;
+- perform diagnostics;
+- generate predictions;
+- evaluate assumptions.
+
+### Statistical Reasoning
+
+Students can:
+
+- assess model validity;
+- compare competing models;
+- distinguish significance from relevance.
+
+### Professional Judgment
+
+Students can:
+
+- determine whether the model provides persuasive evidence;
+- assess limitations of the model;
+- determine which conclusions are justified;
+- evaluate residual uncertainty.
+
+---
+
+## Critical Addition
+
+Introduce a recurring question:
+
+> What conclusions are supported by the model, and what conclusions remain uncertain?
+
+This shifts attention from model construction to evidence evaluation.
+
+---
+
+# Chapter 6
+
+## Goodness-of-Fit and Benford's Law
+
+### Current Position
+
+Focused on:
+
+- χ² testing;
+- Benford's Law;
+- anomaly detection.
+
+---
+
+## Desired Position
+
+### Technical Skills
+
+Students can:
+
+- perform goodness-of-fit testing;
+- conduct Benford analyses.
+
+### Statistical Reasoning
+
+Students can:
+
+- evaluate expected distributions;
+- assess assumptions;
+- interpret deviations.
+
+### Professional Judgment
+
+Students can:
+
+- distinguish anomalies from conclusions;
+- evaluate the strength of anomaly evidence;
+- determine which conclusions are justified.
+
+---
+
+## Important Message
+
+Students should repeatedly encounter the statement:
+
+> Benford deviations are not conclusions.
+>
+> They are evidence that requires evaluation.
+
+---
+
+# Educational Components
+
+## Exercises
+
+Primary Competency:
+
+**Technical Skills**
+
+Purpose:
+
+> Can the student perform the analysis?
+
+Examples:
+
+- calculations;
+- software implementation;
+- statistical procedures.
+
+---
+
+## Concept Questions
+
+Primary Competency:
+
+**Statistical Reasoning**
+
+Purpose:
+
+> Can the student explain and justify the analysis?
+
+Examples:
+
+- assumptions;
+- interpretation;
+- method selection;
+- comparison of alternatives.
+
+---
+
+## Audit Questions
+
+Primary Competency:
+
+**Professional Judgment**
+
+Purpose:
+
+> Can the student evaluate the evidence and determine what conclusions are supported?
+
+Examples:
+
+- assessment of evidence;
+- evaluation of uncertainty;
+- supported conclusions;
+- unsupported conclusions;
+- limitations of evidence.
+
+---
+
+# Workshop Transformation
+
+Current workshop structure:
+
+```text
+Theory
+    ↓
+Code
+    ↓
+Output
+```
+
+Future workshop structure:
+
+```text
+Theory
+    ↓
+Execution
+    ↓
+Interpretation
+    ↓
+Evidence Evaluation
+```
+
+where:
+
+- Execution develops Technical Skills;
+- Interpretation develops Statistical Reasoning;
+- Evidence Evaluation develops Professional Judgment.
+
+---
+
+# Standard Workshop Structure
+
+## Part A – Execute
+
+Purpose:
+
+Develop Technical Skills.
+
+Examples:
+
+- run analyses;
+- calculate values;
+- reproduce results.
+
+---
+
+## Part B – Interpret
+
+Purpose:
+
+Develop Statistical Reasoning.
+
+Questions:
+
+- What does the output mean?
+- Which assumptions matter?
+- Are those assumptions reasonable?
+- What limitations exist?
+
+---
+
+## Part C – Evaluate Evidence
+
+Purpose:
+
+Develop Professional Judgment.
+
+Questions:
+
+- What evidence has been obtained?
+- How persuasive is the evidence?
+- What uncertainty remains?
+- Which conclusions are supported?
+- Which conclusions are not supported?
+
+---
+
+# Learning Objectives Blueprint
+
+The redesign does not replace Bloom's Taxonomy.
+
+Instead:
+
+```text
+Bloom Taxonomy
+        ×
+Competency Model
+```
+
+Every chapter should contain objectives across all three competency levels.
+
+| Competency | Dominant Bloom Levels |
+|------------|-----------------------|
+| Technical Skills | Remember, Apply |
+| Statistical Reasoning | Understand, Analyze |
+| Professional Judgment | Evaluate, Create |
+
+---
+
+# Changes to Cases
+
+Many current cases conclude with:
+
+- a point estimate;
+- a confidence interval;
+- a test result;
+- a p-value.
+
+Future cases should conclude with:
+
+### Evidence Evaluation
+
+What evidence was obtained?
+
+### Remaining Uncertainty
+
+What remains unknown?
+
+### Supported Conclusions
+
+What conclusions are justified?
+
+### Unsupported Conclusions
+
+What conclusions cannot yet be justified?
+
+---
+
+# Changes to Front Matter
+
+Introduce the competency model:
+
+```text
+Professional Judgment
+        ↑
+Statistical Reasoning
+        ↑
+Technical Skills
+```
+
+Explain that:
+
+- software increasingly performs calculations;
+- auditors remain responsible for evaluating evidence;
+- evidence must be interpreted before conclusions can be drawn;
+- statistically informed professional judgment requires all three competencies.
+
+---
+
+# Proposed Tagging System
+
+Introduce competency indicators throughout the text.
+
+### TS
+
+Technical Skills
+
+### SR
+
+Statistical Reasoning
+
+### PJ
+
+Professional Judgment
+
+These tags help students and instructors identify the primary competency being developed.
+
+---
+
+# Definition of Success
+
+A student who completes Volume 1 should be able to:
+
+## Technical Skills
+
+Perform modern statistical analyses.
+
+## Statistical Reasoning
+
+Select, explain, justify, and interpret statistical methods.
+
+## Professional Judgment
+
+Evaluate statistical evidence and determine which conclusions are supported by that evidence.
+
+---
+
+# Implementation Roadmap
+
+## Phase 1 – Curriculum Design
+
+- Competency Model
+- Volume 1 Curriculum Map
+- Volume 1 Transformation Blueprint
+
+## Phase 2 – Pilot Implementation
+
+- Chapter 5 redesign
+- Chapter 4 redesign
+- Validation of competency architecture
+
+## Phase 3 – Volume-Wide Rollout
+
+- Chapter 1 implementation
+- Chapter 2 implementation
+- Chapter 3 implementation
+- Chapter 4 implementation
+- Chapter 5 implementation
+- Chapter 6 implementation
+
+## Phase 4 – External Positioning
+
+- University positioning document
+- Bachelor curriculum mapping
+- Post-master curriculum mapping
+
+---
+
+# Final Positioning Statement
+
+> Volume 1 develops auditors who can perform statistical analyses, understand their implications, evaluate the resulting evidence, and determine which conclusions are supported by that evidence.
+>
+> The objective is not merely to teach statistical methods.
+>
+> The objective is to develop statistically informed evidence evaluation.- assess
 - justify
 
 Central question:
