@@ -35,5 +35,23 @@ private `ada` repository. Do not edit them directly; changes are made in
 `ada` and exported here so that the book-support notebooks and Binder
 workbooks cannot drift apart.
 
+## Publication Guardrail
+
+When `notebooks/support/**/support.Rmd` changes in the private `ada` workflow,
+the regenerated files under `notebooks/workshops/` must be committed and pushed
+to this public repository before the change is considered complete.
+
+Use this check from the repository root:
+
+```bash
+scripts/ci/enforce_workshops_publication.sh origin/main HEAD
+```
+
+The check fails if:
+
+- support notebooks changed but no workshop outputs changed;
+- `notebooks/workshops/` has uncommitted changes in its nested repo;
+- the nested `notebooks/workshops` repo has local commits not yet pushed to its upstream.
+
 [![Binder (RStudio)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
 [![Binder (JupyterLab)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/)
