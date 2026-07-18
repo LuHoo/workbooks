@@ -35,5 +35,28 @@ private `ada` repository. Do not edit them directly; changes are made in
 `ada` and exported here so that the book-support notebooks and Binder
 workbooks cannot drift apart.
 
+## Two-Clone Publication Wrapper (ADA -> Workbooks)
+
+If you keep private ADA and public workbooks in separate clones, use the wrapper
+below from the ADA repository root to run exports, sync outputs into the public
+repo, and print the exact publish commands.
+
+Command:
+
+- `scripts/ci/publish-workbooks-from-ada.sh --workbooks-repo /absolute/path/to/workbooks`
+
+What it does:
+
+- detects `notebooks/support/**/support.Rmd` changes in ADA;
+- runs `scripts/export-workshops.R` and `scripts/export-python-notebooks.R`;
+- syncs `notebooks/workshops/` from ADA into the workbooks repository root;
+- shows the exact `git add/commit/push` commands to publish from the workbooks repo.
+
+Useful options:
+
+- `--ada-repo <path>` to run from outside the ADA repo root;
+- `--base-ref <ref> --head-ref <ref>` to control support-change detection range;
+- `--skip-export` to only sync/check/publish guidance.
+
 [![Binder (RStudio)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=rstudio)
 [![Binder (JupyterLab)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LuHoo/workbooks/HEAD?urlpath=lab/tree/)
