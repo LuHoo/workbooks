@@ -118,7 +118,7 @@ export_python_workshop_chunks_by_config_id <- function(
   if (is.null(config)) {
     stop(
       "Unsupported workshop config id: ", config_id,
-      ". Add it to scripts/workshop-export-config.R."
+      ". Add it to metadata/workshop-registry.R."
     )
   }
 
@@ -141,7 +141,7 @@ export_python_workshop_tex_by_config_id <- function(
   if (is.null(config)) {
     stop(
       "Unsupported workshop config id: ", config_id,
-      ". Add it to scripts/workshop-export-config.R."
+      ". Add it to metadata/workshop-registry.R."
     )
   }
 

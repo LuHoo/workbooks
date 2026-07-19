@@ -38,7 +38,7 @@ Classification: `conforms`
 Implementation (files/functions):
 
 - Canonical source declaration in docs: `notebooks/README.md`, `README.md`
-- Workshop source registry: `scripts/workshop-export-config.R`
+- Workshop source registry: `metadata/workshop-registry.R` (loaded via `scripts/workshop-export-config.R`)
   - `get_workshop_export_configs()`
   - `resolve_workshop_export_config()`
   - `resolve_workshop_export_config_by_id()`
@@ -48,7 +48,7 @@ Conformance evidence:
 
 - Canonical support notebooks are consistently referenced as `notebooks/support/<slug>/support.Rmd`.
 - Both R chunk export and Python notebook export resolve source paths through config.
-- Public R notebook metadata is now derived from `scripts/workshop-export-config.R` via `get_notebook_manifest()`.
+- Public R notebook metadata is now derived from `metadata/workshop-registry.R` via `get_notebook_manifest()`.
 
 Gaps / duplicated paths / obsolete logic:
 
@@ -56,7 +56,7 @@ Gaps / duplicated paths / obsolete logic:
 
 Smallest remediation:
 
-- Keep `scripts/workshop-export-config.R` as the only hand-authored workshop registry and derive compatibility views from it.
+- Keep `metadata/workshop-registry.R` as the only hand-authored workshop registry and derive compatibility views from it.
 
 ## 2) Workshop Model / IR parsing
 

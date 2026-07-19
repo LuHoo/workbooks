@@ -1,130 +1,124 @@
-make_workshop_export_config <- function(id, chapter, title, expected_chunks) {
+registry_source_path <- function() {
+  frame_files <- vapply(
+    sys.frames(),
+    function(env) {
+      file <- env$ofile
+      if (is.null(file)) "" else as.character(file)
+    },
+    character(1L)
+  )
+
+  caller_files <- frame_files[nzchar(frame_files)]
+  this_script <- caller_files[grepl("workshop-export-config\\.R$", caller_files)]
+
+  candidates <- c()
+  if (length(this_script)) {
+    candidates <- c(
+      candidates,
+      file.path(dirname(normalizePath(this_script[[1]], winslash = "/", mustWork = FALSE)), "..", "metadata", "workshop-registry.R")
+    )
+  }
+  candidates <- c(candidates, file.path(getwd(), "metadata", "workshop-registry.R"))
+
+  for (candidate in candidates) {
+    if (file.exists(candidate)) {
+      return(normalizePath(candidate, winslash = "/", mustWork = TRUE))
+    }
+  }
+
+  stop("Canonical workshop registry not found. Tried: ", paste(candidates, collapse = ", "))
+}
+
+source(registry_source_path(), chdir = FALSE)
+
+validate_expected_chunks <- function(expected_chunks, workshop_id) {
+  if (is.null(expected_chunks) || !length(expected_chunks)) {
+    stop("Registry entry '", workshop_id, "' has no expected_chunks")
+  }
+  if (is.null(names(expected_chunks)) || any(!nzchar(names(expected_chunks)))) {
+    stop("Registry entry '", workshop_id, "' has unnamed expected_chunks")
+  }
+  if (!all(grepl("^[0-9]+\\.[0-9]+$", names(expected_chunks)))) {
+    stop(
+      "Registry entry '", workshop_id,
+      "' has invalid expected_chunks keys: expected <chapter>.<exercise>"
+    )
+  }
+
+  chunk_counts <- as.integer(expected_chunks)
+  if (any(is.na(chunk_counts)) || any(chunk_counts < 1L)) {
+    stop("Registry entry '", workshop_id, "' has invalid expected_chunks values")
+  }
+
+  stats::setNames(chunk_counts, names(expected_chunks))
+}
+
+validate_registry_entry <- function(entry, index) {
+  required_fields <- c("id", "chapter", "title", "expected_chunks")
+  missing <- required_fields[!vapply(required_fields, function(field) !is.null(entry[[field]]), logical(1L))]
+  if (length(missing) > 0L) {
+    stop(
+      "Registry entry #", index,
+      " is missing required fields: ",
+      paste(missing, collapse = ", ")
+    )
+  }
+
+  id <- as.character(entry$id)
+  title <- as.character(entry$title)
+  chapter <- as.integer(entry$chapter)
+
+  if (!nzchar(id)) {
+    stop("Registry entry #", index, " has empty id")
+  }
+  if (!nzchar(title)) {
+    stop("Registry entry '", id, "' has empty title")
+  }
+  if (is.na(chapter) || chapter < 1L) {
+    stop("Registry entry '", id, "' has invalid chapter number")
+  }
+
+  expected_chunks <- validate_expected_chunks(entry$expected_chunks, id)
+
   list(
     id = id,
-    chapter = as.integer(chapter),
+    chapter = chapter,
     title = title,
-    source = file.path("notebooks", "support", id, "support.Rmd"),
-    expected_chunks = expected_chunks,
-    r_workshop_output = file.path("notebooks", "workshops", paste0(title, " workshop.Rmd")),
-    published_python_output = sprintf("Workshop %d (Python).ipynb", as.integer(chapter))
+    expected_chunks = expected_chunks
+  )
+}
+
+canonical_registry_entries <- function() {
+  entries <- get_canonical_workshop_registry_entries()
+  if (!is.list(entries) || !length(entries)) {
+    stop("Canonical workshop registry is empty: ", registry_source_path())
+  }
+
+  normalized <- lapply(seq_along(entries), function(i) validate_registry_entry(entries[[i]], i))
+
+  ids <- vapply(normalized, function(entry) entry$id, character(1L))
+  if (anyDuplicated(ids)) {
+    dup <- unique(ids[duplicated(ids)])
+    stop("Canonical workshop registry has duplicate ids: ", paste(dup, collapse = ", "))
+  }
+
+  normalized
+}
+
+make_workshop_export_config <- function(entry) {
+  list(
+    id = entry$id,
+    chapter = as.integer(entry$chapter),
+    title = entry$title,
+    source = file.path("notebooks", "support", entry$id, "support.Rmd"),
+    expected_chunks = entry$expected_chunks,
+    r_workshop_output = file.path("notebooks", "workshops", paste0(entry$title, " workshop.Rmd")),
+    published_python_output = sprintf("Workshop %d (Python).ipynb", as.integer(entry$chapter))
   )
 }
 
 get_workshop_export_configs <- function() {
-  list(
-    make_workshop_export_config(
-      id = "probability-distributions",
-      chapter = 1L,
-      title = "Probability distributions",
-      expected_chunks = c(
-        "1.1" = 3L,
-        "1.2" = 1L,
-        "1.3" = 2L,
-        "1.4" = 2L,
-        "1.5" = 1L,
-        "1.6" = 2L,
-        "1.7" = 2L
-      )
-    ),
-    make_workshop_export_config(
-      id = "population-estimation",
-      chapter = 2L,
-      title = "Estimating the population mean and proportion",
-      expected_chunks = c(
-        "2.1" = 2L,
-        "2.2" = 2L,
-        "2.3" = 6L,
-        "2.4" = 2L,
-        "2.5" = 2L,
-        "2.6" = 2L
-      )
-    ),
-    make_workshop_export_config(
-      id = "auxiliary-variables-and-stratification",
-      chapter = 3L,
-      title = "Estimation with auxiliary variables and stratification",
-      expected_chunks = c(
-        "3.1" = 1L,
-        "3.2" = 7L,
-        "3.3" = 4L,
-        "3.4" = 3L,
-        "3.5" = 3L,
-        "3.6" = 4L,
-        "3.7" = 7L,
-        "3.8" = 2L,
-        "3.9" = 7L
-      )
-    ),
-    make_workshop_export_config(
-      id = "hypothesis-testing",
-      chapter = 4L,
-      title = "Hypothesis testing",
-      expected_chunks = c(
-        "4.1" = 3L,
-        "4.2" = 1L,
-        "4.3" = 1L,
-        "4.4" = 1L,
-        "4.5" = 3L,
-        "4.6" = 3L,
-        "4.7" = 3L,
-        "4.8" = 7L,
-        "4.9" = 1L,
-        "4.10" = 2L
-      )
-    ),
-    make_workshop_export_config(
-      id = "regression-analysis",
-      chapter = 5L,
-      title = "Regression analysis",
-      expected_chunks = c(
-        "5.1" = 1L,
-        "5.2" = 1L,
-        "5.3" = 8L,
-        "5.4" = 1L,
-        "5.5" = 1L,
-        "5.6" = 2L,
-        "5.7" = 4L,
-        "5.8" = 1L,
-        "5.9" = 3L,
-        "5.10" = 1L,
-        "5.11" = 1L,
-        "5.12" = 1L,
-        "5.13" = 3L,
-        "5.14" = 1L,
-        "5.15" = 2L,
-        "5.16" = 1L,
-        "5.17" = 2L,
-        "5.18" = 2L,
-        "5.19" = 6L,
-        "5.20" = 3L,
-        "5.21" = 1L,
-        "5.22" = 2L,
-        "5.23" = 3L,
-        "5.24" = 2L,
-        "5.25" = 2L,
-        "5.26" = 4L,
-        "5.27" = 1L,
-        "5.28" = 1L,
-        "5.29" = 1L,
-        "5.30" = 1L,
-        "5.31" = 4L,
-        "5.32" = 1L,
-        "5.33" = 2L,
-        "5.34" = 1L,
-        "5.35" = 3L,
-        "5.36" = 6L
-      )
-    ),
-    make_workshop_export_config(
-      id = "goodness-of-fit",
-      chapter = 6L,
-      title = "Goodness of fit",
-      expected_chunks = c(
-        "6.1" = 1L,
-        "6.2" = 18L
-      )
-    )
-  )
+  lapply(canonical_registry_entries(), make_workshop_export_config)
 }
 
 as_notebook_manifest_entry <- function(config) {

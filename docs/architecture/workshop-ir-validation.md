@@ -68,7 +68,7 @@ IR-DIRECTIVE unknown directive:
 
 IR-COMPAT chunk mismatch:
 
-[ERROR] IR-COMPAT E301 file=notebooks/support/goodness-of-fit/support.Rmd line=45 block=exercise:6.2 message=chunk count mismatch (expected 18, got 17) remediation=reconcile support notebook chunks with workshop-export-config.R
+[ERROR] IR-COMPAT E301 file=notebooks/support/goodness-of-fit/support.Rmd line=45 block=exercise:6.2 message=chunk count mismatch (expected 18, got 17) remediation=reconcile support notebook chunks with metadata/workshop-registry.R
 
 ## CLI usage
 

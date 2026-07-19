@@ -80,7 +80,7 @@ Rationale:
 
 ## Export and renderer updates
 
-- Updated `scripts/workshop-export-config.R` to match current Chapter 5 chunk counts, including Exercises 5.19, 5.35, and 5.36.
+- Updated the canonical workshop registry (`metadata/workshop-registry.R`, loaded via `scripts/workshop-export-config.R`) to match current Chapter 5 chunk counts, including Exercises 5.19, 5.35, and 5.36.
 - Updated `scripts/workshop-ir-python-renderer.py` to preserve Chapter 5 parity after notebook refactors, including:
   - Exercise 5.26 AR(1) transformation updates.
   - Exercise 5.29 diagnostic ordering.

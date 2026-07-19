@@ -41,7 +41,7 @@ Optional fields:
 Required fields:
 
 - `id`: stable exercise ID.
-- `workshop_id`: workshop key from `scripts/workshop-export-config.R`.
+- `workshop_id`: workshop key from `metadata/workshop-registry.R` (via `scripts/workshop-export-config.R`).
 - `exercise`: exercise reference (for example `5.12`).
 - `chunk`: chunk number integer (for generated chunk granularity).
 
@@ -221,7 +221,7 @@ Allowed values:
 
 ## Compatibility Notes
 
-- Workshop IDs intentionally align with `scripts/workshop-export-config.R` (`id` field).
+- Workshop IDs intentionally align with `metadata/workshop-registry.R` (`id` field).
 - Workshop exercise references align with generated chunk semantics `exercise-<chapter>-<exercise>-<chunk>.tex`.
 - Review-question extraction can initially be chapter+ordinal based, then upgraded to label anchors later without breaking `RQ-*` IDs.
 
