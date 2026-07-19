@@ -34,7 +34,7 @@ Findings:
 | Artifact | Canonical or generated | Authoritative producer | Publication target | Manual editing allowed | Conformance |
 |---|---|---|---|---|---|
 | `notebooks/support/**/support.Rmd` | Canonical | Human authoring | Inputs to generators (not published directly) | Yes | conforms |
-| Workshop config (`scripts/workshop-export-config.R`) | Canonical | Human authoring | Internal | Yes | conforms |
+| Workshop registry (`metadata/workshop-registry.R`) | Canonical | Human authoring | Internal | Yes | conforms |
 | Traceability metadata (`metadata/traceability/**`) | Canonical | Human authoring | Internal validation/reporting | Yes | conforms |
 | Semantic reference metadata | Intended canonical | Not implemented as dedicated layer | N/A | N/A | not implemented |
 | Workshop IR JSON (ephemeral from `scripts/workshop-ir.R`) | Generated | `parse_support_notebook_to_ir()` | Internal handoff to renderers | No | conforms |

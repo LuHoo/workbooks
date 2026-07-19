@@ -218,7 +218,7 @@ export_single_chunk <- function(
   if (is.null(config)) {
     stop(
       "Unsupported workshop source: ", input_path,
-      ". Add its configuration to scripts/workshop-export-config.R."
+      ". Add its configuration to metadata/workshop-registry.R."
     )
   }
 
@@ -345,7 +345,7 @@ export_workshop_by_config_id <- function(
   if (is.null(config)) {
     stop(
       "Unsupported workshop config id: ", config_id,
-      ". Add it to scripts/workshop-export-config.R."
+      ". Add it to metadata/workshop-registry.R."
     )
   }
   export_workshop_by_config(

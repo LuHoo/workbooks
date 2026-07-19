@@ -35,7 +35,7 @@ Example:
 
 ### Notes
 
-- Workshop-specific settings and publication naming metadata are isolated in `scripts/workshop-export-config.R`.
+- Workshop-specific settings and publication naming metadata are isolated in the canonical registry `metadata/workshop-registry.R` and loaded via `scripts/workshop-export-config.R`.
 - The exporter fails loudly for unsupported constructs and malformed marker blocks.
 - Chapter scripts remain as thin compatibility wrappers that delegate to the
 	canonical exporter via configuration:
@@ -71,7 +71,7 @@ chunk generation.
 The architecture is organized around a strict separation between:
 
 - stable export behavior (implemented once in the canonical exporter), and
-- workshop/chapter variability (isolated in `scripts/workshop-export-config.R`).
+- workshop/chapter variability (isolated in `metadata/workshop-registry.R` and exposed via `scripts/workshop-export-config.R`).
 
 This layout reduces duplicate logic, keeps behavior consistent across chapters,
 and provides a controlled path for future enhancements without redesigning core
@@ -115,7 +115,7 @@ Unsupported or malformed structures fail with explicit errors.
 
 ### Extension points (approved path)
 
-- Add new workshop/chapter mappings in `scripts/workshop-export-config.R`.
+- Add new workshop/chapter mappings in `metadata/workshop-registry.R`.
 - `scripts/notebook-manifest.R` is a derived compatibility layer and should not be edited by hand.
 - Use `export_workshop_by_config_id(...)` for wrapper-level batch export.
 - Add new validations in Stage 7 if they do not alter current output semantics.

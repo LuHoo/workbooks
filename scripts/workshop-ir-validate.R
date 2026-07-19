@@ -371,7 +371,7 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
             line = exercise$source_span$heading_line,
             block = paste0("exercise:", exercise$exercise_ref),
             message = paste0("chunk count mismatch (expected ", expected, ", got ", actual, ")"),
-            remediation = "reconcile support notebook chunks with workshop-export-config.R"
+            remediation = "reconcile support notebook chunks with metadata/workshop-registry.R"
           ))
         }
       }

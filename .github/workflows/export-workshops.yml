@@ -8,6 +8,7 @@ on:
       - "scripts/export-workshops.R"
       - "scripts/export-python-notebooks.R"
       - "scripts/publish-python-notebooks.R"
+      - "metadata/workshop-registry.R"
       - "scripts/notebook-manifest.R"
       - "scripts/workshop-export-config.R"
       - "scripts/workshop-ir.R"

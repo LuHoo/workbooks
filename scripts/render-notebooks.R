@@ -12,7 +12,7 @@ if (mode %in% c("workshops", "all")) {
   export_workshops()
 }
 
-for (notebook in notebooks) {
+for (notebook in get_notebook_manifest()) {
   if (mode %in% c("canonical", "all")) {
     rmarkdown::render(notebook$source, output_format = "html_document")
   }
