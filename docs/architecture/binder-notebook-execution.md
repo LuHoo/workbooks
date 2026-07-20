@@ -72,11 +72,25 @@ Policy constraint:
 
 Installed by `.binder/install.R` and mirrored in CI install steps:
 
-- workshop/render dependencies (`knitr`, `rmarkdown`, plotting/statistics libs);
-- bridge/runtime dependencies (`IRkernel`, `jsonlite`, `remotes`, `devtools`);
+- runtime workshop/render dependencies:
+  - `IRkernel`, `jsonlite`, `knitr`, `rmarkdown`
+  - plotting/statistics stack required by current workshops:
+    `ggplot2`, `car`, `pbkrtest`, `lme4`, `nloptr`, `gridExtra`, `tidyr`,
+    `corrplot`, `lmtest`, `latex2exp`, `scales`
+- justified build-time exception:
+  - `remotes` is retained only because `.binder/install.R` installs pinned
+    GitHub runtime packages during image build
 - pinned GitHub packages:
   - `LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418`
   - `LuHoo/aicpa@4a49d0357544eb22ed3314005af2f82b3cf0f53a`
+
+Audit result:
+
+- `devtools` was removed from the Binder install graph because it is
+  maintainer-oriented tooling and is not required by the student runtime or the
+  Binder build path.
+- `readr` was removed from the explicit Binder install list because current
+  runtime surfaces in this repository do not use it directly.
 
 Build-time verification:
 
