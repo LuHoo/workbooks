@@ -247,6 +247,46 @@ Artifacts:
 
 `postBuild` also validates that key R packages (`FSaudit`, `aicpa`, `car`, `pbkrtest`, `lme4`, `nloptr`) are available immediately at runtime.
 
+## Binder Log Triage
+
+Binder build logs can contain high-volume compiler output from upstream package
+builds. Treat the following classes as expected noise unless they are followed
+by a hard build/install failure:
+
+- Eigen compiler warnings such as `-Wignored-attributes`
+- Fortran 2018 deleted-feature warnings emitted by upstream dependencies during
+  compilation
+
+These warnings are not, by themselves, evidence that the Binder image failed or
+that a workshop runtime dependency is unusable.
+
+Escalate immediately when any of the following is present:
+
+- a package build or install ends with `ERROR:`
+- `jupyter-repo2docker` exits non-zero
+- `.binder/postBuild` exits non-zero
+- required headers/tools are reported missing (`cmake`, `hb-ft.h`,
+  `fribidi.h`, `nlopt.h`)
+- required runtime packages or imports fail validation (`FSaudit`, `aicpa`,
+  `car`, `pbkrtest`, `lme4`, `nloptr`, Python notebook deps)
+- Binder launch smoke fails to reach `ready` or returns a non-success `urlpath`
+  probe result
+
+Recommended triage order:
+
+1. Check whether the workflow failed or succeeded overall.
+2. Inspect `generated/traceability/binder-repo2docker-smoke.log` for the first
+   `ERROR:` line or explicit `Missing ...` diagnostic.
+3. If the build succeeded, inspect `generated/traceability/binder-launch-smoke.log`
+   only for launch/readiness failures rather than compiler-warning noise.
+4. Ignore repeated Eigen/Fortran warning blocks unless they coincide with a
+   package install failure or a warning promoted to an error by the toolchain.
+
+Escalation rule:
+
+- warnings are actionable only when they change the build result, are promoted
+  to errors, or are followed by a failed package/runtime verification step.
+
 ## Publication Gating
 
 `export-workshops.yml` includes `notebook-execution-validation` as a required
