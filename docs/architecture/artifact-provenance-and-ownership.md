@@ -84,7 +84,7 @@ Anti-rule:
 | Executed R smoke outputs | `generated/notebook-execution-artifacts/r-smoke/*.md` | temporary | `scripts/ci/execute-r-workshop-smoke.R` | no | no | no |
 | Generated workshop LaTeX fragments | `generated/workshop-output/exercise-*.tex` | generated book artifact | `scripts/export-workshop-output.R` | no | yes | no |
 | Generated traceability reports | `generated/traceability/*` | generated report | `scripts/generate-traceability-reports.R` and `scripts/ci/validate-parity-and-traceability.R` | no | mixed (some committed) | no |
-| Generated validation reports | `generated/traceability/parity-report.*`, `generated/notebook-execution-artifacts/*.json` | temporary/diagnostic | CI/local validation scripts | no | no | no |
+| Generated validation reports | `generated/validation/local-validation-report.json`, `generated/validation/parity-traceability-*`, `generated/notebook-execution-artifacts/*.json` | temporary/diagnostic | CI/local validation scripts | no | no | no |
 | Final PDF outputs | `*.pdf` at repo root | build artifact | LaTeX build command/task | no | no (ignored) | external distribution |
 | Companion-site static pages | `index.html`, `contact.html` | canonical site content | human authoring | yes | yes | yes (site host) |
 

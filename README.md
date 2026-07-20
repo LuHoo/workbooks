@@ -266,8 +266,11 @@ CI execution workflow:
 
 Local-first validation quickstart:
 
-- Combined local gate first:
-  - `bash scripts/ci/local-notebook-validation-gate.sh`
+- Canonical local validation entrypoint:
+	- `.venv/bin/python scripts/ci/run-local-validation.py`
+	- Combined machine-readable report: `generated/validation/local-validation-report.json`
+- Compatibility wrapper for the canonical entrypoint:
+	- `bash scripts/ci/local-notebook-validation-gate.sh`
 - Deterministic generation verification (two isolated runs, inventory/hash/semantic checks):
 	- `bash scripts/ci/verify-deterministic-notebook-generation.sh`
 - For standalone Python validation commands, prefer the project venv interpreter:
@@ -302,6 +305,7 @@ Architecture details and deterministic contract:
 - `docs/architecture/deterministic-notebook-generation.md`
 - `docs/architecture/artifact-provenance-and-ownership.md`
 - `docs/architecture/recovery-and-regeneration.md`
+- `docs/architecture/local-validation-orchestration.md`
 
 Hosted Binder run policy:
 
