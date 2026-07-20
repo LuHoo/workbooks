@@ -225,11 +225,12 @@ Provenance source layers:
   - Workshop LaTeX fragments.
   - Traceability report generation.
   - Executed Python artifacts.
+   - Semantic reference data embedded in canonical workshop IR artifacts.
 - Multiple producers or transitional paths:
   - R distribution notebooks currently use direct parser path rather than IR-renderer path.
   - Probability wrapper contains legacy Python notebook fallback for `.tex` export.
 - Producer unclear/not documented:
-  - semantic reference metadata layer is not implemented as a dedicated artifact class.
+   - no current semantic-reference ownership gap is identified; semantic references live inside the canonical workshop IR rather than a separate published artifact class.
 
 ## Minimal Guardrails Implemented
 
