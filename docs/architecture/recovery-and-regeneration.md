@@ -258,6 +258,17 @@ Local-first checks:
 
 Then defer hosted binder launch/readiness checks.
 
+Binder log triage rule:
+
+- repeated Eigen `-Wignored-attributes` compiler warnings and Fortran
+  deleted-feature warnings from upstream dependencies are expected unless the
+  Binder build later terminates with a package install failure;
+- prioritize the first explicit build error, missing-header/tool diagnostic, or
+  non-zero `postBuild` / repo2docker exit over warning volume;
+- use `generated/traceability/binder-repo2docker-smoke.log` for build/install
+  failures and `generated/traceability/binder-launch-smoke.log` for launch-only
+  failures.
+
 ### E. Book output differs from student notebook
 
 Inspect layer-by-layer:
