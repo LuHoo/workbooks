@@ -24,12 +24,21 @@ runtime_packages <- c(
   "scales"
 )
 
+# CRAN imports for pinned GitHub runtime packages are installed from the
+# snapshot first so Binder can use binary-friendly package channels where
+# available instead of resolving them dynamically during install_github().
+github_runtime_dependencies <- c(
+  "lazyeval",
+  "stratification",
+  "tibble"
+)
+
 # Build-time-only exception: remotes is needed to install pinned GitHub runtime
 # dependencies during the image build, but it is not required by workshop
 # notebooks at runtime.
 build_time_packages <- c("remotes")
 
-install.packages(c(runtime_packages, build_time_packages))
+install.packages(c(runtime_packages, github_runtime_dependencies, build_time_packages))
 
 missing_build_time <- build_time_packages[
   !vapply(build_time_packages, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))
@@ -46,13 +55,13 @@ if (length(missing_build_time) > 0L) {
 remotes::install_github(
   "LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418",
   upgrade = "never",
-  dependencies = TRUE
+  dependencies = FALSE
 )
 
 remotes::install_github(
   "LuHoo/aicpa@4a49d0357544eb22ed3314005af2f82b3cf0f53a",
   upgrade = "never",
-  dependencies = TRUE
+  dependencies = FALSE
 )
 
 missing_runtime <- runtime_packages[
