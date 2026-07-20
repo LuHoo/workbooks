@@ -369,8 +369,9 @@ All commands run from repository root.
 ### Local notebook validation gate (expensive)
 
 - Command:
-  - `bash scripts/ci/local-notebook-validation-gate.sh`
-- Output: generated notebooks and execution artifacts.
+  - `.venv/bin/python scripts/ci/run-local-validation.py`
+  - Compatibility wrapper: `bash scripts/ci/local-notebook-validation-gate.sh`
+- Output: generated notebooks, execution artifacts, and `generated/validation/local-validation-report.json`.
 - Modifies tracked files: yes under generated paths.
 - Follow-up: deterministic checker and status review.
 

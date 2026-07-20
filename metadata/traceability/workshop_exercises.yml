@@ -738,6 +738,36 @@
   exercise: '5.35'
   chunk: 2
   source_file: notebooks/support/regression-analysis/support.Rmd
+- id: WX-regression-analysis-5.36-1
+  workshop_id: regression-analysis
+  exercise: '5.36'
+  chunk: 1
+  source_file: notebooks/support/regression-analysis/support.Rmd
+- id: WX-regression-analysis-5.36-2
+  workshop_id: regression-analysis
+  exercise: '5.36'
+  chunk: 2
+  source_file: notebooks/support/regression-analysis/support.Rmd
+- id: WX-regression-analysis-5.36-3
+  workshop_id: regression-analysis
+  exercise: '5.36'
+  chunk: 3
+  source_file: notebooks/support/regression-analysis/support.Rmd
+- id: WX-regression-analysis-5.36-4
+  workshop_id: regression-analysis
+  exercise: '5.36'
+  chunk: 4
+  source_file: notebooks/support/regression-analysis/support.Rmd
+- id: WX-regression-analysis-5.36-5
+  workshop_id: regression-analysis
+  exercise: '5.36'
+  chunk: 5
+  source_file: notebooks/support/regression-analysis/support.Rmd
+- id: WX-regression-analysis-5.36-6
+  workshop_id: regression-analysis
+  exercise: '5.36'
+  chunk: 6
+  source_file: notebooks/support/regression-analysis/support.Rmd
 - id: WX-goodness-of-fit-6.1-1
   workshop_id: goodness-of-fit
   exercise: '6.1'

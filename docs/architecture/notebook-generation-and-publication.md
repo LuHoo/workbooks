@@ -220,6 +220,7 @@ Current-state note:
 ### Layer 3: Local execution and parity validation
 
 - Tools:
+  - `scripts/ci/run-local-validation.py`
   - `scripts/ci/local-notebook-validation-gate.sh`
   - `scripts/ci/check-generated-python-notebooks.py`
   - `scripts/ci/assert-r-python-equivalence.py`
@@ -227,13 +228,20 @@ Current-state note:
   - `scripts/ci/execute-r-workshop-smoke.R`
   - `scripts/ci/execute-generated-python-notebooks.py`
 - Proves:
-  - strict notebook hygiene checks, parity checks, deterministic sampled R execution,
-    runtime viability for generated notebooks.
+  - deterministic generation validation, strict notebook hygiene checks,
+    parity checks, deterministic sampled R execution, runtime viability for
+    generated notebooks, and publication-readiness against published artifacts.
 - Does not prove:
   - hosted Binder service availability, publication repo drift on remote, or
     full R workshop execution coverage.
 - Local availability: yes.
 - Required when: before publication/export and before hosted checks.
+
+Canonical local validation report:
+
+- entrypoint: `scripts/ci/run-local-validation.py`
+- machine-readable report: `generated/validation/local-validation-report.json`
+- stage order: generation validation -> notebook hygiene -> parity -> notebook execution -> publication-readiness
 
 R workshop execution coverage policy:
 
@@ -294,6 +302,7 @@ CI integration for policy enforcement:
 - Pull request/runtime validation: `.github/workflows/notebook-execution-validation.yml`
 - Publication workflow validation: `.github/workflows/export-workshops.yml`
 - Local mirrored gate: `scripts/ci/local-notebook-validation-gate.sh`
+  (compatibility wrapper for `scripts/ci/run-local-validation.py`)
 | Binder runtime config under `.binder/` | `LuHoo/ada` (current tooling owner) | canonical runtime config | allowed with validation |
 | Binder runtime config under `notebooks/workshops/.binder/` | `LuHoo/workbooks` | canonical in that repo | allowed in that repo; keep ownership/drift explicit |
 
@@ -322,15 +331,13 @@ Current implementation gaps and caveats:
 
 - IR field `generated_at_utc` is derived from source file mtime, so this field
   can vary if file timestamps change.
-- no single dedicated end-to-end deterministic dual-run verifier script exists
-  in this branch.
 
 Reproducibility verification methods currently available:
 
 - rerun `scripts/export-python-notebooks.R` on unchanged source and compare
   generated outputs;
 - run `tests/workshop-ir/run-tests.R` and `tests/python-renderer/run-tests.py`;
-- run local validation gate before publication.
+- run `scripts/ci/run-local-validation.py` before publication.
 
 ## 9. Failure and Recovery Paths (High-level)
 
