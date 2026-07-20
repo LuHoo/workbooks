@@ -80,6 +80,8 @@ Installed by `.binder/install.R` and mirrored in CI install steps:
 - justified build-time exception:
   - `remotes` is retained only because `.binder/install.R` installs pinned
     GitHub runtime packages during image build
+- CRAN imports preinstalled from the snapshot for pinned GitHub runtime packages:
+  - `lazyeval`, `stratification`, `tibble`
 - pinned GitHub packages:
   - `LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418`
   - `LuHoo/aicpa@4a49d0357544eb22ed3314005af2f82b3cf0f53a`
@@ -96,6 +98,18 @@ Build-time verification:
 
 - `.binder/install.R` now verifies required package availability after installation using `requireNamespace(...)` checks.
 - Build fails if required packages are missing; no success message is emitted before verification.
+
+Snapshot/package-source policy:
+
+- prefer the pinned Posit Package Manager Linux Jammy snapshot for CRAN package
+  installs so Binder can consume binary-friendly package channels where
+  available;
+- preinstall CRAN imports for pinned GitHub runtime packages from that snapshot
+  before calling `remotes::install_github(...)`;
+- reserve GitHub installs for packages that are intentionally pinned outside the
+  snapshot (`FSaudit`, `aicpa`);
+- use `apt.txt` for system libraries and toolchain requirements only, not as a
+  parallel source of versioned R package policy.
 
 ### System dependencies (`.binder/apt.txt`)
 
@@ -116,10 +130,20 @@ Snapshot/reproducibility update:
 
 - Binder R package installation now uses a pinned Posit Package Manager snapshot (`2024-10-15`) for Linux Jammy in `.binder/install.R`.
 - This removes live-CRAN drift, improves reproducibility, and increases binary package availability versus unconstrained repository resolution.
+- Current optimization step: the `FSaudit` CRAN imports (`lazyeval`,
+  `stratification`, `tibble`) are installed from the pinned snapshot before the
+  GitHub package itself, reducing dynamic dependency resolution during
+  `install_github()`.
+- Measurable install-graph effect in current implementation: the Binder build no
+  longer asks `install_github()` to resolve those three CRAN imports dynamically
+  from the GitHub package install path.
 
 Maintenance guidance:
 
 - keep OS-level Binder deps in `.binder/apt.txt` as the single source of truth;
+- do not replace the snapshot-backed CRAN package policy with Ubuntu `r-cran-*`
+  packages unless reproducibility and version-alignment tradeoffs are explicitly
+  reviewed;
 - avoid introducing a parallel Dockerfile-based package install path unless Binder architecture changes;
 - when adding an R/Python package that compiles native code, first document and add required OS headers/tools in `.binder/apt.txt`, then mirror rationale here.
 
