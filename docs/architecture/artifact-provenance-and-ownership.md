@@ -202,6 +202,18 @@ Provenance source layers:
 - Publication scripts must not perform semantic transformations.
 - Publication must fail if required provenance metadata is absent from generated artifacts.
 
+Notebook publication contract in current implementation:
+
+- `LuHoo/workbooks` is the only automated notebook publication target.
+- The local publication boundary is the `notebooks/workshops` submodule checkout,
+   which mirrors the remote `LuHoo/workbooks` repository.
+- `LuHoo/audit-data-analysis` is not a second notebook publication destination
+   in current tooling; references to that name in this repository refer to ADA
+   project/repository identity or companion-site context.
+- If a future workflow needs to publish notebooks to an additional destination,
+   that destination must be documented as a separate artifact class with its own
+   authoritative producer and synchronization rules.
+
 ## Correction and Regeneration Workflow
 
 1. Identify the earliest stage that introduced the defect.
@@ -214,8 +226,9 @@ Provenance source layers:
 
 | Repository | Canonical source | Generated artifacts | Published artifacts | Direct edits |
 |---|---|---|---|---|
-| `ada` (this repository) | yes | yes | indirectly (via submodule sync) | canonical files only |
-| `workbooks` (submodule `notebooks/workshops`) | no | receives generated outputs | yes (binder/student-facing) | no direct edits to generated notebook artifacts |
+| `ada` (this repository) | yes | yes | indirectly (publishes notebook artifacts to `workbooks` via submodule sync) | canonical files only |
+| `workbooks` (submodule `notebooks/workshops`) | no | receives generated outputs | yes (binder/student-facing notebook publication target) | no direct edits to generated notebook artifacts |
+| `audit-data-analysis` (name/site identity referenced by this repo) | no separate notebook publication role in current tooling | n/a | not a notebook publication target here | site/docs edits only when applicable |
 
 ## Conformance Snapshot (Current State)
 
