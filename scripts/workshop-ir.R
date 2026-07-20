@@ -243,6 +243,74 @@ make_code_block <- function(
   )
 }
 
+extract_semantic_reference_tokens <- function(text_line) {
+  pattern <- "\\[\\[ADA:REF[[:space:]]+target=([^\\]]+)\\]\\]"
+  matches <- gregexpr(pattern, text_line, perl = TRUE)[[1L]]
+  if (length(matches) == 1L && matches[[1L]] == -1L) {
+    return(list())
+  }
+
+  out <- vector("list", length(matches))
+  for (i in seq_along(matches)) {
+    start_col <- as.integer(matches[[i]])
+    raw_token <- regmatches(text_line, gregexpr(pattern, text_line, perl = TRUE))[[1L]][[i]]
+    target_id <- sub("^\\[\\[ADA:REF[[:space:]]+target=", "", raw_token)
+    target_id <- sub("\\]\\]$", "", target_id)
+    out[[i]] <- list(raw_token = raw_token, target_id = trimws(target_id), column = start_col)
+  }
+
+  out
+}
+
+collect_block_semantic_references <- function(
+  block,
+  source_scope,
+  source_container_id,
+  reference_counter,
+  source_file
+) {
+  content_lines <- if (identical(block$block_type, "narrative")) {
+    block$content$narrative_lines
+  } else {
+    block$content$code_lines
+  }
+
+  if (is.null(content_lines) || length(content_lines) == 0L) {
+    return(list(references = list(), reference_counter = reference_counter))
+  }
+
+  refs <- list()
+  for (line_index in seq_along(content_lines)) {
+    line_tokens <- extract_semantic_reference_tokens(content_lines[[line_index]])
+    if (length(line_tokens) == 0L) {
+      next
+    }
+
+    source_line <- if (identical(block$block_type, "narrative")) {
+      block$source_span$start_line + line_index - 1L
+    } else {
+      block$source_span$fence_open_line + line_index
+    }
+
+    for (token in line_tokens) {
+      reference_counter <- reference_counter + 1L
+      refs[[length(refs) + 1L]] <- list(
+        reference_id = sprintf("SR-%04d", reference_counter),
+        source_file = source_file,
+        source_scope = source_scope,
+        source_container_id = source_container_id,
+        source_block_id = block$block_id,
+        source_line = as.integer(source_line),
+        source_column = as.integer(token$column),
+        raw_token = token$raw_token,
+        target_id = token$target_id
+      )
+    }
+  }
+
+  list(references = refs, reference_counter = reference_counter)
+}
+
 exercise_heading_match <- function(line) {
   regexec("^##+\\s+Exercise\\s+([0-9]+\\.[0-9]+)(?:\\.|\\s|$)(.*)$", line, perl = TRUE)
 }
@@ -270,6 +338,7 @@ as_block_output <- function(
 
   out <- list(
     block_id = block_id,
+    semantic_id = block_id,
     block_type = block$block_type,
     sequence = sequence,
     support_only = isTRUE(block$support_only),
@@ -853,6 +922,7 @@ parse_support_notebook_to_ir <- function(
 
     exercise_outputs[[ex_i]] <- list(
       exercise_id = paste0("EX-", ex$exercise_ref),
+      semantic_id = paste0("EX-", ex$exercise_ref),
       exercise_ref = ex$exercise_ref,
       ordinal = ex_i,
       label = ex$label,
@@ -865,6 +935,64 @@ parse_support_notebook_to_ir <- function(
     )
   }
 
+  semantic_targets <- list(
+    list(
+      semantic_id = paste0("CH-", workshop_id),
+      entity_type = "chapter",
+      entity_id = paste0("CH-", workshop_id)
+    )
+  )
+  semantic_references <- list()
+  semantic_reference_counter <- 0L
+
+  for (block in chapter_blocks) {
+    semantic_targets[[length(semantic_targets) + 1L]] <- list(
+      semantic_id = block$semantic_id,
+      entity_type = "block",
+      entity_id = block$block_id
+    )
+
+    extracted <- collect_block_semantic_references(
+      block = block,
+      source_scope = "chapter",
+      source_container_id = paste0("CH-", workshop_id),
+      reference_counter = semantic_reference_counter,
+      source_file = input_path
+    )
+    semantic_reference_counter <- extracted$reference_counter
+    if (length(extracted$references) > 0L) {
+      semantic_references <- c(semantic_references, extracted$references)
+    }
+  }
+
+  for (exercise in exercise_outputs) {
+    semantic_targets[[length(semantic_targets) + 1L]] <- list(
+      semantic_id = exercise$semantic_id,
+      entity_type = "exercise",
+      entity_id = exercise$exercise_id
+    )
+
+    for (block in exercise$blocks) {
+      semantic_targets[[length(semantic_targets) + 1L]] <- list(
+        semantic_id = block$semantic_id,
+        entity_type = "block",
+        entity_id = block$block_id
+      )
+
+      extracted <- collect_block_semantic_references(
+        block = block,
+        source_scope = "exercise",
+        source_container_id = exercise$exercise_id,
+        reference_counter = semantic_reference_counter,
+        source_file = input_path
+      )
+      semantic_reference_counter <- extracted$reference_counter
+      if (length(extracted$references) > 0L) {
+        semantic_references <- c(semantic_references, extracted$references)
+      }
+    }
+  }
+
   list(
     schema_version = WORKSHOP_IR_SCHEMA_VERSION,
     generated_at_utc = format_source_mtime_utc(input_path),
@@ -874,6 +1002,7 @@ parse_support_notebook_to_ir <- function(
     ),
     chapter = list(
       chapter_id = paste0("CH-", workshop_id),
+      semantic_id = paste0("CH-", workshop_id),
       workshop_id = workshop_id,
       chapter_number = chapter_number,
       title = chapter_title
@@ -888,6 +1017,11 @@ parse_support_notebook_to_ir <- function(
       ),
       observed = observed_directives,
       instances = directive_instances
+    ),
+    semantic_references = list(
+      token_syntax = "[[ADA:REF target=<semantic-id>]]",
+      targets = semantic_targets,
+      references = semantic_references
     ),
     chapter_blocks = chapter_blocks,
     exercises = exercise_outputs

@@ -85,6 +85,8 @@ Core components:
 IR contains:
 
 - deterministic exercise/block ordering and stable IDs (`exercise_id`, `block_id`)
+- first-class semantic IDs (`chapter.semantic_id`, `exercise.semantic_id`, `block.semantic_id`)
+- semantic reference registry and extracted semantic references
 - source spans and traceability keys
 - language-aware authoring context (`base`, `only`, `override`)
 - directive instance records and requirements (`fsaudit` capability)
@@ -197,7 +199,7 @@ Current-state note:
   - parser constraints in `scripts/workshop-ir.R`
 - Proves:
   - source structure, directive validity, schema/model consistency,
-    config compatibility.
+    semantic reference resolution/consistency, and config compatibility.
 - Does not prove:
   - execution success, Binder launchability, publication synchronization.
 - Local availability: yes.

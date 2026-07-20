@@ -24,6 +24,7 @@ The root object contains:
 - source: source file metadata
 - chapter: chapter-level metadata
 - directives: supported/observed directive names and parsed directive instances
+- semantic_references: semantic target registry and extracted semantic reference usages
 - chapter_blocks: ordered blocks before first exercise
 - exercises: ordered exercise objects
 
@@ -32,6 +33,7 @@ The root object contains:
 Each exercise includes:
 
 - exercise_id: stable id (EX-<exercise_ref>)
+- semantic_id: stable semantic id (currently equal to exercise_id)
 - exercise_ref: source reference such as 5.12
 - ordinal: 1-based exercise order in file
 - label: heading text without markdown markers
@@ -43,6 +45,7 @@ Each exercise includes:
 Each block includes:
 
 - block_id: stable deterministic id
+- semantic_id: stable semantic id (currently equal to block_id)
 - block_type: narrative or code
 - sequence: 1-based order in chapter or exercise scope
 - support_only: true when parsed inside SUPPORT-ONLY marker span
@@ -60,6 +63,28 @@ Each block includes:
   - kind (`narrative`, `code`, `any`)
   - optional `override_target_block_id`
   - optional requirements list (for example `fsaudit` capability)
+
+## Semantic references in v1.1
+
+The IR exposes first-class semantic reference data through `semantic_references`:
+
+- `token_syntax`: canonical token format string
+- `targets`: deterministic semantic target registry with:
+  - `semantic_id`
+  - `entity_type` (`chapter`, `exercise`, `block`)
+  - `entity_id` (the corresponding IR object id)
+- `references`: extracted reference occurrences with:
+  - stable `reference_id`
+  - source location (`source_file`, `source_line`, `source_column`)
+  - source ownership (`source_scope`, `source_container_id`, `source_block_id`)
+  - `raw_token` and resolved `target_id`
+
+Authoring token syntax:
+
+- `[[ADA:REF target=<semantic-id>]]`
+
+Validation fails loudly when references are unresolved or semantically
+inconsistent.
 
 ## Directive support in v1
 

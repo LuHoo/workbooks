@@ -75,6 +75,212 @@ validate_required_string <- function(value, field_name, file_path, line = 1L, bl
   NULL
 }
 
+collect_ir_block_index <- function(ir) {
+  index <- list()
+
+  for (block in ir$chapter_blocks) {
+    index[[block$block_id]] <- block
+  }
+
+  for (exercise in ir$exercises) {
+    for (block in exercise$blocks) {
+      index[[block$block_id]] <- block
+    }
+  }
+
+  index
+}
+
+collect_ir_known_entity_ids <- function(ir) {
+  ids <- list(
+    chapter = character(),
+    exercise = character(),
+    block = character()
+  )
+
+  ids$chapter <- ir$chapter$chapter_id
+  ids$exercise <- vapply(ir$exercises, function(exercise) exercise$exercise_id, character(1L))
+  ids$block <- c(
+    vapply(ir$chapter_blocks, function(block) block$block_id, character(1L)),
+    unlist(lapply(ir$exercises, function(exercise) vapply(exercise$blocks, function(block) block$block_id, character(1L))), use.names = FALSE)
+  )
+
+  ids
+}
+
+validate_semantic_references <- function(ir, source_path) {
+  diagnostics <- list()
+
+  if (is.null(ir$semantic_references)) {
+    return(diagnostics)
+  }
+
+  sr <- ir$semantic_references
+  if (is.null(sr$targets) || is.null(sr$references)) {
+    diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+      category = "IR-SEMANTIC",
+      code = "E310",
+      file = source_path,
+      line = 1L,
+      block = "semantic_references",
+      message = "semantic_references requires both targets and references arrays",
+      remediation = "ensure parser emits semantic_references.targets and semantic_references.references"
+    ))
+    return(diagnostics)
+  }
+
+  known_ids <- collect_ir_known_entity_ids(ir)
+  block_index <- collect_ir_block_index(ir)
+  valid_entity_types <- c("chapter", "exercise", "block")
+
+  target_ids <- character()
+  target_types <- character()
+
+  for (target in sr$targets) {
+    target_line <- 1L
+    target_block <- if (!is.null(target$semantic_id)) target$semantic_id else "semantic-target"
+
+    if (is.null(target$semantic_id) || !nzchar(target$semantic_id) ||
+        is.null(target$entity_type) || !nzchar(target$entity_type) ||
+        is.null(target$entity_id) || !nzchar(target$entity_id)) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E311",
+        file = source_path,
+        line = target_line,
+        block = target_block,
+        message = "semantic target missing required fields (semantic_id/entity_type/entity_id)",
+        remediation = "ensure each semantic target declares semantic_id, entity_type, and entity_id"
+      ))
+      next
+    }
+
+    if (!target$entity_type %in% valid_entity_types) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E312",
+        file = source_path,
+        line = target_line,
+        block = target$semantic_id,
+        message = paste0("unsupported semantic target entity_type '", target$entity_type, "'"),
+        remediation = paste0("use one of: ", paste(valid_entity_types, collapse = ", "))
+      ))
+      next
+    }
+
+    if (target$semantic_id %in% target_ids) {
+      existing_type <- target_types[match(target$semantic_id, target_ids)]
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E313",
+        file = source_path,
+        line = target_line,
+        block = target$semantic_id,
+        message = paste0(
+          "duplicate semantic target id '", target$semantic_id,
+          "' declared for entity types '", existing_type, "' and '", target$entity_type, "'"
+        ),
+        remediation = "ensure semantic target IDs are unique"
+      ))
+      next
+    }
+
+    target_ids <- c(target_ids, target$semantic_id)
+    target_types <- c(target_types, target$entity_type)
+
+    if (!target$entity_id %in% known_ids[[target$entity_type]]) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E320",
+        file = source_path,
+        line = target_line,
+        block = target$semantic_id,
+        message = paste0(
+          "semantic target entity_id '", target$entity_id,
+          "' not present in IR ", target$entity_type, " objects"
+        ),
+        remediation = "ensure semantic targets point to existing chapter/exercise/block IDs"
+      ))
+    }
+  }
+
+  valid_scopes <- c("chapter", "exercise")
+  for (reference in sr$references) {
+    line <- if (!is.null(reference$source_line)) as.integer(reference$source_line) else 1L
+    block <- if (!is.null(reference$source_block_id) && nzchar(reference$source_block_id)) {
+      reference$source_block_id
+    } else {
+      "semantic-reference"
+    }
+
+    required_fields <- c(
+      "reference_id",
+      "source_scope",
+      "source_container_id",
+      "source_block_id",
+      "source_line",
+      "source_column",
+      "raw_token",
+      "target_id"
+    )
+    missing_fields <- Filter(function(name) {
+      value <- reference[[name]]
+      is.null(value) || (is.character(value) && length(value) == 1L && !nzchar(value))
+    }, required_fields)
+
+    if (length(missing_fields) > 0L) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E314",
+        file = source_path,
+        line = line,
+        block = block,
+        message = paste0("semantic reference missing fields: ", paste(missing_fields, collapse = ", ")),
+        remediation = "ensure parser emits complete semantic reference entries"
+      ))
+      next
+    }
+
+    if (!reference$source_scope %in% valid_scopes) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E315",
+        file = source_path,
+        line = line,
+        block = block,
+        message = paste0("unsupported semantic reference source_scope '", reference$source_scope, "'"),
+        remediation = paste0("use one of: ", paste(valid_scopes, collapse = ", "))
+      ))
+    }
+
+    if (!reference$source_block_id %in% names(block_index)) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E322",
+        file = source_path,
+        line = line,
+        block = block,
+        message = paste0("semantic reference source_block_id '", reference$source_block_id, "' not present in IR"),
+        remediation = "ensure semantic references point to existing IR block IDs"
+      ))
+    }
+
+    if (!reference$target_id %in% target_ids) {
+      diagnostics <- append_diag(diagnostics, new_ir_diagnostic(
+        category = "IR-SEMANTIC",
+        code = "E321",
+        file = source_path,
+        line = line,
+        block = block,
+        message = paste0("unresolved semantic target_id '", reference$target_id, "'"),
+        remediation = "define a corresponding semantic target ID or fix the ADA:REF token target"
+      ))
+    }
+  }
+
+  diagnostics
+}
+
 validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict = TRUE) {
   if (is.null(source_path)) {
     source_path <- if (!is.null(ir$source$file_path)) ir$source$file_path else "<unknown>"
@@ -113,6 +319,9 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
   if (!is.null(missing)) diagnostics <- append_diag(diagnostics, missing)
 
   missing <- validate_required_string(ir$chapter$chapter_id, "chapter.chapter_id", source_path)
+  if (!is.null(missing)) diagnostics <- append_diag(diagnostics, missing)
+
+  missing <- validate_required_string(ir$chapter$semantic_id, "chapter.semantic_id", source_path)
   if (!is.null(missing)) diagnostics <- append_diag(diagnostics, missing)
 
   missing <- validate_required_string(ir$chapter$workshop_id, "chapter.workshop_id", source_path)
@@ -206,6 +415,15 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
       ))
     }
 
+    missing <- validate_required_string(
+      exercise$semantic_id,
+      paste0("exercise.semantic_id (", exercise$exercise_ref, ")"),
+      source_path,
+      line = exercise$source_span$heading_line,
+      block = paste0("exercise:", exercise$exercise_ref)
+    )
+    if (!is.null(missing)) diagnostics <- append_diag(diagnostics, missing)
+
     expected_seq <- 1L
     for (block in exercise$blocks) {
       if (!identical(block$sequence, expected_seq)) {
@@ -232,6 +450,15 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
           remediation = "ensure parser emits valid block line boundaries"
         ))
       }
+
+      missing <- validate_required_string(
+        block$semantic_id,
+        paste0("block.semantic_id (", block$block_id, ")"),
+        source_path,
+        line = block$source_span$start_line,
+        block = block$block_id
+      )
+      if (!is.null(missing)) diagnostics <- append_diag(diagnostics, missing)
 
       if (identical(block$block_type, "code")) {
         if (!identical(block$content$language, "r")) {
@@ -377,6 +604,8 @@ validate_workshop_ir <- function(ir, source_path = NULL, config = NULL, strict =
       }
     }
   }
+
+  diagnostics <- c(diagnostics, validate_semantic_references(ir = ir, source_path = source_path))
 
   errors <- Filter(function(diag) identical(diag$severity, "error"), diagnostics)
   if (isTRUE(strict) && length(errors) > 0L) {
