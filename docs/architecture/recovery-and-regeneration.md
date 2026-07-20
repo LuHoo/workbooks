@@ -45,6 +45,7 @@ Legacy parser policy note:
   `docs/architecture/legacy-parser-deprecation-policy.md`.
 - During transition, fallback remains valid for recovery, but should not be
   treated as routine default operation.
+- Current lifecycle stage is `Stage 1 — Preferred IR Default`.
 
 ## Phase 1: Recovery Surface Inventory
 
@@ -525,6 +526,8 @@ Legacy parser fallback warning:
 - If rollback uses `--parser-engine legacy`, record rationale in the associated
   issue/PR/release notes and re-evaluate advancement criteria at the next
   deprecation checkpoint.
+- Rollback remains supported during transition, but retirement of rollback
+  support requires a separate future removal issue and PR.
 
 ## Phase 9: Recovery Decision Tree
 

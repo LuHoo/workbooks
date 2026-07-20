@@ -115,6 +115,7 @@ Current-state note:
 - Parser engine defaults to `ir`.
 - Explicit `--parser-engine legacy` remains available as rollback mode while
   transition policy is active.
+- Current lifecycle stage is `Stage 1 — Preferred IR Default`.
 - Deprecation governance and review checkpoints are defined in
   `docs/architecture/legacy-parser-deprecation-policy.md`.
 
@@ -356,8 +357,10 @@ Reproducibility verification methods currently available:
 - Stale Binder artifacts:
   - rerun publication flow, then hosted Binder readiness checks.
 - Renderer rollback:
-  - for LaTeX generation, switch back to legacy parser mode where needed;
-    for Python renderer regressions, fix renderer or revert renderer change and
+  - for LaTeX generation, switch back to legacy parser mode where needed,
+    record fallback rationale, and re-evaluate retirement criteria at the next
+    deprecation checkpoint;
+  - for Python renderer regressions, fix renderer or revert renderer change and
     regenerate.
 
 - Legacy parser lifecycle governance:

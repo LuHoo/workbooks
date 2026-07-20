@@ -165,7 +165,7 @@ The canonical exporter uses the Workshop IR parser path by default.
 Allowed values for `--parser-engine`:
 
 - `ir` (default)
-- `legacy` (explicit rollback path)
+- `legacy` (explicit rollback path during the deprecation transition)
 
 Migration and rollback guidance:
 
@@ -173,6 +173,13 @@ Migration and rollback guidance:
 - `docs/architecture/legacy-parser-deprecation-policy.md`
 
 Rollback is immediate by explicitly passing `--parser-engine legacy`.
+
+Legacy parser lifecycle governance:
+
+- Current lifecycle stage: `Stage 1 — Preferred IR Default`.
+- Legacy mode remains supported for rollback, incident response, and controlled comparison.
+- Retirement is evidence-based rather than date-only.
+- Actual removal requires the criteria in `docs/architecture/legacy-parser-deprecation-policy.md` and a separate future issue/PR.
 
 ## Workshop IR Test Harness
 
