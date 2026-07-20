@@ -8,6 +8,14 @@ chapter workshop sources under notebooks/support/**/support.Rmd.
 Schema identifier: workshop-ir/1.1.0
 JSON schema file: scripts/workshop-ir-schema-v1.json
 
+Compatibility note:
+
+- this document describes the current emitted `workshop-ir/1.1.0` shape;
+- the validator currently accepts both `workshop-ir/1.0.0` and
+  `workshop-ir/1.1.0` as allowed `schema_version` values;
+- accepted-version policy is documented in
+  `docs/architecture/workshop-ir-validation.md`.
+
 ## Goals
 
 - Provide a deterministic, versioned parse artifact.
@@ -86,9 +94,9 @@ Authoring token syntax:
 Validation fails loudly when references are unresolved or semantically
 inconsistent.
 
-## Directive support in v1
+## Directive support in v1.1
 
-Supported directives in v1.1:
+Supported directives in current parser and validator implementation:
 
 - SUPPORT-ONLY:START
 - SUPPORT-ONLY:END

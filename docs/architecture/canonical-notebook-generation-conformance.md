@@ -1,6 +1,6 @@
 # Canonical Notebook Generation Conformance Report
 
-Date: 2026-07-13  
+Date: 2026-07-20  
 Scope: local/static inspection only (no workflow execution, no code changes)
 
 Related policy:
@@ -79,14 +79,16 @@ Conformance evidence:
 
 - Deterministic IR with explicit schema version, directives, source spans, and block identity.
 - Validation catches structural, directive, and config-compatibility errors with actionable diagnostics.
+- Validator documentation now matches implemented accepted schema versions (`workshop-ir/1.0.0`, `workshop-ir/1.1.0`).
+- Directive support is documented consistently as `SUPPORT-ONLY:START`, `SUPPORT-ONLY:END`, `ADA:BEGIN`, `ADA:END`, and `ADA:REQUIRES`.
 
 Gaps / duplicated paths / obsolete logic:
 
-- Validator docs still mention v1.0 language in places, while implementation accepts v1.0 and v1.1.
+- No active documentation gap remains for accepted schema-version wording or directive support in the IR validation surface.
 
 Smallest remediation:
 
-- Align validation doc wording to current accepted schema versions and directive set.
+- Keep validation and schema docs aligned with validator-accepted schema versions and the implemented directive set when future changes land.
 
 ## 3) R notebook generation
 
