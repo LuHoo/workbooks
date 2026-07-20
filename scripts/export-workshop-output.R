@@ -68,7 +68,8 @@ print_help <- function() {
     "Usage:\n",
     "  Rscript scripts/export-workshop-output.R --input <support.Rmd> --output <output.tex> [options]\n\n",
     "Options:\n",
-    "  --parser-engine <legacy|ir>   Parser backend (default: ir).\n\n",
+    "  --parser-engine <legacy|ir>   Parser backend (default: ir; legacy remains explicit rollback mode during the deprecation transition).\n",
+    "                                 Governance: docs/architecture/legacy-parser-deprecation-policy.md\n\n",
     "  --traceability-dir <path>   Path to traceability metadata directory (default: metadata/traceability)\n",
     "  --traceability-strict       Fail if metadata directory exists but required files are missing\n",
     "  --no-traceability           Skip traceability metadata loading\n\n",
@@ -252,6 +253,9 @@ export_single_chunk <- function(
   if (!is.null(getOption("ada.workshop.parser.engine"))) {
     parser_engine <- getOption("ada.workshop.parser.engine")
   }
+  # IR remains the default path. Legacy mode is preserved as an explicit
+  # rollback option while lifecycle decisions remain governed by architecture
+  # policy rather than by automatic retirement behavior.
   if (!parser_engine %in% c("legacy", "ir")) {
     stop("Unsupported parser engine: ", parser_engine, ". Use legacy or ir.")
   }

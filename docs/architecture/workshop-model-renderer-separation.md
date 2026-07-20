@@ -86,6 +86,11 @@ A future renderer can be added by implementing a backend and registering it in `
 
 This separation establishes the prerequisite for multi-target output architecture: parsing into a stable model once, then rendering through pluggable backends.
 
+Legacy rollback note:
+
+- The renderer/model separation does not itself authorize immediate retirement of `--parser-engine legacy`.
+- Parser lifecycle and rollback removal are governed separately by `docs/architecture/legacy-parser-deprecation-policy.md`.
+
 The path to future format support is:
 
 - keep parser/model authoritative;

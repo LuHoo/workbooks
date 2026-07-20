@@ -253,8 +253,8 @@ Gaps / duplicated paths / obsolete logic:
 
 Smallest remediation:
 
-- Keep legacy path but add deprecation criteria/timeline in architecture docs.
-- Track criteria and checkpoints in
+- Keep legacy path as explicit rollback mode during `Stage 1 — Preferred IR Default`.
+- Track retirement criteria, review checkpoints, and removal prerequisites in
   `docs/architecture/legacy-parser-deprecation-policy.md`.
 
 ## 9) Python notebook-to-LaTeX rendering
