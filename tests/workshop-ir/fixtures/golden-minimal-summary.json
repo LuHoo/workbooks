@@ -1,0 +1,163 @@
+{
+  "schema_version": "workshop-ir/1.1.0",
+  "chapter": {
+    "chapter_id": "CH-fixture-workshop",
+    "semantic_id": "CH-fixture-workshop",
+    "workshop_id": "fixture-workshop",
+    "chapter_number": 9,
+    "title": "Workshop Chapter 9"
+  },
+  "directives": {
+    "supported": ["SUPPORT-ONLY:START", "SUPPORT-ONLY:END", "ADA:BEGIN", "ADA:END", "ADA:REQUIRES"],
+    "observed": [],
+    "instances": []
+  },
+  "semantic_references": {
+    "token_syntax": "[[ADA:REF target=<semantic-id>]]",
+    "targets": [
+      {
+        "semantic_id": "CH-fixture-workshop",
+        "entity_type": "chapter",
+        "entity_id": "CH-fixture-workshop"
+      },
+      {
+        "semantic_id": "BL-CH-001",
+        "entity_type": "block",
+        "entity_id": "BL-CH-001"
+      },
+      {
+        "semantic_id": "EX-9.1",
+        "entity_type": "exercise",
+        "entity_id": "EX-9.1"
+      },
+      {
+        "semantic_id": "BL-EX-9.1-001",
+        "entity_type": "block",
+        "entity_id": "BL-EX-9.1-001"
+      },
+      {
+        "semantic_id": "BL-EX-9.1-002",
+        "entity_type": "block",
+        "entity_id": "BL-EX-9.1-002"
+      },
+      {
+        "semantic_id": "BL-EX-9.1-003",
+        "entity_type": "block",
+        "entity_id": "BL-EX-9.1-003"
+      },
+      {
+        "semantic_id": "EX-9.2",
+        "entity_type": "exercise",
+        "entity_id": "EX-9.2"
+      },
+      {
+        "semantic_id": "BL-EX-9.2-001",
+        "entity_type": "block",
+        "entity_id": "BL-EX-9.2-001"
+      },
+      {
+        "semantic_id": "BL-EX-9.2-002",
+        "entity_type": "block",
+        "entity_id": "BL-EX-9.2-002"
+      }
+    ],
+    "references": []
+  },
+  "chapter_blocks": [
+    {
+      "block_type": "narrative",
+      "support_only": false,
+      "source_span": {
+        "start_line": 1,
+        "end_line": 6
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "exercise_ref": "9.1",
+      "ordinal": 1,
+      "source_span": {
+        "start_line": 7,
+        "end_line": 17,
+        "heading_line": 7
+      },
+      "blocks": [
+        {
+          "block_type": "narrative",
+          "support_only": false,
+          "source_span": {
+            "start_line": 8,
+            "end_line": 10
+          },
+          "content": {
+            "narrative_lines": ["", "Intro text.", ""]
+          }
+        },
+        {
+          "block_type": "code",
+          "support_only": false,
+          "source_span": {
+            "start_line": 11,
+            "end_line": 14,
+            "fence_open_line": 11,
+            "fence_close_line": 14
+          },
+          "content": {
+            "chunk_header": "r",
+            "code_lines": ["x <- 1", "x"],
+            "language": "r"
+          }
+        },
+        {
+          "block_type": "narrative",
+          "support_only": false,
+          "source_span": {
+            "start_line": 15,
+            "end_line": 17
+          },
+          "content": {
+            "narrative_lines": ["", "More text.", ""]
+          }
+        }
+      ]
+    },
+    {
+      "exercise_ref": "9.2",
+      "ordinal": 2,
+      "source_span": {
+        "start_line": 18,
+        "end_line": 23,
+        "heading_line": 18
+      },
+      "blocks": [
+        {
+          "block_type": "narrative",
+          "support_only": false,
+          "source_span": {
+            "start_line": 19,
+            "end_line": 19
+          },
+          "content": {
+            "narrative_lines": ""
+          }
+        },
+        {
+          "block_type": "code",
+          "support_only": false,
+          "source_span": {
+            "start_line": 20,
+            "end_line": 23,
+            "fence_open_line": 20,
+            "fence_close_line": 23
+          },
+          "content": {
+            "chunk_header": "r",
+            "code_lines": ["z <- x + 1", "z"],
+            "language": "r"
+          }
+        }
+      ]
+    }
+  ]
+}
