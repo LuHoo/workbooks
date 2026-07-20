@@ -7,6 +7,27 @@ Canonical architecture overview:
 
 - `docs/architecture/notebook-generation-and-publication.md`
 
+## Publication boundary
+
+Current publication contract for student-facing notebook artifacts:
+
+- `LuHoo/ada` is the canonical authoring, generation, validation, and
+	publication-orchestration repository.
+- `LuHoo/workbooks` is the only notebook publication target currently managed by
+	automation in this repository.
+- `LuHoo/audit-data-analysis` is the ADA project/repository identity used by
+	this checkout and related site content; it is not a second notebook
+	publication destination in current scripts or workflows.
+
+Operational implication:
+
+- when notebook publication is discussed in this repository, it means
+	synchronization of validated generated artifacts into
+	`notebooks/workshops` / `LuHoo/workbooks`.
+- any future publication to a separate `audit-data-analysis` destination would
+	require an explicit new producer/contract rather than being implied by the
+	repository name.
+
 ## Workshop Exporter CLI
 
 Workshop exercise `.tex` chunks are generated through a single command-line entry point:

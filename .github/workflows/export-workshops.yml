@@ -80,7 +80,7 @@ jobs:
             --input-dir generated/python-notebooks \
             --checks hygiene
 
-      - name: Publish Python notebooks
+      - name: Publish Python notebooks to workbooks target
         run: |
           Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops
 
@@ -104,7 +104,7 @@ jobs:
             --checks hygiene \
             --published-dir notebooks/workshops
 
-      - name: Commit and publish workbooks
+      - name: Commit and publish workbooks target
         run: |
           git submodule foreach 'git status --short'
 

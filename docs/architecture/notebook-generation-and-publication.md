@@ -35,6 +35,10 @@ Current-state note:
 - Although this repository is named `ada`, `README.md` title still uses
   `audit-data-analysis`. Operationally, generation and publication automation in
   this checkout is authoritative for notebook production.
+- Current publication target contract is singular:
+  - student-facing notebook publication goes to `LuHoo/workbooks` only;
+  - `LuHoo/audit-data-analysis` is not a separate notebook publication target in
+    current scripts, workflows, or Binder launch paths.
 
 ## 2. Canonical Source Model
 
@@ -187,8 +191,21 @@ Current-state note:
 
 - Publication currently performs mapping/copy and stale cleanup; it does not
   execute notebooks.
+- Publication target for notebook artifacts is `LuHoo/workbooks` via the
+  `notebooks/workshops` submodule boundary; current automation does not publish
+  notebooks to a second `audit-data-analysis` destination.
 - Publication permissions are workflow-level `contents: write` in
   `export-workshops.yml` (hardening tracked separately).
+
+Publication contract:
+
+- canonical notebook content is authored and validated in `LuHoo/ada`;
+- notebook publication is a synchronization step into `LuHoo/workbooks`;
+- `scripts/publish-python-notebooks.R` may rename/copy and remove stale files,
+  but must not perform semantic notebook transformations;
+- any companion-site or documentation references in `LuHoo/audit-data-analysis`
+  are downstream link/documentation concerns, not a second notebook publication
+  channel.
 
 ## 6. Validation Layers
 
@@ -356,6 +373,10 @@ Reproducibility verification methods currently available:
 - Publication drift:
   - regenerate artifacts in ADA, republish through mapping script/workflow,
     verify submodule pointer and target files.
+- Publication-target ambiguity:
+  - treat `LuHoo/workbooks` as the only automated notebook publication target;
+  - treat `LuHoo/audit-data-analysis` references as project/site identity unless
+    a separate explicit publication contract is introduced.
 - Notebook execution failures:
   - inspect execution artifacts and runtime diagnostics;
   - fix runtime/dependency/source issue at earliest authoritative layer.

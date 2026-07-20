@@ -94,6 +94,11 @@ print_help <- function() {
   cat(
     "Usage:\n",
     "  Rscript scripts/publish-python-notebooks.R [options]\n\n",
+    "Publication contract:\n",
+    "  This command publishes validated generated Python notebooks into the\n",
+    "  local workbooks publication boundary (default: notebooks/workshops),\n",
+    "  which mirrors the LuHoo/workbooks repository. It does not publish to a\n",
+    "  separate audit-data-analysis notebook target.\n\n",
     "Options:\n",
     "  --input-dir <path>   Source directory for generated notebooks\n",
     "                       (default: generated/python-notebooks).\n",
@@ -126,6 +131,8 @@ validate_notebook_hygiene <- function(input_dir, python_bin = resolve_python_bin
 publish_python_notebooks <- function(input_dir, output_dir) {
   ensure_jsonlite()
   validate_notebook_hygiene(input_dir)
+
+  message("Publication target contract: notebooks/workshops -> LuHoo/workbooks")
 
   configs <- get_workshop_export_configs()
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
