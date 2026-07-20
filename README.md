@@ -137,7 +137,9 @@ Directive support in v1.1:
 
 - parser-level support for `ADA:BEGIN`, `ADA:END`, and `ADA:REQUIRES`;
 - deterministic per-block `authoring_context` metadata;
-- emitted directive event records in `directives.instances`.
+- emitted directive event records in `directives.instances`;
+- first-class semantic references via `[[ADA:REF target=<semantic-id>]]` tokens,
+  resolved through `semantic_references.targets` / `semantic_references.references`.
 
 Generate IR JSON:
 
@@ -152,6 +154,9 @@ Validate parsed IR structure and compatibility with workshop export configuratio
 Validation spec:
 
 - `docs/architecture/workshop-ir-validation.md`
+
+Semantic reference validation fails on unresolved targets and inconsistent
+target/source declarations before notebook or LaTeX export proceeds.
 
 ## Optional IR Parser Integration
 

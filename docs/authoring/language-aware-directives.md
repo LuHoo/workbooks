@@ -64,6 +64,31 @@ np.mean(x)
 - Using `mode=override` when no prior shared block exists.
 - Repeating multiple overrides for the same target block/language.
 
+## Semantic references
+
+When you need to create an explicit semantic cross-reference to another chapter,
+exercise, or block entity, use this inline token format:
+
+```markdown
+[[ADA:REF target=<semantic-id>]]
+```
+
+Examples:
+
+```markdown
+See [[ADA:REF target=EX-5.12]] for the prior exercise setup.
+```
+
+```markdown
+This step reuses context from [[ADA:REF target=BL-EX-5.12-002]].
+```
+
+Validation behavior:
+
+- unresolved target ids fail IR validation;
+- references to missing source block ids fail IR validation;
+- duplicated semantic target declarations fail IR validation.
+
 ## Migration note
 
 Notebooks without directives continue to parse and render as before.
