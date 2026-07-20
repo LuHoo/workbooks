@@ -215,6 +215,21 @@ Workflow: `.github/workflows/binder-readiness.yml`
 This workflow is intentionally independent from export/publication workflows and
 targets Binder readiness directly.
 
+Validation levels in current Binder/CI policy:
+
+1. Local development checks:
+  - `.venv/bin/python scripts/ci/run-local-validation.py`
+  - targeted local Binder config review and `bash scripts/ci/check-binder-config-drift.sh`
+2. Lightweight pull-request checks:
+  - `workshop-ir-tests.yml` on relevant PR paths
+  - PR-time Binder dependency preflight in `binder-readiness.yml`
+3. Full pre-merge integration validation:
+  - deliberate `workflow_dispatch` runs for hosted validation when Binder,
+    runtime, or generation changes need full integration evidence
+4. Post-merge publication and synchronization workflows:
+  - `export-workshops.yml` on `main`
+  - scheduled/manual Binder launch smoke for the published workbooks target
+
 Phasing:
 
 1. PR-time: `repo2docker` build smoke check for this repository.
@@ -237,6 +252,25 @@ Launch smoke behavior:
 
 Default launch target is `LuHoo/workbooks` because Binder usage is linked from
 `LuHoo/audit-data-analysis` to that repository.
+
+Run-discipline policy:
+
+- complete local validation before pushing Binder/runtime changes;
+- batch locally validated commits into a single push where practical;
+- use `workflow_dispatch` for expensive hosted Binder runs when you need
+  integration evidence before merge rather than relying on repeated branch-push
+  retries;
+- rerun a failed hosted job only when the failure appears transient or after a
+  relevant change to Binder/runtime/workflow inputs.
+
+Binder rebuild strategy:
+
+- require a fresh Binder build when `.binder/*`, Binder launch scripts,
+  `.gitmodules`, or the mirrored `notebooks/workshops/.binder/*` content change;
+- prefer existing local validation results and scheduled/manual Binder checks for
+  docs-only changes and unrelated content changes;
+- avoid mixing Binder config changes with unrelated notebook/content edits when
+  a dedicated Binder validation decision is needed.
 
 Artifacts:
 
