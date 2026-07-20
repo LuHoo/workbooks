@@ -27,7 +27,7 @@ This workspace contains one primary repository (`ada`) and one checked-out submo
 Findings:
 
 - Trust boundary between canonical authoring (`ada`) and student distribution (`workbooks`) is explicit and mostly clean.
-- Binder ownership is partially split because `.binder/*` exists in both root and submodule with divergent pins/runtime values.
+- Binder config ownership is now cleanly modeled as authoritative ADA root `.binder/*` plus a required mirrored copy in `notebooks/workshops/.binder/*` for the Binder-facing publication target.
 
 ## 2 Artifact ownership
 
@@ -254,7 +254,7 @@ Smallest architectural changes required to align implementation with stated arch
 
 ### Low
 
-1. Document one authoritative Binder config owner (root vs `notebooks/workshops/.binder`) and add a sync-check to avoid drift.
+1. Keep the authoritative ADA Binder config and mirrored workbooks Binder files synchronized via the drift check and publication workflow.
 2. Add policy checks (pre-commit/CI) to detect manual edits on generated artifacts in `notebooks/workshops/*` when they are not produced by generation scripts.
 3. Add explicit docs mapping each generated artifact to its single authoritative producer script.
 

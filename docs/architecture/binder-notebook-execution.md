@@ -21,6 +21,14 @@ The `LuHoo/workbooks` Binder configuration is R-focused (`.binder/runtime.txt`
 and `.binder/install.R`) and does not define Python notebook execution
 dependencies (`rpy2`, `nbclient`, generated notebook pipeline).
 
+Current ownership contract:
+
+- authoritative Binder config source in the ADA toolchain is `LuHoo/ada:.binder/*`;
+- Binder-facing workbooks files under `notebooks/workshops/.binder/*` are a
+  required mirror for the publication target repository;
+- drift between the authoritative ADA config and the workbooks mirror is a
+  validation failure, not a silent policy exception.
+
 ## Dual-Language Recommendation
 
 A single Binder environment is feasible and recommended.
@@ -44,6 +52,14 @@ Binder files are located under `.binder/`:
 - `requirements.txt`: pins Python and notebook execution dependencies.
 - `apt.txt`: system libraries required for R package builds.
 - `postBuild`: sanity checks for critical runtime imports.
+
+Mirror rule:
+
+- ADA root `.binder/*` is the authoritative edit surface for Binder runtime
+  configuration used by local Binder smoke checks and CI preflight.
+- `notebooks/workshops/.binder/*` must remain byte-for-byte synchronized with
+  the authoritative ADA files.
+- Drift is checked by `scripts/ci/check-binder-config-drift.sh`.
 
 Policy constraint:
 
@@ -165,6 +181,13 @@ Phasing:
 
 1. PR-time: `repo2docker` build smoke check for this repository.
 2. Post-merge/nightly: mybinder launch smoke check with longer timeout.
+
+Ownership enforcement:
+
+- both jobs validate Binder mirror drift before build or launch checks run;
+- a drift failure means `.binder/*` and `notebooks/workshops/.binder/*` no
+  longer match and must be resynchronized before publication or Binder
+  validation proceeds.
 
 Launch smoke behavior:
 

@@ -306,13 +306,19 @@ CI integration for policy enforcement:
 - Publication workflow validation: `.github/workflows/export-workshops.yml`
 - Local mirrored gate: `scripts/ci/local-notebook-validation-gate.sh`
   (compatibility wrapper for `scripts/ci/run-local-validation.py`)
-| Binder runtime config under `.binder/` | `LuHoo/ada` (current tooling owner) | canonical runtime config | allowed with validation |
-| Binder runtime config under `notebooks/workshops/.binder/` | `LuHoo/workbooks` | canonical in that repo | allowed in that repo; keep ownership/drift explicit |
+| Binder runtime config under `.binder/` | `LuHoo/ada` | authoritative Binder config source | allowed with validation |
+| Binder runtime config under `notebooks/workshops/.binder/` | `LuHoo/workbooks` publication mirror | mirrored Binder config | do not edit independently; keep synchronized with ADA root `.binder/` |
 
 Policy:
 
 Fix the earliest authoritative source or transformation responsible for the
 error, then regenerate and republish.
+
+Binder mirror policy:
+
+- edit authoritative Binder runtime files in `LuHoo/ada:.binder/*`;
+- keep `notebooks/workshops/.binder/*` synchronized as the Binder-facing mirror;
+- use `scripts/ci/check-binder-config-drift.sh` to fail fast when the mirror drifts.
 
 ## 8. Provenance and Determinism
 
