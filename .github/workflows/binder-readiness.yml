@@ -8,23 +8,19 @@ on:
       - reopened
     paths:
       - ".binder/**"
-      - "notebooks/workshops"
       - ".gitmodules"
       - "scripts/ci/check-binder-config-drift.sh"
       - "scripts/ci/binder-launch-smoke.py"
       - ".github/workflows/binder-readiness.yml"
-      - "docs/architecture/binder-notebook-execution.md"
   push:
     branches:
       - main
     paths:
       - ".binder/**"
-      - "notebooks/workshops"
       - ".gitmodules"
       - "scripts/ci/check-binder-config-drift.sh"
       - "scripts/ci/binder-launch-smoke.py"
       - ".github/workflows/binder-readiness.yml"
-      - "docs/architecture/binder-notebook-execution.md"
   schedule:
     - cron: "25 3 * * *"
   workflow_dispatch:
@@ -57,6 +53,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: binder-readiness-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   repo2docker-smoke:

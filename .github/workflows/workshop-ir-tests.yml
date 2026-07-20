@@ -2,6 +2,8 @@ name: Workshop IR Tests
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "ada_fsaudit_bridge/**"
       - "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"
@@ -49,6 +51,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: workshop-ir-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   workshop-ir-tests:
