@@ -317,7 +317,7 @@ Smallest remediation:
 
 ## 11) Binder-facing ownership
 
-Classification: `partially conforms`
+Classification: `conforms`
 
 Implementation (files/functions):
 
@@ -328,16 +328,24 @@ Implementation (files/functions):
 
 Conformance evidence:
 
-- Binder-facing deployment ownership points to `LuHoo/workbooks`.
+- Authoritative Binder config owner is documented as `LuHoo/ada:.binder/*`.
+- Binder-facing deployment still targets `LuHoo/workbooks`.
+- Workbooks Binder files are treated as a required mirror rather than an
+  independent owner surface.
 - Binder launch smoke script targets external binder repo/ref via CLI.
+- CI drift detection exists via `scripts/ci/check-binder-config-drift.sh` and
+  runs in Binder validation workflows.
 
 Gaps / duplicated paths / obsolete logic:
 
-- Binder config exists in both root and `notebooks/workshops/.binder`, and key runtime pins diverge (for example runtime snapshots and package install strategy differ), increasing drift risk around ownership of the authoritative Binder environment.
+- No active ownership ambiguity remains once the ADA root Binder config is
+  treated as authoritative and the workbooks Binder files are kept as a checked
+  mirror.
 
 Smallest remediation:
 
-- Declare a single authoritative Binder config location (preferably `workbooks`) and add synchronization checks for any mirrored files.
+- Keep the owner/mirror policy and drift checks aligned across Binder docs and
+  workflows when Binder dependencies change.
 
 ## 12) Semantic reference handling
 
@@ -378,7 +386,7 @@ Smallest remediation:
 | 8. R notebook-to-LaTeX rendering | conforms |
 | 9. Python notebook-to-LaTeX rendering | partially conforms |
 | 10. publication to workbooks and audit-data-analysis | conforms |
-| 11. Binder-facing ownership | partially conforms |
+| 11. Binder-facing ownership | conforms |
 | 12. semantic reference handling | not yet implemented |
 
 ## Highest-value minimal remediations (ordered)
@@ -386,5 +394,4 @@ Smallest remediation:
 1. Commit the ADR text into a stable in-repo path (for example `docs/architecture/canonical-notebook-generation.md`), and cross-link all implementation docs to that single ADR.
 2. Remove non-canonical Python-to-LaTeX fallback path (`notebooks/python/workshop02_python.ipynb`) after migration.
 3. Add pre-publish notebook hygiene check (enforce output-free distribution notebooks).
-4. Decide and document one authoritative Binder config owner and add drift detection between root and submodule Binder files.
-5. Define and implement first-class semantic reference handling in IR + export validation.
+4. Define and implement first-class semantic reference handling in IR + export validation.
