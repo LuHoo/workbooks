@@ -287,7 +287,7 @@ Smallest remediation:
 
 ## 10) Publication to workbooks and audit-data-analysis
 
-Classification: `partially conforms`
+Classification: `conforms`
 
 Implementation (files/functions):
 
@@ -299,14 +299,21 @@ Implementation (files/functions):
 Conformance evidence:
 
 - Publication path to `workbooks` (submodule) is explicit.
+- Current documentation and publication policy now treat `LuHoo/workbooks` as
+  the only automated notebook publication target.
+- `LuHoo/audit-data-analysis` is documented as repository/site identity and
+  companion-site context, not a second notebook publication destination.
 
 Gaps / duplicated paths / obsolete logic:
 
-- No local script explicitly publishes to a separate `audit-data-analysis` target; relationship is indirect/documented rather than codified in repository tooling.
+- No active ambiguity remains in the local publication contract: notebook
+  publication is codified as synchronization to `workbooks`, and any future
+  additional destination would need an explicit new contract.
 
 Smallest remediation:
 
-- Add a local publication contract document/script clarifying whether this repository itself is the audit-data-analysis target or whether a second explicit publish target exists.
+- Keep publication docs, publish-script help, and workflow wording aligned with
+  the current single-target `workbooks` contract.
 
 ## 11) Binder-facing ownership
 
@@ -370,7 +377,7 @@ Smallest remediation:
 | 7. executed-notebook validation | partially conforms |
 | 8. R notebook-to-LaTeX rendering | conforms |
 | 9. Python notebook-to-LaTeX rendering | partially conforms |
-| 10. publication to workbooks and audit-data-analysis | partially conforms |
+| 10. publication to workbooks and audit-data-analysis | conforms |
 | 11. Binder-facing ownership | partially conforms |
 | 12. semantic reference handling | not yet implemented |
 
