@@ -13,6 +13,7 @@ on:
       - "ada_fsaudit_bridge/**"
       - "metadata/traceability/**"
       - ".binder/**"
+      - ".github/workflows/shared-notebook-validation.yml"
       - ".github/workflows/notebook-execution-validation.yml"
   pull_request:
     types:
@@ -30,6 +31,7 @@ on:
       - "ada_fsaudit_bridge/**"
       - "metadata/traceability/**"
       - ".binder/**"
+      - ".github/workflows/shared-notebook-validation.yml"
       - ".github/workflows/notebook-execution-validation.yml"
   workflow_dispatch:
 
@@ -41,123 +43,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  preflight-fast:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: "4.3.1"
-
-      - name: Install minimal R test dependencies
-        run: |
-          Rscript -e "install.packages('jsonlite', repos='https://cloud.r-project.org')"
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install Python test dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r .binder/requirements.txt
-
-      - name: Renderer regression tests
-        run: |
-          python3 tests/python-renderer/run-tests.py
-
-  validate-notebook-execution:
-    needs: preflight-fast
-    runs-on: ubuntu-latest
-
-    env:
-      PYTHON_VERSION: "3.10"
-      R_VERSION: "4.3.1"
-      FSAUDIT_REF: "5a36801a712d9d736bb2c5a3992e7b8b644c7418"
-      AICPA_REF: "4a49d0357544eb22ed3314005af2f82b3cf0f53a"
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: ${{ env.R_VERSION }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install system libraries for R packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libuv1-dev
-
-      - name: Install R dependencies
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          Rscript -e "install.packages(c('IRkernel','jsonlite','knitr','rmarkdown','remotes','devtools','readr','ggplot2','car','gridExtra','tidyr','corrplot','lmtest','latex2exp','scales'), repos='https://cloud.r-project.org')"
-          Rscript -e "remotes::install_github(sprintf('LuHoo/FSaudit@%s', Sys.getenv('FSAUDIT_REF')), upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
-          Rscript -e "remotes::install_github(sprintf('LuHoo/aicpa@%s', Sys.getenv('AICPA_REF')), upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r .binder/requirements.txt
-
-      - name: Print runtime diagnostics
-        run: |
-          python --version
-          python - <<'PY'
-          import importlib.metadata
-          print('rpy2', importlib.metadata.version('rpy2'))
-          PY
-          R --version | head -n 1
-          Rscript -e "cat('FSaudit', as.character(packageVersion('FSaudit')), '\n')"
-
-      - name: Generate Python notebooks
-        run: |
-          Rscript scripts/export-python-notebooks.R --output-dir generated/python-notebooks
-
-      - name: Validate parity and traceability quality gates
-        run: |
-          Rscript scripts/ci/validate-parity-and-traceability.R \
-            --chapters 1,2,3,4,5,6 \
-            --notebooks-dir generated/python-notebooks \
-            --metadata-dir metadata/traceability \
-            --output-json generated/traceability/parity-report.json \
-            --output-summary generated/traceability/parity-report.txt
-
-      - name: Run shared notebook execution validations
-        run: |
-          bash scripts/ci/run-common-notebook-validations.sh \
-            --input-dir generated/python-notebooks \
-            --published-dir notebooks/workshops \
-            --artifacts-dir generated/notebook-execution-artifacts \
-            --timeout 600
-
-      - name: Upload notebook execution artifacts
-        if: ${{ always() && hashFiles('generated/notebook-execution-artifacts/**') != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: notebook-execution-artifacts
-          path: generated/notebook-execution-artifacts
-
-      - name: Upload parity and traceability reports
-        if: ${{ always() && hashFiles('generated/traceability/**') != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: parity-traceability-reports
-          path: generated/traceability
+  notebook-execution-validation:
+    uses: ./.github/workflows/shared-notebook-validation.yml
+    with:
+      input-dir: generated/python-notebooks
+      artifacts-dir: generated/notebook-execution-artifacts
+      timeout-seconds: "600"
+      published-dir: notebooks/workshops
+      run-parity-traceability: true
+      upload-parity-reports: true

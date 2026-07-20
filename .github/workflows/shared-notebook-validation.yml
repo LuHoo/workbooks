@@ -1,0 +1,169 @@
+name: Shared notebook validation
+
+on:
+  workflow_call:
+    inputs:
+      input-dir:
+        description: Directory containing generated Python notebooks.
+        required: false
+        type: string
+        default: generated/python-notebooks
+      artifacts-dir:
+        description: Directory for notebook execution artifacts.
+        required: false
+        type: string
+        default: generated/notebook-execution-artifacts
+      timeout-seconds:
+        description: Timeout passed to generated notebook execution.
+        required: false
+        type: string
+        default: "600"
+      published-dir:
+        description: Optional published notebook directory for generated-artifact policy checks.
+        required: false
+        type: string
+        default: ""
+      run-parity-traceability:
+        description: Whether to run parity and traceability quality gates.
+        required: false
+        type: boolean
+        default: false
+      upload-parity-reports:
+        description: Whether to upload generated parity and traceability reports.
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  preflight-fast:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.3.1"
+
+      - name: Install minimal R test dependencies
+        run: |
+          Rscript -e "install.packages('jsonlite', repos='https://cloud.r-project.org')"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Python test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r .binder/requirements.txt
+
+      - name: Renderer regression tests
+        run: |
+          python3 tests/python-renderer/run-tests.py
+
+  validate-notebook-execution:
+    needs: preflight-fast
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      PYTHON_VERSION: "3.10"
+      R_VERSION: "4.3.1"
+      FSAUDIT_REF: "5a36801a712d9d736bb2c5a3992e7b8b644c7418"
+      AICPA_REF: "4a49d0357544eb22ed3314005af2f82b3cf0f53a"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ env.R_VERSION }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install system libraries for R packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libuv1-dev
+
+      - name: Install R dependencies
+        env:
+          GITHUB_PAT: ${{ github.token }}
+        run: |
+          Rscript -e "install.packages(c('IRkernel','jsonlite','knitr','rmarkdown','remotes','devtools','readr','ggplot2','car','gridExtra','tidyr','corrplot','lmtest','latex2exp','scales'), repos='https://cloud.r-project.org')"
+          Rscript -e "remotes::install_github(sprintf('LuHoo/FSaudit@%s', Sys.getenv('FSAUDIT_REF')), upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
+          Rscript -e "remotes::install_github(sprintf('LuHoo/aicpa@%s', Sys.getenv('AICPA_REF')), upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r .binder/requirements.txt
+
+      - name: Print runtime diagnostics
+        run: |
+          python --version
+          python - <<'PY'
+          import importlib.metadata
+          print('rpy2', importlib.metadata.version('rpy2'))
+          PY
+          R --version | head -n 1
+          Rscript -e "cat('FSaudit', as.character(packageVersion('FSaudit')), '\n')"
+
+      - name: Generate Python notebooks
+        run: |
+          Rscript scripts/export-python-notebooks.R --output-dir "${{ inputs.input-dir }}"
+
+      - name: Validate parity and traceability quality gates
+        if: ${{ inputs.run-parity-traceability }}
+        run: |
+          Rscript scripts/ci/validate-parity-and-traceability.R \
+            --chapters 1,2,3,4,5,6 \
+            --notebooks-dir "${{ inputs.input-dir }}" \
+            --metadata-dir metadata/traceability \
+            --output-json generated/traceability/parity-report.json \
+            --output-summary generated/traceability/parity-report.txt
+
+      - name: Run shared notebook execution validations
+        run: |
+          args=(
+            --input-dir "${{ inputs.input-dir }}"
+            --artifacts-dir "${{ inputs.artifacts-dir }}"
+            --timeout "${{ inputs.timeout-seconds }}"
+          )
+          if [[ -n "${{ inputs.published-dir }}" ]]; then
+            args+=(--published-dir "${{ inputs.published-dir }}")
+          fi
+          bash scripts/ci/run-common-notebook-validations.sh "${args[@]}"
+
+      - name: Upload notebook execution artifacts
+        if: ${{ always() && hashFiles('generated/notebook-execution-artifacts/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-execution-artifacts
+          path: generated/notebook-execution-artifacts
+
+      - name: Upload parity and traceability reports
+        if: ${{ inputs.upload-parity-reports && always() && hashFiles('generated/traceability/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-traceability-reports
+          path: generated/traceability
