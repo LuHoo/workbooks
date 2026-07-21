@@ -857,27 +857,26 @@ $z = t[\infty]$ \\
 
 \subsection{Summary approximations} % (fold)
 \label{sub:recap_approximations}
-Figure \ref{fig:BenaderingenMetVoorwaarden} summarizes all previously discussed approximations and their conditions.
 
-\begin{figure} 
-  \centering
-  \begin{tikzpicture}[node distance = 3 cm and 2 cm, auto]
-    % Place nodes
-  \node[whiteblock] (hype) {hyper\-geometric};
-  \node[whiteblock, below= 1 cm of hype] (bino) {binomial};
-  \node[whiteblock, below= 1 cm of bino] (pois) {Poisson};
-  \node[whiteblock, right= 4 cm of bino] (stud) {Student's $t$};
-  \node[whiteblock, right= 4 cm of pois] (norm) {normal};
-  
-    % Draw edges
-  \path [line] (hype) -- node {$\frac{n}{N} < 0.10$} (bino);
-  \path [line] (bino) -- node [shift={(-1.61,0)}]{$\pi < 0.10,\ n \geq 20$} (pois);
-  \path [line] (stud) -- node {$n \geq 200$} (norm);  
-\end{tikzpicture}
+Table \ref{tab:BenaderingenMetVoorwaarden} summarizes all previously discussed approximations and their conditions.
+
+\begin{table}[htbp]
+\begin{tabularx}{\textwidth}{lll}
+\toprule
+Distribution &
+Approximated by &
+Condition \\
+\midrule
+Hypergeometric & Binomial & $\frac{n}{N} < 0.10$ \\
+Binomial & Poisson & $\pi < 0.10, n \geq 20$ \\
+Student's $t$ & Normal & $n \geq 200$ \\
+Binomial & Normal & \textit{No longer necessary} \\
+Poisson & Normal & \textit{No longer necessary} \\
+\bottomrule
+\end{tabularx}
 \caption{Approximations and their conditions}
-\label{fig:BenaderingenMetVoorwaarden}
-\end{figure}
-There is no longer a use for the approximation of the binomial or Poisson distributions with the normal distribution.
+\label{tab:BenaderingenMetVoorwaarden}
+\end{table}
 
 
 % subsection recap_approximations (end)
