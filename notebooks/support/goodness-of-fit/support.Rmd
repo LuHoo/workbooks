@@ -361,7 +361,7 @@ save_book_figure(benford_digit_plot, "H9_benford-digit-distributions.pdf")
 
 
 
-```{r}
+```{r, eval=FALSE}
 library(ggplot2)
 library(grid)
 library(gridExtra)

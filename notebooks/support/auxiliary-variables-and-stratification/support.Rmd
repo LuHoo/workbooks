@@ -112,7 +112,7 @@ configure_environment(seed=12345)
 We sample 400 units from the `inventoryData` dataset with the `select()` function. This effectively fills the `sample` attribute in `mySample`.
 
 ```{r}
-mySample <- select(mySample)
+mySample <- FSaudit::select(mySample)
 head(mySample$sample)
 ```
 <!-- ADA:BEGIN lang=python mode=override kind=code -->
@@ -341,7 +341,7 @@ arSample = cvs_sample(
 We select the sample, using a seed equal to 1.
 
 ```{r}
-arSample <- select(arSample, seed = 1)
+arSample <- FSaudit::select(arSample, seed = 1)
 ```
 <!-- ADA:BEGIN lang=python mode=override kind=code -->
 ```{r}
@@ -517,7 +517,7 @@ cumul.size(desPrec=200000).n
 Select sample
 
 ```{r}
-cumul <- select(cumul, seed = 12345)
+cumul <- FSaudit::select(cumul, seed = 12345)
 head(cumul$sample)
 ```
 <!-- ADA:BEGIN lang=python mode=override kind=code -->
@@ -589,7 +589,7 @@ mySample <- cvs_obj(n = 400,
 ```
 
 ```{r}
-mySample <-  select(mySample)
+mySample <-  FSaudit::select(mySample)
 
 head(mySample$sample)
 ```
@@ -655,6 +655,7 @@ var(mySample$av)
 ```{r}
 n <- mySample$n
 (g <- sqrt((N * (N - n)) / n))
+(fpc <- sqrt((N - n) / N))
 ```
 
 
@@ -862,7 +863,7 @@ p4 <- ggplot(inventoryData, aes(x = bv, y = av_mus)) +
   labs(title = "Sporadic errors") +
   labs(x = "x", y = "y") 
 
-error_distributions <- grid.arrange(p1, p2, p3, p4, ncol=2)
+error_distributions <- gridExtra::grid.arrange(p1, p2, p3, p4, ncol=2)
 save_book_figure(error_distributions, "H4_errorDistributions.pdf")
 ```
 
@@ -912,6 +913,7 @@ Define results dataframe
 Initialize objects
 ```{r}
 n <- 100
+cl <- 0.95
 
 cvsSample <- cvs_obj()
 cvsSample <- cvs_obj(desPrec = 200000,
@@ -934,7 +936,7 @@ cont_corr <- sqrt((N - n)/(N - 1))
 ```
 # Run simulations
 
-```{r}
+```{r, eval=FALSE}
 start <- Sys.time()
 
 for (i in 1:simSize) {
@@ -1007,7 +1009,7 @@ print(end - start)
 
 ```
 Create graph of distribution of estimates
-```{r}
+```{r, eval=FALSE}
 
 p_sampling_dist <-  ggplot(simResult, aes(estimate))  +
   geom_histogram(aes(y = ..density..), bins = 54, fill = "#00338D") +
@@ -1036,7 +1038,7 @@ arSample <- cvs_obj(bv = accounts_receivable$amount,
 ```
 We select the sample, using the seed equal to 1.
 ```{r}
-arSample <- select(arSample, seed = 1)
+arSample <- FSaudit::select(arSample, seed = 1)
 ```
 We look up the audit values of the selected sampling units.
 ```{r}
@@ -1080,6 +1082,7 @@ Then calculate the standard deviation of the differences only.
 Precision achieved is then calculated with Equation 4.14
 ```{r}
 (g <- sqrt(N * (N-n)/n))
+(fpc <- sqrt((N - n) / N))
 qt(1 - alpha / 2, df = m - 1) 
 g * qt(1 - alpha / 2, df = m - 1) * sqrt(var_diff)
 sqrt(var_diff)
@@ -1095,6 +1098,7 @@ sqrt(var_diff)
 ```{r}
 (sQm2 <- (sum_avsq - 2 * q * sum_bvav + q^2 * sum_bvsq) / (m - 1))
 (var_ratio <- pU * sQm2)
+(sd_ratio <- sqrt(var_ratio))
 ```
 Precision achieved is then calculated with Equation 4.17
 ```{r}
@@ -1110,6 +1114,7 @@ sd_ratio / sqrt(n) * fpc)
 ```
 Then we fill the results into Equation 4.24.
 ```{r}
+(sd_diff <- sqrt(var_diff))
 
 
 (var_regr <- sd_diff^2 - 2 * (slope - 1) * (covBvAv - var_bv) + (slope - 1)^2 * var_bv)
@@ -1173,7 +1178,7 @@ myStrat$n
 Select sample
 
 ```{r}
-myStrat <- select(myStrat, seed = 12345)
+myStrat <- FSaudit::select(myStrat, seed = 12345)
 head(myStrat$sample)
 ```
 
@@ -1470,7 +1475,7 @@ arSample <- cvs_obj(bv = accounts_receivable$amount,
 ```
 Select sample
 ```{r}
-arSample <- select(arSample, seed = 1)
+arSample <- FSaudit::select(arSample, seed = 1)
 
 ```
 Audit sampling units

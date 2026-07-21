@@ -2958,17 +2958,49 @@ To run the exercises in this workshop, we need to load a few packages.
 
 \begin{exercise}
 
+\Needspace{4\baselineskip}
 \textbf{Before we start}
+\nopagebreak[4]
 
-\input{generated/workshop-output-python/exercise-5-1-1}
+To run the exercises in this workshop, we need to load a few packages.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{KPMG_blue}{library(ggplot2)         # Data visualization}
+\textcolor{KPMG_blue}{library(aicpa)           # Contains US SteamCo data}
+\textcolor{KPMG_blue}{library(car)             # Companion to Applied Regression}
+\textcolor{KPMG_blue}{library(gridExtra)       # Arrange multiple grid-based plots}
+\textcolor{KPMG_blue}{library(tidyr)           # Data tidying (reshape and transform)}
+\textcolor{KPMG_blue}{library(corrplot)        # Correlation matrix visualization}
+\textcolor{KPMG_blue}{library(lmtest)          # Diagnostic tests for linear models}
+\textcolor{KPMG_blue}{library(latex2exp)       # Use LaTeX expressions in plots}
+\end{Verbatim}
 
 \end{exercise}
 
+\subsection{Case: USSteamCo}
+
 \begin{exercise}
 
-\textbf{Regression workflow in Python}
+\Needspace{4\baselineskip}
+\textbf{The US SteamCo data file}
+\nopagebreak[4]
 
 \input{generated/workshop-output-python/exercise-5-2-1}
+
+\paragraph{Steam production} is measured by mass in units of thousands of pounds. These were internal data from a source outside the company's financial reporting system.\footnote{AAG DATA B.19} 
+\paragraph{Cooling and heating degree day (DD)} data (external data) were used in the preliminary analysis. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period. 
+\paragraph{Summer} is a dummy variable created to distinguish between heating and cooling months.\footnote{Section \ref{sub:data_wrangling}}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:obtaining_and_testing_data}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Summarizing and plotting the data}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-3-1}
 \input{generated/workshop-output-python/exercise-5-3-2}
 \input{generated/workshop-output-python/exercise-5-3-3}
@@ -2977,69 +3009,382 @@ To run the exercises in this workshop, we need to load a few packages.
 \input{generated/workshop-output-python/exercise-5-3-6}
 \input{generated/workshop-output-python/exercise-5-3-7}
 \input{generated/workshop-output-python/exercise-5-3-8}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:modeling}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{The base model} \ttblue{mod.0}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-4-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{The full summary of }\ttblue{mod.0}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-5-1}
+
+\end{exercise}
+
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Correlations and correlogram}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-6-1}
 \input{generated/workshop-output-python/exercise-5-6-2}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Modelling strategies}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-7-1}
 \input{generated/workshop-output-python/exercise-5-7-2}
 \input{generated/workshop-output-python/exercise-5-7-3}
 \input{generated/workshop-output-python/exercise-5-7-4}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Multiple independent variables }\ttblue{mod.1}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-8-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Interactions}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-9-1}
 \input{generated/workshop-output-python/exercise-5-9-2}
 \input{generated/workshop-output-python/exercise-5-9-3}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Time lag}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-10-1}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:diagnostics_checking}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Residual plots}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-11-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Influence statistics}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-12-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Leverage points}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-13-1}
 \input{generated/workshop-output-python/exercise-5-13-2}
 \input{generated/workshop-output-python/exercise-5-13-3}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Regression outliers}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-14-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Influential observations}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-15-1}
 \input{generated/workshop-output-python/exercise-5-15-2}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Influence plot}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-16-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Winsorizing observation \# 22}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-17-1}
 \input{generated/workshop-output-python/exercise-5-17-2}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Multicollinearity}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-18-1}
 \input{generated/workshop-output-python/exercise-5-18-2}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:analysis_of_variance}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Variance and Total Sum of Squares}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-19-1}
 \input{generated/workshop-output-python/exercise-5-19-2}
 \input{generated/workshop-output-python/exercise-5-19-3}
 \input{generated/workshop-output-python/exercise-5-19-4}
 \input{generated/workshop-output-python/exercise-5-19-5}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Anova Type I and Type II}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-20-1}
 \input{generated/workshop-output-python/exercise-5-20-2}
 \input{generated/workshop-output-python/exercise-5-20-3}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Anova with interactions}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-21-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Comparing models}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-22-1}
 \input{generated/workshop-output-python/exercise-5-22-2}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:testing_model_assumptions}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Testing normality}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-23-1}
 \input{generated/workshop-output-python/exercise-5-23-2}
 \input{generated/workshop-output-python/exercise-5-23-3}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Testing heteroskedasticity}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-24-1}
 \input{generated/workshop-output-python/exercise-5-24-2}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Testing autocorrelation}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-25-1}
 \input{generated/workshop-output-python/exercise-5-25-2}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{First-order autocorrelation correction}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-26-1}
 \input{generated/workshop-output-python/exercise-5-26-2}
 \input{generated/workshop-output-python/exercise-5-26-3}
 \input{generated/workshop-output-python/exercise-5-26-4}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Constructing a refined model}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-27-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Coefficient test of the refined model}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-28-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Re-running the model assumption tests}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-29-1}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:testing_significance}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Testing the significance of the model}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-30-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Showcase: Visualizing the uncertainty in the model parameters}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-31-1}
 \input{generated/workshop-output-python/exercise-5-31-2}
 \input{generated/workshop-output-python/exercise-5-31-3}
 \input{generated/workshop-output-python/exercise-5-31-4}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:expectations}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Showcase: Confidence and prediction intervals}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-32-1}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Creating expectations for the hold-out period}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-33-1}
 \input{generated/workshop-output-python/exercise-5-33-2}
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Plotting expectations against recorded values}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-34-1}
+
+\end{exercise}
+
+\subsection{Section \ref{sec:auditor_response}}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Combining 12 monthly predictions}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-35-1}
 \input{generated/workshop-output-python/exercise-5-35-2}
 \input{generated/workshop-output-python/exercise-5-35-3}
+
+
+\end{exercise}
+
+\begin{exercise}
+
+\Needspace{4\baselineskip}
+\textbf{Level of assurance for the annual prediction}
+\nopagebreak[4]
+
 \input{generated/workshop-output-python/exercise-5-36-1}
 \input{generated/workshop-output-python/exercise-5-36-2}
 \input{generated/workshop-output-python/exercise-5-36-3}
@@ -3047,7 +3392,9 @@ To run the exercises in this workshop, we need to load a few packages.
 \input{generated/workshop-output-python/exercise-5-36-5}
 \input{generated/workshop-output-python/exercise-5-36-6}
 
+
 \end{exercise}
+
 
 % section workshop_python (end)
 

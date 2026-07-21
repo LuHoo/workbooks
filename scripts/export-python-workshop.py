@@ -199,7 +199,9 @@ def render_markdown_cell(lines: list[str]) -> list[str]:
             if m:
                 out.append("")
                 out.append(r"\begin{exercise}")
+                out.append(r"\Needspace{4\baselineskip}")
                 out.append(r"\textbf{" + convert_inline(m.group(2).strip()) + "}")
+                out.append(r"\nopagebreak[4]")
                 out.append("")
             else:
                 out.append(r"\subsection*{" + convert_inline(title) + "}")

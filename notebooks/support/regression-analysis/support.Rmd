@@ -1228,7 +1228,7 @@ cat("Lower bound:", ADR_lower, "\n")
 cat("Upper bound:", ADR_upper, "\n")
 ```
 
-The quantities `c_L` and `c_U` are standardized decision bounds. Multiplying them by `annual_se` converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+The quantities `c_L` and `c_U` are standardized decision bounds. When we multiply them by `annual_se` converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
 
 ```{r}
 # Acceptable bounds for recorded annual revenue
