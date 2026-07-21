@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The Breusch-Godfrey test is executed through \ttblue{bgtest}.
+\noindent The Breusch-Godfrey test is executed through
+\ttblue{bgtest}.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +17,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, nlags=3)
+bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, 
+nlags=3)
 print({'LM statistic': bg_lm, 'p_value': bg_p})
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
@@ -29,4 +31,7 @@ LM test = 7.1466, df = 3, p-value = 0.06737
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
+\noindent The $p$ value of the test statistic is 0.06737.
+Therefore, we reject the null hypothesis at
+levels below 0.06737, suggesting marginal
+evidence of autocorrelation in the residuals.

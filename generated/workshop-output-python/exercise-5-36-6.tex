@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent With the current implementation and the audit parameters above, the achieved assurance is approximately 29.4\% in each direction.
+\noindent With the current implementation and the audit
+parameters above, the achieved assurance is
+approximately 29.4\% in each direction.
 Finally, we evaluate the observed annual difference.
 
 \par\addvspace{\topsep}
@@ -18,14 +20,18 @@ Finally, we evaluate the observed annual difference.
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 if annual_difference < ADR_lower:
-    print('The annual difference indicates a potential understatement requiring investigation.')
+    print('The annual difference indicates a potential 
+understatement requiring investigation.')
 elif annual_difference > ADR_upper:
-    print('The annual difference indicates a potential overstatement requiring investigation.')
+    print('The annual difference indicates a potential 
+overstatement requiring investigation.')
 else:
-    print('The annual difference falls within the acceptable difference range.')
+    print('The annual difference falls within the 
+acceptable difference range.')
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-The annual difference falls within the acceptable difference range.
+The annual difference falls within the acceptable 
+difference range.
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

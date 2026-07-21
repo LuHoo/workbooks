@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Compare the recorded revenue with the expectations.
+\noindent Compare the recorded revenue with the
+expectations.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -24,7 +25,8 @@ comparison = pd.DataFrame({
     'Expected': np.round(predictions['fit'].to_numpy(), 0),
     'Upper': np.round(predictions['upr'].to_numpy(), 0),
 })
-comparison['Difference'] = comparison['Recorded'] - comparison['Expected']
+comparison['Difference'] = comparison['Recorded'] - 
+comparison['Expected']
 display(comparison)
 display(print(comparison['Recorded'].sum()))
 display(print(comparison['Expected'].sum()))

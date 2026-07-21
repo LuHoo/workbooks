@@ -5,7 +5,10 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent On page 120 we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in \ttblue{R} with the following code:
+\noindent On page 120 we calculated significance levels for
+the occurrence of finding one or two errors.
+These probabilities are calculated in \ttblue{R}
+with the following code:
 
 \par\addvspace{\topsep}
 \begingroup
@@ -27,4 +30,7 @@ hypergeom.cdf(2, 1200, 60, 102)
 \endgroup
 \par\addvspace{\topsep}
 \noindent Refer to Equation 2.1.
-Remember that \ttblue{R} uses \ttblue{q} for the number of errors found $k$, \ttblue{m} for the number of deviations in the population $M$, \ttblue{n} for the number of correct items $N - M$, and \ttblue{k} for the sample size $n$.
+Remember that \ttblue{R} uses \ttblue{q} for the number of
+errors found $k$, \ttblue{m} for the number of deviations
+in the population $M$, \ttblue{n} for the number of correct
+items $N - M$, and \ttblue{k} for the sample size $n$.

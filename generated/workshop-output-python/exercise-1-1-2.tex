@@ -5,7 +5,14 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent \emph{Cumulative probabilities} $P(k \leq k)$ (the probability of finding not more than $k$ errors) are obtained with \ttblue{phyper()}. For example, if we are interested in the probability of finding no more than one error, we use \ttblue{phyper(1, 17, 314, 60)}. In this case the prefix \ttblue{p} indicates the (cumulative) probability function.
+\noindent \emph{Cumulative probabilities} $P(k \leq k)$
+(the probability of finding not more than $k$
+errors) are obtained with \ttblue{phyper()}. For
+example, if we are interested in the probability
+of finding no more than one error, we use
+\ttblue{phyper(1, 17, 314, 60)}. In this case the
+prefix \ttblue{p} indicates the (cumulative)
+probability function.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +24,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 hypergeom.cdf(1, M=(17) + (314), n=17, N=60)
-hypergeom.pmf(0, M=(17) + (314), n=17, N=60) + hypergeom.pmf(1, M=(17) + (314), n=17, N=60)
+hypergeom.pmf(0, M=(17) + (314), n=17, N=60) + 
+hypergeom.pmf(1, M=(17) + (314), n=17, N=60)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.1518249

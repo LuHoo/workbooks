@@ -24,19 +24,26 @@ first_digit = pd.DataFrame({
 })
 second_digit = pd.DataFrame({
     'digit': np.arange(0, 10),
-    'probability': [sum(np.log10(1 + 1 / (10 * np.arange(1, 10) + d))) for d in range(10)],
+    'probability': [sum(np.log10(1 + 1 / (10 * np.arange(1,
+ 10) + d))) for d in range(10)],
     'position': 'Second',
 })
 third_digit = pd.DataFrame({
     'digit': np.arange(0, 10),
-    'probability': [sum(np.log10(1 + 1 / (10 * np.arange(10, 100) + d))) for d in range(10)],
+    'probability': [sum(np.log10(1 + 1 / (10 * 
+np.arange(10, 100) + d))) for d in range(10)],
     'position': 'Third',
 })
-benford_data = pd.concat([first_digit, second_digit, third_digit], ignore_index=True)
-fig, axes = plt.subplots(3, 1, figsize=(7, 10), sharex=False)
-for idx, position in enumerate(['First', 'Second', 'Third']):
-    subset = benford_data[benford_data['position'] == position]
-    display(axes[idx].plot(subset['digit'], subset['probability'], marker='o'))
+benford_data = pd.concat([first_digit, second_digit, 
+third_digit], ignore_index=True)
+fig, axes = plt.subplots(3, 1, figsize=(7, 10), 
+sharex=False)
+for idx, position in enumerate(['First', 'Second', 
+'Third']):
+    subset = benford_data[benford_data['position'] == 
+position]
+    display(axes[idx].plot(subset['digit'], 
+subset['probability'], marker='o'))
     display(axes[idx].set_title(position))
     display(axes[idx].set_xlabel('Digit'))
     display(axes[idx].set_ylabel('Probability'))

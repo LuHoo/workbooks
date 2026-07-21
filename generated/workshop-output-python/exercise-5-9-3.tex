@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Note the special operator \ttblue{|}, that can be expressed as 'given the value of'. To call this relationship, we use
+\noindent Note the special operator \ttblue{|}, that can be
+expressed as 'given the value of'. To call this
+relationship, we use
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,32 +18,54 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-ussteamco_mod_2 = fit_lm('ussteamco_mod_2', 'revenue ~ production * summer + coolDD * summer + heatDD * summer', USSteamCoEstim)
+ussteamco_mod_2 = fit_lm('ussteamco_mod_2', 'revenue ~ 
+production * summer + coolDD * summer + heatDD * summer', 
+USSteamCoEstim)
 summary_model('ussteamco_mod_2')
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 
 Call:
-lm(formula = revenue ~ production * summer + coolDD * summer +
-    heatDD * summer, data = structure(list(revenue = c(23304096,
-24552000, 14804728, 11265320, 5945904, 10379712, 13617528, 14092512,
-12085472, 11957032, 10153800, 15093880, 22474848, 18027296, 14575856,
-9064488, 6582400, 10418400, 14122824, 14779280, 12003432, 4809952,
-7439448, 18035344, 20113488, 23725040, 20387368, 17811224, 6082328,
-12064192, 16033016, 14311800, 12291192, 9845128, 8933832, 17613912
-), production = c(659640, 686144, 416464, 324456, 151104, 479264,
-708472, 687728, 567424, 392328, 254504, 358888, 566528, 473016,
-410248, 264424, 217264, 499288, 732520, 725056, 608376, 369656,
-192032, 420920, 531336, 587704, 505272, 427312, 155032, 394400,
-749152, 642688, 594184, 372080, 292648, 562320), summer = c(0,
-0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,
-0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0), coolDD = c(0, 0, 0,
-1, 72, 239, 486, 346, 195, 24, 0, 0, 0, 0, 0, 18, 102, 254, 484,
-430, 184, 31, 0, 0, 0, 0, 0, 0, 87, 278, 505, 340, 129, 49, 0,
-0), heatDD = c(1021, 794, 717, 354, 114, 4, 0, 0, 19, 223, 383,
-662, 846, 680, 438, 294, 69, 11, 0, 0, 9, 173, 591, 681, 899,
-851, 755, 366, 128, 4, 0, 0, 31, 172, 577, 826)), terms = revenue ~
-    production * summer + coolDD * summer + heatDD * summer, row.names = c(NA,
+lm(formula = revenue ~ production * summer + coolDD * 
+summer +
+    heatDD * summer, data = structure(list(revenue = 
+c(23304096,
+24552000, 14804728, 11265320, 5945904, 10379712, 13617528, 
+14092512,
+12085472, 11957032, 10153800, 15093880, 22474848, 18027296,
+ 14575856,
+9064488, 6582400, 10418400, 14122824, 14779280, 12003432, 
+4809952,
+7439448, 18035344, 20113488, 23725040, 20387368, 17811224, 
+6082328,
+12064192, 16033016, 14311800, 12291192, 9845128, 8933832, 
+17613912
+), production = c(659640, 686144, 416464, 324456, 151104, 
+479264,
+708472, 687728, 567424, 392328, 254504, 358888, 566528, 
+473016,
+410248, 264424, 217264, 499288, 732520, 725056, 608376, 
+369656,
+192032, 420920, 531336, 587704, 505272, 427312, 155032, 
+394400,
+749152, 642688, 594184, 372080, 292648, 562320), summer = 
+c(0,
+0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+ 0,
+0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0), coolDD = c(0, 0,
+ 0,
+1, 72, 239, 486, 346, 195, 24, 0, 0, 0, 0, 0, 18, 102, 254,
+ 484,
+430, 184, 31, 0, 0, 0, 0, 0, 0, 87, 278, 505, 340, 129, 49,
+ 0,
+0), heatDD = c(1021, 794, 717, 354, 114, 4, 0, 0, 19, 223, 
+383,
+662, 846, 680, 438, 294, 69, 11, 0, 0, 9, 173, 591, 681, 
+899,
+851, 755, 366, 128, 4, 0, 0, 31, 172, 577, 826)), terms = 
+revenue ~
+    production * summer + coolDD * summer + heatDD * 
+summer, row.names = c(NA,
 36L), class = "data.frame"))
 
 Residuals:
@@ -51,7 +75,8 @@ Residuals:
 Coefficients:
                     Estimate Std. Error t value Pr(>|t|)
 (Intercept)        4.672e+05  1.472e+06   0.317  0.75328
-production         3.426e+01  4.379e+00   7.824  1.6e-08 ***
+production         3.426e+01  4.379e+00   7.824  1.6e-08 
+***
 summer             4.923e+06  3.228e+06   1.525  0.13840
 coolDD            -1.209e+05  4.361e+04  -2.773  0.00977 **
 heatDD             1.495e+03  3.047e+03   0.491  0.62754
@@ -59,7 +84,8 @@ production:summer -2.363e+01  6.858e+00  -3.446  0.00181 **
 summer:coolDD      1.244e+05  4.393e+04   2.833  0.00846 **
 summer:heatDD     -1.334e+04  2.190e+04  -0.609  0.54734
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' 
+' 1
 
 Residual standard error: 1681000 on 28 degrees of freedom
 Multiple R-squared:  0.917,	Adjusted R-squared:  0.8963
@@ -67,5 +93,11 @@ F-statistic:  44.2 on 7 and 28 DF,  p-value: 1.776e-13
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The formula specified in the \ttblue{lm} function, \ttblue{revenue $\sim$ production * summer + coolDD * summer + heatDD * summer} can also be written as \ttblue{revenue $\sim$ (production + coolDD + heatDD) * summer}.
-As a result, this further improved the fit of the model. The residual standard deviation decreased to 1,680,711, and $r^2$ improved to 0.917.
+\noindent The formula specified in the \ttblue{lm}
+function, \ttblue{revenue $\sim$ production *
+summer + coolDD * summer + heatDD * summer} can
+also be written as \ttblue{revenue $\sim$
+(production + coolDD + heatDD) * summer}.
+As a result, this further improved the fit of the model.
+The residual standard deviation decreased to 1,680,711, and
+$r^2$ improved to 0.917.

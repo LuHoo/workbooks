@@ -5,8 +5,15 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent If we draw a sample of size $n = 1,100$ from the \ttblue{accounts\_receivable} population, the largest sampling units have an almost 100\% inclusion probability and with a selection method such as \ttblue{random} are likely to be hit more than once.
-For example, the data file \ttblue{accounts\_receivable}, that comes with the \ttblue{FSaudit} package, has the following six largest amounts:
+\noindent If we draw a sample of size $n = 1,100$ from the
+\ttblue{accounts\_receivable} population, the
+largest sampling units have an almost 100\%
+inclusion probability and with a selection method
+such as \ttblue{random} are likely to be hit more
+than once.
+For example, the data file \ttblue{accounts\_receivable},
+that comes with the \ttblue{FSaudit} package, has the
+following six largest amounts:
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +24,8 @@ For example, the data file \ttblue{accounts\_receivable}, that comes with the \t
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-accounts_receivable.sort_values("amount", ascending=False).iloc[:6, :3]
+accounts_receivable.sort_values("amount", 
+ascending=False).iloc[:6, :3]
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 # A tibble: 6 × 3

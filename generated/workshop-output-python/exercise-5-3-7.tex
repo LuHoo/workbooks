@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Figure 5.1 shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
+\noindent Figure 5.1 shows a scatter plot of the
+independent variable production ($x$-axis) and
+the dependent variable revenue ($y$-axis) for the
+Case: US SteamCo. The plot is an easy means to
+get a feel for the relationship.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +21,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 fig, ax = plt.subplots(figsize=(7, 5))
-sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)
+sns.scatterplot(data=USSteamCoEstim, x='production', 
+y='revenue', color='#00338D', ax=ax)
 ax.set_xlabel('Production (x 1000 lb)')
 ax.set_ylabel('Revenue ($)')
 plt.tight_layout()

@@ -5,7 +5,12 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Then we transform all variables using the estimated \(\rho\). When the model includes interaction terms, we first construct the interaction terms in their original form and only then transform those interaction terms. We should not multiply separately transformed main effects.
+\noindent Then we transform all variables using the
+estimated \(\rho\). When the model includes
+interaction terms, we first construct the
+interaction terms in their original form and only
+then transform those interaction terms. We should
+not multiply separately transformed main effects.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,21 +24,43 @@
 n_obs_mod3 = len(USSteamCoEstim2)
 current_period = USSteamCoEstim2.iloc[1:, :].copy()
 lagged_period = USSteamCoEstim2.iloc[:-1, :].copy()
-current_period['prod_summer'] = current_period['production'] * current_period['summer']
-current_period['heat_summer'] = current_period['heatDD'] * current_period['summer']
-current_period['cool_summer'] = current_period['coolDD'] * current_period['summer']
-lagged_period['prod_summer'] = lagged_period['production'] * lagged_period['summer']
-lagged_period['heat_summer'] = lagged_period['heatDD'] * lagged_period['summer']
-lagged_period['cool_summer'] = lagged_period['coolDD'] * lagged_period['summer']
+current_period['prod_summer'] = 
+current_period['production'] * current_period['summer']
+current_period['heat_summer'] = current_period['heatDD'] * 
+current_period['summer']
+current_period['cool_summer'] = current_period['coolDD'] * 
+current_period['summer']
+lagged_period['prod_summer'] = lagged_period['production'] 
+* lagged_period['summer']
+lagged_period['heat_summer'] = lagged_period['heatDD'] * 
+lagged_period['summer']
+lagged_period['cool_summer'] = lagged_period['coolDD'] * 
+lagged_period['summer']
 transformed_data = current_period.copy()
-transformed_data['revenue_adj'] = current_period['revenue'].to_numpy() - rho * lagged_period['revenue'].to_numpy()
-transformed_data['production_adj'] = current_period['production'].to_numpy() - rho * lagged_period['production'].to_numpy()
-transformed_data['heatDD_adj'] = current_period['heatDD'].to_numpy() - rho * lagged_period['heatDD'].to_numpy()
-transformed_data['coolDD_adj'] = current_period['coolDD'].to_numpy() - rho * lagged_period['coolDD'].to_numpy()
-transformed_data['summer_adj'] = current_period['summer'].to_numpy() - rho * lagged_period['summer'].to_numpy()
-transformed_data['prod_summer_adj'] = current_period['prod_summer'].to_numpy() - rho * lagged_period['prod_summer'].to_numpy()
-transformed_data['heat_summer_adj'] = current_period['heat_summer'].to_numpy() - rho * lagged_period['heat_summer'].to_numpy()
-transformed_data['cool_summer_adj'] = current_period['cool_summer'].to_numpy() - rho * lagged_period['cool_summer'].to_numpy()
+transformed_data['revenue_adj'] = 
+current_period['revenue'].to_numpy() - rho * 
+lagged_period['revenue'].to_numpy()
+transformed_data['production_adj'] = 
+current_period['production'].to_numpy() - rho * 
+lagged_period['production'].to_numpy()
+transformed_data['heatDD_adj'] = 
+current_period['heatDD'].to_numpy() - rho * 
+lagged_period['heatDD'].to_numpy()
+transformed_data['coolDD_adj'] = 
+current_period['coolDD'].to_numpy() - rho * 
+lagged_period['coolDD'].to_numpy()
+transformed_data['summer_adj'] = 
+current_period['summer'].to_numpy() - rho * 
+lagged_period['summer'].to_numpy()
+transformed_data['prod_summer_adj'] = 
+current_period['prod_summer'].to_numpy() - rho * 
+lagged_period['prod_summer'].to_numpy()
+transformed_data['heat_summer_adj'] = 
+current_period['heat_summer'].to_numpy() - rho * 
+lagged_period['heat_summer'].to_numpy()
+transformed_data['cool_summer_adj'] = 
+current_period['cool_summer'].to_numpy() - rho * 
+lagged_period['cool_summer'].to_numpy()
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

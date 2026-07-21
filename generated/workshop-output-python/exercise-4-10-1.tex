@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Finally, we present results from the \ttblue{pps} evaluation method. For this purpose, we use audit values stored in the variable \ttblue{av2}. The total error amount reflected in \ttblue{av2} is 450,000.
+\noindent Finally, we present results from the \ttblue{pps}
+evaluation method. For this purpose, we use audit
+values stored in the variable \ttblue{av2}. The
+total error amount reflected in \ttblue{av2} is
+450,000.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +21,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 from IPython.display import display
-myResults["av2"] = accounts_receivable.set_index("invoice").loc[myResults["item"], "av2"].to_numpy()
+myResults["av2"] = accounts_receivable.set_index("invoice")
+.loc[myResults["item"], "av2"].to_numpy()
 display(ar.evaluate(av=myResults["av2"], evalMeth="pps"))
 display(ar.eval_results["Error estimate"])
 \end{Verbatim}

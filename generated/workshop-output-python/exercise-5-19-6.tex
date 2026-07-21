@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent As a quick cross-check, we can also reverse the variance formula and recover Total Sum of Squares directly.
+\noindent As a quick cross-check, we can also reverse the
+variance formula and recover Total Sum of Squares
+directly.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -23,4 +25,9 @@ np.var(USSteamCoEstim["revenue"], ddof=1) * (n_obs - 1)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent This equality holds because \ttblue{var()} divides by $n - 1$. It is a useful consistency check, but the step-by-step calculation above remains the clearer way to see how Total Sum of Squares is built from the deviations around the mean.
+\noindent This equality holds because \ttblue{var()}
+divides by $n - 1$. It is a useful consistency
+check, but the step-by-step calculation above
+remains the clearer way to see how Total Sum of
+Squares is built from the deviations around the
+mean.

@@ -5,7 +5,10 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Figure 5.10 provides the Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$ values and influential observations.
+\noindent Figure 5.10 provides the Influence index plots.
+From bottom to top: Leverage points, regression
+outliers, their respective Bonferroni $p$ values
+and influential observations.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -18,12 +21,16 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 from IPython.display import display
 influence = ussteamco_mod_2.get_influence()
-fig, axes = plt.subplots(3, 1, figsize=(10, 10), sharex=True)
-display(axes[0].plot(influence.hat_matrix_diag, marker='o'))
+fig, axes = plt.subplots(3, 1, figsize=(10, 10), 
+sharex=True)
+display(axes[0].plot(influence.hat_matrix_diag, 
+marker='o'))
 display(axes[0].set_ylabel('Leverage'))
-display(axes[1].plot(influence.resid_studentized_external, marker='o'))
+display(axes[1].plot(influence.resid_studentized_external, 
+marker='o'))
 display(axes[1].set_ylabel('Studentized residual'))
-display(axes[2].plot(influence.cooks_distance[0], marker='o'))
+display(axes[2].plot(influence.cooks_distance[0], 
+marker='o'))
 display(axes[2].set_ylabel("Cook's distance"))
 display(axes[2].set_xlabel('Observation'))
 plt.tight_layout()

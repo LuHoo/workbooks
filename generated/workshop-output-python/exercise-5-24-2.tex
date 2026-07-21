@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The formal statistical test is the Breusch-Pagan test.
+\noindent The formal statistical test is the Breusch-Pagan
+test.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +17,9 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_3.resid, ussteamco_mod_3.model.exog)
+bp_stat, bp_p, _, _ = 
+het_breuschpagan(ussteamco_mod_3.resid, 
+ussteamco_mod_3.model.exog)
 print({'LM statistic': bp_stat, 'p_value': bp_p})
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

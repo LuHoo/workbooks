@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Next, we set the audit parameters and construct the acceptable difference range. The acceptable difference range is expressed around zero, because it is applied to the difference between the recorded amount and the expectation.
+\noindent Next, we set the audit parameters and construct
+the acceptable difference range. The acceptable
+difference range is expressed around zero,
+because it is applied to the difference between
+the recorded amount and the expectation.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -24,7 +28,8 @@ c_L = t_dist.ppf(beta / 2, df=df)
 c_U = t_dist.ppf(1 - beta / 2, df=df)
 ADR_lower = c_L * annual_se
 ADR_upper = c_U * annual_se
-print('Acceptable Difference Range for the annual difference:')
+print('Acceptable Difference Range for the annual 
+difference:')
 print('Lower bound:', ADR_lower)
 print('Upper bound:', ADR_upper)
 \end{Verbatim}

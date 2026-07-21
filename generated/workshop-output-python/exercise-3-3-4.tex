@@ -5,8 +5,12 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent In this call, the numbers in brackets refer to the 4th and 5th row of the Estimates table. The first column stores the results of the mean-per-unit estimator.
-Alternatively, we can refer to the label of the relevant column.
+\noindent In this call, the numbers in brackets refer to
+the 4th and 5th row of the Estimates table. The
+first column stores the results of the
+mean-per-unit estimator.
+Alternatively, we can refer to the label of the relevant
+column.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +21,8 @@ Alternatively, we can refer to the label of the relevant column.
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-mySample.eval_results["Estimates"].iloc[3:4 + 1, mySample.eval_results["Estimates"].columns.get_loc("mpu")]
+mySample.eval_results["Estimates"].iloc[3:4 + 1, 
+mySample.eval_results["Estimates"].columns.get_loc("mpu")]
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 6877444 8246274

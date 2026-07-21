@@ -5,8 +5,21 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The \ttblue{step} function can be used to implement both backward and forward methods. The \ttblue{direction} argument specifies whether the stepwise algorithm should proceed forward (\ttblue{forward}), backward (\ttblue{backward}), or both (\ttblue{both}). The \ttblue{scope} argument specifies the range of models to be searched, whereas the \ttblue{k} argument may be used to use BIC instead of the default AIC as a criterion.
-We start with the forward method. From a model that only uses the constant (\ttblue{revenue $\sim$ 1}), we add variables one by one. The variable that the largest effect on the criterion, in this example, the default AIC, is selected for inclusion in the model.
+\noindent The \ttblue{step} function can be used to
+implement both backward and forward methods. The
+\ttblue{direction} argument specifies whether the
+stepwise algorithm should proceed forward
+(\ttblue{forward}), backward (\ttblue{backward}),
+or both (\ttblue{both}). The \ttblue{scope}
+argument specifies the range of models to be
+searched, whereas the \ttblue{k} argument may be
+used to use BIC instead of the default AIC as a
+criterion.
+We start with the forward method. From a model that only
+uses the constant (\ttblue{revenue $\sim$ 1}), we add
+variables one by one. The variable that the largest effect
+on the criterion, in this example, the default AIC, is
+selected for inclusion in the model.
 
 \par\addvspace{\topsep}
 \begingroup

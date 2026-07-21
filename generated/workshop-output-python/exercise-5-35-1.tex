@@ -5,8 +5,17 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We use Equations 5.29 and 5.30 to construct a prediction interval for total revenue for the year under audit. The annual expectation is the sum of the 12 monthly expectations.
-To keep the derivation transparent, we first collect the monthly expectations, then combine them into an annual expectation, and finally compute the prediction standard error of that annual total. The design-matrix calculation accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients in all 12 months.
+\noindent We use Equations 5.29 and 5.30 to construct a
+prediction interval for total revenue for the
+year under audit. The annual expectation is the
+sum of the 12 monthly expectations.
+To keep the derivation transparent, we first collect the
+monthly expectations, then combine them into an annual
+expectation, and finally compute the prediction standard
+error of that annual total. The design-matrix calculation
+accounts for the covariance between the monthly
+expectations caused by using the same estimated regression
+coefficients in all 12 months.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -21,10 +30,12 @@ df_res = int(ussteamco_mod_5.df_resid)
 monthly_predictions = pred_df['fit'].to_numpy()
 annual_prediction = monthly_predictions.sum()
 new_df = USSteamCoHold.copy()
-X_hold = smf.ols(ussteamco_mod_5.model.formula, data=new_df).exog
+X_hold = smf.ols(ussteamco_mod_5.model.formula, 
+data=new_df).exog
 one = np.ones(X_hold.shape[0])
 vcov = ussteamco_mod_5.cov_params().to_numpy()
-var_mean_annual = float(one.T @ X_hold @ vcov @ X_hold.T @ one)
+var_mean_annual = float(one.T @ X_hold @ vcov @ X_hold.T @ 
+one)
 sigma2 = ussteamco_mod_5.mse_resid
 var_future_annual = X_hold.shape[0] * sigma2
 annual_var = var_mean_annual + var_future_annual
@@ -32,12 +43,15 @@ annual_se = np.sqrt(annual_var)
 t_score = t_dist.ppf(0.995, df=df_res)
 annual_lower = annual_prediction - t_score * annual_se
 annual_upper = annual_prediction + t_score * annual_se
-print('Variance from coefficient uncertainty:', var_mean_annual)
-print('Variance from future residual variation:', var_future_annual)
+print('Variance from coefficient uncertainty:', 
+var_mean_annual)
+print('Variance from future residual variation:', 
+var_future_annual)
 print('Lower Bound:', round(annual_lower, 0))
 print('Annual Prediction:', round(annual_prediction, 0))
 print('Upper Bound:', round(annual_upper, 0))
-print('Annual prediction standard error:', round(annual_se, 0))
+print('Annual prediction standard error:', round(annual_se,
+ 0))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Variance from coefficient uncertainty: 14886605275947

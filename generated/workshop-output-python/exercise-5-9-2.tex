@@ -17,11 +17,18 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 from IPython.display import display
 plot_df = USSteamCoEstim.copy()
-plot_df['summer_fact'] = plot_df['summer'].map({0: 'No', 1: 'Yes'})
+plot_df['summer_fact'] = plot_df['summer'].map({0: 'No', 1:
+ 'Yes'})
 fig, ax = plt.subplots(figsize=(8, 5))
-sns.scatterplot(data=plot_df, x='production', y='revenue', hue='summer_fact', palette={'No': '#00338D', 'Yes': '#BC204B'}, ax=ax)
-display(sns.regplot(data=plot_df[plot_df['summer_fact'] == 'No'], x='production', y='revenue', scatter=False, color='#00338D', ax=ax))
-display(sns.regplot(data=plot_df[plot_df['summer_fact'] == 'Yes'], x='production', y='revenue', scatter=False, color='#BC204B', ax=ax))
+sns.scatterplot(data=plot_df, x='production', y='revenue', 
+hue='summer_fact', palette={'No': '#00338D', 'Yes': 
+'#BC204B'}, ax=ax)
+display(sns.regplot(data=plot_df[plot_df['summer_fact'] == 
+'No'], x='production', y='revenue', scatter=False, 
+color='#00338D', ax=ax))
+display(sns.regplot(data=plot_df[plot_df['summer_fact'] == 
+'Yes'], x='production', y='revenue', scatter=False, 
+color='#BC204B', ax=ax))
 ax.set_xlabel('Production')
 ax.set_ylabel('Revenue')
 plt.tight_layout()

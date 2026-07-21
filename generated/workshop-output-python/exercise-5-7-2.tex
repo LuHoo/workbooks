@@ -5,9 +5,22 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Starting with AIC = 1114.66 of a model with only a constant, \ttblue{R} evaluates the inclusion of each of the available independent variables and their effect on the resulting AIC. In the first step, it appears that including \ttblue{heatDD} has the best effect on AIC, as it reduces from 1114.66 to 1096.56.
-Using this value of AIC = 1096.56 as the new starting value, \ttblue{R} evaluates if inclusion of any of the remaining variables has a favorable effect. It finds that including \ttblue{production} can further reduce the AIC to 1046.11.
-In the last step, we see that including \ttblue{coolDD} does not further reduce the AIC, leading to the final model \ttblue{revenue $\sim$ heatDD + production}. The summary of this model is:
+\noindent Starting with AIC = 1114.66 of a model with only
+a constant, \ttblue{R} evaluates the inclusion of
+each of the available independent variables and
+their effect on the resulting AIC. In the first
+step, it appears that including \ttblue{heatDD}
+has the best effect on AIC, as it reduces from
+1114.66 to 1096.56.
+Using this value of AIC = 1096.56 as the new starting
+value, \ttblue{R} evaluates if inclusion of any of the
+remaining variables has a favorable effect. It finds that
+including \ttblue{production} can further reduce the AIC to
+1046.11.
+In the last step, we see that including \ttblue{coolDD}
+does not further reduce the AIC, leading to the final model
+\ttblue{revenue $\sim$ heatDD + production}. The summary of
+this model is:
 
 \par\addvspace{\topsep}
 \begingroup
@@ -18,12 +31,18 @@ In the last step, we see that including \ttblue{coolDD} does not further reduce 
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-((model_forward.summary() if hasattr(model_forward, 'summary') else model_forward.describe(include='all') if hasattr(model_forward, 'describe') else print('Skipped summary/describe: model_forward has no compatible method')) if 'model_forward' in globals() else print('Skipped summary/describe: model_forward not defined'))
+((model_forward.summary() if hasattr(model_forward, 
+'summary') else model_forward.describe(include='all') if 
+hasattr(model_forward, 'describe') else print('Skipped 
+summary/describe: model_forward has no compatible method'))
+ if 'model_forward' in globals() else print('Skipped 
+summary/describe: model_forward not defined'))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 
 Call:
-lm(formula = revenue ~ heatDD + production, data = USSteamCoEstim)
+lm(formula = revenue ~ heatDD + production, data = 
+USSteamCoEstim)
 
 Residuals:
      Min       1Q   Median       3Q      Max
@@ -35,7 +54,8 @@ Coefficients:
 heatDD      1.048e+04  9.715e+02  10.787 2.35e-12 ***
 production  2.000e+01  1.919e+00  10.423 5.68e-12 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' 
+' 1
 
 Residual standard error: 1962000 on 33 degrees of freedom
 Multiple R-squared:  0.8667,	Adjusted R-squared:  0.8586

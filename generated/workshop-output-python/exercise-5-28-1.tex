@@ -5,7 +5,10 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We first inspect the full summary of the refined model, which contains the coefficient estimates together with their standard errors, $t$ statistics, and $p$ values.
+\noindent We first inspect the full summary of the refined
+model, which contains the coefficient estimates
+together with their standard errors, $t$
+statistics, and $p$ values.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -21,7 +24,8 @@ summary_model('ussteamco_mod_5')
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 
 Call:
-lm(formula = revenue ~ production + coolDD + summer + production:summer +
+lm(formula = revenue ~ production + coolDD + summer + 
+production:summer +
     coolDD:summer, data = USSteamCoEstim2)
 
 Residuals:
@@ -44,11 +48,14 @@ summer                         0.050173 .
 production:summer 0.0000036074991647945 ***
 coolDD:summer     0.0000305685116428762 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' 
+' 1
 
 Residual standard error: 1446190 on 30 degrees of freedom
-Multiple R-squared:  0.931674,	Adjusted R-squared:  0.920286
-F-statistic: 81.8143 on 5 and 30 DF,  p-value: < 0.000000000000000222
+Multiple R-squared:  0.931674,  Adjusted R-squared:  
+0.920286
+F-statistic: 81.8143 on 5 and 30 DF,  p-value: < 
+0.000000000000000222
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

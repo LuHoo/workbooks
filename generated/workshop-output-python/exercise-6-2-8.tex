@@ -18,13 +18,16 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 digits = np.arange(1, 10)
 probabilities = np.log10((digits + 1) / digits)
-benford = pd.DataFrame({'Digit': digits, 'Probability': probabilities})
+benford = pd.DataFrame({'Digit': digits, 'Probability': 
+probabilities})
 fig, ax = plt.subplots(figsize=(7, 4))
-ax.bar(benford['Digit'], benford['Probability'], color='#00338D', width=0.7)
+ax.bar(benford['Digit'], benford['Probability'], 
+color='#00338D', width=0.7)
 ax.set_xlabel('First digit')
 ax.set_ylabel('Probability')
 ax.set_ylim(0, 0.35)
-ax.yaxis.set_major_formatter(plt.matplotlib.ticker.PercentFormatter(1.0))
+ax.yaxis.set_major_formatter(plt.matplotlib.ticker.PercentF
+ormatter(1.0))
 plt.show()
 \end{Verbatim}
 \endgroup

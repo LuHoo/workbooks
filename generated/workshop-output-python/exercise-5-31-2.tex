@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We first calculate the true regression line, along with its confidence interval.
+\noindent We first calculate the true regression line,
+along with its confidence interval.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,14 +17,19 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-true_line = pd.DataFrame({'x': x_extended, 'y': beta_0 + beta_1 * x_extended})
+true_line = pd.DataFrame({'x': x_extended, 'y': beta_0 + 
+beta_1 * x_extended})
 mean_x = np.mean(x_values)
 S_xx = np.sum((x_values - mean_x) ** 2)
-se_fit_true = sigma * np.sqrt(1 / n + ((x_extended - mean_x) ** 2) / S_xx)
+se_fit_true = sigma * np.sqrt(1 / n + ((x_extended - 
+mean_x) ** 2) / S_xx)
 t_value = t_dist.ppf(1 - alpha / 2, df=n - 2)
-ci_upper_true = (beta_0 + beta_1 * x_extended) + t_value * se_fit_true
-ci_lower_true = (beta_0 + beta_1 * x_extended) - t_value * se_fit_true
-ci_bounds_true = pd.DataFrame({'x': x_extended, 'ci_lower': ci_lower_true, 'ci_upper': ci_upper_true})
+ci_upper_true = (beta_0 + beta_1 * x_extended) + t_value * 
+se_fit_true
+ci_lower_true = (beta_0 + beta_1 * x_extended) - t_value * 
+se_fit_true
+ci_bounds_true = pd.DataFrame({'x': x_extended, 'ci_lower':
+ ci_lower_true, 'ci_upper': ci_upper_true})
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We fit a new model using the transformed variables.
+\noindent We fit a new model using the transformed
+variables.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,14 +17,19 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-ussteamco_mod_4 = fit_lm('ussteamco_mod_4', 'revenue_adj ~ production_adj + heatDD_adj + coolDD_adj + summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj', transformed_data)
+ussteamco_mod_4 = fit_lm('ussteamco_mod_4', 'revenue_adj ~ 
+production_adj + heatDD_adj + coolDD_adj + summer_adj + 
+prod_summer_adj + heat_summer_adj + cool_summer_adj', 
+transformed_data)
 summary_model('ussteamco_mod_4')
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 
 Call:
-lm(formula = revenue_adj ~ production_adj + heatDD_adj + coolDD_adj +
-    summer_adj + prod_summer_adj + heat_summer_adj + cool_summer_adj,
+lm(formula = revenue_adj ~ production_adj + heatDD_adj + 
+coolDD_adj +
+    summer_adj + prod_summer_adj + heat_summer_adj + 
+cool_summer_adj,
     data = transformed_data)
 
 Residuals:
@@ -41,7 +47,8 @@ prod_summer_adj -2.283e+01  5.306e+00  -4.303 0.000198 ***
 heat_summer_adj -2.014e+04  1.390e+04  -1.449 0.158894
 cool_summer_adj  8.454e+04  3.375e+04   2.505 0.018590 *
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' 
+' 1
 
 Residual standard error: 1338000 on 27 degrees of freedom
 Multiple R-squared:  0.919,	Adjusted R-squared:  0.898

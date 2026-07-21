@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Figure 5.2 shows the histograms of the data in the US SteamCo estimation set.
+\noindent Figure 5.2 shows the histograms of the data in
+the US SteamCo estimation set.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -23,15 +24,18 @@ plot_specs = [
     ('coolDD', 50, 'Cooling degree days'),
     ('heatDD', 100, 'Heating degree days'),
 ]
-for ax, (column, binwidth, title) in zip(axes.flatten(), plot_specs):
+for ax, (column, binwidth, title) in zip(axes.flatten(), 
+plot_specs):
     series = USSteamCoEstim[column].dropna()
     if series.empty:
         ax.set_title(f'{title} (no data)')
         continue
-    bins = np.arange(series.min(), series.max() + binwidth, binwidth)
+    bins = np.arange(series.min(), series.max() + binwidth,
+ binwidth)
     if len(bins) < 2:
         bins = 10
-    sns.histplot(series, bins=bins, color='#00338D', edgecolor='white', ax=ax)
+    sns.histplot(series, bins=bins, color='#00338D', 
+edgecolor='white', ax=ax)
     ax.set_title(title)
     ax.set_xlabel(column)
     ax.set_ylabel('Count')

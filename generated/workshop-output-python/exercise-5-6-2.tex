@@ -19,7 +19,8 @@
 if 'cor_ussteam' not in globals():
     cor_ussteam = USSteamCoEstim.iloc[:, 1:5].corr()
 fig, ax = plt.subplots(figsize=(7, 6))
-sns.heatmap(cor_ussteam, vmin=-1, vmax=1, cmap='coolwarm', annot=True, fmt='.2f', ax=ax)
+sns.heatmap(cor_ussteam, vmin=-1, vmax=1, cmap='coolwarm', 
+annot=True, fmt='.2f', ax=ax)
 ax.set_title('Correlation matrix')
 plt.tight_layout()
 plt.show()

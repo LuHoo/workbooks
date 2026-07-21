@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Table 5.5 provides the analysis of variance for \ttblue{mod.0}. We apply the \ttblue{anova()} command to perform this analysis.
+\noindent Table 5.5 provides the analysis of variance for
+\ttblue{mod.0}. We apply the \ttblue{anova()}
+command to perform this analysis.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +18,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-anova_ussteamco_mod_0 = model_anova('ussteamco_mod_0', typ=1)
+anova_ussteamco_mod_0 = model_anova('ussteamco_mod_0', 
+typ=1)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Analysis of Variance Table
@@ -26,7 +29,8 @@ Response: revenue
 production  1 3.7804e+14 3.7804e+14  22.353 3.86e-05 ***
 Residuals  34 5.7503e+14 1.6913e+13
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' 
+' 1
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

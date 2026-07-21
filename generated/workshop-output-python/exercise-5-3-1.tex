@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The \ttblue{summary} command produces summary statistics of all variables in the dataset, the length (number of data points) for character types (such as \ttblue{month}) and distribution statistics for numeric types.
+\noindent The \ttblue{summary} command produces summary
+statistics of all variables in the dataset, the
+length (number of data points) for character
+types (such as \ttblue{month}) and distribution
+statistics for numeric types.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +20,12 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-((USSteamCo.summary() if hasattr(USSteamCo, 'summary') else USSteamCo.describe(include='all') if hasattr(USSteamCo, 'describe') else print('Skipped summary/describe: USSteamCo has no compatible method')) if 'USSteamCo' in globals() else print('Skipped summary/describe: USSteamCo not defined'))
+((USSteamCo.summary() if hasattr(USSteamCo, 'summary') else
+ USSteamCo.describe(include='all') if hasattr(USSteamCo, 
+'describe') else print('Skipped summary/describe: USSteamCo
+ has no compatible method')) if 'USSteamCo' in globals() 
+else print('Skipped summary/describe: USSteamCo not 
+defined'))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
     month              revenue           production

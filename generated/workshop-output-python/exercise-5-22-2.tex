@@ -5,23 +5,71 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The first three AIC values correspond to the final fitted objects returned by the forward, backward, and both-direction stepwise procedures. They are identical because \ttblue{model\_forward}, \ttblue{model\_backward}, and \ttblue{fit\_both} all end at the same model, namely \ttblue{revenue ~ production + heatDD}.
-The AIC values of \ttblue{mod.0}, \ttblue{model\_backward}, \ttblue{mod.1}, and \ttblue{mod.2} can also be compared directly because all four models are fitted to the same response data (\ttblue{USSteamCoEstim}). Model \ttblue{mod.3} is fitted after winsorizing observation 22 and therefore uses a modified response variable. Since the likelihood is computed from the observed responses, the AIC (and BIC) of \ttblue{mod.3} is not directly comparable with those of the earlier models. Instead, \ttblue{mod.3} should be regarded as a sensitivity analysis demonstrating the effect of mitigating the influence of an outlying observation.
-The \ttblue{step()} output shows a different sequence of AIC values because, at each step, it compares the current model with candidate one-step additions or deletions. For example, the forward search starts at AIC = 1114.66 for the intercept-only model, moves to AIC = 1096.56 after adding \ttblue{heatDD}, and then moves to AIC = 1046.11 after adding \ttblue{production}. The backward search starts from the full model at AIC = 1047.68, then drops \ttblue{coolDD} and reaches the same final model at AIC = 1046.11.
-Those \ttblue{step()} AIC numbers do not exactly match the values returned by \ttblue{AIC()} for the final fitted objects. The reason is that \ttblue{step()} reports an AIC-like criterion that is sufficient for comparing candidate models within the procedure, while \ttblue{AIC()} reports the full Gaussian AIC for the fitted model object.
-The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
+\noindent The first three AIC values correspond to the
+final fitted objects returned by the forward,
+backward, and both-direction stepwise procedures.
+They are identical because
+\ttblue{model\_forward},
+\ttblue{model\_backward}, and \ttblue{fit\_both}
+all end at the same model, namely \ttblue{revenue
+~ production + heatDD}.
+The AIC values of \ttblue{mod.0}, \ttblue{model\_backward},
+\ttblue{mod.1}, and \ttblue{mod.2} can also be compared
+directly because all four models are fitted to the same
+response data (\ttblue{USSteamCoEstim}). Model
+\ttblue{mod.3} is fitted after winsorizing observation 22
+and therefore uses a modified response variable. Since the
+likelihood is computed from the observed responses, the AIC
+(and BIC) of \ttblue{mod.3} is not directly comparable with
+those of the earlier models. Instead, \ttblue{mod.3} should
+be regarded as a sensitivity analysis demonstrating the
+effect of mitigating the influence of an outlying
+observation.
+The \ttblue{step()} output shows a different sequence of
+AIC values because, at each step, it compares the current
+model with candidate one-step additions or deletions. For
+example, the forward search starts at AIC = 1114.66 for the
+intercept-only model, moves to AIC = 1096.56 after adding
+\ttblue{heatDD}, and then moves to AIC = 1046.11 after
+adding \ttblue{production}. The backward search starts from
+the full model at AIC = 1047.68, then drops \ttblue{coolDD}
+and reaches the same final model at AIC = 1046.11.
+Those \ttblue{step()} AIC numbers do not exactly match the
+values returned by \ttblue{AIC()} for the final fitted
+objects. The reason is that \ttblue{step()} reports an
+AIC-like criterion that is sufficient for comparing
+candidate models within the procedure, while \ttblue{AIC()}
+reports the full Gaussian AIC for the fitted model object.
+The Akaike Information Criterion (AIC) provides a penalized
+measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
-where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters.
-For a linear regression model with normally distributed errors, this log-likelihood takes the form
-$\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right) \right]$,
+where $\log \hat{L}$ is the maximized log-likelihood of the
+model and $k$ is the number of estimated parameters.
+For a linear regression model with normally distributed
+errors, this log-likelihood takes the form
+$\log \hat{L} = -\frac{n}{2} \left[ \log(2\pi) + 1 +
+\log\left(\frac{\text{SSE}}{n}\right) \right]$,
 leading to the AIC expression
-$\text{AIC} = n \left[\log(2\pi) + 1 + \log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
-In contrast, the \ttblue{step()} function in R reports AIC values based on a deviance-like approximation that omits constant terms unrelated to model comparison:
-$\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
-The difference between the two expressions is a constant shift of
+$\text{AIC} = n \left[\log(2\pi) + 1 +
+\log\left(\frac{\text{SSE}}{n}\right)\right] + 2k$.
+In contrast, the \ttblue{step()} function in R reports AIC
+values based on a deviance-like approximation that omits
+constant terms unrelated to model comparison:
+$\text{AIC}_{\text{step}} = n
+\log\left(\frac{\text{SSE}}{n}\right) + 2k$.
+The difference between the two expressions is a constant
+shift of
 $n \cdot (\log(2\pi) + 1) + 2$.
-The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors.
-The additional +2 arises because R’s AIC() function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression.
+The term $n \cdot (\log(2\pi) + 1)$ reflects the part of
+the log-likelihood that depends only on the sample size and
+the assumption of normally distributed errors.
+The additional +2 arises because R’s AIC() function
+evaluates the likelihood based on a model with an estimated
+variance parameter $\sigma^2$, introducing one more
+estimated parameter than is typically counted in the model
+formula (e.g., intercept and slopes). This shifts the
+effective count of parameters k by 1 and contributes an
+extra penalty of 2 in the AIC expression.
 Similarly, the BIC values are obtained as follows.
 
 \par\addvspace{\topsep}
@@ -49,4 +97,12 @@ print('BIC ussteamco_mod_2:', ussteamco_mod_2.bic)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The same consideration applies to the BIC. The BIC values of \ttblue{mod.0}, \ttblue{model\_backward}, \ttblue{mod.1}, and \ttblue{mod.2} may be compared directly because they are based on the same response data. The BIC of \ttblue{mod.3} should not be interpreted as evidence that the winsorized model is better or worse than the previous models, because it is based on a different dataset.
+\noindent The same consideration applies to the BIC. The
+BIC values of \ttblue{mod.0},
+\ttblue{model\_backward}, \ttblue{mod.1}, and
+\ttblue{mod.2} may be compared directly because
+they are based on the same response data. The BIC
+of \ttblue{mod.3} should not be interpreted as
+evidence that the winsorized model is better or
+worse than the previous models, because it is
+based on a different dataset.

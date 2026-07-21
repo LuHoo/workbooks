@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We look up the audit values of the selected sampling units.
+\noindent We look up the audit values of the selected
+sampling units.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +17,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-audit_values = accounts_receivable.set_index("invoice").loc[arSample.sample["item"], "av2"]
+audit_values = accounts_receivable.set_index("invoice").loc
+[arSample.sample["item"], "av2"]
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

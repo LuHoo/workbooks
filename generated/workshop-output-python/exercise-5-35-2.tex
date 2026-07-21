@@ -5,8 +5,17 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The first variance component, \ttblue{var\_mean\_annual}, captures the uncertainty in the estimated regression coefficients. The second component, \ttblue{var\_future\_annual}, captures the future residual variation of the 12 monthly observations. The latter is calculated under the assumption that the future residual errors are uncorrelated.
-Adjust the March prediction based on the corroborated evidence for the winter conditions and disruptions.
+\noindent The first variance component,
+\ttblue{var\_mean\_annual}, captures the
+uncertainty in the estimated regression
+coefficients. The second component,
+\ttblue{var\_future\_annual}, captures the future
+residual variation of the 12 monthly
+observations. The latter is calculated under the
+assumption that the future residual errors are
+uncorrelated.
+Adjust the March prediction based on the corroborated
+evidence for the winter conditions and disruptions.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -22,10 +31,15 @@ pred_df['fit_adj'] = pred_df['fit']
 pred_df['lwr_adj'] = pred_df['lwr']
 pred_df['upr_adj'] = pred_df['upr']
 march_row = pred_df['date'].dt.strftime('%b') == 'Mar'
-pred_df.loc[march_row, 'fit_adj'] = pred_df.loc[march_row, 'fit_adj'] - storm_adjustment
-pred_df.loc[march_row, 'lwr_adj'] = pred_df.loc[march_row, 'lwr_adj'] - storm_adjustment
-pred_df.loc[march_row, 'upr_adj'] = pred_df.loc[march_row, 'upr_adj'] - storm_adjustment
-pred_df['outside_adj'] = (pred_df['recorded'] < pred_df['lwr_adj']) | (pred_df['recorded'] > pred_df['upr_adj'])
+pred_df.loc[march_row, 'fit_adj'] = pred_df.loc[march_row, 
+'fit_adj'] - storm_adjustment
+pred_df.loc[march_row, 'lwr_adj'] = pred_df.loc[march_row, 
+'lwr_adj'] - storm_adjustment
+pred_df.loc[march_row, 'upr_adj'] = pred_df.loc[march_row, 
+'upr_adj'] - storm_adjustment
+pred_df['outside_adj'] = (pred_df['recorded'] < 
+pred_df['lwr_adj']) | (pred_df['recorded'] > 
+pred_df['upr_adj'])
 display(pred_df)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

@@ -5,8 +5,17 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This notebook shows the transformation explicitly rather than calling a separate named routine. We first estimate the lag-1 autocorrelation in the residuals, then quasi-difference the response and the predictors, and finally refit the model to the transformed data.
-We first estimate an AR(1) model on the residuals from \ttblue{mod.3}.
+\noindent A practical way to address first-order
+autocorrelation is to apply an AR(1)
+transformation. This notebook shows the
+transformation explicitly rather than calling a
+separate named routine. We first estimate the
+lag-1 autocorrelation in the residuals, then
+quasi-difference the response and the predictors,
+and finally refit the model to the transformed
+data.
+We first estimate an AR(1) model on the residuals from
+\ttblue{mod.3}.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +26,8 @@ We first estimate an AR(1) model on the residuals from \ttblue{mod.3}.
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-rho = np.corrcoef(ussteamco_mod_3.resid[1:], ussteamco_mod_3.resid[:-1])[0, 1]
+rho = np.corrcoef(ussteamco_mod_3.resid[1:], 
+ussteamco_mod_3.resid[:-1])[0, 1]
 print(rho)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

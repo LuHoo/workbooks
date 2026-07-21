@@ -16,8 +16,10 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 # Obs - Exp squared divided by expected
-np.round(((inv_observed - inv_expected)**2 / inv_expected), 2)
-sum(np.round(((inv_observed - inv_expected)**2 / inv_expected), 2))
+np.round(((inv_observed - inv_expected)**2 / inv_expected),
+ 2)
+sum(np.round(((inv_observed - inv_expected)**2 / 
+inv_expected), 2))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1]  0.21  0.44  5.60  0.29  0.00 12.61  0.15  0.46  0.01

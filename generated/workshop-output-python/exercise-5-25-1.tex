@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We use the \ttblue{pacf} plot from Figure 5.17 to see if autocorrelation is present, and if so, which order is significant.
+\noindent We use the \ttblue{pacf} plot from Figure 5.17 to
+see if autocorrelation is present, and if so,
+which order is significant.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +19,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 fig, ax = plt.subplots(figsize=(7, 4))
-plot_pacf(ussteamco_mod_3.resid, lags=10, method='ywm', ax=ax)
+plot_pacf(ussteamco_mod_3.resid, lags=10, method='ywm', 
+ax=ax)
 plt.tight_layout()
 plt.show()
 \end{Verbatim}

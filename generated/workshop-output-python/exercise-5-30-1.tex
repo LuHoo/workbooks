@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests.
+\noindent Exercise 5.28 already displayed the full summary
+table. Here we isolate the $F$ statistic for the
+refined model so that the model-level
+significance test is distinguished from the
+coefficient-level tests.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,7 +23,8 @@
 f_stat = float(ussteamco_mod_5.fvalue)
 df_model = int(ussteamco_mod_5.df_model)
 df_resid = int(ussteamco_mod_5.df_resid)
-print({'value': f_stat, 'numdf': df_model, 'dendf': df_resid})
+print({'value': f_stat, 'numdf': df_model, 'dendf': 
+df_resid})
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
      value      numdf      dendf

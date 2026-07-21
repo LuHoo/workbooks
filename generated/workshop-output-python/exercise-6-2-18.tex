@@ -16,19 +16,23 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 if 'ussteamco_mod_3_residuals' in globals():
-    nres = np.asarray(ussteamco_mod_3_residuals) / np.std(ussteamco_mod_3_residuals)
+    nres = np.asarray(ussteamco_mod_3_residuals) / 
+np.std(ussteamco_mod_3_residuals)
     fig, axes = plt.subplots(2, 2, figsize=(10, 8))
     for ax, bins in zip(axes.flatten(), [6, 7, 8, 9]):
-        sns.histplot(nres, bins=bins, stat='density', color='#00338D', edgecolor='black', ax=ax)
+        sns.histplot(nres, bins=bins, stat='density', 
+color='#00338D', edgecolor='black', ax=ax)
         x = np.linspace(np.min(nres), np.max(nres), 200)
-        ax.plot(x, norm.pdf(x, np.mean(nres), np.std(nres)), color='red')
+        ax.plot(x, norm.pdf(x, np.mean(nres), 
+np.std(nres)), color='red')
         ax.set_title(f'Histogram with {bins} bins')
         ax.set_xlabel('Standardized Residuals')
         ax.set_ylabel('Density')
     plt.tight_layout()
     plt.show()
 else:
-    print('Skipped residual histogram example: source R object ussteamco.mod.3 is not available in Python track.')
+    print('Skipped residual histogram example: source R 
+object ussteamco.mod.3 is not available in Python track.')
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

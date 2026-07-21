@@ -5,7 +5,18 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base \ttblue{R} function \ttblue{step()} enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference.
+\noindent When a model includes interaction terms, it is
+important to respect the hierarchical
+structure—interaction terms should not be
+included without their corresponding main
+effects. The base \ttblue{R} function
+\ttblue{step()} enforces this principle
+automatically by removing interaction terms
+before dropping associated main effects.
+Preserving model hierarchy is essential for
+ensuring interpretability and theoretical
+coherence, especially in models intended for
+inference.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,8 +27,11 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-ussteamco_mod_5_start = fit_lm('ussteamco_mod_5_start', 'revenue ~ (production + coolDD + heatDD) * summer', USSteamCoEstim2)
-candidates = ['production', 'coolDD', 'heatDD', 'summer', 'production:summer', 'coolDD:summer', 'heatDD:summer']
+ussteamco_mod_5_start = fit_lm('ussteamco_mod_5_start', 
+'revenue ~ (production + coolDD + heatDD) * summer', 
+USSteamCoEstim2)
+candidates = ['production', 'coolDD', 'heatDD', 'summer', 
+'production:summer', 'coolDD:summer', 'heatDD:summer']
 ussteamco_mod_5, ussteamco_mod_5_terms = stepwise_aic(
     USSteamCoEstim2,
     response='revenue',
@@ -38,7 +52,8 @@ revenue ~ (production + coolDD + heatDD) * summer
 - production:summer  1 3.5302e+13 9.6938e+13 1044.4
 
 Step:  AIC=1028.63
-revenue ~ production + coolDD + heatDD + summer + production:summer +
+revenue ~ production + coolDD + heatDD + summer + 
+production:summer +
     coolDD:summer
 
                     Df  Sum of Sq        RSS    AIC
@@ -48,7 +63,8 @@ revenue ~ production + coolDD + heatDD + summer + production:summer +
 - production:summer  1 3.8414e+13 1.0101e+14 1043.9
 
 Step:  AIC=1026.72
-revenue ~ production + coolDD + summer + production:summer +
+revenue ~ production + coolDD + summer + production:summer 
++
     coolDD:summer
 
                     Df  Sum of Sq        RSS    AIC

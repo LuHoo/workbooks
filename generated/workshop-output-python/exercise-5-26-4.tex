@@ -5,9 +5,22 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent This transformation follows $y_t - \rho y_{t-1} = \beta_0(1-\rho) + \sum_j \beta_j(x_{j,t} - \rho x_{j,t-1}) + u_t$.
-For interaction terms, the interaction is treated as a predictor in its own right. Thus, if \(z_t=x_t s_t\), the transformed interaction is $z_t-\rho z_{t-1} = x_t s_t-\rho x_{t-1}s_{t-1}$.
-It is not obtained by multiplying the transformed variables. The first observation is discarded because no lagged value is available. This is why the notebook keeps the AR(1) correction terminology here: the chapter is emphasizing the manual transformation itself, not introducing a separate Cochran-Orcutt procedure by name. After fitting the transformed model, we check whether autocorrelation is reduced by observing the spikes in the \ttblue{pacf} plot and running the Breusch-Godfrey test.
+\noindent This transformation follows $y_t - \rho y_{t-1} =
+\beta_0(1-\rho) + \sum_j \beta_j(x_{j,t} - \rho
+x_{j,t-1}) + u_t$.
+For interaction terms, the interaction is treated as a
+predictor in its own right. Thus, if \(z_t=x_t s_t\), the
+transformed interaction is $z_t-\rho z_{t-1} = x_t s_t-\rho
+x_{t-1}s_{t-1}$.
+It is not obtained by multiplying the transformed
+variables. The first observation is discarded because no
+lagged value is available. This is why the notebook keeps
+the AR(1) correction terminology here: the chapter is
+emphasizing the manual transformation itself, not
+introducing a separate Cochran-Orcutt procedure by name.
+After fitting the transformed model, we check whether
+autocorrelation is reduced by observing the spikes in the
+\ttblue{pacf} plot and running the Breusch-Godfrey test.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,10 +32,12 @@ It is not obtained by multiplying the transformed variables. The first observati
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 fig, ax = plt.subplots(figsize=(7, 4))
-plot_pacf(ussteamco_mod_4.resid, lags=10, method='ywm', ax=ax)
+plot_pacf(ussteamco_mod_4.resid, lags=10, method='ywm', 
+ax=ax)
 plt.tight_layout()
 plt.show()
-bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_4, nlags=3)
+bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_4, 
+nlags=3)
 print({'LM statistic': bg_lm, 'p_value': bg_p})
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

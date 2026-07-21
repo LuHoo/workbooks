@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Define the new estimation set. We replace the original value of observation 22 with its winsorized value.
+\noindent Define the new estimation set. We replace the
+original value of observation 22 with its
+winsorized value.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,7 +21,8 @@
 USSteamCoEstim2 = USSteamCoEstim.copy()
 p5 = np.quantile(ussteamco_mod_2.resid, 0.05)
 fit_22 = ussteamco_mod_2.fittedvalues.iloc[21]
-USSteamCoEstim2.loc[USSteamCoEstim2.index[21], 'revenue'] = fit_22 + p5
+USSteamCoEstim2.loc[USSteamCoEstim2.index[21], 'revenue'] =
+ fit_22 + p5
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

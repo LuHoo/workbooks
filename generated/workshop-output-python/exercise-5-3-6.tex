@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Figure 5.3 shows the time-series plots for the same dataset.
+\noindent Figure 5.3 shows the time-series plots for the
+same dataset.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,10 +20,15 @@
 from IPython.display import display
 fig, ax_left = plt.subplots(figsize=(10, 5))
 ax_right = ax_left.twinx()
-display(ax_left.plot(USSteamCoEstim['date'], USSteamCoEstim['revenue'], color='#00338D', label='Revenue'))
-display(ax_right.plot(USSteamCoEstim['date'], USSteamCoEstim['production'], color='#BC204B', label='Production'))
+display(ax_left.plot(USSteamCoEstim['date'], 
+USSteamCoEstim['revenue'], color='#00338D', 
+label='Revenue'))
+display(ax_right.plot(USSteamCoEstim['date'], 
+USSteamCoEstim['production'], color='#BC204B', 
+label='Production'))
 ax_left.set_ylabel('Revenue ($)', color='#00338D')
-ax_right.set_ylabel('Production (x 1000 lb)', color='#BC204B')
+ax_right.set_ylabel('Production (x 1000 lb)', 
+color='#BC204B')
 ax_left.set_xlabel('Date')
 fig.autofmt_xdate()
 plt.tight_layout()

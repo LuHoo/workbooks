@@ -23,7 +23,8 @@ y = chi2.pdf(x, df=df)
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.plot(x, y, color='#00338D')
 mask = x >= tail_start
-ax.fill_between(x[mask], y[mask], color='#00338D', alpha=1.0)
+ax.fill_between(x[mask], y[mask], color='#00338D', 
+alpha=1.0)
 ax.set_xlabel('x')
 ax.set_ylabel('density')
 plt.show()

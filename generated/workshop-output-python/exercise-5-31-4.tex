@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent All the elements created earlier are now plotted on a single canvas.
+\noindent All the elements created earlier are now plotted
+on a single canvas.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,11 +20,16 @@
 from IPython.display import display
 fig, ax = plt.subplots(figsize=(10, 6))
 for _, _grp in simulated_lines.groupby('rep'):
-    display(ax.plot(_grp['x'], _grp['y'], color='#00338D', alpha=0.1))
-display(ax.plot(true_line['x'], true_line['y'], color='#E36877', linewidth=1))
-display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_lower'], color='#E36877', linewidth=1))
-display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_upper'], color='#E36877', linewidth=1))
-ax.set_title(f"{rep} Regression Lines with Confidence Interval Based on True Model")
+    display(ax.plot(_grp['x'], _grp['y'], color='#00338D', 
+alpha=0.1))
+display(ax.plot(true_line['x'], true_line['y'], 
+color='#E36877', linewidth=1))
+display(ax.plot(ci_bounds_true['x'], 
+ci_bounds_true['ci_lower'], color='#E36877', linewidth=1))
+display(ax.plot(ci_bounds_true['x'], 
+ci_bounds_true['ci_upper'], color='#E36877', linewidth=1))
+ax.set_title(f"{rep} Regression Lines with Confidence 
+Interval Based on True Model")
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_xlim(x_extended_min, x_extended_max)

@@ -5,7 +5,13 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The function \ttblue{predict} creates expectations, when data from \ttblue{newdata} are evaluated with a certain \ttblue{object}. The optional \ttblue{interval} is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The \ttblue{level} specifies the confidence level of the interval.
+\noindent The function \ttblue{predict} creates
+expectations, when data from \ttblue{newdata} are
+evaluated with a certain \ttblue{object}. The
+optional \ttblue{interval} is used to add bounds
+for a prediction interval, or, alternatively, a
+confidence interval. The \ttblue{level} specifies
+the confidence level of the interval.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,8 +22,10 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-predictions = ussteamco_mod_5.get_prediction(USSteamCoHold).summary_frame(alpha=0.01)
-predictions = predictions.rename(columns={'mean': 'fit', 'obs_ci_lower': 'lwr', 'obs_ci_upper': 'upr'})
+predictions = ussteamco_mod_5.get_prediction(USSteamCoHold)
+.summary_frame(alpha=0.01)
+predictions = predictions.rename(columns={'mean': 'fit', 
+'obs_ci_lower': 'lwr', 'obs_ci_upper': 'upr'})
 display(predictions[['fit', 'lwr', 'upr']])
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
