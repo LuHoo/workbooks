@@ -5,7 +5,4 @@ source("scripts/export-python-workshop-output.R", chdir = FALSE)
 
 export_workshop_by_config_id("hypothesis-testing", parser_engine = "ir")
 export_python_workshop_chunks_by_config_id("hypothesis-testing")
-export_python_workshop_tex_by_config_id(
-	"hypothesis-testing",
-	output_tex_path = "workshop04_Python.tex"
-)
+generate_python_workshop_scaffold("workshop05_R.tex", "workshop05_Python.tex")

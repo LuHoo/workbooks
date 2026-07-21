@@ -9,7 +9,5 @@ source("scripts/export-regression-analysis-workshop.R", chdir = FALSE)
 
 export_workshop_by_config_id("goodness-of-fit", parser_engine = "ir")
 export_python_workshop_chunks_by_config_id("goodness-of-fit")
-export_python_workshop_tex_by_config_id(
-	"goodness-of-fit",
-	output_tex_path = "workshop06_Python.tex"
-)
+# chap09.tex directly includes generated/workshop-output-python chunks inline;
+# no separate workshop09_Python.tex scaffold is needed.
