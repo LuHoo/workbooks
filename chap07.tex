@@ -46,10 +46,18 @@ You have performed other audit procedures to provide assurance regarding revenue
 \item Various procedures to audit cash receipts regarding amounts billed (occurrence).
 \end{itemize}
 
-\bigskip
-Use the data of US SteamCo from 2011 to 2013 (the estimation period) to model the relationship between revenue and steam production, measured by mass in units of thousands of pounds, as well as cooling and heating degree day data. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period.
+\section*{Objectives}
 
-Use the model thus derived to develop expectations for 2014 (the hold-out period).
+Using historical data from 2011 to 2013 (the estimation period), develop a regression model to characterize the relationship between revenue and steam production (measured by mass in units of thousands of pounds), as well as cooling and heating degree day data. Degree days measure the number of days outside air temperatures that were higher or lower than a specified base temperature over a period.
+
+Apply this model to audit the 2014 revenue (the hold-out period) by:
+\begin{itemize}
+\item Assessing the strength and reasonableness of the revenue-production relationship.
+\item Identifying any influential or unusual observations that warrant further investigation.
+\item Developing expectations for 2014 revenue given actual steam production and degree day data.
+\item Evaluating whether recorded 2014 revenue is consistent with expectations and within acceptable variance.
+\item Determining the level of assurance that can be derived from this analytical procedure.
+\end{itemize}
 
 \end{mdframed}
 
@@ -125,9 +133,81 @@ Variable $y$ on the left-hand side of the equation is the conditional mean of th
 
 Because the data in \textit{Case: US SteamCo} incorporate a time dimension, we refer to the regression analysis as a \hlblue{time-series analysis}\index{time-series analysis}. 
 In this case, additional analyses must be performed. Otherwise, the analysis is referred to as a \hlblue{cross-sectional analysis}\index{cross-sectional analysis}. 
-One of the applications is when an analysis is carried out over a large number of companies in the same industry or over a group of outlets of a retailer, for example, in the \textit{Case: On the Go Stores}.
+One of the applications is when an analysis is carried out over a large number of companies in the same industry or over a group of outlets of a retailer
+% , for example, in the \textit{Case: On the Go Stores}
+.
 
 % subsection quick_overview (end)
+
+\subsection{Overview of this chapter} % (fold)
+\label{sub:overview_of_this_chapter}
+
+In Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we provide an overview of the steps taken when performing SAPs. In this Chapter, we provide further details on certain steps when the SAP is carried out using regression analysis.
+
+\paragraph{Assumptions underlying regression results} % (fold)
+\label{par:assumptions_underlying_regression_results}
+
+Section \ref{sec:assumptions_underlying_regression_results} discusses the specific assumptions that underlie the regression results. These consi\-derations should play a role in the back of our minds when engaging in predictive analytic methods such as regression analysis.
+
+% paragraph assumptions_underlying_regression_results (end)
+
+\paragraph{Obtaining and testing data} % (fold)
+\label{par:obtaining_and_testing_data}
+
+We then proceed to obtain and test the data used in the analysis (See Section \ref{sec:obtaining_and_testing_data}). The steps outlined in this section satisfy the requirements from the Standards discussed in Section \ref{sec:relevance_and_reliability_of_the_data}.
+
+% paragraph obtaining_and_testing_data (end)
+
+\paragraph{Modeling} % (fold)
+\label{par:modeling}
+
+The next step in the design of the analytical procedure is to determine the correct model form. This includes the choice of independent variables, the need for disaggregation of the data and time lags. We also cover transformations of the dependent and independent variables. In this Chapter, we focus mainly on simple and multiple linear regression models; however, in Section \ref{sec:modeling}, we hint at other designs that could be considered. 
+
+% paragraph modeling (end)
+
+\paragraph{Diagnostics checking} % (fold)
+\label{par:diagnostics_checking}
+
+Once we have tried a model on the obtained data, we check for possible data errors, and investigate outliers and influential observations, as well as multicollinearity. This could cause problems in the subsequent steps, so it is a good practice to address these problems at an early stage. See Section \ref{sec:diagnostics_checking}.
+
+% paragraph diagnostics_checking (end)
+
+\paragraph{Analysis of variance} % (fold)
+\label{par:analysis_of_variance}
+
+Once we have a model or a set of competing models, we obtain a sense of their quality through an analysis of variance (Section \ref{sec:analysis_of_variance}).
+
+% paragraph analysis_of_variance (end)
+
+\paragraph{Testing model assumptions} % (fold)
+\label{par:testing_model_assumptions}
+
+Section \ref{sec:testing_model_assumptions} then proceeds by testing the three model assumptions (normality, constant variance, and absence of autocorrelation) that need to be valid for the subsequent tests and expectations to be statistically valid. These are model-validation tests and use conventional statistical hypotheses.
+
+% paragraph testing_model_assumptions (end)
+
+\paragraph{Testing significance} % (fold)
+\label{par:testing_significance}
+
+Section \ref{sec:testing_significance} includes two conventional statistical tests: one on the significance of each independent variable in the model and a second test on the significance of the model as a whole. These tests evaluate the regression model; they are distinct from the audit hypothesis test applied to the recorded amount.
+
+% paragraph testing_significance (end)
+
+\paragraph{Expectations} % (fold)
+\label{par:expectations}
+
+Once the validity and significance of the model have been assessed, we proceed in Section \ref{sec:expectations}, creating expectations for the hold-out set. 
+
+% paragraph expectations (end)
+
+\paragraph{Evaluation} % (fold)
+\label{par:evaluation}
+
+Section \ref{sec:auditor_response} marks the transition from statistical model validation to audit evaluation. The regression expectation and its prediction uncertainty are used as evidence in an audit hypothesis test, in which the null hypothesis is that the recorded amount is materially misstated. Significant differences are investigated, after which the auditor determines whether sufficient evidence has been obtained to reject material misstatement at the required level of assurance. Finally, we conclude by determining whether the objectives of the substantive analytical procedure are achieved.
+
+% paragraph evaluation (end)
+
+% subsection overview_of_this_chapter (end)
 
 \subsection{Purposes of regression analysis} % (fold)
 \label{sub:purposes_of_regression_analysis}
@@ -200,75 +280,7 @@ Regression analysis does not eliminate uncertainty. Rather, it provides a discip
 
 Accordingly, the central question that underlies this chapter is not whether a regression model can be estimated, but whether it can be relied upon as a source of audit evidence in the exercise of professional judgement.
 
-\subsection{Overview of this chapter} % (fold)
-\label{sub:overview_of_this_chapter}
-
-In Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we provide an overview of the steps taken when performing SAPs. In this Chapter, we provide further details on certain steps when the SAP is carried out using regression analysis.
-
-\paragraph{Assumptions underlying regression results} % (fold)
-\label{par:assumptions_underlying_regression_results}
-
-Section \ref{sec:assumptions_underlying_regression_results} discusses the specific assumptions that underlie the regression results. These consi\-derations should play a role in the back of our minds when engaging in predictive analytic methods such as regression analysis.
-
-% paragraph assumptions_underlying_regression_results (end)
-
-\paragraph{Obtaining and testing data} % (fold)
-\label{par:obtaining_and_testing_data}
-
-We then proceed to obtain and test the data used in the analysis (See Section \ref{sec:obtaining_and_testing_data}). The steps outlined in this section satisfy the requirements from the Standards discussed in Section \ref{sec:relevance_and_reliability_of_the_data}.
-
-% paragraph obtaining_and_testing_data (end)
-
-\paragraph{Modeling} % (fold)
-\label{par:modeling}
-
-The next step in the design of the analytical procedure is to determine the correct model form. This includes the choice of independent variables, the need for disaggregation of the data and time lags. We also cover transformations of the dependent and independent variables. In this Chapter, we focus mainly on simple and multiple linear regression models; however, in Section \ref{sec:modeling}, we hint at other designs that could be considered. 
-
-% paragraph modeling (end)
-
-\paragraph{Diagnostics checking} % (fold)
-\label{par:diagnostics_checking}
-
-Once we have tried a model on the obtained data, we check for possible data errors, and investigate outliers and influential observations, as well as multicollinearity. This could cause problems in the subsequent steps, so it is a good practice to address these problems at an early stage. See Section \ref{sec:diagnostics_checking}.
-
-% paragraph diagnostics_checking (end)
-
-\paragraph{Analysis of variance} % (fold)
-\label{par:analysis_of_variance}
-
-Once we have a model or a set of competing models, we obtain a sense of their quality through an analysis of variance (Section \ref{sec:analysis_of_variance}).
-
-% paragraph analysis_of_variance (end)
-
-\paragraph{Testing model assumptions} % (fold)
-\label{par:testing_model_assumptions}
-
-Section \ref{sec:testing_model_assumptions} then proceeds by testing the three model assumptions (normality, constant variance, and absence of autocorrelation) that need to be valid for the subsequent tests and expectations to be statistically valid. These are model-validation tests and use conventional statistical hypotheses.
-
-% paragraph testing_model_assumptions (end)
-
-\paragraph{Testing significance} % (fold)
-\label{par:testing_significance}
-
-Section \ref{sec:testing_significance} includes two conventional statistical tests: one on the significance of each independent variable in the model and a second test on the significance of the model as a whole. These tests evaluate the regression model; they are distinct from the audit hypothesis test applied to the recorded amount.
-
-% paragraph testing_significance (end)
-
-\paragraph{Expectations} % (fold)
-\label{par:expectations}
-
-Once the validity and significance of the model have been assessed, we proceed in Section \ref{sec:expectations}, creating expectations for the hold-out set. 
-
-% paragraph expectations (end)
-
-\paragraph{Evaluation} % (fold)
-\label{par:evaluation}
-
-Section \ref{sec:auditor_response} marks the transition from statistical model validation to audit evaluation. The regression expectation and its prediction uncertainty are used as evidence in an audit hypothesis test, in which the null hypothesis is that the recorded amount is materially misstated. Significant differences are investigated, after which the auditor determines whether sufficient evidence has been obtained to reject material misstatement at the required level of assurance. Finally, we conclude by determining whether the objectives of the substantive analytical procedure are achieved.
-
-% paragraph evaluation (end)
-
-% subsection steps_in_performing_a_substantive_analytical_procedure (end)
+% subsection regression_as_audit_evidence (end)
 
 % section what_is_regression_analysis (end)
 
