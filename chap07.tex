@@ -142,7 +142,7 @@ One of the applications is when an analysis is carried out over a large number o
 \subsection{Overview of this chapter} % (fold)
 \label{sub:overview_of_this_chapter}
 
-In Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we provide an overview of the steps taken when performing SAPs. In this Chapter, we provide further details on certain steps when the SAP is carried out using regression analysis.
+In Volume 2, Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we provide an overview of the steps taken when performing SAPs. In this Chapter, we provide further details on certain steps when the SAP is carried out using regression analysis.
 
 \paragraph{Assumptions underlying regression results} % (fold)
 \label{par:assumptions_underlying_regression_results}
@@ -154,7 +154,7 @@ Section \ref{sec:assumptions_underlying_regression_results} discusses the specif
 \paragraph{Obtaining and testing data} % (fold)
 \label{par:obtaining_and_testing_data}
 
-We then proceed to obtain and test the data used in the analysis (See Section \ref{sec:obtaining_and_testing_data}). The steps outlined in this section satisfy the requirements from the Standards discussed in Section \ref{sec:relevance_and_reliability_of_the_data}.
+We then proceed to obtain and test the data used in the analysis (See Section \ref{sec:obtaining_and_testing_data}). The steps outlined in this section satisfy the requirements from the Standards discussed in Volume 2, Section \ref{sec:relevance_and_reliability_of_the_data}.
 
 % paragraph obtaining_and_testing_data (end)
 
@@ -437,33 +437,40 @@ By presenting complex temporal patterns in a clear and accessible format, time-s
 
 Examining data for accuracy and completeness holds a crucial position in the data analysis process, guaranteeing the reliability and credibility of the insights and conclusions drawn from the data. Various approaches can be employed to ascertain data quality.
 
-Data profiling involves scrutinizing data to determine its structure, patterns, and distributions. This includes the identification of missing values, outliers, and anomalies. Profiling serves to highlight potential data-quality concerns, necessitating further inquiry.
+\hlblue{Data profiling} involves scrutinizing data to determine its structure, patterns, and distributions. This includes the identification of missing values, outliers, and anomalies. Profiling serves to highlight potential data-quality concerns, necessitating further inquiry.
 
-Data cleaning involves rectifying, eliminating, or filling missing or erroneous data points. This process involves actions such as imputing missing values, rectifying typographical errors, and addressing inconsistencies in formatting.
+\hlblue{Data cleaning} involves rectifying, eliminating, or filling missing or erroneous data points. This process involves actions such as imputing missing values, rectifying typographical errors, and addressing inconsistencies in formatting.
 
-Data validation verifies whether the data adhere to pre-established rules, constraints, or business logic. For instance, validating the appropriateness of date ranges or verifying numerical values against specific limits.
+\hlblue{Data validation} verifies whether the data adhere to pre-established rules, constraints, or business logic. For instance, validating the appropriateness of date ranges or verifying numerical values against specific limits.
 
-Cross-checking involves comparing data from different sources or credible references to identify inconsistencies. When the same information is present in multiple datasets, discrepancies may signal potential data-quality issues.
+\hlblue{Cross-checking} involves comparing data from different sources or credible references to identify inconsistencies. When the same information is present in multiple datasets, discrepancies may signal potential data-quality issues.
 
-Data completeness entails ensuring the presence of all essential data fields for each record. The absence of data can skew the analytical outcomes and lead to inaccurate deductions.
+\hlblue{Data completeness} entails ensuring the presence of all essential data fields for each record. The absence of data can skew the analytical outcomes and lead to inaccurate deductions.
 
-Duplicate detection aims to pinpoint and eliminate duplicate records that can artificially elevate the significance of specific values and disrupt the analysis.
+\hlblue{Duplicate detection} aims to pinpoint and eliminate duplicate records that can artificially elevate the significance of specific values and disrupt the analysis.
 
-Data consistency ensures that identical data values are consistently represented throughout the dataset. Inconsistencies in labeling or formatting can contribute to confusion and errors in the analysis.
+\hlblue{Data consistency} ensures that identical data values are consistently represented throughout the dataset. Inconsistencies in labeling or formatting can contribute to confusion and errors in the analysis.
 
-Domain knowledge validation involves engaging experts who are well versed in the relevant field. They validate data accuracy and recognize potential issues that might evade detection through data analysis alone.
+\hlblue{Domain knowledge validation} involves engaging experts who are well versed in the relevant field. They validate data accuracy and recognize potential issues that might evade detection through data analysis alone.
 
 \bigskip
-Working with untested or poor-quality data can have several negative effects on data analyses.
+Working with untested or poor-quality data can have several negative effects on data analyses:
 
-\paragraph{Inaccurate insights} Unreliable data can lead to inaccurate conclusions and insights. Decision-making based on inaccurate data can result in poor strategies and outcomes.
-\paragraph{Biased results} Data quality issues such as missing values or skewed distributions can introduce bias into the analysis, leading to skewed results and misleading interpretations.
-\paragraph{Wasted resources}
-Analyzing poor-quality data is an inefficient use of time and resources. Moreover, inaccurate conclusions may lead to misguided audit efforts.
-\paragraph{Damaged reputation} If decisions are made based on faulty data, they can damage the reputation of individuals or organizations, especially if the decisions lead to negative outcomes.
-\paragraph{Misguided strategies} Data-driven strategies based on unreliable data can lead to incorrect business directions, missed opportunities, or increased risks.
-\paragraph{Legal and ethical concerns} Incorrect data may lead to compliance violations or ethical concerns, especially in sensitive domains where accurate reporting is essential.
-\paragraph{Inefficient analysis} Poor-quality data require more effort for analysis, cleaning, and validation, thereby slowing down the overall analysis process.
+\begin{itemize}
+\item \textit{Inaccurate insights}: Unreliable data can lead to inaccurate conclusions and insights. Decision-making based on inaccurate data can result in poor strategies and outcomes.
+
+\item \textit{Biased results}: Data quality issues such as missing values or skewed distributions can introduce bias into the analysis, leading to skewed results and misleading interpretations.
+
+\item \textit{Wasted resources}: Analyzing poor-quality data is an inefficient use of time and resources. Moreover, inaccurate conclusions may lead to misguided audit efforts.
+
+\item \textit{Damaged reputation}: If decisions are made based on faulty data, they can damage the reputation of individuals or organizations, especially if the decisions lead to negative outcomes.
+
+\item \textit{Misguided strategies}: Data-driven strategies based on unreliable data can lead to incorrect business directions, missed opportunities, or increased risks.
+
+\item \textit{Legal and ethical concerns}: Incorrect data may lead to compliance violations or ethical concerns, especially in sensitive domains where accurate reporting is essential.
+
+\item \textit{Inefficient analysis}: Poor-quality data require more effort for analysis, cleaning, and validation, thereby slowing down the overall analysis process.
+\end{itemize}
 
 \bigskip
 We list the results of the data quality verification, and if quality problems exist, we list possible solutions. Solutions to data-quality problems generally depend heavily on both data and business knowledge.
@@ -481,6 +488,7 @@ The effect of this variable on the trajectory of the regression line is explaine
 
 \hlblue{Integrating}\index{data!integration} data, which is another aspect of data wrangling, focuses on combining information from multiple sources. 
 This can include merging tables that contain different aspects of the same object. For example, a retail chain's store information, sales data, and demographic data can be merged to form a new comprehensive table with the fields from each source. 
+
 \hlblue{Data aggregation}\index{data aggregation}\index{aggregation!data} is also a part of data integration, which involves the computation of new values by summarizing data across records or tables. 
 For instance, in the \emph{Case: US SteamCo} it is imaginable that the variables \ttblue{coolDD} and \ttblue{heatDD} were constructed by first calculating the daily differences between maximum temperature and reference temperature, and then adding these differences for the month.
 
@@ -488,6 +496,7 @@ For instance, in the \emph{Case: US SteamCo} it is imaginable that the variables
 This can include reordering attributes to match tool specifications because some tools demand a specific order or random arrangement of records. 
 Additionally, formatting might include syntactic changes to fulfill specific tool demands, such as removing commas from text fields or limiting the length of values to adhere to tool constraints.
 
+\bigskip
 Neglecting data wrangling can lead to inaccuracies and misinterpretation in the analysis. We ensure the accuracy, relevance, and suitability of the data for modeling by effectively constructing, integrating, and formatting data, ultimately improving the reliability of the analytical outcomes.
 
 
@@ -621,12 +630,12 @@ To capture this relationship in a straight line, we need to estimate the two coe
   % \label{eq:simple_linear_regression_model}
 \end{equation*}
 \noindent where $\beta_0$ is the \hlblue{intercept}\index{intercept}, the place where the regression line crosses the $y$-axis at $x = 0$, and $\beta_1$ is the \hlblue{slope}\index{slope} of the regression line. 
-The coefficients are estimated such that the line best fits the data in the \emph{estimation period}\index{estimation period}. 
-$\hat{y}$ is the estimated value of the conditional mean of the dependent variable $y$, conditional on the realized value of $x$.
+The coefficients are estimated such that the line best fits the data in the estimation period. 
+$\hat{y}$~is the estimated value of the conditional mean of the dependent variable $y$, conditional on the realized value of $x$.
 Because real-world data rarely fall perfectly on a straight line, the regression model includes an error term $\epsilon$, which represents the random variation or noise in $y$ that cannot be explained by the linear relationship with $x$. 
 This term captures all other factors affecting $y$ that are not explicitly included in the model.
 
-Note that the observations are scattered around the (presumed) straight line. Apparently, the relationship between revenue and production is not clear. Numerous factors can lead to this inaccuracy. One factor is the absence of other independent variables in the model; this is something that we expand on in Section \ref{sub:multiple_regression}. The relationship may not be linear but can be better expressed by a curve; this is investigated in Section \ref{sub:transformations}. There could be structural changes to this relationship. The time-series plot in Figure \ref{fig:H7_Time_series_plots} also indicates seasonality in the data. It remains to be seen at this point whether or not all seasonality in the dependent variable can be explained by seasonality in the independent variable, or should be taken care of by other means. 
+Note that the observations are scattered around the (presumed) straight line. Apparently, the relationship between revenue and pro\-duct\-ion is not clear. Numerous factors can lead to this inaccuracy. One factor is the absence of other independent variables in the model; this is something that we expand on in Section \ref{sub:multiple_regression}. The relationship may not be linear but can be better expressed by a curve; this is investigated in Section \ref{sub:transformations}. There could be structural changes to this relationship. The time-series plot in Figure \ref{fig:H7_Time_series_plots} also indicates seasonality in the data. It remains to be seen at this point whether or not all seasonality in the dependent variable can be explained by seasonality in the independent variable, or should be taken care of by other means. 
 
 All the uncertainties referred to above are captured in the single \hlblue{residual}\index{residual} $\epsilon$ in the regression model. 
 We want to minimize this residual when estimating the coefficients from the sampled observations. For this purpose we introduce the \hlblue{regression line}\index{regression line}
@@ -688,6 +697,7 @@ $\bar{y}$ & mean value of the dependent variable $y$ \\
 $s_x$     & standard deviation of $x$
 \end{tabular}
 
+\medskip
 For the \emph{Case: US SteamCo}, we use \ttblue{production} in 1,000 lb for the $x$-values, and \ttblue{revenue} in \$ for $y$ to construct our first model \ttblue{mod.0}.
 The estimated values are $b_0 = 4,897,663$ for the intercept and $b_1 = 18.99$ for the slope.\footnote{The calculation of the coefficients is shown in Exercise \ref{ex:modelling_mod0}.} Replacing the coefficients in Equation \ref{eq:regression_line} with their estimates we obtain the regression line
 
@@ -1271,7 +1281,12 @@ In our case, only the October 2012 residual was below the lower threshold $\tau_
 \label{fig:winsor_obs22}
 \end{figure}
 
-We fit a new model, \ttblue{mod.3}, on the residual-winsorized data. The coefficient estimates of this model are summarized in \ref{tab:summary_mod_3}. The remaining analyses in this section are executed on the results of this model.
+We fit a new model, \ttblue{mod.3}, on the residual-winsorized data. The coefficient estimates of this model are summarized in Table \ref{tab:summary_mod_3} below. Following the AAG guidance (AAG A.63), the results show that most predictors in \ttblue{mod.3} have statistically significant $t$ statistics whose absolute values exceed 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. This supports confidence in the reliability of the regression coefficients. However, some variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics, suggesting they may not contribute meaningfully. The remaining analyses in this section are executed on the results of this model.
+
+Following the AAG guidance (AAG A.63), we also note that some variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04). 
+Although \ttblue{summer} also has a low $t$ value, caution is advised before removing it, as it interacts with both \ttblue{production} and \ttblue{coolDD}, potentially influencing their effects.
+
+The standard error of the regression, although not tabulated, should also be interpreted in light of materiality. For example, AAG A.64 notes that if the standard error is less than about 75\% of materiality, the model may be considered reliable for audit purposes. In our case, if the standard error of the best-fitting models falls within this range, it would further support reliance on the regression. Moreover, as we discuss in Section \ref{sec:auditor_response}, we use statistical theory to translate the standard error to the level of assurance that is obtained form the model, by specifically incorporating materiality.
 
 \begin{table}[thbp]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
@@ -1485,7 +1500,7 @@ residuals  & 5.7503e+14 & 34 & 1.6913e+13  \\
 
 \midrule
 
-Total      & 9.5307e+14 & 35 &  \\
+Total      & 9.5307e+14 & 35 &            \\
 
 \bottomrule
 
@@ -1563,7 +1578,7 @@ In this analysis, the calculation of the sum of squares is sequential in the sen
 The column \ttblue{Sum Sq} shows the sum of squares for each independent variable starting with \ttblue{production} ignoring all other effects, then \ttblue{coolDD}, considering that \ttblue{production} has already explained some variation but ignores \ttblue{heatDD}. Therefore the table explains a sequence of models in which independent variables are added one at a time. Had we called the model in a different order, the sums of the squares of the independent variables would have been different. See Exercise \ref{ex:anova} for a comparison.
 
 \bigskip
-The full summary table\footnote{See \ref{ex:summary.mod.0}} displays the values of the multiple $r^2$ (also referred to as the coefficient of determination\index{coefficient of determination}) and the adjusted $r^2$. Since $r^2$ explains the percentage variance explained by the model, it may be tempting to compare models using this statistic. It should be noted that when adding independent variables to the model, the value of $r^2$ cannot decrease even when non-significant independent variables are added.
+The full summary table\footnote{See Exercise\ref{ex:summary.mod.0}} displays the values of the multiple $r^2$ (also referred to as the coefficient of determination\index{coefficient of determination}) and the adjusted $r^2$. Since $r^2$ explains the percentage variance explained by the model, it may be tempting to compare models using this statistic. It should be noted that when adding independent variables to the model, the value of $r^2$ cannot decrease even when non-significant independent variables are added.
 
 To make a fair comparison, the \hlblue{adjusted $r^2$}\index{adjusted $r^2$} was developed. It considers the number of independent variables and penalizes the addition of independent variables that do not improve the overall performance of the model. 
 
@@ -1627,15 +1642,7 @@ The simple benchmark model \ttblue{mod.0} has an adjusted $r^2$ of 0.3789 and a 
 
 Among the models fitted to the original response data, \ttblue{mod.2} has the highest adjusted $r^2$ and the lowest AIC. Its BIC is slightly higher than that of \ttblue{model\_forward}, reflecting the stronger penalty imposed by BIC for the additional interaction terms. This illustrates the trade-off between explanatory richness and parsimony. From an audit perspective, \ttblue{mod.2} remains important because the interaction terms capture the distinct revenue relationships in summer and non-summer months, which are consistent with the business model of US SteamCo.
 
-After this comparison, we separately examine the effect of the outlying observation identified in the diagnostic analysis. Winsorizing observation 22 leads to \ttblue{mod.3}. The improvement in fit after winsorization is in\-for\-mative, but it should not be interpreted as an AIC/BIC improvement over \ttblue{mod.2}, because the model is fitted to a modified response variable. Instead, it supports the conclusion that the outlier had a material influence on the regression results and that further work on the treatment of this observation is warranted.
-
-Following the AAG guidance (AAG A.63), we also consider standard errors and $t$ statistics from the individual model summaries (for example, Table \ref{tab:summary_mod_3}). 
-In \ttblue{mod.3}, for instance, most predictors have statistically significant $t$ statistics whose absolute values exceed 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. 
-This supports confidence in the reliability of the regression coefficients. 
-However, some variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04). 
-Although \ttblue{summer} also has a low $t$ value, caution is advised before removing it, as it interacts with both \ttblue{production} and \ttblue{coolDD}, potentially influencing their effects.
-
-The standard error of the regression, although not tabulated, should also be interpreted in light of materiality. For example, AAG A.64 notes that if the standard error is less than about 75\% of materiality, the model may be considered reliable for audit purposes. In our case, if the standard error of the best-fitting models falls within this range, it would further support reliance on the regression. Moreover, as we discuss in Section \ref{sec:auditor_response}, we use statistical theory to translate the standard error to the level of assurance that is obtained form the model, by specifically incorporating materiality.
+After this comparison, we separately examine the effect of the outlying observation identified in the diagnostic analysis. Winsorizing observation 22 leads to \ttblue{mod.3}. The improvement in fit after winsorization is informative, but it should not be interpreted as an AIC/BIC improvement over \ttblue{mod.2}, because the model is fitted to a modified response variable. Instead, it supports the conclusion that the outlier had a material influence on the regression results and that further work on the treatment of this observation is warranted.
 
 In line with AAG A.66, we also emphasize judgment: statistical criteria can guide but not replace informed model evaluation. For example, the marginally higher BIC of \ttblue{mod.2} versus \ttblue{model\_forward} might be acceptable if the added variables improve predictive accuracy or enhance interpretability.
 
@@ -1721,7 +1728,8 @@ In our experience, many situations involving non-normality of the residuals are 
 
 The \hlblue{homoskedasticity} assumption\index{homoskedasticity} states that the disturbance terms $\epsilon$ not only follow a normal distribution, but also that the variance of this normal distribution is constant and does not depend on the values of any independent variable $x_j$. Ignoring this assumption could have serious consequences when constructing prediction intervals. For example, when the variance of the residuals increases linearly with the value of one of the independent variables, the expectations related to smaller values of $x_j$ are more precise than those for larger values of $x_j$. Therefore, if we inadvertently assume that the variance is constant, the prediction intervals related to smaller values of $x_j$ are overstated, and those for larger values of $x_j$ are understated. 
 
-We use the \ttblue{residualPlots} function to detect heteroskedasticity. Figure \ref{fig:H7_residualPlots3} shows an example for the \ttblue{mod.3} model. It is a variation of Figure \ref{fig:H7_residualPlots_mod2}, leaving out the plot against fitted values and the line that indicates a possible quadratic fit.
+We use the \ttblue{residualPlots} function to detect heteroskedasticity. Figure \ref{fig:H7_residualPlots3} shows an example for the \ttblue{mod.3} model. 
+% It is a variation of Figure \ref{fig:H7_residualPlots_mod2}, leaving out the plot against fitted values and the line that indicates a possible quadratic fit.
 
 \begin{figure}[htbp]
   \includegraphics[width=\columnwidth]{H7_residualPlots3.pdf}
@@ -1880,11 +1888,7 @@ is an interaction term, the transformed interaction becomes
 
 Thus, the interaction term itself is transformed, rather than multiplying separately transformed predictor variables.
 
-\bigskip
-This transformation reduces the first-order autocorrelation in the residuals, provided that the AR(1) model is appropriate. The transformed variables are then used to estimate the regression model by ordinary least squares. In this chapter, the resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and the associated $t$ and $p$ values are summarized in Table~\ref{tab:summary_mod_4}.
-
-
-\begin{table}[htbp]
+\begin{table}[b]
 \begin{tabularx}{\textwidth}{@{}lYYYY@{}}
 \toprule
 \parbox[t]{3 cm}{Variable} &
@@ -1909,6 +1913,8 @@ heat\_summer\_adj &   -20,135 &    13,897 & -1.449 & 0.158894 \\
 \caption{Estimated coefficient values of \ttblue{mod.4}, with their standard errors, $t$ values, and $p$ values.}
 \label{tab:summary_mod_4}
 \end{table}
+
+This transformation reduces the first-order autocorrelation in the residuals, provided that the AR(1) model is appropriate. The transformed variables are then used to estimate the regression model by ordinary least squares. In this chapter, the resulting model is \ttblue{mod.4}, for which the coefficient estimates, their standard errors, and the associated $t$ and $p$ values are summarized in Table~\ref{tab:summary_mod_4}.
 
 After applying the AR(1) correction, the Breusch--Godfrey test on \ttblue{mod.4} gives $LM = 2.2151$ with $p = 0.529$ (order 3), indicating no remaining evidence of residual autocorrelation at conventional levels.
 
@@ -2138,7 +2144,8 @@ The difference between the confidence interval and the prediction interval is vi
 
 \begin{figure}[htbp]
   \includegraphics[width=\columnwidth]{H7_conf_and_pred_intervals.pdf}
-  \caption{Regression line with (dotted) confidence interval and (shaded) prediction interval.}
+  \caption{Regression line with (dotted) confidence interval and (shaded) prediction interval. 
+This figure is illustrative only and does not represent data from the US SteamCo case study.}
   \label{fig:H7_conf_and_pred_intervals}
 \end{figure}
 
@@ -2395,7 +2402,7 @@ Here we define $PM$, the \hlblue{materiality}\index{materiality} threshold, repr
 This test relies on several assumptions about the data:
 \begin{itemize}
     \item \emph{Independence:} Monthly revenue figures should ideally be independent. If dependencies exist (e.g., seasonality or trends), they should be accounted for in the model.
-    \item \emph{Normality:} The errors in the revenue predictions should be ap\-prox\-i\-mate\-ly normally distributed.
+    \item \emph{Normality:} The errors in the revenue predictions should be ap\-rox\-i\-mate\-ly normally distributed.
     \item \emph{Consistency in model parameters:} The model’s parameters and residual variance are assumed to hold for the combined predictions over the year.
 \end{itemize}
 These assumptions ensure that the test’s distribution and the interval calculations are valid, providing a reliable assessment of the recorded revenue.
@@ -2456,7 +2463,7 @@ where $t_{0.005}$ denotes the critical value of the $t$~distribution for a two-s
 The ADR is expressed in monetary units and represents the range of unexplained differences that are considered acceptable. Dividing the ADR by $s_{\text{comb}}$ gives the corresponding decision bounds for the standardized test statistic $T$:
 
 \[
-T = \pm t_{0.005}.
+T = \pm t_{0.005}
 \]
 
 A test statistic that falls between these bounds provides sufficient evidence to reject the audit null hypothesis of material misstatement. Test statistics below the lower bound or above the upper bound do not provide sufficient evidence to reject $H_0$.
@@ -2504,9 +2511,9 @@ As discussed in Section~\ref{sub:acceptable_difference} in Volume 2, the decisio
 
 \begin{equation}
 \left[
-t_{\beta/2,df}s_{\text{comb}},
-t_{1-\beta/2,df}s_{\text{comb}}
-\right].
+t_{\beta/2,df} \cdot s_{\text{comb}},
+t_{1-\beta/2,df} \cdot s_{\text{comb}}
+\right]
 \end{equation}
 
 This limits the probability of investigating a difference when the account is not materially misstated. In that case, the level of assurance is not fixed in advance. It follows from the width of the bounds, the precision of the model, and performance materiality.

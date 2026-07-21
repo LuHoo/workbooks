@@ -1,1 +1,4 @@
-linters: list(seq_linter = seq_linter())
+linters: linters_with_defaults(
+  seq_linter = seq_linter(),
+  line_length_linter = line_length_linter(length = 120L)
+)
