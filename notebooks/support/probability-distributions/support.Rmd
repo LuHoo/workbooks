@@ -460,7 +460,7 @@ df8 <- data.frame(x=xc, density=hx)
 
 p <-
   ggplot(df8) +
-  geom_area(aes(x = x, y = density, fill = "constant")) +
+  geom_line(aes(x = x, y = density), linewidth = 0.8, colour = "#00338D") +
   theme(legend.position="none") + # Removes the legend
   theme(axis.text.x = element_blank(), axis.text.y = element_blank()) +
   theme(axis.title.x = element_blank()) +
@@ -657,10 +657,10 @@ hx1 <- dt(xt, 1)
 hx2 <- dt(xt, 3)
 hx3 <- dt(xt, 9)
 hx4 <- dt(xt, 100)
-s1 <- "df=1"
-s2 <- "df=3"
-s3 <- "df=9"
-s4 <- "df=100"
+s1 <- "df = 1"
+s2 <- "df = 3"
+s3 <- "df = 9"
+s4 <- "df = 100"
 
 
 df9a <- data.frame(t=xt, density = hx1, series=s1)
@@ -669,6 +669,7 @@ df9c <- data.frame(t=xt, density = hx3, series=s3)
 df9d <- data.frame(t=xt, density = hx4, series=s4)
 
 df9t <- rbind(df9a, df9b, df9c, df9d)
+df9t$series <- factor(df9t$series, levels = c(s1, s2, s3, s4))
 
 Fig2.10 <-
   ggplot(df9t) +
@@ -725,15 +726,16 @@ hchi1 <- dchisq(xchi, 3)
 hchi2 <- dchisq(xchi, 6)
 hchi3 <- dchisq(xchi, 10)
 
-s1 <- "df=3"
-s2 <- "df=6"
-s3 <- "df=10"
+s1 <- "df = 3"
+s2 <- "df = 6"
+s3 <- "df = 10"
 
 df12a <- data.frame(x=xchi, density = hchi1, series=s1)
 df12b <- data.frame(x=xchi, density = hchi2, series=s2)
 df12c <- data.frame(x=xchi, density = hchi3, series=s3)
 
 df12t <- rbind(df12a, df12b, df12c)
+df12t$series <- factor(df12t$series, levels = c(s1, s2, s3))
 
 Fig2.12 <-
   ggplot(df12t) +
@@ -773,6 +775,7 @@ df13b <- data.frame(x=xf, density=hf2, series=s2)
 df13c <- data.frame(x=xf, density=hf3, series=s3)
 
 df13t <- rbind(df13a, df13b, df13c)
+df13t$series <- factor(df13t$series, levels = c(s1, s3, s2))
 
 Fig2.13 <-
   ggplot(df13t) +

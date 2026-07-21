@@ -29,8 +29,7 @@ In the absence of notable deviations, auditors assess the overall fit of the mod
 
 
 \bigskip
-% TODO
-In this Chapter, we continue with \textit{Case: US SteamCo}, introduced in Volume 2 (the chapter on analytical procedures).
+In this chapter, we work with \textit{Case: US SteamCo}.
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=KPMG_blue!20]
 \section*{Case: US SteamCo}
@@ -54,7 +53,7 @@ Use the model thus derived to develop expectations for 2014 (the hold-out period
 
 \end{mdframed}
 
-\section*{Objective}
+\section*{Case questions}
 How strong is the relationship between revenue and production? Are there any influential observations in the estimation dataset? What is the expected amount of revenue, given the amount of steam produced? Should other variables be considered to improve the expectations? What is the acceptable difference for these expectations? What is the level of assurance that can be derived from this procedure?
 
 \section*{Learning objectives}
@@ -636,7 +635,7 @@ where \> $\hat{y}$ \> : \> estimate of the conditional mean $y$ of the dependent
 
 The coefficients are estimated such that the line best fits the data in the \hlblue{estimation period}\index{estimation period}. 
 
-The method of estimating the coefficients is referred to as \hlblue{Ordinary Least Squares}\index{ordinary least squares} or \hlblue{OLS}\index{OLS}. 
+The method of estimating the coefficients is referred to as \hlblue{Ordinary Least Squares}\index{ordinary least squares} or \hlblue{OLS}\index{OLS}.
 In this method, the regression line is positioned between the points in the scatter plot such that the quadratic vertical distance between the line ($\hat{y}$) and each of the observations ($y_i$), aggregated over all observations, is minimized. 
 As a result of this minimization procedure, the regression line always passes through the point ($\bar{x}, \bar{y}$), where $\bar{x}$\nomenclature{$\bar{x}$}{mean value of the independent variable $x$} and $\bar{y}$\nomenclature{$\bar{y}$}{mean value of the dependent variable $y$} are the means of the independent and dependent variables, respectively. 
 This property ensures that the fitted line represents the average relationship between the variables in the dataset.
@@ -769,13 +768,17 @@ This inverse relationship is to be expected: in summer months, \hlblue{coolDD} v
 A high correlation between two predictors, such as between \hlblue{coolDD} and \hlblue{heatDD} or between \hlblue{coolDD} and \hlblue{production}, may suggest that they contain overlapping information, and it can be worth considering whether both are needed in a regression model.
 
 \bigskip
+\paragraph{Enter method}
 The \hlblue{enter method}\index{enter method} is the most straightforward approach, in which all candidate independent variables are entered simultaneously into the model. The \emph{enter} method does not involve any variable selection or elimination, and all independent variables are included in the final model. This method is often used when all candidate independent variables are considered important or necessary for predicting the outcome variable. In contrast, \emph{backward} and \emph{forward} methods are stepwise approaches that involve selecting a subset of independent variables from a larger pool of candidate independent variables.
 
+\paragraph{Backward method}
 The \hlblue{backward method}\index{backward method} starts with a model that contains all potential independent variables and then systematically removes independent variables individually that do not contribute significantly to the model's prediction power. This process continues until all remaining variables are statistically significant, based on a predetermined criterion. Common criteria include $p$ value thresholds, $F$ statistics, or information-based metrics such as the \hlblue{Akaike Information Criterion}\index{Akaike information criterion}\index{AIC} (AIC) or \hlblue{Bayesian Information Criterion}\index{Bayesian information criterion}\index{BIC} (BIC). These criteria are under the control of the data scientist, who selects thresholds or metrics appropriate for the analysis. For example, a $p$ value threshold of 0.05 might be chosen to ensure that only variables with strong evidence of association remain in the model. These criteria are discussed in detail in Sections \ref{sec:analysis_of_variance} and \ref{sec:testing_significance}.
 
+\paragraph{Forward method}
 The \hlblue{forward method}\index{forward method} starts with an empty model and adds independent variables one by one based on a statistical criterion such as the highest correlation coefficient, the largest $F$ statistic, or the lowest BIC. The process stops when no additional variable significantly improves the model’s prediction power, according to the chosen criterion. Similar to the backward method, the choice of criterion is controlled by the data scientist and tailored to the specific context of the analysis.
 
-The combination of these two methods, often referred to as \hlblue{stepwise selection}, alternates between adding and removing variables to refine the model. In stepwise selection, the data scientist must define both inclusion and exclusion thresholds based on statistical criteria. For example, a variable might be added to the model if its $p$ value is below 0.05 and removed if its $p$ value rises above 0.10 after subsequent adjustments. 
+\paragraph{Stepwise selection}
+The combination of these two methods, often referred to as \hlblue{stepwise selection}\index{stepwise selection}, alternates between adding and removing variables to refine the model. In stepwise selection, the data scientist must define both inclusion and exclusion thresholds based on statistical criteria. For example, a variable might be added to the model if its $p$ value is below 0.05 and removed if its $p$ value rises above 0.10 after subsequent adjustments. 
 
 Adding the additional variables \texttt{coolDD} and \texttt{heatDD} has improved the fit of the model. The residual standard deviation decreased from \footnote{See Exercises \ref{ex:modelling_mod0} and \ref{ex:modelling_mod.1}} 4,112,487 for \texttt{mod.0} to 1,980,698 for \texttt{mod.1}. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods. A summary of the estimated coefficients for \ttblue{mod.1}, their standard errors, and $t$ and $p$ values is given in \ref{tab:summary_mod_1}.
 
@@ -1062,11 +1065,11 @@ After estimating the regression relationship, we first examine whether there are
 \item \hlblue{influential observations}\index{influential observation}, observations that are outliers and have high leverage.
 \end{itemize}
 
-Figure \ref{fig:H7-influenceIndexPlot} summarizes the influence statistics. It shows from bottom to top the hat values indicating potential leverage, Studentized residuals indicating regression outliers, and their respective Bonferroni $p$ values and Cook's distance, indicating potentially influential observations. Each of these is discussed in detail.
+Figure \ref{fig:H7-influenceIndexPlot} summarizes the influence statistics. From top to bottom it shows influential observations through Cook's distance, their respective Bonferroni $p$ values, regression outliers through Studentized residuals, and leverage points through the hat values. Each of these is discussed in detail.
 
 \begin{figure}[bhtp]
   \includegraphics[width=\columnwidth]{H7_influenceIndexPlot.pdf}
-  \caption{Influence index plots for \ttblue{mod.2}. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$ values and influential observations.}
+  \caption{Influence index plots for \ttblue{mod.2}. From top to bottom: influential observations, their respective Bonferroni $p$ values, regression outliers, and leverage points.}
   \label{fig:H7-influenceIndexPlot}
 \end{figure}
 
@@ -1180,7 +1183,7 @@ The largest residual outliers are observations 22, 34, and 36, and the three lar
 The three most influential observations, as measured by Cook's distance, are observations 34, 22, and 30.
 Because not all top three are similar, a total of five observations are listed.
 
-There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Studentizized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
+There are no specific explanations for the unusually low values in June 2013 (\#30) and October 2013 (\#34). However, the observation from October 2012 (\#22) coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Studentized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
 
 Since we are working with time-series data, we cannot remove the observation without disrupting the temporal structure of the analysis. Instead, we apply residual winsorization to reduce the influence of this extreme value while retaining its presence in the series. In this approach, the residual is adjusted relative to the fitted regression value. Specifically, the residual for October 2012 is replaced by the 5th percentile of the residual distribution, and the adjusted response is reconstructed as the fitted value plus this winsorized residual.
 
@@ -1934,20 +1937,20 @@ coolDD : summer     &   125,064 &    25,504 &  4.904 & 0.000031 \\
 \label{tab:summary_mod_5}
 \end{table}
 
-The regression lines for winter months is
+The regression line for winter months is
 
 \begin{equation*}
   \text{revenue} = 752,767 + 35.87 \cdot \text{production} - 121,381 \cdot \text{coolDD} 
 \end{equation*}
 Because in winter the values for \ttblue{coolDD} are equal to zero, the last term in the equation is of little importance.
-The regression lines for summer months is
+The regression line for summer months is
 
 \begin{equation*}
   \text{revenue} = 3,972,293 + 12.64 \cdot \text{production} + 3,683 \cdot \text{coolDD}
 \end{equation*}
 The coefficient values take the interactions into account. Therefore, the intercept value is equal to $752,767 + 3,219,526 = 3,972,293$, the slope value for \ttblue{production} is equal to $35.87 - 23.23 = 12.64$, and the marginal effect of \ttblue{coolDD} is given by $-121,381 + 125,064 = 3,683$.
 
-Re-running the model-assumption checks for \ttblue{mod.5} gives Breusch--Pagan $BP = 7.0367$ ($p = 0.2179$), Breusch--Godfrey $LM = 5.1992$ ($p = 0.1578$, order 3), and Shapiro--Wilk $W = 0.94875$ ($p = 0.09554$). Taken together, these results provide no evidence against homoskedasticity, absence of autocorrelation, or normality at the 5\% level.
+Re-running the model-assumption checks for \ttblue{mod.5} gives Shapiro--Wilk $W = 0.94875$ ($p = 0.09554$), Breusch--Pagan $BP = 7.0367$ ($p = 0.2179$), and Breusch--Godfrey $LM = 5.1992$ ($p = 0.1578$, order 3). Taken together, these results provide no evidence against normality, homoskedasticity, or absence of autocorrelation at the 5\% level.
 
 Although a backward procedure was applied to remove non-significant predictors, some variables may still merit inclusion for reasons beyond statistical significance. 
 These include theoretical relevance, potential interaction effects, or roles as control variables. 

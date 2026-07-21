@@ -1,3 +1,5 @@
+% !TEX root = ada_volume1.tex
+
 \chapter{Hypothesis testing} % (fold)
 \label{cha:hypothesis_testing}
 
@@ -450,14 +452,14 @@ The MUS sample size lies between the fixed attribute sample sizes of 141 (for $k
 \bigskip
 Four methods allow the evaluation of partially correct elements.
 \begin{enumerate}[leftmargin=*,labelsep=.5em]
-\item All-or-Nothing-Approach;
-\item Stringer bound; 
-\item Cell bounds; and
-\item PPS estimation.
+\item Method 1: All-or-Nothing Approach;
+\item Method 2: Stringer Bound; 
+\item Method 3: Cell Bounds; and
+\item Method 4: PPS estimation.
 %\label{}
 \end{enumerate}
 
-\paragraph{All-or-Nothing-Approach}\index{all-or-nothing-approach} When we introduced the \emph{Case: European innovation subsidies} we saw that we could apply the theory of proportions to monetary populations by simply regarding each individual monetary unit in the population as an individual population element that could be selected and tested separately. A single monetary unit can only be audited through the logical unit that contains it, but this does not prevent us from applying the hypergeometric distribution to make statistical statements on the proportions of correct and incorrect monetary units in the population. Thus, a conclusion in monetary terms can be developed. 
+\paragraph{Method 1: All-or-Nothing Approach}\index{all-or-nothing-approach} When we introduced the \emph{Case: European innovation subsidies} we saw that we could apply the theory of proportions to monetary populations by simply regarding each individual monetary unit in the population as an individual population element that could be selected and tested separately. A single monetary unit can only be audited through the logical unit that contains it, but this does not prevent us from applying the hypergeometric distribution to make statistical statements on the proportions of correct and incorrect monetary units in the population. Thus, a conclusion in monetary terms can be developed. 
 
 In the presence of partial errors, this is still possible, particularly when a selection mechanism is used that allows multiple monetary units to be selected from a single logical unit that contains them, such as in the \emph{Random monetary units} selection method. See Exercise \ref{ex:double_hits} for an example.
 
@@ -503,7 +505,7 @@ The evaluation of the hypothesis test is exactly the same as in the previous sec
 \bigskip
 Most selection methods allow for the determination of selected monetary units within the tested element. The all-or-nothing-approach has a perceived disadvantage in that not all audit information is considered when evaluating the sample; it could be the case that multiple erroneous elements are in the sample, but that each selected monetary unit happens to be in the correct part of the element. As a result, the auditor found information about errors in the population that are not reflected in the statistical evaluation of the sample.
 
-\paragraph{Stringer Bound} This evaluation method is named after its inventor, Kenneth W. Stringer.\index{Stringer Bound} 
+\paragraph{Method 2: Stringer Bound} This evaluation method is named after its inventor, Kenneth W. Stringer.\index{Stringer Bound} 
 It uses all available information of the sampled elements to calculate an \hlblue{upper confidence bound}\index{confidence bound}\index{bound!confidence} of the error amount. 
 The null hypothesis is rejected if this upper bound is less than performance materiality $M$.
 
@@ -629,7 +631,7 @@ Total & & & 354,168.21 \\
 
 The \emph{upper confidence bound}\index{confidence bound}\index{bound!confidence} on errors according to the Stringer bound method is the sum of the point estimate of 115,448.28, and the precision achieved is 354,168.21; the result is 469,616.49. We may assert with 95\% confidence that the amount of misstatement does not exceed 469,616.49. The auditor's interpretation of this statistical conclusion is discussed in Section \ref{sec:auditor_interpretation}.
 
-\paragraph{Cell bounds} The \hlblue{cell bounds}\index{cell bounds} evaluation method is a further refinement of the Stringer bound method. 
+\paragraph{Method 3: Cell Bounds} The \hlblue{cell bounds}\index{cell bounds} evaluation method is a further refinement of the Stringer bound method. 
 The philosophy behind this is that if a partial misstatement is encountered, it can be proven that the most conservative evaluation approach is either
 
 \begin{description}[style=nextline]
@@ -710,8 +712,8 @@ This has an effect on the evaluation of the sample: basic precision is multiplie
 
 For this reason, it has often been claimed that MUS should not be used to test for understatements. It is true that the evaluation of understatements is conservative, but we believe that conservatism alone is not a sufficient rationale for resorting to an anti-conservative method. The main disadvantage of MUS sampling is that overstatements and understatements are evaluated separately, whereas CVS combines overstatements and understatements in the evaluation of the sample.
 
-\paragraph{PPS estimation} \label{par:pps_estimation}
-The last evaluation method that we discuss is \hlblue{PPS estimation}\index{PPS estimation}\index{estimation!PPS}. 
+\paragraph{Method 4: PPS estimation} \label{par:pps_estimation}
+The last evaluation method that we discuss is \hlblue{PPS estimation}\index{PPS estimation}\index{estimation!PPS}. Here, PPS stands for \emph{Probability Proportional to Size}. 
 It has been suggested for situations where more than 20 differences have been found in a sample that was selected with probabilities proportional to size.\footnote{We suggest to use a $t$-value with $m - 1$ degrees of freedom to mitigate the effect of underestimating the standard deviation of the taintings.} The method assumes that taintings $t$ are normally distributed, and thus, the evaluation of the sample is similar to that of ratio estimation, as discussed in Section \ref{sec:ratio_estimator}. Note that this effectively means that there should be a visible normal pattern in the distribution of the taintings; if most taintings found in the sample are constant, for example when most elements in the population are correct, the standard error of the taintings is understated.
 
 \bigskip
