@@ -4,6 +4,10 @@
 % Source: notebooks/support/regression-analysis/support.Rmd
 % -----------------------------------------------------------------------------
 
+
+\noindent We now compare the recorded annual revenue with the annual expectation. Consistent with the convention used throughout the book, the difference is defined as the recorded amount minus the expectation.
+
+\noindent We use the numbers adjusted for the winter storm conditions.
 \par\addvspace{\topsep}
 \begingroup
 \fvset{listparameters={%
@@ -13,18 +17,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bgtest(ussteamco.mod.3, order = 3, type = "Chisq")
-\end{Verbatim}
-\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-
-	Breusch-Godfrey test for serial correlation of order up
-	to 3
-
-data:  ussteamco.mod.3
-LM test = 7.1466, df = 3, p-value = 0.06737
+monthly_predictions <- pred_df$fit_adj
+annual_prediction <- sum(monthly_predictions)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-
-\noindent The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
-Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.
