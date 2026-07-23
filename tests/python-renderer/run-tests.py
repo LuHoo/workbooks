@@ -448,6 +448,80 @@ class RendererTestCase(unittest.TestCase):
         self.assertIn("[validate-metadata]", proc.stderr + proc.stdout)
         self.assertIn("missing metadata.ada_renderer", proc.stderr + proc.stdout)
 
+    def test_python_exporter_escapes_textcolor_code_and_output_arguments(self):
+        notebook_path = Path(tempfile.mkstemp(prefix="escaping-nb-", suffix=".ipynb")[1])
+        notebook_path.write_text(
+            json.dumps(
+                {
+                    "nbformat": 4,
+                    "nbformat_minor": 5,
+                    "metadata": {
+                        "ada_renderer": {
+                            "target_language": "python",
+                            "workshop_id": "probability-distributions",
+                            "chapter_number": 1,
+                            "source_file": "notebooks/support/probability-distributions/support.Rmd",
+                        }
+                    },
+                    "cells": [
+                        {
+                            "cell_type": "markdown",
+                            "metadata": {},
+                            "source": ["## Exercise 1.1. Escaping demo\n"],
+                        },
+                        {
+                            "cell_type": "code",
+                            "metadata": {},
+                            "execution_count": None,
+                            "outputs": [
+                                {
+                                    "output_type": "stream",
+                                    "name": "stdout",
+                                    "text": ["value_{x} = 100% & tag #1\n"],
+                                }
+                            ],
+                            "source": [
+                                "literal = \"\\n\"\n",
+                                "payload = {\"a_b\": \"100% & #1\"}\n",
+                                "print(payload)\n",
+                            ],
+                        },
+                    ],
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+        tex_path = Path(tempfile.mkstemp(prefix="escaping-", suffix=".tex")[1])
+        subprocess.run(
+            [
+                "python3",
+                str(EXPORTER_SCRIPT),
+                "--input",
+                str(notebook_path),
+                "--output",
+                str(tex_path),
+                "--expect-generated-metadata",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        tex_text = tex_path.read_text(encoding="utf-8")
+        self.assertIn(r'\textcolor{ada_blue}{literal = "\textbackslash{}n"}', tex_text)
+        self.assertIn(
+            r'\textcolor{ada_blue}{payload = \{"a\_b": "100\% \& \#1"\}}',
+            tex_text,
+        )
+        self.assertIn(
+            r"\textcolor{ada_light_blue}{value\_\{x\} = 100\% \& tag \#1}",
+            tex_text,
+        )
+        self.assertNotIn(r'"\n"', tex_text)
+
     def test_python_exporter_chunk_mode_writes_expected_chunk_tex(self):
         notebook_path = Path(tempfile.mkstemp(prefix="chunk-nb-", suffix=".ipynb")[1])
         notebook_path.write_text(

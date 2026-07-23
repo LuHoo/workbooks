@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import argparse
 import json
 import re
@@ -67,10 +69,16 @@ def escape_latex(text: str) -> str:
 def escape_textcolor_argument(text: str) -> str:
     # Lines are passed as an argument to \textcolor{...}{...}, not raw Verbatim text.
     # Escape control characters so code like "\\n" and braces render literally.
-    text = text.replace("\\", r"\\textbackslash{}")
-    text = text.replace("{", r"\\{")
-    text = text.replace("}", r"\\}")
-    return escape_latex(text)
+    replacements = {
+        "\\": r"\textbackslash{}",
+        "{": r"\{",
+        "}": r"\}",
+        "%": r"\%",
+        "&": r"\&",
+        "_": r"\_",
+        "#": r"\#",
+    }
+    return "".join(replacements.get(char, char) for char in text)
 
 
 def convert_inline(text: str) -> str:
