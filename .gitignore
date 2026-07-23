@@ -18,9 +18,9 @@
 *.synctex.gz
 *.toc
 
-# Rendered notebook artifacts
-notebooks/**/*.html
-notebooks/**/*_files/
+# Notebook folders to ignore
+notebooks/python/
+notebooks/workshops/
 
 *.html
 

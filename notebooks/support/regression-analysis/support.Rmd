@@ -786,6 +786,7 @@ bgtest(ussteamco.mod.3, order = 3, type = "Chisq")
 ```
 
 The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
+Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.
 
 ## Exercise 5.26. First-order autocorrelation correction
 
@@ -1222,7 +1223,6 @@ pred_df
 ```
 
 
-<!-- SUPPORT-ONLY:START -->
 
 ## Exercise 5.36. Level of assurance for the annual prediction
 
@@ -1311,4 +1311,3 @@ if (annual_difference < ADR_lower) {
 }
 ```
 
-<!-- SUPPORT-ONLY:END -->

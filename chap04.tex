@@ -640,6 +640,17 @@ Regression & 94.78\% & 94.88\% & 94.65\% & 78.07\% \\
 
 The results in Table \ref{tab:coverage_of_estimators} illustrate two important aspects of the application of the Central Limit Theorem: convergence to a normal distribution is from below\footnote{Convergence from below means that the approximation is anticonservative, with coverage below the nominal 95\%, and nominal coverage is achieved asymptotically as $n$ approaches infinity} and is slow for a distribution with sporadic errors. The coverage of the three estimators is below 80\%, and this is mainly caused by instances where very few (i.e., less than three) differences were found in the sample. In the sporadic errors distribution, there are only 116 differences in the 3500 population elements; therefore, the probability that a sample of 100 reveals less than three differences is approximately 35\%.
 
+\bigskip
+The simulation results demonstrate that no estimator is uniformly superior across all populations. The relative performance depends on the relationship between book values and audit values and on the distribution of the misstatements. Consequently, the choice of estimator should not be based solely on tradition or convenience.
+
+In addition to statistical efficiency, practical considerations may influence the choice of estimator. 
+Difference estimation requires knowledge of the population size, whereas ratio estimation requires knowledge of the total book value of the population. 
+Auditors may therefore not always have access to all estimators. Furthermore, selecting an estimator amounts to selecting a model for the relationship between book values and audit values. 
+Ratio estimation assumes that misstatements are broadly proportional to book values, whereas difference estimation assumes that misstatements are approximately constant across sampling units. 
+The observed sample results provide evidence about the validity of these assumptions. 
+Consequently, auditors should evaluate whether the pattern of misstatements observed in the sample is consistent with the projection method selected. 
+Such an evaluation does not justify replacing the estimator after observing the results, but it does provide insight into the suitability and limitations of the conclusions drawn.
+
 % section choice_of_estimator (end)
 
 \section{Using CVS with sporadic errors} % (fold)

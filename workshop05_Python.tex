@@ -88,35 +88,49 @@
 \textcolor{ada_blue}{    print(table)}
 \textcolor{ada_blue}{    return table}
 
+\textcolor{ada_blue}{def _ensure_required_r_packages(ro, packages):}
+\textcolor{ada_blue}{    missing = []}
+\textcolor{ada_blue}{    for pkg in packages:}
+\textcolor{ada_blue}{        available = bool(ro.r(f"requireNamespace('{pkg}', quietly=TRUE)")[0])}
+\textcolor{ada_blue}{        if not available:}
+\textcolor{ada_blue}{            missing.append(pkg)}
+\textcolor{ada_blue}{    if missing:}
+\textcolor{ada_blue}{        missing_str = ', '.join(missing)}
+\textcolor{ada_blue}{        raise RuntimeError(}
+\textcolor{ada_blue}{            "Required R package(s) not available: " + missing_str + ". "}
+\textcolor{ada_blue}{            "This notebook expects all dependencies to be preinstalled by the Binder image. "}
+\textcolor{ada_blue}{            "Please rebuild or verify the Binder environment; runtime package installation is disabled."}
+\textcolor{ada_blue}{        )}
+
 \textcolor{ada_blue}{def ada_run_r(code):}
-\textcolor{ada_blue}{    try:}
-\textcolor{ada_blue}{        import rpy2.robjects as ro}
-\textcolor{ada_blue}{        from rpy2.robjects import numpy2ri, pandas2ri}
+\textcolor{ada_blue}{    import rpy2.robjects as ro}
+\textcolor{ada_blue}{    from rpy2.robjects import numpy2ri, pandas2ri}
 
-\textcolor{ada_blue}{        with (ro.default_converter + pandas2ri.converter + numpy2ri.converter).context():}
-\textcolor{ada_blue}{            for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
-\textcolor{ada_blue}{                if _name in globals():}
-\textcolor{ada_blue}{                    ro.globalenv[_name] = globals()[_name]}
+\textcolor{ada_blue}{    required = ['aicpa', 'FSaudit', 'car', 'lmtest', 'pbkrtest', 'lme4', 'nloptr']}
+\textcolor{ada_blue}{    _ensure_required_r_packages(ro, required)}
 
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('aicpa', quietly=TRUE)) library(aicpa)")}
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('FSaudit', quietly=TRUE)) library(FSaudit)")}
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('car', quietly=TRUE)) library(car)")}
-\textcolor{ada_blue}{            ro.r("if (requireNamespace('lmtest', quietly=TRUE)) library(lmtest)")}
-\textcolor{ada_blue}{            _result = ro.r(code)}
+\textcolor{ada_blue}{    with (ro.default_converter + pandas2ri.converter + numpy2ri.converter).context():}
+\textcolor{ada_blue}{        for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
+\textcolor{ada_blue}{            if _name in globals():}
+\textcolor{ada_blue}{                ro.globalenv[_name] = globals()[_name]}
 
-\textcolor{ada_blue}{            _env_names = set(str(_n) for _n in ro.r('ls()'))}
-\textcolor{ada_blue}{            for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
-\textcolor{ada_blue}{                if _name in _env_names:}
-\textcolor{ada_blue}{                    _value = ro.globalenv[_name]}
-\textcolor{ada_blue}{                    _converted = ro.conversion.get_conversion().rpy2py(_value)}
-\textcolor{ada_blue}{                    if hasattr(_converted, 'columns'):}
-\textcolor{ada_blue}{                        globals()[_name] = pd.DataFrame(_converted)}
-\textcolor{ada_blue}{                    else:}
-\textcolor{ada_blue}{                        globals()[_name] = _converted}
+\textcolor{ada_blue}{        ro.r("library(aicpa)")}
+\textcolor{ada_blue}{        ro.r("library(FSaudit)")}
+\textcolor{ada_blue}{        ro.r("library(car)")}
+\textcolor{ada_blue}{        ro.r("library(lmtest)")}
+\textcolor{ada_blue}{        _result = ro.r(code)}
 
-\textcolor{ada_blue}{            return _result}
-\textcolor{ada_blue}{    except Exception as _exc:}
-\textcolor{ada_blue}{        print(f'R bridge execution skipped for this block: {_exc}')}
+\textcolor{ada_blue}{        _env_names = set(str(_n) for _n in ro.r('ls()'))}
+\textcolor{ada_blue}{        for _name in ['USSteamCo', 'USSteamCoEstim', 'USSteamCoHold', 'USSteamCoEstim2']:}
+\textcolor{ada_blue}{            if _name in _env_names:}
+\textcolor{ada_blue}{                _value = ro.globalenv[_name]}
+\textcolor{ada_blue}{                _converted = ro.conversion.get_conversion().rpy2py(_value)}
+\textcolor{ada_blue}{                if hasattr(_converted, 'columns'):}
+\textcolor{ada_blue}{                    globals()[_name] = pd.DataFrame(_converted)}
+\textcolor{ada_blue}{                else:}
+\textcolor{ada_blue}{                    globals()[_name] = _converted}
+
+\textcolor{ada_blue}{        return _result}
 
 \textcolor{ada_blue}{try:}
 \textcolor{ada_blue}{    import contextlib}
@@ -915,6 +929,7 @@ The Breusch-Godfrey test is executed through \ttblue{bgtest}.
 \end{Verbatim}
 
 The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
+Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.
 
 
 \end{exercise}
@@ -1258,6 +1273,90 @@ Adjust the March prediction based on the corroborated evidence for the winter co
 \textcolor{ada_blue}{pred_df.loc[march_row, 'upr_adj'] = pred_df.loc[march_row, 'upr_adj'] - storm_adjustment}
 \textcolor{ada_blue}{pred_df['outside_adj'] = (pred_df['recorded'] < pred_df['lwr_adj']) | (pred_df['recorded'] > pred_df['upr_adj'])}
 \textcolor{ada_blue}{display(pred_df)}
+\end{Verbatim}
+
+
+
+\end{exercise}
+
+\begin{exercise}
+\textbf{Level of assurance for the annual prediction}
+
+
+We now compare the recorded annual revenue with the annual expectation. Consistent with the convention used throughout the book, the difference is defined as the recorded amount minus the expectation.
+We use the numbers adjusted for the winter storm conditions.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{monthly_predictions = pred_df["fit_adj"]}
+\textcolor{ada_blue}{annual_prediction = sum(monthly_predictions)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{# Difference convention: recorded amount minus expectation}
+\textcolor{ada_blue}{annual_recorded = sum(USSteamCoHold["revenue"])}
+\textcolor{ada_blue}{annual_difference = annual_recorded - annual_prediction}
+\textcolor{ada_blue}{cat("Recorded annual revenue:", annual_recorded, "\n")}
+\textcolor{ada_blue}{cat("Expected annual revenue:", annual_prediction, "\n")}
+\textcolor{ada_blue}{cat("Difference:", annual_difference, "\n")}
+\textcolor{ada_blue}{cat("Annual prediction standard error:", annual_se, "\n")}
+\end{Verbatim}
+
+Next, we set the audit parameters and construct the acceptable difference range. The acceptable difference range is expressed around zero, because it is applied to the difference between the recorded amount and the expectation.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{# Set audit parameters}
+\textcolor{ada_blue}{PM = 15000000         # Performance materiality}
+\textcolor{ada_blue}{beta = 0.01           # Efficiency risk used for the acceptable difference range}
+\textcolor{ada_blue}{df = df_res}
+\textcolor{ada_blue}{# Standardized materiality}
+\textcolor{ada_blue}{delta = PM / annual_se}
+\textcolor{ada_blue}{# Critical values for a two-sided 99% acceptable difference range}
+\textcolor{ada_blue}{c_L = t.ppf(beta / 2, df=df)}
+\textcolor{ada_blue}{c_U = t.ppf(1 - beta / 2, df=df)}
+\textcolor{ada_blue}{# Acceptable difference range for the annual difference}
+\textcolor{ada_blue}{ADR_lower = c_L * annual_se}
+\textcolor{ada_blue}{ADR_upper = c_U * annual_se}
+\textcolor{ada_blue}{cat("Acceptable Difference Range for the annual difference:\n")}
+\textcolor{ada_blue}{cat("Lower bound:", ADR_lower, "\n")}
+\textcolor{ada_blue}{cat("Upper bound:", ADR_upper, "\n")}
+\end{Verbatim}
+
+Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{# Acceptable bounds for recorded annual revenue}
+\textcolor{ada_blue}{recorded_lower = annual_prediction + ADR_lower}
+\textcolor{ada_blue}{recorded_upper = annual_prediction + ADR_upper}
+\textcolor{ada_blue}{cat("Acceptable bounds for recorded annual revenue:\n")}
+\textcolor{ada_blue}{cat("Lower bound:", recorded_lower, "\n")}
+\textcolor{ada_blue}{cat("Annual expectation:", annual_prediction, "\n")}
+\textcolor{ada_blue}{cat("Upper bound:", recorded_upper, "\n")}
+\end{Verbatim}
+
+The achieved assurance is calculated using the non-central \(t\) distribution. A material overstatement shifts the distribution of the standardized difference to the right. A material understatement shifts it to the left.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{# Achieved assurance when controlling efficiency risk}
+\textcolor{ada_blue}{assurance_over = 1 - t.cdf(c_U, df=df, ncp = delta)}
+\textcolor{ada_blue}{assurance_under = t.cdf(c_L, df=df, ncp = -delta)}
+\textcolor{ada_blue}{cat("Achieved assurance for detecting overstatement:",}
+\textcolor{ada_blue}{    np.round(assurance_over * 100, 1), "%\n")}
+\textcolor{ada_blue}{cat("Achieved assurance for detecting understatement:",}
+\textcolor{ada_blue}{    np.round(assurance_under * 100, 1), "%\n")}
+\end{Verbatim}
+
+Finally, we evaluate the observed annual difference.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ada_blue}{# Conclusion for the observed annual difference}
+\textcolor{ada_blue}{if (annual_difference < ADR_lower) {}
+\textcolor{ada_blue}{  cat("The annual difference indicates a potential understatement requiring investigation.\n")}
+\textcolor{ada_blue}{} else if (annual_difference > ADR_upper) {}
+\textcolor{ada_blue}{  cat("The annual difference indicates a potential overstatement requiring investigation.\n")}
+\textcolor{ada_blue}{} else {}
+\textcolor{ada_blue}{  cat("The annual difference falls within the acceptable difference range.\n")}
+\textcolor{ada_blue}{}}
 \end{Verbatim}
 
 

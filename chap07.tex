@@ -204,7 +204,9 @@ Accordingly, the central question that underlies this chapter is not whether a r
 \subsection{Overview of this chapter} % (fold)
 \label{sub:overview_of_this_chapter}
 
-In Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we provide an overview of the steps taken when performing SAPs. In this Chapter, we provide further details on certain steps when the SAP is carried out using regression analysis.
+In Section \ref{sec:steps_in_performing_a_substantive_analytical_procedure} we provide an overview of the phases of performing SAPs: plan, obtain data, perform, and evaluate. In this Chapter, we provide further details on certain steps when the SAP is carried out using regression analysis.
+
+\subsubsection{Phase 1: Plan the SAP}
 
 \paragraph{Assumptions underlying regression results} % (fold)
 \label{par:assumptions_underlying_regression_results}
@@ -213,12 +215,15 @@ Section \ref{sec:assumptions_underlying_regression_results} discusses the specif
 
 % paragraph assumptions_underlying_regression_results (end)
 
+\subsubsection{Phase 2: Obtain the data from which the expectation of recorded amounts or ratios is to be developed}
 \paragraph{Obtaining and testing data} % (fold)
 \label{par:obtaining_and_testing_data}
 
 We then proceed to obtain and test the data used in the analysis (See Section \ref{sec:obtaining_and_testing_data}). The steps outlined in this section satisfy the requirements from the Standards discussed in Section \ref{sec:relevance_and_reliability_of_the_data}.
 
 % paragraph obtaining_and_testing_data (end)
+
+\subsubsection{Phase 3: Perform the SAP}
 
 \paragraph{Modeling} % (fold)
 \label{par:modeling}
@@ -261,6 +266,8 @@ Section \ref{sec:testing_significance} includes two conventional statistical tes
 Once the validity and significance of the model have been assessed, we proceed in Section \ref{sec:expectations}, creating expectations for the hold-out set. 
 
 % paragraph expectations (end)
+
+\subsubsection{Phase 4: Evaluate and respond to the results of the SAP}
 
 \paragraph{Evaluation} % (fold)
 \label{par:evaluation}
@@ -609,10 +616,7 @@ To capture this relationship in a straight line, we need to estimate the two coe
   y = \beta_0 + \beta_1x + \epsilon
   % \label{eq:simple_linear_regression_model}
 \end{equation*}
-\noindent where $\beta_0$ is the \hlblue{intercept}\index{intercept}, the place where the regression line crosses the $y$-axis at $x = 0$, and $\beta_1$ is the \hlblue{slope}\index{slope} of the regression line. 
-The coefficients are estimated such that the line best fits the data in the \emph{estimation period}\index{estimation period}. 
-$\hat{y}$ is the estimated value of the conditional mean of the dependent variable $y$, conditional on the realized value of $x$.
-Because real-world data rarely fall perfectly on a straight line, the regression model includes an error term $\epsilon$, which represents the random variation or noise in $y$ that cannot be explained by the linear relationship with $x$. 
+\noindent where $y$ is the dependent variable, $\beta_0$ is the population \hlblue{intercept}\index{intercept} parameter, $\beta_1$ is the population \hlblue{slope}\index{slope} parameter, and $\epsilon$ represents the unexplained variation in $y$. 
 This term captures all other factors affecting $y$ that are not explicitly included in the model.
 
 Note that the observations are scattered around the (presumed) straight line. Apparently, the relationship between revenue and production is not clear. Numerous factors can lead to this inaccuracy. One factor is the absence of other independent variables in the model; this is something that we expand on in Section \ref{sub:multiple_regression}. The relationship may not be linear but can be better expressed by a curve; this is investigated in Section \ref{sub:transformations}. There could be structural changes to this relationship. The time-series plot in Figure \ref{fig:H7_Time_series_plots} also indicates seasonality in the data. It remains to be seen at this point whether or not all seasonality in the dependent variable can be explained by seasonality in the independent variable, or should be taken care of by other means. 
@@ -895,36 +899,96 @@ Transforming variables in linear regression serves several key purposes, each ai
 Transformations offer a practical solution to address these issues. They can adjust the variables to meet the assumptions required for linear regression, ensuring the model is suitable for robust analysis. In Section \ref{sec:testing_model_assumptions}, these assumptions are systematically tested, and the role of transformations in satisfying them is evaluated. Below, we outline the primary purposes of transforming variables in linear regression. Each purpose aligns with specific model assumptions and aims to improve model reliability and interpretability.
 
 \bigskip
-Both the dependent variable $y$ and independent variables $x_1 \ldots x_k$ can be transformed. The transformation of the dependent variable $y$ is referred to as the \hlblue{Box-Cox transformation}\index{Box-Cox transformation}\index{transformation!Box-Cox}, a mathematical technique using parameter lambda ($\lambda$)\nomenclature{$\lambda$}{parameter of the Box-Cox or Box-Tidwell transformation}, which can take different values to achieve various transformations. The general formula for the Box-Cox transformation is:
+
+Both the dependent variable \(y\) and the independent variables \(x_1,\ldots,x_k\) can be transformed. Transformations are commonly used to improve the suitability of a regression model. Depending on the circumstances, they may help to stabilize the variance, reduce skewness, improve the normality of residuals, and linearize relationships between variables.
+
+\bigskip
+
+The transformation of the dependent variable \(y\) is referred to as the \hlblue{Box--Cox transformation}\index{Box-Cox transformation}\index{transformation!Box-Cox}, a mathematical technique using parameter lambda (\(\lambda\))\nomenclature{$\lambda$}{parameter of the Box-Cox or Box-Tidwell transformation}. The general form of the Box--Cox transformation is:
 
 \begin{equation}
-y(\lambda) =    
+y(\lambda) =
 \begin{cases}
-  \frac{y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\    
-  \ln(y) & \text{if } \lambda = 0 \\   
+\dfrac{y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
+\ln(y) & \text{if } \lambda = 0
 \end{cases}
 \end{equation}
 
-In this formula, $y$ represents the original data point and $\lambda$ is the transformation parameter. $y(\lambda)$ represents the transformed value of the data point using the Box-Cox transformation with the parameter $\lambda$. As $\lambda$ approaches zero, the formula approaches the natural logarithm. As $\lambda$ approaches one, the formula approaches a simple linear transformation $y(\lambda) = y - 1$ (i.e., the identity transformation).
+In this formula, \(y\) represents the original observation and \(\lambda\) is the transformation parameter. The transformed value is denoted by \(y(\lambda)\). As \(\lambda\) approaches zero, the transformation converges to the natural logarithm. As \(\lambda\) approaches one, it converges to the identity transformation \(y(\lambda)=y-1\).
 
 \bigskip
-The interpretation of some values of $\lambda$ is as follows.
 
-  \paragraph{$\lambda$ = -1:} This corresponds to the reciprocal transformation, $y(\lambda) = 1 - 1/y$. It can be used when the data have a decreasing exponential pattern.
-  \paragraph{$\lambda$ = -0.5:} This corresponds to the negative square root transformation, $y(\lambda) = 2(1-\frac{1}{\sqrt{y}})$. This is useful for data that exhibit a square-root relationship.
-  \paragraph{$\lambda$ = 0:} This corresponds to the natural logarithm transformation, $ y(\lambda) = \ln(y)$. It is commonly used to stabilize the variance of data and make it more normally distributed.
-  \paragraph{$\lambda$ = 0.5:} This corresponds to the square root transformation, $ y(\lambda) = 2(\sqrt{y} - 1)$. It is suitable for data with a square root relationship.
-  \paragraph{$\lambda$ = 1:} This corresponds to the identity transformation, $ y(\lambda) = y - 1$. No transformation is applied in this case.
-  \paragraph{$\lambda$ = 2:} This corresponds to the square transformation, $ y(\lambda) = (y^2 - 1)/2 $. It is used when the data have a quadratic relationship.
+The primary purpose of the Box--Cox transformation is to identify a transformation of the dependent variable that improves adherence to the assumptions underlying linear regression. In particular, it may reduce skewness, stabilize the variance, and improve the linearity of the relationship between the dependent variable and the predictor variables.
 
-\begin{figure}[htbp]
+\bigskip
+
+Certain values of \(\lambda\) correspond to well-known transformations.
+
+\paragraph{\(\lambda = -1\):}
+This corresponds to the reciprocal transformation,
+
+\[
+y(\lambda)=1-\frac{1}{y}.
+\]
+
+It strongly compresses large values and is often useful when the response variable is highly right-skewed or when its variance increases rapidly as the level of the variable increases.
+
+\paragraph{\(\lambda = -0.5\):}
+This corresponds to the reciprocal square-root transformation,
+
+\[
+y(\lambda)=2\left(1-\frac{1}{\sqrt{y}}\right).
+\]
+
+It is useful for strongly right-skewed data and can reduce the influence of unusually large observations while helping to stabilize the variance.
+
+\paragraph{\(\lambda = 0\):}
+This corresponds to the natural logarithm transformation,
+
+\[
+y(\lambda)=\ln(y).
+\]
+
+It is commonly used when the response variable is positively skewed or when the variability tends to increase with the level of the response. The logarithmic transformation often converts multiplicative relationships into additive linear relationships.
+
+\paragraph{\(\lambda = 0.5\):}
+This corresponds to the square-root transformation,
+
+\[
+y(\lambda)=2(\sqrt{y}-1).
+\]
+
+It is useful for moderately right-skewed data and can stabilize variance when the variability increases with the mean.
+
+\paragraph{\(\lambda = 1\):}
+This corresponds to the identity transformation,
+
+\[
+y(\lambda)=y-1.
+\]
+
+No substantive transformation is applied.
+
+\paragraph{\(\lambda = 2\):}
+This corresponds to the square transformation,
+
+\[
+y(\lambda)=\frac{y^2-1}{2}.
+\]
+
+It expands larger values relative to smaller values and may occasionally be useful when the response variable is left-skewed.
+
+\bigskip
+
+\begin{figure}[bt]
   \includegraphics[width=\columnwidth]{H7_exponential_function_pos.pdf}
-  \caption{Exponential function $y = e^{b_0} \cdot e^{b_1x}$ and its transformation $ln(y) = b_0 + b_1x$. The slope coefficient $b_1$ is positive.}
+  \caption{Exponential function $y = e^{b_0}\cdot e^{b_1x}$ and its transformation $\ln(y) = b_0 + b_1x$. The slope coefficient $b_1$ is positive.}
   \label{fig:H7_exponential_function_pos}
 \end{figure}
 
 \bigskip
-Table \ref{tab:list_of_common_transformation_methods} on page \pageref{tab:list_of_common_transformation_methods} summarizes commonly used transformations.
+
+Table \ref{tab:list_of_common_transformation_methods} on page \pageref{tab:list_of_common_transformation_methods} summarizes a number of commonly used transformations. Some transformations are applied to the dependent variable, while others are applied to one or more predictor variables. These transformations can often be used to convert a non-linear relationship into a form that can be estimated using ordinary linear regression.
 
 \begin{sidewaystable}[htbp]
 \begin{tabularx}{\textheight}{X Y Y Y}
@@ -937,31 +1001,42 @@ Predicted value ($(\hat{y}$)  \\
 \midrule
 
 Standard linear regression & -- & $y = b_0 + b_1x$ & $\hat{y} = b_0 + b_1x$ \\
-Exponential & log(y) & $log(y) = b_0 + b_1x$ & $\hat{y} = 10^{b_0 + b_1x}$ \\
+Exponential & ln(y) & $ln(y) = b_0 + b_1x$ & $\hat{y} = e^{b_0 + b_1x}$ \\
 Quadratic & sqrt(y) & $\sqrt{y} = b_0 + b_1x$ & $\hat{y} = (b_0 + b_1x)^2$ \\
 Inverse & 1/y & $1/y = b_0 + b_1x$ & $\hat{y} = 1 / (b_0 + b_1x)$ \\
-Logarithmic & log(x) & $y = b_0 + b_1log(x)$ & $\hat{y} = b_0 + b_1log(x)$ \\
-Power & log(y), log(x) & $log(y) = b_0 + b_1log(x)$ & $\hat{y} = 10^{b_0} \cdot x^{b_1}$ \\
+Logarithmic & ln(x) & $y = b_0 + b_1ln(x)$ & $\hat{y} = b_0 + b_1ln(x)$ \\
+Power & ln(y), ln(x) & $ln(y) = b_0 + b_1ln(x)$ & $\hat{y} = e^{b_0} \cdot x^{b_1}$ \\
 
 \bottomrule
 \end{tabularx}
-\caption{List of common transformation methods}
+\caption{Common regression transformations and functional forms}
 \label{tab:list_of_common_transformation_methods}
 \end{sidewaystable}
 
 \bigskip
-Choosing an appropriate $\lambda$ involves finding the transformation that best stabilizes the variance, normalizes the distribution, and achieves linearity for the specific dataset. This process typically requires maximizing the likelihood function of the transformed data, which can be accomplished using computer software such as \ttblue{R}. For instance, \ttblue{R} provides functions like \ttblue{boxcox} from the \ttblue{MASS} package, which automates the estimation of the optimal $\lambda$ value based on the given data and regression model. These tools simplify the search for the $\lambda$ that optimizes the model's fit, ensuring the process is efficient and user-friendly.
 
-The Box-Cox transformation assumes that the data values are positive. If the data contain zeros or negative values, alternative transformations like the \hlblue{Yeo-Johnson transformation}\index{Yeo-Johnson transformation} can be used, which can accommodate a wider range of data distributions.
+Choosing an appropriate value of \(\lambda\) involves identifying the transformation that best improves the fit of the regression model. In practice, this involves balancing several objectives, including stabilizing the variance, reducing skewness, improving the normality of residuals, and increasing the linearity of relationships. The optimal value of \(\lambda\) is commonly selected by maximizing the likelihood function of the transformed regression model.
+
+Computer software such as \ttblue{R} can automate this process. For example, the \ttblue{boxcox} function from the \ttblue{MASS} package evaluates a range of values for \(\lambda\) and identifies the value that maximizes the likelihood function.
 
 \bigskip
-The \hlblue{Box--Tidwell transformation}\index{Box-Tidwell transformation}\index{transformation!Box-Tidwell} models non-linear relationships by applying a power transformation to the predictor variables \(x_i\), rather than to the response variable. It is defined as:
-\begin{equation}
-x_i(\lambda_i) = x_i^{\lambda_i}
-\end{equation} 
-where $\lambda_i$ is a parameter estimated for each predictor $x_i$, allowing for individual transformations of the predictors. The Box-Tidwell transformation is often applied when one or more predictor variables exhibit non-linear relationships with the response. The main advantage transforming the predictor variables rather than the dependent are interpretability of the model, particularly with regard to concluding on whether the account analyzed is materially misstated.
 
-The choice of transformation depends on the characteristics of the data and goals of the analysis. However, it is important to note that although transformations can offer benefits, they can also introduce complexity and complicate the interpretation of results. It is essential to carefully consider the trade-offs and underlying assumptions before applying transformations in linear regression modeling. 
+The Box--Cox transformation requires positive values of the dependent variable. If the data contain zero or negative values, alternative transformations such as the \hlblue{Yeo--Johnson transformation}\index{Yeo-Johnson transformation} may be used because they accommodate a wider range of data values.
+
+\bigskip
+
+The \hlblue{Box--Tidwell transformation}\index{Box-Tidwell transformation}\index{transformation!Box-Tidwell} is conceptually different from the Box--Cox transformation. Whereas the Box--Cox transformation is applied to the response variable, the Box--Tidwell transformation is applied to one or more predictor variables. Its purpose is to identify and model non-linear relationships between the predictors and the response variable. The transformation is defined as
+
+\begin{equation}
+x_i(\lambda_i)=x_i^{\lambda_i}
+\end{equation}
+where \(\lambda_i\) is estimated separately for each predictor \(x_i\).
+
+The Box--Tidwell transformation is particularly useful when a predictor exhibits a systematic but non-linear relationship with the dependent variable. By transforming the predictor rather than the response variable, the interpretation of the dependent variable remains unchanged, which may be advantageous in an audit context when evaluating whether an account balance is materially misstated.
+
+\bigskip
+
+The choice of transformation depends on the characteristics of the data and the objectives of the analysis. Although transformations can substantially improve model performance and validity, they may also complicate interpretation. Consequently, the benefits of improved model assumptions should be weighed against the resulting loss of simplicity and interpretability.
 % subsection transformations (end)
 
 \subsection{Alternative modeling techniques} % (fold)
@@ -1141,10 +1216,15 @@ where: &$D_i$ & : Cook's distance for observation $i$\\
 \nomenclature{$D_i$}{Cook's distance for observation $i$}
 
 \bigskip
-Cook's distance follows an $F$ distribution with $k$ and $n - k$ degrees of freedom. However, some caution should be exercised in finding an appropriate cut-off value to identify influential observations: if the cut-off is chosen too low (for example, $D < \frac{4}{n - k -1}$), points that exercise only mild influence are highlighted for further scrutiny, thereby underestimating the precision of the model. This results in a higher occurrence of observations in the current audit period that have an unacceptable difference, leading to additional work for the auditor. If the cut-off is chosen too high (for example $D > 1$), the model coefficients are distorted, with ultimately the same effect. 
-As a general rule, a Cook's distance greater than 1 indicates a point likely to have substantial influence on the model, while a point in the 0.5 to 1.0 range is only occasionally worthy of investigation. Observations with Cook's distance below 0.5 are unlikely to influence the model in any substantial way.
+Cook's distance follows an $F$ distribution with $k$ and $n - k$ degrees of freedom. However, some caution should be exercised in selecting an appropriate cut-off value for identifying influential observations. 
+The cut-off serves as a screening criterion rather than as a formal decision rule. 
+Observations exceeding the cut-off are flagged for further investigation; observations below the cut-off are not automatically free from scrutiny if other diagnostics indicate potential problems.
 
-Figure \ref{fig:H7_influenceplot} summarizes the three statistics: hat-values on the $x$-axis, Studentized residuals on the $y$-axis, and the size of the bubbles is proportional to their Cook's distance.
+If the cut-off is chosen too low (for example, $D_i > \frac{4}{n-k-1}$), observations with only mild influence may be flagged. This may lead to unnecessary investigation and could result in the removal of observations that are, in fact, representative of the population. If the cut-off is chosen too high (for example, $D_i > 1$), genuinely influential observations may go unnoticed and distort the estimated regression coefficients.
+
+As a rule of thumb, observations with a Cook's distance greater than 1 are often considered highly influential and generally warrant investigation. Observations with Cook's distance between 0.5 and 1 may merit review, particularly when supported by other diagnostics such as large residuals or high leverage. Observations with Cook's distance below 0.5 are generally unlikely to exert substantial influence on the fitted model, although professional judgment remains necessary and other indications of data quality issues should not be ignored.
+
+Figure \ref{fig:H7_influenceplot} combines three measures that are commonly used to assess influential observations. The horizontal axis shows the hat-values (leverage), the vertical axis shows the Studentized residuals, and the size of the circles is proportional to Cook's distance. The vertical dashed line indicates the leverage threshold \(h_i=2p/n\), where \(p\) is the number of estimated regression parameters, including the intercept, and \(n\) is the number of observations. Observations to the right of this line have unusually high leverage. The horizontal dashed lines at Studentized residuals of \(\pm2\) identify observations whose residuals are unusually large relative to the fitted model. Observations that combine high leverage, large Studentized residuals, and a large Cook's distance deserve particular attention because they have the greatest potential to influence the estimated regression coefficients.
 
 \begin{figure}[tbp]
   \includegraphics[width=\columnwidth]{H7_influenceplot.pdf}
@@ -1176,11 +1256,10 @@ Cook's distance \\
 \end{table}
 
 Table \ref{tab:top_3_influence_statistics} shows the three largest (absolute) values of the Studentized residuals, hat-values and Cook's distances for \ttblue{mod.2}.
-The largest residual outliers are observations 22, 34, and 36, and the three largest leverage points are 34, 29, and 30. 
-The three most influential observations, as measured by Cook's distance, are observations 34, 22, and 30.
-Because not all top three are similar, a total of five observations are listed.
+The observations with the largest absolute Studentized residuals are 22, 34, and 36, whereas the observations with the largest leverage values are 34, 29, and 30. The three most influential observations, as measured by Cook's distance, are 34, 22, and 30. Because the rankings are not identical across the three diagnostics, a total of five observations are included in the table.
 
-There are no specific explanations for the unusually low values in June 2013 and October 2013. However, the observation from October 2012 coincides with a known disruption in production due to Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}} This extreme event resulted in a Studentizized residual of approximately $-4.168$, marking it as a clear outlier in the dataset.
+No specific business events or data-quality issues were identified that explain the unusually low values in June 2013 and October 2013.
+However, the observation from October 2012 coincides with a known disruption in production caused by Hurricane Sandy, which struck the East Coast of the United States.\footnote{See also Figure \ref{fig:H7_scat_rev2} on page \pageref{fig:H7_scat_rev2}.} This observation has a Studentized residual of approximately $-4.168$ and is therefore clearly unusual relative to the fitted model. It is also one of the most influential observations in the dataset.
 
 Since we are working with time-series data, we cannot remove the observation without disrupting the temporal structure of the analysis. Instead, we apply residual winsorization to reduce the influence of this extreme value while retaining its presence in the series. In this approach, the residual is adjusted relative to the fitted regression value. Specifically, the residual for October 2012 is replaced by the 5th percentile of the residual distribution, and the adjusted response is reconstructed as the fitted value plus this winsorized residual.
 
@@ -1330,7 +1409,7 @@ Consequently, the common rule of thumb that a VIF greater than 10 indicates seri
 \]
 
 Thus, when using the adjusted GVIF scale, values above about 3.16 may indicate substantial multicollinearity. Values well below this threshold do not suggest serious variance inflation.
-For the \emph{Case: US SteamCo}, the largest VIF in \ttblue{mod.1} is 5.60 (for \ttblue{coolDD}), and the largest adjusted GVIF in \ttblue{mod.3} is 2.47 (also for \ttblue{coolDD}). Both are below their respective reference thresholds, so we find no evidence of problematic multicollinearity in the working models.
+For the \emph{Case: US SteamCo}, the largest VIF in \ttblue{mod.1} is 5.60 (for \ttblue{coolDD}), and the largest adjusted GVIF in \ttblue{mod.3} is 2.47 (also for \ttblue{coolDD}).\footnote{See Exercise \ref{ex:vif}} Both are below their respective reference thresholds, so we find no evidence of problematic multicollinearity in the working models.
 
 % subsection multicollinearity (end)
 
@@ -1545,7 +1624,7 @@ Note the increase in explained variation by adding the two additional variables 
 
 In this analysis, the calculation of the sum of squares is sequential in the sense that the effects of the independent variables are established in the order in which they were entered into the model specification. We defined \ttblue{mod.1} as \ttblue{revenue $\sim$ production + coolDD + heatDD}. The effects are measured in the order in which they appear in the model declaration: first \ttblue{production}, then \ttblue{coolDD}, and \ttblue{heatDD}. 
 
-The column \ttblue{Sum Sq} shows the sum of squares for each independent variable starting with \ttblue{production} ignoring all other effects, then \ttblue{coolDD}, considering that \ttblue{production} has already explained some variation but ignores \ttblue{heatDD}. Therefore the table explains a sequence of models in which independent variables are added one at a time. Had we called the model in a different order, the sums of the squares of the independent variables would have been different. See Exercise \ref{ex:anova} for a comparison.
+The column \ttblue{Sum Sq} shows the sum of squares for each independent variable starting with \ttblue{production} ignoring all other effects, then \ttblue{coolDD}, considering that \ttblue{production} has already explained some variation but ignores \ttblue{heatDD}. Therefore the table explains a sequence of models in which independent variables are added one at a time. Had we specified the model in a different order, the sums of squares attributed to the independent variables would generally have been different because each variable is evaluated after accounting for the variables that precede it in the model. See Exercise \ref{ex:anova} for a comparison.
 
 \bigskip
 The full summary table\footnote{See \ref{ex:summary.mod.0}} displays the values of the multiple $r^2$ (also referred to as the coefficient of determination\index{coefficient of determination}) and the adjusted $r^2$. Since $r^2$ explains the percentage variance explained by the model, it may be tempting to compare models using this statistic. It should be noted that when adding independent variables to the model, the value of $r^2$ cannot decrease even when non-significant independent variables are added.
@@ -1617,7 +1696,7 @@ After this comparison, we separately examine the effect of the outlying observat
 Following the AAG guidance (AAG A.63), we also consider standard errors and $t$ statistics from the individual model summaries (for example, Table \ref{tab:summary_mod_3}). 
 In \ttblue{mod.3}, for instance, most predictors have statistically significant $t$ statistics whose absolute values exceed 2.0, consistent with the guidance that such values indicate a valid relationship between the predictor and the dependent variable. 
 This supports confidence in the reliability of the regression coefficients. 
-However, some variables (e.g., \ttblue{heatDD} and \ttblue{summer:heatDD}) show low $t$ statistics, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04). 
+However, some variables (e.g., \ttblue{heatDD} and \ttblue{heatDD:summer}) show low $t$ statistics, suggesting they may not contribute meaningfully and could be candidates for removal in future model refinements (AAG B.03–B.04). 
 Although \ttblue{summer} also has a low $t$ value, caution is advised before removing it, as it interacts with both \ttblue{production} and \ttblue{coolDD}, potentially influencing their effects.
 
 The standard error of the regression, although not tabulated, should also be interpreted in light of materiality. For example, AAG A.64 notes that if the standard error is less than about 75\% of materiality, the model may be considered reliable for audit purposes. In our case, if the standard error of the best-fitting models falls within this range, it would further support reliance on the regression. Moreover, as we discuss in Section \ref{sec:auditor_response}, we use statistical theory to translate the standard error to the level of assurance that is obtained form the model, by specifically incorporating materiality.
@@ -1627,7 +1706,7 @@ In line with AAG A.66, we also emphasize judgment: statistical criteria can guid
 Finally, we note the potential for model validation through holdout samples or cross-validation, as discussed in the AAG (A.65). Re-estimating the regression on subsets of the data can help assess the model’s robustness and generalizability, particularly when models are used for substantive or audit-related conclusions.
 
 \bigskip
-We continue the development of our analysis using \ttblue{mod.3}.
+We continue the development of our analysis using \ttblue{mod.3}, the winsorized model.
 
 % section analysis_of_variance (end)
 
@@ -1654,7 +1733,7 @@ We can rely on graphical information for each of these assumptions, or perform o
 % SvA 9.6.5
 Now that we have resolved any potential problems related to the need for disaggregation, time lags, outliers, and influential observations, we can test the normality assumption. It states that the disturbance terms $\epsilon$ follow a normal distribution. This assumption is necessary to construct prediction intervals, and is also an assumption of the tests for homoskedasticity and autocorrelation.
 
-Figure \ref{fig:H7_hist_normalized_residuals} shows a histogram of the standardized residuals of \ttblue{mod.3}, with an overlay of a standard normal distribution curve. At first glance it is difficult to accept that the residuals are normally distributed. However, the visual representation is dependent on the choice of the number and width of bins used, especially when the number of observations is relatively low. Our main concern regarding the use of visual information is that the information presented depends on the specific settings of the graph. Instead, we should ask ourselves the following question: if we sample 35 observations from a normal distribution, is it probable that the residuals are distributed in this way. Statistical tests are used to quantify these probabilities.
+Figure \ref{fig:H7_hist_normalized_residuals} shows a histogram of the standardized residuals of \ttblue{mod.3}, with an overlay of a standard normal distribution curve. At first glance it is difficult to accept that the residuals are normally distributed. However, the visual representation is dependent on the choice of the number and width of bins used, especially when the number of observations is relatively low. Our main concern regarding the use of visual information is that the information presented depends on the specific settings of the graph. Instead, we should ask ourselves the following question: if we sample 36 observations from a normal distribution, is it probable that the residuals are distributed in this way. Statistical tests are used to quantify these probabilities.
 
 Another graphical tool for assessing the normality of residuals is the QQ plot, previously introduced in the context of regression diagnostics. Figure \ref{fig:H7_qqplot}, on page \pageref{fig:H7_qqplot}, presents an example based on the data from \ttblue{mod.2}. Compared to earlier versions, the plot for \ttblue{mod.3} now reflects the winsorization of observation 22, which no longer appears as an outlier.
 
@@ -1706,7 +1785,7 @@ In our experience, many situations involving non-normality of the residuals are 
 
 The \hlblue{homoskedasticity} assumption\index{homoskedasticity} states that the disturbance terms $\epsilon$ not only follow a normal distribution, but also that the variance of this normal distribution is constant and does not depend on the values of any independent variable $x_j$. Ignoring this assumption could have serious consequences when constructing prediction intervals. For example, when the variance of the residuals increases linearly with the value of one of the independent variables, the expectations related to smaller values of $x_j$ are more precise than those for larger values of $x_j$. Therefore, if we inadvertently assume that the variance is constant, the prediction intervals related to smaller values of $x_j$ are overstated, and those for larger values of $x_j$ are understated. 
 
-We use the \ttblue{residualPlots} function to detect heteroskedasticity. Figure \ref{fig:H7_residualPlots3} shows an example for the \ttblue{mod.3} model. It is a variation of Figure \ref{fig:H7_residualPlots_mod2}, leaving out the plot against fitted values and the line that indicates a possible quadratic fit.
+We use the \ttblue{residualPlots} function to detect heteroskedasticity. Figure \ref{fig:H7_residualPlots3} shows an example for the \ttblue{mod.3} model.
 
 \begin{figure}[htbp]
   \includegraphics[width=\columnwidth]{H7_residualPlots3.pdf}
@@ -1808,25 +1887,44 @@ $H_1 : $ The residuals $\epsilon$ are autocorrelated.
 
 \paragraph{Assumptions} The test assumes that the residuals $\epsilon$ are normally distributed.
 
-\paragraph{Test statistic} The test statistic is obtained by fitting an autoregressive model of order $p$.\footnote{The order $p$ of the autoregressive model should not be confused with the $p$ generally used as probability of success.} The Breusch-Godfrey test statistic $BG$ \nomenclature{$BG$}{Breusch-Godfrey test statistic} is then given by
+\paragraph{Test statistic} The Breusch--Godfrey test is a Lagrange Multiplier (LM) test for autocorrelation.\index{Lagrange Multiplier test}\index{LM test}
+The test statistic is obtained by fitting an auxiliary autoregressive model of order $p$.\footnote{The order $p$ of the autoregressive model should not be confused with the $p$ generally used to denote a probability.}
+
+The Breusch--Godfrey (or LM) test statistic, denoted by $BG$,\nomenclature{$BG$}{Breusch--Godfrey (Lagrange Multiplier) test statistic} is given by
 
 \begin{equation}
-  BG = nr^2
+BG = nR^2
 \end{equation}
-where $n$ is the number of observations, and $r^2$ is the coefficient of determination from the autoregressive model.
+
+where $n$ is the number of observations and $r^2$ is the coefficient of determination of the auxiliary regression.
+
+Because the Breusch--Godfrey test is an LM test, statistical software often reports the same statistic as the \emph{LM test statistic} rather than as the \emph{Breusch--Godfrey statistic}. The two names refer to the same quantity.
 
 \paragraph{Distribution} Under the null hypothesis of no autocorrelation, the Breusch--Godfrey test statistic is asymptotically chi-squared distributed with $p$ degrees of freedom, where $p$ is the number of lagged residual terms included in the auxiliary regression.
 
 \paragraph{Significance level} We conclude based on the $p$ value of the test. The null hypothesis is rejected when the chosen significance level is greater than the reported $p$ value.
 
-\paragraph{Value of test statistic} We obtain a Breusch--Godfrey test statistic of 7.1466, with a related $p$ value of 0.06737.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.} In this example, the test is performed with order $p=3$, so the reference distribution is a chi-squared distribution with 3 degrees of freedom. It is noteworthy that the order $p$ can be specified by the user. If omitted, the default value is \ttblue{order = 1}.
+\paragraph{Value of test statistic} We obtain a Breusch--Godfrey test statistic of 7.1466, with a related $p$ value of 0.06737.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.} 
+In this example, the test is performed with order $p=3$.
+This means that the test evaluates whether the regression residuals exhibit autocorrelation at lags 1, 2, and 3. 
+Under the null hypothesis, the residuals are not autocorrelated at any of these lags. The reference distribution is therefore a chi-squared distribution with 3 degrees of freedom.
+
+The order $p$ determines the highest lag included in the test and must be specified by the user. 
+For example, when $p=3$, the test examines whether residuals in a given period are related to residuals from one, two, or three periods earlier. 
+Larger values of $p$ allow the detection of autocorrelation over a longer time horizon, but require the estimation of additional parameters.
+
+The choice of $p$ should be guided by the expected pattern of dependence in the data. 
+For monthly or quarterly data, values of $p=2$ or $p=3$ are often a reasonable starting point. 
+Higher values may be appropriate when there is reason to suspect longer-term dependence or seasonal effects. 
+If omitted, the default value is \ttblue{order = 1}, in which case only first-order autocorrelation is tested.
 
 \paragraph{Conclusion}
 
 The $p$ value of the test statistic is 0.06737. Therefore, we fail to reject the null hypothesis at conventional significance levels below 0.06737, such as 5\% or 1\%. The model-validation test provides no evidence of autocorrelation at these levels, although the result is marginal at a 10\% level.
 This is visually supported by a moderate spike in the PACF plot. 
 While not definitively conclusive, these signs suggest that the model may benefit from adjustments to account for autocorrelation. 
-In time-series regression, residual autocorrelation violates the assumption that the error terms are independent over time. When this occurs, the ordinary least squares coefficient estimates may still be unbiased if the regressors are exogenous, but the usual standard errors, confidence intervals, and significance tests may no longer be reliable.
+In time-series regression, residual autocorrelation violates the assumption that the error terms are uncorrelated over time. When this occurs, the ordinary least squares coefficient estimates may still be unbiased if the regressors are exogenous, but the usual standard errors, confidence intervals, and significance tests may no longer be reliable. 
+Consequently, the auditor may incorrectly conclude that a relationship is statistically significant or that the regression model is more precise than it actually is.
 
 One commonly suggested workaround is to include lagged residuals as predictors in the model. 
 This approach can be effective for addressing first-order autocorrelation, but it comes with a caveat: since residuals are themselves estimates derived from the data, treating them as fixed predictors introduces a layer of uncertainty that is typically not accounted for. As a result, the method lacks a rigorous statistical foundation and may lead to biased or inefficient estimates if used uncritically.
@@ -1895,19 +1993,20 @@ heat\_summer\_adj &   -20,135 &    13,897 & -1.449 & 0.158894 \\
 \label{tab:summary_mod_4}
 \end{table}
 
-After applying the AR(1) correction, the Breusch--Godfrey test on \ttblue{mod.4} gives $LM = 2.2151$ with $p = 0.529$ (order 3), indicating no remaining evidence of residual autocorrelation at conventional levels.
+After applying the AR(1) correction, the Breusch--Godfrey test on \ttblue{mod.4} gives $BG = 2.2151$ with $p = 0.529$ (order 3), indicating no remaining evidence of residual autocorrelation at conventional levels.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.}
 
 % subsection absence_of_autocorrelation (end)
 
 \subsection{Constructing a refined model}
 \label{sub:constructing_a_refined_model}
 
-The previously obtained model proves difficult to interpret, and more importantly, many of its coefficients were not statistically significant. 
-We therefore seek to return to a simpler, more parsimonious specification, building on the approach used in Section~\ref{sub:model_selection}. 
+The previously obtained model includes transformed variables and interaction effects, which complicate its interpretation. 
+Furthermore, two coefficients are not statistically significant: \ttblue{heatDD\_adj} and \ttblue{heat\_summer\_adj}. 
+We therefore investigate whether a simpler, more par\-si\-monious specification can provide a comparable fit, following the approach used in Section~\ref{sub:model_selection}.
 Additionally, we must account for the presence of an outlier in observation 22, which we address through winsorization. 
 Another limitation of the earlier stepwise model (\ttblue{model\_forward}) is that it did not consider the inclusion of the dummy variable \ttblue{summer}, which we now believe to be theoretically relevant. 
-To address these issues, we initiate a new stepwise model selection procedure, this time based on the modified dataset USSteamCoEstim2, with the goal of identifying a model that is both statistically robust and more interpretable. 
-The resulting model will be referred to as \ttblue{mod.5}, and we work with this model for the remainder of this chapter. The backward procedure retains \ttblue{production}, \ttblue{coolDD}, and \ttblue{summer}, together with the interaction terms \ttblue{production:summer} and \ttblue{coolDD:summer}, while \ttblue{heatDD} and \ttblue{heatDD:summer} are removed.
+To address these issues, we first modify the dataset by winsorizing the influential observation identified in the previous section, resulting in the dataset \ttblue{USSteamCoEstim2}. We then initiate a new stepwise model selection procedure with the goal of identifying a model that is both statistically robust and more interpretable.
+The resulting model will be referred to as \ttblue{mod.5}, and we work with this model for the remainder of this chapter. The forward procedure retains \ttblue{production}, \ttblue{coolDD}, and \ttblue{summer}, together with the interaction terms \ttblue{production:summer} and \ttblue{coolDD:summer}, while \ttblue{heatDD} and \ttblue{heatDD:summer} are removed.
 A summary of the coefficients of the resulting \ttblue{mod.5} is provided in Table \ref{tab:summary_mod_5}.
 
 \begin{table}[htbp]
@@ -1947,7 +2046,7 @@ The regression lines for summer months is
 \end{equation*}
 The coefficient values take the interactions into account. Therefore, the intercept value is equal to $752,767 + 3,219,526 = 3,972,293$, the slope value for \ttblue{production} is equal to $35.87 - 23.23 = 12.64$, and the marginal effect of \ttblue{coolDD} is given by $-121,381 + 125,064 = 3,683$.
 
-Re-running the model-assumption checks for \ttblue{mod.5} gives Breusch--Pagan $BP = 7.0367$ ($p = 0.2179$), Breusch--Godfrey $LM = 5.1992$ ($p = 0.1578$, order 3), and Shapiro--Wilk $W = 0.94875$ ($p = 0.09554$). Taken together, these results provide no evidence against homoskedasticity, absence of autocorrelation, or normality at the 5\% level.
+Re-running the model-assumption checks for \ttblue{mod.5} gives Breusch--Pagan $BP = 7.0367$ ($p = 0.2179$), Breusch--Godfrey $BG = 5.1992$ ($p = 0.1578$, order 3), and Shapiro--Wilk $W = 0.94875$ ($p = 0.09554$). Taken together, these results provide no evidence against homoskedasticity, absence of autocorrelation, or normality at the 5\% level.
 
 Although a backward procedure was applied to remove non-significant predictors, some variables may still merit inclusion for reasons beyond statistical significance. 
 These include theoretical relevance, potential interaction effects, or roles as control variables. 
@@ -1980,7 +2079,9 @@ H_1 : \beta_j \neq 0
 \end{equation*}
 
 
-\paragraph{Assumptions} Both sets of assumptions (see Sections \ref{sec:assumptions_underlying_regression_results} and \ref{sec:testing_model_assumptions}) are relevant for the test, as we want to start from an unbiased estimate and the particular traits of the residuals.
+\paragraph{Assumptions} The same assumptions that underlie the validity of the regression model apply here (see Sections \ref{sec:assumptions_underlying_regression_results} and \ref{sec:testing_model_assumptions}). 
+In particular, the model should be correctly specified, the observations should be independent, the residuals should exhibit constant variance and be approximately normally distributed, and the residuals should not exhibit autocorrelation. 
+These assumptions ensure that the test statistic follows its stated reference distribution.
 
 \paragraph{Test statistic} We use the \hlblue{$t$ statistic}\index{t statistic}, defined as
 
@@ -2000,11 +2101,9 @@ There is a different $t$ statistic for every coefficient in the regression model
 \paragraph{Conclusion}
 
 The predictor \ttblue{heatDD} and its interaction with \ttblue{summer} were removed during the backward elimination procedure. 
-Among the remaining predictors, only the intercept shows a high $p$ value ($p = 0.525$), yet its inclusion is essential for defining the baseline level of the dependent variable when all predictors equal zero. 
-Similarly, while the variable \ttblue{summer} may seem a borderline candidate for exclusion based on significance, its role as an interaction partner is critical: removing it would also eliminate the associated interaction terms with \ttblue{production} and \ttblue{coolDD}, both of which are statistically and substantively significant. 
-The variable \ttblue{summer} enables the regression model to differentiate behavior between summer and non-summer periods, affecting both the intercept and the slopes of other predictors in meaningful ways.
-
-
+Among the remaining predictors, only the intercept exhibits a clearly non-significant $p$ value ($p = 0.525$). 
+The variable \ttblue{summer} has a $p$ value close to the conventional 5\% significance level ($p = 0.050173$). However, because \ttblue{summer} participates in a retained interaction term, it is kept in the model in accordance with the hierarchy principle, which states that main effects are generally retained when they form part of significant interaction effects. 
+The intercept is likewise retained because it defines the baseline level of the dependent variable when all predictors equal zero.
 
 % subsection testing_significance_of_independent_variables (end)
 
@@ -2029,7 +2128,7 @@ H_1 : \text{At least one of the } \beta_j \neq 0
 \end{equation*}
 
 
-\paragraph{Assumptions} There are again several assumptions that need to be satisfied for the test statistic, including linearity, randomness, homoskedasticity, normality, and the absence of autocorrelation.
+\paragraph{Assumptions} The assumptions are identical to those for the significance tests of the individual regression coefficients and are discussed in Sections \ref{sec:assumptions_underlying_regression_results} and \ref{sec:testing_model_assumptions}.
 
 \paragraph{Test statistic} We use the \hlblue{$F$ statistic}\index{F statistic}, which is defined as the ratio between the explained  and unexplained variances. The explained variance is measured by the \hlblue{Mean Square of the Regression}\index{mean square of the regression} or \hlblue{MSR}\index{MSR}, and the unexplained variance by the \hlblue{Mean Square of the Residuals}\index{mean square of the residuals} or \hlblue{MSE}\index{MSE}.
 
@@ -2111,6 +2210,7 @@ a 99\% confidence interval around this estimate is then
 \begin{equation*}
 16,414,429 \pm 11,470,711
 \end{equation*}
+
 \paragraph{Prediction Interval} This interval gives the range in which an individual observation of $y$ is expected to fall, for a certain value of the independent variable. In addition to model uncertainty (accounted for by the confidence interval), the prediction interval includes random data variation, capturing the natural scatter of data around the regression line. The formula for the prediction interval is:
 \begin{equation}
 \label{eq:prediction_interval}
@@ -2118,6 +2218,13 @@ y_* \pm t_{\alpha / 2} \cdot s_e \sqrt{1 + \frac{1}{n} + \frac{(x_* - \bar{x})^2
 \end{equation}
 
 Here, the extra $+1$ under the square root accounts for the additional variation of an individual observation around its expectation, rather than the average.
+
+The prediction interval is narrowest at $x_*=\bar{x}$, the mean value of the independent variable. In that case, the third term under the square root,
+
+\[
+\frac{(x_*-\bar{x})^2}{(n-1)s_x^2},
+\]
+is equal to zero. As $x_*$ moves away from $\bar{x}$, the term increases and the prediction interval widens. This reflects the fact that the regression line is estimated most precisely near the center of the data, and less precisely at values of $x$ that are farther from the mean. Because the fitted regression line passes through the point $(\bar{x},\bar{y})$, the uncertainty is minimized at this location.
 
 The difference between the confidence interval and the prediction interval is visualized in Figure \ref{fig:H7_conf_and_pred_intervals}. The confidence interval is narrower than the prediction interval, as it only accounts for uncertainty in the model coefficients and predicts the \emph{mean response}. The prediction interval is wider, as it includes both uncertainty in the model coefficients and unexplained data variation, giving a range for a \emph{single new observation}. 
 
@@ -2127,6 +2234,7 @@ The difference between the confidence interval and the prediction interval is vi
   \label{fig:H7_conf_and_pred_intervals}
 \end{figure}
 
+\bigskip
 Table \ref{tab:expectations_holdout} and Figure \ref{fig:H7_expectations} summarize the recorded values, expectation and prediction interval bounds based on \ttblue{mod.5} for the hold-out period.
 
 \begin{sidewaystable}[p]
@@ -2170,10 +2278,10 @@ Total          &174,778,400 &             & 198,680,683 & & -23,902,283 \\
   \label{fig:H7_expectations}
 \end{figure}
 
-The prediction intervals are statistical tools for measuring the uncertainty around the monthly expectations; they are not, by themselves, the audit objective. The difference for January 2014 is consistent with the uncertainty measured by its 99\% prediction interval. The value for March 2014 lies outside these bounds, which identifies a deviation that warrants further examination. This outlier may reflect contradictory or potentially unreliable information, especially in light of the Standard 500, which addresses audit evidence requirements.
+The prediction intervals are statistical tools for measuring the uncertainty around the monthly expectations; they are not, by themselves, the audit objective. The difference for January 2014 is consistent with the uncertainty measured by its 99\% prediction interval.\footnote{For the purposes of this example, a 99\% prediction interval is used. The selection of the confidence level involves practical considerations relating to the design and evaluation of a substantive analytical procedure and is discussed further in Volume~2, Section~\ref{sub:acceptable_difference}.} The value for March 2014 lies outside these bounds, which identifies a deviation that warrants further examination. This outlier may reflect contradictory or potentially unreliable information, especially in light of the Standard 500, which addresses audit evidence requirements.
 According to this Standard, auditors are expected to gather and assess evidence that supports the accuracy and reliability of financial information. When recorded values do not align with the predicted intervals, as in March, this may indicate anomalies that could compromise the integrity of the data. Standard 500 advises auditors to investigate unusual discrepancies to determine whether they represent errors, misstatements, or otherwise unreliable data that might affect the auditor's conclusions and overall audit quality.
 
-The investigation of March 2014 revealed that the lower-than-expected revenue coincided with a severe winter storm that affected large parts of the East Coast of the United States. Although the model includes production and heating degree days, these variables did not fully capture the effect of the storm. The event caused major disruptions in the delivery of steam, so that revenue was lower than would normally be expected given the observed production levels and weather conditions.
+The investigation of March 2014 revealed that the lower-than-expected revenue coincided with the March 2014 North American winter storm, also known as Winter Storm Titan, which affected large parts of the East Coast of the United States. Although the model includes production and heating degree days, these variables did not fully capture the effect of the storm. The event caused major disruptions in the delivery of steam, so that revenue was lower than would normally be expected given the observed production levels and weather conditions.
 
 Based on corroborating audit evidence, the auditor estimated the additional effect of the storm on March revenue at approximately \$8 million. This amount is incorporated into the March expectation before evaluating whether the recorded March revenue falls within its monthly acceptable difference range.
 
@@ -2201,7 +2309,7 @@ The audit evaluation follows two stages. First, the auditor compares the individ
 
 Second, once the individual and combined differences have been satisfactorily resolved, the auditor assesses the strength and precision of the model and determines the level of assurance obtained. At this stage, the regression model is used as audit evidence in a hypothesis test of whether the recorded amount is materially misstated. The achieved assurance is then considered together with the assessed risk and evidence from other audit procedures to determine whether further substantive procedures are required.
 
-The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:H7_expectations}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue may be related to an unexpected storm affecting the East Coast. Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors.
+The monthly expectations serve as benchmarks for evaluating the recorded monthly revenues. As shown in Figure~\ref{fig:H7_expectations}, most monthly recorded amounts fall within their individual 99\% prediction intervals. One notable exception is March 2014, where recorded revenue falls below the lower prediction limit. This observation requires further investigation. In the case facts, the lower-than-expected revenue is associated with the operational disruption caused by the March 2014 North American winter storm (Winter Storm Titan). Such events illustrate that deviations from model expectations may arise from legitimate business circumstances, model limitations, misstatements, or a combination of these factors. The auditor corroborated the occurrence and impact of the storm using external weather reports and internal operational records documenting disruptions in steam deliveries.
 
 After investigating and, where appropriate, incorporating corroborated explanations for individual monthly deviations, the next step is to evaluate the recorded revenue for the year as a whole. This requires combining the 12 monthly expectations into a single annual expectation and constructing an \hlblue{acceptable difference range}\index{acceptable difference range}\index{Acceptable Difference Range} (ADR)\index{ADR} around it. The acceptable difference range is the range within which the difference between recorded revenue and expected revenue is acceptable without further investigation. It is constructed from the prediction uncertainty of the annual total and therefore reflects the precision of the model when applied to the hold-out year.
 
@@ -2264,6 +2372,7 @@ y_{\text{total}} - \hat{y}_{\text{total}}
 12\hat{\sigma}^2.
 \end{split}
 \end{equation}
+The first three terms represent the uncertainty arising from estimation of the regression coefficients and therefore capture the covariance between the monthly expectations. The final term, \(12\hat{\sigma}^2\), represents the future residual variation of the 12 monthly observations.
 
 The formulas in this section assume a regression model with a single predictor. For models with multiple predictors, the same principles apply, but the corresponding formulas require matrix notation, which is beyond the scope of this book.
 
@@ -2308,7 +2417,7 @@ s_{\text{comb}},
 where $df$ is the residual degrees of freedom of the regression model.
 
 \medskip
-For the \emph{Case: US SteamCo}, the annual expectation is obtained by summing the 12 monthly expectations after adjusting the March 2014 expectation for the corroborated winter storm effect.
+For the \emph{Case: US SteamCo}, the annual expectation is obtained by summing the 12 monthly expectations after adjusting the March 2014 expectation for the corroborated winter storm effect.\footnote{See Exercise \ref{ex:Combining_12_monthly_predictions}}
 The resulting annual expectation is:
 
 \begin{equation*}
@@ -2346,8 +2455,30 @@ so that the annual difference, defined as recorded revenue minus expected revenu
 
 The annual difference is consistent with the uncertainty measured by the adjusted 99\% acceptable difference range. The substantive analytical procedure therefore does not identify a remaining significant unexplained difference at the annual level, and the auditor can proceed to determine whether the evidence and achieved assurance are sufficient to reject material misstatement.
 
+It is important to distinguish between the annual difference and performance materiality (PM). The purpose of the substantive analytical procedure is not to determine whether the difference exceeds PM, but to determine whether the difference is larger than can reasonably be explained by the uncertainty of the expectation. This assessment is made using the acceptable difference range derived from the prediction uncertainty of the model.
+
+Consequently, the annual difference of 15,902,284 is first compared with the adjusted 99\% acceptable difference range. Because the annual difference falls within that range, the substantive analytical procedure does not identify a significant unexplained difference requiring further investigation.
+
+Performance materiality serves a different purpose. Once any sig\-ni\-ficant unexplained differences have been investigated and resolved, the auditor evaluates whether the precision of the model and the resulting acceptable difference provide sufficient assurance relative to PM. In other words, PM is used to assess the adequacy of the substantive analytical procedure as an audit test, rather than to determine whether the observed annual difference itself is acceptable.
+
+Accordingly, the fact that the annual difference equals 15,902,284 does not, by itself, imply that the amount should be compared directly with PM. The relevant question at this stage is whether the difference is consistent with the uncertainty of the expectation. Only after that assessment has been completed does PM become relevant in evaluating the assurance obtained from the procedure.
+
 \medskip
-If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be adjusted to reflect that correlation. In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
+If there is evidence of residual autocorrelation in the hold-out errors, the residual variance component in Equation~\ref{eq:annual_prediction_variance} should be adjusted to reflect that correlation. Specifically, the term \(12\hat{\sigma}^2\) assumes that the residual errors from different months are independent, so that all covariance terms are zero. When residual autocorrelation is present, this assumption no longer holds and the prediction variance must also include the covariances between the monthly residual errors.
+
+For a total consisting of 12 monthly observations, the residual variance component becomes
+
+\[
+\operatorname{Var}\!\left(\sum_{i=1}^{12}\varepsilon_i\right)
+=
+\sum_{i=1}^{12}\operatorname{Var}(\varepsilon_i)
++
+2\sum_{i<j}\operatorname{Cov}(\varepsilon_i,\varepsilon_j).
+\]
+
+Positive autocorrelation increases the annual prediction variance because the covariance terms are positive; negative autocorrelation decreases it. In practice, these covariances may be estimated from an autoregressive model fitted to the residuals or by using heteroskedasticity- and autocorrelation-consistent (HAC) variance estimators. The resulting variance estimate is then used in place of the term \(12\hat{\sigma}^2\) in Equation~\ref{eq:annual_prediction_variance}.
+
+In the present case, the model diagnostics do not provide sufficient evidence of residual autocorrelation after refinement, so we proceed under the assumption that the future residual errors are uncorrelated.
 
 % subsection combining_detail_expectations (end)
 
@@ -2400,6 +2531,12 @@ where \> $\hat{y}_{\text{total}}$ \> : \> combined expected revenue \\
       \> $s_{comb}$     \> : \> standard error of the combined prediction (Eq. \ref{eq:annual_prediction_interval})
 \end{tabbing}
 
+For the \emph{Case: US SteamCo}, the annual expectation is $\hat{y}_{\text{total}} = 190,680,684$, the recorded annual revenue is $y_{\text{recorded}} = 174,778,400$, and the combined prediction standard error is $s_{comb} = 6,323,301$. Hence, the observed annual difference is
+
+\[
+D = y_{\text{recorded}} - \hat{y}_{\text{total}} = -15,902,284.
+\]
+
 \paragraph{Step 5. Derive the distribution of the test statistic under the hypotheses}
 Under the alternative hypothesis $H_1$, which assumes that the recorded revenue is not materially misstated, the test statistic $T$ follows a central $t$~distribution with $n-k-1$ degrees of freedom. This distribution accounts for the uncertainty in the model's coefficient estimates and the natural variability around the predicted revenue.
 
@@ -2411,6 +2548,12 @@ Under the null hypothesis $H_0$, where the recorded revenue is materially overst
 \end{equation}
 
 where $PM$ is performance materiality expressed in monetary units and $s_{comb}$ is the standard error of the combined prediction, also expressed in monetary units. The ratio $\lambda_{PM}$ is therefore dimensionless.
+
+Using $PM = 15,000,000$ and $s_{comb} = 6,323,301$ for US SteamCo, we obtain
+
+\[
+\lambda_{PM} = \frac{15,000,000}{6,323,301} \approx 2.37.
+\]
 
 Specifically:
 \begin{itemize}
@@ -2446,8 +2589,26 @@ T = \pm t_{0.005}.
 
 A test statistic that falls between these bounds provides sufficient evidence to reject the audit null hypothesis of material misstatement. Test statistics below the lower bound or above the upper bound do not provide sufficient evidence to reject $H_0$.
 
+For US SteamCo, the resulting 99\% acceptable difference range for the annual difference is
+
+\[
+\text{ADR} = [-17,389,051,\ 17,389,051],
+\]
+
+which corresponds to standardized decision bounds of approximately
+
+\[
+c_L = -2.75, \qquad c_U = 2.75.
+\]
+
 \paragraph{Step 8. Compute the value of the test statistic from the sample}
 Using the observed revenue for the hold-out year, we compute the test statistic $T$ by substituting the recorded revenue $y_i$ and the combined standard error $s_{\text{comb}}$ into the formula.
+
+For US SteamCo,
+
+\[
+T = \frac{-15,902,284}{6,323,301} \approx -2.51.
+\]
 
 \paragraph{Step 9. Conclude on the test}
 Finally, we evaluate the test statistic against the decision bounds:
@@ -2455,6 +2616,8 @@ Finally, we evaluate the test statistic against the decision bounds:
     \item \emph{If $T$ lies between the decision bounds}, and the achieved assurance is sufficient, we reject $H_0$ and conclude that sufficient evidence has been obtained that the recorded revenue is not materially misstated.
     \item \emph{If $T$ lies outside the decision bounds}, we do not reject $H_0$. The procedure has not obtained sufficient evidence that the recorded revenue is not materially misstated. Consequently, further investigation or other substantive procedures are required.
 \end{itemize}
+
+In the US SteamCo case, $T=-2.51$ lies between the decision bounds $[-2.75, 2.75]$, so the observed difference falls within the acceptable range. The achieved assurance at the chapter settings ($PM=15,000,000$, 99\% central interval) is 36.9\% in both directions (overstatement and understatement), which should be evaluated against the auditor's required minimum assurance level.
 
 % subsection the_nine_step_approach (end)
 
@@ -2485,7 +2648,11 @@ Let
 \end{equation}
 be the standardized non-centrality parameter\nomenclature{$\delta$}{standardized non-centrality parameter of the non-central $t$ distribution}, where $PM$ is performance materiality expressed in monetary units. Because both $PM$ and $s_{\text{comb}}$ are expressed in monetary units, $\delta$ is dimensionless, like the test statistic $T$. If revenue is materially overstated by $PM$, the distribution of $T$ shifts to the right and follows a non-central $t$ distribution with non-centrality parameter $+\delta$. If revenue is materially understated by $PM$, the distribution shifts to the left and follows a non-central $t$ distribution with non-centrality parameter $-\delta$.
 
-As discussed in Section~\ref{sub:acceptable_difference} in Volume 2, the decision bounds may be determined by controlling either efficiency risk or effectiveness risk. If the auditor controls efficiency risk, the monetary bounds are based on the central $t$ distribution under the assumption of no material misstatement. For an efficiency risk of $\beta$, these bounds are
+As discussed in Section~\ref{sub:acceptable_difference} in Volume 2, the decision bounds may be determined by controlling either \emph{efficiency risk} or \emph{effectiveness risk}. Efficiency risk is the risk that a difference is investigated even though the recorded amount is not materially misstated. Effectiveness risk is the risk that a materially misstated recorded amount is not identified by the substantive analytical procedure.
+
+In this chapter, we determine the decision bounds by controlling efficiency risk. Under this approach, the bounds are constructed under the assumption that the recorded amount is not materially misstated and are chosen so that the probability of an unnecessary investigation does not exceed a specified value \(\beta\). The resulting bounds are based on the central \(t\) distribution.
+
+For an efficiency risk of \(\beta\), these bounds are
 
 \begin{equation}
 \left[
@@ -2494,7 +2661,9 @@ t_{1-\beta/2,df}s_{\text{comb}}
 \right].
 \end{equation}
 
-This limits the probability of investigating a difference when the account is not materially misstated. In that case, the level of assurance is not fixed in advance. It follows from the width of the bounds, the precision of the model, and performance materiality.
+This limits the probability of investigating a difference when the account is not materially misstated. In contrast, an effectiveness-risk approach determines the bounds by controlling the probability of failing to identify a material misstatement. The detailed design of both approaches is discussed in Volume~2, Section~\ref{sub:acceptable_difference}.
+
+When efficiency risk is controlled, the level of assurance is not fixed in advance. Instead, it follows from the width of the decision bounds, the precision of the model, and performance materiality.
 
 Let $c_L$ and $c_U$ denote the lower and upper standardized decision bounds. The achieved assurance for detecting a material overstatement is the upper-tail probability
 
@@ -2912,6 +3081,20 @@ To run the exercises in this workshop, we need to load a few packages.
 
 \end{exercise}
 
+\begin{exercise}
+\label{ex:level_of_assurance_for_the_annual_prediction}
+
+\textbf{Level of assurance for the annual prediction}
+
+\input{generated/workshop-output/exercise-5-36-1}
+\input{generated/workshop-output/exercise-5-36-2}
+\input{generated/workshop-output/exercise-5-36-3}
+\input{generated/workshop-output/exercise-5-36-4}
+\input{generated/workshop-output/exercise-5-36-5}
+\input{generated/workshop-output/exercise-5-36-6}
+
+\end{exercise}
+
 
 % section workshop_ (end)
 
@@ -3001,6 +3184,12 @@ To run the exercises in this workshop, we need to load a few packages.
 \input{generated/workshop-output-python/exercise-5-34-1}
 \input{generated/workshop-output-python/exercise-5-35-1}
 \input{generated/workshop-output-python/exercise-5-35-2}
+\input{generated/workshop-output-python/exercise-5-36-1}
+\input{generated/workshop-output-python/exercise-5-36-2}
+\input{generated/workshop-output-python/exercise-5-36-3}
+\input{generated/workshop-output-python/exercise-5-36-4}
+\input{generated/workshop-output-python/exercise-5-36-5}
+\input{generated/workshop-output-python/exercise-5-36-6}
 
 \end{exercise}
 

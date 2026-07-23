@@ -64,6 +64,15 @@ def escape_latex(text: str) -> str:
     return text
 
 
+def escape_textcolor_argument(text: str) -> str:
+    # Lines are passed as an argument to \textcolor{...}{...}, not raw Verbatim text.
+    # Escape control characters so code like "\\n" and braces render literally.
+    text = text.replace("\\", r"\\textbackslash{}")
+    text = text.replace("{", r"\\{")
+    text = text.replace("}", r"\\}")
+    return escape_latex(text)
+
+
 def convert_inline(text: str) -> str:
     token_re = re.compile(r"`[^`]*`|\$[^$]*\$|\\\([^)]*\\\)|\\\[[^]]*\\\]|\*[^*]+\*")
     parts = []
@@ -196,13 +205,13 @@ def render_code_cell(source_lines: list[str], output_lines: list[str]) -> list[s
     out = [r"\begin{Verbatim}[commandchars=\\\{\}]"]
     for line in source_lines:
         if line.strip():
-            out.append(r"\textcolor{ada_blue}{" + line + "}")
+            out.append(r"\textcolor{ada_blue}{" + escape_textcolor_argument(line) + "}")
         else:
             out.append("")
     if output_lines:
         for line in output_lines:
             if line.strip():
-                out.append(r"\textcolor{ada_light_blue}{" + line + "}")
+                out.append(r"\textcolor{ada_light_blue}{" + escape_textcolor_argument(line) + "}")
             else:
                 out.append("")
     out.append(r"\end{Verbatim}")
