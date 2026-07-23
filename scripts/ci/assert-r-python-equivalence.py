@@ -30,7 +30,11 @@ class Mismatch:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Assert R/Python numeric equivalence for representative workshop metrics."
+        description=(
+            "Assert R/Python workshop parity: all generated exercise chunks "
+            "must be present and embedded, and representative numeric metrics "
+            "must match within tolerance."
+        )
     )
     parser.add_argument(
         "--chapters",
@@ -50,6 +54,21 @@ def parse_args() -> argparse.Namespace:
         help="Relative tolerance for floating-point comparisons.",
     )
     return parser.parse_args()
+
+
+def run_all_exercise_coverage_check() -> None:
+    proc = subprocess.run(
+        ["Rscript", "scripts/ci/check-generated-python-workshop-includes.R"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=REPO_ROOT,
+    )
+    if proc.returncode != 0:
+        output = "\n".join(part for part in (proc.stdout, proc.stderr) if part)
+        raise RuntimeError(
+            "All-exercise R/Python workshop coverage check failed:\n" + output
+        )
 
 
 def run_r_metrics(chapter: str) -> dict[str, Any]:
@@ -318,6 +337,8 @@ def compare_values(
 def main() -> None:
     args = parse_args()
     chapters = [c.strip() for c in args.chapters.split(",") if c.strip()]
+
+    run_all_exercise_coverage_check()
 
     mismatches: list[Mismatch] = []
     for chapter in chapters:

@@ -23,7 +23,7 @@ generated_python_notebook <- file.path(
 )
 legacy_python_notebook <- "notebooks/python/workshop02_python.ipynb"
 python_notebook <- if (file.exists(generated_python_notebook)) generated_python_notebook else legacy_python_notebook
-python_workshop_tex <- "workshop02_Python.tex"
+python_workshop_tex <- "generated/workshop-output-python/workshop-probability-distributions_Python.tex"
 
 if (!file.exists(python_notebook)) {
 	stop(
