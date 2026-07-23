@@ -5,7 +5,7 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The Breusch-Godfrey test is executed through \ttblue{bgtest}.
+\noindent Finally, we evaluate the observed annual difference.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,18 +16,17 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, nlags=3)
-print({'LM statistic': bg_lm, 'p_value': bg_p})
+# Conclusion for the observed annual difference
+if (annual_difference < ADR_lower) {
+  cat("The annual difference indicates a potential understatement requiring investigation.\n")
+} else if (annual_difference > ADR_upper) {
+  cat("The annual difference indicates a potential overstatement requiring investigation.\n")
+} else {
+  cat("The annual difference falls within the acceptable difference range.\n")
+}
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-
-	Breusch-Godfrey test for serial correlation of order up
-	to 3
-
-data:  ussteamco.mod.3
-LM test = 7.1466, df = 3, p-value = 0.06737
+The annual difference falls within the acceptable difference range.
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
-Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.

@@ -5,7 +5,6 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The Breusch-Godfrey test is executed through \ttblue{bgtest}.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,18 +15,22 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, nlags=3)
-print({'LM statistic': bg_lm, 'p_value': bg_p})
+# Difference convention: recorded amount minus expectation
+annual_recorded = sum(USSteamCoHold["revenue"])
+annual_difference = annual_recorded - annual_prediction
+cat("Recorded annual revenue:", annual_recorded, "\n")
+cat("Expected annual revenue:", annual_prediction, "\n")
+cat("Difference:", annual_difference, "\n")
+cat("Annual prediction standard error:", annual_se, "\n")
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
+Recorded annual revenue: 174778400
 
-	Breusch-Godfrey test for serial correlation of order up
-	to 3
+Expected annual revenue: 190680684
 
-data:  ussteamco.mod.3
-LM test = 7.1466, df = 3, p-value = 0.06737
+Difference: -15902284.2
+
+Annual prediction standard error: 6323301.07
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
-Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.

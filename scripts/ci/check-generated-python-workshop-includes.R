@@ -11,7 +11,8 @@ chapter_tex_files <- c(
   "goodness-of-fit" = "goodness-of-fit.tex"
 )
 
-chunk_dir <- "generated/workshop-output-python"
+r_chunk_dir <- "generated/workshop-output"
+python_chunk_dir <- "generated/workshop-output-python"
 failures <- character()
 
 expected_chunk_stems <- function(config) {
@@ -47,20 +48,35 @@ for (config in get_workshop_export_configs()) {
   }
 
   chunk_stems <- expected_chunk_stems(config)
-  chunk_files <- file.path(chunk_dir, paste0(chunk_stems, ".tex"))
-  existing_chunk_stems <- chunk_stems[file.exists(chunk_files)]
+  r_chunk_files <- file.path(r_chunk_dir, paste0(chunk_stems, ".tex"))
+  python_chunk_files <- file.path(python_chunk_dir, paste0(chunk_stems, ".tex"))
+  existing_r_chunk_stems <- chunk_stems[file.exists(r_chunk_files)]
 
-  if (!length(existing_chunk_stems)) {
+  if (!length(existing_r_chunk_stems)) {
     next
   }
 
   tex_files_with_generated_chunks <- c(tex_files_with_generated_chunks, tex_path)
 
+  missing_python_chunks <- python_chunk_files[
+    chunk_stems %in% existing_r_chunk_stems & !file.exists(python_chunk_files)
+  ]
+  if (length(missing_python_chunks)) {
+    failures <- c(
+      failures,
+      sprintf(
+        "%s: missing generated Python chunk file(s) for existing R chunk(s):\n  %s",
+        config$id,
+        paste(missing_python_chunks, collapse = "\n  ")
+      )
+    )
+  }
+
   tex <- read_tex(tex_path)
   expected_inputs <- sprintf(
     "\\input{%s/%s}",
-    chunk_dir,
-    existing_chunk_stems
+    python_chunk_dir,
+    existing_r_chunk_stems
   )
   missing_inputs <- expected_inputs[!vapply(
     expected_inputs,

@@ -5,7 +5,7 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The Breusch-Godfrey test is executed through \ttblue{bgtest}.
+\noindent Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,18 +16,22 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_3, nlags=3)
-print({'LM statistic': bg_lm, 'p_value': bg_p})
+# Acceptable bounds for recorded annual revenue
+recorded_lower = annual_prediction + ADR_lower
+recorded_upper = annual_prediction + ADR_upper
+cat("Acceptable bounds for recorded annual revenue:\n")
+cat("Lower bound:", recorded_lower, "\n")
+cat("Annual expectation:", annual_prediction, "\n")
+cat("Upper bound:", recorded_upper, "\n")
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
+Acceptable bounds for recorded annual revenue:
 
-	Breusch-Godfrey test for serial correlation of order up
-	to 3
+Lower bound: 173291634
 
-data:  ussteamco.mod.3
-LM test = 7.1466, df = 3, p-value = 0.06737
+Annual expectation: 190680684
+
+Upper bound: 208069735
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
-Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.
