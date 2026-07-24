@@ -40,3 +40,6 @@ generated/python-notebooks/
 
 # Temporary execution artifacts (local/CI diagnostics)
 generated/notebook-execution-artifacts/
+
+# Local Word renders of workshop notebooks
+rendered-workshops/

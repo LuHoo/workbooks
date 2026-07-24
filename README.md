@@ -300,6 +300,13 @@ Local-first validation quickstart:
   - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
   - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
 
+Local Word previews for workshop notebooks:
+
+- `Rscript scripts/render-workshop-word.R`
+- rendered `.docx` files are written to `rendered-workshops/`, which is ignored by Git.
+- use `--type rmd` or `--type ipynb` to render only one notebook family.
+- Word rendering requires Pandoc; on macOS, install it with `brew install pandoc`.
+
 ### Generated Notebook Artifact Edit Policy
 
 Policy scope:
