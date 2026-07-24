@@ -6,6 +6,7 @@ Audit Data Analysis
 Canonical architecture overview:
 
 - `docs/architecture/notebook-generation-and-publication.md`
+- `docs/authoring/content-workflow.md`
 
 ## Workshop Exporter CLI
 
