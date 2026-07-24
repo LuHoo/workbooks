@@ -27,6 +27,7 @@
 % Typographic enhancements
 \usepackage{lmodern}
 \usepackage{microtype}
+\usepackage{catchfile}
 \usepackage{setspace}
 \usepackage{parskip}
 \usepackage{xcolor}
@@ -162,6 +163,9 @@
 
 \makeatother
 
+\CatchFileDef{\adaVersion}{VERSION_VOLUME1}{\endlinechar=-1 }
+\date{Version \adaVersion\\\today}
+
 \newcommand{\writenomencl}[1]{%
   \closenomencl%
   \IfFileExists{#1.nlo}{%
@@ -174,12 +178,6 @@
 \setcounter{secnumdepth}{3}
 \setsecnumdepth{subsubsection}
 
-
-% Creates watermark
-\usepackage[hpos=0.782\paperwidth, vpos=0.07\paperheight, color=KPMG_light_pink]{draftwatermark}
-\SetWatermarkText{DRAFT \today}
-\SetWatermarkScale{0.1}
-\SetWatermarkAngle{0}
 
 % Generates the index
 \usepackage{imakeidx}
@@ -227,6 +225,8 @@
 Copyright \copyright\ \the\year\ Lucas Hoogduin and Paul Touw
 
 \textit{First printing, \monthyear}
+
+\textit{Version \adaVersion, \today}
 \vspace*{\fill}
 \end{center}
 

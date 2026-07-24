@@ -7,6 +7,7 @@ Canonical architecture overview:
 
 - `docs/architecture/notebook-generation-and-publication.md`
 - `docs/authoring/content-workflow.md`
+- `docs/authoring/book-versioning.md`
 
 ## Workshop Exporter CLI
 

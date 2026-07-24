@@ -30,6 +30,7 @@
 % Typographic enhancements
 \usepackage{lmodern}
 \usepackage{microtype}
+\usepackage{catchfile}
 \usepackage{setspace}
 \usepackage{parskip}
 \usepackage{xcolor}
@@ -152,6 +153,9 @@
 
 \makeatother
 
+\CatchFileDef{\adaVersion}{VERSION_VOLUME2}{\endlinechar=-1 }
+\date{Version \adaVersion\\\today}
+
 \newcommand{\writenomencl}[1]{%
   \closenomencl%
   \IfFileExists{#1.nlo}{%
@@ -215,6 +219,8 @@
 Copyright \copyright\ \the\year\ Lucas Hoogduin and Paul Touw
 
 \textit{First printing, \monthyear}
+
+\textit{Version \adaVersion, \today}
 
 ISBN: 978 90 836 9101 5 
 
