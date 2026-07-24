@@ -22,6 +22,14 @@ In order to replicate the experiment in the book, you need to use the same rando
 
 Details of the data file can be obtained using base `R` functionality.
 
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+In order to replicate the experiment in the book, you need to use the same
+random number seed as we did.
+
+Details of the data file can be obtained by inspecting the dataset columns and
+row count.
+<!-- ADA:END -->
+
 ```{r}
 library(FSaudit)
 names(salaries)
@@ -39,6 +47,12 @@ head(sample1)
 ### Exercise 2.2 Point estimation of the mean
 
 The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
+
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of
+$y$ in the sample by the sample size. In Python we use the `mean()` method for
+the selected data column.
+<!-- ADA:END -->
 
 ```{r}
 (y_bar <- mean(sample1$gross))
@@ -126,6 +140,11 @@ The total sample size required to obtain an estimate of the mean monthly payroll
 ### Exercise 2.6 Confidence intervals around the proportion
 
 These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
+
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+These bounds are calculated with the `upper_bound()` and `lower_bound()`
+helpers, which mirror the corresponding FSaudit confidence-bound calculations.
+<!-- ADA:END -->
 
 ```{r}
 lower(k = 31, popn = 2222, n = 50, alpha = .025)

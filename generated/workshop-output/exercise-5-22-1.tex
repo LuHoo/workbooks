@@ -60,4 +60,5 @@ $n \cdot (\log(2\pi) + 1) + 2$.
 The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors.
 The additional +2 arises because R’s AIC() function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression.
 
+
 \noindent Similarly, the BIC values are obtained as follows.

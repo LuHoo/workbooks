@@ -5,7 +5,10 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent \emph{Cumulative probabilities} $P(k \leq k)$ (the probability of finding not more than $k$ errors) are obtained with \ttblue{phyper()}. For example, if we are interested in the probability of finding no more than one error, we use \ttblue{phyper(1, 17, 314, 60)}. In this case the prefix \ttblue{p} indicates the (cumulative) probability function.
+\noindent \emph{Cumulative probabilities} $P(k \leq k)$ (the probability of finding not more
+than $k$ errors) are obtained with \ttblue{scipy.stats.hypergeom.cdf()}. For example,
+if we are interested in the probability of finding no more than one error, we
+evaluate the cumulative distribution function at $k = 1$.
 
 \par\addvspace{\topsep}
 \begingroup

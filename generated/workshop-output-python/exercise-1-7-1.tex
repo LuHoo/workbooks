@@ -5,8 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-
-\noindent Hypothesis testing is done with the function \ttblue{qf}, where we use the argument \ttblue{lower.tail = FALSE} to indicate the direction of the test.
+\noindent Hypothesis testing is done with \ttblue{scipy.stats.f.ppf()} or
+\ttblue{scipy.stats.f.isf()}. Here we use the upper-tail form because the rejection
+region is in the right-hand tail of the $F$ distribution.
 
 
 \par\addvspace{\topsep}

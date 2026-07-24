@@ -20,6 +20,11 @@ In this Chapter we will work with the `inventoryData` data file, that serves as 
 
 Details of the data file can be obtained using base `R` functionality.
 
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+Details of the data file can be obtained by inspecting the dataset columns and
+row count.
+<!-- ADA:END -->
+
 <!-- ADA:REQUIRES capability=fsaudit -->
 ```{r}
 # Open FSaudit library
@@ -98,6 +103,11 @@ mySample.sample
 ```
 <!-- ADA:END -->
 In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of *R* we set it to `Rounding`, which was the default prior to version 3.6.
+
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+In order to replicate the experiment in the book, you need to use the same
+random number seed as we did.
+<!-- ADA:END -->
 
 ```{r}
 RNGkind(sample.kind = "Rounding")

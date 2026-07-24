@@ -54,6 +54,14 @@ We create a dummy variable to distinguish between heating months and cooling mon
 
 The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, `R` recycles this 12-month pattern across the four years automatically. Later, when we include `summer` in a regression model, the `lm` function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
 
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+The vector below contains one January-to-December pattern of 12 observations.
+Because the dataset contains 48 monthly observations, the pattern is repeated
+across the four years. Later, when we include `summer` in a regression model,
+the 0/1 values are treated as an indicator variable and the model estimates how
+the intercept and slope differ between the two seasons.
+<!-- ADA:END -->
+
 ```{r}
 USSteamCo$summer <- c(0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0)
 ```
@@ -241,6 +249,13 @@ Figure 5.4 shows that there is a positive (increasing) relationship: as producti
 
 We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with `car::brief()`, which is part of the `car` package loaded in Exercise 5.1.
 
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+We use ordinary least squares to estimate the coefficient values of $\beta_0$
+and $\beta_1$. This is performed on the data of the estimation set
+`USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model
+is obtained from the fitted statsmodels object.
+<!-- ADA:END -->
+
 ```{r}
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
 car::brief(ussteamco.mod.0)
@@ -255,6 +270,13 @@ A full summary of `mod.0` can be obtained with the `summary` function.
 summary(ussteamco.mod.0)
 ```
 In addition to the statistics produced by `car::brief()`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
+
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+In addition to the brief model output, the full summary provides insight into
+the residuals (minimum, first quartile, median, third quartile, and maximum),
+the $t$ and $p$ values of each of the coefficients and their significance, the
+adjusted $r^2$, and the $F$ statistic with its $p$ value.
+<!-- ADA:END -->
 
 ### Exercise 5.6. Correlations and correlogram
 
@@ -299,6 +321,19 @@ model_forward <- step(model_forward,
 Starting with AIC = 1114.66 of a model with only a constant, `R` evaluates the inclusion of each of the available independent variables and their effect on the resulting AIC. In the first step, it appears that including `heatDD` has the best effect on AIC, as it reduces from 1114.66 to 1096.56.
 
 Using this value of AIC = 1096.56 as the new starting value, `R` evaluates if inclusion of any of the remaining variables has a favorable effect. It finds that including `production` can further reduce the AIC to 1046.11.
+
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+Starting with AIC = 1114.66 of a model with only a constant, the selection
+procedure evaluates the inclusion of each of the available independent
+variables and their effect on the resulting AIC. In the first step, it appears
+that including `heatDD` has the best effect on AIC, as it reduces from 1114.66
+to 1096.56.
+
+Using this value of AIC = 1096.56 as the new starting value, the selection
+procedure evaluates if inclusion of any of the remaining variables has a
+favorable effect. It finds that including `production` can further reduce the
+AIC to 1046.11.
+<!-- ADA:END -->
 
 In the last step, we see that including `coolDD` does not further reduce the AIC, leading to the final model `revenue $\sim$ heatDD + production`. The summary of this model is:
 
@@ -755,6 +790,23 @@ $n \cdot (\log(2\pi) + 1) + 2$.
 The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood that depends only on the sample size and the assumption of normally distributed errors.
 The additional +2 arises because R’s AIC() function evaluates the likelihood based on a model with an estimated variance parameter $\sigma^2$, introducing one more estimated parameter than is typically counted in the model formula (e.g., intercept and slopes). This shifts the effective count of parameters k by 1 and contributes an extra penalty of 2 in the AIC expression.
 
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+In contrast, the stepwise-selection helper reports AIC values based on a
+deviance-like approximation, that omits constant terms unrelated to model
+comparison:
+$\text{AIC}_{\text{step}} = n \log\left(\frac{\text{SSE}}{n}\right) + 2k$.
+The difference between the two expressions is a constant shift of
+$n \cdot (\log(2\pi) + 1) + 2$.
+The term $n \cdot (\log(2\pi) + 1)$ reflects the part of the log-likelihood
+that depends only on the sample size and the assumption of normally distributed
+errors. The additional +2 arises because the full likelihood-based AIC
+evaluates the likelihood based on a model with an estimated variance parameter
+$\sigma^2$, introducing one more estimated parameter than is typically counted
+in the model formula (e.g., intercept and slopes). This shifts the effective
+count of parameters k by 1 and contributes an extra penalty of 2 in the AIC
+expression.
+<!-- ADA:END -->
+
 Similarly, the BIC values are obtained as follows.
 ```{r}
 BIC(ussteamco.mod.0)
@@ -925,6 +977,16 @@ bgtest(ussteamco.mod.4, order = 3)
 
 When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base `R` function `step()` enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference.
 
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+When a model includes interaction terms, it is important to respect the
+hierarchical structure--interaction terms should not be included without their
+corresponding main effects. The stepwise-selection helper enforces this
+principle automatically by removing interaction terms before dropping
+associated main effects. Preserving model hierarchy is essential for ensuring
+interpretability and theoretical coherence, especially in models intended for
+inference.
+<!-- ADA:END -->
+
 ```{r}
 ussteamco.mod.5 <- lm(revenue ~ (production + coolDD + heatDD) * summer,
   data = USSteamCoEstim2
@@ -957,6 +1019,11 @@ bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
 ## Exercise 5.30. Testing significance
 
 The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
+
+<!-- ADA:BEGIN lang=python mode=override kind=narrative -->
+The $F$ statistic used for testing the significance of the model as a whole can
+also be obtained from the full model summary.
+<!-- ADA:END -->
 
 Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests.
 
