@@ -52,6 +52,8 @@ summary(USSteamCo)
 
 We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 5.4.4.
 
+The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, `R` recycles this 12-month pattern across the four years automatically. Later, when we include `summer` in a regression model, the `lm` function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
+
 ```{r}
 USSteamCo$summer <- c(0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0)
 ```
@@ -237,11 +239,11 @@ save_book_base_figure(
 
 Figure 5.4 shows that there is a positive (increasing) relationship: as production increases, so does revenue.
 
-We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with the function `brief`.
+We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with `car::brief()`, which is part of the `car` package loaded in Exercise 5.1.
 
 ```{r}
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
-brief(ussteamco.mod.0)
+car::brief(ussteamco.mod.0)
 ```
 The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$, and the estimate of the slope $\beta_1$, $b_1 = 18.99$.
 
@@ -252,7 +254,7 @@ A full summary of `mod.0` can be obtained with the `summary` function.
 ```{r}
 summary(ussteamco.mod.0)
 ```
-In addition to the statistics produced by `brief`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
+In addition to the statistics produced by `car::brief()`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
 
 ### Exercise 5.6. Correlations and correlogram
 
@@ -631,7 +633,7 @@ ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
   data = USSteamCoEstim2
 )
 
-brief(ussteamco.mod.3)
+car::brief(ussteamco.mod.3)
 ```
 
 ## Exercise 5.18. Multicollinearity
@@ -804,7 +806,7 @@ shapiro.test(ussteamco.mod.3$residuals)
 
 ## Exercise 5.24. Testing heteroskedasticity
 
-To test the asumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 5.15. We can construct it as follows.
+To test the assumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 5.15. We can construct it as follows.
 
 ```{r}
 residualPlots(ussteamco.mod.3,
@@ -944,23 +946,27 @@ summary(ussteamco.mod.5)
 
 ## Exercise 5.29. Re-running the model assumption tests
 
-We re-run the model assumption tests.
+We re-run the model assumption tests in the same order used earlier in the chapter: normality first, then heteroskedasticity, and finally autocorrelation.
 
 ```{r}
+shapiro.test(ussteamco.mod.5$residuals)
 bptest(ussteamco.mod.5)
 bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
-shapiro.test(ussteamco.mod.5$residuals)
 ```
 
 ## Exercise 5.30. Testing significance
 
 The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
 
+Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests.
+
 ```{r}
 summary(ussteamco.mod.5)
 ```
 
-### Exercise 5.31. Visualizing the uncertainty in the model parameters
+### Exercise 5.31. Showcase: Visualizing the uncertainty in the model parameters
+
+This exercise is a showcase rather than part of the US SteamCo case workflow. It supports Figure 5.20 by illustrating a general idea: repeated samples from the same underlying regression model produce different fitted lines, even when the true relationship is unchanged.
 
 First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
 
@@ -1063,7 +1069,9 @@ save_book_figure(regression_lines_plot, "H7_200_regression_lines.pdf")
 
 The resulting graph is shown in Figure 5.20.
 
-## Exercise 5.32. Confidence and prediction intervals
+## Exercise 5.32. Showcase: Confidence and prediction intervals
+
+This exercise is also an illustration rather than a case step. It stays in the student notebook because it introduces the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation before we return to the case-based forecasting exercises.
 
 Figure 5.18 shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
 
@@ -1209,17 +1217,17 @@ save_book_figure(expectations_plot, "H7_expectations.pdf")
 
 We use Equations 5.29 and 5.30 to construct a prediction interval for total revenue for the year under audit. The annual expectation is the sum of the 12 monthly expectations.
 
-The prediction standard error of the annual total is calculated directly from the design matrix for the hold-out observations. This accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients.
+To keep the derivation transparent, we first collect the monthly expectations, then combine them into an annual expectation, and finally compute the prediction standard error of that annual total. The design-matrix calculation accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients in all 12 months.
 
 ```{r}
 # Residual degrees of freedom
 df_res <- ussteamco.mod.5$df.residual
 
-# Monthly predictions
-monthly_predictions <- pred_df$fit
+# Monthly expectations from Exercise 5.34
+monthly_expectations <- pred_df$fit
 
-# Annual expectation
-annual_prediction <- sum(monthly_predictions)
+# Combined annual expectation
+annual_prediction <- sum(monthly_expectations)
 
 # Construct the design matrix for the hold-out observations
 X_hold <- model.matrix(
@@ -1230,23 +1238,25 @@ X_hold <- model.matrix(
 # Vector of ones for summing the 12 monthly predictions
 one <- rep(1, nrow(X_hold))
 
-# Variance component from uncertainty in the estimated coefficients
+# Equation 5.38: variance contribution from uncertainty in the estimated regression coefficients
 var_mean_annual <- as.numeric(
   t(one) %*% X_hold %*% vcov(ussteamco.mod.5) %*% t(X_hold) %*% one
 )
 
-# Variance component from future residual variation
+# Equation 5.39: variance contribution from the future residual variation of 12 monthly observations
 sigma2 <- summary(ussteamco.mod.5)$sigma^2
 var_future_annual <- nrow(X_hold) * sigma2
 
-# Prediction variance and prediction standard error of the annual total
+# Equation 5.40: total prediction variance of the annual amount
 annual_var <- var_mean_annual + var_future_annual
+
+# Equation 5.41: prediction standard error of the annual amount
 annual_se <- sqrt(annual_var)
 
-# t-score for a 99% prediction interval
+# Equation 5.42: critical value for a 99% prediction interval
 t_score <- qt(0.995, df = df_res)
 
-# 99% prediction interval for the annual total
+# Equation 5.43: 99% prediction interval for the annual total
 annual_lower <- annual_prediction - t_score * annual_se
 annual_upper <- annual_prediction + t_score * annual_se
 
@@ -1282,7 +1292,12 @@ pred_df$outside_adj <- with(pred_df, recorded < lwr_adj | recorded > upr_adj)
 pred_df
 ```
 
+For the annual calculations in the next exercise, the adjusted annual expectation is the sum of the adjusted monthly expectations.
 
+```{r}
+annual_prediction_adj <- sum(pred_df$fit_adj)
+annual_prediction_adj
+```
 
 ## Exercise 5.36. Level of assurance for the annual prediction
 
@@ -1290,8 +1305,8 @@ We now compare the recorded annual revenue with the annual expectation. Consiste
 
 We use the numbers adjusted for the winter storm conditions.
 ```{r}
-monthly_predictions <- pred_df$fit_adj
-annual_prediction <- sum(monthly_predictions)
+monthly_expectations_adj <- pred_df$fit_adj
+annual_prediction <- sum(monthly_expectations_adj)
 ```
 
 ```{r}
@@ -1309,11 +1324,11 @@ Next, we set the audit parameters and construct the acceptable difference range.
 
 ```{r}
 # Set audit parameters
-PM <- 15000000         # Performance materiality
-beta <- 0.01           # Efficiency risk used for the acceptable difference range
+PM <- 15000000 # Performance materiality
+beta <- 0.01 # Efficiency risk used for the acceptable difference range
 df <- df_res
 
-# Standardized materiality
+# Equation 5.44: standardized materiality
 delta <- PM / annual_se
 
 # Critical values for a two-sided 99% acceptable difference range
@@ -1329,7 +1344,7 @@ cat("Lower bound:", ADR_lower, "\n")
 cat("Upper bound:", ADR_upper, "\n")
 ```
 
-Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+The quantities `c_L` and `c_U` are standardized decision bounds. Multiplying them by `annual_se` converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
 
 ```{r}
 # Acceptable bounds for recorded annual revenue
@@ -1350,12 +1365,18 @@ The achieved assurance is calculated using the non-central \(t\) distribution. A
 assurance_over <- 1 - pt(c_U, df = df, ncp = delta)
 assurance_under <- pt(c_L, df = df, ncp = -delta)
 
-cat("Achieved assurance for detecting overstatement:",
-    round(assurance_over * 100, 1), "%\n")
+cat(
+  "Achieved assurance for detecting overstatement:",
+  round(assurance_over * 100, 1), "%\n"
+)
 
-cat("Achieved assurance for detecting understatement:",
-    round(assurance_under * 100, 1), "%\n")
+cat(
+  "Achieved assurance for detecting understatement:",
+  round(assurance_under * 100, 1), "%\n"
+)
 ```
+
+With the current implementation and the audit parameters above, the achieved assurance is approximately 36.9% in each direction.
 
 
 Finally, we evaluate the observed annual difference.

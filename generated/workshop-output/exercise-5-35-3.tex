@@ -13,21 +13,11 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
-  data = USSteamCoEstim2
-)
-
-car::brief(ussteamco.mod.3)
+annual_prediction_adj <- sum(pred_df$fit_adj)
+annual_prediction_adj
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-           (Intercept) production heatDD  coolDD  summer
-Estimate        580713      34.87    933 -111458 4809519
-Std. Error     1299338       3.87   2690   38501 2849202
-           production:summer heatDD:summer coolDD:summer
-Estimate              -24.24        -12777        114963
-Std. Error              6.05         19331         38779
-
- Residual SD = 1483679 on 28 df, R-squared = 0.933
+[1] 190680684
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

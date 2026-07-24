@@ -6,6 +6,7 @@
 
 
 \noindent We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 5.4.4.
+The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, \ttblue{R} recycles this 12-month pattern across the four years automatically. Later, when we include \ttblue{summer} in a regression model, the \ttblue{lm} function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
 
 \par\addvspace{\topsep}
 \begingroup

@@ -18,20 +18,27 @@
 assurance_over <- 1 - pt(c_U, df = df, ncp = delta)
 assurance_under <- pt(c_L, df = df, ncp = -delta)
 
-cat("Achieved assurance for detecting overstatement:",
-    round(assurance_over * 100, 1), "%\n")
+cat(
+  "Achieved assurance for detecting overstatement:",
+  round(assurance_over * 100, 1), "%\n"
+)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Achieved assurance for detecting overstatement: 36.9 %
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-cat("Achieved assurance for detecting understatement:",
-    round(assurance_under * 100, 1), "%\n")
+cat(
+  "Achieved assurance for detecting understatement:",
+  round(assurance_under * 100, 1), "%\n"
+)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Achieved assurance for detecting understatement: 36.9 %
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent With the current implementation and the audit parameters above, the achieved assurance is approximately 36.9\% in each direction.
+
 
 \noindent Finally, we evaluate the observed annual difference.

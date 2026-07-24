@@ -524,6 +524,16 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
             r"t.sf(\1, df=\2)",
             updated,
         )
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^,\)]+)\s*,\s*ncp\s*=\s*([^)]+)\)",
+            r"nct.cdf(\1, df=\2, nc=\3)",
+            updated,
+        )
+        updated = re.sub(
+            r"\bpt\s*\(\s*([^,]+)\s*,\s*([^,\)]+)\s*,\s*ncp\s*=\s*([^)]+)\)",
+            r"nct.cdf(\1, df=\2, nc=\3)",
+            updated,
+        )
         updated = re.sub(r"\bpt\s*\(\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.cdf(\1, df=\2)", updated)
         updated = re.sub(r"\bpt\s*\(\s*([^,]+)\s*,\s*([^)]+)\)", r"t.cdf(\1, df=\2)", updated)
         updated = re.sub(r"\bqt\s*\(\s*p\s*=\s*([^,]+)\s*,\s*df\s*=\s*([^)]+)\)", r"t.ppf(\1, df=\2)", updated)
@@ -596,7 +606,7 @@ def make_r_stats_compat_bootstrap_cell(ir: Dict[str, Any]) -> Dict[str, Any]:
     lines = [
         "import numpy as np",
         "from math import sqrt",
-        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
+        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, nct, norm, poisson, t",
     ]
     return as_code_cell(
         lines,
@@ -657,7 +667,7 @@ def make_probability_distributions_bootstrap_cell(ir: Dict[str, Any]) -> Dict[st
     lines = [
         "import numpy as np",
         "from math import sqrt",
-        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, norm, poisson, t",
+        "from scipy.stats import binom, chi2, chisquare, f, hypergeom, nct, norm, poisson, t",
     ]
     return as_code_cell(
         lines,

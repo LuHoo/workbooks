@@ -7,7 +7,7 @@
 
 \noindent We use Equations 5.29 and 5.30 to construct a prediction interval for total revenue for the year under audit. The annual expectation is the sum of the 12 monthly expectations.
 
-\noindent The prediction standard error of the annual total is calculated directly from the design matrix for the hold-out observations. This accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients.
+\noindent To keep the derivation transparent, we first collect the monthly expectations, then combine them into an annual expectation, and finally compute the prediction standard error of that annual total. The design-matrix calculation accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients in all 12 months.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -21,11 +21,11 @@
 # Residual degrees of freedom
 df_res <- ussteamco.mod.5$df.residual
 
-# Monthly predictions
-monthly_predictions <- pred_df$fit
+# Monthly expectations from Exercise 5.34
+monthly_expectations <- pred_df$fit
 
-# Annual expectation
-annual_prediction <- sum(monthly_predictions)
+# Combined annual expectation
+annual_prediction <- sum(monthly_expectations)
 
 # Construct the design matrix for the hold-out observations
 X_hold <- model.matrix(
@@ -36,23 +36,25 @@ X_hold <- model.matrix(
 # Vector of ones for summing the 12 monthly predictions
 one <- rep(1, nrow(X_hold))
 
-# Variance component from uncertainty in the estimated coefficients
+# Equation 5.38: variance contribution from uncertainty in the estimated regression coefficients
 var_mean_annual <- as.numeric(
   t(one) %*% X_hold %*% vcov(ussteamco.mod.5) %*% t(X_hold) %*% one
 )
 
-# Variance component from future residual variation
+# Equation 5.39: variance contribution from the future residual variation of 12 monthly observations
 sigma2 <- summary(ussteamco.mod.5)$sigma^2
 var_future_annual <- nrow(X_hold) * sigma2
 
-# Prediction variance and prediction standard error of the annual total
+# Equation 5.40: total prediction variance of the annual amount
 annual_var <- var_mean_annual + var_future_annual
+
+# Equation 5.41: prediction standard error of the annual amount
 annual_se <- sqrt(annual_var)
 
-# t-score for a 99% prediction interval
+# Equation 5.42: critical value for a 99% prediction interval
 t_score <- qt(0.995, df = df_res)
 
-# 99% prediction interval for the annual total
+# Equation 5.43: 99% prediction interval for the annual total
 annual_lower <- annual_prediction - t_score * annual_se
 annual_upper <- annual_prediction + t_score * annual_se
 

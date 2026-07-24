@@ -17,12 +17,16 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 # Achieved assurance when controlling efficiency risk
-assurance_over = 1 - t.cdf(c_U, df=df, ncp = delta)
-assurance_under = t.cdf(c_L, df=df, ncp = -delta)
-cat("Achieved assurance for detecting overstatement:",
-    np.round(assurance_over * 100, 1), "%\n")
-cat("Achieved assurance for detecting understatement:",
-    np.round(assurance_under * 100, 1), "%\n")
+assurance_over = 1 - nct.cdf(c_U, df=df, nc=delta)
+assurance_under = nct.cdf(c_L, df=df, nc=-delta)
+cat(
+  "Achieved assurance for detecting overstatement:",
+  np.round(assurance_over * 100, 1), "%\n"
+)
+cat(
+  "Achieved assurance for detecting understatement:",
+  np.round(assurance_under * 100, 1), "%\n"
+)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Achieved assurance for detecting overstatement: 36.9 %

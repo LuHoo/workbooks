@@ -17,10 +17,10 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 # Set audit parameters
-PM = 15000000         # Performance materiality
-beta = 0.01           # Efficiency risk used for the acceptable difference range
+PM = 15000000 # Performance materiality
+beta = 0.01 # Efficiency risk used for the acceptable difference range
 df = df_res
-# Standardized materiality
+# Equation 5.44: standardized materiality
 delta = PM / annual_se
 # Critical values for a two-sided 99% acceptable difference range
 c_L = t.ppf(beta / 2, df=df)
