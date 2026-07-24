@@ -58,6 +58,34 @@ for (config in get_workshop_export_configs()) {
 
   tex_files_with_generated_chunks <- c(tex_files_with_generated_chunks, tex_path)
 
+  tex <- read_tex(tex_path)
+  if (identical(config$id, "population-estimation")) {
+    expected_r_inputs <- sprintf(
+      "\\input{%s/%s}",
+      r_chunk_dir,
+      existing_r_chunk_stems
+    )
+    missing_r_inputs <- expected_r_inputs[!vapply(
+      expected_r_inputs,
+      grepl,
+      logical(1),
+      x = tex,
+      fixed = TRUE
+    )]
+
+    if (length(missing_r_inputs)) {
+      failures <- c(
+        failures,
+        sprintf(
+          "%s: missing R chunk inputs in %s:\n  %s",
+          config$id,
+          tex_path,
+          paste(missing_r_inputs, collapse = "\n  ")
+        )
+      )
+    }
+  }
+
   missing_python_chunks <- python_chunk_files[
     chunk_stems %in% existing_r_chunk_stems & !file.exists(python_chunk_files)
   ]
@@ -72,7 +100,6 @@ for (config in get_workshop_export_configs()) {
     )
   }
 
-  tex <- read_tex(tex_path)
   expected_inputs <- sprintf(
     "\\input{%s/%s}",
     python_chunk_dir,

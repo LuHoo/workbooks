@@ -41,6 +41,7 @@ Example:
 - Chapter scripts remain as thin compatibility wrappers that delegate to the
 	canonical exporter via configuration:
 	- `scripts/export-probability-distributions-workshop.R`
+	- `scripts/export-population-estimation-workshop.R`
 	- `scripts/export-auxiliary-variables-and-stratification-workshop.R`
 	- `scripts/export-hypothesis-testing-workshop.R`
 	- `scripts/export-regression-analysis-workshop.R`
@@ -53,6 +54,7 @@ To export all chunks for a chapter/workshop, run the relevant wrapper script.
 Examples:
 
 - `Rscript scripts/export-probability-distributions-workshop.R`
+- `Rscript scripts/export-population-estimation-workshop.R`
 - `Rscript scripts/export-auxiliary-variables-and-stratification-workshop.R`
 - `Rscript scripts/export-hypothesis-testing-workshop.R`
 - `Rscript scripts/export-regression-analysis-workshop.R`

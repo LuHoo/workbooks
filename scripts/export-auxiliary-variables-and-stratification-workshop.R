@@ -7,5 +7,7 @@ export_workshop_by_config_id("auxiliary-variables-and-stratification", parser_en
 export_python_workshop_chunks_by_config_id("auxiliary-variables-and-stratification")
 export_python_workshop_tex_by_config_id(
 	"auxiliary-variables-and-stratification",
-	output_tex_path = "workshop03_Python.tex"
+	# Keep a monolithic auxiliary artifact for debugging/legacy use,
+	# but avoid clobbering any old top-level workshop artifact.
+	output_tex_path = "generated/workshop-output-python/workshop-auxiliary-variables-and-stratification_Python.tex"
 )
