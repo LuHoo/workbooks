@@ -309,6 +309,10 @@ Local Word previews for workshop notebooks:
 - use `--type rmd` or `--type ipynb` to render only one notebook family.
 - Word rendering requires Pandoc; on macOS, install it with `brew install pandoc`.
 
+Long-running simulation artifacts:
+
+- see `docs/authoring/simulation-artifacts.md` for precomputed artifact locations and recompute commands.
+
 ### Generated Notebook Artifact Edit Policy
 
 Policy scope:
