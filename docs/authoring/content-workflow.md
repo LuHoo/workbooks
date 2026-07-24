@@ -134,7 +134,8 @@ Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebook
 ```
 
 For chapter-specific wrapper scripts, use the matching `scripts/export-*-workshop.R`
-file when one exists.
+file when one exists. These wrappers should generate per-exercise R and Python
+chunks only; they must not write monolithic chapter-level workshop `.tex` files.
 
 ## Embedding Workshop Output In LaTeX
 
@@ -145,9 +146,10 @@ Prefer generated chunk inputs in the chapter `.tex` file:
 \input{generated/workshop-output-python/exercise-5-36-1}
 ```
 
-Avoid top-level monolithic workshop files such as `workshopNN_R.tex` or
-`workshopNN_Python.tex` for newly maintained chapters. Remaining monoliths are
-legacy debt unless still intentionally referenced.
+Avoid monolithic workshop files such as `workshopNN_R.tex`,
+`workshopNN_Python.tex`, or generated `workshop-*_Python.tex` files. The local
+validation gate runs `scripts/ci/check-no-python-workshop-monoliths.R` to keep
+chapter wrappers on the per-exercise chunk path.
 
 ## Local Checks
 

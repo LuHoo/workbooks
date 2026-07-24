@@ -17,6 +17,9 @@ python3 scripts/ci/check-generated-python-notebooks.py --input-dir "${OUT_DIR}"
 echo "[gate] Checking generated Python workshop LaTeX includes"
 Rscript scripts/ci/check-generated-python-workshop-includes.R
 
+echo "[gate] Checking for monolithic Python workshop TeX generation"
+Rscript scripts/ci/check-no-python-workshop-monoliths.R
+
 echo "[gate] Enforcing generated artifact edit policy for published notebooks"
 python3 scripts/ci/check-generated-python-notebooks.py \
   --input-dir "${OUT_DIR}" \

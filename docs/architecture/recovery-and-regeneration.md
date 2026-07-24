@@ -307,7 +307,8 @@ flowchart TD
 Transitional/legacy paths:
 
 - `scripts/export-workshops.R` still uses direct source parsing/stripping for R distribution generation (not fully IR-renderer unified).
-- `scripts/export-probability-distributions-workshop.R` contains legacy fallback to `notebooks/python/workshop02_python.ipynb` for Python-to-TeX.
+- Historical top-level and generated monolithic Python workshop TeX files have
+  been removed from normal wrapper generation in favor of per-exercise chunks.
 
 Planned/not yet fully implemented path:
 

@@ -45,7 +45,7 @@ Findings:
 | Executed Python notebooks (`generated/notebook-execution-artifacts/executed/*.ipynb`) | Temporary generated | `scripts/ci/execute-generated-python-notebooks.py` | CI artifacts only | No | conforms |
 | Executed R smoke outputs (`generated/notebook-execution-artifacts/r-smoke/*.md`) | Temporary generated | `scripts/ci/execute-r-workshop-smoke.R` | CI artifacts only | No | partially conforms |
 | Generated workshop LaTeX chunks (`generated/workshop-output/exercise-*.tex`) | Generated | `scripts/export-workshop-output.R` -> LaTeX renderer | Book input | No | conforms |
-| Python notebook-to-TeX (`workshop02_Python.tex`) | Generated | `scripts/export-python-workshop.py` via wrapper | Book input | No | partially conforms |
+| Generated Python workshop LaTeX chunks (`generated/workshop-output-python/exercise-*.tex`) | Generated | `scripts/export-python-workshop.py` via wrapper helpers | Book input | No | conforms |
 | Book-only LaTeX chapter files (`chap*.tex`, etc.) | Canonical | Human authoring | Book build | Yes | conforms |
 | Final PDF/book outputs | Build artifact | TeX toolchain/task | Distribution output | No | conforms |
 
@@ -53,7 +53,8 @@ Key ownership findings:
 
 - Most artifacts have one dominant producer.
 - R distribution notebooks have a separate direct line-based generator (`export-workshops.R`) rather than a full IR-renderer path.
-- Python LaTeX generation currently has a legacy fallback input (`notebooks/python/workshop02_python.ipynb`) in wrapper script, violating strict single-producer intent.
+- Python workshop LaTeX generation now uses generated notebooks and
+  per-exercise chunk outputs in wrapper scripts.
 
 ## 3 Generation pipeline
 
@@ -217,8 +218,7 @@ Expected chain per architecture:
 Broken/weak provenance links:
 
 1. R student distribution notebook generation bypasses IR layer (`export-workshops.R` line-based stripping path).
-2. Python TeX export wrapper for probability chapter has legacy fallback source (`notebooks/python/workshop02_python.ipynb`), which weakens strict provenance from canonical source.
-3. No dedicated semantic-reference provenance chain implemented (reference metadata/resolution layer absent).
+2. No dedicated semantic-reference provenance chain implemented (reference metadata/resolution layer absent).
 
 ## 7 Architectural conformance
 

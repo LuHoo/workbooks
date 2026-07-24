@@ -72,41 +72,6 @@ export_python_workshop_chunks_by_config <- function(
   invisible(TRUE)
 }
 
-export_python_workshop_tex_by_config <- function(
-  config,
-  output_tex_path,
-  input_dir = "generated/python-notebooks",
-  exporter_script = "scripts/export-python-workshop.py"
-) {
-  if (is.null(config) || is.null(config$id)) {
-    stop("Invalid workshop export configuration supplied.")
-  }
-
-  notebook_path <- resolve_python_workshop_notebook(config, input_dir = input_dir)
-  if (!file.exists(notebook_path)) {
-    stop(
-      "Missing generated Python notebook for config ", config$id,
-      ": expected ", notebook_path,
-      ". Run scripts/export-python-notebooks.R first."
-    )
-  }
-
-  python_bin <- resolve_python_bin()
-  args <- c(
-    exporter_script,
-    "--input", notebook_path,
-    "--output", output_tex_path,
-    "--expect-generated-metadata"
-  )
-
-  status <- system2(python_bin, args)
-  if (!identical(status, 0L)) {
-    stop("Failed to export Python workshop TeX for config ", config$id)
-  }
-
-  invisible(TRUE)
-}
-
 export_python_workshop_chunks_by_config_id <- function(
   config_id,
   input_dir = "generated/python-notebooks",
@@ -127,28 +92,6 @@ export_python_workshop_chunks_by_config_id <- function(
     input_dir = input_dir,
     output_dir = output_dir,
     fallback_output_dir = fallback_output_dir,
-    exporter_script = exporter_script
-  )
-}
-
-export_python_workshop_tex_by_config_id <- function(
-  config_id,
-  output_tex_path,
-  input_dir = "generated/python-notebooks",
-  exporter_script = "scripts/export-python-workshop.py"
-) {
-  config <- resolve_workshop_export_config_by_id(config_id)
-  if (is.null(config)) {
-    stop(
-      "Unsupported workshop config id: ", config_id,
-      ". Add it to scripts/workshop-export-config.R."
-    )
-  }
-
-  export_python_workshop_tex_by_config(
-    config = config,
-    output_tex_path = output_tex_path,
-    input_dir = input_dir,
     exporter_script = exporter_script
   )
 }

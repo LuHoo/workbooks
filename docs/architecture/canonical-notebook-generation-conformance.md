@@ -267,7 +267,7 @@ Implementation (files/functions):
   - `render_markdown_cell()`
   - `render_code_cell()`
   - `metadata_export_context()`
-- Chapter wrapper currently invoking it: `scripts/export-probability-distributions-workshop.R`
+- Chapter wrappers invoke chunk export through `scripts/export-python-workshop-output.R`.
 
 Conformance evidence:
 
@@ -275,12 +275,13 @@ Conformance evidence:
 
 Gaps / duplicated paths / obsolete logic:
 
-- Integration appears chapter-specific (chapter 1 wrapper) rather than uniform across all Python chapters.
-- Wrapper includes legacy fallback to `notebooks/python/workshop02_python.ipynb`, indicating non-canonical path still active.
+- Integration is wrapper-driven, but wrappers now produce per-exercise Python
+  chunks rather than monolithic chapter-level TeX files.
 
 Smallest remediation:
 
-- Route all Python-to-LaTeX exports through generated IR notebooks only; remove legacy notebook fallback once migration is complete.
+- Keep Python-to-LaTeX exports routed through generated IR notebooks and
+  per-exercise chunk files.
 
 ## 10) Publication to workbooks and audit-data-analysis
 
