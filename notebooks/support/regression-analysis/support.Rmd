@@ -71,6 +71,66 @@ USSteamCoEstim <- USSteamCo[1:36, ]
 USSteamCoHold <- USSteamCo[37:48, ]
 ```
 
+<!-- SUPPORT-ONLY:START -->
+```{r}
+ussteamco_period_plot_data <- USSteamCo
+ussteamco_period_plot_data$period <- ifelse(
+  seq_len(nrow(ussteamco_period_plot_data)) <= nrow(USSteamCoEstim),
+  "Estimation period (2011-2013)",
+  "Hold-out period (2014)"
+)
+
+ussteamco_period_plot_data <- tidyr::pivot_longer(
+  ussteamco_period_plot_data,
+  cols = c(revenue, production),
+  names_to = "measure",
+  values_to = "value"
+)
+
+ussteamco_period_plot_data$measure <- factor(
+  ussteamco_period_plot_data$measure,
+  levels = c("revenue", "production"),
+  labels = c("Revenue ($)", "Production (x 1000 lb)")
+)
+
+ussteamco_period_plot <-
+  ggplot(ussteamco_period_plot_data, aes(x = date, y = value)) +
+  annotate(
+    "rect",
+    xmin = as.Date("2014-01-01"),
+    xmax = as.Date("2014-12-31"),
+    ymin = -Inf,
+    ymax = Inf,
+    fill = "#BC204B",
+    alpha = 0.08
+  ) +
+  geom_line(aes(group = measure), colour = "#00338D", linewidth = 0.5) +
+  geom_point(aes(colour = period), size = 1.9) +
+  geom_vline(xintercept = as.Date("2014-01-01"), linetype = "dashed") +
+  facet_wrap(~measure, ncol = 1, scales = "free_y") +
+  scale_x_date(date_breaks = "6 months", date_labels = "%b\n%Y") +
+  scale_y_continuous(labels = label_comma()) +
+  scale_colour_manual(
+    values = c(
+      "Estimation period (2011-2013)" = "#00338D",
+      "Hold-out period (2014)" = "#BC204B"
+    )
+  ) +
+  labs(x = NULL, y = NULL, colour = NULL) +
+  theme(
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+
+save_book_figure(
+  ussteamco_period_plot,
+  "H7_USSteamCo_estimation_holdout.pdf",
+  width = 10,
+  height = 6.8
+)
+```
+<!-- SUPPORT-ONLY:END -->
+
 Figure 5.2 shows the histograms of the data in the US SteamCo estimation set.
 
 ```{r}
@@ -1297,6 +1357,7 @@ cat("Achieved assurance for detecting understatement:",
     round(assurance_under * 100, 1), "%\n")
 ```
 
+
 Finally, we evaluate the observed annual difference.
 
 ```{r}
@@ -1310,4 +1371,3 @@ if (annual_difference < ADR_lower) {
   cat("The annual difference falls within the acceptable difference range.\n")
 }
 ```
-
