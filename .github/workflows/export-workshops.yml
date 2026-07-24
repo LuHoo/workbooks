@@ -193,6 +193,10 @@ jobs:
             --input-dir generated/python-notebooks \
             --checks hygiene
 
+      - name: Verify deterministic generation
+        run: |
+          bash scripts/ci/verify-deterministic-notebook-generation.sh
+
       - name: Publish Python notebooks
         run: |
           Rscript scripts/publish-python-notebooks.R --input-dir generated/python-notebooks --output-dir notebooks/workshops

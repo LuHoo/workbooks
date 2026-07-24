@@ -86,7 +86,7 @@ run_generation() {
 
   echo "[verify] Preparing isolated output root: $run_root"
   rm -rf "$run_root"
-  mkdir -p "$run_root"/{ir,python-notebooks,published-python-notebooks,r-workshops,workshop-output}
+  mkdir -p "$run_root"/{ir,python-notebooks,published-python-notebooks,r-workshops,workshop-output,workshop-output-python}
 
   echo "[verify] Generating Workshop IR snapshots"
   ADA_OUT_IR="$run_root/ir" Rscript -e "
@@ -111,7 +111,7 @@ for (cfg in get_workshop_export_configs()) {
   echo "[verify] Generating distribution R workshop notebooks"
   Rscript scripts/export-workshops.R --output-dir "$run_root/r-workshops"
 
-  echo "[verify] Generating workshop LaTeX fragments"
+  echo "[verify] Generating R workshop LaTeX fragments"
   ADA_OUT_LATEX="$run_root/workshop-output" Rscript -e "
 source('scripts/workshop-export-config.R', chdir = FALSE)
 source('scripts/export-workshop-output.R', chdir = FALSE)
@@ -123,6 +123,25 @@ for (cfg in get_workshop_export_configs()) {
     parser_engine = 'ir',
     enable_traceability = TRUE,
     traceability_strict = TRUE
+  )
+}
+"
+
+  echo "[verify] Generating Python workshop LaTeX fragments"
+  ADA_OUT_NOTEBOOKS="$run_root/python-notebooks" \
+  ADA_OUT_LATEX="$run_root/workshop-output" \
+  ADA_OUT_LATEX_PYTHON="$run_root/workshop-output-python" Rscript -e "
+source('scripts/workshop-export-config.R', chdir = FALSE)
+source('scripts/export-python-workshop-output.R', chdir = FALSE)
+input_dir <- Sys.getenv('ADA_OUT_NOTEBOOKS')
+fallback_output_dir <- Sys.getenv('ADA_OUT_LATEX')
+output_dir <- Sys.getenv('ADA_OUT_LATEX_PYTHON')
+for (cfg in get_workshop_export_configs()) {
+  export_python_workshop_chunks_by_config(
+    config = cfg,
+    input_dir = input_dir,
+    output_dir = output_dir,
+    fallback_output_dir = fallback_output_dir
   )
 }
 "
@@ -239,9 +258,20 @@ check_content_guards() {
     exit 1
   fi
 
-  echo "[verify] Checking generated LaTeX guardrails"
+  echo "[verify] Checking generated R LaTeX guardrails"
   if grep -R -n -E '/tmp/|/var/folders/' "$run_root/workshop-output"; then
     echo "[verify] Guardrail failure: environment-specific path fragment found in generated LaTeX" >&2
+    exit 1
+  fi
+
+  echo "[verify] Checking generated Python LaTeX guardrails"
+  if grep -R -n -E '/tmp/|/var/folders/' "$run_root/workshop-output-python"; then
+    echo "[verify] Guardrail failure: environment-specific path fragment found in generated Python LaTeX" >&2
+    exit 1
+  fi
+
+  if find "$run_root/workshop-output-python" -maxdepth 1 -name 'workshop-*_Python.tex' | grep -q .; then
+    echo "[verify] Guardrail failure: monolithic Python workshop TeX file generated" >&2
     exit 1
   fi
 }

@@ -152,6 +152,10 @@ jobs:
             --checks hygiene \
             --published-dir notebooks/workshops
 
+      - name: Verify deterministic generation
+        run: |
+          bash scripts/ci/verify-deterministic-notebook-generation.sh
+
       - name: "Assert R/Python equivalence (phase 1: chapter 1 and 6)"
         run: |
           python3 scripts/ci/assert-r-python-equivalence.py \

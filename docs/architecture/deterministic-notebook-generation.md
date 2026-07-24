@@ -10,7 +10,8 @@ The check validates deterministic behavior for:
 - Generated Python notebooks (`.ipynb`) from IR.
 - Published Python notebook copies (distribution naming/path mapping).
 - Generated R workshop notebooks (`.Rmd`).
-- Generated workshop LaTeX exercise fragments (`exercise-*.tex`).
+- Generated R workshop LaTeX exercise fragments (`generated/workshop-output/exercise-*.tex`).
+- Generated Python workshop LaTeX exercise fragments (`generated/workshop-output-python/exercise-*.tex`).
 
 The procedure intentionally excludes GitHub Actions and Binder execution.
 
@@ -48,6 +49,7 @@ Each run invokes the same canonical generators:
 - Published Python notebooks via `scripts/publish-python-notebooks.R`.
 - R workshop notebooks via `scripts/export-workshops.R`.
 - LaTeX chunks via `scripts/export-workshop-output.R` with `parser_engine = "ir"` and strict traceability.
+- Python LaTeX chunks via `scripts/export-python-workshop-output.R`.
 
 ### 3) Byte-Level Artifact Equivalence
 
@@ -75,7 +77,8 @@ Additional checks ensure no environment leakage and no directive leakage:
 
 - Generated R notebooks must not contain support-only/ADA directive markers.
 - Published Python notebooks must not contain `/tmp/` or `/var/folders/` path fragments.
-- Generated LaTeX outputs must not contain `/tmp/` or `/var/folders/` path fragments.
+- Generated R and Python LaTeX outputs must not contain `/tmp/` or `/var/folders/` path fragments.
+- Generated Python LaTeX outputs must not contain monolithic `workshop-*_Python.tex` files.
 
 ## Local Verification Result
 

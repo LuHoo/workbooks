@@ -20,6 +20,9 @@ Rscript scripts/ci/check-generated-python-workshop-includes.R
 echo "[gate] Checking for monolithic Python workshop TeX generation"
 Rscript scripts/ci/check-no-python-workshop-monoliths.R
 
+echo "[gate] Verifying deterministic generation"
+bash scripts/ci/verify-deterministic-notebook-generation.sh
+
 echo "[gate] Enforcing generated artifact edit policy for published notebooks"
 python3 scripts/ci/check-generated-python-notebooks.py \
   --input-dir "${OUT_DIR}" \

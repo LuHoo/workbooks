@@ -204,16 +204,17 @@ Current-state note:
 ### Layer 2: Deterministic generation validation
 
 - Current implementation:
-  - deterministic behavior is encoded in parser/renderer design and tests
-    (stable ordering/IDs, canonical JSON serialization), but there is no
-    dedicated repository-wide deterministic dual-run verifier script in this
-    branch.
+  - `scripts/ci/verify-deterministic-notebook-generation.sh` performs two
+    isolated generation runs and compares inventories, hashes, and notebook
+    semantics across all generated notebook and workshop-fragment outputs.
 - Proves:
-  - component-level deterministic intent and repeatability checks where tests
-    exist.
+  - end-to-end reproducibility for generated IR snapshots, Rmd workshop
+    notebooks, Python notebooks, published Python notebook copies, and
+    R/Python workshop LaTeX fragments.
 - Does not prove:
-  - full end-to-end reproducibility across all generated artifacts in one gate.
-- Local availability: partial.
+  - runtime execution success, Binder launchability, or external publication
+    synchronization.
+- Local availability: yes.
 - Required when: making parser/renderer/output-contract changes.
 
 ### Layer 3: Local execution and parity validation
@@ -321,13 +322,13 @@ Current implementation gaps and caveats:
 
 - IR field `generated_at_utc` is derived from source file mtime, so this field
   can vary if file timestamps change.
-- no single dedicated end-to-end deterministic dual-run verifier script exists
-  in this branch.
+- `scripts/ci/verify-deterministic-notebook-generation.sh` provides the
+  repository-wide deterministic dual-run verifier.
 
 Reproducibility verification methods currently available:
 
-- rerun `scripts/export-python-notebooks.R` on unchanged source and compare
-  generated outputs;
+- run `bash scripts/ci/verify-deterministic-notebook-generation.sh` to compare
+  isolated end-to-end generation outputs;
 - run `tests/workshop-ir/run-tests.R` and `tests/python-renderer/run-tests.py`;
 - run local validation gate before publication.
 
