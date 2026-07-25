@@ -70,14 +70,23 @@ json_string <- function(x) {
 }
 
 json_value_object <- function(item) {
-  c(
+  lines <- c(
     "    {",
     paste0("      \"id\": ", json_string(item$id), ","),
+    paste0("      \"role\": ", json_string(item$role), ","),
     paste0("      \"raw\": ", format_raw(item$raw), ","),
     paste0("      \"display\": ", json_string(item$display), ","),
-    paste0("      \"format\": ", json_string(item$format)),
-    "    }"
+    paste0("      \"format\": ", json_string(item$format))
   )
+  if (!is.null(item$tolerance)) {
+    lines[length(lines)] <- paste0(lines[length(lines)], ",")
+    lines <- c(lines, paste0("      \"tolerance\": ", format_raw(item$tolerance)))
+  }
+  if (!is.null(item$language_scope)) {
+    lines[length(lines)] <- paste0(lines[length(lines)], ",")
+    lines <- c(lines, paste0("      \"language_scope\": ", json_string(item$language_scope)))
+  }
+  c(lines, "    }")
 }
 
 write_json_metadata <- function(path, metadata) {
@@ -93,11 +102,16 @@ write_json_metadata <- function(path, metadata) {
 
   lines <- c(
     "{",
+    paste0("  \"schema_version\": ", metadata$schema_version, ","),
     paste0("  \"id\": ", json_string(metadata$id), ","),
+    paste0("  \"kind\": ", json_string(metadata$kind), ","),
+    paste0("  \"chapter_prefix\": ", json_string(metadata$chapter_prefix), ","),
     paste0("  \"source_notebook\": ", json_string(metadata$source_notebook), ","),
     paste0("  \"source_context\": ", json_string(metadata$source_context), ","),
     paste0("  \"source_dataset\": ", json_string(metadata$source_dataset), ","),
+    paste0("  \"target_snippet\": ", json_string(metadata$target_snippet), ","),
     paste0("  \"tolerance\": ", format_raw(metadata$tolerance), ","),
+    paste0("  \"language_scope\": ", json_string(metadata$language_scope), ","),
     "  \"equation_labels\": [",
     paste0(
       "    ",
@@ -144,13 +158,13 @@ compute_aux_mpu_estimator <- function() {
   mpu_estimate <- N * mean_y
 
   values <- list(
-    list(id = "aux.mpu.population_size", raw = N, display = format_number(N), format = "integer"),
-    list(id = "aux.mpu.sample_size", raw = n, display = format_number(n), format = "integer"),
-    list(id = "aux.mpu.total_audit_value", raw = sum_y, display = format_number(sum_y, 2), format = "number:2"),
-    list(id = "aux.mpu.mean_audit_value", raw = mean_y, display = format_number(mean_y, 2), format = "number:2"),
-    list(id = "aux.mpu.sum_squared_audit_values", raw = sum_y2, display = format_number(sum_y2), format = "integer"),
-    list(id = "aux.mpu.audit_value_variance", raw = var_y, display = format_number(var_y), format = "integer"),
-    list(id = "aux.mpu.estimated_population_value", raw = mpu_estimate, display = format_number(mpu_estimate), format = "integer")
+    list(id = "aux.mpu.population_size", role = "population_size", raw = N, display = format_number(N), format = "integer"),
+    list(id = "aux.mpu.sample_size", role = "sample_size", raw = n, display = format_number(n), format = "integer"),
+    list(id = "aux.mpu.total_audit_value", role = "total_audit_value", raw = sum_y, display = format_number(sum_y, 2), format = "number:2"),
+    list(id = "aux.mpu.mean_audit_value", role = "mean_audit_value", raw = mean_y, display = format_number(mean_y, 2), format = "number:2"),
+    list(id = "aux.mpu.sum_squared_audit_values", role = "sum_squared_audit_values", raw = sum_y2, display = format_number(sum_y2), format = "integer"),
+    list(id = "aux.mpu.audit_value_variance", role = "audit_value_variance", raw = var_y, display = format_number(var_y), format = "integer"),
+    list(id = "aux.mpu.estimated_population_value", role = "estimated_population_value", raw = mpu_estimate, display = format_number(mpu_estimate), format = "integer")
   )
 
   by_id <- setNames(values, vapply(values, function(item) item$id, character(1L)))
@@ -210,11 +224,16 @@ compute_aux_mpu_estimator <- function() {
   list(
     tex = tex,
     metadata = list(
+      schema_version = 1L,
       id = "aux.mpu.estimator",
+      kind = "worked_calculation",
+      chapter_prefix = "aux",
       source_notebook = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
       source_context = "Exercise 3.2 and Exercise 3.3; inventory sample selected with seed 12345",
       source_dataset = "FSaudit::inventoryData",
+      target_snippet = "generated/worked-calculations/aux-mpu-estimator.tex",
       tolerance = 1e-8,
+      language_scope = "shared",
       equation_labels = c("eq:estimate_total", "eq:sample_var_shortcut"),
       values = values
     )

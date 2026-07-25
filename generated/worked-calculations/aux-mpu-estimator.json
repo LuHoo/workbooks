@@ -1,51 +1,63 @@
 {
+  "schema_version": 1,
   "id": "aux.mpu.estimator",
+  "kind": "worked_calculation",
+  "chapter_prefix": "aux",
   "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
   "source_context": "Exercise 3.2 and Exercise 3.3; inventory sample selected with seed 12345",
   "source_dataset": "FSaudit::inventoryData",
+  "target_snippet": "generated/worked-calculations/aux-mpu-estimator.tex",
   "tolerance": 0.00000001000000000000000,
+  "language_scope": "shared",
   "equation_labels": [
     "eq:estimate_total", "eq:sample_var_shortcut"
   ],
   "values": [
     {
       "id": "aux.mpu.population_size",
+      "role": "population_size",
       "raw": 3500.000000000000,
       "display": "3,500",
       "format": "integer"
     },
     {
       "id": "aux.mpu.sample_size",
+      "role": "sample_size",
       "raw": 400.0000000000000,
       "display": "400",
       "format": "integer"
     },
     {
       "id": "aux.mpu.total_audit_value",
+      "role": "total_audit_value",
       "raw": 864212.4799999996,
       "display": "864,212.48",
       "format": "number:2"
     },
     {
       "id": "aux.mpu.mean_audit_value",
+      "role": "mean_audit_value",
       "raw": 2160.531200000000,
       "display": "2,160.53",
       "format": "number:2"
     },
     {
       "id": "aux.mpu.sum_squared_audit_values",
+      "role": "sum_squared_audit_values",
       "raw": 3649977984.260799,
       "display": "3,649,977,984",
       "format": "integer"
     },
     {
       "id": "aux.mpu.audit_value_variance",
+      "role": "audit_value_variance",
       "raw": 4468220.445592542,
       "display": "4,468,220",
       "format": "integer"
     },
     {
       "id": "aux.mpu.estimated_population_value",
+      "role": "estimated_population_value",
       "raw": 7561859.199999999,
       "display": "7,561,859",
       "format": "integer"
