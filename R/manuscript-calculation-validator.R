@@ -203,7 +203,93 @@ mc_validate_manuscript_inputs <- function(entries, repo_root = ".", manuscript_d
   list(errors = errors, inputs = inputs)
 }
 
-mc_validation_report <- function(entries, inputs, errors) {
+mc_effective_language_scope <- function(value, entry) {
+  value$language_scope %||% entry$language_scope %||% "shared"
+}
+
+mc_value_tolerance <- function(value, entry) {
+  value$tolerance %||% entry$tolerance %||% 1e-8
+}
+
+mc_shared_values_by_id <- function(entries) {
+  rows <- list()
+  for (entry in entries) {
+    for (value in entry$values) {
+      if (identical(mc_effective_language_scope(value, entry), "shared")) {
+        rows[[length(rows) + 1L]] <- list(
+          entry_id = entry$id,
+          value_id = value$id,
+          raw = value$raw,
+          tolerance = mc_value_tolerance(value, entry),
+          source_notebook = entry$source_notebook
+        )
+      }
+    }
+  }
+  stats::setNames(rows, vapply(rows, function(row) row$value_id, character(1L)))
+}
+
+mc_compare_shared_language_values <- function(r_entries, python_entries, default_tolerance = 1e-8) {
+  errors <- character()
+  comparisons <- list()
+  r_values <- mc_shared_values_by_id(r_entries)
+  python_values <- mc_shared_values_by_id(python_entries)
+
+  duplicate_r <- unique(names(r_values)[duplicated(names(r_values))])
+  duplicate_python <- unique(names(python_values)[duplicated(names(python_values))])
+  if (length(duplicate_r)) {
+    errors <- c(errors, paste0("Duplicate shared R value ID(s): ", paste(duplicate_r, collapse = ", ")))
+  }
+  if (length(duplicate_python)) {
+    errors <- c(errors, paste0("Duplicate shared Python value ID(s): ", paste(duplicate_python, collapse = ", ")))
+  }
+
+  shared_ids <- union(names(r_values), names(python_values))
+  for (value_id in shared_ids) {
+    r_value <- r_values[[value_id]]
+    python_value <- python_values[[value_id]]
+    if (is.null(r_value)) {
+      errors <- c(errors, paste0("Missing shared R value for Python value ID: ", value_id))
+      next
+    }
+    if (is.null(python_value)) {
+      errors <- c(errors, paste0("Missing shared Python value for R value ID: ", value_id))
+      next
+    }
+
+    tolerance <- min(r_value$tolerance %||% default_tolerance, python_value$tolerance %||% default_tolerance)
+    difference <- abs(as.numeric(r_value$raw) - as.numeric(python_value$raw))
+    status <- if (is.na(difference) || difference > tolerance) "failed" else "passed"
+    comparisons[[length(comparisons) + 1L]] <- list(
+      id = value_id,
+      r_entry = r_value$entry_id,
+      python_entry = python_value$entry_id,
+      r_source_notebook = r_value$source_notebook,
+      python_source_notebook = python_value$source_notebook,
+      r_raw = r_value$raw,
+      python_raw = python_value$raw,
+      difference = difference,
+      tolerance = tolerance,
+      status = status
+    )
+    if (identical(status, "failed")) {
+      errors <- c(
+        errors,
+        paste0(
+          "Shared R/Python value mismatch for ", value_id,
+          ": R=", r_value$raw,
+          ", Python=", python_value$raw,
+          ", difference=", difference,
+          ", tolerance=", tolerance
+        )
+      )
+    }
+  }
+
+  list(errors = errors, comparisons = comparisons)
+}
+
+mc_validation_report <- function(entries, inputs, errors, language_comparisons = list()) {
   entry_rows <- lapply(entries, function(entry) {
     list(
       id = entry$id %||% NA_character_,
@@ -217,6 +303,7 @@ mc_validation_report <- function(entries, inputs, errors) {
     status = if (length(errors)) "failed" else "passed",
     checked_count = length(entries),
     checked = entry_rows,
+    language_comparisons = language_comparisons,
     manuscript_inputs = if (nrow(inputs)) split(inputs, seq_len(nrow(inputs))) else list(),
     errors = as.list(errors)
   )
@@ -242,6 +329,21 @@ mc_write_validation_markdown <- function(path, report) {
   }
   if (length(report$errors)) {
     lines <- c(lines, "", "## Errors", "", paste0("- ", unlist(report$errors, use.names = FALSE)))
+  }
+  if (length(report$language_comparisons)) {
+    lines <- c(lines, "", "## R/Python Shared Value Comparisons", "")
+    lines <- c(lines, "| ID | R raw | Python raw | Difference | Tolerance | Status |", "| --- | ---: | ---: | ---: | ---: | --- |")
+    for (item in report$language_comparisons) {
+      lines <- c(lines, paste0(
+        "| ", item$id,
+        " | ", item$r_raw,
+        " | ", item$python_raw,
+        " | ", item$difference,
+        " | ", item$tolerance,
+        " | ", item$status,
+        " |"
+      ))
+    }
   }
   writeLines(lines, path, useBytes = TRUE)
 }

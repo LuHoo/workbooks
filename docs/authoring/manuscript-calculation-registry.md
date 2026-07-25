@@ -128,6 +128,14 @@ is complete, manuscript `\input{generated/worked-calculations/...}` statements
 point to registered files, and generated snippets still agree with their
 metadata.
 
+It also compares shared R/Python raw values. R-side metadata lives in
+`generated/worked-calculations/`; Python-side metadata lives in
+`generated/worked-calculations-python/`. Values with `language_scope: shared`
+must exist in both places with the same semantic value ID and may differ by no
+more than the configured tolerance, which defaults to `1e-8`. Values that are
+intentionally track-specific should be marked `r`, `python`, or `exception`
+rather than left as `shared`.
+
 For release evidence, write both machine-readable and reviewer-friendly reports:
 
 ```sh

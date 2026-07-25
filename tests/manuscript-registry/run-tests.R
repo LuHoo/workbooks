@@ -114,4 +114,29 @@ inputs <- mc_extract_worked_calculation_inputs(tex_fixture)
 assert_true(identical(inputs$target[[1]], "generated/worked-calculations/aux-mpu-estimator.tex"), "input extension should be normalized")
 assert_true(identical(inputs$target[[2]], "generated/worked-calculations/aux-mpu-other.tex"), "explicit input extension should be preserved")
 
+python_group <- group
+python_group$source_notebook <- "notebooks/workshops/Workshop 3 (Python).ipynb"
+comparison <- mc_compare_shared_language_values(list(group), list(python_group))
+assert_true(!length(comparison$errors), "matching shared R/Python values should pass")
+assert_true(identical(comparison$comparisons[[1]]$status, "passed"), "shared value comparison status mismatch")
+
+drifted_python_group <- python_group
+drifted_python_group$values[[1]]$raw <- drifted_python_group$values[[1]]$raw + 0.01
+drift_comparison <- mc_compare_shared_language_values(list(group), list(drifted_python_group))
+assert_true(
+  any(grepl("Shared R/Python value mismatch", drift_comparison$errors, fixed = TRUE)),
+  "drifted shared R/Python value should fail"
+)
+
+missing_comparison <- mc_compare_shared_language_values(list(group), list())
+assert_true(
+  any(grepl("Missing shared Python value", missing_comparison$errors, fixed = TRUE)),
+  "missing Python counterpart should fail for shared values"
+)
+
+r_only_group <- group
+r_only_group$language_scope <- "r"
+r_only_comparison <- mc_compare_shared_language_values(list(r_only_group), list())
+assert_true(!length(r_only_comparison$errors), "R-only values should not require Python counterparts")
+
 message("Manuscript registry R helper tests passed.")

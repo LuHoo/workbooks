@@ -76,6 +76,10 @@ manuscript correctly, run:
 
 `Rscript scripts/ci/validate-manuscript-calculations.R`
 
+The validator also compares shared R/Python raw manuscript values between
+`generated/worked-calculations/` and `generated/worked-calculations-python/`
+with the default `1e-8` tolerance.
+
 Release evidence can be written with:
 
 `Rscript scripts/ci/validate-manuscript-calculations.R --output-json generated/worked-calculations/validation-report.json --output-summary generated/worked-calculations/validation-report.md`

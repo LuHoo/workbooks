@@ -3,6 +3,7 @@
 parse_args <- function(args) {
   out <- list(
     generated_dir = "generated/worked-calculations",
+    python_generated_dir = "generated/worked-calculations-python",
     manuscript_dir = ".",
     output_json = NULL,
     output_summary = NULL,
@@ -17,6 +18,10 @@ parse_args <- function(args) {
       i <- i + 1L
       if (i > length(args)) stop("Missing value after --generated-dir")
       out$generated_dir <- args[[i]]
+    } else if (identical(arg, "--python-generated-dir")) {
+      i <- i + 1L
+      if (i > length(args)) stop("Missing value after --python-generated-dir")
+      out$python_generated_dir <- args[[i]]
     } else if (identical(arg, "--manuscript-dir")) {
       i <- i + 1L
       if (i > length(args)) stop("Missing value after --manuscript-dir")
@@ -48,6 +53,7 @@ print_help <- function() {
     "  Rscript scripts/ci/validate-manuscript-calculations.R [options]\n\n",
     "Options:\n",
     "  --generated-dir <path>   Directory with generated snippets and metadata (default: generated/worked-calculations)\n",
+    "  --python-generated-dir <path>  Directory with Python-side generated metadata (default: generated/worked-calculations-python)\n",
     "  --manuscript-dir <path>  Directory containing top-level manuscript .tex files (default: .)\n",
     "  --output-json <path>     Write a machine-readable validation report\n",
     "  --output-summary <path>  Write a Markdown validation report\n",
@@ -105,6 +111,8 @@ if (!isTRUE(args$skip_freshness)) {
 
 entries <- mc_read_registry_metadata(args$generated_dir)
 errors <- freshness_errors
+python_entries <- list()
+language_comparisons <- list()
 
 if (!length(entries)) {
   errors <- c(errors, paste0("No manuscript calculation metadata files found in: ", args$generated_dir))
@@ -130,7 +138,30 @@ if (length(duplicate_entries)) {
 input_check <- mc_validate_manuscript_inputs(entries, repo_root = ".", manuscript_dir = args$manuscript_dir)
 errors <- c(errors, input_check$errors)
 
-report <- mc_validation_report(entries, input_check$inputs, errors)
+if (dir.exists(args$python_generated_dir)) {
+  python_entries <- mc_read_registry_metadata(args$python_generated_dir)
+  for (entry in python_entries) {
+    errors <- c(
+      errors,
+      mc_validate_registry_entry(
+        entry,
+        repo_root = ".",
+        metadata_path = attr(entry, "metadata_path"),
+        check_files = FALSE
+      )
+    )
+  }
+  comparison <- mc_compare_shared_language_values(entries, python_entries)
+  errors <- c(errors, comparison$errors)
+  language_comparisons <- comparison$comparisons
+} else {
+  shared_r_values <- mc_shared_values_by_id(entries)
+  if (length(shared_r_values)) {
+    errors <- c(errors, paste0("Missing Python metadata directory for shared manuscript values: ", args$python_generated_dir))
+  }
+}
+
+report <- mc_validation_report(entries, input_check$inputs, errors, language_comparisons)
 write_report(report, args$output_json, args$output_summary)
 
 if (length(errors)) {
