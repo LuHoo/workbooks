@@ -13,6 +13,8 @@ notebook_repo_root <- function(start = getwd()) {
   }
 }
 
+source(file.path(notebook_repo_root(), "R", "manuscript-calculation-registry.R"))
+
 #' Save a support-notebook figure for use by the book
 #'
 #' Filenames are preserved exactly because they may be referenced by LaTeX.

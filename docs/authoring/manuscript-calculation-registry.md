@@ -116,3 +116,24 @@ Validation should fail when:
 
 The MPU pilot metadata in `generated/worked-calculations/aux-mpu-estimator.json`
 is the first concrete registry entry.
+
+## Authoring Helpers
+
+R Support notebooks should source `R/notebook-utils.R`, which now loads the
+manuscript calculation helpers:
+
+- `mc_value()` registers one raw/display value.
+- `mc_group()` registers a group of related values.
+- `mc_format_value()` renders a raw value according to the shared formatting
+  rules.
+
+Python Support flows can use the companion helpers in
+`ada_fsaudit_bridge.manuscript_registry`:
+
+- `RegistryValue`
+- `RegistryEntry`
+- `format_value()`
+
+These helpers produce the same registry shape as the v1 schema. They are only
+the registration layer; reusable snippet rendering and full schema validation
+are tracked separately in #221 and #222.

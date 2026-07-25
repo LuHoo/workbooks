@@ -38,20 +38,12 @@ print_help <- function() {
   )
 }
 
+source("R/manuscript-calculation-registry.R", chdir = FALSE)
+
 ensure_dependencies <- function() {
   if (!requireNamespace("FSaudit", quietly = TRUE)) {
     stop("The FSaudit package is required to generate worked calculations.")
   }
-}
-
-format_number <- function(x, digits = 0) {
-  formatC(
-    x,
-    format = "f",
-    digits = digits,
-    big.mark = ",",
-    decimal.mark = "."
-  )
 }
 
 format_raw <- function(x) {
@@ -158,13 +150,13 @@ compute_aux_mpu_estimator <- function() {
   mpu_estimate <- N * mean_y
 
   values <- list(
-    list(id = "aux.mpu.population_size", role = "population_size", raw = N, display = format_number(N), format = "integer"),
-    list(id = "aux.mpu.sample_size", role = "sample_size", raw = n, display = format_number(n), format = "integer"),
-    list(id = "aux.mpu.total_audit_value", role = "total_audit_value", raw = sum_y, display = format_number(sum_y, 2), format = "number:2"),
-    list(id = "aux.mpu.mean_audit_value", role = "mean_audit_value", raw = mean_y, display = format_number(mean_y, 2), format = "number:2"),
-    list(id = "aux.mpu.sum_squared_audit_values", role = "sum_squared_audit_values", raw = sum_y2, display = format_number(sum_y2), format = "integer"),
-    list(id = "aux.mpu.audit_value_variance", role = "audit_value_variance", raw = var_y, display = format_number(var_y), format = "integer"),
-    list(id = "aux.mpu.estimated_population_value", role = "estimated_population_value", raw = mpu_estimate, display = format_number(mpu_estimate), format = "integer")
+    mc_value("aux.mpu.population_size", role = "population_size", raw = N, format = "integer"),
+    mc_value("aux.mpu.sample_size", role = "sample_size", raw = n, format = "integer"),
+    mc_value("aux.mpu.total_audit_value", role = "total_audit_value", raw = sum_y, format = "number:2"),
+    mc_value("aux.mpu.mean_audit_value", role = "mean_audit_value", raw = mean_y, format = "number:2"),
+    mc_value("aux.mpu.sum_squared_audit_values", role = "sum_squared_audit_values", raw = sum_y2, format = "integer"),
+    mc_value("aux.mpu.audit_value_variance", role = "audit_value_variance", raw = var_y, format = "integer"),
+    mc_value("aux.mpu.estimated_population_value", role = "estimated_population_value", raw = mpu_estimate, format = "integer")
   )
 
   by_id <- setNames(values, vapply(values, function(item) item$id, character(1L)))
@@ -223,11 +215,9 @@ compute_aux_mpu_estimator <- function() {
 
   list(
     tex = tex,
-    metadata = list(
-      schema_version = 1L,
+    metadata = mc_group(
       id = "aux.mpu.estimator",
       kind = "worked_calculation",
-      chapter_prefix = "aux",
       source_notebook = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
       source_context = "Exercise 3.2 and Exercise 3.3; inventory sample selected with seed 12345",
       source_dataset = "FSaudit::inventoryData",
