@@ -117,6 +117,28 @@ Validation should fail when:
 The MPU pilot metadata in `generated/worked-calculations/aux-mpu-estimator.json`
 is the first concrete registry entry.
 
+Run the strict validation gate with:
+
+```sh
+Rscript scripts/ci/validate-manuscript-calculations.R
+```
+
+This single command verifies that committed snippets are reproducible, metadata
+is complete, manuscript `\input{generated/worked-calculations/...}` statements
+point to registered files, and generated snippets still agree with their
+metadata.
+
+For release evidence, write both machine-readable and reviewer-friendly reports:
+
+```sh
+Rscript scripts/ci/validate-manuscript-calculations.R \
+  --output-json generated/worked-calculations/validation-report.json \
+  --output-summary generated/worked-calculations/validation-report.md
+```
+
+The reports list every checked calculation ID, source notebook, target snippet,
+status, and any validation failures.
+
 ## Authoring Helpers
 
 R Support notebooks should source `R/notebook-utils.R`, which now loads the

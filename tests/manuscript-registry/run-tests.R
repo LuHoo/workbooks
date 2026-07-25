@@ -2,6 +2,7 @@
 
 source("R/manuscript-calculation-registry.R", chdir = FALSE)
 source("R/manuscript-calculation-renderer.R", chdir = FALSE)
+source("R/manuscript-calculation-validator.R", chdir = FALSE)
 
 assert_true <- function(value, message) {
   if (!isTRUE(value)) {
@@ -78,5 +79,39 @@ expect_error(
   mc_render_template("Missing {{sample_size}}", list(value)),
   "Missing registered value"
 )
+
+valid_errors <- mc_validate_registry_entry(group, check_files = FALSE)
+assert_true(!length(valid_errors), "valid registry entry should pass strict validation")
+
+broken_group <- group
+broken_group$values[[1]]$display <- NULL
+broken_errors <- mc_validate_registry_entry(broken_group, check_files = FALSE)
+assert_true(
+  any(grepl("missing required field `display`", broken_errors, fixed = TRUE)),
+  "missing display metadata should fail strict validation"
+)
+
+bad_role_group <- group
+bad_role_group$values <- list(
+  mc_value("aux.mpu.first_value", role = "duplicate", raw = 1, format = "integer"),
+  mc_value("aux.mpu.second_value", role = "duplicate", raw = 2, format = "integer")
+)
+bad_role_errors <- mc_validate_registry_entry(bad_role_group, check_files = FALSE)
+assert_true(
+  any(grepl("duplicate value role", bad_role_errors, fixed = TRUE)),
+  "duplicate value roles should fail strict validation"
+)
+
+tex_fixture <- tempfile(fileext = ".tex")
+writeLines(
+  c(
+    "\\input{generated/worked-calculations/aux-mpu-estimator}",
+    "\\input{generated/worked-calculations/aux-mpu-other.tex}"
+  ),
+  tex_fixture
+)
+inputs <- mc_extract_worked_calculation_inputs(tex_fixture)
+assert_true(identical(inputs$target[[1]], "generated/worked-calculations/aux-mpu-estimator.tex"), "input extension should be normalized")
+assert_true(identical(inputs$target[[2]], "generated/worked-calculations/aux-mpu-other.tex"), "explicit input extension should be preserved")
 
 message("Manuscript registry R helper tests passed.")

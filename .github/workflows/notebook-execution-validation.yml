@@ -133,9 +133,11 @@ jobs:
           R --version | head -n 1
           Rscript -e "cat('FSaudit', as.character(packageVersion('FSaudit')), '\n')"
 
-      - name: Check generated worked calculations
+      - name: Validate manuscript calculations
         run: |
-          Rscript scripts/generate-worked-calculations.R --check
+          Rscript scripts/ci/validate-manuscript-calculations.R \
+            --output-json generated/worked-calculations/validation-report.json \
+            --output-summary generated/worked-calculations/validation-report.md
 
       - name: Generate Python notebooks
         run: |

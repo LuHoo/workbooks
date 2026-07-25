@@ -71,9 +71,14 @@ Notebook-derived manuscript calculations are generated with:
 
 `Rscript scripts/generate-worked-calculations.R`
 
-To verify that committed snippets are fresh, run:
+To verify that committed snippets are fresh, registered, and still wired into the
+manuscript correctly, run:
 
-`Rscript scripts/generate-worked-calculations.R --check`
+`Rscript scripts/ci/validate-manuscript-calculations.R`
+
+Release evidence can be written with:
+
+`Rscript scripts/ci/validate-manuscript-calculations.R --output-json generated/worked-calculations/validation-report.json --output-summary generated/worked-calculations/validation-report.md`
 
 The initial pilot generates the MPU worked calculation used in the
 auxiliary-variables chapter from the same `FSaudit::inventoryData` workflow used
