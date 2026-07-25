@@ -134,6 +134,25 @@ Python Support flows can use the companion helpers in
 - `RegistryEntry`
 - `format_value()`
 
-These helpers produce the same registry shape as the v1 schema. They are only
-the registration layer; reusable snippet rendering and full schema validation
-are tracked separately in #221 and #222.
+These helpers produce the same registry shape as the v1 schema. Full schema
+validation is tracked separately in #222.
+
+## Snippet Templates
+
+Reusable snippet rendering uses LaTeX templates with `{{...}}` placeholders.
+Placeholders may refer to either a registered value ID or a value role:
+
+```tex
+\hat{Y}_{MPU} = {{population_size}} \cdot {{mean_audit_value}}
+```
+
+The renderer replaces placeholders with the registered display values and adds
+provenance comments to generated snippets. Missing placeholders fail during
+generation.
+
+R helpers:
+
+- `mc_render_template()` renders a character-vector template from registered
+  values.
+- `mc_render_snippet()` adds provenance comments and renders the template for a
+  registry group.

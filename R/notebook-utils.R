@@ -14,6 +14,7 @@ notebook_repo_root <- function(start = getwd()) {
 }
 
 source(file.path(notebook_repo_root(), "R", "manuscript-calculation-registry.R"))
+source(file.path(notebook_repo_root(), "R", "manuscript-calculation-renderer.R"))
 
 #' Save a support-notebook figure for use by the book
 #'

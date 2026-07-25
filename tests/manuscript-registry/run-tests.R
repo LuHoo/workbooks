@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
 source("R/manuscript-calculation-registry.R", chdir = FALSE)
+source("R/manuscript-calculation-renderer.R", chdir = FALSE)
 
 assert_true <- function(value, message) {
   if (!isTRUE(value)) {
@@ -61,6 +62,21 @@ expect_error(
     values = list(mc_value("reg.mpu.value", raw = 1, format = "integer"))
   ),
   "Value IDs must use group prefix"
+)
+
+rendered <- mc_render_template(
+  c("Mean: {{mean_audit_value}}", "Total: {{aux.mpu.total_audit_value}}"),
+  list(
+    mc_value("aux.mpu.mean_audit_value", raw = 2160.5312, format = "number:2"),
+    mc_value("aux.mpu.total_audit_value", raw = 864212.48, format = "number:2")
+  )
+)
+assert_true(identical(rendered[[1]], "Mean: 2,160.53"), "role template rendering mismatch")
+assert_true(identical(rendered[[2]], "Total: 864,212.48"), "ID template rendering mismatch")
+
+expect_error(
+  mc_render_template("Missing {{sample_size}}", list(value)),
+  "Missing registered value"
 )
 
 message("Manuscript registry R helper tests passed.")

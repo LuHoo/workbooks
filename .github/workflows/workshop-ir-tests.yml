@@ -5,6 +5,7 @@ on:
     paths:
       - "ada_fsaudit_bridge/**"
       - "R/manuscript-calculation-registry.R"
+      - "R/manuscript-calculation-renderer.R"
       - "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"
       - "notebooks/support/hypothesis-testing/support.Rmd"
       - "scripts/workshop-ir.R"
@@ -31,6 +32,7 @@ on:
     paths:
       - "ada_fsaudit_bridge/**"
       - "R/manuscript-calculation-registry.R"
+      - "R/manuscript-calculation-renderer.R"
       - "notebooks/support/auxiliary-variables-and-stratification/support.Rmd"
       - "notebooks/support/hypothesis-testing/support.Rmd"
       - "scripts/workshop-ir.R"
