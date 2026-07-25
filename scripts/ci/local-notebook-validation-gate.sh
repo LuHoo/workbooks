@@ -11,6 +11,9 @@ cd "${ROOT_DIR}"
 echo "[gate] Generating Python notebooks"
 Rscript scripts/export-python-notebooks.R --output-dir "${OUT_DIR}"
 
+echo "[gate] Checking generated worked calculations"
+Rscript scripts/generate-worked-calculations.R --check
+
 echo "[gate] Checking strict Python guardrail"
 python3 scripts/ci/check-generated-python-notebooks.py --input-dir "${OUT_DIR}"
 

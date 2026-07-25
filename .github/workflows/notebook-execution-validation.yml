@@ -6,12 +6,15 @@ on:
       - "notebooks/support/**/support.Rmd"
       - "notebooks/workshops/**"
       - "scripts/export-python-notebooks.R"
+      - "scripts/generate-worked-calculations.R"
       - "scripts/workshop-ir-*.R"
       - "scripts/workshop-ir-*.py"
       - "scripts/ci/**"
+      - "generated/worked-calculations/**"
       - "scripts/traceability-*.R"
       - "ada_fsaudit_bridge/**"
       - "metadata/traceability/**"
+      - "auxiliary.tex"
       - ".binder/**"
       - ".github/workflows/notebook-execution-validation.yml"
   pull_request:
@@ -23,12 +26,15 @@ on:
       - "notebooks/support/**/support.Rmd"
       - "notebooks/workshops/**"
       - "scripts/export-python-notebooks.R"
+      - "scripts/generate-worked-calculations.R"
       - "scripts/workshop-ir-*.R"
       - "scripts/workshop-ir-*.py"
       - "scripts/ci/**"
+      - "generated/worked-calculations/**"
       - "scripts/traceability-*.R"
       - "ada_fsaudit_bridge/**"
       - "metadata/traceability/**"
+      - "auxiliary.tex"
       - ".binder/**"
       - ".github/workflows/notebook-execution-validation.yml"
   workflow_dispatch:
@@ -126,6 +132,10 @@ jobs:
           PY
           R --version | head -n 1
           Rscript -e "cat('FSaudit', as.character(packageVersion('FSaudit')), '\n')"
+
+      - name: Check generated worked calculations
+        run: |
+          Rscript scripts/generate-worked-calculations.R --check
 
       - name: Generate Python notebooks
         run: |

@@ -116,23 +116,9 @@ Total & 863,201.37 & 864,212.48 & -1,011.11 \\
 \section{Mean-per-unit estimator} % (fold)
 \label{sec:mpu_estimator}
 
-We start addressing the problem in the \emph{Case: Valuation of inventories} with the estimator introduced in the previous chapter. An estimate of the correct value of the population is obtained by extrapolating the audited values of $n = $ 400 sampled items. We refer to this estimator as the \hlblue{direct estimator}\index{direct estimator}\index{estimator!direct} or, more commonly, among auditors, as the \hlblue{mean-per-unit (MPU) estimator}\index{mean-per-unit estimator}\index{estimator!mean-per-unit}. The total \hlblue{audit value}\index{audit value} of the 400 sampled items $\sum y =$ 864,212.48, resulting in the mean audit value
+We start addressing the problem in the \emph{Case: Valuation of inventories} with the estimator introduced in the previous chapter. An estimate of the correct value of the population is obtained by extrapolating the audited values of $n = $ 400 sampled items. We refer to this estimator as the \hlblue{direct estimator}\index{direct estimator}\index{estimator!direct} or, more commonly, among auditors, as the \hlblue{mean-per-unit (MPU) estimator}\index{mean-per-unit estimator}\index{estimator!mean-per-unit}.
 
-\begin{equation*}
-\overline{y} = \frac{\sum{y_i}}{n} = \frac{864,212.48}{400} = 2,160.53
-\end{equation*}
-
-We then use Equation \ref{eq:estimate_total} 
-\begin{equation*}
-  \hat{Y}_{MPU} = N\frac{\sum y_i}{n} = 3,500 \cdot 2,160.53 = 7,561,859
-\end{equation*}
-to estimate of the population value. 
-The variance of the audit values is calculated with Equation \ref{eq:sample_var_shortcut}
-
-\begin{align*}
-s_y^2 &= \frac{\sum{y^2 - (\sum{y})^2 / n}}{n - 1} \\
-&= \frac{3,649,977,984 - 864,212.48^2 / 400}{400 - 1} = 4,468,220
-\end{align*}
+\input{generated/worked-calculations/aux-mpu-estimator}
 
 A 95\% two-sided prediction interval on the correct population value is then calculated by applying Equation \ref{eq:two-sided_finite}, multiplied by $N$
 

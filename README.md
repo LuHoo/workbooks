@@ -64,6 +64,20 @@ Examples:
 Note: The goodness-of-fit wrapper preloads the regression workshop in-process,
 because chapter 6 exercises depend on objects produced by chapter 5 code.
 
+## Worked Calculation Generator
+
+Notebook-derived manuscript calculations are generated with:
+
+`Rscript scripts/generate-worked-calculations.R`
+
+To verify that committed snippets are fresh, run:
+
+`Rscript scripts/generate-worked-calculations.R --check`
+
+The initial pilot generates the MPU worked calculation used in the
+auxiliary-variables chapter from the same `FSaudit::inventoryData` workflow used
+by the support workbook.
+
 ## Exporter Architecture Freeze
 
 The workshop exporter architecture is frozen as supported project infrastructure.
