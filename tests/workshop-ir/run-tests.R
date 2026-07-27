@@ -51,6 +51,37 @@ expect_error_pattern <- function(expr, pattern, message) {
   }
 }
 
+strip_non_shared_ada_regions <- function(lines) {
+  out <- character()
+  drop_region <- FALSE
+
+  for (line in lines) {
+    trimmed <- trimws(line)
+
+    if (grepl("^<!--\\s*ADA:BEGIN\\b", trimmed)) {
+      # Keep only shared authoring regions in the legacy baseline stream.
+      begin_is_shared <- grepl("\\blang=shared\\b", trimmed)
+      drop_region <- !begin_is_shared
+      next
+    }
+
+    if (grepl("^<!--\\s*ADA:END\\s*-->$", trimmed)) {
+      drop_region <- FALSE
+      next
+    }
+
+    if (grepl("^<!--\\s*ADA:REQUIRES\\b", trimmed)) {
+      next
+    }
+
+    if (!drop_region) {
+      out <- c(out, line)
+    }
+  }
+
+  out
+}
+
 extract_python_override_lines <- function(lines) {
   in_python_override <- FALSE
   collected <- character()
@@ -326,6 +357,7 @@ run_round_trip_consistency_test <- function() {
   source_lines <- read_source_lines(source_file)
   validate_supported_constructs(source_lines, source_file)
   publishable <- strip_support_only(source_lines, source_file)
+  publishable <- strip_non_shared_ada_regions(publishable)
 
   legacy_segments <- extract_exercise_segments(
     publishable,
