@@ -5,7 +5,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import textwrap
 from pathlib import Path
+
+
+MAX_TEX_PROSE_LINE_LENGTH = 59
+MAX_TEX_VERBATIM_LINE_LENGTH = 59
 
 
 class ExportValidationError(ValueError):
@@ -113,16 +118,85 @@ def normalize_source(source) -> list[str]:
     return raw.splitlines()
 
 
+def wrap_latex_prose_line(text: str, max_length: int = MAX_TEX_PROSE_LINE_LENGTH) -> list[str]:
+    stripped = text.strip()
+    if len(stripped) <= max_length:
+        return [stripped]
+
+    words = stripped.split()
+    if not words:
+        return [""]
+
+    wrapped: list[str] = []
+    current = words[0]
+    for word in words[1:]:
+        candidate = current + " " + word
+        if len(candidate) <= max_length:
+            current = candidate
+        else:
+            wrapped.append(current)
+            current = word
+    wrapped.append(current)
+    return wrapped
+
+
+def wrap_latex_prose_with_optional_prefix(
+    text: str,
+    prefix: str,
+    max_length: int = MAX_TEX_PROSE_LINE_LENGTH,
+) -> list[str]:
+    effective_first_line_max = max(20, max_length - len(prefix))
+    wrapped = wrap_latex_prose_line(text, max_length=effective_first_line_max)
+    if not wrapped:
+        return [prefix.rstrip()]
+
+    wrapped[0] = prefix + wrapped[0]
+    for idx in range(1, len(wrapped)):
+        if len(wrapped[idx]) > max_length:
+            secondary = wrap_latex_prose_line(wrapped[idx], max_length=max_length)
+            wrapped[idx:idx + 1] = secondary
+    return wrapped
+
+
+def wrap_verbatim_line(text: str, max_length: int = MAX_TEX_VERBATIM_LINE_LENGTH) -> list[str]:
+    if len(text) <= max_length:
+        return [text]
+
+    wrapped = textwrap.wrap(
+        text,
+        width=max_length,
+        break_long_words=True,
+        break_on_hyphens=False,
+        replace_whitespace=False,
+        drop_whitespace=False,
+    )
+    candidates = wrapped if wrapped else [text]
+
+    clamped: list[str] = []
+    for segment in candidates:
+        if len(segment) <= max_length:
+            clamped.append(segment)
+            continue
+        start = 0
+        while start < len(segment):
+            clamped.append(segment[start : start + max_length])
+            start += max_length
+    return clamped
+
+
 def render_markdown_cell(lines: list[str]) -> list[str]:
     out = []
+    paragraph_start = True
     for line in lines:
         stripped = line.strip()
         if not stripped:
             out.append("")
+            paragraph_start = True
             continue
 
         if stripped.startswith("### "):
             out.append(r"\subsubsection*{" + convert_inline(stripped[4:].strip()) + "}")
+            paragraph_start = True
             continue
 
         if stripped.startswith("## "):
@@ -135,13 +209,17 @@ def render_markdown_cell(lines: list[str]) -> list[str]:
                 out.append("")
             else:
                 out.append(r"\subsection*{" + convert_inline(title) + "}")
+            paragraph_start = True
             continue
 
         if stripped.startswith("# "):
             out.append(r"\subsection*{" + convert_inline(stripped[2:].strip()) + "}")
+            paragraph_start = True
             continue
 
-        out.append(convert_inline(line))
+        prefix = r"\noindent " if paragraph_start else ""
+        out.extend(wrap_latex_prose_with_optional_prefix(convert_inline(line), prefix=prefix))
+        paragraph_start = False
 
     return out
 
@@ -212,16 +290,20 @@ def render_code_cell(source_lines: list[str], output_lines: list[str]) -> list[s
     source_lines = strip_internal_workflow_lines(source_lines)
     out = [r"\begin{Verbatim}[commandchars=\\\{\}]"]
     for line in source_lines:
-        if line.strip():
-            out.append(r"\textcolor{ada_blue}{" + escape_textcolor_argument(line) + "}")
-        else:
-            out.append("")
-    if output_lines:
-        for line in output_lines:
-            if line.strip():
-                out.append(r"\textcolor{ada_light_blue}{" + escape_textcolor_argument(line) + "}")
+        escaped_line = escape_textcolor_argument(line)
+        for wrapped_line in wrap_verbatim_line(escaped_line):
+            if wrapped_line.strip():
+                out.append(r"\textcolor{ada_blue}{" + wrapped_line + "}")
             else:
                 out.append("")
+    if output_lines:
+        for line in output_lines:
+            escaped_line = escape_textcolor_argument(line)
+            for wrapped_line in wrap_verbatim_line(escaped_line):
+                if wrapped_line.strip():
+                    out.append(r"\textcolor{ada_light_blue}{" + wrapped_line + "}")
+                else:
+                    out.append("")
     out.append(r"\end{Verbatim}")
     return out
 
@@ -287,7 +369,7 @@ def markdown_lines_to_workshop_latex(lines: list[str]) -> list[str]:
             paragraph_start = True
             continue
         prefix = r"\noindent " if paragraph_start else ""
-        out.append(prefix + convert_inline(line))
+        out.extend(wrap_latex_prose_with_optional_prefix(convert_inline(line), prefix=prefix))
         paragraph_start = False
     return out
 
@@ -296,7 +378,8 @@ def render_verbatim_block(lines: list[str], color: str) -> list[str]:
     if not lines:
         return []
     out = [rf"\begin{{Verbatim}}[breaklines=true,formatcom=\color{{{color}}}]"]
-    out.extend(lines)
+    for line in lines:
+        out.extend(wrap_verbatim_line(line))
     out.append(r"\end{Verbatim}")
     return out
 

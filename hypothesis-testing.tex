@@ -386,7 +386,7 @@ However, it is not possible to test individual monetary units; to assess the app
 To enable this, we therefore select the items for testing not randomly but with a \hlblue{probability proportional to size}\index{probability proportional to size}. 
 The image of sampling individual monetary units provides this method with the name of \hlblue{Monetary Unit Sampling}\index{monetary unit sampling}\index{sampling!monetary unit} or MUS.
 
-The most commonly used sampling schemes with probabilities pro\-por\-tion\-al to the size of the elements are discussed in Section \ref{sub:selection_with_probability_proportional_to_size}.
+The most commonly used sampling schemes with probabilities pro\-por\-tion\-al to the size of the elements are discussed in Volume 2, Section \ref{sub:selection_with_probability_proportional_to_size}.
 
 % \begin{description}
 \paragraph{Step 1. Develop the research question.} For \emph{Case: European innovation subsidies}, we need to investigate whether the population of innovation expenses contains items not applicable for funding with a total amount of 1\% of the total.
@@ -629,15 +629,12 @@ Total & & & 354,168.21 \\
 
 The \emph{upper confidence bound}\index{confidence bound}\index{bound!confidence} on errors according to the Stringer bound method is the sum of the point estimate of 115,448.28, and the precision achieved is 354,168.21; the result is 469,616.49. We may assert with 95\% confidence that the amount of misstatement does not exceed 469,616.49. The auditor's interpretation of this statistical conclusion is discussed in Section \ref{sec:auditor_interpretation}.
 
-\paragraph{Cell bounds} The \hlblue{cell bounds}\index{cell bounds} evaluation method is a further refinement of the Stringer bound method. 
-The philosophy behind this is that if a partial misstatement is encountered, it can be proven that the most conservative evaluation approach is either
+\paragraph{Method 3: Cell Bounds} The \hlblue{cell bounds}\index{cell bounds} evaluation method is a further refinement of the Stringer bound method. 
+The philosophy behind this is that if a partial misstatement is encountered, it can be proven that the most conservative evaluation approach is either to assume that all other errors in the population are 100\% errors (Load and Spread), or to assume that all other errors in the population exhibit the same tainting as the partial error found (Simple Spread).
 
-\begin{description}[style=nextline]
-\item[Load and Spread.] In addition to the partial error, all other errors in the population are 100\% errors. As a result, the upper bound $M_U[k]$ for error $k$ is the sum of the previous upper bound $M_U[k-1]$ and the point estimate $t_k X / n$ for error $k$; or\footnote{$M_{U,LS}[k] = M_U[k-1] + t X / n$}
+\paragraph{Load and Spread} In addition to the partial error, all other errors in the population are 100\% errors. As a result, the upper bound $M_U[k]$ for error $k$ is the sum of the previous upper bound $M_U[k-1]$ and the point estimate $t_k X / n$ for error $k$; \footnote{$M_{U,LS}[k] = M_U[k-1] + t X / n$}
 
-\item[Simple Spread.] All partial errors in the population exhibit the same tainting. This results in applying the average tainting $\bar{t}$ to the upper bound $M_U$.\footnote{$M_{U,SS}[k] = M_U[k] \bar{t}$}
-
-\end{description}
+\paragraph{Simple Spread} All partial errors in the population exhibit the same tainting. This results in applying the average tainting $\bar{t}$ to the upper bound $M_U$.\footnote{$M_{U,SS}[k] = M_U[k] \bar{t}$}
 
 The sample is evaluated according to both approaches, and at each stage in the evaluation, the most conservative upper bound is chosen. Table \ref{tab:precision_Cell} shows the calculations involved in the cell bounds evaluation method executed on the same three errors found. These numbers can be explained as follows:
 
@@ -798,7 +795,7 @@ The conclusion is that, if we expect a total error in the population of 100,000,
 \section{Auditor interpretation} % (fold)
 \label{sec:auditor_interpretation}
 
-As explained in Section \ref{sec:nature_and_cause_of_deviations_and_misstatements}, before extrapolating the differences, the auditor should first evaluate their nature and causes. For statistical evaluation, the hypothesis test is carried out with the upper confidence bound $M_U$ as the test statistic, with the critical region as $M_U \leq PM$. If $M_U$ is within the critical range, the null hypothesis that the population is materially misstated is rejected in favor of the alternative. Auditors conclude, with $(1 - \alpha)$ confidence, the population is not materially misstated.
+As explained in Volume 2, Section \ref{sec:nature_and_cause_of_deviations_and_misstatements}, before extrapolating the differences, the auditor should first evaluate their nature and causes. For statistical evaluation, the hypothesis test is carried out with the upper confidence bound $M_U$ as the test statistic, with the critical region as $M_U \leq PM$. If $M_U$ is within the critical range, the null hypothesis that the population is materially misstated is rejected in favor of the alternative. Auditors conclude, with $(1 - \alpha)$ confidence, the population is not materially misstated.
 
 If $M_U$ is not within the critical region, the null hypothesis cannot be rejected; however, this does not automatically mean that the alternative hypothesis is true. In this case, it is usually best to first discuss the misstatements found with the client and then decide on an alternative approach. The client may want to clean up the population before submitting it to the auditor for testing. Alternatively, the auditor may extend the sample, particularly if the original sample is set up with low expected error. The size of the extended sample can be obtained by using the point estimate from the original sample as the expected error of the new sample. However, the extended sample could be quite large if the expected error is more than $PM/2$. For example, increasing the expected error from 100,000 to 300,000 increases the sample size from 145 to 746.
 
