@@ -45,6 +45,7 @@ Legacy parser policy note:
   `docs/architecture/legacy-parser-deprecation-policy.md`.
 - During transition, fallback remains valid for recovery, but should not be
   treated as routine default operation.
+- Current lifecycle stage is `Stage 1 — Preferred IR Default`.
 
 ## Phase 1: Recovery Surface Inventory
 
@@ -238,6 +239,17 @@ Local-first checks:
 - regenerate + guardrails + local execution scripts.
 
 Then defer hosted binder launch/readiness checks.
+
+Binder log triage rule:
+
+- repeated Eigen `-Wignored-attributes` compiler warnings and Fortran
+  deleted-feature warnings from upstream dependencies are expected unless the
+  Binder build later terminates with a package install failure;
+- prioritize the first explicit build error, missing-header/tool diagnostic, or
+  non-zero `postBuild` / repo2docker exit over warning volume;
+- use `generated/traceability/binder-repo2docker-smoke.log` for build/install
+  failures and `generated/traceability/binder-launch-smoke.log` for launch-only
+  failures.
 
 ### E. Book output differs from student notebook
 
@@ -525,6 +537,8 @@ Legacy parser fallback warning:
 - If rollback uses `--parser-engine legacy`, record rationale in the associated
   issue/PR/release notes and re-evaluate advancement criteria at the next
   deprecation checkpoint.
+- Rollback remains supported during transition, but retirement of rollback
+  support requires a separate future removal issue and PR.
 
 ## Phase 9: Recovery Decision Tree
 

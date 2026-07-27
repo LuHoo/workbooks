@@ -56,11 +56,25 @@ Policy constraint:
 
 Installed by `.binder/install.R` and mirrored in CI install steps:
 
-- workshop/render dependencies (`knitr`, `rmarkdown`, plotting/statistics libs);
-- bridge/runtime dependencies (`IRkernel`, `jsonlite`, `remotes`, `devtools`);
+- runtime workshop/render dependencies:
+  - `IRkernel`, `jsonlite`, `knitr`, `rmarkdown`
+  - plotting/statistics stack required by current workshops:
+    `ggplot2`, `car`, `pbkrtest`, `lme4`, `nloptr`, `gridExtra`, `tidyr`,
+    `corrplot`, `lmtest`, `latex2exp`, `scales`
+- justified build-time exception:
+  - `remotes` is retained only because `.binder/install.R` installs pinned
+    GitHub runtime packages during image build
 - pinned GitHub packages:
   - `LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418`
   - `LuHoo/aicpa@4a49d0357544eb22ed3314005af2f82b3cf0f53a`
+
+Audit result:
+
+- `devtools` was removed from the Binder install graph because it is
+  maintainer-oriented tooling and is not required by the student runtime or the
+  Binder build path.
+- `readr` was removed from the explicit Binder install list because current
+  runtime surfaces in this repository do not use it directly.
 
 Build-time verification:
 
@@ -185,6 +199,46 @@ Artifacts:
 `postBuild` includes lightweight dependency assertions for critical system tools/headers (including `cmake`, harfbuzz, and fribidi) so missing Binder apt dependencies fail fast with actionable messages.
 
 `postBuild` also validates that key R packages (`FSaudit`, `aicpa`, `car`, `pbkrtest`, `lme4`, `nloptr`) are available immediately at runtime.
+
+## Binder Log Triage
+
+Binder build logs can contain high-volume compiler output from upstream package
+builds. Treat the following classes as expected noise unless they are followed
+by a hard build/install failure:
+
+- Eigen compiler warnings such as `-Wignored-attributes`
+- Fortran 2018 deleted-feature warnings emitted by upstream dependencies during
+  compilation
+
+These warnings are not, by themselves, evidence that the Binder image failed or
+that a workshop runtime dependency is unusable.
+
+Escalate immediately when any of the following is present:
+
+- a package build or install ends with `ERROR:`
+- `jupyter-repo2docker` exits non-zero
+- `.binder/postBuild` exits non-zero
+- required headers/tools are reported missing (`cmake`, `hb-ft.h`,
+  `fribidi.h`, `nlopt.h`)
+- required runtime packages or imports fail validation (`FSaudit`, `aicpa`,
+  `car`, `pbkrtest`, `lme4`, `nloptr`, Python notebook deps)
+- Binder launch smoke fails to reach `ready` or returns a non-success `urlpath`
+  probe result
+
+Recommended triage order:
+
+1. Check whether the workflow failed or succeeded overall.
+2. Inspect `generated/traceability/binder-repo2docker-smoke.log` for the first
+   `ERROR:` line or explicit `Missing ...` diagnostic.
+3. If the build succeeded, inspect `generated/traceability/binder-launch-smoke.log`
+   only for launch/readiness failures rather than compiler-warning noise.
+4. Ignore repeated Eigen/Fortran warning blocks unless they coincide with a
+   package install failure or a warning promoted to an error by the toolchain.
+
+Escalation rule:
+
+- warnings are actionable only when they change the build result, are promoted
+  to errors, or are followed by a failed package/runtime verification step.
 
 ## Publication Gating
 

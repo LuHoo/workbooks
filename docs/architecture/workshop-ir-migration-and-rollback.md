@@ -13,6 +13,7 @@ The canonical exporter defaults to the IR parser engine.
 
 - Command behavior uses IR unless an explicit parser override is provided.
 - Wrapper scripts call IR explicitly for architectural clarity.
+- Current lifecycle stage is `Stage 1 — Preferred IR Default`.
 
 ## Adapter-first migration approach
 
@@ -46,6 +47,7 @@ fixed removal date.
 - Legacy mode remains rollback-capable during transition.
 - Advancement toward retirement consideration requires all policy criteria to be
 	satisfied at review checkpoints.
+- Actual removal, if ever approved, requires a separate issue and PR after Stage 2 review.
 
 ## Rollback plan
 
@@ -61,6 +63,8 @@ If optional integrations were added to automation, rollback means:
 Rollback use remains valid during transition and should be treated as an
 operational safeguard, not as a default-state architecture change.
 
+Rollback users should record why fallback was needed and what evidence is required to return to IR-first operation at the next governance checkpoint.
+
 ## Operational guardrails
 
 - Keep parser errors actionable and file/line-specific.
@@ -74,3 +78,4 @@ operational safeguard, not as a default-state architecture change.
 - Validation checks pass on targeted support notebooks.
 - Malformed inputs produce deterministic, actionable diagnostics.
 - Team can safely toggle between engines without code changes.
+- Legacy fallback remains contingency-only across the required policy review window.

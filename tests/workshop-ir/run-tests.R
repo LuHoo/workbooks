@@ -99,6 +99,7 @@ summarize_ir_for_golden <- function(ir) {
     schema_version = ir$schema_version,
     chapter = ir$chapter,
     directives = ir$directives,
+    semantic_references = ir$semantic_references,
     chapter_blocks = lapply(ir$chapter_blocks, function(block) {
       list(
         block_type = block$block_type,
@@ -250,6 +251,72 @@ run_directive_validation_tests <- function() {
   bad_cap_diags <- validate_workshop_ir(ir_bad_cap, source_path = "directive-valid-support.Rmd", strict = FALSE)
   bad_cap_codes <- vapply(bad_cap_diags, function(diag) diag$code, character(1L))
   expect_contains(bad_cap_codes, "E244", "Unsupported capability should produce E244")
+}
+
+run_semantic_reference_validation_tests <- function() {
+  ir <- parse_support_notebook_to_ir(
+    input_path = "tests/workshop-ir/fixtures/minimal-valid-support.Rmd",
+    workshop_id = "fixture-workshop"
+  )
+
+  expect_true(!is.null(ir$semantic_references), "IR must include semantic_references section")
+  expect_identical(
+    ir$semantic_references$token_syntax,
+    "[[ADA:REF target=<semantic-id>]]",
+    "IR must expose canonical semantic reference token syntax"
+  )
+
+  unresolved_ref <- list(
+    reference_id = "SR-9999",
+    source_file = ir$source$file_path,
+    source_scope = "exercise",
+    source_container_id = ir$exercises[[1L]]$exercise_id,
+    source_block_id = ir$exercises[[1L]]$blocks[[1L]]$block_id,
+    source_line = ir$exercises[[1L]]$blocks[[1L]]$source_span$start_line,
+    source_column = 1L,
+    raw_token = "[[ADA:REF target=EX-does-not-exist]]",
+    target_id = "EX-does-not-exist"
+  )
+  ir_unresolved <- ir
+  ir_unresolved$semantic_references$references <- c(ir_unresolved$semantic_references$references, list(unresolved_ref))
+
+  unresolved_diags <- validate_workshop_ir(
+    ir_unresolved,
+    source_path = "minimal-valid-support.Rmd",
+    strict = FALSE
+  )
+  unresolved_codes <- vapply(unresolved_diags, function(diag) diag$code, character(1L))
+  expect_contains(unresolved_codes, "E321", "Unresolved semantic reference must produce E321")
+
+  missing_block_ref <- unresolved_ref
+  missing_block_ref$reference_id <- "SR-9998"
+  missing_block_ref$target_id <- ir$chapter$semantic_id
+  missing_block_ref$raw_token <- paste0("[[ADA:REF target=", ir$chapter$semantic_id, "]]" )
+  missing_block_ref$source_block_id <- "BL-DOES-NOT-EXIST"
+
+  ir_missing_block <- ir
+  ir_missing_block$semantic_references$references <- c(ir_missing_block$semantic_references$references, list(missing_block_ref))
+  missing_block_diags <- validate_workshop_ir(
+    ir_missing_block,
+    source_path = "minimal-valid-support.Rmd",
+    strict = FALSE
+  )
+  missing_block_codes <- vapply(missing_block_diags, function(diag) diag$code, character(1L))
+  expect_contains(missing_block_codes, "E322", "Unknown semantic source block must produce E322")
+
+  duplicate_target <- ir$semantic_references$targets[[1L]]
+  duplicate_target$entity_type <- "exercise"
+
+  ir_duplicate_target <- ir
+  ir_duplicate_target$semantic_references$targets <- c(ir_duplicate_target$semantic_references$targets, list(duplicate_target))
+
+  duplicate_target_diags <- validate_workshop_ir(
+    ir_duplicate_target,
+    source_path = "minimal-valid-support.Rmd",
+    strict = FALSE
+  )
+  duplicate_target_codes <- vapply(duplicate_target_diags, function(diag) diag$code, character(1L))
+  expect_contains(duplicate_target_codes, "E313", "Duplicate semantic target IDs must produce E313")
 }
 
 run_round_trip_consistency_test <- function() {
@@ -516,6 +583,7 @@ main <- function() {
   run_validation_tests()
   run_directive_parser_tests()
   run_directive_validation_tests()
+  run_semantic_reference_validation_tests()
   run_round_trip_consistency_test()
   run_default_parser_cutover_test()
   run_exporter_compatibility_test()

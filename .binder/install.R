@@ -6,14 +6,11 @@ options(repos = c(
   )
 ))
 
-required_packages <- c(
+runtime_packages <- c(
   "IRkernel",
   "jsonlite",
   "knitr",
   "rmarkdown",
-  "remotes",
-  "devtools",
-  "readr",
   "ggplot2",
   "car",
   "pbkrtest",
@@ -27,7 +24,24 @@ required_packages <- c(
   "scales"
 )
 
-install.packages(required_packages)
+# Build-time-only exception: remotes is needed to install pinned GitHub runtime
+# dependencies during the image build, but it is not required by workshop
+# notebooks at runtime.
+build_time_packages <- c("remotes")
+
+install.packages(c(runtime_packages, build_time_packages))
+
+missing_build_time <- build_time_packages[
+  !vapply(build_time_packages, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))
+]
+if (length(missing_build_time) > 0L) {
+  stop(
+    sprintf(
+      "Binder build failed: required build-time R packages unavailable after installation: %s",
+      paste(missing_build_time, collapse = ", ")
+    )
+  )
+}
 
 remotes::install_github(
   "LuHoo/FSaudit@5a36801a712d9d736bb2c5a3992e7b8b644c7418",
@@ -41,12 +55,14 @@ remotes::install_github(
   dependencies = TRUE
 )
 
-missing_packages <- required_packages[!vapply(required_packages, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))]
-if (length(missing_packages) > 0L) {
+missing_runtime <- runtime_packages[
+  !vapply(runtime_packages, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))
+]
+if (length(missing_runtime) > 0L) {
   stop(
     sprintf(
-      "Binder build failed: required R packages unavailable after installation: %s",
-      paste(missing_packages, collapse = ", ")
+      "Binder build failed: required runtime R packages unavailable after installation: %s",
+      paste(missing_runtime, collapse = ", ")
     )
   )
 }

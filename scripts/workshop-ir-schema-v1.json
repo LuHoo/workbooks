@@ -9,6 +9,7 @@
     "source",
     "chapter",
     "directives",
+    "semantic_references",
     "chapter_blocks",
     "exercises"
   ],
@@ -31,9 +32,10 @@
     },
     "chapter": {
       "type": "object",
-      "required": ["chapter_id", "workshop_id", "chapter_number", "title"],
+      "required": ["chapter_id", "semantic_id", "workshop_id", "chapter_number", "title"],
       "properties": {
         "chapter_id": { "type": "string" },
+        "semantic_id": { "type": "string" },
         "workshop_id": { "type": "string" },
         "chapter_number": { "type": "integer", "minimum": 1 },
         "title": { "type": "string" }
@@ -55,6 +57,22 @@
         "instances": {
           "type": "array",
           "items": { "$ref": "#/$defs/directive_instance" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "semantic_references": {
+      "type": "object",
+      "required": ["token_syntax", "targets", "references"],
+      "properties": {
+        "token_syntax": { "type": "string" },
+        "targets": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/semantic_target" }
+        },
+        "references": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/semantic_reference" }
         }
       },
       "additionalProperties": false
@@ -134,10 +152,53 @@
       },
       "additionalProperties": false
     },
+    "semantic_target": {
+      "type": "object",
+      "required": ["semantic_id", "entity_type", "entity_id"],
+      "properties": {
+        "semantic_id": { "type": "string" },
+        "entity_type": {
+          "type": "string",
+          "enum": ["chapter", "exercise", "block"]
+        },
+        "entity_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "semantic_reference": {
+      "type": "object",
+      "required": [
+        "reference_id",
+        "source_file",
+        "source_scope",
+        "source_container_id",
+        "source_block_id",
+        "source_line",
+        "source_column",
+        "raw_token",
+        "target_id"
+      ],
+      "properties": {
+        "reference_id": { "type": "string" },
+        "source_file": { "type": "string" },
+        "source_scope": {
+          "type": "string",
+          "enum": ["chapter", "exercise"]
+        },
+        "source_container_id": { "type": "string" },
+        "source_block_id": { "type": "string" },
+        "source_line": { "type": "integer", "minimum": 1 },
+        "source_column": { "type": "integer", "minimum": 1 },
+        "raw_token": { "type": "string" },
+        "target_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
     "block": {
       "type": "object",
       "required": [
         "block_id",
+        "semantic_id",
         "block_type",
         "sequence",
         "support_only",
@@ -148,6 +209,7 @@
       ],
       "properties": {
         "block_id": { "type": "string" },
+        "semantic_id": { "type": "string" },
         "block_type": {
           "type": "string",
           "enum": ["narrative", "code"]
@@ -180,6 +242,7 @@
       "type": "object",
       "required": [
         "exercise_id",
+        "semantic_id",
         "exercise_ref",
         "ordinal",
         "label",
@@ -188,6 +251,7 @@
       ],
       "properties": {
         "exercise_id": { "type": "string" },
+        "semantic_id": { "type": "string" },
         "exercise_ref": { "type": "string" },
         "ordinal": { "type": "integer", "minimum": 1 },
         "label": { "type": "string" },

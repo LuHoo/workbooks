@@ -165,7 +165,9 @@ Directive support in v1.1:
 
 - parser-level support for `ADA:BEGIN`, `ADA:END`, and `ADA:REQUIRES`;
 - deterministic per-block `authoring_context` metadata;
-- emitted directive event records in `directives.instances`.
+- emitted directive event records in `directives.instances`;
+- first-class semantic references via `[[ADA:REF target=<semantic-id>]]` tokens,
+  resolved through `semantic_references.targets` / `semantic_references.references`.
 
 Generate IR JSON:
 
@@ -181,6 +183,9 @@ Validation spec:
 
 - `docs/architecture/workshop-ir-validation.md`
 
+Semantic reference validation fails on unresolved targets and inconsistent
+target/source declarations before notebook or LaTeX export proceeds.
+
 ## Optional IR Parser Integration
 
 The canonical exporter uses the Workshop IR parser path by default.
@@ -193,7 +198,7 @@ The canonical exporter uses the Workshop IR parser path by default.
 Allowed values for `--parser-engine`:
 
 - `ir` (default)
-- `legacy` (explicit rollback path)
+- `legacy` (explicit rollback path during the deprecation transition)
 
 Migration and rollback guidance:
 
@@ -201,6 +206,13 @@ Migration and rollback guidance:
 - `docs/architecture/legacy-parser-deprecation-policy.md`
 
 Rollback is immediate by explicitly passing `--parser-engine legacy`.
+
+Legacy parser lifecycle governance:
+
+- Current lifecycle stage: `Stage 1 — Preferred IR Default`.
+- Legacy mode remains supported for rollback, incident response, and controlled comparison.
+- Retirement is evidence-based rather than date-only.
+- Actual removal requires the criteria in `docs/architecture/legacy-parser-deprecation-policy.md` and a separate future issue/PR.
 
 ## Workshop IR Test Harness
 
