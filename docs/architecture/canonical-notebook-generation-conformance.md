@@ -175,7 +175,8 @@ Classification: `conforms`
 
 Implementation (files/functions):
 
-- Local control gate: `scripts/ci/local-notebook-validation-gate.sh`
+- Canonical local control gate: `scripts/ci/run-local-validation.py`
+- Compatibility wrapper: `scripts/ci/local-notebook-validation-gate.sh`
 - Python execution with timeout and structured failure diagnostics: `scripts/ci/execute-generated-python-notebooks.py`
   - `execute_notebook()`
   - `find_error_cell()`
