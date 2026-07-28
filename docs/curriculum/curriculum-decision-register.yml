@@ -1,0 +1,904 @@
+schema_version: "1.0"
+generated_for_issue: 232
+scope: "Repository-derived curriculum architecture decisions"
+generated_at: "2026-07-28"
+status_definitions:
+  confirmed: "Explicitly stated or clearly implemented across the codebase with consistent evidence."
+  inferred: "Consistently implemented but not explicitly documented as a formal decision."
+  proposed: "Advocated in an issue, PR, or design document but not yet fully implemented or accepted."
+  open: "Raised as a question or gap but without consensus or decision documentation."
+  superseded: "Previously decided but explicitly replaced by a newer decision."
+
+decisions:
+  - id: "CURR-001"
+    title: "Single source of truth principle for educational content"
+    domain:
+      - "educational-purpose"
+      - "curriculum-governance"
+    decision: >
+      Every educational concept must be authored exactly once in a canonical source.
+      All other representations are generated from that source. No generated artefact
+      may become an independent source of truth.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      This principle minimizes duplication, prevents divergence between educational
+      artefacts (R notebooks, Python notebooks, book), and ensures that improvements
+      to the canonical source automatically propagate throughout the ecosystem.
+    implications:
+      - "All curriculum corrections must be made at the earliest authoritative layer."
+      - "Generated artifacts (distribution notebooks, book LaTeX) must never be manually edited."
+      - "Workshop exercises, book chapters, and reference materials are derived, not authoritative."
+      - "Generated content that diverges from the canonical source indicates a generation bug."
+    applies_to:
+      - "whole-curriculum"
+      - "manuscript"
+      - "workshops"
+      - "exercises"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/architecture/architecture_decision_record.md"
+        lines: "L13-L20"
+        heading: "Design philosophy"
+        quotation: >
+          Every educational concept should be authored exactly once.
+          Everything else is generated from that canonical source.
+    related_decisions:
+      supports: ["CURR-002", "CURR-003", "CURR-006"]
+      depends_on: []
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-002"
+    title: "Support.Rmd as canonical workshop source"
+    domain:
+      - "manuscript-role"
+      - "workshop-role"
+    decision: >
+      The file notebooks/support/{chapter}/{topic}/support.Rmd is the primary educational source
+      for workshop content. It contains all instructional narrative, exercises, explanations,
+      language-specific variants, and code.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      A single, author-editable Rmd file serves as the canonical workshop definition,
+      eliminating the need to maintain consistency across multiple source files.
+    implications:
+      - "Workshop updates must be made first in support.Rmd."
+      - "R and Python notebook content must be derived from support.Rmd, not edited independently."
+      - "All exercise text and explanations originate from support.Rmd."
+      - "Corrections to workshop content must be made in support.Rmd and regenerated."
+    applies_to:
+      - "workshops"
+      - "exercises"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/architecture/architecture_decision_record.md"
+        lines: "L26-L44"
+        heading: "Single source of truth"
+        quotation: >
+          Within this architecture, support.Rmd is the primary educational source.
+          It contains: instructional narrative; exercises; shared explanations;
+          language-specific explanations; R code; Python code or overrides;
+          support-only material; semantic references.
+      - source_type: "repository-file"
+        path: "docs/architecture/artifact-provenance-and-ownership.md"
+        lines: "L1-L10"
+        heading: null
+        quotation: "Canonical educational source notebooks: notebooks/support/**/support.Rmd"
+    related_decisions:
+      supports: ["CURR-001", "CURR-003", "CURR-006"]
+      depends_on: ["CURR-001"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-003"
+    title: "R and Python workshop notebooks are educationally equivalent"
+    domain:
+      - "workshop-role"
+      - "case-and-data-design"
+    decision: >
+      Generated R and Python workshop notebooks must present the same learning experience
+      and cover the same educational content, despite implementation differences in code
+      syntax and package ecosystems.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      A student using R should acquire the same competencies as a student using Python.
+      Educational content (narrative, exercises, examples, expectations) must not differ
+      between language variants.
+    implications:
+      - "Explanatory text and exercise instructions must be identical in both languages."
+      - "Worked examples must demonstrate equivalent statistical concepts in both languages."
+      - "If a code-based learning goal differs between languages, it must be documented."
+      - "Validation must check for content parity between R and Python rendered notebooks."
+    applies_to:
+      - "workshops"
+      - "exercises"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/architecture/architecture_decision_record.md"
+        lines: "L73-L85"
+        heading: "Student notebooks"
+        quotation: >
+          Both notebooks are educationally equivalent. They may differ in implementation details,
+          but should present the same learning experience.
+    related_decisions:
+      supports: ["CURR-001", "CURR-002"]
+      depends_on: ["CURR-001", "CURR-002"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-004"
+    title: "Bloom taxonomy classification of learning objectives"
+    domain:
+      - "bloom-taxonomy"
+      - "learning-objectives"
+    decision: >
+      Learning objectives are classified using Bloom's taxonomy cognitive levels.
+      Each learning objective must be assigned exactly one Bloom level: remember, understand,
+      apply, analyze, evaluate, or create.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Bloom classification enables curricular alignment analysis and helps ensure
+      that learning activities and assessment match the intended cognitive demand.
+    implications:
+      - "Every learning objective record requires a bloom field."
+      - "Published materials may display Bloom level labels alongside objectives."
+      - "Learning objective progressions should reflect intended cognitive escalation."
+      - "Assessment methods should align with Bloom level (remember vs. evaluate require different activities)."
+    applies_to:
+      - "learning-objectives"
+      - "assessment"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L42-L50"
+        heading: "Core Entities"
+        quotation: >
+          `bloom`: Bloom taxonomy level.
+          Reader-facing material may display objective text and optional Bloom level labels.
+    related_decisions:
+      supports: ["CURR-008", "CURR-009"]
+      depends_on: ["CURR-008"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "How should Bloom levels be validated for consistency across chapters?"
+      - "Are Bloom levels currently displayed in student-facing materials?"
+    notes: "Bloom level defined but representation in coverage output currently limited."
+
+  - id: "CURR-005"
+    title: "Statistical technique must connect to audit evidence and professional judgment"
+    domain:
+      - "educational-purpose"
+      - "audit-judgement"
+      - "statistical-foundations"
+    decision: >
+      Every statistical technique covered in the curriculum must be explicitly connected
+      to its implications for audit evidence, the strength of that evidence, and the
+      professional judgments that an auditor must make based on that evidence.
+      Techniques are not taught as ends in themselves.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      The curriculum prepares auditors, not statisticians. A technique's value lies
+      in how it informs audit conclusions. Mechanical mastery of procedures without
+      understanding their audit role produces incompetent practitioners.
+    implications:
+      - "No chapter should teach a technique without explaining its audit application."
+      - "Worked examples should culminate in an audit decision or conclusion."
+      - "Exercises should require interpretation of results for audit purposes, not just calculation."
+      - "Learning objectives should emphasize evaluation and judgment, not calculation."
+    applies_to:
+      - "chapters"
+      - "workshops"
+      - "exercises"
+      - "manuscript"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/regression-learning-objectives-review.md"
+        lines: "L1-L13"
+        heading: "Purpose"
+        quotation: >
+          This document reviews the current learning objectives for the Regression Analysis
+          chapter and proposes a reduced, judgement-oriented replacement set. The aim is to
+          align the objectives with the chapter's educational purpose: preparing auditors to
+          evaluate regression analysis as audit evidence, rather than merely perform
+          regression calculations.
+    related_decisions:
+      supports: ["CURR-009", "CURR-010"]
+      depends_on: []
+      qualifies: ["CURR-008"]
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "How is the audit connection validated across all chapters?"
+      - "Which chapters currently lack explicit audit judgment connection?"
+    notes: null
+
+  - id: "CURR-006"
+    title: "Distribution notebooks are generated without output"
+    domain:
+      - "workshop-role"
+      - "exercise-design"
+    decision: >
+      Student-facing workshop notebooks published to Binder are generated as clean artifacts
+      without execution outputs, execution counts, or embedded results. They are deterministic
+      and never manually edited.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Clean notebooks allow students to execute the code and see results in real time,
+      supporting active learning. Deterministic generation ensures consistency and
+      prevents accidental divergence from the source.
+    implications:
+      - "Student notebooks are generated automatically from support.Rmd."
+      - "Any edits to student notebooks are erased on regeneration."
+      - "Students must execute code to see outputs; results are not pre-computed."
+      - "Books are generated from a separate validated-execution artefact, not from distribution notebooks."
+    applies_to:
+      - "workshops"
+      - "exercises"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/architecture/architecture_decision_record.md"
+        lines: "L91-L103"
+        heading: "Distribution notebooks"
+        quotation: >
+          The notebooks published to Binder are distribution artefacts.
+          Characteristics: executable by students; contain no outputs; contain no execution counts;
+          deterministic; generated automatically. They are never edited manually.
+    related_decisions:
+      supports: ["CURR-001", "CURR-002"]
+      depends_on: ["CURR-001", "CURR-002"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-007"
+    title: "Workshop exercises are distinct from review questions"
+    domain:
+      - "exercise-design"
+      - "review-questions"
+      - "assessment"
+    decision: >
+      Workshop exercises and chapter review questions serve distinct pedagogical purposes.
+      Workshop exercises are guided, directed activities embedded in the learning sequence.
+      Review questions are cumulative, independent assessment items at chapter end.
+      They are not duplicates and should not be force-fit to align one-to-one.
+    status: "inferred"
+    confidence: "medium"
+    rationale: >
+      Workshop exercises scaffold learning within the chapter narrative. Review questions
+      assess whether students have retained and can apply knowledge independently. These
+      roles are pedagogically distinct. Forced alignment between them risks degrading both.
+    implications:
+      - "A chapter may have more workshop exercises than review questions (and vice versa)."
+      - "Learning objectives may map to workshop exercises, review questions, or both, depending on intent."
+      - "A single learning objective need not have a corresponding review question."
+      - "Not all review questions need to trace to a workshop exercise."
+    applies_to:
+      - "workshops"
+      - "exercises"
+      - "review-questions"
+      - "learning-objectives"
+    evidence:
+      - source_type: "repository-file"
+        path: "metadata/traceability/learning_objectives.yml"
+        lines: null
+        heading: null
+        quotation: "Learning objectives may map to multiple exercise types; the mapping is explicit and not assumed to be complete."
+    related_decisions:
+      supports: []
+      depends_on: []
+      qualifies: ["CURR-008"]
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "Should the ratio of workshop exercises to review questions be guided by policy?"
+      - "Are current chapter designs intentional or accidental in this regard?"
+    notes: "Inferred from metadata structure; not explicitly documented as a design decision."
+
+  - id: "CURR-008"
+    title: "Learning objectives serve as curriculum alignment anchor"
+    domain:
+      - "learning-objectives"
+      - "curriculum-sequencing"
+      - "assessment"
+    decision: >
+      Learning objectives are the anchor for curriculum alignment. They define intended
+      student capabilities; workshops and exercises develop those capabilities;
+      review questions and assessments measure achievement of them.
+      Learning objectives must be explicitly mapped to supporting activities.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Constructive alignment—alignment of learning objectives, teaching methods, and
+      assessment—is a prerequisite for coherent curriculum. Explicit traceability prevents
+      gaps where capabilities are taught but not assessed, or assessed without teaching.
+    implications:
+      - "Every learning objective should have traceable evidence of instruction (workshop or manuscript)."
+      - "Most learning objectives should have assessment (review question or workshop exercise)."
+      - "Gaps in mapping indicate either missing instruction, missing assessment, or misaligned objectives."
+      - "Learning objective coverage reports are authoritative curriculum documentation."
+    applies_to:
+      - "whole-curriculum"
+      - "learning-objectives"
+      - "workshops"
+      - "review-questions"
+      - "assessment"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L7-L13"
+        heading: "Goals"
+        quotation: >
+          Create stable identifiers for learning objectives, workshop exercises, and review questions.
+          Support many-to-many mappings between objectives and activities.
+          Enable deterministic automated reporting and validation in the exporter.
+    related_decisions:
+      supports: ["CURR-004", "CURR-009"]
+      depends_on: []
+      qualifies: ["CURR-005"]
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "What percentage of learning objectives should have mapped review questions?"
+      - "What percentage should have workshop exercises?"
+      - "How are gaps in coverage prioritized for remediation?"
+    notes: null
+
+  - id: "CURR-009"
+    title: "Shift from calculation-focused to judgment-focused learning objectives"
+    domain:
+      - "audit-judgement"
+      - "bloom-taxonomy"
+      - "learning-objectives"
+    decision: >
+      Learning objectives in audit-focused chapters should emphasize higher-order
+      Bloom levels (evaluate, analyze, create) over lower levels (remember, understand, apply).
+      Objectives should frame capabilities in terms of professional judgment rather than
+      procedural execution.
+    status: "proposed"
+    confidence: "medium"
+    rationale: >
+      Auditors need judgment and interpretation skills more than calculation skill.
+      Objectives focused on "calculate" or "perform" risk producing students who can
+      execute procedures without understanding or questioning them. Judgment-focused
+      objectives orient students toward professional reasoning.
+    implications:
+      - "Regression chapter should have objectives like 'evaluate model reliability' not 'calculate F-statistic'."
+      - "Workshop exercises should require interpretation and decision-making, not just computation."
+      - "Review questions should assess judgment and critical evaluation, not rote calculation."
+      - "Lower-Bloom procedural skills become supporting details, not chapter endpoints."
+    applies_to:
+      - "chapters"
+      - "learning-objectives"
+      - "workshops"
+      - "exercises"
+      - "review-questions"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/regression-learning-objectives-review.md"
+        lines: "L97-L110"
+        heading: "Proposed objective 1: Model appropriateness"
+        quotation: >
+          Determine whether regression analysis is suitable for a given audit problem...
+          Suggested Bloom level: evaluate
+    related_decisions:
+      supports: ["CURR-005", "CURR-008"]
+      depends_on: ["CURR-004", "CURR-005"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "Which other chapters need similar objective restructuring?"
+      - "Has this been implemented beyond the Regression chapter proposal?"
+      - "How is the shift from calculation to judgment objectively measured?"
+    notes: >
+      This decision is documented in the regression-learning-objectives-review.md as a
+      proposal but status of full implementation across chapters is unclear.
+
+  - id: "CURR-010"
+    title: "Regression chapter restructuring around audit judgment"
+    domain:
+      - "audit-judgement"
+      - "chapter-architecture"
+      - "learning-objectives"
+    decision: >
+      The Regression Analysis chapter (Chapter 5/7) should be restructured to organize
+      content around six core professional capabilities: model appropriateness, model
+      reliability, interpretation, anomaly investigation, expectation and uncertainty,
+      and audit conclusion. Lower-Bloom procedural skills (e.g., stepwise regression,
+      F-test calculation) should become supporting details.
+    status: "proposed"
+    confidence: "medium"
+    rationale: >
+      The current section-level structure emphasizes statistical procedures and
+      assumptions over the audit judgments that auditors actually make. A
+      judgment-centered restructuring reduces cognitive load and ensures that
+      statistical concepts remain connected to audit reasoning.
+    implications:
+      - "Chapter 5/7 requires restructuring; not a simple objective substitution."
+      - "Some procedural sections may be condensed or moved to appendices."
+      - "Worked examples must culminate in audit conclusions, not just regression output."
+      - "Assessment (review questions) must test judgment, not calculation."
+    applies_to:
+      - "chapters"
+      - "manuscript"
+      - "workshops"
+      - "learning-objectives"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/regression-learning-objectives-review.md"
+        lines: "L13-L35"
+        heading: "Current Structure Extracted From The Chapter"
+        quotation: >
+          This document reviews the current learning objectives for the Regression Analysis
+          chapter and proposes a reduced, judgement-oriented replacement set...
+          If approved, the next step is to rewrite the student-facing Regression Analysis
+          learning objectives in chap07.tex using the proposed reduced set.
+    related_decisions:
+      supports: ["CURR-005", "CURR-009"]
+      depends_on: ["CURR-005", "CURR-009"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "Has this proposal been approved?"
+      - "What is the implementation timeline?"
+      - "Should similar restructuring be applied to other chapters?"
+    notes: >
+      This is documented as a proposal in branch 91-rewrite-regression-chapter-learning-objectives-around-audit-judgement.
+      Implementation status and chapter-wide adoption are unclear from repository evidence.
+
+  - id: "CURR-011"
+    title: "Learning objective granularity: chapter-level vs. section-level"
+    domain:
+      - "learning-objectives"
+      - "curriculum-sequencing"
+    decision: >
+      Learning objectives may be defined at either chapter level (broader professional capabilities)
+      or section level (targeted skills within a chapter). Both scopes are valid and should coexist.
+      Student-facing materials should prioritize chapter-level objectives for clarity;
+      section-level objectives support internal curriculum design.
+    status: "inferred"
+    confidence: "medium"
+    rationale: >
+      Students need a clear sense of what they should learn by chapter end (chapter-level).
+      Instructors and curriculum designers need detailed tracking of skills within sections
+      (section-level). These are distinct purposes that should not force artificial unity.
+    implications:
+      - "Chapters may have 5-7 chapter-level objectives and many more section-level objectives."
+      - "Learning objective metadata must distinguish scope (chapter vs. section)."
+      - "Student-facing displays should typically show chapter-level objectives."
+      - "Coverage reports should track alignment at both levels."
+    applies_to:
+      - "learning-objectives"
+      - "manuscript"
+      - "chapters"
+      - "sections"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L34-L46"
+        heading: "Core Entities"
+        quotation: >
+          `scope`: `chapter` or `section`.
+          `section`: section number string when `scope = section` (for example `5.3`).
+    related_decisions:
+      supports: ["CURR-008"]
+      depends_on: []
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "Are both chapter and section-level objectives currently defined?"
+      - "What policies guide deciding whether an objective is chapter or section scope?"
+    notes: "Inferred from metadata structure but not explicitly justified in design documents."
+
+  - id: "CURR-012"
+    title: "Learning objective identifiers are stable and never repurposed"
+    domain:
+      - "curriculum-governance"
+      - "quality-assurance"
+    decision: >
+      Learning objective IDs (format: LO-C{chapter}-NN or LO-C{chapter}S{section}-NN)
+      are permanent once assigned. IDs are never reassigned to different objectives,
+      even if the original objective text changes or the objective is retired.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Stable IDs allow reliable tracking over time. Historical data about which students
+      learned which objectives, which exercises mapped to which objectives, and which
+      assessments measured which objectives depend on ID immutability.
+    implications:
+      - "Objective text may be revised, but ID stays the same."
+      - "Retired objectives retain their IDs with status: retired."
+      - "IDs are internal identifiers, not exposed to students."
+      - "Curriculum mapping reports remain valid across multiple editions."
+    applies_to:
+      - "learning-objectives"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L69-L78"
+        heading: "Learning objective IDs"
+        quotation: >
+          Rules: ID remains fixed even if objective wording is refined.
+          Retired objectives keep their IDs with `status: retired`.
+    related_decisions:
+      supports: ["CURR-008"]
+      depends_on: []
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-013"
+    title: "Metadata is author-editable and diff-friendly"
+    domain:
+      - "curriculum-governance"
+      - "quality-assurance"
+    decision: >
+      Learning objective and traceability metadata (YAML, structured text) must be
+      author-editable without special tools and must produce clean, readable diffs
+      when changed. Metadata format should not create barriers to curriculum updates.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Curriculum designers and instructors should own their curriculum documentation.
+      If metadata requires special tools or produces unreadable diffs, it will be
+      neglected and become unreliable.
+    implications:
+      - "Metadata must use simple, open formats (YAML, Markdown, plain text)."
+      - "Identifiers and relationships must be explicit and diff-transparent."
+      - "No opaque binary formats, databases, or proprietary tools."
+      - "Version control (Git) must be the authoritative storage and history mechanism."
+    applies_to:
+      - "repository"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L17-L25"
+        heading: "Design Principles"
+        quotation: >
+          Metadata is author-editable and diff-friendly.
+          Relationships are explicit (no inferred links from prose text).
+    related_decisions:
+      supports: []
+      depends_on: []
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      supersended_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-014"
+    title: "Validation must fail loudly for unresolved references"
+    domain:
+      - "curriculum-governance"
+      - "quality-assurance"
+    decision: >
+      Automated validation of curriculum metadata must detect and loudly report any
+      broken or ambiguous references, such as: learning objectives with no mapped
+      exercises or questions, exercises without objective links, IDs that do not exist.
+      Validation failures must block publication.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Silent failures in curriculum traceability create undetectable gaps in learning
+      or assessment. Loud, visible validation ensures that gaps are noticed and
+      resolved before student-facing materials are published.
+    implications:
+      - "All curriculum artifacts must pass validation before deployment."
+      - "Validation errors must be human-readable and actionable."
+      - "Curriculum maintenance must include regular validation runs."
+      - "CI/CD pipelines must include curriculum validation gates."
+    applies_to:
+      - "repository"
+      - "curriculum-governance"
+      - "quality-assurance"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L17-L25"
+        heading: "Design Principles"
+        quotation: >
+          Validation must fail loudly for unresolved references.
+    related_decisions:
+      supports: ["CURR-008"]
+      depends_on: []
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "What is the current state of curriculum validation automation?"
+      - "Which validation rules are enforced, and which are aspirational?"
+    notes: null
+
+  - id: "CURR-015"
+    title: "Published outputs show objective text and optional Bloom level, not IDs"
+    domain:
+      - "learning-objectives"
+      - "manuscript-role"
+    decision: >
+      Student-facing curriculum materials (textbook, notebooks, syllabi) display
+      learning objective text and optionally their Bloom levels. Internal IDs are
+      never shown to students.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Students learn concepts and capabilities, not identifiers. Showing IDs creates
+      cognitive noise and confusion. Internal IDs remain private implementation details.
+    implications:
+      - "Learning objective displays use text, not IDs."
+      - "Bloom levels may be shown (e.g., 'Understand', 'Evaluate') for pedagogical clarity."
+      - "The gap between internal metadata and student-visible materials is intentional."
+      - "Exporter tools must map internal IDs to display text."
+    applies_to:
+      - "manuscript"
+      - "workshops"
+      - "exercises"
+      - "instructor-materials"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/traceability/learning-objective-metadata-model.md"
+        lines: "L14-L20"
+        heading: "Goals"
+        quotation: >
+          Keep internal IDs out of student-facing book/notebook content.
+          Published outputs show objective text (and optional Bloom level), not internal IDs.
+    related_decisions:
+      supports: ["CURR-012"]
+      depends_on: ["CURR-012"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "Are Bloom levels currently displayed in student-facing materials?"
+    notes: null
+
+  - id: "CURR-016"
+    title: "Book generation from validated-execution notebooks, not distribution notebooks"
+    domain:
+      - "manuscript-role"
+      - "workshop-role"
+    decision: >
+      The ADA book (LaTeX, PDF) is generated from a separate validated-executed notebook
+      artefact, not from the distribution notebooks. The validated-executed notebook is
+      generated by running distribution notebooks in a controlled environment.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      This separation ensures that (1) the book presents outputs that have been validated,
+      (2) distribution notebooks remain clean and student-runnable, and (3) the book build
+      is deterministic and auditable.
+    implications:
+      - "Book generation is a two-stage process: execution, then rendering."
+      - "Distribution notebooks (for Binder) and book content originate from the same source but via different pipelines."
+      - "Book outputs are frozen once validated; execution is separate."
+      - "Errors in book rendering do not require re-running code."
+    applies_to:
+      - "manuscript"
+      - "workshops"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/architecture/architecture_decision_record.md"
+        lines: "L104-L125"
+        heading: "Executed notebooks and Book generation"
+        quotation: >
+          Before book generation, the distribution notebooks are executed in a controlled
+          environment. The notebook-to-LaTeX renderer reads notebook cells, converts markdown,
+          converts code, converts outputs, preserves ordering, applies book typography.
+    related_decisions:
+      supports: ["CURR-001", "CURR-006"]
+      depends_on: ["CURR-001", "CURR-006"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-017"
+    title: "Workshop exporter architecture is frozen as supported infrastructure"
+    domain:
+      - "curriculum-governance"
+      - "workshop-role"
+    decision: >
+      The workshop exporter (scripts/export-workshop-output.R) is the canonical, stable
+      implementation for generating workshop exercise `.tex` chunks and distribution
+      notebooks. This architecture is frozen: future enhancements must work within it,
+      not replace it.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      A frozen exporter architecture provides stability for curriculum maintenance.
+      Changes must be planned and tested carefully. The canonical implementation
+      prevents accumulation of duplicate/divergent logic across chapters.
+    implications:
+      - "New chapters must use the canonical exporter, not create their own."
+      - "Chapter-specific behavior is configured in scripts/workshop-export-config.R, not in the exporter itself."
+      - "Exporter enhancements require careful compatibility review."
+      - "All chapters share the same underlying export logic."
+    applies_to:
+      - "workshops"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "README.md"
+        lines: "L85-L100"
+        heading: "Exporter Architecture Freeze"
+        quotation: >
+          The workshop exporter architecture is frozen as supported project infrastructure.
+          scripts/export-workshop-output.R is the canonical implementation for workshop
+          chunk generation.
+    related_decisions:
+      supports: ["CURR-001", "CURR-002"]
+      depends_on: ["CURR-001", "CURR-002"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-018"
+    title: "Canonical exporter separates stable behavior from chapter variability"
+    domain:
+      - "workshop-role"
+      - "curriculum-governance"
+    decision: >
+      The workshop exporter is organized around a strict separation between (1) stable
+      export behavior, implemented once in scripts/export-workshop-output.R, and (2)
+      chapter/workshop variability, isolated in scripts/workshop-export-config.R.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      This architecture reduces duplicate logic, keeps behavior consistent across
+      chapters, and provides a controlled path for future enhancements without
+      redesigning core flow.
+    implications:
+      - "All export logic belongs in the canonical exporter or config, not in chapter scripts."
+      - "Chapter wrappers (e.g., scripts/export-regression-analysis-workshop.R) are thin, delegating to config."
+      - "Chapter-specific naming, metadata, or workflow goes in workshop-export-config.R."
+      - "Enhancements to exporter behavior apply to all chapters automatically."
+    applies_to:
+      - "workshops"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "README.md"
+        lines: "L101-L115"
+        heading: "Why this structure"
+        quotation: >
+          The architecture is organized around a strict separation between: stable export
+          behavior (implemented once in the canonical exporter), and workshop/chapter
+          variability (isolated in scripts/workshop-export-config.R).
+    related_decisions:
+      supports: ["CURR-017"]
+      depends_on: ["CURR-017"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-019"
+    title: "Canonical publication target is LuHoo/workbooks repository"
+    domain:
+      - "curriculum-governance"
+      - "workshop-role"
+    decision: >
+      LuHoo/workbooks is the only notebook publication target currently managed by
+      automation in the ada repository. Notebooks are synchronized into notebooks/workshops
+      and published to workbooks as the student-facing distribution.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      A single, clearly defined publication target eliminates ambiguity about where
+      students access materials and simplifies publication orchestration.
+    implications:
+      - "Publication scripts target workbooks as the default distribution channel."
+      - "Any future publication to other destinations requires explicit new automation."
+      - "The repository name (audit-data-analysis) is project identity, not a second publication target."
+      - "Publication contracts (metadata, versioning, artifact compatibility) must be maintained."
+    applies_to:
+      - "repository"
+      - "workshops"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "README.md"
+        lines: "L8-L24"
+        heading: "Publication boundary"
+        quotation: >
+          LuHoo/workbooks is the only notebook publication target currently managed by
+          automation in this repository.
+          Operational implication: when notebook publication is discussed in this repository,
+          it means synchronization of validated generated artifacts into notebooks/workshops / LuHoo/workbooks.
+    related_decisions:
+      supports: []
+      depends_on: []
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
+
+  - id: "CURR-020"
+    title: "Generated content never becomes independent source of truth"
+    domain:
+      - "curriculum-governance"
+      - "quality-assurance"
+    decision: >
+      No generated artefact (distribution notebooks, book LaTeX, exported exercises,
+      rendered output) may be edited independently and become an authoritative version.
+      All corrections must flow back to the canonical source.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Once generated content becomes independently maintained, consistency fractures.
+      Authors become confused about which version is authoritative. Divergence accumulates
+      silently. Governance breaks down.
+    implications:
+      - "Distribution notebooks must never be hand-edited."
+      - "Book LaTeX must never be edited outside the generation pipeline."
+      - "Corrections to exercises must be made in support.Rmd, then regenerated."
+      - "Generated files should be git-ignored or clearly marked as non-editable."
+    applies_to:
+      - "whole-curriculum"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/architecture/architecture_decision_record.md"
+        lines: "L46-L52"
+        heading: "Single source of truth"
+        quotation: >
+          No generated artefact may become an independent source of truth.
+          Whenever an error is discovered, it should be corrected at the earliest
+          authoritative layer.
+    related_decisions:
+      supports: ["CURR-001"]
+      depends_on: ["CURR-001"]
+      qualifies: []
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions: []
+    notes: null
