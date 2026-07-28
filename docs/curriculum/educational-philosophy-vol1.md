@@ -1,4 +1,4 @@
-# Learning Philosophy for *Audit Data Analysis – Volume 1*
+# Educational Philosophy for *Audit Data Analysis – Volume 1*
 
 ## Purpose
 
@@ -163,7 +163,7 @@ Perform → Interpret → Evaluate
 
 # Chapter Design Framework
 
-Every chapter should follow a common educational architecture.
+Most chapters should follow a common educational architecture.
 
 ## 1. Why This Matters
 
@@ -223,7 +223,7 @@ Dedicated section connecting statistical outputs to evidence evaluation.
 
 Integrated application of all three competencies.
 
-Structure standardized across all chapters.
+A common structure is preferred where it improves clarity and consistency.
 
 ---
 
@@ -303,7 +303,7 @@ Explicit statement of conclusions that exceed available evidence.
 
 Explicit statement of remaining limitations, assumptions, and risks.
 
-This section becomes mandatory for every case study.
+Every substantial case study should explicitly address these questions.
 
 ---
 
@@ -407,16 +407,6 @@ Review questions should be categorized explicitly.
 - Sufficiency of evidence
 - Remaining uncertainty
 
-### Recommended Distribution
-
-```text
-Level 1: 35%
-Level 2: 35%
-Level 3: 30%
-```
-
-This preserves statistical rigor while ensuring evidence evaluation remains visible throughout.
-
 ---
 
 # Alignment to Existing Chapter Structure
@@ -443,7 +433,7 @@ Learning Objective
     ↓
 Chapter Content
     ↓
-Workshop Activity
+Workshop 
     ↓
 Case Study
     ↓
@@ -470,6 +460,12 @@ Workshop Part B
 Review Question Level 2
 Case Study Interpretation Section
 ```
+
+---
+
+# Bloom Taxonomy
+
+Bloom taxonomy describes the cognitive complexity of a learning objective. The three competencies describe the nature of the capability being developed. These classifications are independent: any competency may be addressed at different Bloom levels.
 
 ---
 
