@@ -2,6 +2,8 @@ name: Workshop IR Tests
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "ada_fsaudit_bridge/**"
       - "R/manuscript-calculation-registry.R"
@@ -55,6 +57,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: workshop-ir-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   workshop-ir-tests:

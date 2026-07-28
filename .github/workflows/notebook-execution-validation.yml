@@ -2,6 +2,8 @@ name: Notebook Execution Validation
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "notebooks/support/**/support.Rmd"
       - "notebooks/workshops/**"

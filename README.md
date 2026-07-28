@@ -10,6 +10,27 @@ Canonical architecture overview:
 - `docs/authoring/book-versioning.md`
 - `docs/authoring/manuscript-calculation-registry.md`
 
+## Publication boundary
+
+Current publication contract for student-facing notebook artifacts:
+
+- `LuHoo/ada` is the canonical authoring, generation, validation, and
+	publication-orchestration repository.
+- `LuHoo/workbooks` is the only notebook publication target currently managed by
+	automation in this repository.
+- `LuHoo/audit-data-analysis` is the ADA project/repository identity used by
+	this checkout and related site content; it is not a second notebook
+	publication destination in current scripts or workflows.
+
+Operational implication:
+
+- when notebook publication is discussed in this repository, it means
+	synchronization of validated generated artifacts into
+	`notebooks/workshops` / `LuHoo/workbooks`.
+- any future publication to a separate `audit-data-analysis` destination would
+	require an explicit new producer/contract rather than being implied by the
+	repository name.
+
 ## Workshop Exporter CLI
 
 Workshop exercise `.tex` chunks are generated through a single command-line entry point:
@@ -385,6 +406,27 @@ Hosted Binder run policy:
 
 - Run full hosted Binder validation only after local-first checks are green.
 - Trigger full hosted Binder checks deliberately via manual workflow dispatch (`workflow_dispatch`) instead of on every development push.
+
+Validation levels:
+
+1. Local development checks
+	- `.venv/bin/python scripts/ci/run-local-validation.py`
+	- use this before pushing routine notebook, renderer, or Binder-affecting changes
+2. Lightweight pull-request checks
+	- PR-triggered workflow checks on scoped paths only
+	- intended to catch obvious integration regressions without rerunning every expensive hosted job on every branch push
+3. Full pre-merge integration validation
+	- use deliberate hosted `workflow_dispatch` runs when local checks are green but Binder/runtime or publication-sensitive changes need full integration evidence
+4. Post-merge publication/synchronization workflows
+	- `main`-only export/publication flows and scheduled/manual Binder launch checks
+
+GitHub Actions minute discipline:
+
+- complete local checks before pushing;
+- batch locally validated commits into one push where practical;
+- avoid editing `.binder/*` in the same push as unrelated content when a fresh Binder build is not needed;
+- rerun a failed hosted job only for likely transient infrastructure failures or after a relevant fix;
+- inspect repository Actions usage before running repeated expensive manual workflows if usage is already high.
 
 Publication gating:
 

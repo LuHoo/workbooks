@@ -14,7 +14,7 @@ Audit basis:
 
 This workspace contains one primary repository (`ada`) and one checked-out submodule (`notebooks/workshops`) pointing to `LuHoo/workbooks`.
 
-`audit-data-analysis` appears to be this repository identity (root `README.md` title), while `workbooks` is the Binder-facing publication target.
+`audit-data-analysis` is the repository/project identity surfaced by the root `README.md` title, while `workbooks` is the Binder-facing notebook publication target.
 
 ### Repository boundary table
 
@@ -22,7 +22,7 @@ This workspace contains one primary repository (`ada`) and one checked-out submo
 |---|---|---|---|---|---|---|
 | `ada` (this repo) | Authoring, IR parsing, rendering, validation, export orchestration, book build inputs | Yes (`notebooks/support/**/support.Rmd`, config, traceability metadata) | Yes (`generated/**`, `generated/python-notebooks/**`, `generated/workshop-output/**`, reports) | Indirect (publishes to `workbooks` submodule) | Yes for canonical sources/docs/scripts; no for generated outputs | Contains root `.binder/*` (validation/runtime context) and Binder readiness scripts |
 | `workbooks` (submodule at `notebooks/workshops`) | Student-facing distribution notebooks (R and Python), Binder launch target | No (declared generated from private/canonical source) | Yes (generated into submodule by export workflow) | Yes (pushed to `LuHoo/workbooks:main`) | No for generated notebooks (README explicitly says do not edit directly) | Primary Binder target (`mybinder.org/v2/gh/LuHoo/workbooks/...`) |
-| `audit-data-analysis` (name in root README) | Project/repo identity for ADA codebase and book workflow | Yes (same as `ada` canonical layer) | Yes | Not a separate publication target in scripts | Yes (canonical assets) | Binder links in docs point to `workbooks`, not separate binder config ownership |
+| `audit-data-analysis` (name in root README) | Project/repo identity for ADA codebase and book workflow | Yes (same as `ada` canonical layer) | Yes | Not a separate notebook publication target in current tooling | Yes (canonical assets) | Binder links in docs point to `workbooks`, not separate binder config ownership |
 
 Findings:
 

@@ -38,6 +38,10 @@ Note on path naming:
 - Generated artifacts are rebuildable and must not be repaired manually.
 - Publication is synchronization of validated generated artifacts, not authoring.
 - Deterministic rebuilds are expected for unchanged canonical inputs.
+- Current notebook publication target is singular: `LuHoo/workbooks` via the
+  `notebooks/workshops` submodule boundary.
+- `LuHoo/audit-data-analysis` is not a second notebook publication destination
+  in current recovery/publish tooling.
 
 Legacy parser policy note:
 
@@ -126,6 +130,14 @@ Then run validation ladder (Phase 7).
 
 Use when local generated artifacts are correct but publication targets are stale.
 
+Current target definition:
+
+- notebook publication resynchronization in this repository means resynchronizing
+  the `notebooks/workshops` submodule checkout and, when required, the remote
+  `LuHoo/workbooks` repository;
+- it does not include a separate notebook publish step to
+  `LuHoo/audit-data-analysis`.
+
 Procedure:
 
 1. Run pre-publication checks locally:
@@ -145,6 +157,12 @@ Procedure:
 - no semantic transforms are allowed in publish step.
 
 4. Only then synchronize to submodule/release process.
+
+Publication contract check:
+
+- if a requested recovery action mentions `audit-data-analysis` as a notebook
+  destination, treat that as a documentation/linking concern unless a new
+  explicit publication producer has been added.
 
 Rollback for incorrect publication:
 
