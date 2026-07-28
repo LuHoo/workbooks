@@ -112,3 +112,877 @@
   text: Evaluate whether identified digit anomalies warrant additional audit procedures.
   bloom: evaluate
   status: active
+
+# --- Manuscript chapter-level LOs (added issue #245) ---
+- id: LO-C1-02
+  chapter: 1
+  scope: chapter
+  text: define a probability distribution and explain its role in describing possible outcomes of an experiment.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C1-03
+  chapter: 1
+  scope: chapter
+  text: recall examples of discrete and continuous probability distributions (e.g., hypergeometric, binomial, normal).
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C1-04
+  chapter: 1
+  scope: chapter
+  text: list common distributions used in statistics, including the hypergeometric, binomial, Poisson, normal, Student’s t, χ^2, and F distributions.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C1-05
+  chapter: 1
+  scope: chapter
+  text: explain the difference between sampling with and without replacement and its impact on the distribution of successes (e.g., hypergeometric versus binomial).
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C1-06
+  chapter: 1
+  scope: chapter
+  text: describe the central limit theorem and its implications for the distribution of the sample mean as sample size increases.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C1-07
+  chapter: 1
+  scope: chapter
+  text: discuss the historical and practical significance of approximating one probability distribution with another.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C1-08
+  chapter: 1
+  scope: chapter
+  text: compute probabilities using the hypergeometric, binomial, Poisson, normal, Student’s t, χ^2, and F distributions.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C1-09
+  chapter: 1
+  scope: chapter
+  text: perform probability calculations in R or Python to solve practical problems using these distributions.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C1-10
+  chapter: 1
+  scope: chapter
+  text: assess the conditions under which the binomial distribution can approximate the hypergeometric distribution.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C1-11
+  chapter: 1
+  scope: chapter
+  text: determine when the Poisson distribution can be used to approximate the binomial distribution.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C1-12
+  chapter: 1
+  scope: chapter
+  text: evaluate whether the normal distribution can approximate the t-distribution under given circumstances.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C1-13
+  chapter: 1
+  scope: chapter
+  text: judge the appropriateness of approximations between distributions in modern computational contexts.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C1-14
+  chapter: 1
+  scope: chapter
+  text: critique the usefulness of such approximations in specific professional or theoretical applications, even when computing power is not a limitation.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C1-15
+  chapter: 1
+  scope: chapter
+  text: design a simulation study to illustrate the central limit theorem, showing how the sample mean approaches a normal distribution with increasing sample size.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C1-16
+  chapter: 1
+  scope: chapter
+  text: conduct exercises in R or Python to calculate probabilities for various distributions, enabling students to apply statistical concepts using programming tools.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C2-01
+  chapter: 2
+  scope: chapter
+  text: define point estimation and interval estimation for population parameters.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C2-02
+  chapter: 2
+  scope: chapter
+  text: identify the difference between population mean, population total, and population proportion.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C2-03
+  chapter: 2
+  scope: chapter
+  text: recall the purpose of the finite population correction factor.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C2-04
+  chapter: 2
+  scope: chapter
+  text: explain the relationship between sample size, confidence level, and precision in estimation.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C2-05
+  chapter: 2
+  scope: chapter
+  text: describe the importance of distinguishing between qualitative and quantitative characteristics in estimation.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C2-06
+  chapter: 2
+  scope: chapter
+  text: explain the assumptions underlying the normality of the sample mean and recognize when these assumptions may be invalid.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C2-07
+  chapter: 2
+  scope: chapter
+  text: calculate point estimates for the population mean, population total, and population proportion using sample data.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C2-08
+  chapter: 2
+  scope: chapter
+  text: construct two-sided and one-sided confidence intervals for the population mean, population total, and population proportion.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C2-09
+  chapter: 2
+  scope: chapter
+  text: assess the effect of the finite population correction factor on interval estimates.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C2-10
+  chapter: 2
+  scope: chapter
+  text: evaluate the adequacy of sample findings in achieving desired precision and determine the need for additional sampling.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C2-11
+  chapter: 2
+  scope: chapter
+  text: judge the precision of interval estimates and their consistency with recorded population characteristics.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C2-12
+  chapter: 2
+  scope: chapter
+  text: critique the validity of the normality assumption in specific sampling scenarios.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C2-13
+  chapter: 2
+  scope: chapter
+  text: design a sampling plan that ensures target precision at a given confidence level.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C2-14
+  chapter: 2
+  scope: chapter
+  text: develop strategies to handle cases where the normality assumption for the sample mean does not hold.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C3-02
+  chapter: 3
+  scope: chapter
+  text: define auxiliary variables and stratification in the context of sampling.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C3-03
+  chapter: 3
+  scope: chapter
+  text: "list the four estimators discussed: mean-per-unit, regression, ratio, and difference estimation."
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C3-04
+  chapter: 3
+  scope: chapter
+  text: recall the assumption of normality for the sample mean and the conditions under which it may be violated.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C3-05
+  chapter: 3
+  scope: chapter
+  text: explain how auxiliary variables improve the precision of estimates.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C3-06
+  chapter: 3
+  scope: chapter
+  text: describe the benefits of stratifying a population and how it supports normality of the sample mean.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C3-07
+  chapter: 3
+  scope: chapter
+  text: differentiate between the four estimators (mean-per-unit, regression, ratio, and difference estimation) and explain their appropriate use cases.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C3-08
+  chapter: 3
+  scope: chapter
+  text: stratify a population based on available data.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C3-09
+  chapter: 3
+  scope: chapter
+  text: allocate a calculated sample size to strata using proportional or optimal allocation methods.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C3-10
+  chapter: 3
+  scope: chapter
+  text: evaluate the results of a stratified sample to estimate population characteristics.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C3-11
+  chapter: 3
+  scope: chapter
+  text: assess sampling situations to determine whether auxiliary variables or stratification would improve estimation precision.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C3-12
+  chapter: 3
+  scope: chapter
+  text: examine the impact of stratification and auxiliary variables on reducing bias and promoting normality.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C3-13
+  chapter: 3
+  scope: chapter
+  text: critically assess whether the assumption of normality for the sample mean holds in specific sampling scenarios.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C3-14
+  chapter: 3
+  scope: chapter
+  text: compare the precision and accuracy of different estimators in varied sampling contexts.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C3-15
+  chapter: 3
+  scope: chapter
+  text: design a sampling plan incorporating stratification and auxiliary variables to achieve precise and unbiased estimates.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C3-16
+  chapter: 3
+  scope: chapter
+  text: develop strategies to address cases where the assumption of normality is violated.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C4-02
+  chapter: 4
+  scope: chapter
+  text: define the purpose of a hypothesis test and describe the steps involved in carrying it out.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C4-03
+  chapter: 4
+  scope: chapter
+  text: distinguish between Type I and Type II errors, including their definitions and implications.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C4-04
+  chapter: 4
+  scope: chapter
+  text: list the conditions under which hypothesis tests are valid.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C4-05
+  chapter: 4
+  scope: chapter
+  text: explain how the required sample size is determined for a hypothesis test, taking into account factors like significance level, effect size, and power.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C4-06
+  chapter: 4
+  scope: chapter
+  text: identify scenarios where hypothesis testing is feasible and appropriate.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C4-07
+  chapter: 4
+  scope: chapter
+  text: describe how the theory of hypothesis testing is applied within the context of Monetary Unit Sampling (MUS).
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C4-08
+  chapter: 4
+  scope: chapter
+  text: conduct a hypothesis test using sample data, including interpreting the results in the context of an audit.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C4-09
+  chapter: 4
+  scope: chapter
+  text: implement selection methods for a Monetary Unit Sample, ensuring adherence to best practices and auditing standards.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C4-10
+  chapter: 4
+  scope: chapter
+  text: use MUS to evaluate the sufficiency and reliability of audit evidence.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C4-11
+  chapter: 4
+  scope: chapter
+  text: assess the role of sample size, selection methods, and assumptions in determining the validity and reliability of a hypothesis test.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C4-12
+  chapter: 4
+  scope: chapter
+  text: compare the pros and cons of different selection methods in Monetary Unit Sampling, such as random sampling versus systematic selection.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C4-13
+  chapter: 4
+  scope: chapter
+  text: evaluate the results of a Monetary Unit Sample to determine whether audit objectives have been met.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C4-14
+  chapter: 4
+  scope: chapter
+  text: critically appraise the robustness of a hypothesis test or MUS procedure, identifying potential limitations or areas for improvement.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C4-15
+  chapter: 4
+  scope: chapter
+  text: develop a step-by-step plan for carrying out a hypothesis test tailored to a specific audit scenario.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C4-16
+  chapter: 4
+  scope: chapter
+  text: design a Monetary Unit Sampling procedure, including sample selection and evaluation methods, to achieve audit objectives effectively.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C5-02
+  chapter: 5
+  scope: chapter
+  text: identify the purpose of regression analysis in substantive analytical procedures and the role of expectations, residuals, and prediction uncertainty in evaluating audit evidence.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-03
+  chapter: 5
+  scope: chapter
+  text: "define the key terms used in regression analysis, including regression coefficient, standard error, residual, leverage, Cook's distance, and variance inflation factor (VIF)."
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-04
+  chapter: 5
+  scope: chapter
+  text: state the assumptions of the classical linear regression model, including linearity, random sampling, sample variation in the independent variable, and zero conditional mean.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-05
+  chapter: 5
+  scope: chapter
+  text: list the main steps in building and applying a regression-based analytical procedure, from data collection and model selection through evaluation and documentation.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-06
+  chapter: 5
+  scope: chapter
+  text: explain when regression analysis is suitable for an audit problem, taking into account the plausibility of the underlying business relationship and the availability of relevant data.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C5-07
+  chapter: 5
+  scope: chapter
+  text: explain why model assumptions, diagnostics, and data quality affect the evidential value of regression results.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C5-08
+  chapter: 5
+  scope: chapter
+  text: describe how model selection criteria — including R^2, adjusted R^2, and information criteria — are used to choose among competing regression models.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C5-09
+  chapter: 5
+  scope: chapter
+  text: "explain how outliers and influential observations, identified through leverage and Cook's distance, can distort regression estimates and affect audit conclusions."
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C5-10
+  chapter: 5
+  scope: chapter
+  text: use regression output, prediction uncertainty, and materiality to assess whether recorded amounts are consistent with audit expectations.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-11
+  chapter: 5
+  scope: chapter
+  text: fit a simple and multiple linear regression model to audit data and interpret the estimated coefficients, prediction intervals, and goodness-of-fit measures.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-12
+  chapter: 5
+  scope: chapter
+  text: apply regression diagnostics, including residual plots, leverage statistics, and tests for normality, homoskedasticity, and autocorrelation, to verify that model assumptions hold.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C5-13
+  chapter: 5
+  scope: chapter
+  text: interpret regression relationships and unusual observations in terms of underlying business processes, audit risk, and possible explanations.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C5-14
+  chapter: 5
+  scope: chapter
+  text: examine the components of a regression model — coefficients, R^2, ANOVA decomposition, and residual plots — to assess whether the model adequately captures the underlying business relationship.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C5-15
+  chapter: 5
+  scope: chapter
+  text: evaluate whether a regression model can be relied upon as audit evidence and whether further investigation, adjustment, or alternative procedures are required.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C5-16
+  chapter: 5
+  scope: chapter
+  text: assess whether the evidence obtained from a regression analysis is sufficient to support an audit conclusion at the required level of assurance.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C5-17
+  chapter: 5
+  scope: chapter
+  text: design a regression-based analytical procedure for a specific audit objective, specifying the dependent and independent variables, data requirements, estimation period, precision threshold, and decision rule.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C5-18
+  chapter: 5
+  scope: chapter
+  text: communicate the results, limitations, and audit implications of a regression analysis in a manner appropriate for audit documentation and professional discussion.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C6-03
+  chapter: 6
+  scope: chapter
+  text: define goodness of fit and explain its purpose in statistical analysis.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-04
+  chapter: 6
+  scope: chapter
+  text: identify the null and alternative hypotheses used in goodness-of-fit testing.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-05
+  chapter: 6
+  scope: chapter
+  text: "state the main characteristics and expected digit frequencies of Benford's Law."
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-06
+  chapter: 6
+  scope: chapter
+  text: recall the assumptions and conditions required for the application of goodness-of-fit tests.
+  bloom: remember
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-07
+  chapter: 6
+  scope: chapter
+  text: explain how goodness-of-fit tests compare observed frequencies with expected frequencies.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-08
+  chapter: 6
+  scope: chapter
+  text: "describe the rationale behind Benford's Law and why it applies to many naturally occurring datasets."
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-09
+  chapter: 6
+  scope: chapter
+  text: explain the relationship between test statistics, degrees of freedom, and statistical significance.
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-10
+  chapter: 6
+  scope: chapter
+  text: "understand the strengths and limitations of Benford's Law as a tool for fraud detection."
+  bloom: understand
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-11
+  chapter: 6
+  scope: chapter
+  text: construct observed and expected frequency tables for goodness-of-fit analyses.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-12
+  chapter: 6
+  scope: chapter
+  text: perform a chi-square goodness-of-fit test using statistical software.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-13
+  chapter: 6
+  scope: chapter
+  text: "apply Benford's Law to a dataset and compare observed digit frequencies with expected frequencies."
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-14
+  chapter: 6
+  scope: chapter
+  text: interpret p-values and test results in the context of auditing and data analysis.
+  bloom: apply
+  competency: technical_skills
+  status: active
+  source: manuscript
+
+- id: LO-C6-15
+  chapter: 6
+  scope: chapter
+  text: investigate discrepancies between observed and expected frequencies.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-16
+  chapter: 6
+  scope: chapter
+  text: determine which categories or digits contribute most to a lack of fit.
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-17
+  chapter: 6
+  scope: chapter
+  text: "assess whether deviations from Benford's Law are likely due to natural variation or require further investigation."
+  bloom: analyze
+  competency: statistical_reasoning
+  status: active
+  source: manuscript
+
+- id: LO-C6-18
+  chapter: 6
+  scope: chapter
+  text: evaluate the appropriateness of a goodness-of-fit model for a particular dataset.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C6-19
+  chapter: 6
+  scope: chapter
+  text: judge whether the assumptions underlying a goodness-of-fit test have been satisfied.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C6-20
+  chapter: 6
+  scope: chapter
+  text: assess the evidential value of Benford analysis in an audit or fraud examination.
+  bloom: evaluate
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C6-21
+  chapter: 6
+  scope: chapter
+  text: design a goodness-of-fit analysis to assess whether observed data follow a specified distribution.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C6-22
+  chapter: 6
+  scope: chapter
+  text: "develop a Benford's Law testing procedure for use in an audit or forensic investigation."
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
+
+- id: LO-C6-23
+  chapter: 6
+  scope: chapter
+  text: formulate recommendations for additional audit procedures based on the results of a goodness-of-fit analysis.
+  bloom: create
+  competency: professional_judgment
+  status: active
+  source: manuscript
