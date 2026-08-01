@@ -10,6 +10,42 @@
 This addendum records the governance analysis used to create CURR-021
 ("Learning Objective Authoring Standard is authoritative curriculum policy").
 
+### Governance baseline established by CURR-021
+
+CURR-021 establishes the governance baseline for all future LO work.
+
+- The file docs/curriculum/learning-objective-authoring-standard.md is the authoritative LO policy.
+- Active LOs are chapter-level only.
+- Section-level and workshop-level LOs are retired from the active architecture.
+- Bloom classification is mandatory for active LOs.
+- Competency classification is mandatory for active LOs.
+- Competency vocabulary is fixed to technical_skills, statistical_reasoning, and professional_judgment.
+- Audit Judgment is governed as a specialized form of professional_judgment.
+- Validation rules LO-001 to LO-012 are binding controls.
+- Non-compliant LOs must be corrected before inclusion in canonical curriculum metadata.
+- Automated validation is required before publication.
+- New competency categories require a formal curriculum decision.
+
+### Relationship analysis (explicit type and rationale)
+
+- CURR-004 (Bloom): `supports` and `depends_on`.
+	Rationale: CURR-021 makes Bloom assignment mandatory and enforceable, operationalizing CURR-004 into binding LO controls.
+- CURR-008 (LO alignment anchor): `supports` and `depends_on`.
+	Rationale: CURR-021 governs the quality and scope of the LO anchor used for alignment and traceability.
+- CURR-011 (granularity): `supersedes` (qualified scope only).
+	Rationale: CURR-021 supersedes only the mixed-scope interpretation that permits coexistence of active chapter-level and section-level LOs.
+	Rationale: CURR-021 does not supersede all uses of section-level detail as historical/internal records.
+- CURR-012 (identifier stability): `supports` and `depends_on`.
+	Rationale: governed retirement requires stable IDs, retired aliases, and preserved audit trails.
+- CURR-014 (validation): `supports` and `depends_on`.
+	Rationale: CURR-021 requires automated, blocking validation before publication and binds LO-001 to LO-012 as governance controls.
+- CURR-005 (audit evidence focus): `qualifies`.
+	Rationale: CURR-021 sets LO form and classification constraints for expressing audit-evidence capability.
+- CURR-007 (workshop vs review distinctness): `qualifies`.
+	Rationale: distinct pedagogical roles remain valid, but explicit LO traceability controls remain mandatory.
+- CURR-015 (student-facing display): `qualifies`.
+	Rationale: text-first display remains valid while internal LO governance controls are strengthened.
+
 ### Supporting decisions
 
 - CURR-004 (Bloom taxonomy classification): provides mandatory Bloom classification foundation adopted as binding by CURR-021.
@@ -25,8 +61,9 @@ This addendum records the governance analysis used to create CURR-021
 
 ### Superseded decisions
 
-- CURR-011 is superseded for active-architecture scope policy.
-- CURR-021 replaces the mixed chapter/section active-scope model with chapter-only active scope.
+- CURR-011 is superseded only for active-architecture mixed-scope interpretation.
+- CURR-021 replaces the interpretation that allows chapter-level and section-level active LOs to coexist.
+- CURR-011 is not globally retired; its remaining non-conflicting context is retained.
 
 ### Open questions resolved by CURR-021
 
@@ -43,6 +80,53 @@ This addendum records the governance analysis used to create CURR-021
 	- 11 active section-level legacy LOs;
 	- 97 active LOs without explicit traceability links;
 	- competency and metadata conformance gaps.
+
+### Legacy migration policy
+
+- Policy: retire and keep as aliases where repository conventions permit.
+- Legacy section-level objectives should not remain active.
+- Legacy section-level objectives should not remain part of the active LO model.
+- Retired alias records should preserve traceability and historical audit trails.
+- Deletion of historical curriculum records is not the preferred policy.
+
+### Migration roadmap authority
+
+- Phase 1 Governance adoption:
+	objective: adopt CURR-021 as binding policy.
+	expected deliverables: decision-register integration and governance notice.
+	success criteria: CURR-021 is confirmed and referenced in LO governance workflow.
+- Phase 2 Retire legacy section-level objectives:
+	objective: remove section-level objectives from active architecture.
+	expected deliverables: legacy disposition list and chapter-only active set.
+	success criteria: zero active section-level/workshop-level LO records.
+- Phase 3 Remediate competency metadata:
+	objective: close active-LO competency metadata gaps.
+	expected deliverables: complete approved competency coverage for active LOs.
+	success criteria: no active LO fails mandatory competency checks.
+- Phase 4 Remediate traceability:
+	objective: close explicit LO mapping gaps.
+	expected deliverables: updated LO-to-workshop and LO-to-review mappings or approved exceptions.
+	success criteria: each active LO has explicit traceability or approved exception.
+- Phase 5 Chapter-level objective redesign where appropriate:
+	objective: run scoped chapter redesign under CURR-021 controls.
+	expected deliverables: chapter redesign proposals and approved update plans.
+	success criteria: redesign outputs remain compliant with identifier, scope, and validation controls.
+- Phase 6 Compliance re-audit:
+	objective: establish post-migration compliance baseline.
+	expected deliverables: updated LO compliance audit artifacts.
+	success criteria: measurable reduction in rule-level violations versus baseline.
+
+### Implications
+
+- Implications for audits:
+	- LO compliance audits become recurring governance controls with trend tracking.
+	- Rule-level LO-001 to LO-012 outcomes become authoritative acceptance evidence.
+- Implications for traceability:
+	- Chapter-level active architecture becomes the required mapping anchor.
+	- Legacy aliases preserve historical continuity while preventing active-model drift.
+- Implications for LO remediation:
+	- Remediation sequencing is governed by the six-phase roadmap.
+	- No redesign/remediation output may bypass mandatory validation controls.
 
 ## Purpose and Scope
 
