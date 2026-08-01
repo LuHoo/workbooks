@@ -5,6 +5,45 @@
 **Generated:** 2026-07-28  
 **Status:** First extraction and analysis
 
+## 2026-08-01 Addendum: CURR-021 Adoption Analysis
+
+This addendum records the governance analysis used to create CURR-021
+("Learning Objective Authoring Standard is authoritative curriculum policy").
+
+### Supporting decisions
+
+- CURR-004 (Bloom taxonomy classification): provides mandatory Bloom classification foundation adopted as binding by CURR-021.
+- CURR-008 (LO alignment anchor): provides alignment and mapping architecture formalized into mandatory controls by CURR-021.
+- CURR-012 (ID stability): provides persistence contract required for governed migration and re-audit continuity.
+- CURR-014 (validation fail-loudly): provides the validation-governance mechanism expanded by CURR-021 through LO-001 to LO-012 controls.
+
+### Qualified decisions
+
+- CURR-005: CURR-021 qualifies LO governance form and classification expectations used to express audit-evidence capabilities.
+- CURR-007: CURR-021 clarifies that workshop/review distinctness does not remove the requirement for explicit LO traceability controls.
+- CURR-015: CURR-021 confirms student-facing display policy remains text-oriented while internal governance is strengthened.
+
+### Superseded decisions
+
+- CURR-011 is superseded for active-architecture scope policy.
+- CURR-021 replaces the mixed chapter/section active-scope model with chapter-only active scope.
+
+### Open questions resolved by CURR-021
+
+- Scope ambiguity is resolved: active LOs are chapter-only.
+- Competency-model ambiguity is resolved: only technical_skills, statistical_reasoning, professional_judgment.
+- Audit Judgment category ambiguity is resolved: governed inside professional_judgment, not a fourth category.
+- Validation-policy ambiguity is resolved: LO-001 to LO-012 are binding governance controls.
+
+### Baseline evidence grounding
+
+- `docs/curriculum/learning-objective-authoring-standard.md` is adopted as authoritative policy.
+- `docs/curriculum/lo-compliance-audit.md` provides baseline measurements for migration governance:
+	- 114 active LOs audited;
+	- 11 active section-level legacy LOs;
+	- 97 active LOs without explicit traceability links;
+	- competency and metadata conformance gaps.
+
 ## Purpose and Scope
 
 This report documents the extraction, analysis, and validation of curriculum-related architectural decisions from the ADA repository. It accompanies `docs/curriculum/curriculum-decision-register.yml`, which contains machine-readable decision data.

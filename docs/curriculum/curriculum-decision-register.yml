@@ -902,3 +902,140 @@ decisions:
       superseded_by: []
     open_questions: []
     notes: null
+
+  - id: "CURR-021"
+    title: "Learning Objective Authoring Standard is authoritative curriculum policy"
+    domain:
+      - "learning-objectives"
+      - "curriculum-governance"
+      - "quality-assurance"
+      - "bloom-taxonomy"
+      - "competency-model"
+    decision: >
+      The document docs/curriculum/learning-objective-authoring-standard.md is
+      adopted as the authoritative policy for learning-objective authoring,
+      classification, validation, and governance across the ADA curriculum.
+      Active learning objectives are chapter-level only. Section-level and
+      workshop-level learning objectives are no longer part of the active
+      curriculum architecture. Every active learning objective must include
+      mandatory Bloom and competency classification and must comply with binding
+      validation rules LO-001 through LO-012. The competency model is fixed to
+      technical_skills, statistical_reasoning, and professional_judgment.
+      Audit Judgment is governed as a specialized form of professional_judgment
+      and does not introduce a separate competency category.
+    status: "confirmed"
+    confidence: "high"
+    rationale: >
+      Existing LO governance had unresolved ambiguity around scope (chapter vs.
+      section), inconsistent competency metadata coverage, and incomplete
+      traceability linkage. The LO compliance audit established a measurable
+      baseline (114 active LOs; 11 legacy section-level active LOs; 97 LOs
+      without explicit traceability links; competency and metadata conformance
+      gaps). A single binding policy is required to govern migration, enforce
+      consistency, and provide auditable control points for future LO changes.
+    implications:
+      - "The LO authoring standard is now the canonical governance source for LO policy."
+      - "All future LO changes must be evaluated against LO-001 to LO-012 before acceptance."
+      - "Active section-level and workshop-level LOs are legacy artifacts requiring governed migration."
+      - "Bloom classification and competency classification are mandatory fields for active LOs."
+      - "Competency vocabulary is restricted to technical_skills, statistical_reasoning, and professional_judgment."
+      - "Audit Judgment is represented within professional_judgment, not as a fourth competency."
+      - "LO compliance audits become a recurring governance control, not a one-time exercise."
+    applies_to:
+      - "whole-curriculum"
+      - "learning-objectives"
+      - "curriculum-governance"
+      - "quality-assurance"
+      - "assessment"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/curriculum/learning-objective-authoring-standard.md"
+        lines: "L1-L220"
+        heading: "Purpose and Authority; Scope; Competency Model; Validation Rules"
+        quotation: >
+          This standard defines the canonical rules for learning-objective
+          authoring, classification, review, and validation. LOs MUST exist only
+          at chapter level. Competency model is fixed to Technical Skills,
+          Statistical Reasoning, and Professional Judgment. Validation rules
+          LO-001 through LO-012 are normative controls.
+      - source_type: "repository-file"
+        path: "docs/curriculum/lo-compliance-audit.md"
+        lines: "L1-L140"
+        heading: "Executive Summary; Rule-Level Findings"
+        quotation: >
+          114 active learning objectives were audited. 11 active section-level
+          objectives remain. 97 active objectives have no explicit traceability
+          links. Competency-classification and metadata conformance gaps are
+          present.
+      - source_type: "repository-file"
+        path: "metadata/traceability/learning_objectives.yml"
+        lines: null
+        heading: null
+        quotation: >
+          Current active LO metadata includes both chapter and section scope
+          records and mixed competency field coverage.
+    related_decisions:
+      supports: ["CURR-004", "CURR-008", "CURR-012", "CURR-014"]
+      depends_on: ["CURR-004", "CURR-008", "CURR-012", "CURR-014", "CURR-013"]
+      qualifies: ["CURR-005", "CURR-007", "CURR-015"]
+      conflicts_with: []
+      supersedes: ["CURR-011"]
+      superseded_by: []
+    implementation_notes:
+      - "Phase 1 - Adopt CURR-021: Publish decision and treat LO standard as binding policy in governance workflows."
+      - "Phase 2 - Scope migration: Retire or migrate active section-level objectives to chapter-level active architecture."
+      - "Phase 3 - Competency completion: Resolve missing or invalid competency metadata for all active LOs."
+      - "Phase 4 - Traceability completion: Resolve explicit LO-to-workshop and/or LO-to-review link gaps."
+      - "Phase 5 - Form compliance remediation: Address LO form/granularity violations against LO-001 to LO-012 under controlled review."
+      - "Phase 6 - Re-audit: Execute a full LO compliance re-audit and publish updated baseline metrics."
+    migration_requirements:
+      - phase: "Phase 1"
+        objective: "Adopt CURR-021 as binding policy."
+        deliverables:
+          - "Updated curriculum-decision-register.yml with CURR-021."
+          - "Governance notice linking to learning-objective-authoring-standard.md."
+        success_criteria:
+          - "CURR-021 status is confirmed and referenced in LO governance workflow."
+      - phase: "Phase 2"
+        objective: "Retire or migrate active section-level objectives."
+        deliverables:
+          - "Disposition list for all active section-level LOs (migrate/retire decisions)."
+          - "Updated active LO set where scope is chapter-only."
+        success_criteria:
+          - "Zero active section-level or workshop-level LO records remain."
+      - phase: "Phase 3"
+        objective: "Resolve competency metadata gaps."
+        deliverables:
+          - "Complete competency field coverage for all active LOs using approved vocabulary."
+        success_criteria:
+          - "No active LO fails mandatory competency classification checks."
+      - phase: "Phase 4"
+        objective: "Resolve traceability gaps."
+        deliverables:
+          - "Updated mapping files with explicit links or approved exceptions."
+        success_criteria:
+          - "Every active LO has explicit instructional/assessment traceability or approved exception record."
+      - phase: "Phase 5"
+        objective: "Perform governed LO text-level remediation where required."
+        deliverables:
+          - "Rule-tagged remediation log for LO-001 to LO-012 failures."
+        success_criteria:
+          - "All remediated LOs pass deterministic checks and human-review controls."
+      - phase: "Phase 6"
+        objective: "Re-audit compliance baseline."
+        deliverables:
+          - "Updated lo-compliance-audit.md and lo-compliance-audit.yml baseline."
+        success_criteria:
+          - "Governance can demonstrate measurable reduction of LO violations versus the current baseline."
+    validation_impact:
+      - "LO-001 to LO-012 become binding controls for LO acceptance and review."
+      - "Validation pipelines must treat missing Bloom/competency/scope non-compliance as blocking defects."
+      - "Compliance reporting must include rule-level pass/fail/needs-review counts and trend tracking across audits."
+    open_questions:
+      - "What threshold policy should govern accepted temporary traceability exceptions during migration phases?"
+      - "What review cadence (for example quarterly or per release) will be mandated for recurring LO compliance audits?"
+    notes: >
+      Relationship classification for CURR-004, CURR-008, CURR-011, CURR-012,
+      and CURR-014: CURR-021 depends_on and supports CURR-004/008/012/014 by
+      operationalizing their controls; CURR-021 supersedes CURR-011 by replacing
+      mixed-scope LO architecture with chapter-only active scope.
