@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -eu
+
+if [ "${ALLOW_MAIN_PUSH:-0}" = "1" ]; then
+  exit 0
+fi
+
+current_branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+
+if [ -z "$current_branch" ]; then
+  echo "Blocked: refusing to push from detached HEAD." >&2
+  echo "Switch to a local branch first, for example: git switch main or git switch <feature-branch>." >&2
+  echo "If you intentionally need this, rerun with ALLOW_MAIN_PUSH=1." >&2
+  exit 1
+fi
+
+if [ "$current_branch" = "main" ]; then
+  echo "Blocked: refusing to push while checked out on local main." >&2
+  echo "Create or switch to a feature branch first." >&2
+  echo "If you intentionally need this, rerun with ALLOW_MAIN_PUSH=1." >&2
+  exit 1
+fi
+
+while read -r local_ref local_oid remote_ref remote_oid; do
+  case "$remote_ref" in
+    refs/heads/main)
+      echo "Blocked: refusing to push directly to remote main ($remote_ref)." >&2
+      echo "Push your feature branch instead and merge through PR/review." >&2
+      echo "If you intentionally need this, rerun with ALLOW_MAIN_PUSH=1." >&2
+      exit 1
+      ;;
+  esac
+done
+
+exit 0
