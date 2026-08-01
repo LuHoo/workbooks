@@ -78,13 +78,13 @@
   workshop_id: WX-goodness-of-fit-6.1-1
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-1
-- lo_id: LO-C6S6.2-01
+- lo_id: LO-C6-13
   workshop_id: WX-goodness-of-fit-6.2-1
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-1
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-10
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-10
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-11
@@ -100,7 +100,7 @@
   workshop_id: WX-goodness-of-fit-6.2-13
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-14
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-14
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-15
@@ -120,35 +120,35 @@
   workshop_id: WX-goodness-of-fit-6.2-18
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-2
-- lo_id: LO-C6S6.2-01
+- lo_id: LO-C6-13
   workshop_id: WX-goodness-of-fit-6.2-2
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-3
-- lo_id: LO-C6S6.2-01
+- lo_id: LO-C6-13
   workshop_id: WX-goodness-of-fit-6.2-3
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-4
-- lo_id: LO-C6S6.2-01
+- lo_id: LO-C6-13
   workshop_id: WX-goodness-of-fit-6.2-4
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-5
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-5
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-6
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-6
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-7
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-7
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-8
-- lo_id: LO-C6S6.2-01
+- lo_id: LO-C6-13
   workshop_id: WX-goodness-of-fit-6.2-8
 - lo_id: LO-C6-01
   workshop_id: WX-goodness-of-fit-6.2-9
-- lo_id: LO-C6S6.2-02
+- lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-9
 - lo_id: LO-C4-01
   workshop_id: WX-hypothesis-testing-4.1-1
@@ -385,21 +385,21 @@
 - lo_id: LO-C5-01
   workshop_id: WX-regression-analysis-5.9-3
 
-- lo_id: LO-C5S5.1-01
+- lo_id: LO-C5-01
   workshop_id: WX-regression-analysis-5.1-1
-- lo_id: LO-C5S5.2-01
+- lo_id: LO-C5-04
   workshop_id: WX-regression-analysis-5.2-1
-- lo_id: LO-C5S5.3-01
+- lo_id: LO-C5-05
   workshop_id: WX-regression-analysis-5.3-1
-- lo_id: LO-C5S5.4-01
+- lo_id: LO-C5-03
   workshop_id: WX-regression-analysis-5.4-1
-- lo_id: LO-C5S5.5-01
+- lo_id: LO-C5-09
   workshop_id: WX-regression-analysis-5.5-1
-- lo_id: LO-C5S5.6-01
+- lo_id: LO-C5-14
   workshop_id: WX-regression-analysis-5.6-1
-- lo_id: LO-C5S5.7-01
+- lo_id: LO-C5-04
   workshop_id: WX-regression-analysis-5.7-1
-- lo_id: LO-C5S5.8-01
+- lo_id: LO-C5-11
   workshop_id: WX-regression-analysis-5.8-1
-- lo_id: LO-C5S5.9-01
+- lo_id: LO-C5-11
   workshop_id: WX-regression-analysis-5.9-1

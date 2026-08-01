@@ -1,5 +1,7 @@
 "bloom","covered_both","workshop_only","review_only","uncovered","total"
-"analyze",1,2,0,0,3
-"apply",1,7,0,0,8
-"evaluate",1,1,0,0,2
-"understand",1,3,0,0,4
+"analyze",1,1,0,15,17
+"apply",1,5,0,19,25
+"create",1,0,0,12,13
+"evaluate",0,0,0,15,15
+"remember",0,3,0,17,20
+"understand",1,1,0,22,24
