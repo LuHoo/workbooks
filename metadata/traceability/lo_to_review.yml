@@ -7,8 +7,53 @@
 - lo_id: LO-C6-13
   review_question_id: RQ-C6-003
 
+- lo_id: LO-C6-04
+  review_question_id: RQ-C6-003
+
+- lo_id: LO-C6-05
+  review_question_id: RQ-C6-004
+
+- lo_id: LO-C6-10
+  review_question_id: RQ-C6-005
+
+- lo_id: LO-C6-16
+  review_question_id: RQ-C6-006
+
+- lo_id: LO-C6-18
+  review_question_id: RQ-C6-007
+
+- lo_id: LO-C6-05
+  review_question_id: RQ-C6-008
+
+- lo_id: LO-C6-06
+  review_question_id: RQ-C6-009
+
+- lo_id: LO-C6-19
+  review_question_id: RQ-C6-010
+
+- lo_id: LO-C6-20
+  review_question_id: RQ-C6-011
+
+- lo_id: LO-C6-21
+  review_question_id: RQ-C6-011
+
+- lo_id: LO-C6-22
+  review_question_id: RQ-C6-011
+
 - lo_id: LO-C6-13
   review_question_id: RQ-C6-012
 
+- lo_id: LO-C6-15
+  review_question_id: RQ-C6-012
+
+- lo_id: LO-C6-16
+  review_question_id: RQ-C6-012
+
 - lo_id: LO-C6-02
+  review_question_id: RQ-C6-013
+
+- lo_id: LO-C6-14
+  review_question_id: RQ-C6-013
+
+- lo_id: LO-C6-17
   review_question_id: RQ-C6-013

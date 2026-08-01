@@ -13,6 +13,46 @@
   ordinal: 3
   source_file: review_questions.tex
 
+- id: RQ-C6-004
+  chapter: 6
+  ordinal: 4
+  source_file: review_questions.tex
+
+- id: RQ-C6-005
+  chapter: 6
+  ordinal: 5
+  source_file: review_questions.tex
+
+- id: RQ-C6-006
+  chapter: 6
+  ordinal: 6
+  source_file: review_questions.tex
+
+- id: RQ-C6-007
+  chapter: 6
+  ordinal: 7
+  source_file: review_questions.tex
+
+- id: RQ-C6-008
+  chapter: 6
+  ordinal: 8
+  source_file: review_questions.tex
+
+- id: RQ-C6-009
+  chapter: 6
+  ordinal: 9
+  source_file: review_questions.tex
+
+- id: RQ-C6-010
+  chapter: 6
+  ordinal: 10
+  source_file: review_questions.tex
+
+- id: RQ-C6-011
+  chapter: 6
+  ordinal: 11
+  source_file: review_questions.tex
+
 - id: RQ-C6-012
   chapter: 6
   ordinal: 12
