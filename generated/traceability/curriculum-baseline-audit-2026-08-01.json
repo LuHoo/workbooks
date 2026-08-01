@@ -1,0 +1,136 @@
+{
+  "generated_at": "2026-08-01",
+  "scope": "active chapter-level LOs",
+  "inventory": {
+    "active_total": 103,
+    "active_chapter_total": 103,
+    "retired_total": 11,
+    "chapter_distribution": {
+      "1": 16,
+      "2": 14,
+      "3": 16,
+      "4": 16,
+      "5": 18,
+      "6": 23
+    },
+    "bloom_distribution": {
+      "apply": 21,
+      "understand": 21,
+      "analyze": 15,
+      "remember": 20,
+      "evaluate": 13,
+      "create": 13
+    },
+    "competency_distribution": {
+      "technical_skills": 42,
+      "professional_judgment": 27,
+      "statistical_reasoning": 34
+    },
+    "multiple_primary_count": 0,
+    "secondary_competency_count": 0,
+    "traceability": {
+      "with_workshop": 94,
+      "with_review": 17,
+      "with_both": 17,
+      "with_exceptions": 9
+    }
+  },
+  "rule_counts": {
+    "LO-001": {
+      "pass": 90,
+      "fail": 7,
+      "needs_review": 6
+    },
+    "LO-002": {
+      "pass": 102,
+      "fail": 1,
+      "needs_review": 0
+    },
+    "LO-003": {
+      "pass": 100,
+      "fail": 2,
+      "needs_review": 1
+    },
+    "LO-004": {
+      "pass": 94,
+      "fail": 9,
+      "needs_review": 0
+    },
+    "LO-005": {
+      "pass": 103,
+      "fail": 0,
+      "needs_review": 0
+    },
+    "LO-006": {
+      "pass": 103,
+      "fail": 0,
+      "needs_review": 0
+    },
+    "LO-007": {
+      "pass": 102,
+      "fail": 1,
+      "needs_review": 0
+    },
+    "LO-008": {
+      "pass": 101,
+      "fail": 2,
+      "needs_review": 0
+    },
+    "LO-009": {
+      "pass": 94,
+      "fail": 0,
+      "needs_review": 9
+    },
+    "LO-010": {
+      "pass": 103,
+      "fail": 0,
+      "needs_review": 0
+    },
+    "LO-011": {
+      "pass": 0,
+      "fail": 0,
+      "needs_review": 103
+    },
+    "LO-012": {
+      "pass": 94,
+      "fail": 9,
+      "needs_review": 0
+    }
+  },
+  "before": {
+    "active_objectives": 114,
+    "active_section_objectives": 11,
+    "lo005_fail": 17,
+    "lo006_fail": 11,
+    "lo009_fail": 97,
+    "lo010_fail": 17,
+    "total_fail_findings": 199
+  },
+  "after": {
+    "active_objectives": 103,
+    "active_section_objectives": 0,
+    "lo005_fail": 0,
+    "lo006_fail": 0,
+    "lo009_fail": 0,
+    "lo010_fail": 0,
+    "total_fail_findings": 31
+  },
+  "delta": {
+    "active_objectives": -11,
+    "active_section_objectives": -11,
+    "lo005_fail": -17,
+    "lo006_fail": -11,
+    "lo009_fail": -97,
+    "lo010_fail": -17,
+    "total_fail_findings": -168
+  },
+  "exception_summary": {
+    "active_exception_count": 9,
+    "risk_counts": {
+      "temporary": 4,
+      "acceptable": 9,
+      "high risk": 5
+    }
+  },
+  "remaining_defects_count": 150
+}
