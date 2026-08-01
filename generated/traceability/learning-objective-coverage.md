@@ -1,6 +1,6 @@
 # Learning Objective Coverage Report
 
-Generated: 2026-08-01 17:18:25
+Generated: 2026-08-01 20:14:01
 
 ## Objective Coverage
 
@@ -68,7 +68,7 @@ Generated: 2026-08-01 17:18:25
 | LO-C4-14 | 4 | chapter | - | evaluate | 1 | 0 | workshop-only |
 | LO-C4-15 | 4 | chapter | - | create | 1 | 0 | workshop-only |
 | LO-C4-16 | 4 | chapter | - | create | 1 | 0 | workshop-only |
-| LO-C5-01 | 5 | chapter | - | apply | 80 | 0 | workshop-only |
+| LO-C5-01 | 5 | chapter | - | apply | 79 | 0 | workshop-only |
 | LO-C5-02 | 5 | chapter | - | remember | 1 | 0 | workshop-only |
 | LO-C5-03 | 5 | chapter | - | remember | 2 | 0 | workshop-only |
 | LO-C5-04 | 5 | chapter | - | remember | 3 | 0 | workshop-only |
@@ -649,7 +649,7 @@ Generated: 2026-08-01 17:18:25
 | learning_objective | LO-C4-14 | workshop-only | workshop_links=1; review_links=0 |
 | learning_objective | LO-C4-15 | workshop-only | workshop_links=1; review_links=0 |
 | learning_objective | LO-C4-16 | workshop-only | workshop_links=1; review_links=0 |
-| learning_objective | LO-C5-01 | workshop-only | workshop_links=80; review_links=0 |
+| learning_objective | LO-C5-01 | workshop-only | workshop_links=79; review_links=0 |
 | learning_objective | LO-C5-02 | workshop-only | workshop_links=1; review_links=0 |
 | learning_objective | LO-C5-03 | workshop-only | workshop_links=2; review_links=0 |
 | learning_objective | LO-C5-04 | workshop-only | workshop_links=3; review_links=0 |

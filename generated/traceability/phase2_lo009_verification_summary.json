@@ -1,0 +1,24 @@
+{
+  "baseline_lo009_counts": {
+    "PASS": 17,
+    "FAIL": 97
+  },
+  "baseline_lo009_fail_count": 97,
+  "after_active_chapter_fail_count": 9,
+  "after_active_chapter_pass_count": 94,
+  "remaining_lo009_ids": [
+    "LO-C1-06",
+    "LO-C1-07",
+    "LO-C1-13",
+    "LO-C1-14",
+    "LO-C1-15",
+    "LO-C2-06",
+    "LO-C2-12",
+    "LO-C2-14",
+    "LO-C3-09"
+  ],
+  "classification_counts": {
+    "reporting_limitation_baseline_snapshot": 88,
+    "real_coverage_or_metadata_gap": 9
+  }
+}

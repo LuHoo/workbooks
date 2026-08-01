@@ -1,0 +1,158 @@
+{
+  "inventory_metrics": {
+    "total_active_chapter_los": 103,
+    "fully_traceable": 17,
+    "partially_traceable": 77,
+    "metadata_incomplete": 9,
+    "traceability_gap": 0
+  },
+  "coverage_metrics": {
+    "workshop_total": 190,
+    "workshop_mapped": 190,
+    "workshop_unmapped": 0,
+    "review_total": 13,
+    "review_mapped": 13,
+    "review_unmapped": 0,
+    "case_study_mapped": 0,
+    "case_study_unmapped": "not-modeled"
+  },
+  "lo009": {
+    "before_fail": 97,
+    "before_pass": 17,
+    "after_fail_active_chapter": 9,
+    "after_pass_active_chapter": 94
+  },
+  "integrity": {
+    "broken_workshop_refs": 0,
+    "broken_review_refs": 0,
+    "missing_lo_refs_in_workshop_map": 0,
+    "missing_lo_refs_in_review_map": 0,
+    "duplicate_workshop_pairs": 0,
+    "duplicate_review_pairs": 0
+  },
+  "chapter_summary": {
+    "1": {
+      "total": 16,
+      "fully": 0,
+      "partial": 11,
+      "incomplete": 5,
+      "with_workshop": 11,
+      "with_review": 0
+    },
+    "2": {
+      "total": 14,
+      "fully": 0,
+      "partial": 11,
+      "incomplete": 3,
+      "with_workshop": 11,
+      "with_review": 0
+    },
+    "3": {
+      "total": 16,
+      "fully": 0,
+      "partial": 15,
+      "incomplete": 1,
+      "with_workshop": 15,
+      "with_review": 0
+    },
+    "4": {
+      "total": 16,
+      "fully": 0,
+      "partial": 16,
+      "incomplete": 0,
+      "with_workshop": 16,
+      "with_review": 0
+    },
+    "5": {
+      "total": 18,
+      "fully": 0,
+      "partial": 18,
+      "incomplete": 0,
+      "with_workshop": 18,
+      "with_review": 0
+    },
+    "6": {
+      "total": 23,
+      "fully": 17,
+      "partial": 6,
+      "incomplete": 0,
+      "with_workshop": 23,
+      "with_review": 17
+    }
+  },
+  "strongest_chapter": {
+    "chapter": "6",
+    "total": 23,
+    "fully": 17,
+    "partial": 6,
+    "incomplete": 0,
+    "with_workshop": 23,
+    "with_review": 17
+  },
+  "weakest_chapter": {
+    "chapter": "1",
+    "total": 16,
+    "fully": 0,
+    "partial": 11,
+    "incomplete": 5,
+    "with_workshop": 11,
+    "with_review": 0
+  },
+  "defect_taxonomy": {
+    "Category 1 Missing metadata": {
+      "count": 9,
+      "examples": [
+        "LO-C1-06",
+        "LO-C1-07",
+        "LO-C1-13",
+        "LO-C1-14",
+        "LO-C1-15"
+      ],
+      "definition": "Active chapter-level LOs without explicit workshop/review links."
+    },
+    "Category 2 Broken references": {
+      "count": 0,
+      "examples": [],
+      "definition": "Mappings that point to missing LO/workshop/review IDs."
+    },
+    "Category 3 Orphaned workshop exercises": {
+      "count": 0,
+      "examples": [],
+      "definition": "Workshop exercises present in metadata but not mapped to any active LO."
+    },
+    "Category 4 Orphaned review questions": {
+      "count": 0,
+      "examples": [],
+      "definition": "Review questions present in metadata but not mapped to any active LO."
+    },
+    "Category 5 Missing review coverage": {
+      "count": 86,
+      "examples": [
+        "LO-C1-01",
+        "LO-C1-02",
+        "LO-C1-03",
+        "LO-C1-04",
+        "LO-C1-05"
+      ],
+      "definition": "Active LOs with no mapped review question."
+    },
+    "Category 6 Missing instructional coverage": {
+      "count": 9,
+      "examples": [
+        "LO-C1-06",
+        "LO-C1-07",
+        "LO-C1-13",
+        "LO-C1-14",
+        "LO-C1-15"
+      ],
+      "definition": "Active LOs with no explicit workshop mapping (chapter content linkage exists through chapter assignment)."
+    },
+    "Category 7 Intentional exceptions": {
+      "count": 1,
+      "examples": [
+        "Case-study traceability relation not yet modeled in metadata schema"
+      ],
+      "definition": "Known architecture exception requiring policy/model decision rather than automatic remediation."
+    }
+  }
+}

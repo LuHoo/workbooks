@@ -1,0 +1,182 @@
+[
+  {
+    "lo_id": "LO-C1-06",
+    "chapter": 1,
+    "bloom": "understand",
+    "competency": "statistical_reasoning",
+    "relevant_artifacts": [
+      "notebooks/support/probability-distributions/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C1-07",
+    "chapter": 1,
+    "bloom": "understand",
+    "competency": "statistical_reasoning",
+    "relevant_artifacts": [
+      "notebooks/support/probability-distributions/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C1-13",
+    "chapter": 1,
+    "bloom": "evaluate",
+    "competency": "professional_judgment",
+    "relevant_artifacts": [
+      "notebooks/support/probability-distributions/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C1-14",
+    "chapter": 1,
+    "bloom": "evaluate",
+    "competency": "professional_judgment",
+    "relevant_artifacts": [
+      "notebooks/support/probability-distributions/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C1-15",
+    "chapter": 1,
+    "bloom": "create",
+    "competency": "professional_judgment",
+    "relevant_artifacts": [
+      "notebooks/support/probability-distributions/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C2-06",
+    "chapter": 2,
+    "bloom": "understand",
+    "competency": "statistical_reasoning",
+    "relevant_artifacts": [
+      "notebooks/support/population-estimation/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C2-12",
+    "chapter": 2,
+    "bloom": "evaluate",
+    "competency": "professional_judgment",
+    "relevant_artifacts": [
+      "notebooks/support/population-estimation/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C2-14",
+    "chapter": 2,
+    "bloom": "create",
+    "competency": "professional_judgment",
+    "relevant_artifacts": [
+      "notebooks/support/population-estimation/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  },
+  {
+    "lo_id": "LO-C3-09",
+    "chapter": 3,
+    "bloom": "apply",
+    "competency": "technical_skills",
+    "relevant_artifacts": [
+      "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "review_questions.tex",
+      "metadata/traceability/lo_to_workshop.yml",
+      "metadata/traceability/lo_to_review.yml"
+    ],
+    "available_evidence": "LO exists as active chapter objective with chapter linkage but no explicit workshop/review mapping.",
+    "decision_options": [
+      "Option A: add evidence-backed workshop link(s) from source Rmd exercises.",
+      "Option B: add evidence-backed review question link(s) once chapter review metadata exists.",
+      "Option C: record temporary traceability exception with review date."
+    ],
+    "recommended_option": "Option C until exact source-level evidence is curated and peer-reviewed.",
+    "consequences": "Without explicit mapping, LO remains in LO-009 residual set; forcing guessed mappings risks false traceability."
+  }
+]

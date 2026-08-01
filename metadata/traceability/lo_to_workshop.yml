@@ -384,9 +384,6 @@
   workshop_id: WX-regression-analysis-5.9-2
 - lo_id: LO-C5-01
   workshop_id: WX-regression-analysis-5.9-3
-
-- lo_id: LO-C5-01
-  workshop_id: WX-regression-analysis-5.1-1
 - lo_id: LO-C5-04
   workshop_id: WX-regression-analysis-5.2-1
 - lo_id: LO-C5-05
