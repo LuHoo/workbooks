@@ -17,6 +17,30 @@ Audit Data Analysis
 Canonical architecture overview:
 
 - `docs/architecture/notebook-generation-and-publication.md`
+- `docs/authoring/content-workflow.md`
+- `docs/authoring/book-versioning.md`
+- `docs/authoring/manuscript-calculation-registry.md`
+
+## Publication boundary
+
+Current publication contract for student-facing notebook artifacts:
+
+- `LuHoo/ada` is the canonical authoring, generation, validation, and
+	publication-orchestration repository.
+- `LuHoo/workbooks` is the only notebook publication target currently managed by
+	automation in this repository.
+- `LuHoo/audit-data-analysis` is the ADA project/repository identity used by
+	this checkout and related site content; it is not a second notebook
+	publication destination in current scripts or workflows.
+
+Operational implication:
+
+- when notebook publication is discussed in this repository, it means
+	synchronization of validated generated artifacts into
+	`notebooks/workshops` / `LuHoo/workbooks`.
+- any future publication to a separate `audit-data-analysis` destination would
+	require an explicit new producer/contract rather than being implied by the
+	repository name.
 
 ## Workshop Exporter CLI
 
@@ -51,6 +75,7 @@ Example:
 - Chapter scripts remain as thin compatibility wrappers that delegate to the
 	canonical exporter via configuration:
 	- `scripts/export-probability-distributions-workshop.R`
+	- `scripts/export-population-estimation-workshop.R`
 	- `scripts/export-auxiliary-variables-and-stratification-workshop.R`
 	- `scripts/export-hypothesis-testing-workshop.R`
 	- `scripts/export-regression-analysis-workshop.R`
@@ -63,6 +88,7 @@ To export all chunks for a chapter/workshop, run the relevant wrapper script.
 Examples:
 
 - `Rscript scripts/export-probability-distributions-workshop.R`
+- `Rscript scripts/export-population-estimation-workshop.R`
 - `Rscript scripts/export-auxiliary-variables-and-stratification-workshop.R`
 - `Rscript scripts/export-hypothesis-testing-workshop.R`
 - `Rscript scripts/export-regression-analysis-workshop.R`
@@ -70,6 +96,29 @@ Examples:
 
 Note: The goodness-of-fit wrapper preloads the regression workshop in-process,
 because chapter 6 exercises depend on objects produced by chapter 5 code.
+
+## Worked Calculation Generator
+
+Notebook-derived manuscript calculations are generated with:
+
+`Rscript scripts/generate-worked-calculations.R`
+
+To verify that committed snippets are fresh, registered, and still wired into the
+manuscript correctly, run:
+
+`Rscript scripts/ci/validate-manuscript-calculations.R`
+
+The validator also compares shared R/Python raw manuscript values between
+`generated/worked-calculations/` and `generated/worked-calculations-python/`
+with the default `1e-8` tolerance.
+
+Release evidence can be written with:
+
+`Rscript scripts/ci/validate-manuscript-calculations.R --output-json generated/worked-calculations/validation-report.json --output-summary generated/worked-calculations/validation-report.md`
+
+The initial pilot generates the MPU worked calculation used in the
+auxiliary-variables chapter from the same `FSaudit::inventoryData` workflow used
+by the support workbook.
 
 ## Exporter Architecture Freeze
 
@@ -148,7 +197,9 @@ Directive support in v1.1:
 
 - parser-level support for `ADA:BEGIN`, `ADA:END`, and `ADA:REQUIRES`;
 - deterministic per-block `authoring_context` metadata;
-- emitted directive event records in `directives.instances`.
+- emitted directive event records in `directives.instances`;
+- first-class semantic references via `[[ADA:REF target=<semantic-id>]]` tokens,
+  resolved through `semantic_references.targets` / `semantic_references.references`.
 
 Generate IR JSON:
 
@@ -164,6 +215,9 @@ Validation spec:
 
 - `docs/architecture/workshop-ir-validation.md`
 
+Semantic reference validation fails on unresolved targets and inconsistent
+target/source declarations before notebook or LaTeX export proceeds.
+
 ## Optional IR Parser Integration
 
 The canonical exporter uses the Workshop IR parser path by default.
@@ -176,7 +230,7 @@ The canonical exporter uses the Workshop IR parser path by default.
 Allowed values for `--parser-engine`:
 
 - `ir` (default)
-- `legacy` (explicit rollback path)
+- `legacy` (explicit rollback path during the deprecation transition)
 
 Migration and rollback guidance:
 
@@ -184,6 +238,13 @@ Migration and rollback guidance:
 - `docs/architecture/legacy-parser-deprecation-policy.md`
 
 Rollback is immediate by explicitly passing `--parser-engine legacy`.
+
+Legacy parser lifecycle governance:
+
+- Current lifecycle stage: `Stage 1 — Preferred IR Default`.
+- Legacy mode remains supported for rollback, incident response, and controlled comparison.
+- Retirement is evidence-based rather than date-only.
+- Actual removal requires the criteria in `docs/architecture/legacy-parser-deprecation-policy.md` and a separate future issue/PR.
 
 ## Workshop IR Test Harness
 
@@ -300,8 +361,11 @@ CI execution workflow:
 
 Local-first validation quickstart:
 
-- Combined local gate first:
-  - `bash scripts/ci/local-notebook-validation-gate.sh`
+- Canonical local validation entrypoint:
+	- `.venv/bin/python scripts/ci/run-local-validation.py`
+	- Combined machine-readable report: `generated/validation/local-validation-report.json`
+- Compatibility wrapper for the canonical entrypoint:
+	- `bash scripts/ci/local-notebook-validation-gate.sh`
 - Deterministic generation verification (two isolated runs, inventory/hash/semantic checks):
 	- `bash scripts/ci/verify-deterministic-notebook-generation.sh`
 - For standalone Python validation commands, prefer the project venv interpreter:
@@ -309,6 +373,17 @@ Local-first validation quickstart:
   - `.venv/bin/python scripts/ci/check-generated-python-notebooks.py --input-dir generated/python-notebooks --checks hygiene --published-dir notebooks/workshops`
   - `.venv/bin/python scripts/ci/assert-r-python-equivalence.py --chapters 1,2,3,4,5,6`
   - `.venv/bin/python scripts/ci/execute-generated-python-notebooks.py --input-dir generated/python-notebooks --artifacts-dir generated/notebook-execution-artifacts`
+
+Local Word previews for workshop notebooks:
+
+- `Rscript scripts/render-workshop-word.R`
+- rendered `.docx` files are written to `rendered-workshops/`, which is ignored by Git.
+- use `--type rmd` or `--type ipynb` to render only one notebook family.
+- Word rendering requires Pandoc; on macOS, install it with `brew install pandoc`.
+
+Long-running simulation artifacts:
+
+- see `docs/authoring/simulation-artifacts.md` for precomputed artifact locations and recompute commands.
 
 ### Generated Notebook Artifact Edit Policy
 
@@ -336,11 +411,33 @@ Architecture details and deterministic contract:
 - `docs/architecture/deterministic-notebook-generation.md`
 - `docs/architecture/artifact-provenance-and-ownership.md`
 - `docs/architecture/recovery-and-regeneration.md`
+- `docs/architecture/local-validation-orchestration.md`
 
 Hosted Binder run policy:
 
 - Run full hosted Binder validation only after local-first checks are green.
 - Trigger full hosted Binder checks deliberately via manual workflow dispatch (`workflow_dispatch`) instead of on every development push.
+
+Validation levels:
+
+1. Local development checks
+	- `.venv/bin/python scripts/ci/run-local-validation.py`
+	- use this before pushing routine notebook, renderer, or Binder-affecting changes
+2. Lightweight pull-request checks
+	- PR-triggered workflow checks on scoped paths only
+	- intended to catch obvious integration regressions without rerunning every expensive hosted job on every branch push
+3. Full pre-merge integration validation
+	- use deliberate hosted `workflow_dispatch` runs when local checks are green but Binder/runtime or publication-sensitive changes need full integration evidence
+4. Post-merge publication/synchronization workflows
+	- `main`-only export/publication flows and scheduled/manual Binder launch checks
+
+GitHub Actions minute discipline:
+
+- complete local checks before pushing;
+- batch locally validated commits into one push where practical;
+- avoid editing `.binder/*` in the same push as unrelated content when a fresh Binder build is not needed;
+- rerun a failed hosted job only for likely transient infrastructure failures or after a relevant fix;
+- inspect repository Actions usage before running repeated expensive manual workflows if usage is already high.
 
 Publication gating:
 

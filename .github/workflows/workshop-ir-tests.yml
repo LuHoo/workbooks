@@ -69,6 +69,8 @@ jobs:
     env:
       PYTHON_VERSION: "3.10"
       R_VERSION: "4.3.1"
+      FSAUDIT_REF: "5a36801a712d9d736bb2c5a3992e7b8b644c7418"
+      AICPA_REF: "4a49d0357544eb22ed3314005af2f82b3cf0f53a"
 
     steps:
       - name: Checkout repository
@@ -84,12 +86,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Install system libraries for R packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev libssl-dev libxml2-dev libuv1-dev \
+            libfontconfig1-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev libpng-dev \
+            libtiff-dev libjpeg-dev libwebp-dev pkg-config
+
       - name: Install test dependencies
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          Rscript -e "install.packages(c('jsonlite', 'knitr', 'remotes'), repos='https://cloud.r-project.org')"
-          Rscript -e "remotes::install_github('LuHoo/FSaudit', upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
+          Rscript .binder/install.R
           python -m pip install --upgrade pip
           python -m pip install rpy2==3.6.7 pandas==2.3.3 scipy==1.15.3
 

@@ -314,8 +314,12 @@ Population characteristics of the file inventoryData: number of items:
 library(ggplot2)
 library(magrittr)
 library(FSaudit)
-library(kthemes)
-theme_set(theme_kpmg())
+if (requireNamespace("kthemes", quietly = TRUE)) {
+  library(kthemes)
+  theme_set(theme_kpmg())
+} else {
+  theme_set(theme_grey())
+}
 RNGkind(sample.kind = "Rounding")
 names(inventoryData)
 (N <- nrow(inventoryData))

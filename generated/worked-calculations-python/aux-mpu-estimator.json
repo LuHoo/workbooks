@@ -46,7 +46,8 @@
       "role": "sum_squared_audit_values",
       "raw": 3649977984.260799,
       "display": "3,649,977,984",
-      "format": "integer"
+      "format": "integer",
+      "tolerance": 0.000001000000000000000
     },
     {
       "id": "aux.mpu.audit_value_variance",

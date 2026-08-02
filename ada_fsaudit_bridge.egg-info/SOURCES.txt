@@ -4,6 +4,7 @@ ada_fsaudit_bridge/__init__.py
 ada_fsaudit_bridge/api.py
 ada_fsaudit_bridge/conversion.py
 ada_fsaudit_bridge/errors.py
+ada_fsaudit_bridge/manuscript_registry.py
 ada_fsaudit_bridge/models.py
 ada_fsaudit_bridge/native_stats.py
 ada_fsaudit_bridge/session.py

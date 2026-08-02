@@ -150,56 +150,6 @@
   workshop_id: WX-goodness-of-fit-6.2-9
 - lo_id: LO-C6-23
   workshop_id: WX-goodness-of-fit-6.2-9
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.1-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.1-2
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.1-3
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.10-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.10-2
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.2-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.3-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.4-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.5-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.5-2
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.5-3
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.6-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.6-2
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.6-3
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.7-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.7-2
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.7-3
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-1
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-2
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-3
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-4
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-5
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-6
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.8-7
-- lo_id: LO-C4-01
-  workshop_id: WX-hypothesis-testing-4.9-1
 - lo_id: LO-C1-01
   workshop_id: WX-probability-distributions-1.1-1
 - lo_id: LO-C1-01
@@ -600,16 +550,24 @@
 - lo_id: LO-C3-16
   workshop_id: WX-auxiliary-variables-and-stratification-3.7-1
 
+- lo_id: LO-C4-01
+  workshop_id: WX-hypothesis-testing-4.1-1
 - lo_id: LO-C4-02
   workshop_id: WX-hypothesis-testing-4.1-1
+- lo_id: LO-C4-02
+  workshop_id: WX-hypothesis-testing-4.2-1
 - lo_id: LO-C4-03
   workshop_id: WX-hypothesis-testing-4.3-1
 - lo_id: LO-C4-04
   workshop_id: WX-hypothesis-testing-4.1-1
+- lo_id: LO-C4-09
+  workshop_id: WX-hypothesis-testing-4.4-1
 - lo_id: LO-C4-05
   workshop_id: WX-hypothesis-testing-4.1-1
 - lo_id: LO-C4-06
   workshop_id: WX-hypothesis-testing-4.5-1
+- lo_id: LO-C4-15
+  workshop_id: WX-hypothesis-testing-4.6-1
 - lo_id: LO-C4-07
   workshop_id: WX-hypothesis-testing-4.8-1
 - lo_id: LO-C4-08

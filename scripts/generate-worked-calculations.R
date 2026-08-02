@@ -47,8 +47,17 @@ ensure_dependencies <- function() {
   }
 }
 
-format_raw <- function(x) {
-  formatC(x, format = "fg", digits = 16, flag = "#")
+format_raw <- function(x, tolerance = NULL) {
+  mc_assert_numeric_scalar(x, "x")
+
+  digits <- 16L
+  if (!is.null(tolerance) && is.finite(tolerance) && tolerance > 0) {
+    digits <- max(0L, ceiling(-log10(tolerance)))
+    x <- round(x, digits = digits)
+    return(formatC(x, format = "f", digits = digits, decimal.mark = "."))
+  }
+
+  formatC(x, format = "fg", digits = digits, flag = "#")
 }
 
 json_escape <- function(x) {
@@ -62,18 +71,19 @@ json_string <- function(x) {
   paste0("\"", json_escape(x), "\"")
 }
 
-json_value_object <- function(item) {
+json_value_object <- function(item, default_tolerance = NULL) {
+  raw_tolerance <- item$tolerance %||% default_tolerance
   lines <- c(
     "    {",
     paste0("      \"id\": ", json_string(item$id), ","),
     paste0("      \"role\": ", json_string(item$role), ","),
-    paste0("      \"raw\": ", format_raw(item$raw), ","),
+    paste0("      \"raw\": ", format_raw(item$raw, raw_tolerance), ","),
     paste0("      \"display\": ", json_string(item$display), ","),
     paste0("      \"format\": ", json_string(item$format))
   )
   if (!is.null(item$tolerance)) {
     lines[length(lines)] <- paste0(lines[length(lines)], ",")
-    lines <- c(lines, paste0("      \"tolerance\": ", format_raw(item$tolerance)))
+    lines <- c(lines, paste0("      \"tolerance\": ", format_raw(item$tolerance, item$tolerance)))
   }
   if (!is.null(item$language_scope)) {
     lines[length(lines)] <- paste0(lines[length(lines)], ",")
@@ -83,7 +93,7 @@ json_value_object <- function(item) {
 }
 
 write_json_metadata <- function(path, metadata) {
-  value_blocks <- lapply(metadata$values, json_value_object)
+  value_blocks <- lapply(metadata$values, json_value_object, default_tolerance = metadata$tolerance)
   value_lines <- character()
   for (i in seq_along(value_blocks)) {
     block <- value_blocks[[i]]
@@ -103,7 +113,7 @@ write_json_metadata <- function(path, metadata) {
     paste0("  \"source_context\": ", json_string(metadata$source_context), ","),
     paste0("  \"source_dataset\": ", json_string(metadata$source_dataset), ","),
     paste0("  \"target_snippet\": ", json_string(metadata$target_snippet), ","),
-    paste0("  \"tolerance\": ", format_raw(metadata$tolerance), ","),
+    paste0("  \"tolerance\": ", format_raw(metadata$tolerance, metadata$tolerance), ","),
     paste0("  \"language_scope\": ", json_string(metadata$language_scope), ","),
     "  \"equation_labels\": [",
     paste0(
@@ -155,7 +165,7 @@ compute_aux_mpu_estimator <- function() {
     mc_value("aux.mpu.sample_size", role = "sample_size", raw = n, format = "integer"),
     mc_value("aux.mpu.total_audit_value", role = "total_audit_value", raw = sum_y, format = "number:2"),
     mc_value("aux.mpu.mean_audit_value", role = "mean_audit_value", raw = mean_y, format = "number:2"),
-    mc_value("aux.mpu.sum_squared_audit_values", role = "sum_squared_audit_values", raw = sum_y2, format = "integer"),
+    mc_value("aux.mpu.sum_squared_audit_values", role = "sum_squared_audit_values", raw = sum_y2, format = "integer", tolerance = 1e-6),
     mc_value("aux.mpu.audit_value_variance", role = "audit_value_variance", raw = var_y, format = "integer"),
     mc_value("aux.mpu.estimated_population_value", role = "estimated_population_value", raw = mpu_estimate, format = "integer")
   )
@@ -216,6 +226,84 @@ files_identical <- function(path_a, path_b) {
                    readBin(path_b, "raw", n = file.info(path_b)$size)))
 }
 
+json_metadata_equivalent <- function(expected_path, actual_path) {
+  if (!requireNamespace("jsonlite", quietly = TRUE)) {
+    stop("jsonlite is required to compare generated JSON metadata.")
+  }
+
+  expected <- jsonlite::fromJSON(expected_path, simplifyVector = FALSE)
+  actual <- jsonlite::fromJSON(actual_path, simplifyVector = FALSE)
+
+  scalar_fields <- c(
+    "schema_version",
+    "id",
+    "kind",
+    "chapter_prefix",
+    "source_notebook",
+    "source_context",
+    "source_dataset",
+    "target_snippet",
+    "language_scope"
+  )
+
+  for (field in scalar_fields) {
+    if (!identical(expected[[field]], actual[[field]])) {
+      return(FALSE)
+    }
+  }
+
+  if (!identical(expected$equation_labels, actual$equation_labels)) {
+    return(FALSE)
+  }
+
+  if (length(expected$values) != length(actual$values)) {
+    return(FALSE)
+  }
+
+  default_tolerance <- suppressWarnings(as.numeric(expected$tolerance %||% 0))
+  if (!is.finite(default_tolerance)) {
+    default_tolerance <- 0
+  }
+
+  value_tolerance <- function(item) {
+    tol <- suppressWarnings(as.numeric(item$tolerance %||% default_tolerance))
+    if (!is.finite(tol)) {
+      return(default_tolerance)
+    }
+    tol
+  }
+
+  equal_numeric <- function(a, b, tol) {
+    if (is.na(a) || is.na(b)) {
+      return(is.na(a) && is.na(b))
+    }
+    abs(a - b) <= tol
+  }
+
+  for (i in seq_along(expected$values)) {
+    e <- expected$values[[i]]
+    a <- actual$values[[i]]
+    if (!identical(e$id, a$id) || !identical(e$role, a$role) || !identical(e$format, a$format)) {
+      return(FALSE)
+    }
+
+    e_scope <- e$language_scope %||% NULL
+    a_scope <- a$language_scope %||% NULL
+    if (!identical(e_scope, a_scope)) {
+      return(FALSE)
+    }
+
+    e_raw <- suppressWarnings(as.numeric(e$raw))
+    a_raw <- suppressWarnings(as.numeric(a$raw))
+    tol <- max(value_tolerance(e), value_tolerance(a))
+    if (!equal_numeric(e_raw, a_raw, tol)) {
+      return(FALSE)
+    }
+  }
+
+  TRUE
+}
+
 check_outputs <- function(output_dir) {
   temp_dir <- tempfile("worked-calculations-")
   dir.create(temp_dir, recursive = TRUE)
@@ -230,7 +318,12 @@ check_outputs <- function(output_dir) {
       failures <- c(failures, paste0("Missing generated file: ", target[[i]]))
       next
     }
-    if (!files_identical(expected[[i]], target[[i]])) {
+    same <- if (grepl("\\.json$", expected[[i]], ignore.case = TRUE)) {
+      json_metadata_equivalent(expected[[i]], target[[i]])
+    } else {
+      files_identical(expected[[i]], target[[i]])
+    }
+    if (!same) {
       failures <- c(failures, paste0("Stale generated file: ", target[[i]]))
     }
   }

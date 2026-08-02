@@ -8,16 +8,21 @@ options(repos = c(
 
 runtime_packages <- c(
   "IRkernel",
+  "xfun",
   "jsonlite",
   "knitr",
   "rmarkdown",
   "ggplot2",
+  "dplyr",
   "car",
   "pbkrtest",
   "lme4",
   "nloptr",
   "gridExtra",
+  "magrittr",
+  "plyr",
   "tidyr",
+  "tidyverse",
   "corrplot",
   "lmtest",
   "latex2exp",
@@ -63,6 +68,10 @@ remotes::install_github(
   upgrade = "never",
   dependencies = FALSE
 )
+
+# Force a source rebuild so lme4 links against the Matrix ABI present in the
+# active library, avoiding binary/source ABI drift on CI images.
+install.packages("lme4", type = "source")
 
 missing_runtime <- runtime_packages[
   !vapply(runtime_packages, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))

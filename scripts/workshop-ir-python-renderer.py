@@ -574,6 +574,13 @@ def normalize_r_style_code_for_python(lines: List[str]) -> List[str]:
             r"(lambda _obs, _p: chisquare(f_obs=_obs, f_exp=_obs.sum() * (_p / _p.sum())))(np.asarray(\1, dtype=float), np.asarray(\2, dtype=float))",
             updated,
         )
+        updated = re.sub(r"\bcat\s*\(", "print(", updated)
+        updated = re.sub(r"^\s*if\s*\((.+)\)\s*\{\s*$", r"if \1:", updated)
+        updated = re.sub(r"^\s*\}\s*else\s+if\s*\((.+)\)\s*\{\s*$", r"elif \1:", updated)
+        updated = re.sub(r"^\s*else\s+if\s*\((.+)\)\s*\{\s*$", r"elif \1:", updated)
+        updated = re.sub(r"^\s*\}\s*else\s*\{\s*$", "else:", updated)
+        updated = re.sub(r"^\s*else\s*\{\s*$", "else:", updated)
+        updated = re.sub(r"^\s*\}\s*$", "", updated)
         updated = re.sub(r"\bc\(([^()]*)\)", r"np.array([\1])", updated)
         updated = re.sub(
             r"^\s*([A-Za-z_][A-Za-z0-9_]*)\[\"([A-Za-z_][A-Za-z0-9_]*)\"\]\s*=\s*np\.array\((\[.*\])\)\s*$",

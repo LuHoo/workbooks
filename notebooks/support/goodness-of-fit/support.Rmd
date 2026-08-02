@@ -29,7 +29,9 @@ library(tidyverse)
 library(lmtest) # Diagnostic tests for linear models
 # library(latex2exp)       # Use LaTeX expressions in plots
 # library(scales)
-library(kthemes)
+if (requireNamespace("kthemes", quietly = TRUE)) {
+  library(kthemes)
+}
 theme_set(theme_grey())
 ```
 

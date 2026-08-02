@@ -462,8 +462,12 @@ knitr::opts_chunk$set(echo = TRUE)
 options(pillar.sigfig = 4)
 library(FSaudit)
 library(ggplot2)
-library(kthemes)
-theme_set(theme_kpmg())
+if (requireNamespace("kthemes", quietly = TRUE)) {
+  library(kthemes)
+  theme_set(theme_kpmg())
+} else {
+  theme_set(theme_grey())
+}
 ```
 
 ## Attribute Sampling

@@ -90,15 +90,17 @@ jobs:
       - name: Install system libraries for R packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libuv1-dev
+          sudo apt-get install -y \
+            libcurl4-openssl-dev libssl-dev libxml2-dev libuv1-dev \
+            libfontconfig1-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev libpng-dev \
+            libtiff-dev libjpeg-dev libwebp-dev pkg-config
 
       - name: Install R dependencies
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          Rscript -e "install.packages(c('IRkernel','jsonlite','knitr','rmarkdown','remotes','devtools','readr','ggplot2','car','gridExtra','tidyr','corrplot','lmtest','latex2exp','scales'), repos='https://cloud.r-project.org')"
-          Rscript -e "remotes::install_github(sprintf('LuHoo/FSaudit@%s', Sys.getenv('FSAUDIT_REF')), upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
-          Rscript -e "remotes::install_github(sprintf('LuHoo/aicpa@%s', Sys.getenv('AICPA_REF')), upgrade = 'never', dependencies = TRUE, auth_token = Sys.getenv('GITHUB_PAT'))"
+          Rscript .binder/install.R
+          Rscript -e "install.packages('devtools', repos = Sys.getenv('RSPM', unset = 'https://cloud.r-project.org'))"
 
       - name: Install Python dependencies
         run: |

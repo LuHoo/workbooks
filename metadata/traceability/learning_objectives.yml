@@ -15,8 +15,8 @@
 - id: LO-C4-01
   chapter: 4
   scope: chapter
-  text: Define auxiliary variables and stratification in the context of sampling.
-  bloom: apply
+  text: define the purpose of statistical hypothesis testing in substantive sampling and MUS contexts.
+  bloom: remember
   competency: technical_skills
   status: active
 - id: LO-C5-01
@@ -541,7 +541,7 @@
 - id: LO-C4-02
   chapter: 4
   scope: chapter
-  text: define the purpose of a hypothesis test and describe the steps involved in carrying it out.
+  text: define and distinguish null hypothesis, alternative hypothesis, significance level, p-value, critical region, and one-sided confidence bound.
   bloom: remember
   competency: technical_skills
   status: active
@@ -550,25 +550,25 @@
 - id: LO-C4-03
   chapter: 4
   scope: chapter
-  text: distinguish between Type I and Type II errors, including their definitions and implications.
+  text: distinguish Type I error, Type II error, and test power in terms of evidential risk.
   bloom: remember
-  competency: technical_skills
+  competency: statistical_reasoning
   status: active
   source: manuscript
 
 - id: LO-C4-04
   chapter: 4
   scope: chapter
-  text: list the conditions under which hypothesis tests are valid.
-  bloom: remember
-  competency: technical_skills
+  text: explain how sample size, significance level, tolerable misstatement, expected error, and critical region jointly affect test design.
+  bloom: understand
+  competency: statistical_reasoning
   status: active
   source: manuscript
 
 - id: LO-C4-05
   chapter: 4
   scope: chapter
-  text: explain how the required sample size is determined for a hypothesis test, taking into account factors like significance level, effect size, and power.
+  text: explain when attribute testing and MUS are appropriate and what types of conclusions each can support.
   bloom: understand
   competency: statistical_reasoning
   status: active
@@ -577,7 +577,7 @@
 - id: LO-C4-06
   chapter: 4
   scope: chapter
-  text: identify scenarios where hypothesis testing is feasible and appropriate.
+  text: explain why p-values do not prove hypotheses and why failure to reject does not imply acceptance of the null hypothesis.
   bloom: understand
   competency: statistical_reasoning
   status: active
@@ -586,7 +586,7 @@
 - id: LO-C4-07
   chapter: 4
   scope: chapter
-  text: describe how the theory of hypothesis testing is applied within the context of Monetary Unit Sampling (MUS).
+  text: explain the assumptions and validity conditions required for interpreting hypothesis-test outcomes in this chapter.
   bloom: understand
   competency: statistical_reasoning
   status: active
@@ -595,7 +595,7 @@
 - id: LO-C4-08
   chapter: 4
   scope: chapter
-  text: conduct a hypothesis test using sample data, including interpreting the results in the context of an audit.
+  text: compute required sample size and critical-region specifications for stated sampling scenarios.
   bloom: apply
   competency: technical_skills
   status: active
@@ -604,7 +604,7 @@
 - id: LO-C4-09
   chapter: 4
   scope: chapter
-  text: implement selection methods for a Monetary Unit Sample, ensuring adherence to best practices and auditing standards.
+  text: execute attribute-sampling hypothesis tests and compute decision quantities using critical-region, p-value, and confidence-bound approaches.
   bloom: apply
   competency: technical_skills
   status: active
@@ -613,7 +613,7 @@
 - id: LO-C4-10
   chapter: 4
   scope: chapter
-  text: use MUS to evaluate the sufficiency and reliability of audit evidence.
+  text: execute MUS selection and evaluation procedures for 100 percent and partial-error settings using appropriate evaluation methods.
   bloom: apply
   competency: technical_skills
   status: active
@@ -622,8 +622,8 @@
 - id: LO-C4-11
   chapter: 4
   scope: chapter
-  text: assess the role of sample size, selection methods, and assumptions in determining the validity and reliability of a hypothesis test.
-  bloom: analyze
+  text: apply structured uncertainty communication to report test outcomes using confidence language and explicit error-risk framing.
+  bloom: apply
   competency: statistical_reasoning
   status: active
   source: manuscript
@@ -631,7 +631,7 @@
 - id: LO-C4-12
   chapter: 4
   scope: chapter
-  text: compare the pros and cons of different selection methods in Monetary Unit Sampling, such as random sampling versus systematic selection.
+  text: analyze how alternative design choices (alpha, critical region width, expected error, and selection method) change inferential outcomes.
   bloom: analyze
   competency: statistical_reasoning
   status: active
@@ -640,35 +640,35 @@
 - id: LO-C4-13
   chapter: 4
   scope: chapter
-  text: evaluate the results of a Monetary Unit Sample to determine whether audit objectives have been met.
-  bloom: evaluate
-  competency: professional_judgment
+  text: analyze non-significant outcomes to distinguish insufficient evidence from evidence of no material misstatement.
+  bloom: analyze
+  competency: statistical_reasoning
   status: active
   source: manuscript
 
 - id: LO-C4-14
   chapter: 4
   scope: chapter
-  text: critically appraise the robustness of a hypothesis test or MUS procedure, identifying potential limitations or areas for improvement.
-  bloom: evaluate
-  competency: professional_judgment
+  text: compare sampling-selection methods in terms of statistical behavior, practical feasibility, and interpretation consequences.
+  bloom: analyze
+  competency: statistical_reasoning
   status: active
   source: manuscript
 
 - id: LO-C4-15
   chapter: 4
   scope: chapter
-  text: develop a step-by-step plan for carrying out a hypothesis test tailored to a specific audit scenario.
-  bloom: create
-  competency: professional_judgment
+  text: evaluate whether observed test results support a conclusion of statistical consistency with the stated misstatement threshold, including explicit limitations.
+  bloom: evaluate
+  competency: statistical_reasoning
   status: active
   source: manuscript
 
 - id: LO-C4-16
   chapter: 4
   scope: chapter
-  text: design a Monetary Unit Sampling procedure, including sample selection and evaluation methods, to achieve audit objectives effectively.
-  bloom: create
+  text: evaluate and communicate what the chapter’s hypothesis-test evidence supports and does not support, without prescribing audit-response actions.
+  bloom: evaluate
   competency: professional_judgment
   status: active
   source: manuscript
