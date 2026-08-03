@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "est.mean.minimum_sample_size_infinite",
+  "kind": "worked_calculation",
+  "chapter_prefix": "est",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.4 minimum sample size for mean without finite-population correction",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:minimum_sample_size"
+  ],
+  "values": [
+    {
+      "id": "est.mean.population_size",
+      "role": "population_size",
+      "raw": 2222.00000000,
+      "display": "2,222",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.t_value_95",
+      "role": "t_value_95",
+      "raw": 2.00960000,
+      "display": "2.010",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.sample_variance",
+      "role": "sample_variance",
+      "raw": 2364064.25960000,
+      "display": "2,364,064",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.target_precision_600k",
+      "role": "target_precision_600k",
+      "raw": 600000.00000000,
+      "display": "600,000",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.min_n_infinite",
+      "role": "min_n_infinite",
+      "raw": 130.93430000,
+      "display": "130.93",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.min_n_infinite_ceiling",
+      "role": "min_n_infinite_ceiling",
+      "raw": 131.00000000,
+      "display": "131",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.additional_n_required",
+      "role": "additional_n_required",
+      "raw": 81.00000000,
+      "display": "81",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

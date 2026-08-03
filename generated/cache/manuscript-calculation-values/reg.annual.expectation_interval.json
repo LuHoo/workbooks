@@ -1,0 +1,79 @@
+{
+  "id": "reg.annual.expectation_interval",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Exercise 5.35 and Exercise 5.36 annual expectation, annual interval, and annual difference",
+  "source_dataset": "USSteamCo hold-out predictions",
+  "target_snippet": "generated/worked-calculations/reg-annual-expectation-interval.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": ["eq:annual_expectation", "eq:combined_prediction_standard_error", "eq:annual_prediction_interval"],
+  "values": [
+    {
+      "id": "reg.annual.annual_prediction",
+      "role": "annual_prediction",
+      "raw": 190680684.1512,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.annual_se",
+      "role": "annual_se",
+      "raw": 6323301.0674,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.var_mean_annual",
+      "role": "var_mean_annual",
+      "raw": 14886605275947.465,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.annual.var_future_annual",
+      "role": "var_future_annual",
+      "raw": 25097531113309.016,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.annual.coefficient_share",
+      "role": "coefficient_share",
+      "raw": 0.3723,
+      "format": "percentage:1"
+    },
+    {
+      "id": "reg.annual.future_share",
+      "role": "future_share",
+      "raw": 0.6277,
+      "format": "percentage:1"
+    },
+    {
+      "id": "reg.annual.annual_interval_lower",
+      "role": "annual_interval_lower",
+      "raw": 173291633.6996,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.annual_interval_upper",
+      "role": "annual_interval_upper",
+      "raw": 208069734.6028,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.annual_recorded",
+      "role": "annual_recorded",
+      "raw": 174778400,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.annual_difference",
+      "role": "annual_difference",
+      "raw": -15902284.1512,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.annual_difference_abs",
+      "role": "annual_difference_abs",
+      "raw": 15902284.1512,
+      "format": "integer"
+    }
+  ]
+}

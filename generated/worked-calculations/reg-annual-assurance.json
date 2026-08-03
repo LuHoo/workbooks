@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "reg.annual.assurance",
+  "kind": "worked_calculation",
+  "chapter_prefix": "reg",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Exercise 5.36 acceptable difference range, test statistic, and achieved assurance",
+  "source_dataset": "USSteamCo hold-out predictions",
+  "target_snippet": "generated/worked-calculations/reg-annual-assurance.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:standardized_noncentrality_parameter", "eq:acceptable_difference_range", "eq:test_statistic"
+  ],
+  "values": [
+    {
+      "id": "reg.annual.performance_materiality",
+      "role": "performance_materiality",
+      "raw": 15000000.00000000,
+      "display": "15,000,000",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.annual_prediction",
+      "role": "annual_prediction",
+      "raw": 190680684.15120000,
+      "display": "190,680,684",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.annual_recorded",
+      "role": "annual_recorded",
+      "raw": 174778400.00000000,
+      "display": "174,778,400",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.annual_difference",
+      "role": "annual_difference",
+      "raw": -15902284.15120000,
+      "display": "-15,902,284",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.annual_se",
+      "role": "annual_se",
+      "raw": 6323301.06740000,
+      "display": "6,323,301",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.delta",
+      "role": "delta",
+      "raw": 2.37220000,
+      "display": "2.37",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.adr_lower",
+      "role": "adr_lower",
+      "raw": -17389050.45160000,
+      "display": "-17,389,050",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.adr_upper",
+      "role": "adr_upper",
+      "raw": 17389050.45160000,
+      "display": "17,389,050",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.c_lower",
+      "role": "c_lower",
+      "raw": -2.75000000,
+      "display": "-2.75",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.c_upper",
+      "role": "c_upper",
+      "raw": 2.75000000,
+      "display": "2.75",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.test_statistic",
+      "role": "test_statistic",
+      "raw": -2.51490000,
+      "display": "-2.51",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.assurance_over",
+      "role": "assurance_over",
+      "raw": 0.36920000,
+      "display": "36.9\\%",
+      "format": "percentage:1",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "reg.annual.assurance_under",
+      "role": "assurance_under",
+      "raw": 0.36920000,
+      "display": "36.9\\%",
+      "format": "percentage:1",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "est.prop.minimum_sample_size_normal",
+  "kind": "worked_calculation",
+  "chapter_prefix": "est",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.6 normal-approximation sample size for proportion",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:sampsize_proportion"
+  ],
+  "values": [
+    {
+      "id": "est.prop.z_value_95",
+      "role": "z_value_95",
+      "raw": 1.96000000,
+      "display": "1.96",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.p_hat",
+      "role": "p_hat",
+      "raw": 0.62000000,
+      "display": "0.62",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.one_minus_p_hat",
+      "role": "one_minus_p_hat",
+      "raw": 0.38000000,
+      "display": "0.38",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.target_prop_precision",
+      "role": "target_prop_precision",
+      "raw": 0.10000000,
+      "display": "0.1",
+      "format": "number:1",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.min_n_prop",
+      "role": "min_n_prop",
+      "raw": 90.50480000,
+      "display": "90.5",
+      "format": "number:1",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.min_n_prop_ceiling",
+      "role": "min_n_prop_ceiling",
+      "raw": 91.00000000,
+      "display": "91",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

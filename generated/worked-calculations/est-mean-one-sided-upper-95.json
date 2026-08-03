@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "est.mean.one_sided_upper_95",
+  "kind": "worked_calculation",
+  "chapter_prefix": "est",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.3 one-sided upper confidence interval (95%)",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-mean-one-sided-upper-95.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    
+  ],
+  "values": [
+    {
+      "id": "est.mean.sample_size",
+      "role": "sample_size",
+      "raw": 50.00000000,
+      "display": "50",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.sample_sd",
+      "role": "sample_sd",
+      "raw": 1537.55140000,
+      "display": "1,537.55",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.sample_mean",
+      "role": "sample_mean",
+      "raw": 3014.16000000,
+      "display": "3,014.16",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.t_value_one_sided_95",
+      "role": "t_value_one_sided_95",
+      "raw": 1.67660000,
+      "display": "1.677",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.upper_one_sided_95",
+      "role": "upper_one_sided_95",
+      "raw": 3378.71360000,
+      "display": "3,378.71",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.mean.total_upper_one_sided_95",
+      "role": "total_upper_one_sided_95",
+      "raw": 7507501.59380000,
+      "display": "7,507,502",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

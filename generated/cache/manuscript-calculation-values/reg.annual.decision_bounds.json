@@ -1,0 +1,43 @@
+{
+  "id": "reg.annual.decision_bounds",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Exercise 5.36 decision bounds and acceptable difference range",
+  "source_dataset": "USSteamCo hold-out predictions",
+  "target_snippet": "generated/worked-calculations/reg-annual-decision-bounds.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": "eq:acceptable_difference_range",
+  "values": [
+    {
+      "id": "reg.annual.annual_se",
+      "role": "annual_se",
+      "raw": 6323301.0674,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.adr_lower",
+      "role": "adr_lower",
+      "raw": -17389050.4516,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.adr_upper",
+      "role": "adr_upper",
+      "raw": 17389050.4516,
+      "format": "integer"
+    },
+    {
+      "id": "reg.annual.c_lower",
+      "role": "c_lower",
+      "raw": -2.75,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.annual.c_upper",
+      "role": "c_upper",
+      "raw": 2.75,
+      "format": "number:2"
+    }
+  ]
+}

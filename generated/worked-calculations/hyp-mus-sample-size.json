@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "id": "hyp.mus.sample_size",
+  "kind": "worked_calculation",
+  "chapter_prefix": "hyp",
+  "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+  "source_context": "Exercise 4.6 and Exercise 4.8 MUS sample-size interpolation and tolerable tainting",
+  "source_dataset": "FSaudit::accounts_receivable",
+  "target_snippet": "generated/worked-calculations/hyp-mus-sample-size.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:MUS_sample_size"
+  ],
+  "values": [
+    {
+      "id": "hyp.mus.population_book_total",
+      "role": "population_book_total",
+      "raw": 13500000.00000000,
+      "display": "13,500,000",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.performance_materiality",
+      "role": "performance_materiality",
+      "raw": 450000.00000000,
+      "display": "450,000",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.expected_error",
+      "role": "expected_error",
+      "raw": 100000.00000000,
+      "display": "100,000",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.n_1",
+      "role": "n_1",
+      "raw": 141.00000000,
+      "display": "141",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.n_2",
+      "role": "n_2",
+      "raw": 187.00000000,
+      "display": "187",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k1",
+      "role": "sampling_interval_k1",
+      "raw": 95744.68090000,
+      "display": "95,744.68",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k2",
+      "role": "sampling_interval_k2",
+      "raw": 72192.51340000,
+      "display": "72,192.51",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.expected_error_k2",
+      "role": "expected_error_k2",
+      "raw": 144385.02670000,
+      "display": "144,385.03",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.mu_1",
+      "role": "mu_1",
+      "raw": 436007.00000000,
+      "display": "436,007",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.mu_2",
+      "role": "mu_2",
+      "raw": 577535.00000000,
+      "display": "577,535",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.k_value",
+      "role": "k_value",
+      "raw": 1.00000000,
+      "display": "1",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.n_star",
+      "role": "n_star",
+      "raw": 144.10110000,
+      "display": "144.1",
+      "format": "number:1",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.n_required",
+      "role": "n_required",
+      "raw": 145.00000000,
+      "display": "145",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.t_tol",
+      "role": "t_tol",
+      "raw": 1.09890000,
+      "display": "1.09890",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "hyp.mus.partial_tainting_pct",
+      "role": "partial_tainting_pct",
+      "raw": 0.09890000,
+      "display": "9.890\\%",
+      "format": "percentage:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

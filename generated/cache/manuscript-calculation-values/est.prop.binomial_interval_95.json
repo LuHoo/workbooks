@@ -1,0 +1,49 @@
+{
+  "id": "est.prop.binomial_interval_95",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.6 binomial confidence interval for proportion (95%)",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-prop-binomial-interval-95.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": ["eq:lower_bound_binomial", "eq:upper_bound_binomial"],
+  "values": [
+    {
+      "id": "est.prop.k",
+      "role": "k",
+      "raw": 31,
+      "format": "integer"
+    },
+    {
+      "id": "est.prop.n",
+      "role": "n",
+      "raw": 50,
+      "format": "integer"
+    },
+    {
+      "id": "est.prop.f_value_lower",
+      "role": "f_value_lower",
+      "raw": 1.7356,
+      "format": "number:3"
+    },
+    {
+      "id": "est.prop.f_value_upper",
+      "role": "f_value_upper",
+      "raw": 1.815,
+      "format": "number:3"
+    },
+    {
+      "id": "est.prop.p_lower",
+      "role": "p_lower",
+      "raw": 0.4717,
+      "format": "number:3"
+    },
+    {
+      "id": "est.prop.p_upper",
+      "role": "p_upper",
+      "raw": 0.7535,
+      "format": "number:3"
+    }
+  ]
+}

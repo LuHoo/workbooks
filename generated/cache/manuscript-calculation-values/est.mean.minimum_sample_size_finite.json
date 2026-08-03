@@ -1,0 +1,60 @@
+{
+  "id": "est.mean.minimum_sample_size_finite",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.5 minimum sample size for mean with finite-population correction",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "values": [
+    {
+      "id": "est.mean.population_size",
+      "role": "population_size",
+      "raw": 2222,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.t_value_95",
+      "role": "t_value_95",
+      "raw": 2.0096,
+      "format": "number:3"
+    },
+    {
+      "id": "est.mean.sample_variance",
+      "role": "sample_variance",
+      "raw": 2364064.2596,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.target_precision_300k",
+      "role": "target_precision_300k",
+      "raw": 300000,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.gamma_finite",
+      "role": "gamma_finite",
+      "raw": 4.2426,
+      "format": "number:3"
+    },
+    {
+      "id": "est.mean.min_n_finite",
+      "role": "min_n_finite",
+      "raw": 423.8366,
+      "format": "number:1"
+    },
+    {
+      "id": "est.mean.min_n_finite_ceiling",
+      "role": "min_n_finite_ceiling",
+      "raw": 424,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.min_n_infinite_300k",
+      "role": "min_n_infinite_300k",
+      "raw": 523.7372,
+      "format": "integer"
+    }
+  ]
+}

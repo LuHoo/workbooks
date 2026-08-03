@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "est.prop.point_estimate",
+  "kind": "worked_calculation",
+  "chapter_prefix": "est",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.6 point estimate of the proportion",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-prop-point-estimate.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:sample_proportion"
+  ],
+  "values": [
+    {
+      "id": "est.prop.k",
+      "role": "k",
+      "raw": 31.00000000,
+      "display": "31",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.n",
+      "role": "n",
+      "raw": 50.00000000,
+      "display": "50",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.p_hat",
+      "role": "p_hat",
+      "raw": 0.62000000,
+      "display": "0.62",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

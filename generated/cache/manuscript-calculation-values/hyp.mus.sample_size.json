@@ -1,0 +1,103 @@
+{
+  "id": "hyp.mus.sample_size",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+  "source_context": "Exercise 4.6 and Exercise 4.8 MUS sample-size interpolation and tolerable tainting",
+  "source_dataset": "FSaudit::accounts_receivable",
+  "target_snippet": "generated/worked-calculations/hyp-mus-sample-size.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": "eq:MUS_sample_size",
+  "values": [
+    {
+      "id": "hyp.mus.population_book_total",
+      "role": "population_book_total",
+      "raw": 13500000,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.performance_materiality",
+      "role": "performance_materiality",
+      "raw": 450000,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.expected_error",
+      "role": "expected_error",
+      "raw": 100000,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.n_1",
+      "role": "n_1",
+      "raw": 141,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.n_2",
+      "role": "n_2",
+      "raw": 187,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k1",
+      "role": "sampling_interval_k1",
+      "raw": 95744.6809,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k2",
+      "role": "sampling_interval_k2",
+      "raw": 72192.5134,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.expected_error_k2",
+      "role": "expected_error_k2",
+      "raw": 144385.0267,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.mu_1",
+      "role": "mu_1",
+      "raw": 436007,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.mu_2",
+      "role": "mu_2",
+      "raw": 577535,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.k_value",
+      "role": "k_value",
+      "raw": 1,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.n_star",
+      "role": "n_star",
+      "raw": 144.1011,
+      "format": "number:1"
+    },
+    {
+      "id": "hyp.mus.n_required",
+      "role": "n_required",
+      "raw": 145,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.t_tol",
+      "role": "t_tol",
+      "raw": 1.0989,
+      "format": "number:5"
+    },
+    {
+      "id": "hyp.mus.partial_tainting_pct",
+      "role": "partial_tainting_pct",
+      "raw": 0.0989,
+      "format": "percentage:3"
+    }
+  ]
+}

@@ -396,6 +396,98 @@ upper_bound(k=3, popn=13500000, n=145, alpha=0.05)
 ```
 <!-- ADA:END -->
 
+```{r hyp-worked-calculation-values-mus-sample-size, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+if (!requireNamespace("jsonlite", quietly = TRUE)) {
+  stop("jsonlite is required to emit manuscript calculation values.")
+}
+
+find_repo_root <- function(start = getwd()) {
+  current <- normalizePath(start, winslash = "/", mustWork = TRUE)
+  repeat {
+    if (file.exists(file.path(current, "pyproject.toml")) || file.exists(file.path(current, ".git"))) {
+      return(current)
+    }
+    parent <- dirname(current)
+    if (identical(parent, current)) {
+      stop("Unable to locate repository root from working directory: ", start)
+    }
+    current <- parent
+  }
+}
+
+repo_root <- find_repo_root()
+values_output_dir <- file.path(
+  repo_root,
+  "generated",
+  "cache",
+  "manuscript-calculation-values"
+)
+dir.create(values_output_dir, recursive = TRUE, showWarnings = FALSE)
+
+write_values_entry <- function(file_name, entry) {
+  values_output_path <- file.path(values_output_dir, file_name)
+  jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
+  message("Wrote manuscript calculation values: ", values_output_path)
+}
+
+X_total <- 13500000
+expected_error <- 100000
+performance_materiality <- 450000
+
+att_k1 <- att_obj(alpha = 0.05, popn = X_total, popdev = performance_materiality)
+att_k1 <- size(att_k1, c = 1)
+n_1 <- att_k1$n
+
+att_k2 <- att_obj(alpha = 0.05, popn = X_total, popdev = performance_materiality)
+att_k2 <- size(att_k2, c = 2)
+n_2 <- att_k2$n
+
+sampling_interval_k1 <- X_total / n_1
+sampling_interval_k2 <- X_total / n_2
+expected_error_k2 <- 2 * sampling_interval_k2
+
+mu_1 <- upper(k = 1, popn = X_total, n = ar$n, alpha = .05)
+mu_2 <- upper(k = 2, popn = X_total, n = ar$n, alpha = .05)
+
+k_value <- 1
+n_star <- (k_value - n_1 / (n_2 - n_1)) / ((expected_error / X_total) - 1 / (n_2 - n_1))
+n_required <- ceiling(n_star)
+t_tol <- k_value + (performance_materiality - mu_1) / (mu_2 - mu_1)
+partial_tainting_pct <- (t_tol - k_value) * 100
+
+write_values_entry(
+  "hyp.mus.sample_size.json",
+  list(
+    id = "hyp.mus.sample_size",
+    kind = "worked_calculation",
+    source_notebook = "notebooks/support/hypothesis-testing/support.Rmd",
+    source_context = "Exercise 4.6 and Exercise 4.8 MUS sample-size interpolation and tolerable tainting",
+    source_dataset = "FSaudit::accounts_receivable",
+    target_snippet = "generated/worked-calculations/hyp-mus-sample-size.tex",
+    tolerance = 1e-8,
+    language_scope = "shared",
+    equation_labels = c("eq:MUS_sample_size"),
+    values = list(
+      list(id = "hyp.mus.population_book_total", role = "population_book_total", raw = X_total, format = "integer"),
+      list(id = "hyp.mus.performance_materiality", role = "performance_materiality", raw = performance_materiality, format = "integer"),
+      list(id = "hyp.mus.expected_error", role = "expected_error", raw = expected_error, format = "integer"),
+      list(id = "hyp.mus.n_1", role = "n_1", raw = n_1, format = "integer"),
+      list(id = "hyp.mus.n_2", role = "n_2", raw = n_2, format = "integer"),
+      list(id = "hyp.mus.sampling_interval_k1", role = "sampling_interval_k1", raw = sampling_interval_k1, format = "number:2"),
+      list(id = "hyp.mus.sampling_interval_k2", role = "sampling_interval_k2", raw = sampling_interval_k2, format = "number:2"),
+      list(id = "hyp.mus.expected_error_k2", role = "expected_error_k2", raw = expected_error_k2, format = "number:2"),
+      list(id = "hyp.mus.mu_1", role = "mu_1", raw = mu_1, format = "integer"),
+      list(id = "hyp.mus.mu_2", role = "mu_2", raw = mu_2, format = "integer"),
+      list(id = "hyp.mus.k_value", role = "k_value", raw = k_value, format = "integer"),
+      list(id = "hyp.mus.n_star", role = "n_star", raw = n_star, format = "number:1"),
+      list(id = "hyp.mus.n_required", role = "n_required", raw = n_required, format = "integer"),
+      list(id = "hyp.mus.t_tol", role = "t_tol", raw = t_tol, format = "number:5"),
+      list(id = "hyp.mus.partial_tainting_pct", role = "partial_tainting_pct", raw = partial_tainting_pct / 100, format = "percentage:3")
+    )
+  )
+)
+```
+
 ### Exercise 4.9. Cell evaluation
 
 The results of the cell evaluation method, as presented in Table 5.8, can also be obtained, by changing the evaluation method.

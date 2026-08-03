@@ -1,0 +1,61 @@
+{
+  "id": "est.mean.stein_interval",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.4 Stein two-step confidence interval",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-mean-stein-interval.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": "eq:stein",
+  "values": [
+    {
+      "id": "est.mean.population_size",
+      "role": "population_size",
+      "raw": 2222,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.sample2_mean",
+      "role": "sample2_mean",
+      "raw": 3332.1374,
+      "format": "number:2"
+    },
+    {
+      "id": "est.mean.t_value_95",
+      "role": "t_value_95",
+      "raw": 2.0096,
+      "format": "number:3"
+    },
+    {
+      "id": "est.mean.sample_sd",
+      "role": "sample_sd",
+      "raw": 1537.5514,
+      "format": "number:2"
+    },
+    {
+      "id": "est.mean.n_total",
+      "role": "n_total",
+      "raw": 131,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.stein_total_point",
+      "role": "stein_total_point",
+      "raw": 7404009.313,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.stein_precision",
+      "role": "stein_precision",
+      "raw": 599849.5204,
+      "format": "integer"
+    },
+    {
+      "id": "est.mean.target_precision_600k",
+      "role": "target_precision_600k",
+      "raw": 600000,
+      "format": "integer"
+    }
+  ]
+}

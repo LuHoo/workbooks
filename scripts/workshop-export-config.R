@@ -32,11 +32,11 @@ get_workshop_export_configs <- function() {
       title = "Estimating the population mean and proportion",
       expected_chunks = c(
         "2.1" = 2L,
-        "2.2" = 2L,
+        "2.2" = 3L,
         "2.3" = 6L,
         "2.4" = 2L,
         "2.5" = 2L,
-        "2.6" = 2L
+        "2.6" = 3L
       )
     ),
     make_workshop_export_config(
@@ -52,7 +52,7 @@ get_workshop_export_configs <- function() {
         "3.6" = 4L,
         "3.7" = 7L,
         "3.8" = 2L,
-        "3.9" = 7L
+        "3.9" = 8L
       )
     ),
     make_workshop_export_config(
@@ -67,7 +67,7 @@ get_workshop_export_configs <- function() {
         "4.5" = 3L,
         "4.6" = 3L,
         "4.7" = 3L,
-        "4.8" = 7L,
+        "4.8" = 8L,
         "4.9" = 1L,
         "4.10" = 2L
       )
@@ -112,7 +112,7 @@ get_workshop_export_configs <- function() {
         "5.33" = 2L,
         "5.34" = 1L,
         "5.35" = 3L,
-        "5.36" = 6L
+        "5.36" = 7L
       )
     ),
     make_workshop_export_config(

@@ -121,7 +121,7 @@ The monthly gross salaries of employees are quantitative and expressed as numeri
   \bar{y} = \frac{\sum y_i}{n} 
 \end{equation*}
 
-The result for our sample is 150,708 / 50 = 3,014.16.
+\input{generated/worked-calculations/est-mean-point-estimate}
 
 \bigskip
 
@@ -132,11 +132,7 @@ This estimate can easily be expanded to obtain an estimate of the total monthly 
   \label{eq:estimate_total}
 \end{equation} 
 
-The estimated total gross payroll for January 20XX is therefore
-
-\begin{equation*}
-\hat{Y} = 2,222 \cdot \frac{150,708}{50} = 6,697,464
-\end{equation*}
+\input{generated/worked-calculations/est-total-point-estimate}
 
 \index{point estimate|)}\index{estimate!point|)}
 % section point_estimation (end)
@@ -239,35 +235,12 @@ To achieve a more accurate estimate, decreasing confidence is often undesirable 
 
 \bigskip
 We use the $t$ distribution with an $\alpha$ value of 5\% to obtain a confidence level of 95\%, and we use $n - 1 = 49$ degrees of freedom. 
-First, we estimate the variance in the population from the variance of the sample.
 
-\begin{equation*}
-s^2 = \frac{ (1,612 - 3,014.16)^2 + (4,818 - 3,014.16)^2 + \ldots}{50-1} = 2,364,064
-\end{equation*} 
-
-The calculation of the standard error is then
-
-\begin{equation}
-s_{\bar{y}} = \sqrt{\frac{2,364,064}{50}} = \frac{1,537.55}{\sqrt{50}}
-\end{equation} 
-
-We multiply the standard error by the relevant $t$ values. 
-
-\begin{equation*}
-3,014.16 \pm 2.010 \cdot \frac{1,537.55}{\sqrt{50}} = 3,014.16 \pm 436.97
-\end{equation*}
-
-
-Therefore, we can be 95\% confident that the interval [2,577.19, 3,451.13] contains the true population mean. Expanding this over the number of employees in the population of $N =$ 2,222, we obtain a 95\% two-sided confidence interval for the total monthly salary cost of [5,726,522,\hspace{0.5em} 7,668,405].
+\input{generated/worked-calculations/est-mean-two-sided-interval-95}
 
 \bigskip
 
-If we desire a statement with a different confidence level, the value of $t$ must be changed. For example, at 99\% confidence the corresponding $t$ value is approximately 2.680, leading to bounds of 
-
-\begin{equation*}
-3,014.16 \pm 2.680 \cdot \frac{1,537.55}{\sqrt{50}} = 3,014.16 \pm 582.74
-\end{equation*} 
-and the interval estimate is [2,431.42,\hspace{0.5em} 3,596.90]. This creates a 99\% two-sided confidence interval for the total monthly salary cost [5,402,625, 7,992,302]. Note that the 99\% confdence interval is wider than the 95\% confidence interval.
+\input{generated/worked-calculations/est-mean-two-sided-interval-99}
 
 % subsection two_sided_intervals (end)
 
@@ -285,12 +258,7 @@ and for the maximum
   \bar{y} + t_{\alpha} \frac{s}{\sqrt{n}}
 \end{equation}
 
-Note that we do not split $\alpha$, but apply it to a single tail. Applying this to the results from the sample, we get for the maximum
-
-\begin{equation*}
-  3,014.16 + 1.677 \cdot \frac{1,537.55}{\sqrt{50}} = 3,378.71
-\end{equation*}
-and the interpretation is that we can be 95\% confident that the true mean monthly payroll does not exceed 3,378.71, and the total payroll charge for the month does not exceed 7,507,502.
+\input{generated/worked-calculations/est-mean-one-sided-upper-95}
 
 % subsection one_sided_intervals (end)
 
@@ -313,15 +281,7 @@ So far, we have worked with a sample from a large population and have ignored th
 Figure \ref{fig:fpcf} shows the effects of the finite-population correction factor. The $x$-axis represents the sample size $n$ as a fraction of the population size $N$. The $y$-axis shows the value of $\sqrt{(N - n)/(N - 1)}$. If $n / N$ is  very small, the correction is close to one, which means that there is little effect. As $n / N$ increases, the correction factor decreases and therefore becomes prominent. As $n$ approaches $N$, the correction factor decreases to zero. When we sampled the entire population, the precision achieved is zero, and we could exactly calculate the total and average population.
 
 \bigskip
-Using the values from \emph{Case: Salaries}, the two-sided 95\% confidence interval\index{confidence interval}\index{interval!confidence} is now calculated as 
-
-\begin{equation*}
-  3,014.16 \pm 2.010 \cdot \frac{1,537.55}{\sqrt{50}}\sqrt{\frac{2,222 - 50}{2,221}} = 3,014.16 \pm 432.21
-\end{equation*}
-
-By considering the finite-population correction factor, the precision achieved\index{precision!achieved} is reduced from 436.97 to 432.21. 
-
-It is always permissible to use the finite-population correction factor regardless of the value of $n / N$, but if the sample is less than 10\% of the population, then the correction is close to 1 (no correction). In our case, the sample proportion was 50 / 2,222 $\approx$ 2.2\%, and the correction $\sqrt((2,222 - 50)/(2,221))$ $\approx$ 0.989.
+\input{generated/worked-calculations/est-mean-two-sided-finite-95}
 
 % subsection the_effect_of_finiteness (end)
 
@@ -354,13 +314,7 @@ Solving for $n$ gives the minimum required sample size
   n \geq \frac{N^2 t_{\alpha/2}^2 s^2}{E^2}
 \end{equation}
 
-For the sample of 50 employees, the results are
-
-\begin{equation*}
-  n = \frac{2,222^2 \cdot 2.010^2 \cdot 2,364,064}{600,000^2} = 130,93.
-\end{equation*}
-
-The sample size must be at least 131 to achieve a precision\index{precision} of 600,000 with 95\% confidence. Given that we already sampled 50 employees, the \hlblue{additional sample}\index{additional sample}\index{sample!additional} must have a size of $n' = 81$.
+\input{generated/worked-calculations/est-mean-minimum-sample-size-infinite}
 
 We need to make a few remarks regarding this result. First, we used the \emph{estimated} variance of the population (2,364,064) calculated for the original sample. This number may increase or decrease as more observations become available. If it moves up, we may still fail to achieve the target precision. In this case, we may need to take another additional sample to satisfy the target precision. This also implies that we cannot use this formula in practice if we do not have a reasonable estimate of the population variance. 
 
@@ -378,14 +332,7 @@ To address these problems, Stein (1945) developed a two-step procedure\footnote{
 Therefore, we draw an additional sample of 81 units. We select a sample of 131 units and use the same random number seed as before to make sure that the units selected in the initial sample are included again.
 The mean of the total sample is 3,332.14, and its standard deviation 1,705.37.\footnote{See the calculations in Exercise \ref{ex:extending_the_sample}}
 
-Applying Equation \ref{eq:stein} to these results, we obtain 
-\footnote{Compare this with the result obtained with Equation \ref{eq:two-sided}: $2,222 \cdot 3,332.14 \pm$ $2,222 \cdot1.978 \cdot 1,705.37 / \sqrt{131}$ = 7,404,009 $\pm$ 654,993, which does not satisfy the target precision.}
-
-\begin{equation*}
-  2,222 \cdot 3,332.14 \pm 2,222 \cdot 2.010 \cdot \frac{1,537.55}{\sqrt{131}} = 7,404,009 \pm 600,000
-\end{equation*}
-
-Under Stein's method, the precision achieved is, by definition, equal to the target precision.
+\input{generated/worked-calculations/est-mean-stein-interval}
 
 % subsection infinite_populations (end)
 
@@ -414,14 +361,7 @@ with
 \begin{equation}
   \gamma = \frac{E^2 (N-1)}{N^2 t_{\alpha/2}^2 s^2} \approx \frac{E^2}{N t_{\alpha/2}^2 s^2}
 \end{equation}
-The required minimum sample size to satisfy $E \leq 300,000$ is now calculated at
-
-\begin{align*} 
-\gamma &= \frac{300,000^2}{2,222 \cdot 2.010^2 \cdot 2,364,064} = 4.243 \\ 
-n &\geq \frac{2,222}{1 + 4.243} = 424.0
-\end{align*}
-
-The total sample size required to obtain an estimate of the mean monthly payroll with a precision of 300,000 at 95\% confidence is 424. This is more than 10\% of the population size; therefore, we were right to use the finite-population correction factor. If we had not anticipated that the required sample size would have been unnecessarily large, not taking the finite-population correction factor into account would have resulted in a sample size of 524.
+\input{generated/worked-calculations/est-mean-minimum-sample-size-finite}
 
 % subsection finite_populations (end)
 \index{additional sample|)}\index{sample!additional|)}
@@ -442,7 +382,7 @@ Similar to the average monthly salary, we can estimate the proportion of employe
 \end{equation}
 where $k$ denotes the number of women in the sample. Note that when conveniently coding a nominal variable that consists of only two possible values, we can simply sum the observations to obtain a count of the class that is coded with 1.
 
-In the sample of 50 employees we found 31 women; therefore, the estimated proportion is $31 / 50 = 0.62$.
+\input{generated/worked-calculations/est-prop-point-estimate}
 
 Again, we can turn this estimate into an estimate of the total number of women employed by expanding the total number of employees.
 
@@ -451,7 +391,7 @@ Again, we can turn this estimate into an estimate of the total number of women e
   \label{eq:point_estimate_number}
 \end{equation}
 
-For our sample, we estimate the number of women employed at 2,222 $\cdot$ 31 / 50 = 1,377.6. Note that this estimate is not an integer, and we do not need to round it.
+\input{generated/worked-calculations/est-prop-total-point-estimate}
 
 \index{point estimate|)}\index{estimate!point|)}
 
@@ -495,17 +435,7 @@ The \hlblue{binomial upper bound}\index{binomial upper bound}\index{upper bound!
 with the number of degrees of freedom of $F$ given by $\nu_1 = 2k + 2$ and $\nu_2 = 2n - 2k$.\nomenclature{$p_u$}{upper bound on the proportion of successes in the population $p$, based on the sample result $k$}
 
 \bigskip
-Using the results from the sample, we can calculate the lower bound as
-
-\begin{equation*}
-  p_l = \frac{31}{31 + (50 - 31 + 1) \cdot 1.735} = 0.472
-\end{equation*}
-and the upper bound as
-\begin{equation*}
-  p_u = \frac{31 + 1}{31 + 1 + (50 - 31)/1.815} = 0.754
-\end{equation*}
-
-The interval estimate is [47.2\%, 75.4\%].\footnote{Throughout this book we round lower bounds up and upper bounds down.\index{rounding}}
+\input{generated/worked-calculations/est-prop-binomial-interval-95}
 
 To obtain a one-sided confidence interval for a proportion, we can use Equations \ref{eq:lower_bound_binomial} or \ref{eq:upper_bound_binomial}, again using $\alpha$ rather than $\alpha/2$.
 
@@ -534,22 +464,8 @@ which we solve for $n$ to get
   \label{eq:sampsize_proportion}
 \end{equation}
 
-We obtained $p = 0.62$ and the interval estimate was [47.2\%, 75.3\%]. If we set $E= 10\% =.1$, the minimum required sample size $n$ is
-
-\begin{equation*}
-  n \geq \frac{1.96^2 \cdot 0.62 \cdot 0.38}{0.1^2}  = 90.5
-\end{equation*}
-and it follows that the sample must be extended to $n$ = 91. We now double-check if the sample size is sufficient, assuming we find the same proportion of women in the additional sample of 41 items (overall $k'$ = 0.62 $\cdot$ 91 = 56.4, rounded to 57). This gives us
-
-\begin{equation*}
-  p_l = \frac{57}{57 + (91 - 57 + 1) \cdot 1.511} = 0.519
-\end{equation*}
-and the upper bound as
-\begin{equation*}
-  p_u = \frac{57 + 1}{57 + 1 + (91 - 57)/1.550} = 0.726
-\end{equation*}
-
-The interval estimate is reduced to [51.9\%, 72.6\%]. 
+\input{generated/worked-calculations/est-prop-minimum-sample-size-normal}
+\input{generated/worked-calculations/est-prop-binomial-interval-extended}
 \begin{figure}
   \includegraphics[width=\linewidth]{old_and_new_intervals_fraction.pdf}
   \caption{Confidence intervals of the finite-population women for the initial sample (above) and extended sample (below)}

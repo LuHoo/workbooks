@@ -1,0 +1,37 @@
+{
+  "id": "est.total.point_estimate",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.2 point estimate of the total payroll",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-total-point-estimate.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": "eq:estimate_total",
+  "values": [
+    {
+      "id": "est.total.population_size",
+      "role": "population_size",
+      "raw": 2222,
+      "format": "integer"
+    },
+    {
+      "id": "est.total.sample_total_gross",
+      "role": "sample_total_gross",
+      "raw": 150708,
+      "format": "integer"
+    },
+    {
+      "id": "est.total.sample_size",
+      "role": "sample_size",
+      "raw": 50,
+      "format": "integer"
+    },
+    {
+      "id": "est.total.estimated_total_gross",
+      "role": "estimated_total_gross",
+      "raw": 6697463.52,
+      "format": "integer"
+    }
+  ]
+}

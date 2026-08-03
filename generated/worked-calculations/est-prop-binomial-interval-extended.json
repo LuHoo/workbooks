@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "est.prop.binomial_interval_extended",
+  "kind": "worked_calculation",
+  "chapter_prefix": "est",
+  "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+  "source_context": "Exercise 2.6 binomial confidence interval after extending sample",
+  "source_dataset": "FSaudit::salaries",
+  "target_snippet": "generated/worked-calculations/est-prop-binomial-interval-extended.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:lower_bound_binomial", "eq:upper_bound_binomial"
+  ],
+  "values": [
+    {
+      "id": "est.prop.k_extended",
+      "role": "k_extended",
+      "raw": 57.00000000,
+      "display": "57",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.n_extended",
+      "role": "n_extended",
+      "raw": 91.00000000,
+      "display": "91",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.additional_n",
+      "role": "additional_n",
+      "raw": 41.00000000,
+      "display": "41",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.f_value_lower_extended",
+      "role": "f_value_lower_extended",
+      "raw": 1.51120000,
+      "display": "1.511",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.f_value_upper_extended",
+      "role": "f_value_upper_extended",
+      "raw": 1.55010000,
+      "display": "1.550",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.p_lower_extended",
+      "role": "p_lower_extended",
+      "raw": 0.51870000,
+      "display": "0.519",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "est.prop.p_upper_extended",
+      "role": "p_upper_extended",
+      "raw": 0.72560000,
+      "display": "0.726",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

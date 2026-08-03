@@ -5,7 +5,13 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The quantities \ttblue{c\_L} and \ttblue{c\_U} are standardized decision bounds. Multiplying them by \ttblue{annual\_se} converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+\noindent The quantities \ttblue{c\_L} and \ttblue{c\_U}
+are standardized decision bounds. Multiplying
+them by \ttblue{annual\_se} converts them into
+the acceptable difference range for the annual
+difference. Equivalently, this acceptable
+difference range can be translated into lower and
+upper bounds around the annual expectation.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,10 +25,10 @@
 # Acceptable bounds for recorded annual revenue
 recorded_lower = annual_prediction + ADR_lower
 recorded_upper = annual_prediction + ADR_upper
-cat("Acceptable bounds for recorded annual revenue:\n")
-cat("Lower bound:", recorded_lower, "\n")
-cat("Annual expectation:", annual_prediction, "\n")
-cat("Upper bound:", recorded_upper, "\n")
+print("Acceptable bounds for recorded annual revenue:\n")
+print("Lower bound:", recorded_lower, "\n")
+print("Annual expectation:", annual_prediction, "\n")
+print("Upper bound:", recorded_upper, "\n")
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Acceptable bounds for recorded annual revenue:
