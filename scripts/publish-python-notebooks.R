@@ -118,7 +118,9 @@ validate_notebook_hygiene <- function(input_dir, python_bin = resolve_python_bin
   message("Validating generated Python notebook hygiene before publication")
   status <- system2(
     python_bin,
-    args = c(guardrail_script, "--input-dir", input_dir, "--checks", "hygiene")
+    # Quote args because macOS may route this invocation through sh -c, and
+    # unquoted workspace paths like "ADA (git)" otherwise break parsing.
+    args = shQuote(c(guardrail_script, "--input-dir", input_dir, "--checks", "hygiene"))
   )
   if (!identical(status, 0L)) {
     stop(

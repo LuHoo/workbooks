@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "checked_count": 1,
+  "checked": [
+    {
+      "id": "aux.mpu.estimator",
+      "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "target_snippet": "generated/worked-calculations/aux-mpu-estimator.tex",
+      "status": "passed"
+    }
+  ],
+  "language_comparisons": [
+    {
+      "id": "aux.mpu.population_size",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 3500,
+      "python_raw": 3500,
+      "difference": 0,
+      "tolerance": 1e-08,
+      "status": "passed"
+    },
+    {
+      "id": "aux.mpu.sample_size",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 400,
+      "python_raw": 400,
+      "difference": 0,
+      "tolerance": 1e-08,
+      "status": "passed"
+    },
+    {
+      "id": "aux.mpu.total_audit_value",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 864212.48,
+      "python_raw": 864212.48,
+      "difference": 3.4925e-10,
+      "tolerance": 1e-08,
+      "status": "passed"
+    },
+    {
+      "id": "aux.mpu.mean_audit_value",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 2160.5312,
+      "python_raw": 2160.5312,
+      "difference": 0,
+      "tolerance": 1e-08,
+      "status": "passed"
+    },
+    {
+      "id": "aux.mpu.sum_squared_audit_values",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 3649977984.2608,
+      "python_raw": 3649977984.2608,
+      "difference": 0,
+      "tolerance": 1e-06,
+      "status": "passed"
+    },
+    {
+      "id": "aux.mpu.audit_value_variance",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 4468220.4456,
+      "python_raw": 4468220.4456,
+      "difference": 1.8626e-09,
+      "tolerance": 1e-08,
+      "status": "passed"
+    },
+    {
+      "id": "aux.mpu.estimated_population_value",
+      "r_entry": "aux.mpu.estimator",
+      "python_entry": "aux.mpu.estimator",
+      "r_source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
+      "r_raw": 7561859.2,
+      "python_raw": 7561859.2,
+      "difference": 9.3132e-10,
+      "tolerance": 1e-08,
+      "status": "passed"
+    }
+  ],
+  "manuscript_inputs": {
+    "1": [
+      {
+        "file": "././auxiliary.tex",
+        "target": "generated/worked-calculations/aux-mpu-estimator.tex"
+      }
+    ]
+  },
+  "errors": []
+}
