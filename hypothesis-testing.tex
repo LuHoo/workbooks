@@ -665,35 +665,7 @@ Total & & & 115,448.28 \\
 \label{tab:precision_Cell}
 \end{sidewaystable}
 
-\paragraph{Step 1.} When no errors are found, we only calculate the basic precision, which is the upper bound on the error calculated using Equation \ref{eq:upper_bound}. 
-
-\paragraph{Step 2.} The first error is a 100\% error; therefore, $t_1 = 1.00$ and $\bar{t} = 1.00$.
-
-\begin{itemize}
-\item \emph{Simple spread}: $M_U[1] \bar{t} = 436,007 \cdot 1.00 = 436,007$.
-\item \emph{Load and spread}: Stage $M_U[0] + t_1 \frac{X}{n} = 276,050 + 1.00 \cdot 93,103.45 = 369,153.45$.
-\item \emph{Stage} $M_U$: The largest of these two values (436,007 and 369,153.45) is 436,007.
-\end{itemize}
-
-\paragraph{Step 3.} The second error is a 20\% error; therefore, $t_2 = 0.20$ and $\bar{t} = 1.20 / 2 = 0.60$.
-
-\begin{itemize}
-\item \emph{Simple spread}: $M_U[2] \bar{t} = 577,535 \cdot 0.60 = 346,521$.
-\item \emph{Load and spread}: Stage $M_U[1] + t_3 \frac{X}{n} = 436,007 + 0.20 \cdot 93,103.45 = 454,627.69$.
-\item \emph{Stage} $M_U$: The largest of these two values (346,521 and 454,627.69) is 454,627.69.
-\end{itemize}
-
-\paragraph{Step 4.} The third error is a 4\% error; $t_3 = 0.04$ and $\bar{t} = 1.24 / 3 = 0.4133$.
-
-\begin{itemize}
-\item \emph{Simple spread}: $M_U[3] \bar{t} = 710,132 \cdot 0.4133 = 293,521.23$.
-\item \emph{Load and spread}: Stage $M_U[2] + t_2 \frac{X}{n} = 454,627.69 + 0.04 \cdot 93,103.45 = 458,351.83$.
-\item \emph{Stage} $M_U$: The largest of these two values (293,521.23 and 458,351.83) is 458,351.83.
-\end{itemize}
-
-\bigskip
-The conclusion is that we may assert, with 95\% confidence, that the total misstatement does not exceed the \emph{upper confidence bound} of 458,351.83. Note that the projected misstatement of 115,448.28 is not different from that calculated using the Stringer-bound evaluation method.
-Again, the auditor interpretation of the statistical conclusion is discussed in Section \ref{sec:auditor_interpretation}.
+\input{generated/worked-calculations/hyp-cell-evaluation-steps}
 
 \bigskip 
 A final remark on \hlblue{large taintings}\index{tainting!large}: 
@@ -746,10 +718,7 @@ $EE = k \cdot SI$ \\
 
 \midrule
 
-0 & 89 & 151,685.39 & 0.00 \\
-1 & 141 & 95,744.68 & 95,744.68 \\
-2 & 187 & 72,192.51 & 144,385.03 \\
-3 & 231 & 58,441.56 & 175,324.68 \\
+\input{generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows}
 
 \bottomrule
 \end{tabularx}

@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "id": "hyp.cell.evaluation_steps",
+  "kind": "worked_calculation",
+  "chapter_prefix": "hyp",
+  "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+  "source_context": "Cell-bounds stepwise comparison and resulting upper bound",
+  "source_dataset": "FSaudit::accounts_receivable",
+  "target_snippet": "generated/worked-calculations/hyp-cell-evaluation-steps.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    
+  ],
+  "values": [
+    {
+      "id": "hyp.cell.mu_0",
+      "role": "mu_0",
+      "raw": 276050.00000000,
+      "display": "276,050",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.mu_1",
+      "role": "mu_1",
+      "raw": 436007.00000000,
+      "display": "436,007",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.mu_2",
+      "role": "mu_2",
+      "raw": 577535.00000000,
+      "display": "577,535",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.mu_3",
+      "role": "mu_3",
+      "raw": 710132.00000000,
+      "display": "710,132",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.t_1",
+      "role": "t_1",
+      "raw": 1.00000000,
+      "display": "1.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.t_2",
+      "role": "t_2",
+      "raw": 0.20000000,
+      "display": "0.20",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.t_3",
+      "role": "t_3",
+      "raw": 0.04000000,
+      "display": "0.04",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.tbar_1",
+      "role": "tbar_1",
+      "raw": 1.00000000,
+      "display": "1.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.tbar_2",
+      "role": "tbar_2",
+      "raw": 0.60000000,
+      "display": "0.60",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.tbar_3",
+      "role": "tbar_3",
+      "raw": 0.41330000,
+      "display": "0.4133",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.sampling_interval",
+      "role": "sampling_interval",
+      "raw": 93103.44830000,
+      "display": "93,103.45",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.simple_1",
+      "role": "simple_1",
+      "raw": 436007.00000000,
+      "display": "436,007.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.load_1",
+      "role": "load_1",
+      "raw": 369153.44830000,
+      "display": "369,153.45",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.stage_1",
+      "role": "stage_1",
+      "raw": 436007.00000000,
+      "display": "436,007.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.simple_2",
+      "role": "simple_2",
+      "raw": 346521.00000000,
+      "display": "346,521.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.load_2",
+      "role": "load_2",
+      "raw": 454627.68970000,
+      "display": "454,627.69",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.stage_2",
+      "role": "stage_2",
+      "raw": 454627.68970000,
+      "display": "454,627.69",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.simple_3",
+      "role": "simple_3",
+      "raw": 293521.22670000,
+      "display": "293,521.23",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.load_3",
+      "role": "load_3",
+      "raw": 458351.82760000,
+      "display": "458,351.83",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.stage_3",
+      "role": "stage_3",
+      "raw": 458351.82760000,
+      "display": "458,351.83",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.cell.projected_misstatement",
+      "role": "projected_misstatement",
+      "raw": 115448.27590000,
+      "display": "115,448.28",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    }
+  ]
+}

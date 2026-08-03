@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "checked_count": 22,
+  "checked_count": 24,
   "checked": [
     {
       "id": "aux.difference.estimator",
@@ -109,6 +109,18 @@
       "id": "est.total.point_estimate",
       "source_notebook": "notebooks/support/population-estimation/support.Rmd",
       "target_snippet": "generated/worked-calculations/est-total-point-estimate.tex",
+      "status": "passed"
+    },
+    {
+      "id": "hyp.cell.evaluation_steps",
+      "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+      "target_snippet": "generated/worked-calculations/hyp-cell-evaluation-steps.tex",
+      "status": "passed"
+    },
+    {
+      "id": "hyp.mus.attribute_sample_sizes_rows",
+      "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+      "target_snippet": "generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex",
       "status": "passed"
     },
     {
@@ -334,22 +346,34 @@
     "19": [
       {
         "file": "././hypothesis-testing.tex",
-        "target": "generated/worked-calculations/hyp-mus-sample-size.tex"
+        "target": "generated/worked-calculations/hyp-cell-evaluation-steps.tex"
       }
     ],
     "20": [
+      {
+        "file": "././hypothesis-testing.tex",
+        "target": "generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex"
+      }
+    ],
+    "21": [
+      {
+        "file": "././hypothesis-testing.tex",
+        "target": "generated/worked-calculations/hyp-mus-sample-size.tex"
+      }
+    ],
+    "22": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
       }
     ],
-    "21": [
+    "23": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-assurance.tex"
       }
     ],
-    "22": [
+    "24": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-decision-bounds.tex"

@@ -1,7 +1,7 @@
 # Manuscript Calculation Validation Report
 
 - Status: passed
-- Checked calculations: 22
+- Checked calculations: 24
 
 ## Checked Calculations
 
@@ -25,6 +25,8 @@
 | est.prop.point_estimate | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-prop-point-estimate.tex | passed |
 | est.prop.total_point_estimate | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-prop-total-point-estimate.tex | passed |
 | est.total.point_estimate | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-total-point-estimate.tex | passed |
+| hyp.cell.evaluation_steps | notebooks/support/hypothesis-testing/support.Rmd | generated/worked-calculations/hyp-cell-evaluation-steps.tex | passed |
+| hyp.mus.attribute_sample_sizes_rows | notebooks/support/hypothesis-testing/support.Rmd | generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex | passed |
 | hyp.mus.sample_size | notebooks/support/hypothesis-testing/support.Rmd | generated/worked-calculations/hyp-mus-sample-size.tex | passed |
 | reg.annual.assurance | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-assurance.tex | passed |
 | reg.annual.decision_bounds | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-decision-bounds.tex | passed |

@@ -442,6 +442,46 @@ hyp_mus_sample_size_template <- function() {
   )
 }
 
+hyp_mus_attribute_sample_sizes_rows_template <- function() {
+  c(
+    "0 & {{n_0}} & {{sampling_interval_k0}} & {{expected_error_k0}} \\\\",
+    "1 & {{n_1}} & {{sampling_interval_k1}} & {{expected_error_k1}} \\\\",
+    "2 & {{n_2}} & {{sampling_interval_k2}} & {{expected_error_k2}} \\\\",
+    "3 & {{n_3}} & {{sampling_interval_k3}} & {{expected_error_k3}} \\\\"
+  )
+}
+
+hyp_cell_evaluation_steps_template <- function() {
+  c(
+    "\\paragraph{Step 1.} When no errors are found, we only calculate the basic precision, which is the upper bound on the error calculated using Equation \\ref{eq:upper_bound}: $M_U[0] = {{mu_0}}$.",
+    "",
+    "\\paragraph{Step 2.} The first error is a 100\\% error; therefore, $t_1 = {{t_1}}$ and $\\bar{t}_1 = {{tbar_1}}$.",
+    "\\begin{itemize}",
+    "\\item \\emph{Simple spread}: $M_U[1] \\bar{t}_1 = {{mu_1}} \\cdot {{tbar_1}} = {{simple_1}}$.",
+    "\\item \\emph{Load and spread}: Stage $M_U[0] + t_1 \\frac{X}{n} = {{mu_0}} + {{t_1}} \\cdot {{sampling_interval}} = {{load_1}}$.",
+    "\\item \\emph{Stage} $M_U$: $\\max({{simple_1}}, {{load_1}}) = {{stage_1}}$.",
+    "\\end{itemize}",
+    "",
+    "\\paragraph{Step 3.} The second error is a 20\\% error; therefore, $t_2 = {{t_2}}$ and $\\bar{t}_2 = {{tbar_2}}$.",
+    "\\begin{itemize}",
+    "\\item \\emph{Simple spread}: $M_U[2] \\bar{t}_2 = {{mu_2}} \\cdot {{tbar_2}} = {{simple_2}}$.",
+    "\\item \\emph{Load and spread}: Stage $M_U[1] + t_2 \\frac{X}{n} = {{stage_1}} + {{t_2}} \\cdot {{sampling_interval}} = {{load_2}}$.",
+    "\\item \\emph{Stage} $M_U$: $\\max({{simple_2}}, {{load_2}}) = {{stage_2}}$.",
+    "\\end{itemize}",
+    "",
+    "\\paragraph{Step 4.} The third error is a 4\\% error; therefore, $t_3 = {{t_3}}$ and $\\bar{t}_3 = {{tbar_3}}$.",
+    "\\begin{itemize}",
+    "\\item \\emph{Simple spread}: $M_U[3] \\bar{t}_3 = {{mu_3}} \\cdot {{tbar_3}} = {{simple_3}}$.",
+    "\\item \\emph{Load and spread}: Stage $M_U[2] + t_3 \\frac{X}{n} = {{stage_2}} + {{t_3}} \\cdot {{sampling_interval}} = {{load_3}}$.",
+    "\\item \\emph{Stage} $M_U$: $\\max({{simple_3}}, {{load_3}}) = {{stage_3}}$.",
+    "\\end{itemize}",
+    "",
+    "\\bigskip",
+    "The conclusion is that we may assert, with 95\\% confidence, that the total misstatement does not exceed the \\emph{upper confidence bound} of {{stage_3}}. Note that the projected misstatement of {{projected_misstatement}} is not different from that calculated using the Stringer-bound evaluation method.",
+    "Again, the auditor interpretation of the statistical conclusion is discussed in Section \\ref{sec:auditor_interpretation}."
+  )
+}
+
 reg_annual_expectation_interval_template <- function() {
   c(
     "For the \\emph{Case: US SteamCo}, the annual expectation is obtained by summing the 12 monthly expectations after adjusting the March 2014 expectation for the corroborated winter storm effect.\\footnote{See Exercise \\ref{ex:Combining_12_monthly_predictions}} The resulting annual expectation is:",
@@ -561,6 +601,8 @@ required_entries <- list(
   list(id = "est.prop.minimum_sample_size_normal", file = "est.prop.minimum_sample_size_normal.json", template = est_prop_minimum_sample_size_normal_template),
   list(id = "est.prop.binomial_interval_extended", file = "est.prop.binomial_interval_extended.json", template = est_prop_binomial_interval_extended_template),
   list(id = "hyp.mus.sample_size", file = "hyp.mus.sample_size.json", template = hyp_mus_sample_size_template),
+  list(id = "hyp.mus.attribute_sample_sizes_rows", file = "hyp.mus.attribute_sample_sizes_rows.json", template = hyp_mus_attribute_sample_sizes_rows_template),
+  list(id = "hyp.cell.evaluation_steps", file = "hyp.cell.evaluation_steps.json", template = hyp_cell_evaluation_steps_template),
   list(id = "reg.annual.expectation_interval", file = "reg.annual.expectation_interval.json", template = reg_annual_expectation_interval_template),
   list(id = "reg.annual.assurance", file = "reg.annual.assurance.json", template = reg_annual_assurance_template),
   list(id = "reg.annual.decision_bounds", file = "reg.annual.decision_bounds.json", template = reg_annual_decision_bounds_template)

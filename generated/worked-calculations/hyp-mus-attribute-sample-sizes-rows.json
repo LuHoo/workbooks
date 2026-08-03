@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "id": "hyp.mus.attribute_sample_sizes_rows",
+  "kind": "worked_calculation",
+  "chapter_prefix": "hyp",
+  "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+  "source_context": "Sample-size table rows for MUS interpolation example",
+  "source_dataset": "FSaudit::accounts_receivable",
+  "target_snippet": "generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    
+  ],
+  "values": [
+    {
+      "id": "hyp.mus.n_0",
+      "role": "n_0",
+      "raw": 89.00000000,
+      "display": "89",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.n_1",
+      "role": "n_1",
+      "raw": 141.00000000,
+      "display": "141",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.n_2",
+      "role": "n_2",
+      "raw": 187.00000000,
+      "display": "187",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.n_3",
+      "role": "n_3",
+      "raw": 231.00000000,
+      "display": "231",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k0",
+      "role": "sampling_interval_k0",
+      "raw": 151685.39330000,
+      "display": "151,685.39",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k1",
+      "role": "sampling_interval_k1",
+      "raw": 95744.68090000,
+      "display": "95,744.68",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k2",
+      "role": "sampling_interval_k2",
+      "raw": 72192.51340000,
+      "display": "72,192.51",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k3",
+      "role": "sampling_interval_k3",
+      "raw": 58441.55840000,
+      "display": "58,441.56",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.expected_error_k0",
+      "role": "expected_error_k0",
+      "raw": 0.00000000,
+      "display": "0.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.expected_error_k1",
+      "role": "expected_error_k1",
+      "raw": 95744.68090000,
+      "display": "95,744.68",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.expected_error_k2",
+      "role": "expected_error_k2",
+      "raw": 144385.02670000,
+      "display": "144,385.03",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "hyp.mus.expected_error_k3",
+      "role": "expected_error_k3",
+      "raw": 175324.67530000,
+      "display": "175,324.68",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    }
+  ]
+}
