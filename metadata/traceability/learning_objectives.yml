@@ -658,7 +658,7 @@
 - id: LO-C4-15
   chapter: 4
   scope: chapter
-  text: evaluate whether observed test results support a conclusion of statistical consistency with the stated misstatement threshold, including explicit limitations.
+  text: evaluate whether observed test results support a statistically defensible conclusion of consistency with the stated misstatement threshold, and explicitly state what remains unsupported.
   bloom: evaluate
   competency: statistical_reasoning
   status: active

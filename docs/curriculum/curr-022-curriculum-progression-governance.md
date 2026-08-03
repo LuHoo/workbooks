@@ -108,6 +108,25 @@ Examples of pathways:
 - foundational estimation -> design-enhanced estimation -> inferential interpretation;
 - model construction -> model interpretation -> evidential adequacy evaluation.
 
+### 6.4 Chapter Hypothesis Testing progression-role narrative
+
+Chapter Hypothesis Testing is the programme's inferential-discipline chapter.
+
+Its role is to consolidate Statistical Reasoning by teaching students to interpret uncertainty, error risk, and test limitations without over-claiming. The chapter primarily advances the Technical Skills -> Statistical Reasoning transition, while introducing a bounded Statistical Reasoning -> Professional Judgment endpoint through explicit communication of what evidence supports and does not support.
+
+Policy interpretation under CURR-022:
+
+- a local Professional Judgment dip in this chapter is acceptable when purpose-justified;
+- chapter purpose takes precedence over competency symmetry;
+- progression quality is judged by transition clarity, not chapter-to-chapter numeric monotonicity;
+- this chapter must not be repurposed into audit-response action selection, which is staged for Volume 2.
+
+Progression linkage expectation:
+
+- Chapter Estimation with Auxiliary Variables and Stratification -> Chapter Hypothesis Testing: method/application to inferential interpretation;
+- Chapter Hypothesis Testing -> Chapter Regression Analysis: inferential interpretation to expectation-based evidence evaluation;
+- Chapter Hypothesis Testing -> Chapter Goodness of Fit: limitation-aware inference to anomaly interpretation and evidential constraints.
+
 ## 7. Relationship with Bloom Taxonomy
 
 Bloom remains required and governance-relevant under CURR-021.

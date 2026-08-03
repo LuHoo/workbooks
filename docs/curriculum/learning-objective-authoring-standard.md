@@ -390,6 +390,23 @@ Interpretation rule:
   - Case study: anomaly follow-up decision memo.
   - Review question: decide whether additional procedures are required.
 
+## 5.5 Assessment Guidance for Limitation-Bound Inference Objectives
+
+For evidence tasks mapped to LO-C4-15 and LO-C4-16 (or equivalent objectives with the same demand), assessors MUST require explicit separation between:
+
+- what the statistical evidence supports; and
+- what the statistical evidence does not support.
+
+Required evidence-task output elements:
+
+1. conclusion statement tied to the stated misstatement threshold or inferential claim;
+2. explicit limitations statement (unsupported claims and boundary conditions);
+3. uncertainty rationale using confidence language and error-risk framing.
+
+Assessment artifacts (rubrics, model answers, and review-question marking guides) MUST include separate scoring criteria for supported and unsupported conclusion statements.
+
+A response that reports only a reject/fail-to-reject decision without explicit supported-vs-unsupported interpretation is non-compliant with assessability expectations for these objectives.
+
 ## 6. Granularity Standard
 
 ## 6.1 Granularity Objective
