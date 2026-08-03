@@ -41,5 +41,16 @@ stopifnot(requireNamespace("car", quietly = TRUE))
 stopifnot(requireNamespace("pbkrtest", quietly = TRUE))
 stopifnot(requireNamespace("lme4", quietly = TRUE))
 stopifnot(requireNamespace("nloptr", quietly = TRUE))
+required_car_exports <- c("scatterplot", "influenceIndexPlot", "qqPlot")
+missing_car_exports <- setdiff(required_car_exports, getNamespaceExports("car"))
+if (length(missing_car_exports) > 0L) {
+    stop(
+        sprintf(
+            "Binder build failed: car is installed but missing required exports: %s",
+            paste(missing_car_exports, collapse = ", ")
+        )
+    )
+}
 cat("R Binder dependencies load successfully (FSaudit, aicpa, car, pbkrtest, lme4, nloptr)\n")
+cat("Verified car exports for regression notebook: scatterplot, influenceIndexPlot, qqPlot\n")
 RS

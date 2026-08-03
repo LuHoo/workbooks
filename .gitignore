@@ -1,42 +1,12 @@
-# LaTeX-gerelateerde bestanden
-*.aux
-*.fdb_latexmk
-*.fls
-*.glo
-*.idx
-*.ilg
-*.ind
-*.ist
-*.lof
-*.log
-*.lot
-*.nlg
-*.nlo
-*.nls
-*.out
-*.pdf
-*.synctex.gz
-*.toc
-
-# Rendered notebook artifacts
-notebooks/**/*.html
-notebooks/**/*_files/
-
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*_cache/
+*_files/
 *.html
-
-# macOS Finder metadata
+*.nb.html
+*.pdf
+*.docx
+*.Rproj
 .DS_Store
-
-# Python cache artifacts
-__pycache__/
-*.pyc
-
-# Local Python virtual environments
-.venv/
-venv/
-
-# Generated Python notebook build artifacts
-generated/python-notebooks/
-
-# Temporary execution artifacts (local/CI diagnostics)
-generated/notebook-execution-artifacts/

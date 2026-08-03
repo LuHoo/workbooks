@@ -1,0 +1,19 @@
+{
+  "runtime": {
+    "python_version": "3.10.5 (v3.10.5:f377153967, Jun  6 2022, 12:36:10) [Clang 13.0.0 (clang-1300.0.29.30)]",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "cwd": "/Users/lucashoogduin/Documents/6. Mental/ADA (git)",
+    "r_version": "R version 4.3.1 (2023-06-16) -- \"Beagle Scouts\"",
+    "fsaudit_version": "0.3.4",
+    "rpy2_version": "3.5.17"
+  },
+  "executed": [
+    "/Users/lucashoogduin/Documents/6. Mental/ADA (git)/generated/python-notebooks/auxiliary-variables-and-stratification/chapter-3.ipynb",
+    "/Users/lucashoogduin/Documents/6. Mental/ADA (git)/generated/python-notebooks/goodness-of-fit/chapter-6.ipynb",
+    "/Users/lucashoogduin/Documents/6. Mental/ADA (git)/generated/python-notebooks/hypothesis-testing/chapter-4.ipynb",
+    "/Users/lucashoogduin/Documents/6. Mental/ADA (git)/generated/python-notebooks/population-estimation/chapter-2.ipynb",
+    "/Users/lucashoogduin/Documents/6. Mental/ADA (git)/generated/python-notebooks/probability-distributions/chapter-1.ipynb",
+    "/Users/lucashoogduin/Documents/6. Mental/ADA (git)/generated/python-notebooks/regression-analysis/chapter-5.ipynb"
+  ],
+  "failures": []
+}
