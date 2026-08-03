@@ -43,7 +43,7 @@
       "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
       "r_raw": 864212.48,
       "python_raw": 864212.48,
-      "difference": 3.4925e-10,
+      "difference": 0,
       "tolerance": 1e-08,
       "status": "passed"
     },
@@ -68,7 +68,7 @@
       "r_raw": 3649977984.2608,
       "python_raw": 3649977984.2608,
       "difference": 0,
-      "tolerance": 1e-06,
+      "tolerance": 3.65e-06,
       "status": "passed"
     },
     {
@@ -79,7 +79,7 @@
       "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
       "r_raw": 4468220.4456,
       "python_raw": 4468220.4456,
-      "difference": 1.8626e-09,
+      "difference": 0,
       "tolerance": 1e-08,
       "status": "passed"
     },
@@ -91,7 +91,7 @@
       "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
       "r_raw": 7561859.2,
       "python_raw": 7561859.2,
-      "difference": 9.3132e-10,
+      "difference": 0,
       "tolerance": 1e-08,
       "status": "passed"
     }

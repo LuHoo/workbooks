@@ -137,6 +137,14 @@ jobs:
           R --version | head -n 1
           Rscript -e "cat('FSaudit', as.character(packageVersion('FSaudit')), '\n')"
 
+      - name: Regenerate worked calculations (pre-check)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libfontconfig1-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev \
+            libssl-dev libxml2-dev libcurl4-openssl-dev libuv1-dev || true
+          Rscript scripts/generate-worked-calculations.R
+
       - name: Validate manuscript calculations
         run: |
           Rscript scripts/ci/validate-manuscript-calculations.R \

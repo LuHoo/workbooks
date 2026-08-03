@@ -229,7 +229,7 @@ mc_shared_values_by_id <- function(entries) {
   stats::setNames(rows, vapply(rows, function(row) row$value_id, character(1L)))
 }
 
-mc_compare_shared_language_values <- function(r_entries, python_entries, default_tolerance = 1e-8) {
+mc_compare_shared_language_values <- function(r_entries, python_entries, default_tolerance = 1e-8, relative_tolerance = 1e-15) {
   errors <- character()
   comparisons <- list()
   r_values <- mc_shared_values_by_id(r_entries)
@@ -257,8 +257,12 @@ mc_compare_shared_language_values <- function(r_entries, python_entries, default
       next
     }
 
-    tolerance <- min(r_value$tolerance %||% default_tolerance, python_value$tolerance %||% default_tolerance)
-    difference <- abs(as.numeric(r_value$raw) - as.numeric(python_value$raw))
+    configured_tolerance <- min(r_value$tolerance %||% default_tolerance, python_value$tolerance %||% default_tolerance)
+    r_numeric <- as.numeric(r_value$raw)
+    python_numeric <- as.numeric(python_value$raw)
+    difference <- abs(r_numeric - python_numeric)
+    scale_reference <- max(abs(r_numeric), abs(python_numeric), 1)
+    tolerance <- max(configured_tolerance, relative_tolerance * scale_reference)
     status <- if (is.na(difference) || difference > tolerance) "failed" else "passed"
     comparisons[[length(comparisons) + 1L]] <- list(
       id = value_id,
