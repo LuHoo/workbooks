@@ -97,7 +97,9 @@ render_config <- function(config, output_dir, renderer_path, python_bin) {
     "--exercise-refs", paste(names(config$expected_chunks), collapse = ",")
   )
 
-  out <- system2(python_bin, args = args, stdout = TRUE, stderr = TRUE)
+  # system2 capture mode may invoke through sh -c on macOS; quote args so
+  # paths containing spaces or parentheses are passed safely.
+  out <- system2(python_bin, args = shQuote(args), stdout = TRUE, stderr = TRUE)
   status <- attr(out, "status")
   if (!is.null(status) && status != 0L) {
     stop(
