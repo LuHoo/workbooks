@@ -10,6 +10,7 @@ Policy type: Educational design standard (not metadata standard)
 This standard defines how bridge objectives are designed, reviewed, and governed to strengthen developmental progression across the curriculum.
 
 The standard is instructional by design. It governs cognitive transitions in student learning, not administrative labeling.
+It is not a metadata exercise and not a classification exercise.
 
 ## 1. Formal Definition
 
@@ -336,16 +337,18 @@ Proposed policy text:
 
 "The curriculum adopts the Bridge Objective Standard as a binding instructional-design policy. For non-foundational chapters, authors and reviewers must ensure that chapter learning objectives include explicit cognitive transitions that connect technical execution to interpretation and evidential meaning, and where chapter purpose requires, from interpretation to reliability and defensibility evaluation. Bridge objectives are governed as qualitative educational requirements, not numerical quotas. Bloom taxonomy and competency classifications remain required diagnostic indicators, but bridge quality is determined by observable cognitive transition and evidential reasoning quality. Reviewers are authorized to require revision where local objective compliance is met but developmental progression is weak."
 
+"Classification tags cannot substitute for explicit bridge wording in the objective itself."
+
 ## 16. Programme Progression Application Note
 
 Illustrative progression pattern:
 
-- Chapter 1: primarily foundational (bridges optional/minimal).
-- Chapter 2: selective early bridges.
-- Chapter 3: strong Technical Skills -> Statistical Reasoning bridges.
-- Chapter 4: strong Technical Skills -> Statistical Reasoning; limited Statistical Reasoning -> Professional Judgment.
-- Chapter 5: strong Technical Skills -> Statistical Reasoning; limited Statistical Reasoning -> Professional Judgment.
-- Chapter 6: primarily Statistical Reasoning -> Professional Judgment bridges.
+- Probability Distributions: primarily foundational (bridges optional/minimal).
+- Estimation: selective early bridges.
+- Stratified Sampling: strong Technical Skills -> Statistical Reasoning bridges.
+- Hypothesis Testing: strong Technical Skills -> Statistical Reasoning; limited Statistical Reasoning -> Professional Judgment.
+- Regression Analysis: strong Technical Skills -> Statistical Reasoning; limited Statistical Reasoning -> Professional Judgment.
+- Goodness of Fit: primarily Statistical Reasoning -> Professional Judgment bridges.
 
 This pattern is illustrative, not mandatory. Chapter-purpose justification remains the governing principle.
 
