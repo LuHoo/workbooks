@@ -1117,3 +1117,68 @@ decisions:
       CURR-022 is intentionally non-prescriptive in numerical terms. It governs
       progression through chapter-purpose alignment, sequence-level review, and
       bridge-objective visibility.
+
+  - id: "CURR-023"
+    title: "Bridge Objective Standard for developmental curriculum transitions"
+    domain:
+      - "curriculum-governance"
+      - "learning-objectives"
+      - "educational-purpose"
+      - "assessment"
+      - "curriculum-sequencing"
+    decision: >
+      The Bridge Objective Standard is adopted as proposed instructional-design
+      policy to strengthen developmental progression across the curriculum.
+      Bridge objectives are defined as learning objectives that explicitly
+      require movement from a base cognitive activity to a higher-order
+      cognitive activity in an observable, assessable way. The governing design
+      mechanism is cognitive transition quality, not metadata shape or taxonomy
+      labels. Bridge design should generally follow the progression Technical
+      Skills -> Statistical Reasoning -> Professional Judgment, with
+      Statistical Reasoning as the default instructional bridge between
+      execution and judgment.
+    status: "proposed"
+    confidence: "high"
+    rationale: >
+      Curriculum review identified insufficient explicit transitions connecting
+      technical execution, interpretation, evidential meaning, and defensible
+      judgment. As a result, competencies can appear as isolated silos rather
+      than a developmental pathway. A dedicated bridge-objective governance
+      standard is needed to make progression visible while preserving chapter
+      purpose and avoiding rigid quota-based requirements.
+    implications:
+      - "Non-foundational chapter objective sets should include explicit bridge objectives where chapter purpose requires developmental transition."
+      - "Bridge quality is evaluated by explicit cognitive transition and evidential reasoning clarity, not by verb stacking or label inflation."
+      - "Review workflows should check bridge strength (weak/moderate/strong) and anti-patterns such as vague judgment language without reasoning process."
+      - "Bloom and competency fields remain required diagnostics under existing policy, but bridge quality is governed as instructional design."
+      - "No minimum bridge-objective count is mandated; quality and purpose-fit take precedence over quantity."
+    applies_to:
+      - "whole-curriculum"
+      - "chapters"
+      - "learning-objectives"
+      - "assessment"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/curriculum/bridge-objective-standard.md"
+        lines: "L1-L340"
+        heading: "Bridge Objective Standard"
+        quotation: >
+          A bridge objective is a learning objective that explicitly requires
+          students to move from one cognitive activity to a higher-order
+          cognitive activity in a visible, assessable way.
+    related_decisions:
+      supports: ["CURR-005", "CURR-008", "CURR-014", "CURR-022"]
+      depends_on: ["CURR-004", "CURR-021", "CURR-022"]
+      qualifies: ["CURR-004"]
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "What reviewer rubric granularity should be standardized for evaluating bridge strength across chapters?"
+      - "Which chapter-review templates should be updated first to embed bridge-objective checks with minimal process overhead?"
+      - "What exception documentation format should be used when direct Technical Skills -> Professional Judgment transitions are pedagogically justified?"
+    notes: >
+      CURR-023 is a governance standard for instructional design quality. It is
+      explicitly non-quota-based and should be applied through chapter-purpose
+      and sequence-level progression review.
