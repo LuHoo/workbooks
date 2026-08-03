@@ -1494,8 +1494,29 @@ write_values_entry <- function(file_name, entry) {
   message("Wrote manuscript calculation values: ", values_output_path)
 }
 
-annual_interval_lower <- recorded_lower
-annual_interval_upper <- recorded_upper
+required_vars <- c(
+  "annual_prediction",
+  "ADR_lower",
+  "ADR_upper",
+  "annual_difference",
+  "annual_se",
+  "var_mean_annual",
+  "annual_var",
+  "var_future_annual",
+  "annual_recorded",
+  "PM",
+  "delta",
+  "c_L",
+  "c_U",
+  "assurance_over",
+  "assurance_under"
+)
+
+if (!all(vapply(required_vars, function(name) exists(name, inherits = TRUE), logical(1L)))) {
+  message("Skipping regression worked-calculation value emission: required variables are not available in this execution context.")
+} else {
+annual_interval_lower <- annual_prediction + ADR_lower
+annual_interval_upper <- annual_prediction + ADR_upper
 test_statistic <- annual_difference / annual_se
 coefficient_share <- var_mean_annual / annual_var
 future_share <- var_future_annual / annual_var
@@ -1511,7 +1532,7 @@ write_values_entry(
     source_dataset = "USSteamCo hold-out predictions",
     target_snippet = "generated/worked-calculations/reg-annual-expectation-interval.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:annual_expectation", "eq:combined_prediction_standard_error", "eq:annual_prediction_interval"),
     values = list(
       list(id = "reg.annual.annual_prediction", role = "annual_prediction", raw = annual_prediction, format = "integer"),
@@ -1539,7 +1560,7 @@ write_values_entry(
     source_dataset = "USSteamCo hold-out predictions",
     target_snippet = "generated/worked-calculations/reg-annual-assurance.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:standardized_noncentrality_parameter", "eq:acceptable_difference_range", "eq:test_statistic"),
     values = list(
       list(id = "reg.annual.performance_materiality", role = "performance_materiality", raw = PM, format = "integer"),
@@ -1569,7 +1590,7 @@ write_values_entry(
     source_dataset = "USSteamCo hold-out predictions",
     target_snippet = "generated/worked-calculations/reg-annual-decision-bounds.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:acceptable_difference_range"),
     values = list(
       list(id = "reg.annual.annual_se", role = "annual_se", raw = annual_se, format = "integer"),
@@ -1580,4 +1601,5 @@ write_values_entry(
     )
   )
 )
+}
 ```

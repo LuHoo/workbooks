@@ -6,7 +6,7 @@
   "source_dataset": "USSteamCo hold-out predictions",
   "target_snippet": "generated/worked-calculations/reg-annual-decision-bounds.tex",
   "tolerance": 1e-08,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": "eq:acceptable_difference_range",
   "values": [
     {

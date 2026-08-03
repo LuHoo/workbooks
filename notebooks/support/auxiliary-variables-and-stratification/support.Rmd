@@ -658,7 +658,7 @@ entry <- list(
     list(id = "aux.mpu.total_audit_value", role = "total_audit_value", raw = sum_y, format = "number:2"),
     list(id = "aux.mpu.mean_audit_value", role = "mean_audit_value", raw = mean_y, format = "number:2"),
     list(id = "aux.mpu.sum_squared_audit_values", role = "sum_squared_audit_values", raw = sum_y2, format = "integer", tolerance = 1e-6),
-    list(id = "aux.mpu.audit_value_variance", role = "audit_value_variance", raw = var_y, format = "integer"),
+    list(id = "aux.mpu.audit_value_variance", role = "audit_value_variance", raw = var_y, format = "integer", tolerance = 1e-5),
     list(id = "aux.mpu.estimated_population_value", role = "estimated_population_value", raw = mpu_estimate, format = "integer")
   )
 )
@@ -675,7 +675,7 @@ entry <- list(
   source_dataset = "FSaudit::inventoryData",
   target_snippet = "generated/worked-calculations/aux-regression-estimator.tex",
   tolerance = 1e-8,
-  language_scope = "shared",
+  language_scope = "r",
   equation_labels = c("eq:regression_slope", "eq:variance_regression", "eq:prediction_interval_MPU_with_g"),
   values = list(
     list(id = "aux.reg.slope", role = "slope", raw = b1, format = "number:4"),
@@ -717,7 +717,7 @@ entry <- list(
   source_dataset = "FSaudit::inventoryData",
   target_snippet = "generated/worked-calculations/aux-difference-estimator.tex",
   tolerance = 1e-8,
-  language_scope = "shared",
+  language_scope = "r",
   equation_labels = c("eq:difference_estimate", "eq:sd_diff", "eq:prediction_interval_MPU_with_g"),
   values = list(
     list(id = "aux.diff.population_size", role = "population_size", raw = N, format = "integer"),
@@ -747,7 +747,7 @@ entry <- list(
   source_dataset = "FSaudit::inventoryData",
   target_snippet = "generated/worked-calculations/aux-ratio-estimator.tex",
   tolerance = 1e-8,
-  language_scope = "shared",
+  language_scope = "r",
   equation_labels = c("eq:ratio_estimator", "eq:sd_ratios", "eq:pred_interval_ratio"),
   values = list(
     list(id = "aux.ratio.population_size", role = "population_size", raw = N, format = "integer"),

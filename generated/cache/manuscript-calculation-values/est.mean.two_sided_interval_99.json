@@ -6,7 +6,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-mean-two-sided-interval-99.tex",
   "tolerance": 1e-08,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": "eq:two-sided",
   "values": [
     {

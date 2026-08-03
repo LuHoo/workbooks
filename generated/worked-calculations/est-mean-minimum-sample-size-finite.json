@@ -8,7 +8,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     
   ],
@@ -20,7 +20,7 @@
       "display": "2,222",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.t_value_95",
@@ -29,7 +29,7 @@
       "display": "2.010",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_variance",
@@ -38,7 +38,7 @@
       "display": "2,364,064",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.target_precision_300k",
@@ -47,7 +47,7 @@
       "display": "300,000",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.gamma_finite",
@@ -56,7 +56,7 @@
       "display": "4.243",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.min_n_finite",
@@ -65,7 +65,7 @@
       "display": "423.8",
       "format": "number:1",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.min_n_finite_ceiling",
@@ -74,7 +74,7 @@
       "display": "424",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.min_n_infinite_300k",
@@ -83,7 +83,7 @@
       "display": "524",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

@@ -8,7 +8,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-prop-binomial-interval-95.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     "eq:lower_bound_binomial", "eq:upper_bound_binomial"
   ],
@@ -20,7 +20,7 @@
       "display": "31",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.n",
@@ -29,7 +29,7 @@
       "display": "50",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.f_value_lower",
@@ -38,7 +38,7 @@
       "display": "1.736",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.f_value_upper",
@@ -47,7 +47,7 @@
       "display": "1.815",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.p_lower",
@@ -56,7 +56,7 @@
       "display": "0.472",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.p_upper",
@@ -65,7 +65,7 @@
       "display": "0.753",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

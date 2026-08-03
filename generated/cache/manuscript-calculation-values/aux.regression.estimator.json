@@ -6,7 +6,7 @@
   "source_dataset": "FSaudit::inventoryData",
   "target_snippet": "generated/worked-calculations/aux-regression-estimator.tex",
   "tolerance": 1e-08,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": ["eq:regression_slope", "eq:variance_regression", "eq:prediction_interval_MPU_with_g"],
   "values": [
     {

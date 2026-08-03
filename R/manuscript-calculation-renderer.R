@@ -58,9 +58,10 @@ mc_render_template <- function(template, values, allow_roles = TRUE) {
 
   out <- template
   for (token in names(replacements)) {
+    replacement <- gsub("\\\\", "\\\\\\\\", replacements[[token]])
     out <- gsub(
       paste0("\\{\\{", token, "\\}\\}"),
-      replacements[[token]],
+      replacement,
       out,
       fixed = FALSE
     )

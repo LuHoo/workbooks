@@ -1,12 +1,138 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "checked_count": 1,
+  "checked_count": 22,
   "checked": [
+    {
+      "id": "aux.difference.estimator",
+      "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "target_snippet": "generated/worked-calculations/aux-difference-estimator.tex",
+      "status": "passed"
+    },
     {
       "id": "aux.mpu.estimator",
       "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
       "target_snippet": "generated/worked-calculations/aux-mpu-estimator.tex",
+      "status": "passed"
+    },
+    {
+      "id": "aux.ratio.estimator",
+      "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "target_snippet": "generated/worked-calculations/aux-ratio-estimator.tex",
+      "status": "passed"
+    },
+    {
+      "id": "aux.regression.estimator",
+      "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "target_snippet": "generated/worked-calculations/aux-regression-estimator.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.minimum_sample_size_finite",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.minimum_sample_size_infinite",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.one_sided_upper_95",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-one-sided-upper-95.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.point_estimate",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-point-estimate.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.stein_interval",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-stein-interval.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.two_sided_finite_95",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-two-sided-finite-95.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.two_sided_interval_95",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-two-sided-interval-95.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.mean.two_sided_interval_99",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-mean-two-sided-interval-99.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.prop.binomial_interval_95",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-prop-binomial-interval-95.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.prop.binomial_interval_extended",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-prop-binomial-interval-extended.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.prop.minimum_sample_size_normal",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.prop.point_estimate",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-prop-point-estimate.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.prop.total_point_estimate",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-prop-total-point-estimate.tex",
+      "status": "passed"
+    },
+    {
+      "id": "est.total.point_estimate",
+      "source_notebook": "notebooks/support/population-estimation/support.Rmd",
+      "target_snippet": "generated/worked-calculations/est-total-point-estimate.tex",
+      "status": "passed"
+    },
+    {
+      "id": "hyp.mus.sample_size",
+      "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+      "target_snippet": "generated/worked-calculations/hyp-mus-sample-size.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.annual.assurance",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-annual-assurance.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.annual.decision_bounds",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-annual-decision-bounds.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.annual.expectation_interval",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-annual-expectation-interval.tex",
       "status": "passed"
     }
   ],
@@ -67,7 +193,7 @@
       "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
       "r_raw": 3649977984.2608,
       "python_raw": 3649977984.2608,
-      "difference": 0,
+      "difference": 9.5367e-07,
       "tolerance": 3.65e-06,
       "status": "passed"
     },
@@ -79,8 +205,8 @@
       "python_source_notebook": "notebooks/workshops/Workshop 3 (Python).ipynb",
       "r_raw": 4468220.4456,
       "python_raw": 4468220.4456,
-      "difference": 1.8626e-09,
-      "tolerance": 1e-08,
+      "difference": 7.458e-06,
+      "tolerance": 1e-05,
       "status": "passed"
     },
     {
@@ -101,6 +227,132 @@
       {
         "file": "././auxiliary.tex",
         "target": "generated/worked-calculations/aux-mpu-estimator.tex"
+      }
+    ],
+    "2": [
+      {
+        "file": "././auxiliary.tex",
+        "target": "generated/worked-calculations/aux-regression-estimator.tex"
+      }
+    ],
+    "3": [
+      {
+        "file": "././auxiliary.tex",
+        "target": "generated/worked-calculations/aux-difference-estimator.tex"
+      }
+    ],
+    "4": [
+      {
+        "file": "././auxiliary.tex",
+        "target": "generated/worked-calculations/aux-ratio-estimator.tex"
+      }
+    ],
+    "5": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-point-estimate.tex"
+      }
+    ],
+    "6": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-total-point-estimate.tex"
+      }
+    ],
+    "7": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-two-sided-interval-95.tex"
+      }
+    ],
+    "8": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-two-sided-interval-99.tex"
+      }
+    ],
+    "9": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-one-sided-upper-95.tex"
+      }
+    ],
+    "10": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-two-sided-finite-95.tex"
+      }
+    ],
+    "11": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex"
+      }
+    ],
+    "12": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-stein-interval.tex"
+      }
+    ],
+    "13": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex"
+      }
+    ],
+    "14": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-prop-point-estimate.tex"
+      }
+    ],
+    "15": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-prop-total-point-estimate.tex"
+      }
+    ],
+    "16": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-prop-binomial-interval-95.tex"
+      }
+    ],
+    "17": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex"
+      }
+    ],
+    "18": [
+      {
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-prop-binomial-interval-extended.tex"
+      }
+    ],
+    "19": [
+      {
+        "file": "././hypothesis-testing.tex",
+        "target": "generated/worked-calculations/hyp-mus-sample-size.tex"
+      }
+    ],
+    "20": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
+      }
+    ],
+    "21": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+      }
+    ],
+    "22": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-decision-bounds.tex"
       }
     ]
   },

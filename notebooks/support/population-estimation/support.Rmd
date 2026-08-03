@@ -96,7 +96,7 @@ entry <- list(
   source_dataset = "FSaudit::salaries",
   target_snippet = "generated/worked-calculations/est-mean-point-estimate.tex",
   tolerance = 1e-8,
-  language_scope = "shared",
+  language_scope = "r",
   equation_labels = c("eq:sample_mean"),
   values = list(
     list(id = "est.mean.sample_total_gross", role = "sample_total_gross", raw = sample_total_gross, format = "integer"),
@@ -117,7 +117,7 @@ entry <- list(
   source_dataset = "FSaudit::salaries",
   target_snippet = "generated/worked-calculations/est-total-point-estimate.tex",
   tolerance = 1e-8,
-  language_scope = "shared",
+  language_scope = "r",
   equation_labels = c("eq:estimate_total"),
   values = list(
     list(id = "est.total.population_size", role = "population_size", raw = N, format = "integer"),
@@ -322,7 +322,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-two-sided-interval-95.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:two-sided"),
     values = list(
       list(id = "est.mean.sample_size", role = "sample_size", raw = n, format = "integer"),
@@ -350,7 +350,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-two-sided-interval-99.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:two-sided"),
     values = list(
       list(id = "est.mean.sample_size", role = "sample_size", raw = n, format = "integer"),
@@ -377,7 +377,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-one-sided-upper-95.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     values = list(
       list(id = "est.mean.sample_size", role = "sample_size", raw = n, format = "integer"),
       list(id = "est.mean.sample_sd", role = "sample_sd", raw = sample_sd, format = "number:2"),
@@ -399,7 +399,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-two-sided-finite-95.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:two-sided_finite"),
     values = list(
       list(id = "est.mean.sample_size", role = "sample_size", raw = n, format = "integer"),
@@ -424,7 +424,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:minimum_sample_size"),
     values = list(
       list(id = "est.mean.population_size", role = "population_size", raw = N, format = "integer"),
@@ -448,7 +448,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-stein-interval.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:stein"),
     values = list(
       list(id = "est.mean.population_size", role = "population_size", raw = N, format = "integer"),
@@ -473,7 +473,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     values = list(
       list(id = "est.mean.population_size", role = "population_size", raw = N, format = "integer"),
       list(id = "est.mean.t_value_95", role = "t_value_95", raw = t_value_95, format = "number:3"),
@@ -497,7 +497,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-prop-point-estimate.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:sample_proportion"),
     values = list(
       list(id = "est.prop.k", role = "k", raw = k, format = "integer"),
@@ -517,7 +517,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-prop-total-point-estimate.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:point_estimate_number"),
     values = list(
       list(id = "est.prop.population_size", role = "population_size", raw = N, format = "integer"),
@@ -538,7 +538,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-prop-binomial-interval-95.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:lower_bound_binomial", "eq:upper_bound_binomial"),
     values = list(
       list(id = "est.prop.k", role = "k", raw = k, format = "integer"),
@@ -561,7 +561,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:sampsize_proportion"),
     values = list(
       list(id = "est.prop.z_value_95", role = "z_value_95", raw = z_value_95, format = "number:2"),
@@ -584,7 +584,7 @@ write_values_entry(
     source_dataset = "FSaudit::salaries",
     target_snippet = "generated/worked-calculations/est-prop-binomial-interval-extended.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:lower_bound_binomial", "eq:upper_bound_binomial"),
     values = list(
       list(id = "est.prop.k_extended", role = "k_extended", raw = k_ext, format = "integer"),

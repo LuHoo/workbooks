@@ -8,7 +8,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-mean-two-sided-interval-95.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     "eq:two-sided"
   ],
@@ -20,7 +20,7 @@
       "display": "50",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_variance",
@@ -29,7 +29,7 @@
       "display": "2,364,064",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_sd",
@@ -38,7 +38,7 @@
       "display": "1,537.55",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_mean",
@@ -47,7 +47,7 @@
       "display": "3,014.16",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.t_value_95",
@@ -56,7 +56,7 @@
       "display": "2.010",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.precision_95",
@@ -65,7 +65,7 @@
       "display": "436.97",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.lower_95",
@@ -74,7 +74,7 @@
       "display": "2,577.19",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.upper_95",
@@ -83,7 +83,7 @@
       "display": "3,451.13",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.population_size",
@@ -92,7 +92,7 @@
       "display": "2,222",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.total_lower_95",
@@ -101,7 +101,7 @@
       "display": "5,726,522",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.total_upper_95",
@@ -110,7 +110,7 @@
       "display": "7,668,405",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

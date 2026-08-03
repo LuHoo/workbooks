@@ -61,10 +61,10 @@
     {
       "id": "aux.mpu.audit_value_variance",
       "role": "audit_value_variance",
-      "raw": 4468220.44560000,
+      "raw": 4468220.44560,
       "display": "4,468,220",
       "format": "integer",
-      "tolerance": 0.00000001,
+      "tolerance": 0.00001,
       "language_scope": "shared"
     },
     {

@@ -8,7 +8,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     "eq:sampsize_proportion"
   ],
@@ -20,7 +20,7 @@
       "display": "1.96",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.p_hat",
@@ -29,7 +29,7 @@
       "display": "0.62",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.one_minus_p_hat",
@@ -38,7 +38,7 @@
       "display": "0.38",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.target_prop_precision",
@@ -47,7 +47,7 @@
       "display": "0.1",
       "format": "number:1",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.min_n_prop",
@@ -56,7 +56,7 @@
       "display": "90.5",
       "format": "number:1",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.prop.min_n_prop_ceiling",
@@ -65,7 +65,7 @@
       "display": "91",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

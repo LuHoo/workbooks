@@ -168,6 +168,7 @@ aux_regression_template <- function() {
     "\\begin{equation*}",
     "c_{xy} = {{covariance}}",
     "\\end{equation*}",
+    "with audit-value variance $s_y^2 = {{audit_variance}}$ and book-value variance $s_x^2 = {{book_variance}}$.",
     "\\begin{equation*}",
     "s_{y,R}^2 = {{regression_variance}}",
     "\\end{equation*}",
@@ -215,6 +216,7 @@ aux_difference_template <- function() {
 aux_ratio_template <- function() {
   c(
     "Applying these formulas to the results of \\emph{Case: Valuation of Inventories} in Table \\ref{tab:sample_results}, we obtain the following results.",
+    "The population contains {{population_size}} inventory items.",
     "",
     "\\begin{equation*}",
     "q = \\frac{{{sum_audit}}}{{{sum_book}}} = {{q_factor}}",
@@ -295,7 +297,7 @@ est_mean_two_sided_99_template <- function() {
     "\\begin{equation*}",
     "{{sample_mean}} \\pm {{t_value_99}} \\cdot \\frac{{{sample_sd}}}{\\sqrt{{{sample_size}}}} = {{sample_mean}} \\pm {{precision_99}}",
     "\\end{equation*}",
-    "and the interval estimate is [{{lower_99}},\\hspace{0.5em} {{upper_99}}]. This creates a 99\\% two-sided confidence interval for the total monthly salary cost [{{total_lower_99}}, {{total_upper_99}}]. Note that the 99\\% confidence interval is wider than the 95\\% confidence interval."
+    "and the interval estimate is [{{lower_99}},\\hspace{0.5em} {{upper_99}}]. This creates a 99\\% two-sided confidence interval for the total monthly salary cost in a population of {{population_size}} employees: [{{total_lower_99}}, {{total_upper_99}}]. Note that the 99\\% confidence interval is wider than the 95\\% confidence interval."
   )
 }
 
@@ -344,7 +346,7 @@ est_mean_stein_interval_template <- function() {
     "{{population_size}} \\cdot {{sample2_mean}} \\pm {{population_size}} \\cdot {{t_value_95}} \\cdot \\frac{{{sample_sd}}}{\\sqrt{{{n_total}}}} = {{stein_total_point}} \\pm {{target_precision_600k}}",
     "\\end{equation*}",
     "",
-    "Under Stein's method, the precision achieved is, by definition, equal to the target precision."
+    "Under Stein's method, the precision achieved is, by definition, equal to the target precision, i.e. {{stein_precision}}."
   )
 }
 

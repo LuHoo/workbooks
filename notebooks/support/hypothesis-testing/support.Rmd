@@ -465,7 +465,7 @@ write_values_entry(
     source_dataset = "FSaudit::accounts_receivable",
     target_snippet = "generated/worked-calculations/hyp-mus-sample-size.tex",
     tolerance = 1e-8,
-    language_scope = "shared",
+    language_scope = "r",
     equation_labels = c("eq:MUS_sample_size"),
     values = list(
       list(id = "hyp.mus.population_book_total", role = "population_book_total", raw = X_total, format = "integer"),

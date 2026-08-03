@@ -8,7 +8,7 @@
   "source_dataset": "USSteamCo hold-out predictions",
   "target_snippet": "generated/worked-calculations/reg-annual-expectation-interval.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     "eq:annual_expectation", "eq:combined_prediction_standard_error", "eq:annual_prediction_interval"
   ],
@@ -20,7 +20,7 @@
       "display": "190,680,684",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.annual_se",
@@ -29,7 +29,7 @@
       "display": "6,323,301",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.var_mean_annual",
@@ -38,7 +38,7 @@
       "display": "14,886,605,275,947.4648",
       "format": "number:4",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.var_future_annual",
@@ -47,7 +47,7 @@
       "display": "25,097,531,113,309.0156",
       "format": "number:4",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.coefficient_share",
@@ -56,7 +56,7 @@
       "display": "37.2\\%",
       "format": "percentage:1",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.future_share",
@@ -65,7 +65,7 @@
       "display": "62.8\\%",
       "format": "percentage:1",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.annual_interval_lower",
@@ -74,7 +74,7 @@
       "display": "173,291,634",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.annual_interval_upper",
@@ -83,7 +83,7 @@
       "display": "208,069,735",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.annual_recorded",
@@ -92,7 +92,7 @@
       "display": "174,778,400",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.annual_difference",
@@ -101,7 +101,7 @@
       "display": "-15,902,284",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.annual_difference_abs",
@@ -110,7 +110,7 @@
       "display": "15,902,284",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

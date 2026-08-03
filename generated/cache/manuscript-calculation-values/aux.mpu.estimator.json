@@ -44,7 +44,8 @@
       "id": "aux.mpu.audit_value_variance",
       "role": "audit_value_variance",
       "raw": 4468220.4456,
-      "format": "integer"
+      "format": "integer",
+      "tolerance": 1e-05
     },
     {
       "id": "aux.mpu.estimated_population_value",

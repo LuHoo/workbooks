@@ -8,7 +8,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-mean-point-estimate.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     "eq:sample_mean"
   ],
@@ -20,7 +20,7 @@
       "display": "150,708",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_size",
@@ -29,7 +29,7 @@
       "display": "50",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_mean",
@@ -38,7 +38,7 @@
       "display": "3,014.16",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

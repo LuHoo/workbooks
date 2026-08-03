@@ -8,7 +8,7 @@
   "source_dataset": "USSteamCo hold-out predictions",
   "target_snippet": "generated/worked-calculations/reg-annual-decision-bounds.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     "eq:acceptable_difference_range"
   ],
@@ -20,7 +20,7 @@
       "display": "6,323,301",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.adr_lower",
@@ -29,7 +29,7 @@
       "display": "-17,389,050",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.adr_upper",
@@ -38,7 +38,7 @@
       "display": "17,389,050",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.c_lower",
@@ -47,7 +47,7 @@
       "display": "-2.75",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "reg.annual.c_upper",
@@ -56,7 +56,7 @@
       "display": "2.75",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

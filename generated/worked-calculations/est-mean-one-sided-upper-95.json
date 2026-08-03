@@ -8,7 +8,7 @@
   "source_dataset": "FSaudit::salaries",
   "target_snippet": "generated/worked-calculations/est-mean-one-sided-upper-95.tex",
   "tolerance": 0.00000001,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": [
     
   ],
@@ -20,7 +20,7 @@
       "display": "50",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_sd",
@@ -29,7 +29,7 @@
       "display": "1,537.55",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.sample_mean",
@@ -38,7 +38,7 @@
       "display": "3,014.16",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.t_value_one_sided_95",
@@ -47,7 +47,7 @@
       "display": "1.677",
       "format": "number:3",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.upper_one_sided_95",
@@ -56,7 +56,7 @@
       "display": "3,378.71",
       "format": "number:2",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     },
     {
       "id": "est.mean.total_upper_one_sided_95",
@@ -65,7 +65,7 @@
       "display": "7,507,502",
       "format": "integer",
       "tolerance": 0.00000001,
-      "language_scope": "shared"
+      "language_scope": "r"
     }
   ]
 }

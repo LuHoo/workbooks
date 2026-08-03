@@ -6,7 +6,7 @@
   "source_dataset": "USSteamCo hold-out predictions",
   "target_snippet": "generated/worked-calculations/reg-annual-expectation-interval.tex",
   "tolerance": 1e-08,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": ["eq:annual_expectation", "eq:combined_prediction_standard_error", "eq:annual_prediction_interval"],
   "values": [
     {

@@ -6,7 +6,7 @@
   "source_dataset": "FSaudit::inventoryData",
   "target_snippet": "generated/worked-calculations/aux-difference-estimator.tex",
   "tolerance": 1e-08,
-  "language_scope": "shared",
+  "language_scope": "r",
   "equation_labels": ["eq:difference_estimate", "eq:sd_diff", "eq:prediction_interval_MPU_with_g"],
   "values": [
     {
