@@ -1,0 +1,86 @@
+{
+  "id": "aux.difference.estimator",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  "source_context": "Exercise 3.5 and corresponding manuscript worked derivation",
+  "source_dataset": "FSaudit::inventoryData",
+  "target_snippet": "generated/worked-calculations/aux-difference-estimator.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": ["eq:difference_estimate", "eq:sd_diff", "eq:prediction_interval_MPU_with_g"],
+  "values": [
+    {
+      "id": "aux.diff.population_size",
+      "role": "population_size",
+      "raw": 3500,
+      "format": "integer"
+    },
+    {
+      "id": "aux.diff.sample_size",
+      "role": "sample_size",
+      "raw": 400,
+      "format": "integer"
+    },
+    {
+      "id": "aux.diff.population_book_total",
+      "role": "population_book_total",
+      "raw": 7360816,
+      "format": "integer"
+    },
+    {
+      "id": "aux.diff.sum_difference",
+      "role": "sum_difference",
+      "raw": -1011.11,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.diff.sum_squared_difference",
+      "role": "sum_squared_difference",
+      "raw": 135190037.6433,
+      "format": "integer",
+      "tolerance": 1e-06
+    },
+    {
+      "id": "aux.diff.estimated_population_value",
+      "role": "estimated_population_value",
+      "raw": 7369663.2125,
+      "format": "integer"
+    },
+    {
+      "id": "aux.diff.difference_variance",
+      "role": "difference_variance",
+      "raw": 338815.7438,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.diff.g_factor",
+      "role": "g_factor",
+      "raw": 164.6967,
+      "format": "number:4"
+    },
+    {
+      "id": "aux.diff.t_value",
+      "role": "t_value",
+      "raw": 1.9659,
+      "format": "number:3"
+    },
+    {
+      "id": "aux.diff.precision",
+      "role": "precision",
+      "raw": 188466.4792,
+      "format": "integer"
+    },
+    {
+      "id": "aux.diff.interval_lower",
+      "role": "interval_lower",
+      "raw": 7181196.7333,
+      "format": "integer"
+    },
+    {
+      "id": "aux.diff.interval_upper",
+      "role": "interval_upper",
+      "raw": 7558129.6917,
+      "format": "integer"
+    }
+  ]
+}

@@ -13,10 +13,79 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-N * y_bar
-\end{Verbatim}
-\begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-[1] 6697464
+if (!requireNamespace("jsonlite", quietly = TRUE)) {
+  stop("jsonlite is required to emit manuscript calculation values.")
+}
+
+find_repo_root <- function(start = getwd()) {
+  current <- normalizePath(start, winslash = "/", mustWork = TRUE)
+  repeat {
+    if (file.exists(file.path(current, "pyproject.toml")) || file.exists(file.path(current, ".git"))) {
+      return(current)
+    }
+    parent <- dirname(current)
+    if (identical(parent, current)) {
+      stop("Unable to locate repository root from working directory: ", start)
+    }
+    current <- parent
+  }
+}
+
+repo_root <- find_repo_root()
+values_output_dir <- file.path(
+  repo_root,
+  "generated",
+  "cache",
+  "manuscript-calculation-values"
+)
+dir.create(values_output_dir, recursive = TRUE, showWarnings = FALSE)
+
+sample_total_gross <- sum(sample1$gross)
+
+entry <- list(
+  id = "est.mean.point_estimate",
+  kind = "worked_calculation",
+  source_notebook = "notebooks/support/population-estimation/support.Rmd",
+  source_context = "Exercise 2.2 point estimate of the mean",
+  source_dataset = "FSaudit::salaries",
+  target_snippet = "generated/worked-calculations/est-mean-point-estimate.tex",
+  tolerance = 1e-8,
+  language_scope = "shared",
+  equation_labels = c("eq:sample_mean"),
+  values = list(
+    list(id = "est.mean.sample_total_gross", role = "sample_total_gross", raw = sample_total_gross, format = "integer"),
+    list(id = "est.mean.sample_size", role = "sample_size", raw = n, format = "integer"),
+    list(id = "est.mean.sample_mean", role = "sample_mean", raw = y_bar, format = "number:2")
+  )
+)
+
+values_output_path <- file.path(values_output_dir, "est.mean.point_estimate.json")
+jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
+message("Wrote manuscript calculation values: ", values_output_path)
+
+entry <- list(
+  id = "est.total.point_estimate",
+  kind = "worked_calculation",
+  source_notebook = "notebooks/support/population-estimation/support.Rmd",
+  source_context = "Exercise 2.2 point estimate of the total payroll",
+  source_dataset = "FSaudit::salaries",
+  target_snippet = "generated/worked-calculations/est-total-point-estimate.tex",
+  tolerance = 1e-8,
+  language_scope = "shared",
+  equation_labels = c("eq:estimate_total"),
+  values = list(
+    list(id = "est.total.population_size", role = "population_size", raw = N, format = "integer"),
+    list(id = "est.total.sample_total_gross", role = "sample_total_gross", raw = sample_total_gross, format = "integer"),
+    list(id = "est.total.sample_size", role = "sample_size", raw = n, format = "integer"),
+    list(id = "est.total.estimated_total_gross", role = "estimated_total_gross", raw = N * y_bar, format = "integer")
+  )
+)
+
+values_output_path <- file.path(values_output_dir, "est.total.point_estimate.json")
+jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
+message("Wrote manuscript calculation values: ", values_output_path)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
+
+\noindent We can use the sample mean as an estimate for the total payroll in the population. The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.

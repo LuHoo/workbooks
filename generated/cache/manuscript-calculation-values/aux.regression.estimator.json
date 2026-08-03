@@ -1,0 +1,159 @@
+{
+  "id": "aux.regression.estimator",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  "source_context": "Exercise 3.4 and corresponding manuscript worked derivation",
+  "source_dataset": "FSaudit::inventoryData",
+  "target_snippet": "generated/worked-calculations/aux-regression-estimator.tex",
+  "tolerance": 1e-08,
+  "language_scope": "shared",
+  "equation_labels": ["eq:regression_slope", "eq:variance_regression", "eq:prediction_interval_MPU_with_g"],
+  "values": [
+    {
+      "id": "aux.reg.slope",
+      "role": "slope",
+      "raw": 0.978,
+      "format": "number:4"
+    },
+    {
+      "id": "aux.reg.sample_size",
+      "role": "sample_size",
+      "raw": 400,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.sum_book",
+      "role": "sum_book",
+      "raw": 863201.37,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.reg.sum_audit",
+      "role": "sum_audit",
+      "raw": 864212.48,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.reg.sum_cross",
+      "role": "sum_cross",
+      "raw": 3550437464.2295,
+      "format": "integer",
+      "tolerance": 1e-06
+    },
+    {
+      "id": "aux.reg.sum_squared_book",
+      "role": "sum_squared_book",
+      "raw": 3586086981.8415,
+      "format": "integer",
+      "tolerance": 1e-06
+    },
+    {
+      "id": "aux.reg.population_size",
+      "role": "population_size",
+      "raw": 3500,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.population_book_total",
+      "role": "population_book_total",
+      "raw": 7360816,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.sample_mean_audit",
+      "role": "sample_mean_audit",
+      "raw": 2160.5312,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.reg.sample_mean_book",
+      "role": "sample_mean_book",
+      "raw": 2158.0034,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.reg.estimated_population_value",
+      "role": "estimated_population_value",
+      "raw": 7373882.49,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.covariance",
+      "role": "covariance",
+      "raw": 4224220.4824,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.audit_variance",
+      "role": "audit_variance",
+      "raw": 4468220.4456,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.book_variance",
+      "role": "book_variance",
+      "raw": 4319036.2629,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.regression_variance",
+      "role": "regression_variance",
+      "raw": 337580.3194,
+      "format": "number:2"
+    },
+    {
+      "id": "aux.reg.g_factor",
+      "role": "g_factor",
+      "raw": 164.6967,
+      "format": "number:4"
+    },
+    {
+      "id": "aux.reg.t_value",
+      "role": "t_value",
+      "raw": 1.9659,
+      "format": "number:3"
+    },
+    {
+      "id": "aux.reg.precision",
+      "role": "precision",
+      "raw": 188122.5626,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.interval_lower",
+      "role": "interval_lower",
+      "raw": 7185759.9274,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.interval_upper",
+      "role": "interval_upper",
+      "raw": 7562005.0526,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.correlation",
+      "role": "correlation",
+      "raw": 0.9616,
+      "format": "number:4"
+    },
+    {
+      "id": "aux.reg.adjustment_factor",
+      "role": "adjustment_factor",
+      "raw": 0.2745,
+      "format": "number:4"
+    },
+    {
+      "id": "aux.reg.mpu_precision",
+      "role": "mpu_precision",
+      "raw": 684415.1618,
+      "format": "integer"
+    },
+    {
+      "id": "aux.reg.mpu_precision_adjusted",
+      "role": "mpu_precision_adjusted",
+      "raw": 188122.5626,
+      "format": "integer"
+    }
+  ]
+}

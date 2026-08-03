@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "id": "aux.ratio.estimator",
+  "kind": "worked_calculation",
+  "chapter_prefix": "aux",
+  "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  "source_context": "Exercise 3.6 and corresponding manuscript worked derivation",
+  "source_dataset": "FSaudit::inventoryData",
+  "target_snippet": "generated/worked-calculations/aux-ratio-estimator.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:ratio_estimator", "eq:sd_ratios", "eq:pred_interval_ratio"
+  ],
+  "values": [
+    {
+      "id": "aux.ratio.population_size",
+      "role": "population_size",
+      "raw": 3500.00000000,
+      "display": "3,500",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.sample_size",
+      "role": "sample_size",
+      "raw": 400.00000000,
+      "display": "400",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.population_book_total",
+      "role": "population_book_total",
+      "raw": 7360816.00000000,
+      "display": "7,360,816",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.sum_audit",
+      "role": "sum_audit",
+      "raw": 864212.48000000,
+      "display": "864,212.48",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.sum_book",
+      "role": "sum_book",
+      "raw": 863201.37000000,
+      "display": "863,201.37",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.sum_squared_audit",
+      "role": "sum_squared_audit",
+      "raw": 3649977984.260800,
+      "display": "3,649,977,984",
+      "format": "integer",
+      "tolerance": 0.000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.sum_cross",
+      "role": "sum_cross",
+      "raw": 3550437464.229500,
+      "display": "3,550,437,464",
+      "format": "integer",
+      "tolerance": 0.000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.sum_squared_book",
+      "role": "sum_squared_book",
+      "raw": 3586086981.841500,
+      "display": "3,586,086,982",
+      "format": "integer",
+      "tolerance": 0.000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.q_factor",
+      "role": "q_factor",
+      "raw": 1.00120000,
+      "display": "1.00120",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.estimated_population_value",
+      "role": "estimated_population_value",
+      "raw": 7369438.08390000,
+      "display": "7,369,438",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.ratio_variance",
+      "role": "ratio_variance",
+      "raw": 339043.79450000,
+      "display": "339,043.79",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.g_factor",
+      "role": "g_factor",
+      "raw": 164.69670000,
+      "display": "164.6967",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.t_value",
+      "role": "t_value",
+      "raw": 1.96590000,
+      "display": "1.966",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.precision",
+      "role": "precision",
+      "raw": 188529.89520000,
+      "display": "188,530",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.interval_lower",
+      "role": "interval_lower",
+      "raw": 7180908.18880000,
+      "display": "7,180,908",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.ratio.interval_upper",
+      "role": "interval_upper",
+      "raw": 7557967.97910000,
+      "display": "7,557,968",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}

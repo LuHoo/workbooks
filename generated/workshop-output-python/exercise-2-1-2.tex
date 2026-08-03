@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We sample 50 units from the \ttblue{salaries} dataset by using the \ttblue{sample()} function.
+\noindent We sample 50 units from the \ttblue{salaries}
+dataset by using the \ttblue{sample()} function.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -19,7 +20,8 @@
 # RNGkind() is R-specific; NumPy RNG is used in Python
 n = 50
 np.random.seed(12345)
-sample1 = salaries.iloc[np.random.choice(N, size=n, replace=False), :]
+sample1 = salaries.iloc[np.random.choice(N, size=n, 
+replace=False), :]
 sample1.head()
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

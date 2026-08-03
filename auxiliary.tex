@@ -248,48 +248,7 @@ If there is a strong correlation between the book and audit values, the effect o
 	\label{fig:H4_adjustment_factor}
 \end{figure}
 
-Using the results summarized in Table \ref{tab:sample_results}, the estimated slope parameter is
-
-\begin{equation*}
-	b_1 = \frac{3,550,437,464 - \frac{863,201.37 \cdot 864,212.48}{400}}{3,586,086,982 - \frac{(863,201.37)^2}{400}} = 0.9780
-\end{equation*}
-
-The estimated total value of the population is therefore
-\begin{align*}
- 	\hat{Y}_R &= 3,500 \cdot 2,160.53 + 0.9780 \cdot (7,360,816 - 3,500 \cdot \frac{863,201.37}{400}) \\
- 	&= 7,373,882
-\end{align*} 
-
-The covariance $c_{xy}$ is then calculated as follows by using the values given in the \emph{Case: Valuation of inventories}
-
-\begin{equation*}
-c_{xy} = \frac{3,550,437,464 - 863,201.347 \cdot 864,212.48 / 400}{400 - 1} = 4,224,220
-\end{equation*}
-
-This makes the regression variance
-\begin{align*}
-	s_{y, R}^2 &= \frac{400 - 1}{400 - 2}(4,468,220 - 2 \cdot 0.9780 \cdot 4,224,220 + 0.9780^2 \cdot 4,319,036) \\
-	&= 337,580.32
-\label{eq:standard_deviation_regression}
-\end{align*}
-A 95\% two-sided prediction interval on the correct population value is then calculated similar to Equation \ref{eq:prediction_interval_MPU_with_g}, replacing $\hat{Y}_{MPU}$ with $\hat{Y}_R$ and $s_y$ with $s_{y, R}$
-\begin{equation*}
-  7,373,882 \pm 164.6967 \cdot 1.966 \cdot \sqrt{337,580.32} = 
-\end{equation*}
-\begin{equation*}
-  7,373,882 \pm 188,123
-\end{equation*}
-which provides the prediction interval [7,185,760; 7,562,005].
-
-The correlation between book and audit values is 0.9616. 
-We therefore see that the adjustment factor
-\begin{equation*}
-	\sqrt{1 - r^2_{x.y}} = \sqrt{1 - 0.9616^2} = 0.2745
-\end{equation*}
-along with the factor $\sqrt{\frac{n - 1}{n - 2}}$ explains the reduction in precision of the MPU estimator
-\begin{equation*}
-	684,415 \cdot \sqrt{\frac{400 - 1}{400 - 2}} \cdot 0.2745 = 188,123
-\end{equation*}
+\input{generated/worked-calculations/aux-regression-estimator}
 
 We can also conclude that using the correlation between book and audit values reduces the precision of the estimate of the correct population value to below the desired precision of 200,000. Therefore, by using the regression estimator, it is not necessary to extend the sample.
 
@@ -321,30 +280,9 @@ s_d^2 = \frac{\sum{d^2} - (\sum{d})^2/n}{n - 1}
 \end{equation}
 
 \bigskip
-Applying these formulas to the results of \emph{Case: Valuation of Inventories} in Table \ref{tab:sample_results} we obtain the following results. The difference estimate is
+\input{generated/worked-calculations/aux-difference-estimator}
 
-\begin{equation*}
-\hat{Y}_D = 7,360,816 - 3,500 \cdot \frac{-1,011.11}{400} = 7,369,663
-%\label{}
-\end{equation*}
-
-The variance of the differences $d$ is
-\begin{equation*}
-s_d^2 = \frac{135,190,038 - (-1,011.11)^2 / 400}{400 - 1} = 338,815.74
-\end{equation*}
-
-The resulting two-sided 95\% prediction interval is
-
-\begin{equation*}
-  7,369,663 \pm 164.6967 \cdot 1.966 \cdot \sqrt{338,815.74} =
-%\label{eq:pred_interval_difference}
-\end{equation*}
-
-\begin{equation*}
-  7,369,663 \pm 188,467 
-%\label{eq:pred_interval_difference}
-\end{equation*}
-which provides the prediction interval [7,181,197; 7,558,130]. Similar to the regression estimator, the difference estimator is sufficiently precise.
+Similar to the regression estimator, the difference estimator is sufficiently precise.
 
 % section difference_estimator (end)
 
@@ -376,43 +314,9 @@ s_q^2 = \frac{\sum{y^2} - 2q\sum{xy} + q^2\sum{x^2}}{n - 1}
 \end{equation}
 
 \bigskip
-Applying these formulas to the results of \emph{Case: Valuation of Inventories} in Table \ref{tab:sample_results}, we obtain the following results. The ratio estimate is
+\input{generated/worked-calculations/aux-ratio-estimator}
 
-\begin{equation*}
-\hat{Y}_Q = 7,360,816 \cdot 1.00117 = 7,369,438
-%\label{eq:ratio_estimator}
-\end{equation*}
-
-The standard deviation of the ratio estimator is
-
-\begin{align*}
-s_q^2
-&=
-\frac{\scalebox{0.92}{$
-3,649,977,984
--2\cdot1.00117\cdot3,550,437,464
-+1.00117^2\cdot3,586,086,982
-$}}{400-1} \\
-&= 339,043.79
-\end{align*}
-
-% \begin{align*}
-% s_q^2 &= \frac{3,649,977,984 - 2\!\cdot 1.0012\!\cdot\!3,550,437,464 + 1.0012^2\!\cdot\!3,586,086,982}{400 - 1} \\
-% &= 339,043.79
-% %\label{eq:sd_ratios}
-% \end{align*}
-and as a result the two-sided 95\% prediction interval is
-
-\begin{equation*}
-7,369,438 \pm 164.6967 \cdot 1.966 \cdot \sqrt{339,043.79} = 
-%\label{eq:pred_interval_ratio}
-\end{equation*}
-\begin{equation*}
-  7,369,438 \pm 188,530
-%\label{eq:pred_interval_difference}
-\end{equation*}
-
-which yields the prediction interval [7,180,908; 7,557,968]. Similar to the regression and difference estimators, the ratio estimator yields a precision less than the target precision of 200,000.
+Similar to the regression and difference estimators, the ratio estimator yields a precision less than the target precision of 200,000.
 
 % The estimated misstatement in these results is the difference between the book value of the population (7,360,816) and estimated audit value. For example, the estimated misstatement from the MPU estimator is $X - \hat{Y}_{MPU} = 7,360,816 - 7,561,859.20 = -201,043.20$.
 

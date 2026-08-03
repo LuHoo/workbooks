@@ -18,50 +18,63 @@
       "role": "population_size",
       "raw": 3500.00000000,
       "display": "3,500",
-      "format": "integer"
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
     },
     {
       "id": "aux.mpu.sample_size",
       "role": "sample_size",
       "raw": 400.00000000,
       "display": "400",
-      "format": "integer"
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
     },
     {
       "id": "aux.mpu.total_audit_value",
       "role": "total_audit_value",
       "raw": 864212.48000000,
       "display": "864,212.48",
-      "format": "number:2"
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
     },
     {
       "id": "aux.mpu.mean_audit_value",
       "role": "mean_audit_value",
       "raw": 2160.53120000,
       "display": "2,160.53",
-      "format": "number:2"
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
     },
     {
       "id": "aux.mpu.sum_squared_audit_values",
       "role": "sum_squared_audit_values",
-      "raw": 3649977984.260799,
+      "raw": 3649977984.260800,
       "display": "3,649,977,984",
       "format": "integer",
-      "tolerance": 0.000001
+      "tolerance": 0.000001,
+      "language_scope": "shared"
     },
     {
       "id": "aux.mpu.audit_value_variance",
       "role": "audit_value_variance",
-      "raw": 4468220.44559254,
+      "raw": 4468220.44560000,
       "display": "4,468,220",
-      "format": "integer"
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
     },
     {
       "id": "aux.mpu.estimated_population_value",
       "role": "estimated_population_value",
       "raw": 7561859.20000000,
       "display": "7,561,859",
-      "format": "integer"
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
     }
   ]
 }

@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent To achieve the target precision of $E = $ 600,000, we extend the sample from Exercise 3.1 from 50 to 131 sampling units.
+\noindent To achieve the target precision of $E = $
+600,000, we extend the sample from Exercise 3.1
+from 50 to 131 sampling units.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +19,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 np.random.seed(12345)
-sample2 = salaries.iloc[np.random.choice(N, size=131, replace=False), :]
+sample2 = salaries.iloc[np.random.choice(N, size=131, 
+replace=False), :]
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

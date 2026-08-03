@@ -15,8 +15,10 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-cumul = cvs_sample(bv=inventoryData["bv"], id=inventoryData["item"])
-cumul.stratify(strata=3, classes=10, stratMeth="cumulative")
+cumul = cvs_sample(bv=inventoryData["bv"], 
+id=inventoryData["item"])
+cumul.stratify(strata=3, classes=10, 
+stratMeth="cumulative")
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

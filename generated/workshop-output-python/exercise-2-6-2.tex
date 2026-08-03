@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Binomial bounds can be obtained, by adding the distribution to the respective functions.
+\noindent Binomial bounds can be obtained, by adding the
+distribution to the respective functions.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -18,8 +19,10 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 lower(k = 31, n = 50, alpha = .025, dist = "binom")
 upper(k = 31, n = 50, alpha = .025, dist = "binom")
-lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
-upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
+lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = 
+"binom")
+upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = 
+"binom")
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 [1] 0.4717492
@@ -32,4 +35,3 @@ upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent Note that the hypergeometric distribution provides a more precise result.

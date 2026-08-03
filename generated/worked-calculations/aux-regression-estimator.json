@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "id": "aux.regression.estimator",
+  "kind": "worked_calculation",
+  "chapter_prefix": "aux",
+  "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  "source_context": "Exercise 3.4 and corresponding manuscript worked derivation",
+  "source_dataset": "FSaudit::inventoryData",
+  "target_snippet": "generated/worked-calculations/aux-regression-estimator.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "shared",
+  "equation_labels": [
+    "eq:regression_slope", "eq:variance_regression", "eq:prediction_interval_MPU_with_g"
+  ],
+  "values": [
+    {
+      "id": "aux.reg.slope",
+      "role": "slope",
+      "raw": 0.97800000,
+      "display": "0.9780",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sample_size",
+      "role": "sample_size",
+      "raw": 400.00000000,
+      "display": "400",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sum_book",
+      "role": "sum_book",
+      "raw": 863201.37000000,
+      "display": "863,201.37",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sum_audit",
+      "role": "sum_audit",
+      "raw": 864212.48000000,
+      "display": "864,212.48",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sum_cross",
+      "role": "sum_cross",
+      "raw": 3550437464.229500,
+      "display": "3,550,437,464",
+      "format": "integer",
+      "tolerance": 0.000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sum_squared_book",
+      "role": "sum_squared_book",
+      "raw": 3586086981.841500,
+      "display": "3,586,086,982",
+      "format": "integer",
+      "tolerance": 0.000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.population_size",
+      "role": "population_size",
+      "raw": 3500.00000000,
+      "display": "3,500",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.population_book_total",
+      "role": "population_book_total",
+      "raw": 7360816.00000000,
+      "display": "7,360,816",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sample_mean_audit",
+      "role": "sample_mean_audit",
+      "raw": 2160.53120000,
+      "display": "2,160.53",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.sample_mean_book",
+      "role": "sample_mean_book",
+      "raw": 2158.00340000,
+      "display": "2,158.00",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.estimated_population_value",
+      "role": "estimated_population_value",
+      "raw": 7373882.49000000,
+      "display": "7,373,882",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.covariance",
+      "role": "covariance",
+      "raw": 4224220.48240000,
+      "display": "4,224,220",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.audit_variance",
+      "role": "audit_variance",
+      "raw": 4468220.44560000,
+      "display": "4,468,220",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.book_variance",
+      "role": "book_variance",
+      "raw": 4319036.26290000,
+      "display": "4,319,036",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.regression_variance",
+      "role": "regression_variance",
+      "raw": 337580.31940000,
+      "display": "337,580.32",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.g_factor",
+      "role": "g_factor",
+      "raw": 164.69670000,
+      "display": "164.6967",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.t_value",
+      "role": "t_value",
+      "raw": 1.96590000,
+      "display": "1.966",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.precision",
+      "role": "precision",
+      "raw": 188122.56260000,
+      "display": "188,123",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.interval_lower",
+      "role": "interval_lower",
+      "raw": 7185759.92740000,
+      "display": "7,185,760",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.interval_upper",
+      "role": "interval_upper",
+      "raw": 7562005.05260000,
+      "display": "7,562,005",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.correlation",
+      "role": "correlation",
+      "raw": 0.96160000,
+      "display": "0.9616",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.adjustment_factor",
+      "role": "adjustment_factor",
+      "raw": 0.27450000,
+      "display": "0.2745",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.mpu_precision",
+      "role": "mpu_precision",
+      "raw": 684415.16180000,
+      "display": "684,415",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    },
+    {
+      "id": "aux.reg.mpu_precision_adjusted",
+      "role": "mpu_precision_adjusted",
+      "raw": 188122.56260000,
+      "display": "188,123",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "shared"
+    }
+  ]
+}
