@@ -1049,3 +1049,71 @@ decisions:
       operationalizing their controls; CURR-021 supersedes CURR-011 only for
       the mixed-scope interpretation that allows chapter-level and section-level
       active LOs to coexist.
+
+  - id: "CURR-022"
+    title: "Curriculum progression is governed at sequence level, not inferred from local chapter compliance"
+    domain:
+      - "curriculum-governance"
+      - "educational-purpose"
+      - "learning-objectives"
+      - "assessment"
+      - "curriculum-sequencing"
+    decision: >
+      Curriculum progression is a programme-level governance concern and must be
+      evaluated across chapter sequences, not only within individual chapters.
+      Chapter purpose remains primary, and chapter-to-chapter symmetry in Bloom
+      or competency profiles is not a default quality target. Bloom taxonomy and
+      competency classifications are required diagnostic indicators, but they are
+      not the governing definition of progression. Advanced technical chapters
+      must include explicit bridge objectives connecting technical execution to
+      evidential interpretation and reliability evaluation. Reviewers are
+      authorized to require remediation of progression weaknesses even when local
+      chapter compliance is satisfied.
+    status: "proposed"
+    confidence: "high"
+    rationale: >
+      Repository curriculum reviews indicate the programme is broadly sound but
+      exhibits excessive chapter-to-chapter regularization. Aggregate chapter
+      balance can obscure weak developmental progression, particularly where
+      chapter structures, Bloom distributions, and competency profiles become too
+      symmetrical. A governance decision is needed to protect chapter-specific
+      educational purpose while making progression visible along the programme
+      spine: Perform -> Interpret -> Evaluate.
+    implications:
+      - "Curriculum quality reviews must include sequence-level progression analysis, not chapter-local checks only."
+      - "Chapter educational purpose governs LO architecture; symmetry must be justified, not assumed."
+      - "Bridge-objective checks become required in advanced technical chapters."
+      - "Reviewer authority explicitly includes progression remediation requests despite local compliance pass status."
+      - "Curriculum guidance remains principle-based and avoids rigid numeric quotas."
+      - "Professional_judgment progression remains gradual across the programme, with stronger operational emphasis in Volume 2."
+    applies_to:
+      - "whole-curriculum"
+      - "chapters"
+      - "learning-objectives"
+      - "assessment"
+      - "curriculum-governance"
+    evidence:
+      - source_type: "repository-file"
+        path: "docs/curriculum/curr-022-curriculum-progression-governance.md"
+        lines: "L1-L260"
+        heading: "CURR-022 decision record"
+        quotation: >
+          Progression is defined primarily as conceptual and cognitive
+          development in student capability, aligned to Perform -> Interpret ->
+          Evaluate. Bloom and competency classifications are diagnostic
+          instruments rather than the governing definition of progression.
+    related_decisions:
+      supports: ["CURR-005", "CURR-008", "CURR-014", "CURR-021"]
+      depends_on: ["CURR-004", "CURR-008", "CURR-021"]
+      qualifies: ["CURR-004"]
+      conflicts_with: []
+      supersedes: []
+      superseded_by: []
+    open_questions:
+      - "What review cadence should be mandatory for sequence-level progression audits?"
+      - "What standard rubric should reviewers use to evaluate bridge-objective quality across chapters?"
+      - "How should justified progression exceptions be documented in routine chapter-review workflows?"
+    notes: >
+      CURR-022 is intentionally non-prescriptive in numerical terms. It governs
+      progression through chapter-purpose alignment, sequence-level review, and
+      bridge-objective visibility.
