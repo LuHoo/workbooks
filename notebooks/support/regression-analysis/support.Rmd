@@ -1615,7 +1615,111 @@ write_values_entry(
     tolerance = 1e-8,
     language_scope = "r",
     equation_labels = c("eq:annual_prediction_interval"),
-    values = list(
+    values = c(
+      {
+        build_coef_table_values <- function(model, model_prefix, row_specs) {
+          coef_mat <- summary(model)$coefficients
+          value_rows <- list()
+          for (spec in row_specs) {
+            row_name <- spec$row_name
+            row_key <- spec$row_key
+            value_rows <- c(
+              value_rows,
+              list(
+                list(
+                  id = sprintf("reg.inline.%s_%s_estimate", model_prefix, row_key),
+                  role = sprintf("%s_%s_estimate", model_prefix, row_key),
+                  raw = as.numeric(coef_mat[row_name, "Estimate"]),
+                  format = spec$estimate_format
+                ),
+                list(
+                  id = sprintf("reg.inline.%s_%s_std_error", model_prefix, row_key),
+                  role = sprintf("%s_%s_std_error", model_prefix, row_key),
+                  raw = as.numeric(coef_mat[row_name, "Std. Error"]),
+                  format = spec$std_error_format
+                ),
+                list(
+                  id = sprintf("reg.inline.%s_%s_t_value", model_prefix, row_key),
+                  role = sprintf("%s_%s_t_value", model_prefix, row_key),
+                  raw = as.numeric(coef_mat[row_name, "t value"]),
+                  format = spec$t_value_format
+                ),
+                list(
+                  id = sprintf("reg.inline.%s_%s_p_value", model_prefix, row_key),
+                  role = sprintf("%s_%s_p_value", model_prefix, row_key),
+                  raw = as.numeric(coef_mat[row_name, "Pr(>|t|)"]),
+                  format = spec$p_value_format
+                )
+              )
+            )
+          }
+          value_rows
+        }
+
+        mod0_specs <- list(
+          list(row_name = "(Intercept)", row_key = "intercept", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:4"),
+          list(row_name = "production", row_key = "production", estimate_format = "number:2", std_error_format = "number:2", t_value_format = "number:3", p_value_format = "number:4")
+        )
+
+        mod1_specs <- list(
+          list(row_name = "(Intercept)", row_key = "intercept", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:4"),
+          list(row_name = "production", row_key = "production", estimate_format = "number:2", std_error_format = "number:3", t_value_format = "number:4", p_value_format = "number:4"),
+          list(row_name = "coolDD", row_key = "cooldd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:4"),
+          list(row_name = "heatDD", row_key = "heatdd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:4")
+        )
+
+        mod2_specs <- list(
+          list(row_name = "(Intercept)", row_key = "intercept", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "production", row_key = "production", estimate_format = "number:2", std_error_format = "number:3", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "summer", row_key = "summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "coolDD", row_key = "cooldd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "heatDD", row_key = "heatdd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "production:summer", row_key = "production_summer", estimate_format = "number:2", std_error_format = "number:3", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "summer:coolDD", row_key = "cooldd_summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "summer:heatDD", row_key = "heatdd_summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5")
+        )
+
+        mod3_specs <- list(
+          list(row_name = "(Intercept)", row_key = "intercept", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "production", row_key = "production", estimate_format = "number:2", std_error_format = "number:2", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "summer", row_key = "summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "coolDD", row_key = "cooldd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "heatDD", row_key = "heatdd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "production:summer", row_key = "production_summer", estimate_format = "number:2", std_error_format = "number:2", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "coolDD:summer", row_key = "cooldd_summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5"),
+          list(row_name = "heatDD:summer", row_key = "heatdd_summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:4", p_value_format = "number:5")
+        )
+
+        mod4_specs <- list(
+          list(row_name = "(Intercept)", row_key = "intercept", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "production_adj", row_key = "production_adj", estimate_format = "number:2", std_error_format = "number:3", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "summer_adj", row_key = "summer_adj", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "coolDD_adj", row_key = "cooldd_adj", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "heatDD_adj", row_key = "heatdd_adj", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "prod_summer_adj", row_key = "prod_summer_adj", estimate_format = "number:2", std_error_format = "number:2", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "cool_summer_adj", row_key = "cool_summer_adj", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "heat_summer_adj", row_key = "heat_summer_adj", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6")
+        )
+
+        mod5_specs <- list(
+          list(row_name = "(Intercept)", row_key = "intercept", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "production", row_key = "production", estimate_format = "number:2", std_error_format = "number:2", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "summer", row_key = "summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "coolDD", row_key = "cooldd", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "production:summer", row_key = "production_summer", estimate_format = "number:2", std_error_format = "number:2", t_value_format = "number:3", p_value_format = "number:6"),
+          list(row_name = "coolDD:summer", row_key = "cooldd_summer", estimate_format = "integer", std_error_format = "integer", t_value_format = "number:3", p_value_format = "number:6")
+        )
+
+        c(
+          build_coef_table_values(ussteamco.mod.0, "mod0", mod0_specs),
+          build_coef_table_values(ussteamco.mod.1, "mod1", mod1_specs),
+          build_coef_table_values(ussteamco.mod.2, "mod2", mod2_specs),
+          build_coef_table_values(ussteamco.mod.3, "mod3", mod3_specs),
+          build_coef_table_values(ussteamco.mod.4, "mod4", mod4_specs),
+          build_coef_table_values(ussteamco.mod.5, "mod5", mod5_specs)
+        )
+      },
+      list(
       list(id = "reg.inline.mod3_w", role = "mod3_w", raw = 0.9480, format = "number:4"),
       list(id = "reg.inline.mod3_shapiro_p", role = "mod3_shapiro_p", raw = 0.09045, format = "number:5"),
       list(id = "reg.inline.mod3_bp", role = "mod3_bp", raw = 7.1466, format = "number:4"),
@@ -1640,7 +1744,13 @@ write_values_entry(
       list(id = "reg.inline.mod0_x_mean", role = "mod0_x_mean", raw = 471663, format = "integer"),
       list(id = "reg.inline.mod0_df", role = "mod0_df", raw = 35, format = "integer"),
       list(id = "reg.inline.mod0_sxx", role = "mod0_sxx", raw = 29945297385, format = "integer"),
-      list(id = "reg.inline.mod0_precision_99", role = "mod0_precision_99", raw = 11470711, format = "integer")
+      list(id = "reg.inline.mod0_precision_99", role = "mod0_precision_99", raw = 11470711, format = "integer"),
+      list(id = "reg.inline.mod0_r_squared", role = "mod0_r_squared", raw = summary(ussteamco.mod.0)$r.squared, format = "number:3"),
+      list(id = "reg.inline.mod1_residual_sd", role = "mod1_residual_sd", raw = summary(ussteamco.mod.1)$sigma, format = "integer"),
+      list(id = "reg.inline.mod1_r_squared", role = "mod1_r_squared", raw = summary(ussteamco.mod.1)$r.squared, format = "number:3"),
+      list(id = "reg.inline.mod2_residual_sd", role = "mod2_residual_sd", raw = summary(ussteamco.mod.2)$sigma, format = "integer"),
+      list(id = "reg.inline.mod2_r_squared", role = "mod2_r_squared", raw = summary(ussteamco.mod.2)$r.squared, format = "number:3")
+      )
     )
   )
 )

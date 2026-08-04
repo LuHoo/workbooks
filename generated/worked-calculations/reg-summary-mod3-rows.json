@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "id": "reg.summary.mod3_rows",
+  "kind": "inline_values",
+  "chapter_prefix": "reg",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Derived mod.3 coefficient table rows for regression chapter",
+  "source_dataset": "USSteamCo winsorized model summary",
+  "target_snippet": "generated/worked-calculations/reg-summary-mod3-rows.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    
+  ],
+  "values": [
+    {
+      "id": "reg.inline.mod3_intercept_estimate",
+      "role": "mod3_intercept_estimate",
+      "raw": 580713.09470000,
+      "display": "580,713",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_std_error",
+      "role": "mod3_intercept_std_error",
+      "raw": 1299337.86160000,
+      "display": "1,299,338",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_t_value",
+      "role": "mod3_intercept_t_value",
+      "raw": 0.44690000,
+      "display": "0.4469",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_p_value",
+      "role": "mod3_intercept_p_value",
+      "raw": 0.65840000,
+      "display": "0.65840",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_estimate",
+      "role": "mod3_production_estimate",
+      "raw": 34.87080000,
+      "display": "34.87",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_std_error",
+      "role": "mod3_production_std_error",
+      "raw": 3.86550000,
+      "display": "3.87",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_t_value",
+      "role": "mod3_production_t_value",
+      "raw": 9.02110000,
+      "display": "9.0211",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_p_value",
+      "role": "mod3_production_p_value",
+      "raw": 0.00000000,
+      "display": "0.00000",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_summer_estimate",
+      "role": "mod3_summer_estimate",
+      "raw": 4809518.77170000,
+      "display": "4,809,519",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_summer_std_error",
+      "role": "mod3_summer_std_error",
+      "raw": 2849202.13210000,
+      "display": "2,849,202",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_summer_t_value",
+      "role": "mod3_summer_t_value",
+      "raw": 1.68800000,
+      "display": "1.6880",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_summer_p_value",
+      "role": "mod3_summer_p_value",
+      "raw": 0.10250000,
+      "display": "0.10250",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_estimate",
+      "role": "mod3_cooldd_estimate",
+      "raw": -111458.47360000,
+      "display": "-111,458",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_std_error",
+      "role": "mod3_cooldd_std_error",
+      "raw": 38500.89710000,
+      "display": "38,501",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_t_value",
+      "role": "mod3_cooldd_t_value",
+      "raw": -2.89500000,
+      "display": "-2.8950",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_p_value",
+      "role": "mod3_cooldd_p_value",
+      "raw": 0.00730000,
+      "display": "0.00730",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_estimate",
+      "role": "mod3_heatdd_estimate",
+      "raw": 932.55760000,
+      "display": "933",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_std_error",
+      "role": "mod3_heatdd_std_error",
+      "raw": 2689.88860000,
+      "display": "2,690",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_t_value",
+      "role": "mod3_heatdd_t_value",
+      "raw": 0.34670000,
+      "display": "0.3467",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_p_value",
+      "role": "mod3_heatdd_p_value",
+      "raw": 0.73140000,
+      "display": "0.73140",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_estimate",
+      "role": "mod3_production_summer_estimate",
+      "raw": -24.24300000,
+      "display": "-24.24",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_std_error",
+      "role": "mod3_production_summer_std_error",
+      "raw": 6.05380000,
+      "display": "6.05",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_t_value",
+      "role": "mod3_production_summer_t_value",
+      "raw": -4.00460000,
+      "display": "-4.0046",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_p_value",
+      "role": "mod3_production_summer_p_value",
+      "raw": 0.00040000,
+      "display": "0.00040",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_estimate",
+      "role": "mod3_cooldd_summer_estimate",
+      "raw": 114963.15040000,
+      "display": "114,963",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_std_error",
+      "role": "mod3_cooldd_summer_std_error",
+      "raw": 38778.52050000,
+      "display": "38,779",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_t_value",
+      "role": "mod3_cooldd_summer_t_value",
+      "raw": 2.96460000,
+      "display": "2.9646",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_p_value",
+      "role": "mod3_cooldd_summer_p_value",
+      "raw": 0.00610000,
+      "display": "0.00610",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_estimate",
+      "role": "mod3_heatdd_summer_estimate",
+      "raw": -12777.25680000,
+      "display": "-12,777",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_std_error",
+      "role": "mod3_heatdd_summer_std_error",
+      "raw": 19331.47390000,
+      "display": "19,331",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_t_value",
+      "role": "mod3_heatdd_summer_t_value",
+      "raw": -0.66100000,
+      "display": "-0.6610",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_p_value",
+      "role": "mod3_heatdd_summer_p_value",
+      "raw": 0.51400000,
+      "display": "0.51400",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_w",
+      "role": "mod3_w",
+      "raw": 0.94800000,
+      "display": "0.9480",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_shapiro_p",
+      "role": "mod3_shapiro_p",
+      "raw": 0.09040000,
+      "display": "0.09040",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bp",
+      "role": "mod3_bp",
+      "raw": 7.14660000,
+      "display": "7.1466",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bp_p",
+      "role": "mod3_bp_p",
+      "raw": 0.06740000,
+      "display": "0.0674",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bg",
+      "role": "mod3_bg",
+      "raw": 7.14660000,
+      "display": "7.1466",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bg_p",
+      "role": "mod3_bg_p",
+      "raw": 0.06740000,
+      "display": "0.06740",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    }
+  ]
+}

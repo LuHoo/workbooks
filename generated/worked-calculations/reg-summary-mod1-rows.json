@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "id": "reg.summary.mod1_rows",
+  "kind": "inline_values",
+  "chapter_prefix": "reg",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Derived mod.1 coefficient table rows for regression chapter",
+  "source_dataset": "USSteamCo multiple model summary",
+  "target_snippet": "generated/worked-calculations/reg-summary-mod1-rows.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    
+  ],
+  "values": [
+    {
+      "id": "reg.inline.mod1_intercept_estimate",
+      "role": "mod1_intercept_estimate",
+      "raw": 702546.71390000,
+      "display": "702,547",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_std_error",
+      "role": "mod1_intercept_std_error",
+      "raw": 1046712.59160000,
+      "display": "1,046,713",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_t_value",
+      "role": "mod1_intercept_t_value",
+      "raw": 0.67120000,
+      "display": "0.6712",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_p_value",
+      "role": "mod1_intercept_p_value",
+      "raw": 0.50690000,
+      "display": "0.5069",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_production_estimate",
+      "role": "mod1_production_estimate",
+      "raw": 21.54490000,
+      "display": "21.54",
+      "format": "number:2",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_production_std_error",
+      "role": "mod1_production_std_error",
+      "raw": 3.15800000,
+      "display": "3.158",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_production_t_value",
+      "role": "mod1_production_t_value",
+      "raw": 6.82240000,
+      "display": "6.8224",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_production_p_value",
+      "role": "mod1_production_p_value",
+      "raw": 0.00000010,
+      "display": "0.0000",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_estimate",
+      "role": "mod1_cooldd_estimate",
+      "raw": -2965.40480000,
+      "display": "-2,965",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_std_error",
+      "role": "mod1_cooldd_std_error",
+      "raw": 4789.07120000,
+      "display": "4,789",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_t_value",
+      "role": "mod1_cooldd_t_value",
+      "raw": -0.61920000,
+      "display": "-0.6192",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_p_value",
+      "role": "mod1_cooldd_p_value",
+      "raw": 0.54020000,
+      "display": "0.5402",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_estimate",
+      "role": "mod1_heatdd_estimate",
+      "raw": 9477.75500000,
+      "display": "9,478",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_std_error",
+      "role": "mod1_heatdd_std_error",
+      "raw": 1892.55230000,
+      "display": "1,893",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_t_value",
+      "role": "mod1_heatdd_t_value",
+      "raw": 5.00790000,
+      "display": "5.0079",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_p_value",
+      "role": "mod1_heatdd_p_value",
+      "raw": 0.00000000,
+      "display": "0.0000",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_residual_sd",
+      "role": "mod1_residual_sd",
+      "raw": 1980697.62840000,
+      "display": "1,980,698",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod1_r_squared",
+      "role": "mod1_r_squared",
+      "raw": 0.86830000,
+      "display": "0.868",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    }
+  ]
+}

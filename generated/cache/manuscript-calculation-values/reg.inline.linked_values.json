@@ -10,6 +10,870 @@
   "equation_labels": "eq:annual_prediction_interval",
   "values": [
     {
+      "id": "reg.inline.mod0_intercept_estimate",
+      "role": "mod0_intercept_estimate",
+      "raw": 4897663.2566,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_intercept_std_error",
+      "role": "mod0_intercept_std_error",
+      "raw": 2014855.2035,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_intercept_t_value",
+      "role": "mod0_intercept_t_value",
+      "raw": 2.4308,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod0_intercept_p_value",
+      "role": "mod0_intercept_p_value",
+      "raw": 0.0205,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod0_production_estimate",
+      "role": "mod0_production_estimate",
+      "raw": 18.992,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod0_production_std_error",
+      "role": "mod0_production_std_error",
+      "raw": 4.017,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod0_production_t_value",
+      "role": "mod0_production_t_value",
+      "raw": 4.7279,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod0_production_p_value",
+      "role": "mod0_production_p_value",
+      "raw": 0,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_estimate",
+      "role": "mod1_intercept_estimate",
+      "raw": 702546.7139,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_std_error",
+      "role": "mod1_intercept_std_error",
+      "raw": 1046712.5916,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_t_value",
+      "role": "mod1_intercept_t_value",
+      "raw": 0.6712,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_intercept_p_value",
+      "role": "mod1_intercept_p_value",
+      "raw": 0.5069,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_production_estimate",
+      "role": "mod1_production_estimate",
+      "raw": 21.5449,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod1_production_std_error",
+      "role": "mod1_production_std_error",
+      "raw": 3.158,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod1_production_t_value",
+      "role": "mod1_production_t_value",
+      "raw": 6.8224,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_production_p_value",
+      "role": "mod1_production_p_value",
+      "raw": 1.0274e-07,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_estimate",
+      "role": "mod1_cooldd_estimate",
+      "raw": -2965.4048,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_std_error",
+      "role": "mod1_cooldd_std_error",
+      "raw": 4789.0712,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_t_value",
+      "role": "mod1_cooldd_t_value",
+      "raw": -0.6192,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_cooldd_p_value",
+      "role": "mod1_cooldd_p_value",
+      "raw": 0.5402,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_estimate",
+      "role": "mod1_heatdd_estimate",
+      "raw": 9477.755,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_std_error",
+      "role": "mod1_heatdd_std_error",
+      "raw": 1892.5523,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_t_value",
+      "role": "mod1_heatdd_t_value",
+      "raw": 5.0079,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod1_heatdd_p_value",
+      "role": "mod1_heatdd_p_value",
+      "raw": 0,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_intercept_estimate",
+      "role": "mod2_intercept_estimate",
+      "raw": 467200.5059,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_intercept_std_error",
+      "role": "mod2_intercept_std_error",
+      "raw": 1471888.8734,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_intercept_t_value",
+      "role": "mod2_intercept_t_value",
+      "raw": 0.3174,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_intercept_p_value",
+      "role": "mod2_intercept_p_value",
+      "raw": 0.7533,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_production_estimate",
+      "role": "mod2_production_estimate",
+      "raw": 34.2594,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod2_production_std_error",
+      "role": "mod2_production_std_error",
+      "raw": 4.3788,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod2_production_t_value",
+      "role": "mod2_production_t_value",
+      "raw": 7.824,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_production_p_value",
+      "role": "mod2_production_p_value",
+      "raw": 1.5996e-08,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_summer_estimate",
+      "role": "mod2_summer_estimate",
+      "raw": 4923031.3605,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_summer_std_error",
+      "role": "mod2_summer_std_error",
+      "raw": 3227573.859,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_summer_t_value",
+      "role": "mod2_summer_t_value",
+      "raw": 1.5253,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_summer_p_value",
+      "role": "mod2_summer_p_value",
+      "raw": 0.1384,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_estimate",
+      "role": "mod2_cooldd_estimate",
+      "raw": -120940.8983,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_std_error",
+      "role": "mod2_cooldd_std_error",
+      "raw": 43613.7849,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_t_value",
+      "role": "mod2_cooldd_t_value",
+      "raw": -2.773,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_p_value",
+      "role": "mod2_cooldd_p_value",
+      "raw": 0.0098,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_estimate",
+      "role": "mod2_heatdd_estimate",
+      "raw": 1494.8543,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_std_error",
+      "role": "mod2_heatdd_std_error",
+      "raw": 3047.1036,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_t_value",
+      "role": "mod2_heatdd_t_value",
+      "raw": 0.4906,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_p_value",
+      "role": "mod2_heatdd_p_value",
+      "raw": 0.6275,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_production_summer_estimate",
+      "role": "mod2_production_summer_estimate",
+      "raw": -23.6316,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod2_production_summer_std_error",
+      "role": "mod2_production_summer_std_error",
+      "raw": 6.8577,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod2_production_summer_t_value",
+      "role": "mod2_production_summer_t_value",
+      "raw": -3.446,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_production_summer_p_value",
+      "role": "mod2_production_summer_p_value",
+      "raw": 0.0018,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_summer_estimate",
+      "role": "mod2_cooldd_summer_estimate",
+      "raw": 124445.5751,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_summer_std_error",
+      "role": "mod2_cooldd_summer_std_error",
+      "raw": 43928.2765,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_summer_t_value",
+      "role": "mod2_cooldd_summer_t_value",
+      "raw": 2.8329,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_cooldd_summer_p_value",
+      "role": "mod2_cooldd_summer_p_value",
+      "raw": 0.0085,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_summer_estimate",
+      "role": "mod2_heatdd_summer_estimate",
+      "raw": -13339.5536,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_summer_std_error",
+      "role": "mod2_heatdd_summer_std_error",
+      "raw": 21898.6779,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_summer_t_value",
+      "role": "mod2_heatdd_summer_t_value",
+      "raw": -0.6091,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod2_heatdd_summer_p_value",
+      "role": "mod2_heatdd_summer_p_value",
+      "raw": 0.5473,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_estimate",
+      "role": "mod3_intercept_estimate",
+      "raw": 580713.0947,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_std_error",
+      "role": "mod3_intercept_std_error",
+      "raw": 1299337.8616,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_t_value",
+      "role": "mod3_intercept_t_value",
+      "raw": 0.4469,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_intercept_p_value",
+      "role": "mod3_intercept_p_value",
+      "raw": 0.6584,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_production_estimate",
+      "role": "mod3_production_estimate",
+      "raw": 34.8708,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod3_production_std_error",
+      "role": "mod3_production_std_error",
+      "raw": 3.8655,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod3_production_t_value",
+      "role": "mod3_production_t_value",
+      "raw": 9.0211,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_production_p_value",
+      "role": "mod3_production_p_value",
+      "raw": 8.8893e-10,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_summer_estimate",
+      "role": "mod3_summer_estimate",
+      "raw": 4809518.7717,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_summer_std_error",
+      "role": "mod3_summer_std_error",
+      "raw": 2849202.1321,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_summer_t_value",
+      "role": "mod3_summer_t_value",
+      "raw": 1.688,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_summer_p_value",
+      "role": "mod3_summer_p_value",
+      "raw": 0.1025,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_estimate",
+      "role": "mod3_cooldd_estimate",
+      "raw": -111458.4736,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_std_error",
+      "role": "mod3_cooldd_std_error",
+      "raw": 38500.8971,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_t_value",
+      "role": "mod3_cooldd_t_value",
+      "raw": -2.895,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_p_value",
+      "role": "mod3_cooldd_p_value",
+      "raw": 0.0073,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_estimate",
+      "role": "mod3_heatdd_estimate",
+      "raw": 932.5576,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_std_error",
+      "role": "mod3_heatdd_std_error",
+      "raw": 2689.8886,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_t_value",
+      "role": "mod3_heatdd_t_value",
+      "raw": 0.3467,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_p_value",
+      "role": "mod3_heatdd_p_value",
+      "raw": 0.7314,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_estimate",
+      "role": "mod3_production_summer_estimate",
+      "raw": -24.243,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_std_error",
+      "role": "mod3_production_summer_std_error",
+      "raw": 6.0538,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_t_value",
+      "role": "mod3_production_summer_t_value",
+      "raw": -4.0046,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_production_summer_p_value",
+      "role": "mod3_production_summer_p_value",
+      "raw": 0.0004,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_estimate",
+      "role": "mod3_cooldd_summer_estimate",
+      "raw": 114963.1504,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_std_error",
+      "role": "mod3_cooldd_summer_std_error",
+      "raw": 38778.5205,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_t_value",
+      "role": "mod3_cooldd_summer_t_value",
+      "raw": 2.9646,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_cooldd_summer_p_value",
+      "role": "mod3_cooldd_summer_p_value",
+      "raw": 0.0061,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_estimate",
+      "role": "mod3_heatdd_summer_estimate",
+      "raw": -12777.2568,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_std_error",
+      "role": "mod3_heatdd_summer_std_error",
+      "raw": 19331.4739,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_t_value",
+      "role": "mod3_heatdd_summer_t_value",
+      "raw": -0.661,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_heatdd_summer_p_value",
+      "role": "mod3_heatdd_summer_p_value",
+      "raw": 0.514,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod4_intercept_estimate",
+      "role": "mod4_intercept_estimate",
+      "raw": 14959.8706,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_intercept_std_error",
+      "role": "mod4_intercept_std_error",
+      "raw": 741230.6762,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_intercept_t_value",
+      "role": "mod4_intercept_t_value",
+      "raw": 0.0202,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_intercept_p_value",
+      "role": "mod4_intercept_p_value",
+      "raw": 0.984,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_production_adj_estimate",
+      "role": "mod4_production_adj_estimate",
+      "raw": 34.0662,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod4_production_adj_std_error",
+      "role": "mod4_production_adj_std_error",
+      "raw": 3.2094,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_production_adj_t_value",
+      "role": "mod4_production_adj_t_value",
+      "raw": 10.6146,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_production_adj_p_value",
+      "role": "mod4_production_adj_p_value",
+      "raw": 3.8892e-11,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_summer_adj_estimate",
+      "role": "mod4_summer_adj_estimate",
+      "raw": 5633141.0599,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_summer_adj_std_error",
+      "role": "mod4_summer_adj_std_error",
+      "raw": 2324881.6673,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_summer_adj_t_value",
+      "role": "mod4_summer_adj_t_value",
+      "raw": 2.423,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_summer_adj_p_value",
+      "role": "mod4_summer_adj_p_value",
+      "raw": 0.0224,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_cooldd_adj_estimate",
+      "role": "mod4_cooldd_adj_estimate",
+      "raw": -82554.2229,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_cooldd_adj_std_error",
+      "role": "mod4_cooldd_adj_std_error",
+      "raw": 32693.3844,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_cooldd_adj_t_value",
+      "role": "mod4_cooldd_adj_t_value",
+      "raw": -2.5251,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_cooldd_adj_p_value",
+      "role": "mod4_cooldd_adj_p_value",
+      "raw": 0.0177,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_heatdd_adj_estimate",
+      "role": "mod4_heatdd_adj_estimate",
+      "raw": 2155.0896,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_heatdd_adj_std_error",
+      "role": "mod4_heatdd_adj_std_error",
+      "raw": 2326.0658,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_heatdd_adj_t_value",
+      "role": "mod4_heatdd_adj_t_value",
+      "raw": 0.9265,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_heatdd_adj_p_value",
+      "role": "mod4_heatdd_adj_p_value",
+      "raw": 0.3624,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_prod_summer_adj_estimate",
+      "role": "mod4_prod_summer_adj_estimate",
+      "raw": -22.8315,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod4_prod_summer_adj_std_error",
+      "role": "mod4_prod_summer_adj_std_error",
+      "raw": 5.3059,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod4_prod_summer_adj_t_value",
+      "role": "mod4_prod_summer_adj_t_value",
+      "raw": -4.3031,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_prod_summer_adj_p_value",
+      "role": "mod4_prod_summer_adj_p_value",
+      "raw": 0.0002,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_cool_summer_adj_estimate",
+      "role": "mod4_cool_summer_adj_estimate",
+      "raw": 84539.266,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_cool_summer_adj_std_error",
+      "role": "mod4_cool_summer_adj_std_error",
+      "raw": 33751.0569,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_cool_summer_adj_t_value",
+      "role": "mod4_cool_summer_adj_t_value",
+      "raw": 2.5048,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_cool_summer_adj_p_value",
+      "role": "mod4_cool_summer_adj_p_value",
+      "raw": 0.0186,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod4_heat_summer_adj_estimate",
+      "role": "mod4_heat_summer_adj_estimate",
+      "raw": -20135.1207,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_heat_summer_adj_std_error",
+      "role": "mod4_heat_summer_adj_std_error",
+      "raw": 13897.2649,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod4_heat_summer_adj_t_value",
+      "role": "mod4_heat_summer_adj_t_value",
+      "raw": -1.4489,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod4_heat_summer_adj_p_value",
+      "role": "mod4_heat_summer_adj_p_value",
+      "raw": 0.1589,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod5_intercept_estimate",
+      "role": "mod5_intercept_estimate",
+      "raw": 752767.0759,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_intercept_std_error",
+      "role": "mod5_intercept_std_error",
+      "raw": 1170484.9173,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_intercept_t_value",
+      "role": "mod5_intercept_t_value",
+      "raw": 0.6431,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_intercept_p_value",
+      "role": "mod5_intercept_p_value",
+      "raw": 0.525,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod5_production_estimate",
+      "role": "mod5_production_estimate",
+      "raw": 35.8722,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod5_production_std_error",
+      "role": "mod5_production_std_error",
+      "raw": 2.5039,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod5_production_t_value",
+      "role": "mod5_production_t_value",
+      "raw": 14.3267,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_production_p_value",
+      "role": "mod5_production_p_value",
+      "raw": 5.9047e-15,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod5_summer_estimate",
+      "role": "mod5_summer_estimate",
+      "raw": 3219526.3373,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_summer_std_error",
+      "role": "mod5_summer_std_error",
+      "raw": 1577708.4813,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_summer_t_value",
+      "role": "mod5_summer_t_value",
+      "raw": 2.0406,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_summer_p_value",
+      "role": "mod5_summer_p_value",
+      "raw": 0.0502,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_estimate",
+      "role": "mod5_cooldd_estimate",
+      "raw": -121380.6493,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_std_error",
+      "role": "mod5_cooldd_std_error",
+      "raw": 25102.4987,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_t_value",
+      "role": "mod5_cooldd_t_value",
+      "raw": -4.8354,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_p_value",
+      "role": "mod5_cooldd_p_value",
+      "raw": 0,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod5_production_summer_estimate",
+      "role": "mod5_production_summer_estimate",
+      "raw": -23.2319,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod5_production_summer_std_error",
+      "role": "mod5_production_summer_std_error",
+      "raw": 4.1038,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod5_production_summer_t_value",
+      "role": "mod5_production_summer_t_value",
+      "raw": -5.6611,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_production_summer_p_value",
+      "role": "mod5_production_summer_p_value",
+      "raw": 3.6075e-06,
+      "format": "number:6"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_summer_estimate",
+      "role": "mod5_cooldd_summer_estimate",
+      "raw": 125064.0557,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_summer_std_error",
+      "role": "mod5_cooldd_summer_std_error",
+      "raw": 25503.7286,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_summer_t_value",
+      "role": "mod5_cooldd_summer_t_value",
+      "raw": 4.9038,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_cooldd_summer_p_value",
+      "role": "mod5_cooldd_summer_p_value",
+      "raw": 0,
+      "format": "number:6"
+    },
+    {
       "id": "reg.inline.mod3_w",
       "role": "mod3_w",
       "raw": 0.948,
@@ -158,6 +1022,36 @@
       "role": "mod0_precision_99",
       "raw": 11470711,
       "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_r_squared",
+      "role": "mod0_r_squared",
+      "raw": 0.3967,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod1_residual_sd",
+      "role": "mod1_residual_sd",
+      "raw": 1980697.6284,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod1_r_squared",
+      "role": "mod1_r_squared",
+      "raw": 0.8683,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod2_residual_sd",
+      "role": "mod2_residual_sd",
+      "raw": 1680710.6145,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod2_r_squared",
+      "role": "mod2_r_squared",
+      "raw": 0.917,
+      "format": "number:3"
     }
   ]
 }

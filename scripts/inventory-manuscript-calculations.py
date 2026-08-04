@@ -237,6 +237,8 @@ def classify_line(
     line_stripped = line.strip()
     number_count = len(NUMBER_RE.findall(line_stripped))
     explicit_math = any(tok in line_stripped for tok in ("=", "\\pm", "\\sqrt", "\\frac", "\\cdot", "P("))
+    table_style_numeric_row = "&" in line_stripped and line_stripped.endswith("\\\\") and number_count >= 2
+    dense_numeric_row = number_count >= 4 and any(tok in line_stripped for tok in ("&", "mod.", "summary", "intercept", "slope", "mean", "sd", "variance"))
 
     if has_generated_input:
         return (
@@ -253,6 +255,16 @@ def classify_line(
         )
 
     # Static data lines (tables/case givens/references) should remain manual unless explicit compute pattern is present.
+    # Exception (strict policy): dense numeric rows (especially table rows) are
+    # migration candidates by default. Presence in support output alone is not
+    # sufficient; values should be linked via generated references.
+    if table_style_numeric_row or dense_numeric_row:
+        return (
+            "must_be_generated_from_support_notebook",
+            "migration_required",
+            "Dense numeric row detected; strict policy requires generated linkage instead of hard-coded table/prose values.",
+        )
+
     if STATIC_SIGNAL_RE.search(line_stripped) and not CALC_SIGNAL_RE.search(line_stripped):
         return (
             "static_theoretical_or_illustrative",
