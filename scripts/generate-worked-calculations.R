@@ -447,7 +447,7 @@ hyp_mus_attribute_sample_sizes_rows_template <- function() {
     "0 & {{n_0}} & {{sampling_interval_k0}} & {{expected_error_k0}} \\\\",
     "1 & {{n_1}} & {{sampling_interval_k1}} & {{expected_error_k1}} \\\\",
     "2 & {{n_2}} & {{sampling_interval_k2}} & {{expected_error_k2}} \\\\",
-    "3 & {{n_3}} & {{sampling_interval_k3}} & {{expected_error_k3}} \\\\"
+    "3 & {{n_3}} & {{sampling_interval_k3}} & {{expected_error_k3}}"
   )
 }
 

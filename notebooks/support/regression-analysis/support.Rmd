@@ -1460,6 +1460,7 @@ if (annual_difference < ADR_lower) {
 }
 ```
 
+<!-- SUPPORT-ONLY:START -->
 ```{r reg-worked-calculation-values-annual-evaluation, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
   stop("jsonlite is required to emit manuscript calculation values.")
@@ -1603,3 +1604,4 @@ write_values_entry(
 )
 }
 ```
+<!-- SUPPORT-ONLY:END -->

@@ -112,7 +112,7 @@ get_workshop_export_configs <- function() {
         "5.33" = 2L,
         "5.34" = 1L,
         "5.35" = 3L,
-        "5.36" = 7L
+        "5.36" = 6L
       )
     ),
     make_workshop_export_config(

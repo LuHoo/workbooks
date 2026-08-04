@@ -132,7 +132,7 @@ Alternatively, one may want to allow for a small number of errors in the test. F
 The critical region affects the minimum required sample size. We determine the sample size $n$ such that if the null hypothesis is true, that is, the population contains a material misstatement ($\pi \geq 0.05$), the probability of finding $k$ in the critical region $\{k | k \leq k_{cr}\}$ is less than or equal to the significance level of the test, that is, 10\%. Mathematically we are looking for the smallest sample size $n$ for which
 \begin{equation}
 P(\stoch{k} \leq k_{cr} | \pi = 0.05) \leq \alpha
-\label{eq:sample_size _calculation_att}
+\label{eq:sample_size_calculation_att}
 \end{equation}
 
 This leads to a sample size of $n =$ 45, if we do not allow for any errors in the sample. If we determine the critical region to be $\{\stoch{k} | k \leq 2\}$, allowing for up to two errors in the sample, the minimum required sample size is 102.\footnote{See Exercise \ref{ex:critical_region} for the calculation of these sample sizes.}
@@ -706,7 +706,7 @@ Now that we know how an MUS sample is evaluated, we can calculate the required s
 \bigskip
 We turn to the parameters from the \emph{Case: Accounts receivable circularization}. The total book value of the population $X =$ 13,500,000, performance materiality $M = 450,000$, and we expect a total misstatement in the population of 100,000. 
 
-With only 100\% errors, Table \ref{tab:attribute_sample_sizes} shows the sample sizes $n_k$, sampling intervals $SI_k$ and expected errors $k \cdot SI_k$ for the various critical regions. Sample size $n_k$ is calculated using Equation \ref{eq:sample_size _calculation_att}. 
+With only 100\% errors, Table \ref{tab:attribute_sample_sizes} shows the sample sizes $n_k$, sampling intervals $SI_k$ and expected errors $k \cdot SI_k$ for the various critical regions. Sample size $n_k$ is calculated using Equation \ref{eq:sample_size_calculation_att}. 
 
 \begin{table}[htbp]
 \begin{tabularx}{\textwidth}{X Y Y Y}
@@ -719,6 +719,7 @@ $EE = k \cdot SI$ \\
 \midrule
 
 \input{generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows}
+\\
 
 \bottomrule
 \end{tabularx}
@@ -849,6 +850,7 @@ Auditors are unlikely to reach their objectives by reducing their confidence lev
 \input{generated/workshop-output/exercise-4-8-5}
 \input{generated/workshop-output/exercise-4-8-6}
 \input{generated/workshop-output/exercise-4-8-7}
+\input{generated/workshop-output/exercise-4-8-8}
 \index[FSaudit]{\ttblue{select}}
 \index[FSaudit]{\ttblue{evaluate}}
 \index[FSaudit]{\ttblue{upper}}
@@ -963,6 +965,7 @@ Auditors are unlikely to reach their objectives by reducing their confidence lev
 \input{generated/workshop-output-python/exercise-4-8-5}
 \input{generated/workshop-output-python/exercise-4-8-6}
 \input{generated/workshop-output-python/exercise-4-8-7}
+\input{generated/workshop-output-python/exercise-4-8-8}
 
 \end{exercise}
 
