@@ -6,6 +6,8 @@
 Johann Wolfgang von Goethe (1749-1832)
 \end{quote}
 
+\input{generated/worked-calculations/prob-inline-linked-values}
+
 Probability distributions play an important role in probability theory and statistics. Probability theory is used to describe the probabilities of the possible outcomes of an experiment.
 
 In statistics, probability distributions are important to make a statement about an unknown quantity of the population. For example, when we sample from a population, the number of errors in the sample follows a hypergeometric distribution. This helps us draw inferences about, for example, the (unknown) number of errors in the population from the number of errors in the sample. 
@@ -106,7 +108,7 @@ When we draw a sample from a sampling frame, we typically do not replace an item
 
 The distinction between sampling with and without replacement is typically made when comparing the \emph{hypergeometric distribution}\index{hypergeometric distribution}\index{distribution!hypergeometric} with the binomial distribution\index{distribution!binomial}\index{binomial distribution}, as discussed in the next section. Until recently, it was hardly possible to calculate the hypergeometric probabilities for values of $n$ larger than 20. Improved hardware and software allow us to work with a much larger population and sample size.
 
-In this section, we assume that we sample without replacement. We sample 60 items from the list of 331 PhDs in the \emph{Case: Number of students}, and we assume that 17 of these have erroneously been listed; the remaining 314 are correct. When we draw the first element, the probability that it is correct is therefore 314/331 $\approx$ 0.9486. The probability of the second item being correct is different if the first item is not replaced: it is 313/330 $\approx$ 0.9485. If the first item is incorrect, then the probability of drawing a correct one in the second draw is 314/330 $\approx$ 0.9515. It follows that the probability of drawing a correct item is not constant from draw to draw, as it depends on the results of the previous draws.
+In this section, we assume that we sample without replacement. We sample \ProbSampleSize items from the list of \ProbPopulationSize PhDs in the \emph{Case: Number of students}, and we assume that \ProbErrorCount of these have erroneously been listed; the remaining \ProbCorrectCount are correct. When we draw the first element, the probability that it is correct is therefore \ProbCorrectCount/\ProbPopulationSize $\approx$ \ProbFirstCorrectProbability. The probability of the second item being correct is different if the first item is not replaced: it is 313/330 $\approx$ \ProbSecondCorrectGivenFirstCorrect. If the first item is incorrect, then the probability of drawing a correct one in the second draw is \ProbCorrectCount/330 $\approx$ \ProbSecondCorrectGivenFirstIncorrect. It follows that the probability of drawing a correct item is not constant from draw to draw, as it depends on the results of the previous draws.
 
 The probability distribution that describes the probability of `success' (erroneous item) or `failure' (correct item) in a number of draws without replacement from a finite population is the hypergeometric distribution\index{distribution!hypergeometric}\index{hypergeometric distribution}. Its probability mass function is given by
 
@@ -163,7 +165,7 @@ Note that $\left( \begin{array}{c}17\\0\end{array} \right) = 1$.
 \end{equation*}
 
 \begin{equation*}
-\frac{271 \cdot 270 \cdot ... \cdot 255 }{331 \cdot 330 \cdot ... \cdot 315} \approx 0.0304
+\frac{271 \cdot 270 \cdot ... \cdot 255 }{331 \cdot 330 \cdot ... \cdot 315} \approx \ProbZeroErrorProbability
 \end{equation*}
 
 The results are shown in Figure \ref{fig:H2hypergeometric}, where the fourth panel shows the results for a sample size of $n = 60$. We also show the results for different sample sizes to provide an impression of the shape of the distribution.

@@ -1,7 +1,7 @@
 # Manuscript Calculation Validation Report
 
 - Status: passed
-- Checked calculations: 26
+- Checked calculations: 28
 
 ## Checked Calculations
 
@@ -30,9 +30,11 @@
 | hyp.cell.evaluation_steps | notebooks/support/hypothesis-testing/support.Rmd | generated/worked-calculations/hyp-cell-evaluation-steps.tex | passed |
 | hyp.mus.attribute_sample_sizes_rows | notebooks/support/hypothesis-testing/support.Rmd | generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex | passed |
 | hyp.mus.sample_size | notebooks/support/hypothesis-testing/support.Rmd | generated/worked-calculations/hyp-mus-sample-size.tex | passed |
+| pro.inline.linked_values | notebooks/support/probability-distributions/support.Rmd | generated/worked-calculations/prob-inline-linked-values.tex | passed |
 | reg.annual.assurance | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-assurance.tex | passed |
 | reg.annual.decision_bounds | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-decision-bounds.tex | passed |
 | reg.annual.expectation_interval | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-expectation-interval.tex | passed |
+| reg.inline.linked_values | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-inline-linked-values.tex | passed |
 
 ## R/Python Shared Value Comparisons
 

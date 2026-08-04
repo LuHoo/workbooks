@@ -1,0 +1,61 @@
+{
+  "id": "pro.inline.linked_values",
+  "kind": "inline_values",
+  "source_notebook": "notebooks/support/probability-distributions/support.Rmd",
+  "source_context": "Hypergeometric introductory prose values used in chapter inline text",
+  "source_dataset": "Case: Number of students constants",
+  "target_snippet": "generated/worked-calculations/prob-inline-linked-values.tex",
+  "tolerance": 1e-08,
+  "language_scope": "r",
+  "equation_labels": "eq:hypergeometric",
+  "values": [
+    {
+      "id": "pro.inline.population_size",
+      "role": "population_size",
+      "raw": 331,
+      "format": "integer"
+    },
+    {
+      "id": "pro.inline.error_count",
+      "role": "error_count",
+      "raw": 17,
+      "format": "integer"
+    },
+    {
+      "id": "pro.inline.correct_count",
+      "role": "correct_count",
+      "raw": 314,
+      "format": "integer"
+    },
+    {
+      "id": "pro.inline.sample_size",
+      "role": "sample_size",
+      "raw": 60,
+      "format": "integer"
+    },
+    {
+      "id": "pro.inline.first_correct_probability",
+      "role": "first_correct_probability",
+      "raw": 0.9486,
+      "format": "number:4"
+    },
+    {
+      "id": "pro.inline.second_correct_given_first_correct",
+      "role": "second_correct_given_first_correct",
+      "raw": 0.9485,
+      "format": "number:4"
+    },
+    {
+      "id": "pro.inline.second_correct_given_first_incorrect",
+      "role": "second_correct_given_first_incorrect",
+      "raw": 0.9515,
+      "format": "number:4"
+    },
+    {
+      "id": "pro.inline.zero_error_probability",
+      "role": "zero_error_probability",
+      "raw": 0.0304,
+      "format": "number:4"
+    }
+  ]
+}

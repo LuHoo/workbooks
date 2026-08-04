@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "pro.inline.linked_values",
+  "kind": "inline_values",
+  "chapter_prefix": "pro",
+  "source_notebook": "notebooks/support/probability-distributions/support.Rmd",
+  "source_context": "Hypergeometric introductory prose values used in chapter inline text",
+  "source_dataset": "Case: Number of students constants",
+  "target_snippet": "generated/worked-calculations/prob-inline-linked-values.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    "eq:hypergeometric"
+  ],
+  "values": [
+    {
+      "id": "pro.inline.population_size",
+      "role": "population_size",
+      "raw": 331.00000000,
+      "display": "331",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.error_count",
+      "role": "error_count",
+      "raw": 17.00000000,
+      "display": "17",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.correct_count",
+      "role": "correct_count",
+      "raw": 314.00000000,
+      "display": "314",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.sample_size",
+      "role": "sample_size",
+      "raw": 60.00000000,
+      "display": "60",
+      "format": "integer",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.first_correct_probability",
+      "role": "first_correct_probability",
+      "raw": 0.94860000,
+      "display": "0.9486",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.second_correct_given_first_correct",
+      "role": "second_correct_given_first_correct",
+      "raw": 0.94850000,
+      "display": "0.9485",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.second_correct_given_first_incorrect",
+      "role": "second_correct_given_first_incorrect",
+      "raw": 0.95150000,
+      "display": "0.9515",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "pro.inline.zero_error_probability",
+      "role": "zero_error_probability",
+      "raw": 0.03040000,
+      "display": "0.0304",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    }
+  ]
+}

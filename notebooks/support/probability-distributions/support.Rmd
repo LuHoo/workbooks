@@ -11,6 +11,73 @@ output:
 source("../../../R/notebook-utils.R")
 ```
 <!-- SUPPORT-ONLY:END -->
+
+<!-- SUPPORT-ONLY:START -->
+```{r prob-worked-calculation-values-inline-links, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+if (!requireNamespace("jsonlite", quietly = TRUE)) {
+  stop("jsonlite is required to emit manuscript calculation values.")
+}
+
+find_repo_root <- function(start = getwd()) {
+  current <- normalizePath(start, winslash = "/", mustWork = TRUE)
+  repeat {
+    if (file.exists(file.path(current, "pyproject.toml")) || file.exists(file.path(current, ".git"))) {
+      return(current)
+    }
+    parent <- dirname(current)
+    if (identical(parent, current)) {
+      stop("Unable to locate repository root from working directory: ", start)
+    }
+    current <- parent
+  }
+}
+
+repo_root <- find_repo_root()
+values_output_dir <- file.path(
+  repo_root,
+  "generated",
+  "cache",
+  "manuscript-calculation-values"
+)
+dir.create(values_output_dir, recursive = TRUE, showWarnings = FALSE)
+
+N <- 331
+M <- 17
+n <- 60
+correct_count <- N - M
+
+prob_first_correct <- correct_count / N
+prob_second_correct_given_first_correct <- (correct_count - 1) / (N - 1)
+prob_second_correct_given_first_incorrect <- correct_count / (N - 1)
+prob_zero_errors <- as.numeric(stats::dhyper(0, M, correct_count, n))
+
+entry <- list(
+  id = "pro.inline.linked_values",
+  kind = "inline_values",
+  source_notebook = "notebooks/support/probability-distributions/support.Rmd",
+  source_context = "Hypergeometric introductory prose values used in chapter inline text",
+  source_dataset = "Case: Number of students constants",
+  target_snippet = "generated/worked-calculations/prob-inline-linked-values.tex",
+  tolerance = 1e-8,
+  language_scope = "r",
+  equation_labels = c("eq:hypergeometric"),
+  values = list(
+    list(id = "pro.inline.population_size", role = "population_size", raw = N, format = "integer"),
+    list(id = "pro.inline.error_count", role = "error_count", raw = M, format = "integer"),
+    list(id = "pro.inline.correct_count", role = "correct_count", raw = correct_count, format = "integer"),
+    list(id = "pro.inline.sample_size", role = "sample_size", raw = n, format = "integer"),
+    list(id = "pro.inline.first_correct_probability", role = "first_correct_probability", raw = prob_first_correct, format = "number:4"),
+    list(id = "pro.inline.second_correct_given_first_correct", role = "second_correct_given_first_correct", raw = prob_second_correct_given_first_correct, format = "number:4"),
+    list(id = "pro.inline.second_correct_given_first_incorrect", role = "second_correct_given_first_incorrect", raw = prob_second_correct_given_first_incorrect, format = "number:4"),
+    list(id = "pro.inline.zero_error_probability", role = "zero_error_probability", raw = prob_zero_errors, format = "number:4")
+  )
+)
+
+values_output_path <- file.path(values_output_dir, "pro.inline.linked_values.json")
+jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
+message("Wrote manuscript calculation values: ", values_output_path)
+```
+<!-- SUPPORT-ONLY:END -->
  
 ## Chapter 1. Probability distributions
  

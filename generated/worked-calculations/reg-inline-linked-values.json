@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "id": "reg.inline.linked_values",
+  "kind": "inline_values",
+  "chapter_prefix": "reg",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Model diagnostics and refined-model summary values used in chapter prose",
+  "source_dataset": "USSteamCo model diagnostics",
+  "target_snippet": "generated/worked-calculations/reg-inline-linked-values.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    "eq:annual_prediction_interval"
+  ],
+  "values": [
+    {
+      "id": "reg.inline.mod3_w",
+      "role": "mod3_w",
+      "raw": 0.94800000,
+      "display": "0.9480",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_shapiro_p",
+      "role": "mod3_shapiro_p",
+      "raw": 0.09040000,
+      "display": "0.09040",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bp",
+      "role": "mod3_bp",
+      "raw": 7.14660000,
+      "display": "7.1466",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bp_p",
+      "role": "mod3_bp_p",
+      "raw": 0.06740000,
+      "display": "0.0674",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bg",
+      "role": "mod3_bg",
+      "raw": 7.14660000,
+      "display": "7.1466",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod3_bg_p",
+      "role": "mod3_bg_p",
+      "raw": 0.06740000,
+      "display": "0.06740",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod4_bg",
+      "role": "mod4_bg",
+      "raw": 2.21510000,
+      "display": "2.2151",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod4_bg_p",
+      "role": "mod4_bg_p",
+      "raw": 0.52900000,
+      "display": "0.529",
+      "format": "number:3",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod5_bp",
+      "role": "mod5_bp",
+      "raw": 7.03670000,
+      "display": "7.0367",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod5_bp_p",
+      "role": "mod5_bp_p",
+      "raw": 0.21790000,
+      "display": "0.2179",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod5_bg",
+      "role": "mod5_bg",
+      "raw": 5.19920000,
+      "display": "5.1992",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod5_bg_p",
+      "role": "mod5_bg_p",
+      "raw": 0.15780000,
+      "display": "0.1578",
+      "format": "number:4",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod5_w",
+      "role": "mod5_w",
+      "raw": 0.94880000,
+      "display": "0.94880",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    },
+    {
+      "id": "reg.inline.mod5_shapiro_p",
+      "role": "mod5_shapiro_p",
+      "raw": 0.09550000,
+      "display": "0.09550",
+      "format": "number:5",
+      "tolerance": 0.00000001,
+      "language_scope": "r"
+    }
+  ]
+}

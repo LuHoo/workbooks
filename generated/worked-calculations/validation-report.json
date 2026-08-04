@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "checked_count": 26,
+  "checked_count": 28,
   "checked": [
     {
       "id": "aux.difference.estimator",
@@ -142,6 +142,12 @@
       "status": "passed"
     },
     {
+      "id": "pro.inline.linked_values",
+      "source_notebook": "notebooks/support/probability-distributions/support.Rmd",
+      "target_snippet": "generated/worked-calculations/prob-inline-linked-values.tex",
+      "status": "passed"
+    },
+    {
       "id": "reg.annual.assurance",
       "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
       "target_snippet": "generated/worked-calculations/reg-annual-assurance.tex",
@@ -157,6 +163,12 @@
       "id": "reg.annual.expectation_interval",
       "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
       "target_snippet": "generated/worked-calculations/reg-annual-expectation-interval.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.inline.linked_values",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-inline-linked-values.tex",
       "status": "passed"
     }
   ],
@@ -387,17 +399,29 @@
     ],
     "24": [
       {
-        "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
+        "file": "././probability-distributions.tex",
+        "target": "generated/worked-calculations/prob-inline-linked-values.tex"
       }
     ],
     "25": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+        "target": "generated/worked-calculations/reg-inline-linked-values.tex"
       }
     ],
     "26": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
+      }
+    ],
+    "27": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+      }
+    ],
+    "28": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-decision-bounds.tex"

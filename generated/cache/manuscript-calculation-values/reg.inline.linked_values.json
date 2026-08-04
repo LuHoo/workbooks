@@ -1,0 +1,97 @@
+{
+  "id": "reg.inline.linked_values",
+  "kind": "inline_values",
+  "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+  "source_context": "Model diagnostics and refined-model summary values used in chapter prose",
+  "source_dataset": "USSteamCo model diagnostics",
+  "target_snippet": "generated/worked-calculations/reg-inline-linked-values.tex",
+  "tolerance": 1e-08,
+  "language_scope": "r",
+  "equation_labels": "eq:annual_prediction_interval",
+  "values": [
+    {
+      "id": "reg.inline.mod3_w",
+      "role": "mod3_w",
+      "raw": 0.948,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_shapiro_p",
+      "role": "mod3_shapiro_p",
+      "raw": 0.0904,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod3_bp",
+      "role": "mod3_bp",
+      "raw": 7.1466,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_bp_p",
+      "role": "mod3_bp_p",
+      "raw": 0.0674,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_bg",
+      "role": "mod3_bg",
+      "raw": 7.1466,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod3_bg_p",
+      "role": "mod3_bg_p",
+      "raw": 0.0674,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod4_bg",
+      "role": "mod4_bg",
+      "raw": 2.2151,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod4_bg_p",
+      "role": "mod4_bg_p",
+      "raw": 0.529,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod5_bp",
+      "role": "mod5_bp",
+      "raw": 7.0367,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod5_bp_p",
+      "role": "mod5_bp_p",
+      "raw": 0.2179,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod5_bg",
+      "role": "mod5_bg",
+      "raw": 5.1992,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod5_bg_p",
+      "role": "mod5_bg_p",
+      "raw": 0.1578,
+      "format": "number:4"
+    },
+    {
+      "id": "reg.inline.mod5_w",
+      "role": "mod5_w",
+      "raw": 0.9488,
+      "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod5_shapiro_p",
+      "role": "mod5_shapiro_p",
+      "raw": 0.0955,
+      "format": "number:5"
+    }
+  ]
+}

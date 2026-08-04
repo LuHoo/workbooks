@@ -1796,11 +1796,13 @@ Its calculation is quite complicated and based on order statistics. The $W$ stat
 
 \paragraph{Significance level} In regression analysis, we deviate from the standard approach of committing to a significance level ahead of time and then using a critical region. Instead, it is more informative to answer the following question: given the observed value of the $W$ statistic, what is the smallest significance level at which the null hypothesis would be rejected? This level is referred to as the \hlblue{$p$ value}\index{p value}\nomenclature{$p$}{significance level} for the test. The significance level for the $W$ statistic is calculated using approximations.
 
-\paragraph{Value of test statistic} We use the Shapiro--Wilk test to obtain the value of the $W$ statistic and its associated $p$ value. For \ttblue{mod.3}, the value of the $W$ statistic is 0.9480, with a $p$ value of 0.09045.\footnote{See Exercise \ref{ex:normality_test}.}
+\input{generated/worked-calculations/reg-inline-linked-values}
+
+\paragraph{Value of test statistic} We use the Shapiro--Wilk test to obtain the value of the $W$ statistic and its associated $p$ value. For \ttblue{mod.3}, the value of the $W$ statistic is \RegModThreeW, with a $p$ value of \RegModThreeShapiroP.\footnote{See Exercise \ref{ex:normality_test}.}
 
 \paragraph{Conclusion}
 
-The $p$ value of the Shapiro--Wilk test is 0.09045. Con\-se\-quently, we do not reject the null hypothesis of normality at the conventional significance levels of 5\% or 1\%. The test therefore provides no evidence that the residuals deviate from a normal distribution.
+The $p$ value of the Shapiro--Wilk test is \RegModThreeShapiroP. Con\-se\-quently, we do not reject the null hypothesis of normality at the conventional significance levels of 5\% or 1\%. The test therefore provides no evidence that the residuals deviate from a normal distribution.
 
 \bigskip
 In our experience, many situations involving non-normality of the residuals are caused by data-input errors. Hence, we recommend performing diagnostic checking and/or reviewing the necessity of transformations prior to testing the model assumptions. If non-normality is not remedied by these procedures, Weighted Least Squares (see Section \ref{sub:homoskedasticity}) may help. Other remedies include nonparametric regression models such as kernel regression and spline regression, or generalized linear models. These remedies are beyond the scope of this book.
@@ -1856,11 +1858,11 @@ where $n$ is the number of observations and $r^2$ is the coefficient of determin
 
 \paragraph{Significance level} Again, we typically conclude based on the $p$ value of the test.
 
-\paragraph{Value of test statistic} We obtain the value of the $BP$ statistic, 7.1466, and its related $p$ value, 0.0674.\footnote{See Exercise \ref{ex:breusch_pagan}}
+\paragraph{Value of test statistic} We obtain the value of the $BP$ statistic, \RegModThreeBp, and its related $p$ value, \RegModThreeBpP.\footnote{See Exercise \ref{ex:breusch_pagan}}
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.0674. We therefore fail to reject the null hypothesis at conventional significance levels below 0.0674, such as 5\% or 1\%. The model-validation test provides no evidence of non-constant variance at these levels.
+The $p$ value of the test statistic is \RegModThreeBpP. We therefore fail to reject the null hypothesis at conventional significance levels below \RegModThreeBpP, such as 5\% or 1\%. The model-validation test provides no evidence of non-constant variance at these levels.
 
 \bigskip
 In cases where the null hypothesis is rejected, and the residuals show non-constant variance, we use a technique referred to as \hlblue{Weighted Least Squares}\index{weighted least squares} (WLS)\index{WLS}. It involves specifying a weight matrix for the residuals based on our understanding of the data and the source of heteroskedasticity. The weight matrix is based on the variance of the residuals, with larger weights assigned to observations with smaller residuals. 
@@ -1931,7 +1933,7 @@ Because the Breusch--Godfrey test is an LM test, statistical software often repo
 
 \paragraph{Significance level} We conclude based on the $p$ value of the test. The null hypothesis is rejected when the chosen significance level is greater than the reported $p$ value.
 
-\paragraph{Value of test statistic} We obtain a Breusch--Godfrey test statistic of 7.1466, with a related $p$ value of 0.06737.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.} 
+\paragraph{Value of test statistic} We obtain a Breusch--Godfrey test statistic of \RegModThreeBg, with a related $p$ value of \RegModThreeBgP.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.} 
 In this example, the test is performed with order $p=3$.
 This means that the test evaluates whether the regression residuals exhibit autocorrelation at lags 1, 2, and 3. 
 Under the null hypothesis, the residuals are not autocorrelated at any of these lags. The reference distribution is therefore a chi-squared distribution with 3 degrees of freedom.
@@ -1947,7 +1949,7 @@ If omitted, the default value is \ttblue{order = 1}, in which case only first-or
 
 \paragraph{Conclusion}
 
-The $p$ value of the test statistic is 0.06737. Therefore, we fail to reject the null hypothesis at conventional significance levels below 0.06737, such as 5\% or 1\%. The model-validation test provides no evidence of autocorrelation at these levels, although the result is marginal at a 10\% level.
+The $p$ value of the test statistic is \RegModThreeBgP. Therefore, we fail to reject the null hypothesis at conventional significance levels below \RegModThreeBgP, such as 5\% or 1\%. The model-validation test provides no evidence of autocorrelation at these levels, although the result is marginal at a 10\% level.
 This is visually supported by a moderate spike in the PACF plot. 
 While not definitively conclusive, these signs suggest that the model may benefit from adjustments to account for autocorrelation. 
 In time-series regression, residual autocorrelation violates the assumption that the error terms are uncorrelated over time. When this occurs, the ordinary least squares coefficient estimates may still be unbiased if the regressors are exogenous, but the usual standard errors, confidence intervals, and significance tests may no longer be reliable. 
@@ -2020,7 +2022,7 @@ heat\_summer\_adj &   -20,135 &    13,897 & -1.449 & 0.158894 \\
 \label{tab:summary_mod_4}
 \end{table}
 
-After applying the AR(1) correction, the Breusch--Godfrey test on \ttblue{mod.4} gives $BG = 2.2151$ with $p = 0.529$ (order 3), indicating no remaining evidence of residual autocorrelation at conventional levels.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.}
+After applying the AR(1) correction, the Breusch--Godfrey test on \ttblue{mod.4} gives $BG = \RegModFourBg$ with $p = \RegModFourBgP$ (order 3), indicating no remaining evidence of residual autocorrelation at conventional levels.\footnote{See Exercise \ref{ex:breusch_godfrey_test}.}
 
 % subsection absence_of_autocorrelation (end)
 
@@ -2073,7 +2075,7 @@ The regression lines for summer months is
 \end{equation*}
 The coefficient values take the interactions into account. Therefore, the intercept value is equal to $752,767 + 3,219,526 = 3,972,293$, the slope value for \ttblue{production} is equal to $35.87 - 23.23 = 12.64$, and the marginal effect of \ttblue{coolDD} is given by $-121,381 + 125,064 = 3,683$.
 
-Re-running the model-assumption checks for \ttblue{mod.5} gives Breusch--Pagan $BP = 7.0367$ ($p = 0.2179$), Breusch--Godfrey $BG = 5.1992$ ($p = 0.1578$, order 3), and Shapiro--Wilk $W = 0.94875$ ($p = 0.09554$). Taken together, these results provide no evidence against homoskedasticity, absence of autocorrelation, or normality at the 5\% level.
+Re-running the model-assumption checks for \ttblue{mod.5} gives Breusch--Pagan $BP = \RegModFiveBp$ ($p = \RegModFiveBpP$), Breusch--Godfrey $BG = \RegModFiveBg$ ($p = \RegModFiveBgP$, order 3), and Shapiro--Wilk $W = \RegModFiveW$ ($p = \RegModFiveShapiroP$). Taken together, these results provide no evidence against homoskedasticity, absence of autocorrelation, or normality at the 5\% level.
 
 Although a backward procedure was applied to remove non-significant predictors, some variables may still merit inclusion for reasons beyond statistical significance. 
 These include theoretical relevance, potential interaction effects, or roles as control variables. 
