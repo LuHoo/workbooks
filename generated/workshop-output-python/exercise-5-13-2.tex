@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The three largest hat-values are then summarized by
+\noindent The three largest hat-values are then summarized
+by
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +18,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 top_hat_idx = np.argsort(hatvals_mod_2)[-3:][::-1]
-display(pd.Series(hatvals_mod_2[top_hat_idx], index=top_hat_idx + 1, name='top_hatvalues'))
+display(pd.Series(hatvals_mod_2[top_hat_idx], 
+index=top_hat_idx + 1, name='top_hatvalues'))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
        34        29        30

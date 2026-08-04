@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent In Figure 5.19 we have plotted expectations against the recorded values of revenue, indicating which individual observations fall outside of the 99\% prediction interval. The following code is used to create it.
+\noindent In Figure 5.19 we have plotted expectations
+against the recorded values of revenue,
+indicating which individual observations fall
+outside of the 99\% prediction interval. The
+following code is used to create it.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -24,13 +28,18 @@ pred_df = pd.DataFrame({
     'fit': predictions['fit'].to_numpy(),
     'upr': predictions['upr'].to_numpy(),
 })
-pred_df['outside'] = (pred_df['recorded'] < pred_df['lwr']) | (pred_df['recorded'] > pred_df['upr'])
+pred_df['outside'] = (pred_df['recorded'] < pred_df['lwr'])
+ | (pred_df['recorded'] > pred_df['upr'])
 fig, ax = plt.subplots(figsize=(10, 5))
-display(ax.plot(pred_df['date'], pred_df['fit'], color='#00338D', label='Expectation'))
-display(ax.fill_between(pred_df['date'], pred_df['lwr'], pred_df['upr'], color='#00338D', alpha=0.2))
-display(ax.plot(pred_df['date'], pred_df['recorded'], color='#E36877', label='Recorded'))
+display(ax.plot(pred_df['date'], pred_df['fit'], 
+color='#00338D', label='Expectation'))
+display(ax.fill_between(pred_df['date'], pred_df['lwr'], 
+pred_df['upr'], color='#00338D', alpha=0.2))
+display(ax.plot(pred_df['date'], pred_df['recorded'], 
+color='#E36877', label='Recorded'))
 outliers = pred_df[pred_df['outside']]
-display(ax.scatter(outliers['date'], outliers['recorded'], color='#E36877', s=30))
+display(ax.scatter(outliers['date'], outliers['recorded'], 
+color='#E36877', s=30))
 ax.set_xlabel('Month in 2014')
 ax.set_ylabel('Revenue ($)')
 ax.legend(loc='best')

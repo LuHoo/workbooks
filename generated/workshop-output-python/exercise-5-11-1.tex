@@ -22,13 +22,17 @@ USSteamCoEstim['resid'] = ussteamco_mod_2.resid
 predictors = ['production', 'coolDD', 'heatDD', 'summer']
 fig, axes = plt.subplots(3, 2, figsize=(12, 12))
 for ax, var in zip(axes.flatten()[:4], predictors):
-    display(sns.scatterplot(x=USSteamCoEstim[var], y=USSteamCoEstim['resid'], color='#00338D', ax=ax))
+    display(sns.scatterplot(x=USSteamCoEstim[var], 
+y=USSteamCoEstim['resid'], color='#00338D', ax=ax))
     ax.axhline(0, linestyle='dotted', color='black')
     ax.set_xlabel(var)
     ax.set_ylabel('resid')
 fitted_vals = ussteamco_mod_2.fittedvalues
-display(sns.scatterplot(x=fitted_vals, y=USSteamCoEstim['resid'], color='#00338D', ax=axes.flatten()[4]))
-display(axes.flatten()[4].axhline(0, linestyle='dotted', color='black'))
+display(sns.scatterplot(x=fitted_vals, 
+y=USSteamCoEstim['resid'], color='#00338D', 
+ax=axes.flatten()[4]))
+display(axes.flatten()[4].axhline(0, linestyle='dotted', 
+color='black'))
 display(axes.flatten()[4].set_xlabel('Fitted Values'))
 display(axes.flatten()[4].set_ylabel('resid'))
 display(axes.flatten()[5].axis('off'))

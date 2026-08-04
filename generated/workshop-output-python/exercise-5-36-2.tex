@@ -18,10 +18,10 @@
 # Difference convention: recorded amount minus expectation
 annual_recorded = sum(USSteamCoHold["revenue"])
 annual_difference = annual_recorded - annual_prediction
-cat("Recorded annual revenue:", annual_recorded, "\n")
-cat("Expected annual revenue:", annual_prediction, "\n")
-cat("Difference:", annual_difference, "\n")
-cat("Annual prediction standard error:", annual_se, "\n")
+print("Recorded annual revenue:", annual_recorded, "\n")
+print("Expected annual revenue:", annual_prediction, "\n")
+print("Difference:", annual_difference, "\n")
+print("Annual prediction standard error:", annual_se, "\n")
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Recorded annual revenue: 174778400

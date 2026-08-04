@@ -1,7 +1,7 @@
 # Manuscript Calculation Validation Report
 
 - Status: passed
-- Checked calculations: 24
+- Checked calculations: 25
 
 ## Checked Calculations
 
@@ -14,6 +14,7 @@
 | est.mean.minimum_sample_size_finite | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-minimum-sample-size-finite.tex | passed |
 | est.mean.minimum_sample_size_infinite | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex | passed |
 | est.mean.one_sided_upper_95 | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-one-sided-upper-95.tex | passed |
+| est.mean.point_estimate_inline_values | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-point-estimate-inline-value.tex | passed |
 | est.mean.point_estimate | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-point-estimate.tex | passed |
 | est.mean.stein_interval | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-stein-interval.tex | passed |
 | est.mean.two_sided_finite_95 | notebooks/support/population-estimation/support.Rmd | generated/worked-calculations/est-mean-two-sided-finite-95.tex | passed |

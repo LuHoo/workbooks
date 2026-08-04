@@ -5,8 +5,15 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The results on page 119 are obtained with the \ttblue{FSaudit} package, first by creating an attribute object, filling it with the parameters of the test, and then applying the \ttblue{size()} function.
-The relevant parameters are the significance level \ttblue{alpha}, the number of deviations in the population $M$ \ttblue{popdev}, the population size $N$ \ttblue{popn}, and the critical region \ttblue{c}.
+\noindent The results on page 119 are obtained with the
+\ttblue{FSaudit} package, first by creating an
+attribute object, filling it with the parameters
+of the test, and then applying the
+\ttblue{size()} function.
+The relevant parameters are the significance level
+\ttblue{alpha}, the number of deviations in the population
+$M$ \ttblue{popdev}, the population size $N$ \ttblue{popn},
+and the critical region \ttblue{c}.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +24,8 @@ The relevant parameters are the significance level \ttblue{alpha}, the number of
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-mySample = att_sample(alpha=0.1, popdev=60, popn=1200, c=0).size()
+mySample = att_sample(alpha=0.1, popdev=60, popn=1200, 
+c=0).size()
 mySample.n
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

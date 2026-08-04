@@ -122,6 +122,7 @@ The monthly gross salaries of employees are quantitative and expressed as numeri
 \end{equation*}
 
 \input{generated/worked-calculations/est-mean-point-estimate}
+\input{generated/worked-calculations/est-mean-point-estimate-inline-value}
 
 \bigskip
 
@@ -143,17 +144,17 @@ This estimate can easily be expanded to obtain an estimate of the total monthly 
 \subsection{Two-sided intervals} % (fold)
 \label{sub:two_sided_intervals}
 
-In the previous section, we obtained an estimate of the mean monthly payroll for the population of 3,014.16. However, it is not reasonable to assume that this estimate value is exactly equal to the population mean, and we would like to know how large the \hlblue{sampling error}\index{sampling error} is, the difference between the sample result $\bar{y}$ and the population mean $\mu$:
+In the previous section, we obtained an estimate of the mean monthly payroll for the population of \EstMeanPointEstimate. However, it is not reasonable to assume that this estimate value is exactly equal to the population mean, and we would like to know how large the \hlblue{sampling error}\index{sampling error} is, the difference between the sample result $\bar{y}$ and the population mean $\mu$:
 
 \begin{equation}
   \textrm{Sampling error} = | \bar{y} - \mu |.
 \end{equation}
 
-This is of little practical value because we do not know the actual value of $\mu$. Instead, we use knowledge of the sampling distribution of $\bar{y}$ to make probability statements about the sampling error. Let us assume that 3,014.16 is the true value of the population mean $\mu$. We repeatedly obtain different samples of the same size from the population and draw a histogram of the resulting $\bar{y}$. This is illustrated in Figure \ref{fig:H3best_estimate}.
+This is of little practical value because we do not know the actual value of $\mu$. Instead, we use knowledge of the sampling distribution of $\bar{y}$ to make probability statements about the sampling error. Let us assume that \EstMeanPointEstimate is the true value of the population mean $\mu$. We repeatedly obtain different samples of the same size from the population and draw a histogram of the resulting $\bar{y}$. This is illustrated in Figure \ref{fig:H3best_estimate}.
 
 \begin{figure}[htbp]
   \includegraphics[width=\linewidth]{H3best_estimate.pdf}
-  \caption{Sampling distribution of mean monthly payroll, $\mu = 3014.16$}
+  \caption{Sampling distribution of mean monthly payroll, $\mu = \EstMeanPointEstimate$}
   \label{fig:H3best_estimate}
 \end{figure}
 
@@ -165,16 +166,17 @@ As shown in this figure, the distribution of $\bar{y}$ exhibits a peak at $\mu$.
   \label{fig:H3low_estimate}
 \end{figure}
 
-If the true population mean is 3,200.00, as in Figure \ref{fig:H3low_estimate}, the sample mean found to be 3,014.16 (marked with an `x') is still close to the true value. This is not as good an estimate as we had before, but it is still quite close. It is still within the bell-shaped area, which indicates the likely values of the sample mean, given the population mean. 
+If the true population mean is 3,200.00, as in Figure \ref{fig:H3low_estimate}, the sample mean found to be \EstMeanPointEstimate (marked with an `x') is still close to the true value. This is not as good an estimate as we had before, but it is still quite close. It is still within the bell-shaped area, which indicates the likely values of the sample mean, given the population mean. 
 
 As the population mean increases or decreases, the sample mean ends in one of the tails of the distribution. In this manner, we can determine the $\mu$ lower and upper bounds that define the area of reasonable estimates. This range of values is referred to as the \hlblue{confidence interval}\index{confidence interval}\index{interval!confidence}. This is illustrated in Figure \ref{fig:H3two_borderline_sampling_distributions}. 
-We see two borderline sampling distributions, one for samples from a population with a low population mean ($\mu$ = 2,577.19) and one for samples from a population with a high population mean ($\mu$ = 3,451.13).\footnote{We explain later why these two particular values were chosen.} In both cases, the sample mean found of 3,014.16 is just acceptable. If the true population mean is less than 2,577.19, the observed sample mean ends up in the right tail and is distrusted as being exceptionally high, whereas if the true population mean is greater than 3,451.13, the sample mean is in the left tail, in which case it is distrusted as being unexpectedly low. 
+We see two borderline sampling distributions, one for samples from a population with a low population mean ($\mu$ = \EstMeanLower95) and one for samples from a population with a high population mean ($\mu$ = \EstMeanUpper95).\footnote{We explain later why these two particular values were chosen.} In both cases, the sample mean found of \EstMeanPointEstimate 
+~is just acceptable. If the true population mean is less than \EstMeanLower95, the observed sample mean ends up in the right tail and is distrusted as being exceptionally high, whereas if the true population mean is greater than \EstMeanUpper95, the sample mean is in the left tail, in which case it is distrusted as being unexpectedly low. 
 \begin{figure*}
   \includegraphics[width=\linewidth]{H3two_borderline_sampling_distributions.pdf}
-  \caption{Two sampling distributions for which sample mean of 3,014.16 is just acceptable}
+  \caption{Two sampling distributions for which sample mean of \EstMeanPointEstimate is just acceptable}
   \label{fig:H3two_borderline_sampling_distributions}
 \end{figure*}
-For all values of the population mean between 2,577.19 and 3,451.13, the sample mean is consistent with the assumption that the sample is obtained from a population with this mean. Hence, we infer that the population mean is between 2,577.19 and 3,451.13.
+For all values of the population mean between \EstMeanLower95 and \EstMeanUpper95, the sample mean is consistent with the assumption that the sample is obtained from a population with this mean. Hence, we infer that the population mean is between \EstMeanLower95 and \EstMeanUpper95.
 
 \bigskip
 We also need to discuss what is acceptable and what is not acceptable. This is related to the \hlblue{confidence}\index{confidence} with which we make our statement. When the confidence of our statement is higher, we accept values farther away from the true mean, which leads to wider intervals. If we can live with lower confidence, the \hlblue{confidence interval}\index{confidence interval}\index{interval!confidence} is narrower.
@@ -234,7 +236,7 @@ From these formulae we can derive that precision achieved is smaller and therefo
 To achieve a more accurate estimate, decreasing confidence is often undesirable and only goes so far, and the standard deviation is dependent on the quality of the population and is beyond our influence. This leaves us with increasing the sample size to achieve a higher accuracy.
 
 \bigskip
-We use the $t$ distribution with an $\alpha$ value of 5\% to obtain a confidence level of 95\%, and we use $n - 1 = 49$ degrees of freedom. 
+We use the $t$ distribution with an $\alpha$ value of 5\% to obtain a confidence level of 95\%, and we use $n - 1 = \EstMeanDf$ degrees of freedom. 
 
 \input{generated/worked-calculations/est-mean-two-sided-interval-95}
 
@@ -247,7 +249,7 @@ We use the $t$ distribution with an $\alpha$ value of 5\% to obtain a confidence
 \subsection{One-sided intervals} % (fold)
 \label{sub:one_sided_intervals}
 
-In the previous section, we found a 95\% confidence interval for the mean monthly payroll of [2,577.19,\hspace{0.5em} 3,451.13]. We can make similar statements about the minimum or maximum mean monthly payroll using a one-sided interval rather than a two-sided interval. For the minimum mean monthly payroll, we use
+In the previous section, we found a 95\% confidence interval for the mean monthly payroll of [\EstMeanLower95,\hspace{0.5em} \EstMeanUpper95]. We can make similar statements about the minimum or maximum mean monthly payroll using a one-sided interval rather than a two-sided interval. For the minimum mean monthly payroll, we use
 
 \begin{equation}
   \bar{y} - t_{\alpha} \frac{s}{\sqrt{n}}
@@ -290,7 +292,7 @@ Figure \ref{fig:fpcf} shows the effects of the finite-population correction fact
 \section{Minimum sample size to estimate the mean} % (fold)
 \label{sec:estimating_the_sample_size}
 \index{additional sample|(}\index{sample!additional|(}
-When we presented the results of the sample, a sample size of $n =$ 50 was  determined. The resulting 95\% confidence intervals for the mean monthly payroll of [2,577.19, 3,451.13], and for the total monthly salary cost of [5,726,522, 7,668,405], may be too wide. In this section, we focus on determining the sample size $n$ that is sufficient to generate a confidence interval (at a given confidence level) with a certain target precision\index{precision!target}\index{target precision}. 
+When we presented the results of the sample, a sample size of $n =$ \EstMeanSampleSize was  determined. The resulting 95\% confidence intervals for the mean monthly payroll of [\EstMeanLower95, \EstMeanUpper95], and for the total monthly salary cost of [\EstMeanTotalLower95, \EstMeanTotalUpper95], may be too wide. In this section, we focus on determining the sample size $n$ that is sufficient to generate a confidence interval (at a given confidence level) with a certain target precision\index{precision!target}\index{target precision}. 
 
 \subsection{Infinite populations} % (fold)
 \label{sub:infinite_populations}
@@ -301,7 +303,7 @@ If we ignore the fact that we are sampling from a finite population, the calcula
   N \bar{y} \pm N t_{\alpha/2} \frac{s}{\sqrt{n}}
 \end{equation*}
 
-Suppose we are not satisfied with the precision achieved of 970,941, which leads to a 95\% two-sided confidence interval of [5,726,522, 7,668,405]. Instead, let us assume that we would like the distance between each of the bounds and the point estimate to be less than the \hlblue{target precision}\index{precision!target} $E$\nomenclature{$E$}{target precision} of 600,000. 
+Suppose we are not satisfied with the precision achieved of \EstMeanTotalPrecision95, which leads to a 95\% two-sided confidence interval of [\EstMeanTotalLower95, \EstMeanTotalUpper95]. Instead, let us assume that we would like the distance between each of the bounds and the point estimate to be less than the \hlblue{target precision}\index{precision!target} $E$\nomenclature{$E$}{target precision} of 600,000. 
 
 \begin{equation*}
   N t_{\alpha/2} \frac{s}{\sqrt{n}} \leq E
@@ -316,7 +318,7 @@ Solving for $n$ gives the minimum required sample size
 
 \input{generated/worked-calculations/est-mean-minimum-sample-size-infinite}
 
-We need to make a few remarks regarding this result. First, we used the \emph{estimated} variance of the population (2,364,064) calculated for the original sample. This number may increase or decrease as more observations become available. If it moves up, we may still fail to achieve the target precision. In this case, we may need to take another additional sample to satisfy the target precision. This also implies that we cannot use this formula in practice if we do not have a reasonable estimate of the population variance. 
+We need to make a few remarks regarding this result. First, we used the \emph{estimated} variance of the population (\EstMeanSampleVariance) calculated for the original sample. This number may increase or decrease as more observations become available. If it moves up, we may still fail to achieve the target precision. In this case, we may need to take another additional sample to satisfy the target precision. This also implies that we cannot use this formula in practice if we do not have a reasonable estimate of the population variance. 
 
 Second, the value of $t$ used in the calculation is associated with 49 degrees of freedom. As more observations become available, the number of degrees of freedom increases and the associated $t$ value decreases. This creates safety in the estimated sample size. Finally, the sample size could be larger than 10\% of the population size, at which point we should consider the finite-population correction factor\index{finite-population correction factor}.
 
@@ -330,7 +332,7 @@ To address these problems, Stein (1945) developed a two-step procedure\footnote{
 \end{equation}
 
 Therefore, we draw an additional sample of 81 units. We select a sample of 131 units and use the same random number seed as before to make sure that the units selected in the initial sample are included again.
-The mean of the total sample is 3,332.14, and its standard deviation 1,705.37.\footnote{See the calculations in Exercise \ref{ex:extending_the_sample}}
+The mean of the total sample is \EstMeanSampleTwoMean.\footnote{See the calculations in Exercise \ref{ex:extending_the_sample}}
 
 \input{generated/worked-calculations/est-mean-stein-interval}
 
@@ -339,7 +341,7 @@ The mean of the total sample is 3,332.14, and its standard deviation 1,705.37.\f
 \subsection{Finite populations} % (fold)
 \label{sub:finite_populations}
 
-We saw in Section \ref{sub:the_effect_of_finiteness} that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = 50$, $N = 2,222$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
+We saw in Section \ref{sub:the_effect_of_finiteness} that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = \EstMeanSampleSize$, $N = \EstPopulationSize$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
 
 The confidence interval incorporating the finite-population correction factor\index{finite-population correction factor} is given by Equation \ref{eq:two-sided_finite}:
 
@@ -400,7 +402,7 @@ Again, we can turn this estimate into an estimate of the total number of women e
 \section{Confidence intervals around the proportion} % (fold)
 \label{sec:confidence_intervals_around_the_proportion}
 
-We now turn to the calculation of the confidence interval\index{confidence interval}\index{interval!confidence} around the proportion of women in the sample. Recall that we find $k = 31$ women in the sample with $n = 50$. 
+We now turn to the calculation of the confidence interval\index{confidence interval}\index{interval!confidence} around the proportion of women in the sample. Recall that we find $k = \EstPropK$ women in the sample with $n = \EstPropSampleSize$. 
 
 To calculate a confidence interval\index{confidence interval!proportion}\index{interval!confidence!proportion} for a proportion in a finite population, we should employ the hypergeometric distribution.\footnote{Only if $n / N < 0.1$ can we use the binomial distribution as an approximation.} Unfortunately, there is no simple formula to calculate the bounds; therefore numerical methods must be used to determine the correct values.
 
@@ -472,7 +474,7 @@ which we solve for $n$ to get
   \label{fig:old_and_new_intervals_finite-population}
 \end{figure}
 
-We notice that  $p-p_l$ is slightly above the target $E = 0.1$; this is due to the fact that the normal approximation is \hlblue{anti-conservative}\index{anti-conservative}\footnote{anti-conservative means that the confidence intervals are narrower than required to contain the true population parameter in at least $(1 - \alpha) \cdot$ 100\% of the cases} and assumes symmetry\footnote{Two-sided intervals constructed using the binomial or hypergeometric distributions generally have $p_u - p \neq p - p_l$}. To accomodate this, we decide to use a slightly larger sample size. It should be noted that the confidence intervals are tighter when $p$ is closer to 0 or 1, and less tight when $p$ is closer to 0.5. A lot depends on the actual finite-population found in an additional sample.
+We notice that  $p-p_l$ is slightly above the target $E = \EstPropTargetPrecision$; this is due to the fact that the normal approximation is \hlblue{anti-conservative}\index{anti-conservative}\footnote{anti-conservative means that the confidence intervals are narrower than required to contain the true population parameter in at least $(1 - \alpha) \cdot$ 100\% of the cases} and assumes symmetry\footnote{Two-sided intervals constructed using the binomial or hypergeometric distributions generally have $p_u - p \neq p - p_l$}. To accomodate this, we decide to use a slightly larger sample size. It should be noted that the confidence intervals are tighter when $p$ is closer to 0 or 1, and less tight when $p$ is closer to 0.5. A lot depends on the actual finite-population found in an additional sample.
 
 % section minimum_sample_size_to_estimate_a_finite-population (end)
 
@@ -499,7 +501,6 @@ When these conditions are not met, the results may not be reliable. The sample s
 
 \input{generated/workshop-output/exercise-2-1-1}
 \input{generated/workshop-output/exercise-2-1-2}
-\input{generated/workshop-output/exercise-2-2-3}
 
 \end{exercise}
 
@@ -510,7 +511,6 @@ When these conditions are not met, the results may not be reliable. The sample s
 
 \input{generated/workshop-output/exercise-2-2-1}
 \input{generated/workshop-output/exercise-2-2-2}
-\input{generated/workshop-output/exercise-2-6-3}
 
 \end{exercise}
 
@@ -580,7 +580,6 @@ When these conditions are not met, the results may not be reliable. The sample s
 
 \input{generated/workshop-output-python/exercise-2-2-1}
 \input{generated/workshop-output-python/exercise-2-2-2}
-\input{generated/workshop-output-python/exercise-2-2-3}
 
 \end{exercise}
 
@@ -625,7 +624,6 @@ When these conditions are not met, the results may not be reliable. The sample s
 
 \input{generated/workshop-output-python/exercise-2-6-1}
 \input{generated/workshop-output-python/exercise-2-6-2}
-\input{generated/workshop-output-python/exercise-2-6-3}
 
 \end{exercise}
 

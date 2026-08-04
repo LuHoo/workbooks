@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The enhanced scatter plot in Figure 5.4 is obtained by running the following code.
+\noindent The enhanced scatter plot in Figure 5.4 is
+obtained by running the following code.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +18,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 fig, ax = plt.subplots(figsize=(7, 5))
-sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)
+sns.scatterplot(data=USSteamCoEstim, x='production', 
+y='revenue', color='#00338D', ax=ax)
 ax.set_xlabel('production')
 ax.set_ylabel('revenue')
 plt.tight_layout()

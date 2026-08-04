@@ -5,10 +5,14 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The vector below contains one January-to-December pattern of 12 observations.
-Because the dataset contains 48 monthly observations, the pattern is repeated
-across the four years. Later, when we include \ttblue{summer} in a regression model,
-the 0/1 values are treated as an indicator variable and the model estimates how
+\noindent The vector below contains one January-to-December
+pattern of 12 observations.
+Because the dataset contains 48 monthly observations, the
+pattern is repeated
+across the four years. Later, when we include
+\ttblue{summer} in a regression model,
+the 0/1 values are treated as an indicator variable and the
+model estimates how
 the intercept and slope differ between the two seasons.
 
 \par\addvspace{\topsep}
@@ -20,7 +24,8 @@ the intercept and slope differ between the two seasons.
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-USSteamCo["summer"] = np.resize(np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]), len(USSteamCo))
+USSteamCo["summer"] = np.resize(np.array([0, 0, 0, 0, 1, 1,
+ 1, 1, 1, 0, 0, 0]), len(USSteamCo))
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}

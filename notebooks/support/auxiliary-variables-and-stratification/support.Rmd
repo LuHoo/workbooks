@@ -566,6 +566,7 @@ cumul.eval_results["Estimates"]
 ```
 <!-- ADA:END -->
 
+<!-- SUPPORT-ONLY:START -->
 ```{r manuscript-calculation-values-aux-mpu, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
   stop("jsonlite is required to emit manuscript calculation values.")
@@ -773,15 +774,7 @@ values_output_path <- file.path(values_output_dir, "aux.ratio.estimator.json")
 jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
 message("Wrote manuscript calculation values: ", values_output_path)
 ```
-<!-- ADA:BEGIN lang=python mode=override kind=code -->
-```{r}
-ada_set_context("3.9")
-# Values JSON is emitted by the R workflow chunk.
-None
-```
-<!-- ADA:END -->
-
-
+<!-- SUPPORT-ONLY:END -->
 
 <!-- SUPPORT-ONLY:START -->
 

@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent The \ttblue{summary} command produces summary statistics of all variables in the dataset, the length (number of data points) for character types (such as \ttblue{month}) and distribution statistics for numeric types.
+\noindent The \ttblue{summary} command produces summary
+statistics of all variables in the dataset, the
+length (number of data points) for character
+types (such as \ttblue{month}) and distribution
+statistics for numeric types.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,16 +20,21 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-((USSteamCo.summary() if hasattr(USSteamCo, 'summary') else USSteamCo.describe(include='all') if hasattr(USSteamCo, 'describe') else print('Skipped summary/describe: USSteamCo has no compatible method')) if 'USSteamCo' in globals() else print('Skipped summary/describe: USSteamCo not defined'))
+((USSteamCo.summary() if hasattr(USSteamCo, 'summary') else
+ USSteamCo.describe(include='all') if hasattr(USSteamCo, 
+'describe') else print('Skipped summary/describe: USSteamCo
+ has no compatible method')) if 'USSteamCo' in globals() 
+else print('Skipped summary/describe: USSteamCo not 
+defined'))
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
-       month       revenue           production
- Length   :48   Min.   : 4809952   Min.   :151104
- N.unique :48   1st Qu.:10325796   1st Qu.:371474
- N.blank  : 0   Median :13542764   Median :502280
- Min.nchar: 6   Mean   :14032843   Mean   :493034
- Max.nchar: 6   3rd Qu.:17865242   3rd Qu.:646926
-                Max.   :26792280   Max.   :805600
+    month              revenue           production
+ Length:48          Min.   : 4809952   Min.   :151104
+ Class :character   1st Qu.:10325796   1st Qu.:371474
+ Mode  :character   Median :13542764   Median :502280
+                    Mean   :14032843   Mean   :493034
+                    3rd Qu.:17865242   3rd Qu.:646926
+                    Max.   :26792280   Max.   :805600
      coolDD          heatDD
  Min.   :  0.0   Min.   :   0.0
  1st Qu.:  0.0   1st Qu.:  10.5

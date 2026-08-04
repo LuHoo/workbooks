@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We obtain the Cook's distances of a model by running the \ttblue{cooks.distance} function on it.
+\noindent We obtain the Cook's distances of a model by
+running the \ttblue{cooks.distance} function on
+it.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +18,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-cooks_mod_2 = ussteamco_mod_2.get_influence().cooks_distance[0]
+cooks_mod_2 = 
+ussteamco_mod_2.get_influence().cooks_distance[0]
 display(pd.Series(cooks_mod_2, name='cooks_distance'))
 \end{Verbatim}
 \endgroup

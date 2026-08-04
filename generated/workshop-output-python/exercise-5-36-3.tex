@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Next, we set the audit parameters and construct the acceptable difference range. The acceptable difference range is expressed around zero, because it is applied to the difference between the recorded amount and the expectation.
+\noindent Next, we set the audit parameters and construct
+the acceptable difference range. The acceptable
+difference range is expressed around zero,
+because it is applied to the difference between
+the recorded amount and the expectation.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -18,19 +22,22 @@
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 # Set audit parameters
 PM = 15000000 # Performance materiality
-beta = 0.01 # Efficiency risk used for the acceptable difference range
+beta = 0.01 # Efficiency risk used for the acceptable 
+difference range
 df = df_res
 # Equation 5.44: standardized materiality
 delta = PM / annual_se
-# Critical values for a two-sided 99% acceptable difference range
+# Critical values for a two-sided 99% acceptable difference
+ range
 c_L = t.ppf(beta / 2, df=df)
 c_U = t.ppf(1 - beta / 2, df=df)
 # Acceptable difference range for the annual difference
 ADR_lower = c_L * annual_se
 ADR_upper = c_U * annual_se
-cat("Acceptable Difference Range for the annual difference:\n")
-cat("Lower bound:", ADR_lower, "\n")
-cat("Upper bound:", ADR_upper, "\n")
+print("Acceptable Difference Range for the annual 
+difference:\n")
+print("Lower bound:", ADR_lower, "\n")
+print("Upper bound:", ADR_upper, "\n")
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 Acceptable Difference Range for the annual difference:

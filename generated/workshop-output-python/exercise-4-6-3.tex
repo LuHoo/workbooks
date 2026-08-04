@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Compare this with the sample size calculated using fixed-attribute sampling.
+\noindent Compare this with the sample size calculated
+using fixed-attribute sampling.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +18,8 @@
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 from IPython.display import display
-ar2 = att_sample(alpha=0.05, popn=13500000, popdev=450000).size(c=1)
+ar2 = att_sample(alpha=0.05, popn=13500000, 
+popdev=450000).size(c=1)
 display(ar2.n)
 display(ar2.size(c=2).n)
 \end{Verbatim}
@@ -28,4 +30,6 @@ display(ar2.size(c=2).n)
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
-\noindent We can therefore infer that with an expected error of \ttblue{ee = 100000}, we can tolerate between one and two 100\% errors.
+\noindent We can therefore infer that with an expected
+error of \ttblue{ee = 100000}, we can tolerate
+between one and two 100\% errors.

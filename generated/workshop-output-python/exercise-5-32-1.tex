@@ -5,8 +5,16 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent This exercise is also an illustration rather than a case step. It stays in the student notebook because it introduces the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation before we return to the case-based forecasting exercises.
-Figure 5.18 shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
+\noindent This exercise is also an illustration rather than
+a case step. It stays in the student notebook
+because it introduces the visual distinction
+between a confidence interval for the mean
+response and a prediction interval for a new
+observation before we return to the case-based
+forecasting exercises.
+Figure 5.18 shows a regression line with a dotted
+confidence interval and a shaded prediction interval. It is
+created with the following code.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -20,15 +28,26 @@ Figure 5.18 shows a regression line with a dotted confidence interval and a shad
 from IPython.display import display
 alpha_pred = 0.01
 t_value_pred = t_dist.ppf(1 - alpha_pred / 2, df=n - 2)
-se_pred = sigma * np.sqrt(1 + 1 / n + ((x_extended - mean_x) ** 2) / S_xx)
-pi_upper_true = (beta_0 + beta_1 * x_extended) + t_value_pred * se_pred
-pi_lower_true = (beta_0 + beta_1 * x_extended) - t_value_pred * se_pred
-pi_bounds_true = pd.DataFrame({'x': x_extended, 'pi_lower': pi_lower_true, 'pi_upper': pi_upper_true})
+se_pred = sigma * np.sqrt(1 + 1 / n + ((x_extended - 
+mean_x) ** 2) / S_xx)
+pi_upper_true = (beta_0 + beta_1 * x_extended) + 
+t_value_pred * se_pred
+pi_lower_true = (beta_0 + beta_1 * x_extended) - 
+t_value_pred * se_pred
+pi_bounds_true = pd.DataFrame({'x': x_extended, 'pi_lower':
+ pi_lower_true, 'pi_upper': pi_upper_true})
 fig, ax = plt.subplots(figsize=(10, 6))
-display(ax.fill_between(pi_bounds_true['x'], pi_bounds_true['pi_lower'], pi_bounds_true['pi_upper'], color='#00338D', alpha=0.15))
-display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_lower'], color='#00338D', linewidth=1, linestyle='--'))
-display(ax.plot(ci_bounds_true['x'], ci_bounds_true['ci_upper'], color='#00338D', linewidth=1, linestyle='--'))
-display(ax.plot(true_line['x'], true_line['y'], color='#00338D', linewidth=1.5))
+display(ax.fill_between(pi_bounds_true['x'], 
+pi_bounds_true['pi_lower'], pi_bounds_true['pi_upper'], 
+color='#00338D', alpha=0.15))
+display(ax.plot(ci_bounds_true['x'], 
+ci_bounds_true['ci_lower'], color='#00338D', linewidth=1, 
+linestyle='--'))
+display(ax.plot(ci_bounds_true['x'], 
+ci_bounds_true['ci_upper'], color='#00338D', linewidth=1, 
+linestyle='--'))
+display(ax.plot(true_line['x'], true_line['y'], 
+color='#00338D', linewidth=1.5))
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_xlim(x_extended_min, x_extended_max)

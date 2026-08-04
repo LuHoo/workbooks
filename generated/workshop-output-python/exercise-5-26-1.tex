@@ -5,8 +5,16 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of the lagged value from the dependent variable and from each predictor. The transformed model can then be estimated by ordinary least squares.
-We first estimate an AR(1) model on the residuals from \ttblue{mod.3}.
+\noindent A practical way to address first-order
+autocorrelation is to apply an AR(1)
+transformation. This method estimates the
+autocorrelation parameter and transforms the
+regression model by subtracting a multiple of the
+lagged value from the dependent variable and from
+each predictor. The transformed model can then be
+estimated by ordinary least squares.
+We first estimate an AR(1) model on the residuals from
+\ttblue{mod.3}.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -17,7 +25,8 @@ We first estimate an AR(1) model on the residuals from \ttblue{mod.3}.
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-rho = np.corrcoef(ussteamco_mod_3.resid[1:], ussteamco_mod_3.resid[:-1])[0, 1]
+rho = np.corrcoef(ussteamco_mod_3.resid[1:], 
+ussteamco_mod_3.resid[:-1])[0, 1]
 print(rho)
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]

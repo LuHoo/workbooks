@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent In Section 5.4.4 we developed \ttblue{mod.2}, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable \ttblue{summer}.
+\noindent In Section 5.4.4 we developed \ttblue{mod.2},
+that incorporates two separate regression lines.
+In addition to the three independent variables,
+we also account for their interactions with the
+dummy variable \ttblue{summer}.
 The scatterplot in Figure 5.6 is prepared using
 
 \par\addvspace{\topsep}
@@ -18,7 +22,8 @@ The scatterplot in Figure 5.6 is prepared using
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
 fig, ax = plt.subplots(figsize=(7, 5))
-sns.scatterplot(data=USSteamCoEstim, x='production', y='revenue', color='#00338D', ax=ax)
+sns.scatterplot(data=USSteamCoEstim, x='production', 
+y='revenue', color='#00338D', ax=ax)
 ax.set_xlabel('production')
 ax.set_ylabel('revenue')
 plt.tight_layout()

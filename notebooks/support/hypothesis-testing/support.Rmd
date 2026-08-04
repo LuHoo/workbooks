@@ -396,6 +396,7 @@ upper_bound(k=3, popn=13500000, n=145, alpha=0.05)
 ```
 <!-- ADA:END -->
 
+<!-- SUPPORT-ONLY:START -->
 ```{r hyp-worked-calculation-values-mus-sample-size, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
   stop("jsonlite is required to emit manuscript calculation values.")
@@ -591,6 +592,8 @@ write_values_entry(
   )
 )
 ```
+
+<!-- SUPPORT-ONLY:END -->
 
 ### Exercise 4.9. Cell evaluation
 

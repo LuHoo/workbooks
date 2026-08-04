@@ -5,7 +5,9 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 5.14 is obtained by:
+\noindent We can assess normality issues with a histogram
+or with a QQ plot. The histogram in Figure 5.14
+is obtained by:
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,11 +18,14 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-nres = ussteamco_mod_3.resid / np.std(ussteamco_mod_3.resid)
+nres = ussteamco_mod_3.resid / 
+np.std(ussteamco_mod_3.resid)
 fig, ax = plt.subplots(figsize=(7, 5))
-sns.histplot(nres, bins=np.arange(-2.55, 1.65 + 0.7, 0.7), stat='density', color='#00338D', ax=ax)
+sns.histplot(nres, bins=np.arange(-2.55, 1.65 + 0.7, 0.7), 
+stat='density', color='#00338D', ax=ax)
 x_vals = np.linspace(nres.min(), nres.max(), 200)
-ax.plot(x_vals, norm.pdf(x_vals, np.mean(nres), np.std(nres)), color='black')
+ax.plot(x_vals, norm.pdf(x_vals, np.mean(nres), 
+np.std(nres)), color='black')
 plt.tight_layout()
 plt.show()
 \end{Verbatim}

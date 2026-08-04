@@ -16,9 +16,12 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-resid_std_mod3 = (ussteamco_mod_3.resid - ussteamco_mod_3.resid.mean()) / ussteamco_mod_3.resid.std(ddof=1)
+resid_std_mod3 = (ussteamco_mod_3.resid - 
+ussteamco_mod_3.resid.mean()) / 
+ussteamco_mod_3.resid.std(ddof=1)
 fig, ax = plt.subplots(figsize=(7, 5))
-qqplot(resid_std_mod3, line='45', fit=True, ax=ax, color='#00338D', alpha=0.8)
+qqplot(resid_std_mod3, line='45', fit=True, ax=ax, 
+color='#00338D', alpha=0.8)
 ax.set_title('QQ Plot of Standardized Residuals (mod.3)')
 ax.set_xlabel('Theoretical Quantiles')
 ax.set_ylabel('Standardized Residuals')

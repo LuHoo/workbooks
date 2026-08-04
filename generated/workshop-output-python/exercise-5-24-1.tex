@@ -5,7 +5,10 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent To test the assumption of constant variance, we can employ visual means, such as the \ttblue{residualPlots} in Figure 5.15. We can construct it as follows.
+\noindent To test the assumption of constant variance, we
+can employ visual means, such as the
+\ttblue{residualPlots} in Figure 5.15. We can
+construct it as follows.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -22,12 +25,15 @@ fitted = ussteamco_mod_3.fittedvalues
 predictors = ['production', 'coolDD', 'heatDD', 'summer']
 fig, axes = plt.subplots(2, 3, figsize=(14, 8))
 for ax, col in zip(axes.flatten()[:4], predictors):
-    display(sns.scatterplot(x=USSteamCoEstim2[col], y=resid, color='#00338D', ax=ax))
+    display(sns.scatterplot(x=USSteamCoEstim2[col], 
+y=resid, color='#00338D', ax=ax))
     ax.axhline(0, color='black', linestyle='dotted')
     ax.set_xlabel(col)
     ax.set_ylabel('Residuals')
-display(sns.scatterplot(x=fitted, y=resid, color='#00338D', ax=axes.flatten()[4]))
-display(axes.flatten()[4].axhline(0, color='black', linestyle='dotted'))
+display(sns.scatterplot(x=fitted, y=resid, color='#00338D',
+ ax=axes.flatten()[4]))
+display(axes.flatten()[4].axhline(0, color='black', 
+linestyle='dotted'))
 display(axes.flatten()[4].set_xlabel('Fitted'))
 display(axes.flatten()[4].set_ylabel('Residuals'))
 display(axes.flatten()[5].axis('off'))

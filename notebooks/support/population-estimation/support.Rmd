@@ -58,6 +58,7 @@ the selected data column.
 (y_bar <- mean(sample1$gross))
 ```
 
+<!-- SUPPORT-ONLY:START -->
 ```{r est-worked-calculation-values-point-estimate, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
   stop("jsonlite is required to emit manuscript calculation values.")
@@ -131,6 +132,7 @@ values_output_path <- file.path(values_output_dir, "est.total.point_estimate.jso
 jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
 message("Wrote manuscript calculation values: ", values_output_path)
 ```
+<!-- SUPPORT-ONLY:END -->
 
 We can use the sample mean as an estimate for the total payroll in the population. The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
 ```{r}
@@ -151,7 +153,7 @@ The calculation of the standard error is then
 (se <- s / sqrt(n))
 ```
 
-For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.095.
+For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.975.
 
 ```{r}
 (tval <- qt(0.975, df = (n - 1)))
@@ -236,6 +238,7 @@ upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 ```
 Note that the hypergeometric distribution provides a more precise result.
 
+<!-- SUPPORT-ONLY:START -->
 ```{r est-worked-calculation-values-intervals-and-sample-sizes, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
   stop("jsonlite is required to emit manuscript calculation values.")
@@ -598,6 +601,7 @@ write_values_entry(
   )
 )
 ```
+<!-- SUPPORT-ONLY:END -->
 
 <!-- SUPPORT-ONLY:START -->
 

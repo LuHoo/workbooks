@@ -5,7 +5,11 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values into a data frame.
+\noindent Before we can evaluate the sample, we must first
+provide audit values. These should be provided in
+a list of the same order as the list of sample
+book values. We first copy the list of book
+values into a data frame.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +20,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-myResults = ar.sample.loc[:, ["item", "bv"]].rename(columns={"bv": "av"}).copy()
+myResults = ar.sample.loc[:, ["item", 
+"bv"]].rename(columns={"bv": "av"}).copy()
 myResults
 \end{Verbatim}
 \endgroup

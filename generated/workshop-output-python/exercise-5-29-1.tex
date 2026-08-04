@@ -5,7 +5,10 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We re-run the model assumption tests in the same order used earlier in the chapter: normality first, then heteroskedasticity, and finally autocorrelation.
+\noindent We re-run the model assumption tests in the same
+order used earlier in the chapter: normality
+first, then heteroskedasticity, and finally
+autocorrelation.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,10 +19,14 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-bp_stat, bp_p, _, _ = het_breuschpagan(ussteamco_mod_5.resid, ussteamco_mod_5.model.exog)
-bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_5, nlags=3)
+bp_stat, bp_p, _, _ = 
+het_breuschpagan(ussteamco_mod_5.resid, 
+ussteamco_mod_5.model.exog)
+bg_lm, bg_p, _, _ = acorr_breusch_godfrey(ussteamco_mod_5, 
+nlags=3)
 sw_stat, sw_p = shapiro_test(ussteamco_mod_5.resid)
-print({'bp_lm': bp_stat, 'bp_p': bp_p, 'bg_lm': bg_lm, 'bg_p': bg_p, 'shapiro_W': sw_stat, 'shapiro_p': sw_p})
+print({'bp_lm': bp_stat, 'bp_p': bp_p, 'bg_lm': bg_lm, 
+'bg_p': bg_p, 'shapiro_W': sw_stat, 'shapiro_p': sw_p})
 \end{Verbatim}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_light_blue}]
 

@@ -5,7 +5,8 @@
 % -----------------------------------------------------------------------------
 
 
-\noindent We reformat the month variable, that has a character type, into the \ttblue{date} variable.
+\noindent We reformat the month variable, that has a
+character type, into the \ttblue{date} variable.
 
 \par\addvspace{\topsep}
 \begingroup
@@ -16,7 +17,8 @@
   \setlength{\itemsep}{0pt}%
 }}
 \begin{Verbatim}[breaklines=true,formatcom=\color{ada_blue}]
-USSteamCo['date'] = pd.date_range('2011-01-01', periods=len(USSteamCo), freq='MS')
+USSteamCo['date'] = pd.date_range('2011-01-01', 
+periods=len(USSteamCo), freq='MS')
 \end{Verbatim}
 \endgroup
 \par\addvspace{\topsep}
