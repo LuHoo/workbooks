@@ -6,6 +6,9 @@
 % Prevent underfull vbox warnings on pages with little text
 \raggedbottom
 
+% Load generated regression inline macros before first use in this chapter.
+\input{generated/worked-calculations/reg-inline-linked-values}
+
 \begin{quote}
 `Prediction is very difficult, especially if it is about the future'\\
 Niels Bohr (1885-1962)
@@ -729,7 +732,8 @@ Std. Error &
 $t$ value &
 $Pr(>|t|)$ \\
 \midrule
-\input{generated/worked-calculations/reg-summary-mod0-rows}
+intercept  & 4,897,663 & 2,014,855 & 2.431 & 0.0205 \\
+production &     18.99 &      4.02 & 4.728 & 0.0000 \\
 \bottomrule
 \end{tabularx}
 \caption{Coefficient estimates of \ttblue{mod.0}, with their standard errors, $t$ values, and $p$ values.}
@@ -819,7 +823,10 @@ $t$ value &
 $Pr(>|t|)$ \\
 
 \midrule
-\input{generated/worked-calculations/reg-summary-mod1-rows}
+intercept  & 702,547 & 1,046,713 &  0.6712 & 0.5069 \\
+production &   21.54 &     3.158 &  6.8224 & 0.0000 \\
+coolDD     &  -2,965 &     4,789 & -0.6192 & 0.5402 \\
+heatDD     &   9,478 &     1,893 &  5.0079 & 0.0000 \\
 
 \bottomrule
 \end{tabularx}
@@ -852,7 +859,14 @@ $t$ value &
 $Pr(>|t|)$ \\
 
 \midrule
-\input{generated/worked-calculations/reg-summary-mod2-rows}
+intercept           &   467,201 &  1,471,889  &  0.3174 & 0.75330 \\
+production          &     34.26 &      4.379  &  7.8240 & 0.00000 \\
+summer              & 4,923,031 &  3,227,574  &  1.5253 & 0.13840 \\
+coolDD              &  -120,941 &     43,614  & -2.7730 & 0.00980 \\
+heatDD              &     1,495 &      3,047  &  0.4906 & 0.62750 \\
+production : summer &    -23.63 &      6.858  & -3.4460 & 0.00180 \\
+coolDD : summer     &   124,446 &     43,928  &  2.8329 & 0.00850 \\
+heatDD  :  summer   &   -13,340 &     21,899  & -0.6091 & 0.54730 \\
 
 \bottomrule
 \end{tabularx}
@@ -1361,7 +1375,14 @@ $t$ value &
 $Pr(>|t|)$ \\
 
 \midrule
-\input{generated/worked-calculations/reg-summary-mod3-rows}
+intercept           &   580,713 & 1,299,338 &  0.4469 & 0.65840 \\
+production          &     34.87 &      3.87 &  9.0211 & 0.00000 \\
+summer              & 4,809,519 & 2,849,202 &  1.6880 & 0.10250 \\
+coolDD              &  -111,458 &    38,501 & -2.8950 & 0.00730 \\
+heatDD              &       933 &     2,690 &  0.3467 & 0.73140 \\
+production : summer &    -24.24 &      6.05 & -4.0046 & 0.00040 \\
+coolDD : summer     &   114,963 &    38,779 &  2.9646 & 0.00610 \\
+heatDD : summer     &   -12,777 &    19,331 & -0.6610 & 0.51400 \\
 
 \bottomrule
 \end{tabularx}
@@ -1985,8 +2006,14 @@ $t$ value &
 $Pr(>|t|)$ \\
 
 \midrule
-
-\input{generated/worked-calculations/reg-summary-mod4-rows}
+intercept         &    14,960 &   741,231 &  0.020 & 0.984000 \\
+production\_adj   &     34.07 &     3.209 & 10.615 & 0.000000 \\
+summer\_adj       & 5,633,141 & 2,324,882 &  2.423 & 0.022400 \\
+coolDD\_adj       &   -82,554 &    32,693 & -2.525 & 0.017700 \\
+heatDD\_adj       &     2,155 &     2,326 &  0.926 & 0.362400 \\
+prod\_summer\_adj &    -22.83 &      5.31 & -4.303 & 0.000200 \\
+cool\_summer\_adj &    84,539 &    33,751 &  2.505 & 0.018600 \\
+heat\_summer\_adj &   -20,135 &    13,897 & -1.449 & 0.158900 \\
 
 \bottomrule
 \end{tabularx}
@@ -2020,8 +2047,12 @@ $t$ value &
 $Pr(>|t|)$ \\
 
 \midrule
-
-\input{generated/worked-calculations/reg-summary-mod5-rows}
+intercept           &   752,767 & 1,170,485 &  0.643 & 0.525000 \\
+production          &     35.87 &      2.50 & 14.327 & 0.000000 \\
+summer              & 3,219,526 & 1,577,708 &  2.041 & 0.050200 \\
+coolDD              &  -121,381 &    25,102 & -4.835 & 0.000000 \\
+production : summer &    -23.23 &      4.10 & -5.661 & 0.000004 \\
+coolDD : summer     &   125,064 &    25,504 &  4.904 & 0.000000 \\
 
 \bottomrule
 \end{tabularx}
@@ -2201,10 +2232,10 @@ For example, when using a model with one single independent variable like \ttblu
 \end{equation*}
 a 99\% confidence interval around this estimate is then
 \begin{equation*}
-  \RegModZeroYHat \pm \RegModZeroT99 \cdot \RegModZeroResidualSd \sqrt{\frac{1}{\RegModZeroSampleSize} + \frac{(\RegModZeroXStar - \RegModZeroXMean)^2}{\RegModZeroDf \cdot \RegModZeroSxx}} =
+  \RegModZeroYHat \pm \RegModZeroTCritNinetyNine \cdot \RegModZeroResidualSd \sqrt{\frac{1}{\RegModZeroSampleSize} + \frac{(\RegModZeroXStar - \RegModZeroXMean)^2}{\RegModZeroDf \cdot \RegModZeroSxx}} =
 \end{equation*}
 \begin{equation*}
-\RegModZeroYHat \pm \RegModZeroPrecision99
+\RegModZeroYHat \pm \RegModZeroPrecisionCritNinetyNine
 \end{equation*}
 
 \paragraph{Prediction Interval} This interval gives the range in which an individual observation of $y$ is expected to fall, for a certain value of the independent variable. In addition to model uncertainty (accounted for by the confidence interval), the prediction interval includes random data variation, capturing the natural scatter of data around the regression line. The formula for the prediction interval is:

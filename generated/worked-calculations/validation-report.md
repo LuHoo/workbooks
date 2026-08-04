@@ -1,7 +1,7 @@
 # Manuscript Calculation Validation Report
 
 - Status: passed
-- Checked calculations: 28
+- Checked calculations: 34
 
 ## Checked Calculations
 
@@ -35,6 +35,12 @@
 | reg.annual.decision_bounds | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-decision-bounds.tex | passed |
 | reg.annual.expectation_interval | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-annual-expectation-interval.tex | passed |
 | reg.inline.linked_values | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-inline-linked-values.tex | passed |
+| reg.summary.mod0_rows | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-summary-mod0-rows.tex | passed |
+| reg.summary.mod1_rows | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-summary-mod1-rows.tex | passed |
+| reg.summary.mod2_rows | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-summary-mod2-rows.tex | passed |
+| reg.summary.mod3_rows | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-summary-mod3-rows.tex | passed |
+| reg.summary.mod4_rows | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-summary-mod4-rows.tex | passed |
+| reg.summary.mod5_rows | notebooks/support/regression-analysis/support.Rmd | generated/worked-calculations/reg-summary-mod5-rows.tex | passed |
 
 ## R/Python Shared Value Comparisons
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "checked_count": 28,
+  "checked_count": 34,
   "checked": [
     {
       "id": "aux.difference.estimator",
@@ -169,6 +169,42 @@
       "id": "reg.inline.linked_values",
       "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
       "target_snippet": "generated/worked-calculations/reg-inline-linked-values.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.summary.mod0_rows",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-summary-mod0-rows.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.summary.mod1_rows",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-summary-mod1-rows.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.summary.mod2_rows",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-summary-mod2-rows.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.summary.mod3_rows",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-summary-mod3-rows.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.summary.mod4_rows",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-summary-mod4-rows.tex",
+      "status": "passed"
+    },
+    {
+      "id": "reg.summary.mod5_rows",
+      "source_notebook": "notebooks/support/regression-analysis/support.Rmd",
+      "target_snippet": "generated/worked-calculations/reg-summary-mod5-rows.tex",
       "status": "passed"
     }
   ],
@@ -406,22 +442,58 @@
     "25": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-inline-linked-values.tex"
+        "target": "generated/worked-calculations/reg-summary-mod0-rows.tex"
       }
     ],
     "26": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
+        "target": "generated/worked-calculations/reg-summary-mod1-rows.tex"
       }
     ],
     "27": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+        "target": "generated/worked-calculations/reg-summary-mod2-rows.tex"
       }
     ],
     "28": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-summary-mod3-rows.tex"
+      }
+    ],
+    "29": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-inline-linked-values.tex"
+      }
+    ],
+    "30": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-summary-mod4-rows.tex"
+      }
+    ],
+    "31": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-summary-mod5-rows.tex"
+      }
+    ],
+    "32": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
+      }
+    ],
+    "33": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+      }
+    ],
+    "34": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-decision-bounds.tex"
