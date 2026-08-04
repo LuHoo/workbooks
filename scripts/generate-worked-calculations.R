@@ -918,7 +918,13 @@ render_derived_outputs <- function(resolved_entries) {
         macro_line("ProbFirstCorrectProbability", get_display("pro.inline.linked_values", "first_correct_probability")),
         macro_line("ProbSecondCorrectGivenFirstCorrect", get_display("pro.inline.linked_values", "second_correct_given_first_correct")),
         macro_line("ProbSecondCorrectGivenFirstIncorrect", get_display("pro.inline.linked_values", "second_correct_given_first_incorrect")),
-        macro_line("ProbZeroErrorProbability", get_display("pro.inline.linked_values", "zero_error_probability"))
+        macro_line("ProbZeroErrorProbability", get_display("pro.inline.linked_values", "zero_error_probability")),
+        macro_line("ProbSocSecSampleOneMeanDot", get_display("pro.inline.linked_values", "social_security_sample_one_mean_dot")),
+        macro_line("ProbSocSecSampleOneMean", get_display("pro.inline.linked_values", "social_security_sample_one_mean")),
+        macro_line("ProbSocSecSampleOneSd", get_display("pro.inline.linked_values", "social_security_sample_one_sd")),
+        macro_line("ProbSocSecSampleTwoN", get_display("pro.inline.linked_values", "social_security_sample_two_n")),
+        macro_line("ProbSocSecSampleTwoMean", get_display("pro.inline.linked_values", "social_security_sample_two_mean")),
+        macro_line("ProbSocSecSampleTwoSd", get_display("pro.inline.linked_values", "social_security_sample_two_sd"))
       ),
       metadata = by_id[[prob_derived_id]],
       target_snippet = prob_derived_target_snippet
@@ -943,7 +949,18 @@ render_derived_outputs <- function(resolved_entries) {
         macro_line("RegModFiveBg", get_display("reg.inline.linked_values", "mod5_bg")),
         macro_line("RegModFiveBgP", get_display("reg.inline.linked_values", "mod5_bg_p")),
         macro_line("RegModFiveW", get_display("reg.inline.linked_values", "mod5_w")),
-        macro_line("RegModFiveShapiroP", get_display("reg.inline.linked_values", "mod5_shapiro_p"))
+        macro_line("RegModFiveShapiroP", get_display("reg.inline.linked_values", "mod5_shapiro_p")),
+        macro_line("RegModZeroIntercept", get_display("reg.inline.linked_values", "mod0_intercept")),
+        macro_line("RegModZeroSlope", get_display("reg.inline.linked_values", "mod0_slope")),
+        macro_line("RegModZeroXStar", get_display("reg.inline.linked_values", "mod0_x_star")),
+        macro_line("RegModZeroYHat", get_display("reg.inline.linked_values", "mod0_y_hat")),
+        macro_line("RegModZeroT99", get_display("reg.inline.linked_values", "mod0_t_99")),
+        macro_line("RegModZeroResidualSd", get_display("reg.inline.linked_values", "mod0_residual_sd")),
+        macro_line("RegModZeroSampleSize", get_display("reg.inline.linked_values", "mod0_sample_size")),
+        macro_line("RegModZeroXMean", get_display("reg.inline.linked_values", "mod0_x_mean")),
+        macro_line("RegModZeroDf", get_display("reg.inline.linked_values", "mod0_df")),
+        macro_line("RegModZeroSxx", get_display("reg.inline.linked_values", "mod0_sxx")),
+        macro_line("RegModZeroPrecision99", get_display("reg.inline.linked_values", "mod0_precision_99"))
       ),
       metadata = by_id[[reg_derived_id]],
       target_snippet = reg_derived_target_snippet

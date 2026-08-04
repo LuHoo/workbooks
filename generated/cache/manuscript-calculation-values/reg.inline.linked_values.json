@@ -92,6 +92,72 @@
       "role": "mod5_shapiro_p",
       "raw": 0.0955,
       "format": "number:5"
+    },
+    {
+      "id": "reg.inline.mod0_intercept",
+      "role": "mod0_intercept",
+      "raw": 4897663,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_slope",
+      "role": "mod0_slope",
+      "raw": 18.99,
+      "format": "number:2"
+    },
+    {
+      "id": "reg.inline.mod0_x_star",
+      "role": "mod0_x_star",
+      "raw": 606400,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_y_hat",
+      "role": "mod0_y_hat",
+      "raw": 16414429,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_t_99",
+      "role": "mod0_t_99",
+      "raw": 2.728,
+      "format": "number:3"
+    },
+    {
+      "id": "reg.inline.mod0_residual_sd",
+      "role": "mod0_residual_sd",
+      "raw": 4112487,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_sample_size",
+      "role": "mod0_sample_size",
+      "raw": 36,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_x_mean",
+      "role": "mod0_x_mean",
+      "raw": 471663,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_df",
+      "role": "mod0_df",
+      "raw": 35,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_sxx",
+      "role": "mod0_sxx",
+      "raw": 29945297385,
+      "format": "integer"
+    },
+    {
+      "id": "reg.inline.mod0_precision_99",
+      "role": "mod0_precision_99",
+      "raw": 11470711,
+      "format": "integer"
     }
   ]
 }

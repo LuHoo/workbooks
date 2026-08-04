@@ -366,9 +366,9 @@ The first sample is prepared for the second sample. In Chapter \ref{cha:estimati
 The results for the two samples are as follows:
 
 \paragraph{Sample 1:}  The values of the payments are 930, 1,035, 1,073, 994, 910, 1,033, 947, 1,102, 1,095, 921.
-Mean $\bar{x} = 1.004$, standard deviation $s = 73.78$.\nomenclature{$\bar{x}$}{mean value of $x$}
+Mean $\bar{x} = \ProbSocSecSampleOneMeanDot$, standard deviation $s = \ProbSocSecSampleOneSd$.\nomenclature{$\bar{x}$}{mean value of $x$}
 
-\paragraph{Sample 2:} The mean of the $N = 200$ payments $\bar{x} = 1,012,$ their standard deviation $s = 115.26$.
+\paragraph{Sample 2:} The mean of the $N = \ProbSocSecSampleTwoN$ payments $\bar{x} = \ProbSocSecSampleTwoMean,$ their standard deviation $s = \ProbSocSecSampleTwoSd$.
 
 \section*{Objective}
 Given the sample results, determine whether it is probable that the mean payment value in the population equals 1,030.
@@ -383,8 +383,8 @@ Sample size $n$ &
 Sample mean $\bar{x}$ &
 Sample standard deviation $s$ \\
 \midrule
-1 & variance & 10  & 1,004 &  73.78 \\
-2 & mean     & 200 & 1,012 & 115.26 \\
+1 & variance & 10  & \ProbSocSecSampleOneMean &  \ProbSocSecSampleOneSd \\
+2 & mean     & \ProbSocSecSampleTwoN & \ProbSocSecSampleTwoMean & \ProbSocSecSampleTwoSd \\
 \bottomrule
 \end{tabularx}
 \caption{Characteristics of \emph{Case: Social Security Payments} samples}
