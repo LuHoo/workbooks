@@ -773,6 +773,80 @@ entry <- list(
 values_output_path <- file.path(values_output_dir, "aux.ratio.estimator.json")
 jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
 message("Wrote manuscript calculation values: ", values_output_path)
+
+# Additional inline-link values used by manuscript prose in sections with
+# sporadic-errors CVS derivations and stratified MPU summaries.
+ar_sample_inline <- cvs_obj(
+  bv = accounts_receivable$amount,
+  id = accounts_receivable$invoice,
+  n = 100
+)
+ar_sample_inline <- select(ar_sample_inline, seed = 1)
+audit_values_inline <- accounts_receivable[
+  match(ar_sample_inline$sample$item, accounts_receivable$invoice),
+  "av2"
+]
+ar_sample_inline <- evaluate(ar_sample_inline, av = audit_values_inline$av2)
+sample_inline <- ar_sample_inline$sample
+sample_inline$av <- audit_values_inline$av2
+sample_inline$diff <- sample_inline$bv - sample_inline$av
+m_inline <- sum(sample_inline$diff != 0)
+q_inline <- sum(sample_inline$av) / sum(sample_inline$bv)
+sum_avsq_inline <- sum(sample_inline$av^2)
+sum_bvav_inline <- sum(sample_inline$bv * sample_inline$av)
+sum_bvsq_inline <- sum(sample_inline$bv^2)
+sQm2_inline <- (sum_avsq_inline - 2 * q_inline * sum_bvav_inline + q_inline^2 * sum_bvsq_inline) / (m_inline - 1)
+
+entry <- list(
+  id = "aux.sporadic.ratio_variance_component",
+  kind = "inline_values",
+  source_notebook = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  source_context = "Exercise 3.7 sporadic errors derivation used in chapter inline equations",
+  source_dataset = "FSaudit::accounts_receivable",
+  target_snippet = "generated/worked-calculations/aux-inline-linked-values.tex",
+  tolerance = 1e-8,
+  language_scope = "r",
+  equation_labels = c("eq:sd_ratios_m"),
+  values = list(
+    list(id = "aux.sporadic.sQm2", role = "sporadic_ratio_variance_component", raw = sQm2_inline, format = "integer")
+  )
+)
+values_output_path <- file.path(values_output_dir, "aux.sporadic.ratio_variance_component.json")
+jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
+message("Wrote manuscript calculation values: ", values_output_path)
+
+my_strat_inline <- cvs_obj(
+  bv = inventoryData$bv,
+  id = inventoryData$item,
+  n = 600
+)
+my_strat_inline <- stratify(my_strat_inline, strata = 3, classes = 10, stratMeth = "cumulative")
+my_strat_inline <- size(my_strat_inline, desPrec = 200000)
+my_strat_inline <- select(my_strat_inline, seed = 12345)
+true_values_inline <- inventoryData[
+  match(my_strat_inline$sample$item, inventoryData$item),
+  "av"
+]
+my_strat_inline <- evaluate(my_strat_inline, av = true_values_inline)
+Y_MPU_inline <- as.numeric(my_strat_inline$evalResults$`Most likely total audited amount mpu`)
+
+entry <- list(
+  id = "aux.stratified.mpu_estimate",
+  kind = "inline_values",
+  source_notebook = "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  source_context = "Exercise 3.9 stratified estimation summary used in chapter inline equations",
+  source_dataset = "FSaudit::inventoryData",
+  target_snippet = "generated/worked-calculations/aux-inline-linked-values.tex",
+  tolerance = 1e-8,
+  language_scope = "r",
+  equation_labels = c("eq:estimated_variance_MPU"),
+  values = list(
+    list(id = "aux.stratified.Y_MPU", role = "stratified_mpu_estimate", raw = Y_MPU_inline, format = "number:2")
+  )
+)
+values_output_path <- file.path(values_output_dir, "aux.stratified.mpu_estimate.json")
+jsonlite::write_json(entry, path = values_output_path, auto_unbox = TRUE, pretty = TRUE)
+message("Wrote manuscript calculation values: ", values_output_path)
 ```
 <!-- SUPPORT-ONLY:END -->
 

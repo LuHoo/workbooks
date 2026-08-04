@@ -1,6 +1,8 @@
 \chapter{Estimation with auxiliary variables and stratification} % (fold)
 \label{cha:stratified_sampling}
 
+\input{generated/worked-calculations/aux-inline-linked-values}
+
 \begin{quote}
 `The world is divided into two classes, those who believe the incredible, and those who do the improbable.'\\
 Oscar Wilde (1854-1900)
@@ -604,14 +606,14 @@ such that the result is\footnote{The $t$ value of 2.571 is for a two-sided inter
 
 \begin{align*}
 	s_{q, m}^2 &= \frac{230,244,509 - 2 \cdot 0.9825 \cdot 231,280,871 + 0.9825^2 \cdot 234,376,912}{6 - 1} \\ 
-	&= 404,624
+	&= \AuxSporadicRatioVariance
 \end{align*}
 This quantity is then used for the calculation of the estimated standard deviation of population ratios as
 \begin{equation}
 	{s'_Q}^2 = M_U(m) s_{Q, m}^2
 \end{equation}
 \begin{equation*}
-	= 0.1147 \cdot 404,624 = 46,410.33
+	= 0.1147 \cdot \AuxSporadicRatioVariance = 46,410.33
 \end{equation*}
 Precision achieved is then calculated with Equation \ref{eq:pred_interval_ratio}
 \begin{equation*}
@@ -972,7 +974,7 @@ $N \overline{y}$ \\
 
 \midrule
 
-Total &  3,500 & & 7,670,700.42 \\
+Total &  3,500 & & \AuxStratifiedMpuEstimate \\
 
 \bottomrule
 \end{tabularx}
@@ -980,7 +982,7 @@ Total &  3,500 & & 7,670,700.42 \\
 \label{tab:stratified_MPU_estimate}
 \end{table}
 
-We can see from Table \ref{tab:stratified_MPU_estimate} that $\hat{Y}_{MPU} = 7,670,700.42$.
+We can see from Table \ref{tab:stratified_MPU_estimate} that $\hat{Y}_{MPU} = \AuxStratifiedMpuEstimate$.
 
 \bigskip
 The estimated variance of $\hat{Y}_{MPU}$ is given by
@@ -1134,8 +1136,8 @@ Total & & & 7,612,702.17 \\
 The regression estimate is then
 
 \begin{equation*}
-	\hat{Y}_R = 7,670,700.42 + 1.026 \cdot (7,360,816.00 - 7,612,702.17) = 7,412,261
-\end{equation*}\footnote{Note that $\sum{N \overline{y}} = 7,670,700.42$ is the MPU estimate from Table \ref{tab:stratified_MPU_estimate}.}
+	\hat{Y}_R = \AuxStratifiedMpuEstimate + 1.026 \cdot (7,360,816.00 - 7,612,702.17) = 7,412,261
+	\end{equation*}\footnote{Note that $\sum{N \overline{y}} = \AuxStratifiedMpuEstimate$ is the MPU estimate from Table \ref{tab:stratified_MPU_estimate}.}
 
 The \hlblue{standard error of the regression population}\index{standard error!regression population} per stratum is given by
 
@@ -1371,7 +1373,7 @@ $N \bar{y}$ \\
 
 \midrule
 
-Total & 3,500 & &               & 7,612,702.17 & 7,670,700.42 \\
+Total & 3,500 & &               & 7,612,702.17 & \AuxStratifiedMpuEstimate \\
 
 \bottomrule
 \end{tabularx}
@@ -1382,7 +1384,7 @@ Total & 3,500 & &               & 7,612,702.17 & 7,670,700.42 \\
 Using the results from Table \ref{tab:ratio_q} this yields
 
 \begin{equation*}
-q = \frac{7,670,700.42}{7,612,702.17} = 1.0076
+q = \frac{\AuxStratifiedMpuEstimate}{7,612,702.17} = 1.0076
 \end{equation*}
 
 The stratified ratio estimate of the population audit value is then

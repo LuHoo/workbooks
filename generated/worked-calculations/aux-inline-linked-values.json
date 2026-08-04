@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "aux.inline_linked_values",
+  "kind": "inline_values",
+  "chapter_prefix": "aux",
+  "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+  "source_context": "Derived inline macros for Auxiliary chapter prose values",
+  "source_dataset": "FSaudit::accounts_receivable + FSaudit::inventoryData",
+  "target_snippet": "generated/worked-calculations/aux-inline-linked-values.tex",
+  "tolerance": 0.00000001,
+  "language_scope": "r",
+  "equation_labels": [
+    
+  ],
+  "values": [
+    {
+      "id": "aux.inline.sporadic_ratio_variance_component",
+      "role": "sporadic_ratio_variance_component",
+      "raw": 404619.09885999,
+      "display": "404,619",
+      "format": "integer"
+    },
+    {
+      "id": "aux.inline.stratified_mpu_estimate",
+      "role": "stratified_mpu_estimate",
+      "raw": 7670700.42000000,
+      "display": "7,670,700.42",
+      "format": "number:2"
+    }
+  ]
+}

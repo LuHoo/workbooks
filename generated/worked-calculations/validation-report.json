@@ -1,12 +1,18 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "checked_count": 25,
+  "checked_count": 26,
   "checked": [
     {
       "id": "aux.difference.estimator",
       "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
       "target_snippet": "generated/worked-calculations/aux-difference-estimator.tex",
+      "status": "passed"
+    },
+    {
+      "id": "aux.inline_linked_values",
+      "source_notebook": "notebooks/support/auxiliary-variables-and-stratification/support.Rmd",
+      "target_snippet": "generated/worked-calculations/aux-inline-linked-values.tex",
       "status": "passed"
     },
     {
@@ -244,148 +250,154 @@
     "1": [
       {
         "file": "././auxiliary.tex",
-        "target": "generated/worked-calculations/aux-mpu-estimator.tex"
+        "target": "generated/worked-calculations/aux-inline-linked-values.tex"
       }
     ],
     "2": [
       {
         "file": "././auxiliary.tex",
-        "target": "generated/worked-calculations/aux-regression-estimator.tex"
+        "target": "generated/worked-calculations/aux-mpu-estimator.tex"
       }
     ],
     "3": [
       {
         "file": "././auxiliary.tex",
-        "target": "generated/worked-calculations/aux-difference-estimator.tex"
+        "target": "generated/worked-calculations/aux-regression-estimator.tex"
       }
     ],
     "4": [
       {
         "file": "././auxiliary.tex",
-        "target": "generated/worked-calculations/aux-ratio-estimator.tex"
+        "target": "generated/worked-calculations/aux-difference-estimator.tex"
       }
     ],
     "5": [
       {
-        "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-point-estimate.tex"
+        "file": "././auxiliary.tex",
+        "target": "generated/worked-calculations/aux-ratio-estimator.tex"
       }
     ],
     "6": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-point-estimate-inline-value.tex"
+        "target": "generated/worked-calculations/est-mean-point-estimate.tex"
       }
     ],
     "7": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-total-point-estimate.tex"
+        "target": "generated/worked-calculations/est-mean-point-estimate-inline-value.tex"
       }
     ],
     "8": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-two-sided-interval-95.tex"
+        "target": "generated/worked-calculations/est-total-point-estimate.tex"
       }
     ],
     "9": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-two-sided-interval-99.tex"
+        "target": "generated/worked-calculations/est-mean-two-sided-interval-95.tex"
       }
     ],
     "10": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-one-sided-upper-95.tex"
+        "target": "generated/worked-calculations/est-mean-two-sided-interval-99.tex"
       }
     ],
     "11": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-two-sided-finite-95.tex"
+        "target": "generated/worked-calculations/est-mean-one-sided-upper-95.tex"
       }
     ],
     "12": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex"
+        "target": "generated/worked-calculations/est-mean-two-sided-finite-95.tex"
       }
     ],
     "13": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-stein-interval.tex"
+        "target": "generated/worked-calculations/est-mean-minimum-sample-size-infinite.tex"
       }
     ],
     "14": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex"
+        "target": "generated/worked-calculations/est-mean-stein-interval.tex"
       }
     ],
     "15": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-prop-point-estimate.tex"
+        "target": "generated/worked-calculations/est-mean-minimum-sample-size-finite.tex"
       }
     ],
     "16": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-prop-total-point-estimate.tex"
+        "target": "generated/worked-calculations/est-prop-point-estimate.tex"
       }
     ],
     "17": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-prop-binomial-interval-95.tex"
+        "target": "generated/worked-calculations/est-prop-total-point-estimate.tex"
       }
     ],
     "18": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex"
+        "target": "generated/worked-calculations/est-prop-binomial-interval-95.tex"
       }
     ],
     "19": [
       {
         "file": "././estimation.tex",
-        "target": "generated/worked-calculations/est-prop-binomial-interval-extended.tex"
+        "target": "generated/worked-calculations/est-prop-minimum-sample-size-normal.tex"
       }
     ],
     "20": [
       {
-        "file": "././hypothesis-testing.tex",
-        "target": "generated/worked-calculations/hyp-cell-evaluation-steps.tex"
+        "file": "././estimation.tex",
+        "target": "generated/worked-calculations/est-prop-binomial-interval-extended.tex"
       }
     ],
     "21": [
       {
         "file": "././hypothesis-testing.tex",
-        "target": "generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex"
+        "target": "generated/worked-calculations/hyp-cell-evaluation-steps.tex"
       }
     ],
     "22": [
       {
         "file": "././hypothesis-testing.tex",
-        "target": "generated/worked-calculations/hyp-mus-sample-size.tex"
+        "target": "generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex"
       }
     ],
     "23": [
       {
-        "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
+        "file": "././hypothesis-testing.tex",
+        "target": "generated/worked-calculations/hyp-mus-sample-size.tex"
       }
     ],
     "24": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
       }
     ],
     "25": [
+      {
+        "file": "././regression-analysis.tex",
+        "target": "generated/worked-calculations/reg-annual-assurance.tex"
+      }
+    ],
+    "26": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-decision-bounds.tex"

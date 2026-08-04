@@ -1,13 +1,14 @@
 # Manuscript Calculation Validation Report
 
 - Status: passed
-- Checked calculations: 25
+- Checked calculations: 26
 
 ## Checked Calculations
 
 | ID | Source notebook | Target snippet | Status |
 | --- | --- | --- | --- |
 | aux.difference.estimator | notebooks/support/auxiliary-variables-and-stratification/support.Rmd | generated/worked-calculations/aux-difference-estimator.tex | passed |
+| aux.inline_linked_values | notebooks/support/auxiliary-variables-and-stratification/support.Rmd | generated/worked-calculations/aux-inline-linked-values.tex | passed |
 | aux.mpu.estimator | notebooks/support/auxiliary-variables-and-stratification/support.Rmd | generated/worked-calculations/aux-mpu-estimator.tex | passed |
 | aux.ratio.estimator | notebooks/support/auxiliary-variables-and-stratification/support.Rmd | generated/worked-calculations/aux-ratio-estimator.tex | passed |
 | aux.regression.estimator | notebooks/support/auxiliary-variables-and-stratification/support.Rmd | generated/worked-calculations/aux-regression-estimator.tex | passed |
