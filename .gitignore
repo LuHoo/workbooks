@@ -10,3 +10,7 @@
 *.docx
 *.Rproj
 .DS_Store
+audit-data-analysis/
+workbooks/
+generated/cache/
+generated/notebook-execution-artifacts/
