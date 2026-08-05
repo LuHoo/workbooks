@@ -45,12 +45,15 @@ mySample2$n
 ### Exercise 4.2. Significance levels
 
 On page 120 we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in `R` with the following code:
+
+
 ```{r}
 phyper(q = 1, m = 60, n = 1140, k = 45)
 phyper(q = 2, m = 60, n = 1140, k = 102)
 ```
 Refer to Equation 2.1.
 Remember that `R` uses `q` for the number of errors found $k$, `m` for the number of deviations in the population $M$, `n` for the number of correct items $N - M$, and `k` for the sample size $n$.
+
 
 ### Exercise 4.3. Type II error
 
@@ -100,6 +103,7 @@ In MUS, we increase the critical region by anticipating on the expected error (i
 ### Exercise 4.6. Case: Accounts receivable circularization
 
 We start by setting up the MUS object `ar` (for Accounts Receivable) in `R` with the `FSaudit` package and first verify that the number of sampling units `popn` and the total book value `popBv` of the sampling frame match those in the population. Notice that these statistics are calculated as soon as the object is loaded with the detail amounts.
+
 
 ```{r}
 ar <- mus_obj(
@@ -211,6 +215,7 @@ upper(k = 1, popn = 13500000, n = 145, alpha = .05)
 upper(k = 2, popn = 13500000, n = 145, alpha = .05)
 upper(k = 3, popn = 13500000, n = 145, alpha = .05)
 ```
+
 
 ### Exercise 4.9. Cell evaluation
 

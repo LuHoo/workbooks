@@ -1,0 +1,54 @@
+{
+  "id": "hyp.mus.attribute_sample_sizes_rows",
+  "kind": "worked_calculation",
+  "source_notebook": "notebooks/support/hypothesis-testing/support.Rmd",
+  "source_context": "Sample-size table rows for MUS interpolation example",
+  "source_dataset": "FSaudit::accounts_receivable",
+  "target_snippet": "generated/worked-calculations/hyp-mus-attribute-sample-sizes-rows.tex",
+  "tolerance": 1e-08,
+  "language_scope": "r",
+  "values": [
+    {
+      "id": "hyp.mus.n_0",
+      "role": "n_0",
+      "raw": 89,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.n_3",
+      "role": "n_3",
+      "raw": 231,
+      "format": "integer"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k0",
+      "role": "sampling_interval_k0",
+      "raw": 151685.3933,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.sampling_interval_k3",
+      "role": "sampling_interval_k3",
+      "raw": 58441.5584,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.expected_error_k0",
+      "role": "expected_error_k0",
+      "raw": 0,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.expected_error_k1",
+      "role": "expected_error_k1",
+      "raw": 95744.6809,
+      "format": "number:2"
+    },
+    {
+      "id": "hyp.mus.expected_error_k3",
+      "role": "expected_error_k3",
+      "raw": 175324.6753,
+      "format": "number:2"
+    }
+  ]
+}
