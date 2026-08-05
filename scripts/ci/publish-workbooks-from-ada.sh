@@ -123,7 +123,13 @@ else
 fi
 
 echo "Syncing ADA notebooks/workshops into workbooks repo root..."
-rsync -a --delete --exclude '.git' "$ADA_REPO/notebooks/workshops/" "$WORKBOOKS_REPO/"
+rsync -a --delete \
+  --exclude '.git' \
+  --exclude 'generated/cache/' \
+  --exclude 'generated/notebook-execution-artifacts/' \
+  --filter='protect audit-data-analysis/' \
+  --filter='protect workbooks/' \
+  "$ADA_REPO/notebooks/workshops/" "$WORKBOOKS_REPO/"
 
 echo "\nWorkbooks repo status:"
 git -C "$WORKBOOKS_REPO" status -sb
@@ -136,7 +142,7 @@ if [[ -z "$WB_STATUS" ]]; then
   echo "\nNo changes to publish in workbooks."
 else
   echo "\nChanges detected in workbooks. Suggested publish commands:"
-  echo "  git -C \"$WORKBOOKS_REPO\" add -A"
+  echo "  git -C \"$WORKBOOKS_REPO\" add -u"
   echo "  git -C \"$WORKBOOKS_REPO\" commit -m \"Publish workshops from ADA\""
   echo "  git -C \"$WORKBOOKS_REPO\" push origin $WB_BRANCH"
 fi

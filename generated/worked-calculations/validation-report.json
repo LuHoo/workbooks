@@ -442,58 +442,28 @@
     "25": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-summary-mod0-rows.tex"
+        "target": "generated/worked-calculations/reg-inline-linked-values.tex"
       }
     ],
     "26": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-summary-mod1-rows.tex"
+        "target": "generated/worked-calculations/reg-inline-linked-values.tex"
       }
     ],
     "27": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-summary-mod2-rows.tex"
+        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
       }
     ],
     "28": [
       {
         "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-summary-mod3-rows.tex"
-      }
-    ],
-    "29": [
-      {
-        "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-inline-linked-values.tex"
-      }
-    ],
-    "30": [
-      {
-        "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-summary-mod4-rows.tex"
-      }
-    ],
-    "31": [
-      {
-        "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-summary-mod5-rows.tex"
-      }
-    ],
-    "32": [
-      {
-        "file": "././regression-analysis.tex",
-        "target": "generated/worked-calculations/reg-annual-expectation-interval.tex"
-      }
-    ],
-    "33": [
-      {
-        "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-assurance.tex"
       }
     ],
-    "34": [
+    "29": [
       {
         "file": "././regression-analysis.tex",
         "target": "generated/worked-calculations/reg-annual-decision-bounds.tex"
