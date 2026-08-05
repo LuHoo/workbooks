@@ -20,6 +20,7 @@ In order to replicate the experiment in the book, you need to use the same rando
 
 Details of the data file can be obtained using base `R` functionality.
 
+
 ```{r}
 library(FSaudit)
 names(salaries)
@@ -38,9 +39,12 @@ head(sample1)
 
 The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
 
+
 ```{r}
 (y_bar <- mean(sample1$gross))
 ```
+
+
 We can use the sample mean as an estimate for the total payroll in the population. The estimate of the total monthly payroll is then obtained by multiplying the sample mean with the number of elements in the population $N$.
 ```{r}
 N * y_bar
@@ -60,7 +64,7 @@ The calculation of the standard error is then
 (se <- s / sqrt(n))
 ```
 
-For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.095.
+For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.975.
 
 ```{r}
 (tval <- qt(0.975, df = (n - 1)))
@@ -124,6 +128,7 @@ The total sample size required to obtain an estimate of the mean monthly payroll
 ### Exercise 2.6 Confidence intervals around the proportion
 
 These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
+
 
 ```{r}
 lower(k = 31, popn = 2222, n = 50, alpha = .025)

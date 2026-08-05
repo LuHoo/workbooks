@@ -9,6 +9,7 @@ output:
 
 <!-- GENERATED FILE: edit notebooks/support/probability-distributions/support.Rmd in the private ada repository. -->
 
+
  
 ## Chapter 1. Probability distributions
  
@@ -16,12 +17,15 @@ output:
  
 The `R` function `dhyper()` requires four arguments: $k, M, (N - M)$, and $n$.
 The prefix `d` indicates that the function is a density function.
+
  
 ```{r}
 dhyper(x = 0, m = 17, n = 314, k = 60)
 dhyper(x = 1, m = 17, n = 314, k = 60)
 ```
 *Cumulative probabilities* $P(k \leq k)$ (the probability of finding not more than $k$ errors) are obtained with `phyper()`. For example, if we are interested in the probability of finding no more than one error, we use `phyper(1, 17, 314, 60)`. In this case the prefix `p` indicates the (cumulative) probability function.
+
+
 ```{r}
 phyper(1, 17, 314, 60)
 dhyper(0, 17, 314, 60) + dhyper(1, 17, 314, 60)
@@ -30,6 +34,7 @@ dhyper(0, 17, 314, 60) + dhyper(1, 17, 314, 60)
 We see that the result for the cumulative function equals that of the sum of the two individual probabilities.
  
 Probabilities in the right-hand tail $P(k > k)$ can be calculated by passing the additional argument `lower.tail = FALSE`. For example, the probability $P(k > 1)$ is calculated by
+
  
 ```{r}
 phyper(1, 17, 314, 60, lower.tail = FALSE)
@@ -38,6 +43,7 @@ phyper(1, 17, 314, 60, lower.tail = FALSE)
 ### Exercise 1.2 Binomial distribution
  
 The relevant `R` functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and $\pi = M / N$.
+
  
 ```{r}
 dbinom(x = 1, size = 60, prob = 17 / 331)
@@ -66,14 +72,16 @@ ppois(1, 60 * 17 / 331)
 ### Exercise 1.4 Normal distribution
  
 In `R` we use the function `pnorm`, that uses the arguments `q` for the sampling result that we evaluate, `mean` for the population mean, and `sd` for the standard deviation of the mean.
+
  
 ```{r}
 pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
 ```
  
 Note that the syntax is more elaborate than what we have done so far. In `R` we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
- 
+
 There are two advantages to using argument names and values. First, the command is easier to interpret by a reviewer. Second, we can pass the arguments in any order. The following commands are therefore equivalent:
+
  
 ```{r}
 pnorm(1012, 1030, 115.26 / sqrt(200))
@@ -84,6 +92,7 @@ pnorm(sd = 115.26 / sqrt(200), mean = 1030, q = 1012)
 ### Exercise 1.5 Student's $t$ distribution
  
 To calculate the probability found of 14.7%, we use the function `pt()` with arguments `x` for the boundary value and `df` for the number of degrees of freedom.
+
  
 ```{r}
 (t_val <- (1004 - 1030) / (73.8 / sqrt(10)))
@@ -111,12 +120,13 @@ These two results are then used to calculate the upper and lower 90\% confidence
 ### Exercise 1.7 $F$ distribution
  
 Hypothesis testing is done with the function `qf`, where we use the argument `lower.tail = FALSE` to indicate the direction of the test.
+
  
 ```{r}
 (f_crit <- qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE))
 ```
  
-In the example above, the critical value of the $F$ statistic is `r round(f_crit, 6)`. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not.
+In the example above, the critical value of the $F$ statistic is the value shown in the output. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not.
  
 The probability of obtaining this particular value of the test statistic is calculated with the `pf` function.
  
