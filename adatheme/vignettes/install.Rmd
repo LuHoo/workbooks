@@ -1,0 +1,15 @@
+---
+title: "Installation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Installation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Development version
+
+```{r, eval=FALSE}
+library(devtools)
+devtools::install_git("https://username:password@gitlab-nl.dna.adalab.com/research/adatheme.git")
+```

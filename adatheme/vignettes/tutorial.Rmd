@@ -1,0 +1,81 @@
+---
+title: "Control Manual"
+author: "ADA"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Control Manual}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Control Manual for color palettes
+
+adatheme package define 18 ADA color palettes. By default, for all plots **graph** palette is used. In which colors are ordered as follows:
+
+- `ADA Blue`
+- `Light Blue`
+- `Light Purple`
+- `Medium Blue`
+- `Green`
+- `Yellow`
+- `Light Green`
+- `Pink`
+
+Apart from graph palette, package contains primary, secondary, tertiary and tonal color palette.
+
+Primary palette contains **ADA Blue**, **Medium Blue** and **Light Blue**.
+
+Secondary palette contains **Violet**, **Purple**, **Light Purple** and **Green**.
+
+Tertiary colors should be used only if the primary and secondary colors do not meet the business need. It contains **Dark Green**, **Light Green**, **Yellow**, **Orange**, **Red** and **Pink**.
+
+Tonal Color Order can be used when comparing 4 or less data points and are most appropriate for relational charts — such as bubble charts or heat maps. Tonal color is defined for all the above colors (including gray color).
+
+To add a different palette other than the default palette use **scale_fill_ada()** or **scale_colour_ada()** function and pass the palette name as the argument.
+
+For example
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(mpg, aes(x = drv, fill = drv)) +
+  geom_bar() + scale_fill_ada("tonal_green")
+
+```
+
+# Control Manual for x and y axis
+
+**anonymous** function is used to remove the x or y scales. This function will remove the axis text, title and ticks. This will be more usefull for pie and donut charts.
+
+To remove x axis, argument should be passed as **anonymous(X = x)**. Similarly for y axis, **anonymous(Y = y)**. To remove both scales use **anonymous(X = x, Y = y)**.
+
+For example
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+## data
+country <- c("australia", "hungary", "germany", "france")
+freq <- c(25, 19, 35, 21)
+colour.df <- data.frame(country, freq)
+
+## calculate percentage
+colour.df$percentage <- round(colour.df$freq / sum(colour.df$freq), 2)
+colour.df <- colour.df[with(colour.df, order(percentage, country, decreasing = TRUE)), ]
+colour.df$cum <- cumsum(colour.df$freq)
+colour.df$midpt <- colour.df$cum - colour.df$freq / 2
+colour.df$country <- factor(colour.df$country, levels =
+          colour.df$country[order(colour.df$percentage, colour.df$country,
+                                  decreasing = FALSE)], ordered = TRUE)
+
+
+ggplot(colour.df, aes(x = 0, y = freq, fill = country)) +
+geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", direction = -1) +
+  geom_text(aes(y = midpt, label = percentage)) + anonymous(X = x, Y = y)
+```

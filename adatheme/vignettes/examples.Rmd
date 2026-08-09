@@ -1,0 +1,309 @@
+---
+title: "Examples"
+author: "ADA"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Simple scatter plot
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(mtcars, aes(x = wt, y = mpg, colour = factor(gear))) +
+  geom_point()
+
+```
+
+# Donut Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+## my data
+country <- c("australia", "hungary", "germany", "france")
+freq <- c(25, 19, 35, 21)
+colour.df <- data.frame(country, freq)
+
+## calculate percentage
+colour.df$percentage <- as.character(round(colour.df$freq / sum(colour.df$freq), 2))
+colour.df <- colour.df[with(colour.df, order(percentage, country)), ]
+colour.df$cum <- cumsum(colour.df$freq)
+colour.df$midpt <- colour.df$cum - colour.df$freq / 2
+colour.df$ymax <- cumsum(colour.df$percentage)
+colour.df$ymin <- c(0, head(colour.df$ymax, n = -1))
+colour.df$country <- factor(colour.df$country, levels =
+        colour.df$country[order(colour.df$percentage, colour.df$country)], ordered = TRUE)
+
+ ggplot(colour.df, aes(fill = country, ymax = ymax, ymin = ymin, xmax = 100, xmin = 50)) +
+ geom_rect() + coord_polar(theta = "y") + xlim(c(0, 100)) +
+ geom_text(aes(label = percentage, x = 100, y = (ymin + ymax) / 2),
+           inherit.aes = F, show.legend = F) + anonymous(X = x, Y = y)
+```
+
+# Multi-Segment Donut - Tonal Palette
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+## my data
+country <- c("australia", "hungary", "germany", "france")
+freq <- c(25, 19, 35, 21)
+colour.df <- data.frame(country, freq)
+
+## calculate percentage
+colour.df$percentage <- as.character(round(colour.df$freq / sum(colour.df$freq), 2))
+colour.df <- colour.df[with(colour.df, order(percentage, country)), ]
+colour.df$cum <- cumsum(colour.df$freq)
+colour.df$midpt <- colour.df$cum - colour.df$freq / 2
+colour.df$ymax <- cumsum(colour.df$percentage)
+colour.df$ymin <- c(0, head(colour.df$ymax, n = -1))
+colour.df$country <- factor(colour.df$country, levels =
+  colour.df$country[order(colour.df$percentage, colour.df$country)], ordered = TRUE)
+
+ ggplot(colour.df, aes(fill = country, ymax = ymax, ymin = ymin, xmax = 100, xmin = 50)) +
+    geom_rect() + coord_polar(theta = "y") +
+    xlim(c(0, 100)) + scale_fill_ada("tonal_lightpurple") +
+    geom_text(aes(label = percentage, x = 100, y = (ymin + ymax) / 2),
+              inherit.aes = F, show.legend = F) + anonymous(X = x, Y = y)
+```
+
+# Pie Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+## data
+country <- c("australia", "hungary", "germany", "france")
+freq <- c(25, 19, 35, 21)
+colour.df <- data.frame(country, freq)
+
+## calculate percentage
+colour.df$percentage <- round(colour.df$freq / sum(colour.df$freq), 2)
+colour.df <- colour.df[with(colour.df, order(percentage, country, decreasing = TRUE)), ]
+colour.df$cum <- cumsum(colour.df$freq)
+colour.df$midpt <- colour.df$cum - colour.df$freq / 2
+colour.df$country <- factor(colour.df$country, levels =
+          colour.df$country[order(colour.df$percentage, colour.df$country,
+                                  decreasing = FALSE)], ordered = TRUE)
+
+
+ggplot(colour.df, aes(x = 0, y = freq, fill = country)) +
+geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", direction = -1) +
+  geom_text(aes(y = midpt, label = percentage)) + anonymous(X = x, Y = y)
+```
+
+
+# Pie Chart - Tonal Palette
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+## data
+country <- c("australia", "hungary", "germany", "france")
+freq <- c(25, 19, 35, 21)
+colour.df <- data.frame(country, freq)
+
+## calculate percentage
+colour.df$percentage <- round(colour.df$freq / sum(colour.df$freq), 2)
+colour.df <- colour.df[with(colour.df, order(percentage, country, decreasing = TRUE)), ]
+colour.df$cum <- cumsum(colour.df$freq)
+colour.df$midpt <- colour.df$cum - colour.df$freq / 2
+colour.df$country <- factor(colour.df$country, levels =
+  colour.df$country[order(colour.df$percentage, colour.df$country,
+                          decreasing = FALSE)], ordered = TRUE)
+
+
+ggplot(colour.df, aes(x = 1, y = freq, fill = country)) +
+geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", direction = -1) + scale_fill_ada("tonal_lightblue") +
+  geom_text(aes(y = midpt, label = percentage)) + anonymous(X = x, Y = y)
+```
+
+
+# Simple Bar Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(diamonds, aes(x = clarity, fill = clarity)) +
+  geom_bar()
+```
+
+# Simple Bar Chart - Tonal Palette
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(mpg, aes(x = drv, fill = drv)) +
+  geom_bar() + scale_fill_ada("tonal_green")
+
+```
+
+# Grouped Bar Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(diamonds, aes(x = clarity, fill = cut)) +
+  geom_bar(position = position_dodge())
+```
+
+# Stacked Bar Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(diamonds, aes(x = clarity, fill = cut)) +
+  geom_bar()
+```
+
+# Stacked Bar Chart - Tonal Palette
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+ggplot(mpg, aes(x = class, fill = drv)) +
+  geom_bar() + scale_fill_ada("tonal_green")
+
+```
+
+# Area Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+library(dplyr)
+theme_set(theme_ada()) # Set ADA theme as default
+
+
+# DATA
+set.seed(345)
+Sector <- rep(c("S01", "S02", "S03", "S04"), times = 4)
+Year <- as.numeric(rep(c("1950", "1960", "1970", "1980"), each = 4))
+Value <- runif(16, 10, 100)
+data <- data.frame(Sector, Year, Value)
+
+ggplot(data, aes(x = Year, y = Value, fill = Sector)) +
+ geom_area()
+
+```
+
+
+# Area Chart - Tonal Palette
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+library(dplyr)
+theme_set(theme_ada()) # Set ADA theme as default
+
+
+# DATA
+set.seed(345)
+Sector <- rep(c("S01", "S02", "S03", "S04"), times = 4)
+Year <- as.numeric(rep(c("1950", "1960", "1970", "1980"), each = 4))
+Value <- runif(16, 10, 100)
+data <- data.frame(Sector, Year, Value)
+
+ggplot(data, aes(x = Year, y = Value, fill = Sector)) +
+ geom_area() + scale_fill_ada("tonal_lightpurple")
+
+```
+
+# Line Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+category <- rep(c("A", "B", "C", "D", "E", "F"), 3)
+set.seed(123)
+amount <- round(runif(18, 1, 100), 0)
+labelName <- rep(c("label1", "label2", "label3"), each = 6)
+test <- data.frame(category, amount, labelName)
+
+ggplot(test, aes(x = category, y = amount, colour = labelName, group = labelName)) + geom_line() +
+  geom_point()
+
+```
+
+# Line Chart - Tonal Palette
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+category <- rep(c("A", "B", "C", "D", "E", "F"), 3)
+set.seed(123)
+amount <- round(runif(18, 1, 100), 0)
+labelName <- rep(c("label1", "label2", "label3"), each = 6)
+test <- data.frame(category, amount, labelName)
+
+ggplot(test, aes(x = category, y = amount, colour = labelName, group = labelName)) + geom_line() +
+  geom_point() + scale_colour_ada("tonal_pink")
+
+```
+
+# Bubble Chart
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+aq_trim <- airquality[which(airquality$Month == 7 |
+                            airquality$Month == 8 |
+                            airquality$Month == 9), ]
+aq_trim$Month <- factor(aq_trim$Month,
+                        labels = c("July", "August", "September"))
+ggplot(aq_trim, aes(x = Day, y = Ozone, size = Wind, fill = Month)) +
+  geom_point(shape = 21) +
+   scale_x_continuous(breaks = seq(1, 31, 5)) +
+   scale_size(range = c(1, 10))
+```
+
+# Bubble Chart - Single Color
+
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+library(ggplot2)
+library(adatheme)
+theme_set(theme_ada()) # Set ADA theme as default
+
+aq_trim <- airquality[which(airquality$Month == 7 |
+                            airquality$Month == 8 |
+                            airquality$Month == 9), ]
+aq_trim$Month <- factor(aq_trim$Month,
+                        labels = c("July", "August", "September"))
+ggplot(aq_trim, aes(x = Day, y = Ozone, size = Wind)) +
+  geom_point(shape = 21, fill = "lightpink") +
+  scale_x_continuous(breaks = seq(1, 31, 5)) +
+  scale_size(range = c(1, 10))
+```

@@ -1,0 +1,16 @@
+Package: adatheme
+Type: Package
+Title: ADA Theme and Colour Scales for ggplot2
+Version: 0.1.0
+Authors@R: person("Lucas", "LuHoo", email = "lucas@localhost", role = c("aut", "cre"))
+Author: Lucas LuHoo
+Maintainer: Lucas LuHoo <lucas@localhost>
+Description: Provides an ADA plotting theme and discrete colour scales for
+    ggplot2 graphics.
+License: MIT + file LICENSE
+Imports: scales, ggplot2
+Suggests: testthat, knitr, rmarkdown, dplyr
+VignetteBuilder: knitr
+Encoding: UTF-8
+Config/roxygen2/version: 8.0.0
+NeedsCompilation: no

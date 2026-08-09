@@ -18,7 +18,8 @@ To run the exercises in this workshop, we need to load a few packages.
 
 ```{r setup}
 library(ggplot2) # Data visualization
-theme_set(theme_gray())
+library(adatheme) # ADA plotting theme
+theme_set(theme_ada())
 library(aicpa) # Contains US SteamCo data
 library(car) # Companion to Applied Regression
 library(gridExtra) # Arrange multiple grid-based plots
@@ -77,23 +78,23 @@ Figure 5.2 shows the histograms of the data in the US SteamCo estimation set.
 ```{r}
 hist_revenue <-
   ggplot(USSteamCoEstim, aes(x = revenue)) +
-  geom_histogram(binwidth = 4000000, fill = "#00338D") +
+  geom_histogram(binwidth = 4000000, fill = adatheme::colour$ada$get("blue")) +
   scale_x_continuous(labels = label_comma())
 
 hist_production <-
   ggplot(USSteamCoEstim, aes(x = production)) +
-  geom_histogram(binwidth = 50000, fill = "#00338D") +
+  geom_histogram(binwidth = 50000, fill = adatheme::colour$ada$get("blue")) +
   scale_x_continuous(labels = label_comma()) +
   theme(plot.margin = unit(c(0, 1, 0, 0), "cm")) # top, right, bottom, left
 
 hist_coolDD <-
   ggplot(USSteamCoEstim, aes(x = coolDD)) +
-  geom_histogram(binwidth = 50, fill = "#00338D") +
+  geom_histogram(binwidth = 50, fill = adatheme::colour$ada$get("blue")) +
   scale_x_continuous(labels = label_comma())
 
 hist_heatDD <-
   ggplot(USSteamCoEstim, aes(x = heatDD)) +
-  geom_histogram(binwidth = 100, fill = "#00338D") +
+  geom_histogram(binwidth = 100, fill = adatheme::colour$ada$get("blue")) +
   scale_x_continuous(labels = label_comma())
 
 histograms_plot <- grid.arrange(hist_revenue, hist_production, hist_coolDD, hist_heatDD, ncol = 2)
@@ -109,10 +110,10 @@ prod_range <- range(USSteamCoEstim$production, na.rm = TRUE)
 # Create the plot
 time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   # First time series (revenue)
-  geom_line(aes(y = revenue), colour = "#00338D") +
+  geom_line(aes(y = revenue), colour = adatheme::colour$ada$get("blue")) +
   # Second time series (production), rescaled to match revenue range
   geom_line(aes(y = scales::rescale(production, to = rev_range)),
-    colour = "#BC204B"
+    colour = adatheme::colour$ada$get("red")
   ) +
   scale_y_continuous(
     name = "Revenue ($)",
@@ -125,8 +126,8 @@ time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   ) +
   theme(
     axis.title.x = element_blank(),
-    axis.title.y.left = element_text(color = "#00338D"),
-    axis.title.y.right = element_text(color = "#BC204B")
+    axis.title.y.left = element_text(color = adatheme::colour$ada$get("blue")),
+    axis.title.y.right = element_text(color = adatheme::colour$ada$get("red"))
   )
 time_series_plot
 ```
@@ -136,7 +137,7 @@ Figure 5.1 shows a scatter plot of the independent variable production ($x$-axis
 
 ```{r}
 scatter_plot <- ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
-  geom_point(color = "#00338D") +
+  geom_point(color = adatheme::colour$ada$get("blue")) +
   scale_x_continuous(name = "Production (x 1000 lb)", labels = scales::label_comma()) +
   scale_y_continuous(name = "Revenue ($)", labels = scales::label_comma())
 scatter_plot
@@ -186,7 +187,7 @@ The correlogram in Figure 5.5 is produced by
 ```{r echo=FALSE}
 corrplot(cor_ussteam,
   tl.col = "black",
-  col = colorRampPalette(c("#bc204b", "white", "#00348d"))(100),
+  col = colorRampPalette(c(adatheme::colour$ada$get("red"), "white", adatheme::colour$ada$get("blue")))(100),
   col.lim = c(-1, 1)
 )
 ```
@@ -275,7 +276,7 @@ scat_rev2 <- scatterplot(revenue ~ production | summer,
 USSteamCoEstim$summer_fact <- factor(USSteamCoEstim$summer, levels = c(0, 1), labels = c("No", "Yes"))
 
 # Define custom colors
-summer_colors <- c("No" = "#00338D", "Yes" = "#BC204B")
+summer_colors <- c("No" = adatheme::colour$ada$get("blue"), "Yes" = adatheme::colour$ada$get("red"))
 
 # Base plot with manual color scale and separate regression lines
 p <- ggplot(USSteamCoEstim, aes(x = production, y = revenue, color = summer_fact)) +
@@ -337,7 +338,7 @@ make_resid_plot <- function(data, var) {
   n_unique <- length(unique(data[[var]]))
 
   p <- ggplot(data, aes(x = .data[[var]], y = resid)) +
-    geom_point(color = "#00338D", alpha = 0.7) +
+    geom_point(color = adatheme::colour$ada$get("blue"), alpha = 0.7) +
     geom_hline(yintercept = 0, linetype = "dotted") +
     scale_x_continuous(labels = label_comma()) +
     scale_y_continuous(labels = label_comma()) +
@@ -349,7 +350,7 @@ make_resid_plot <- function(data, var) {
         method = "lm",
         formula = y ~ poly(x, 2),
         se = FALSE,
-        color = "#E36877"
+        color = adatheme::colour$ada$get("lightpink")
       )
   } else {
     p <- p +
@@ -357,7 +358,7 @@ make_resid_plot <- function(data, var) {
         method = "lm",
         formula = y ~ x,
         se = FALSE,
-        color = "#E36877"
+        color = adatheme::colour$ada$get("lightpink")
       )
   }
 
@@ -376,13 +377,13 @@ fitted_data <- data.frame(
 )
 
 fitted_plot <- ggplot(fitted_data, aes(x = fitted, y = resid)) +
-  geom_point(color = "#00338D", alpha = 0.7) +
+  geom_point(color = adatheme::colour$ada$get("blue"), alpha = 0.7) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   geom_smooth(
     method = "lm",
     formula = y ~ poly(x, 2),
     se = FALSE,
-    color = "#E36877"
+    color = adatheme::colour$ada$get("lightpink")
   ) +
   scale_x_continuous(labels = label_comma()) +
   scale_y_continuous(labels = label_comma()) +
@@ -630,7 +631,7 @@ hist_stand_res <-
   ggplot(model3, aes(nres)) +
   geom_histogram(aes(y = after_stat(density)),
     breaks = seq(-2.55, 1.65, by = 0.7),
-    fill = "#00338D"
+    fill = adatheme::colour$ada$get("blue")
   ) +
   stat_function(fun = dnorm, args = list(
     mean = mean(model3$nres),
@@ -879,16 +880,16 @@ All the elements created earlier are now plotted on a single canvas.
 regression_lines_plot <- ggplot() +
   geom_line(
     data = simulated_lines, aes(x = x, y = y, group = rep),
-    color = "#00338D", alpha = 0.1
+    color = adatheme::colour$ada$get("blue"), alpha = 0.1
   ) + # Plot the simulated regression lines
-  geom_line(data = true_line, aes(x = x, y = y), color = "#E36877", linewidth = .5) + # Plot the true line
+  geom_line(data = true_line, aes(x = x, y = y), color = adatheme::colour$ada$get("lightpink"), linewidth = .5) + # Plot the true line
   geom_line(
     data = ci_bounds_true, aes(x = x, y = ci_lower),
-    color = "#E36877", linewidth = .5, linetype = "solid"
+    color = adatheme::colour$ada$get("lightpink"), linewidth = .5, linetype = "solid"
   ) + # Lower bound (true line)
   geom_line(
     data = ci_bounds_true, aes(x = x, y = ci_upper),
-    color = "#E36877", linewidth = .5, linetype = "solid"
+    color = adatheme::colour$ada$get("lightpink"), linewidth = .5, linetype = "solid"
   ) + # Upper bound (true line)
   labs(
     title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),
@@ -927,22 +928,22 @@ intervals_plot <- ggplot() +
   geom_ribbon(
     data = pi_bounds_true,
     aes(x = x, ymin = pi_lower, ymax = pi_upper),
-    fill = "#00338D", alpha = 0.15
+    fill = adatheme::colour$ada$get("blue"), alpha = 0.15
   ) + # 99% prediction interval as a ribbon
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_lower),
-    color = "#00338D", linewidth = .5, linetype = "dashed"
+    color = adatheme::colour$ada$get("blue"), linewidth = .5, linetype = "dashed"
   ) + # 95% CI lower
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_upper),
-    color = "#00338D", linewidth = .5, linetype = "dashed"
+    color = adatheme::colour$ada$get("blue"), linewidth = .5, linetype = "dashed"
   ) + # 95% CI upper
   geom_line(
     data = true_line,
     aes(x = x, y = y),
-    color = "#00338D", linewidth = 1
+    color = adatheme::colour$ada$get("blue"), linewidth = 1
   ) + # True regression line
   labs(
     x = "x", y = "y"
@@ -1011,14 +1012,14 @@ expectations_plot <- ggplot(pred_df, aes(x = date)) +
   # Plot the predicted values as a line
   geom_line(aes(y = fit, color = "Expectation"), linewidth = 1) +
   # Add the prediction interval as a shaded area
-  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = "#00338D", alpha = 0.2) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = adatheme::colour$ada$get("blue"), alpha = 0.2) +
   # Plot the actual values, with conditional coloring for outside interval points
   geom_line(aes(y = recorded, color = "Recorded"), linewidth = 1) +
   # Highlight points outside interval in red
-  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = "#E36877", size = 2) +
+  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = adatheme::colour$ada$get("lightpink"), size = 2) +
   # Define color for predicted and actual values
   scale_color_manual(
-    values = c("Expectation" = "#00338D", "Recorded" = "#E36877"),
+    values = c("Expectation" = adatheme::colour$ada$get("blue"), "Recorded" = adatheme::colour$ada$get("lightpink")),
     name = ""
   ) +
   labs(
