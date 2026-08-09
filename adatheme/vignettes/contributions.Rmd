@@ -1,0 +1,10 @@
+---
+title: "Contributions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Contributions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Please make contributions to this package via pull-requests
