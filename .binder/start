@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export XDG_CONFIG_DIRS="${HOME}/.config-rstudio${XDG_CONFIG_DIRS:+:${XDG_CONFIG_DIRS}}"
+rstudio_config_dir="${HOME}/.config-rstudio/rstudio"
+mkdir -p "${rstudio_config_dir}"
+
+python - <<'PY'
+import pathlib
+import secrets
+
+config_dir = pathlib.Path.home() / ".config-rstudio" / "rstudio"
+config_dir.mkdir(parents=True, exist_ok=True)
+for name in ("secure-cookie-key", "session-rpc-key"):
+    path = config_dir / name
+    if not path.exists():
+        path.write_text(secrets.token_hex(16))
+    path.chmod(0o600)
+PY
+
+exec "$@"
