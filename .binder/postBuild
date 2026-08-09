@@ -29,7 +29,16 @@ echo "System Binder dependencies present: cmake, nlopt, harfbuzz headers, fribid
 
 python - <<'PY'
 import importlib
-for module in ["nbclient", "nbformat", "rpy2", "pandas", "scipy", "ada_fsaudit_bridge"]:
+for module in [
+    "nbclient",
+    "nbformat",
+    "rpy2",
+    "pandas",
+    "scipy",
+    "jupyter_server_proxy",
+    "jupyter_rsession_proxy",
+    "ada_fsaudit_bridge",
+]:
     importlib.import_module(module)
 print("Python notebook dependencies import successfully")
 PY

@@ -1,4 +1,6 @@
 jupyter==1.1.1
+jupyter-server-proxy==4.5.0
+jupyter-rsession-proxy==2.5.1
 nbclient==0.10.2
 nbformat==5.10.4
 jupyterlab==4.4.9
