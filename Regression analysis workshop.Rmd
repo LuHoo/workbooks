@@ -14,12 +14,28 @@ output:
 
 ### Exercise 5.1. Before we start
 
+This first exercise prepares the regression-analysis workspace. The practical goal is to load the tools used for data inspection, model fitting, plotting, and diagnostics before any audit model is built.
+
 To run the exercises in this workshop, we need to load a few packages.
 
 ```{r setup}
 library(ggplot2) # Data visualization
-library(adatheme) # ADA plotting theme
-theme_set(theme_ada())
+ada_colour <- function(name) {
+  palette <- c(
+    blue = "#3c4b99",
+    mediumblue = "#6098d2",
+    lightblue = "#62b8e7",
+    red = "#c93f55",
+    yellow = "#eacc62",
+    green = "#469d76",
+    purple = "#924099",
+    lightpurple = "#df9ed4",
+    blue50 = "#d3d8ef",
+    lightpink = "#e36877"
+  )
+  unname(palette[[name]])
+}
+theme_set(ggplot2::theme_bw())
 library(aicpa) # Contains US SteamCo data
 library(car) # Companion to Applied Regression
 library(gridExtra) # Arrange multiple grid-based plots
@@ -35,18 +51,27 @@ library(grid)
 
 Throughout this workshop, we work with the `USSteamCo` data file, this is available in the `aicpa` package. The data file is used in the AICPA Guide to Audit Analytics, Exhibit B-3.
 
+The audit task is to use production and weather-related information to explain revenue and later assess whether expected revenue is consistent with the observed data. Start by checking what variables are available and what one monthly record looks like.
+
 The `head` function shows the values of the variables (columns) in the first few observations (rows) from the dataset.
 
 ```{r}
 head(USSteamCo)
 ```
+
+Use this output as a data-readiness check: identify the response variable, the candidate explanatory variables, and the monthly structure before fitting any model.
+
 ### Exercise 5.3. Summarizing and plotting the data
+
+This exercise explores the data before modelling. The practical question is whether the variables show ranges, patterns, or relationships that make a regression model plausible for an audit analytics procedure.
 
 The `summary` command produces summary statistics of all variables in the dataset, the length (number of data points) for character types (such as `month`) and distribution statistics for numeric types.
 
 ```{r}
 summary(USSteamCo)
 ```
+
+Check the output for scale and completeness. Large differences in units are not a problem by themselves, but they matter when you interpret coefficients and plots later.
 
 We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 5.4.4.
 
@@ -72,29 +97,31 @@ USSteamCoEstim <- USSteamCo[1:36, ]
 USSteamCoHold <- USSteamCo[37:48, ]
 ```
 
+The estimation set is used to build the model; the hold-out set is kept separate so model performance can later be checked on months that were not used for fitting.
+
 
 Figure 5.2 shows the histograms of the data in the US SteamCo estimation set.
 
 ```{r}
 hist_revenue <-
   ggplot(USSteamCoEstim, aes(x = revenue)) +
-  geom_histogram(binwidth = 4000000, fill = adatheme::colour$ada$get("blue")) +
+  geom_histogram(binwidth = 4000000, fill = ada_colour("blue")) +
   scale_x_continuous(labels = label_comma())
 
 hist_production <-
   ggplot(USSteamCoEstim, aes(x = production)) +
-  geom_histogram(binwidth = 50000, fill = adatheme::colour$ada$get("blue")) +
+  geom_histogram(binwidth = 50000, fill = ada_colour("blue")) +
   scale_x_continuous(labels = label_comma()) +
   theme(plot.margin = unit(c(0, 1, 0, 0), "cm")) # top, right, bottom, left
 
 hist_coolDD <-
   ggplot(USSteamCoEstim, aes(x = coolDD)) +
-  geom_histogram(binwidth = 50, fill = adatheme::colour$ada$get("blue")) +
+  geom_histogram(binwidth = 50, fill = ada_colour("blue")) +
   scale_x_continuous(labels = label_comma())
 
 hist_heatDD <-
   ggplot(USSteamCoEstim, aes(x = heatDD)) +
-  geom_histogram(binwidth = 100, fill = adatheme::colour$ada$get("blue")) +
+  geom_histogram(binwidth = 100, fill = ada_colour("blue")) +
   scale_x_continuous(labels = label_comma())
 
 histograms_plot <- grid.arrange(hist_revenue, hist_production, hist_coolDD, hist_heatDD, ncol = 2)
@@ -110,10 +137,10 @@ prod_range <- range(USSteamCoEstim$production, na.rm = TRUE)
 # Create the plot
 time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   # First time series (revenue)
-  geom_line(aes(y = revenue), colour = adatheme::colour$ada$get("blue")) +
+  geom_line(aes(y = revenue), colour = ada_colour("blue")) +
   # Second time series (production), rescaled to match revenue range
   geom_line(aes(y = scales::rescale(production, to = rev_range)),
-    colour = adatheme::colour$ada$get("red")
+    colour = ada_colour("red")
   ) +
   scale_y_continuous(
     name = "Revenue ($)",
@@ -126,8 +153,8 @@ time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   ) +
   theme(
     axis.title.x = element_blank(),
-    axis.title.y.left = element_text(color = adatheme::colour$ada$get("blue")),
-    axis.title.y.right = element_text(color = adatheme::colour$ada$get("red"))
+    axis.title.y.left = element_text(color = ada_colour("blue")),
+    axis.title.y.right = element_text(color = ada_colour("red"))
   )
 time_series_plot
 ```
@@ -137,7 +164,7 @@ Figure 5.1 shows a scatter plot of the independent variable production ($x$-axis
 
 ```{r}
 scatter_plot <- ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
-  geom_point(color = adatheme::colour$ada$get("blue")) +
+  geom_point(color = ada_colour("blue")) +
   scale_x_continuous(name = "Production (x 1000 lb)", labels = scales::label_comma()) +
   scale_y_continuous(name = "Revenue ($)", labels = scales::label_comma())
 scatter_plot
@@ -152,9 +179,13 @@ scatterplot(revenue ~ production,
 )
 ```
 
+Use the plots together rather than separately. The histograms show scale and spread, the time-series plot shows whether the estimation period behaves consistently over time, and the scatter plots show whether production is a reasonable first explanatory variable for revenue.
+
 ### Exercise 5.4. The base model `mod.0`
 
 Figure 5.4 shows that there is a positive (increasing) relationship: as production increases, so does revenue.
+
+This exercise fits the first regression model for the audit analytics procedure. The goal is not to choose the final model yet, but to establish a simple baseline that links revenue to production.
 
 We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with `car::brief()`, which is part of the `car` package loaded in Exercise 5.1.
 
@@ -163,38 +194,50 @@ We use the function `lm` (for linear model) to estimate the coefficient values o
 ussteamco.mod.0 <- lm(revenue ~ production, data = USSteamCoEstim)
 car::brief(ussteamco.mod.0)
 ```
-The estimate of the intercept $\beta_0$, $b_0 = 4,897,663$, and the estimate of the slope $\beta_1$, $b_1 = 18.99$.
+The estimate of the intercept $\beta_0$ is $b_0 = 4,897,663$, and the estimate of the slope $\beta_1$ is $b_1 = 18.99$. In practical terms, this baseline model estimates expected revenue from production alone. Before relying on it, we still need to inspect fit, residuals, and whether other available variables improve the estimate.
 
 ### Exercise 5.5. The full summary of `mod.0`
+
+This exercise opens the full model output for the baseline model. The practical task is to identify which parts of the output speak to model fit, coefficient evidence, and unexplained variation.
 
 A full summary of `mod.0` can be obtained with the `summary` function.
 
 ```{r}
 summary(ussteamco.mod.0)
 ```
-In addition to the statistics produced by `car::brief()`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$ and $p$ values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$ value.
+In addition to the statistics produced by `car::brief()`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$- and $p$-values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$-value.
 
+
+Read the output as a diagnostic summary, not as a final audit conclusion. The coefficient table indicates whether production contributes to the model, while residual spread and $r^2$ indicate how much uncertainty remains.
 
 ### Exercise 5.6. Correlations and correlogram
+
+This exercise checks pairwise relationships among candidate variables. The practical goal is to see which variables may help explain revenue and whether some predictors move together strongly enough to complicate interpretation.
 
 The correlations in Table 5.3 are calculated using the `cor` function.
 
 ```{r}
 (cor_ussteam <- cor(USSteamCoEstim[, 2:5]))
 ```
+
+Use the signs and magnitudes as a screening tool. A strong correlation with revenue suggests potential explanatory value; strong correlations among predictors are a warning to interpret later coefficients with care.
+
 The correlogram in Figure 5.5 is produced by
 
 ```{r echo=FALSE}
 corrplot(cor_ussteam,
   tl.col = "black",
-  col = colorRampPalette(c(adatheme::colour$ada$get("red"), "white", adatheme::colour$ada$get("blue")))(100),
+  col = colorRampPalette(c(ada_colour("red"), "white", ada_colour("blue")))(100),
   col.lim = c(-1, 1)
 )
 ```
 
 ### Exercise 5.7. Modelling strategies
 
+This exercise compares automated model-selection strategies. The practical task is to observe how candidate predictors enter or leave the model, then treat the selected model as a proposal that still needs audit judgment and diagnostics.
+
 The `step` function can be used to implement both backward and forward methods. The `direction` argument specifies whether the stepwise algorithm should proceed forward (`forward`), backward (`backward`), or both (`both`). The `scope` argument specifies the range of models to be searched, whereas the `k` argument may be used to use BIC instead of the default AIC as a criterion.
+
 
 We start with the forward method. From a model that only uses the constant (`revenue $\sim$ 1`), we add variables one by one. The variable that the largest effect on the criterion, in this example, the default AIC, is selected for inclusion in the model.
 
@@ -215,6 +258,8 @@ In the last step, we see that including `coolDD` does not further reduce the AIC
 ```{r}
 summary(model_forward)
 ```
+
+At this point, record which variables were selected and which were excluded. The learning point is that AIC-driven selection helps organize candidate models, but it does not replace checking whether the chosen predictors make sense for the audit setting.
 
 Next, we show an example of the backward method, starting with the full model and eliminating variables one by one.
 
@@ -241,7 +286,11 @@ fit_both <- step(fit_both,
 summary(fit_both)
 ```
 
+When forward, backward, and both-direction selection end at the same formula, the selection result is more stable. That agreement is useful evidence for model-building, but the model still needs residual and influence checks before it can support an audit expectation.
+
 ### Exercise 5.8. Multiple independent variables `mod.1`
+
+This exercise fits a model with multiple independent variables. The practical question is whether adding weather-related predictors improves the expected-revenue model enough to justify the extra complexity.
 
 We now regress $y$ = `revenue` on $x_1$ = `production`, $x_2$ = `coolDD`, and $x_3$ = `heatDD`.
 
@@ -254,9 +303,13 @@ summary(ussteamco.mod.1)
 
 Adding the additional variables `coolDD` and `heatDD` has improved the fit of the model. The residual standard deviation decreased from 4,112,487 for `mod.0` to 1,980,698 for `mod.1`. Similarly, $r^2$ improved from 0.397 to 0.868. These metrics suggest that the inclusion of relevant variables enhances the explanatory power of the model, demonstrating the importance of carefully chosen criteria in stepwise selection methods.
 
+For audit use, focus on what changed from `mod.0`: the unexplained variation is smaller and the model now reflects operational drivers beyond production. The next question is whether the relationship differs by season.
+
 ## Exercise 5.9. Interactions
 
 In Section 5.4.4 we developed `mod.2`, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable `summer`.
+
+This exercise tests whether one revenue relationship is sufficient across the year. The practical task is to allow the slope or intercept to differ between summer and non-summer months, then decide whether that extra structure improves the audit expectation.
 
 The scatterplot in Figure 5.6 is prepared using
 
@@ -270,13 +323,11 @@ scat_rev2 <- scatterplot(revenue ~ production | summer,
 ```
 
 ```{r}
-# Picture in ADA
-
 # Ensure summer is a factor
 USSteamCoEstim$summer_fact <- factor(USSteamCoEstim$summer, levels = c(0, 1), labels = c("No", "Yes"))
 
 # Define custom colors
-summer_colors <- c("No" = adatheme::colour$ada$get("blue"), "Yes" = adatheme::colour$ada$get("red"))
+summer_colors <- c("No" = ada_colour("blue"), "Yes" = ada_colour("red"))
 
 # Base plot with manual color scale and separate regression lines
 p <- ggplot(USSteamCoEstim, aes(x = production, y = revenue, color = summer_fact)) +
@@ -306,7 +357,11 @@ The formula specified in the `lm` function, `revenue $\sim$ production * summer 
 
 As a result, this further improved the fit of the model. The residual standard deviation decreased to 1,680,711, and $r^2$ improved to 0.917.
 
+Interpret this improvement together with the plot. If the seasonal lines describe visibly different revenue patterns and reduce residual spread, the interaction model is a stronger candidate for expected-revenue testing.
+
 ## Exercise 5.10. Time lag
+
+This exercise checks whether revenue and production move together at the same time or with a delay. The practical question is whether the model should use current-period predictors only, or whether a lagged relationship deserves attention.
 
 The cross-correlation plot in Figure 5.7 is created by running:
 
@@ -321,8 +376,12 @@ with(
 )
 ```
 
+Use the largest cross-correlations as a prompt for model judgment. If the strongest relationship occurs at a non-zero lag, a later model may need to reflect timing differences between production activity and recorded revenue.
+
 
 ## Exercise 5.11. Residual plots
+
+This exercise starts the diagnostic review of the selected interaction model. The practical task is to inspect whether residuals look randomly scattered or whether visible patterns suggest a model misspecification.
 
 The residual plots in Figure 5.9 are obtained by:
 
@@ -338,7 +397,7 @@ make_resid_plot <- function(data, var) {
   n_unique <- length(unique(data[[var]]))
 
   p <- ggplot(data, aes(x = .data[[var]], y = resid)) +
-    geom_point(color = adatheme::colour$ada$get("blue"), alpha = 0.7) +
+    geom_point(color = ada_colour("blue"), alpha = 0.7) +
     geom_hline(yintercept = 0, linetype = "dotted") +
     scale_x_continuous(labels = label_comma()) +
     scale_y_continuous(labels = label_comma()) +
@@ -350,7 +409,7 @@ make_resid_plot <- function(data, var) {
         method = "lm",
         formula = y ~ poly(x, 2),
         se = FALSE,
-        color = adatheme::colour$ada$get("lightpink")
+        color = ada_colour("lightpink")
       )
   } else {
     p <- p +
@@ -358,7 +417,7 @@ make_resid_plot <- function(data, var) {
         method = "lm",
         formula = y ~ x,
         se = FALSE,
-        color = adatheme::colour$ada$get("lightpink")
+        color = ada_colour("lightpink")
       )
   }
 
@@ -377,13 +436,13 @@ fitted_data <- data.frame(
 )
 
 fitted_plot <- ggplot(fitted_data, aes(x = fitted, y = resid)) +
-  geom_point(color = adatheme::colour$ada$get("blue"), alpha = 0.7) +
+  geom_point(color = ada_colour("blue"), alpha = 0.7) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   geom_smooth(
     method = "lm",
     formula = y ~ poly(x, 2),
     se = FALSE,
-    color = adatheme::colour$ada$get("lightpink")
+    color = ada_colour("lightpink")
   ) +
   scale_x_continuous(labels = label_comma()) +
   scale_y_continuous(labels = label_comma()) +
@@ -408,17 +467,25 @@ grid.newpage()
 grid.draw(combined)
 ```
 
+After creating the plots, look for curves, changing spread, or isolated points. A clean residual pattern supports using the model as an audit expectation; a visible pattern means the model may still be missing an important feature.
+
 
 
 ## Exercise 5.12. Influence statistics
 
-Figure 5.10 provides the Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$ values and influential observations.
+This exercise checks whether a small number of observations have too much influence on the fitted model. The practical question is whether the audit expectation is robust, or whether particular months drive the model result.
+
+Figure 5.10 provides the Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$-values and influential observations.
 
 ```{r}
 influenceIndexPlot(ussteamco.mod.2)
 ```
 
+Use the index plots to identify observations that deserve follow-up. An influential month is not automatically an error, but it should be explained before the model is used to support an audit decision.
+
 ## Exercise 5.13. Leverage points
+
+This exercise begins a focused diagnostic review of `mod.2`. The practical task is to identify months whose predictor values are unusual enough that they may strongly affect the fitted regression line.
 
 We obtain the hat-values of a model by running the `hatvalues` function on it.
 
@@ -432,13 +499,19 @@ The three largest hat-values are then summarized by
 hatvals.mod.2[order(hatvals.mod.2, decreasing = TRUE)[1:3]]
 ```
 
+Treat these observations as candidates for follow-up. A high leverage value does not mean that the revenue is wrong, but it tells you that the month has unusual explanatory-variable values and can affect the model fit.
+
 The sum of the hat-values is equal to $k + 1$.
 
 ```{r}
 sum(hatvals.mod.2)
 ```
 
+This check links the leverage values back to the number of model parameters. It helps verify that the diagnostic is being read on the right scale before moving to outliers and influence.
+
 ## Exercise 5.14. Regression outliers
+
+This exercise checks whether any months have unusually large residuals after fitting `mod.2`. The practical question is whether the model misses particular revenue observations badly enough to require explanation.
 
 Figure 5.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
 
@@ -446,7 +519,11 @@ Figure 5.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three la
 qqPlot(ussteamco.mod.2, id = list(n = 3))
 ```
 
+Use the labelled observations as a review list. They should be connected back to the business period or underlying records before deciding whether the model is unreliable or whether a particular month is unusual but explainable.
+
 ## Exercise 5.15. Influential observations
+
+This exercise combines the previous ideas by measuring how much each observation affects the fitted model. The practical task is to identify months where the audit expectation may depend too heavily on one data point.
 
 We obtain the Cook's distances of a model by running the `cooks.distance` function on it.
 
@@ -460,7 +537,9 @@ The three largest Cook's distances are then summarized by
 cooks.mod.2[order(cooks.mod.2, decreasing = TRUE)[1:3]]
 ```
 
-## Exercise 5.16. Infuence plot
+Compare these observations with the leverage and outlier lists. An observation that appears in several diagnostics deserves priority in the audit follow-up because it may affect both model fit and the resulting expectation.
+
+## Exercise 5.16. Influence plot
 
 Figure 5.12 shows the hat-values, Studentized residuals, and Cook’s distances for `ussteamco.mod.2`. The size of the circles is proportional to the Cook’s distance.
 
@@ -468,9 +547,13 @@ Figure 5.12 shows the hat-values, Studentized residuals, and Cook’s distances 
 influencePlot(ussteamco.mod.2, id = list(n = 3, cex = 0.8))
 ```
 
+Read the influence plot as a combined diagnostic view. The most important observations are those that are unusual on more than one dimension: high leverage, large residual, or large Cook's distance.
+
 ## Exercise 5.17. Winsorizing observation # 22
 
-Define the new estimation set. We replace the original value of observation 22 with its winsorized value.
+This exercise performs a sensitivity analysis for observation 22. The goal is not to declare the original value wrong automatically, but to see how much the model changes if the influence of that observation is reduced.
+
+Define the new estimation set. For this sensitivity model, we replace the original value of observation 22 with its winsorized value.
 
 ```{r}
 USSteamCoEstim2 <- USSteamCoEstim
@@ -489,7 +572,11 @@ ussteamco.mod.3 <- lm(revenue ~ (production + heatDD + coolDD) * summer,
 car::brief(ussteamco.mod.3)
 ```
 
+Compare this brief output with `mod.2`. If the model changes materially, the audit team should understand observation 22 before relying on the regression expectation.
+
 ## Exercise 5.18. Multicollinearity
+
+This exercise checks whether predictors overlap so strongly that individual coefficient estimates become hard to interpret. The practical question is whether the model can still support a clear explanation of the revenue expectation.
 
 To assess multicollinearity for a model without interaction terms, such as `mod.1`, we use the standard `vif()` function.
 
@@ -507,7 +594,11 @@ vif(ussteamco.mod.3, type = "predictor")
 
 The adjusted GVIF places predictors with different degrees of freedom on a comparable scale. For a predictor with one degree of freedom, the adjusted GVIF equals the square root of the ordinary VIF. Consequently, the conventional VIF threshold of 10 corresponds to an adjusted GVIF of approximately \(\sqrt{10} \approx 3.16\). Since none of the reported values exceeds 3.16, we conclude that `mod.3` does not exhibit problematic multicollinearity.
 
+For audit interpretation, this means that the selected predictors do not appear to be so redundant that the model explanation becomes unstable.
+
 ## Exercise 5.19. Variance and Total Sum of Squares
+
+This exercise connects the variance of revenue to the total variation that regression models try to explain. The practical task is to understand the denominator behind later measures of explained and unexplained variation.
 
 Table 5.5 provides the analysis of variance for `mod.0`. We apply the `anova()` command to perform this analysis.
 
@@ -545,7 +636,11 @@ total_sum_of_squares / 35
 
 This shows how variance is linked to variation.
 
+Keep this calculation in mind when reading model-comparison tables: better models reduce unexplained variation, but the benchmark is the total variation in the response.
+
 ## Exercise 5.20. Anova Type I and Type II
+
+This exercise compares two ways to attribute explained variation to predictors. The practical reason is that variable importance can look different when the calculation depends on the order in which predictors enter the model.
 
 We now turn to a model with multiple independent variables, for example, `mod.1`, introduced in Section 5.4.3.
 
@@ -571,7 +666,11 @@ We see that the marginal effect of adding `production`, assuming `coolDD` and `h
 
 We have no clear preference for either `anova` or `Anova`, they both have their merits. `anova` decomposes TSS, but that decomposition is dependent on the order in which variables are entered into the equation. `Anova` shows the marginal effect of each independent variable, but these marginal effects do not add to TSS.
 
+For the workshop, use this as a caution against over-interpreting a single variable-importance table. Ask whether the result answers the audit question: which variables add useful explanatory value after accounting for the others?
+
 ## Exercise 5.21. Anova with interactions
+
+This exercise applies the same analysis-of-variance idea to the sensitivity model with interactions. The practical task is to see which terms still explain variation once seasonal relationships are included.
 
 The analysis of variance of `mod.3` is as follows:
 
@@ -579,7 +678,11 @@ The analysis of variance of `mod.3` is as follows:
 (anova.mod.3 <- anova(ussteamco.mod.3))
 ```
 
+Use this output as a model-review aid, not as the only selection rule. Interaction models should remain interpretable and defensible for the audit expectation.
+
 ## Exercise 5.22. Comparing models
+
+This exercise brings the candidate models together. The practical task is to compare fit measures only when the models are based on comparable response data.
 
 We compare the performance of models with four different statistics, the Multiple $r^2$, Adjusted $r^2$ (both obtained from the `summary` function), and the AIC and BIC values. These last two can be called with their own respective commands.
 
@@ -619,7 +722,11 @@ BIC(ussteamco.mod.2)
 
 The same consideration applies to the BIC. The BIC values of `mod.0`, `model_backward`, `mod.1`, and `mod.2` may be compared directly because they are based on the same response data. The BIC of `mod.3` should not be interpreted as evidence that the winsorized model is better or worse than the previous models, because it is based on a different dataset.
 
+Before moving to assumption tests, state which model is currently the best candidate and why. Separate fit, interpretability, and sensitivity to observation 22 in that explanation.
+
 ## Exercise 5.23. Testing normality
+
+This exercise starts the formal assumption checks for `mod.3`. The practical question is whether the residual distribution is consistent enough with the modelling assumptions to support inference from the model.
 
 We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 5.14 is obtained by:
 
@@ -631,7 +738,7 @@ hist_stand_res <-
   ggplot(model3, aes(nres)) +
   geom_histogram(aes(y = after_stat(density)),
     breaks = seq(-2.55, 1.65, by = 0.7),
-    fill = adatheme::colour$ada$get("blue")
+    fill = ada_colour("blue")
   ) +
   stat_function(fun = dnorm, args = list(
     mean = mean(model3$nres),
@@ -653,7 +760,11 @@ The Shapiro-Wilk normality test is executed through the `shapiro.test` function 
 shapiro.test(ussteamco.mod.3$residuals)
 ```
 
+Interpret the visual checks and the Shapiro-Wilk test together. A small p-value would suggest that the residuals depart from normality enough to question normal-theory intervals or tests.
+
 ## Exercise 5.24. Testing heteroskedasticity
+
+This exercise checks whether residual variability changes across fitted values or predictors. The practical question is whether prediction uncertainty is reasonably stable across the range of the model.
 
 To test the assumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 5.15. We can construct it as follows.
 
@@ -669,7 +780,11 @@ The formal statistical test is the Breusch-Pagan test.
 bptest(ussteamco.mod.3)
 ```
 
+Use the plot to look for changing spread and the Breusch-Pagan test as formal support. Evidence of heteroskedasticity would make standard errors and prediction intervals less reliable without adjustment.
+
 ## Exercise 5.25. Testing autocorrelation
+
+This exercise checks whether residuals are related over time. Because the SteamCo data are monthly, the practical question is whether one month's unexplained revenue helps predict the next month's unexplained revenue.
 
 We use the `pacf` plot from Figure 5.17 to see if autocorrelation is present, and if so, which order is significant.
 
@@ -683,8 +798,10 @@ The Breusch-Godfrey test is executed through `bgtest`.
 bgtest(ussteamco.mod.3, order = 3, type = "Chisq")
 ```
 
-The $p$ value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
+The $p$-value of the test statistic is 0.06737. Therefore, we reject the null hypothesis at levels below 0.06737, suggesting marginal evidence of autocorrelation in the residuals.
 Note that the value labelled \texttt{LM test} in the software output is the Breusch--Godfrey test statistic.
+
+For audit use, treat this as a warning rather than a final rejection of the model. Marginal autocorrelation suggests that timing effects may still be present, so the next exercise tests a correction.
 
 ## Exercise 5.26. First-order autocorrelation correction
 
@@ -697,6 +814,8 @@ We first estimate an AR(1) model on the residuals from `mod.3`.
   order = c(1, 0, 0)
 )$coef[1])
 ```
+
+Read \(\rho\) as the estimated strength of first-order residual dependence. A value near zero would mean little adjustment; a larger value means the transformed model will more strongly account for timing.
 
 Then we transform all variables using the estimated \(\rho\). When the model includes interaction terms, we first construct the interaction terms in their original form and then transform those interaction terms. We should not multiply separately transformed variables.
 
@@ -757,7 +876,11 @@ pacf(ussteamco.mod.4$residuals)
 
 bgtest(ussteamco.mod.4, order = 3)
 ```
+
+Compare the PACF plot and Breusch-Godfrey result with Exercise 5.25. The learning point is whether the correction reduced the autocorrelation problem enough for the model to remain a usable audit expectation.
 ## Exercise 5.27. Constructing a refined model
+
+This exercise constructs the final candidate model for the hold-out expectation. The practical task is to simplify the interaction model while preserving a structure that remains interpretable for audit use.
 
 When a model includes interaction terms, it is important to respect the hierarchical structure—interaction terms should not be included without their corresponding main effects. The base `R` function `step()` enforces this principle automatically by removing interaction terms before dropping associated main effects. Preserving model hierarchy is essential for ensuring interpretability and theoretical coherence, especially in models intended for inference.
 
@@ -771,7 +894,11 @@ ussteamco.mod.5 <- step(ussteamco.mod.5,
 )
 ```
 
+Treat the refined model as a candidate, not as an automatic final answer. The next exercises check whether its coefficients, assumptions, and overall significance support using it to create expectations.
+
 ## Exercise 5.28. Coefficient test of the refined model
+
+This exercise inspects the coefficient-level evidence for the refined model. The practical question is which predictors still make a meaningful contribution after the model has been simplified.
 
 The summary of this model is:
 
@@ -780,6 +907,8 @@ options(scipen = 999)
 options(digits = 9)
 summary(ussteamco.mod.5)
 ```
+
+Use the coefficient table to identify the terms that drive the expectation. Terms with weak evidence should be interpreted cautiously, especially when they affect the audit expectation for the hold-out period.
 
 ## Exercise 5.29. Re-running the model assumption tests
 
@@ -791,6 +920,8 @@ bptest(ussteamco.mod.5)
 bgtest(ussteamco.mod.5, order = 3, type = "Chisq")
 ```
 
+Read these tests as a final reliability screen. If the refined model still shows serious assumption problems, its predictions may need adjustment, corroboration, or a different modelling approach before they support an audit conclusion.
+
 ## Exercise 5.30. Testing significance
 
 The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
@@ -801,6 +932,8 @@ Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ 
 ```{r}
 summary(ussteamco.mod.5)
 ```
+
+The model-level test asks whether the refined model explains revenue better than a model with no predictors. Combine this result with the diagnostics above before carrying `mod.5` forward to the hold-out period.
 
 ### Exercise 5.31. Showcase: Visualizing the uncertainty in the model parameters
 
@@ -880,27 +1013,29 @@ All the elements created earlier are now plotted on a single canvas.
 regression_lines_plot <- ggplot() +
   geom_line(
     data = simulated_lines, aes(x = x, y = y, group = rep),
-    color = adatheme::colour$ada$get("blue"), alpha = 0.1
+    color = ada_colour("blue"), alpha = 0.1
   ) + # Plot the simulated regression lines
-  geom_line(data = true_line, aes(x = x, y = y), color = adatheme::colour$ada$get("lightpink"), linewidth = .5) + # Plot the true line
+  geom_line(data = true_line, aes(x = x, y = y), color = ada_colour("lightpink"), linewidth = .5) + # Plot the true line
   geom_line(
     data = ci_bounds_true, aes(x = x, y = ci_lower),
-    color = adatheme::colour$ada$get("lightpink"), linewidth = .5, linetype = "solid"
+    color = ada_colour("lightpink"), linewidth = .5, linetype = "solid"
   ) + # Lower bound (true line)
   geom_line(
     data = ci_bounds_true, aes(x = x, y = ci_upper),
-    color = adatheme::colour$ada$get("lightpink"), linewidth = .5, linetype = "solid"
+    color = ada_colour("lightpink"), linewidth = .5, linetype = "solid"
   ) + # Upper bound (true line)
   labs(
     title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),
     x = "x", y = "y"
   ) +
-  theme_minimal() +
+  ggplot2::theme_bw() +
   xlim(x_extended_min, x_extended_max) # Extend the x-axis limits
 regression_lines_plot
 ```
 
 The resulting graph is shown in Figure 5.20.
+
+Use the figure as a reminder that a fitted regression line is an estimate. The same modelling process can produce different lines when the sample changes, which is why prediction intervals matter in the audit expectation exercises.
 
 ## Exercise 5.32. Showcase: Confidence and prediction intervals
 
@@ -928,22 +1063,22 @@ intervals_plot <- ggplot() +
   geom_ribbon(
     data = pi_bounds_true,
     aes(x = x, ymin = pi_lower, ymax = pi_upper),
-    fill = adatheme::colour$ada$get("blue"), alpha = 0.15
+    fill = ada_colour("blue"), alpha = 0.15
   ) + # 99% prediction interval as a ribbon
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_lower),
-    color = adatheme::colour$ada$get("blue"), linewidth = .5, linetype = "dashed"
+    color = ada_colour("blue"), linewidth = .5, linetype = "dashed"
   ) + # 95% CI lower
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_upper),
-    color = adatheme::colour$ada$get("blue"), linewidth = .5, linetype = "dashed"
+    color = ada_colour("blue"), linewidth = .5, linetype = "dashed"
   ) + # 95% CI upper
   geom_line(
     data = true_line,
     aes(x = x, y = y),
-    color = adatheme::colour$ada$get("blue"), linewidth = 1
+    color = ada_colour("blue"), linewidth = 1
   ) + # True regression line
   labs(
     x = "x", y = "y"
@@ -952,10 +1087,16 @@ intervals_plot <- ggplot() +
 intervals_plot
 ```
 
+The shaded prediction interval is wider because it includes uncertainty for a new observation, not only uncertainty in the average response. That distinction is the key bridge back to the hold-out revenue predictions in the next exercise.
+
 
 ## Exercise 5.33. Creating expectations for the hold-out period
 
+This exercise applies the refined model to the 2014 hold-out months. The practical task is to create an expected revenue and prediction interval for each month, then compare those expectations with recorded revenue.
+
 The function `predict` creates expectations, when data from `newdata` are evaluated with a certain `object`. The optional `interval` is used to add bounds for a prediction interval, or, alternatively, a confidence interval. The `level` specifies the confidence level of the interval.
+
+
 
 ```{r echo=FALSE}
 (predictions <- predict(
@@ -992,8 +1133,12 @@ sum(comparison$Expected)
 sum(comparison$Difference)
 ```
 
+Use the monthly differences as a first exception scan. A month outside the prediction interval or with a large recorded-minus-expected difference should be explained before the annual result is interpreted.
+
 
 ## Exercise 5.34. Plotting expectations against recorded values
+
+This exercise visualizes the same monthly comparison. The practical question is whether any recorded revenue pattern falls outside the model-based expectation rather than only whether individual numbers differ.
 
 In Figure 5.19 we have plotted expectations against the recorded values of revenue, indicating which individual observations fall outside of the 99% prediction interval. The following code is used to create it.
 
@@ -1012,14 +1157,14 @@ expectations_plot <- ggplot(pred_df, aes(x = date)) +
   # Plot the predicted values as a line
   geom_line(aes(y = fit, color = "Expectation"), linewidth = 1) +
   # Add the prediction interval as a shaded area
-  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = adatheme::colour$ada$get("blue"), alpha = 0.2) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = ada_colour("blue"), alpha = 0.2) +
   # Plot the actual values, with conditional coloring for outside interval points
   geom_line(aes(y = recorded, color = "Recorded"), linewidth = 1) +
   # Highlight points outside interval in red
-  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = adatheme::colour$ada$get("lightpink"), size = 2) +
+  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = ada_colour("lightpink"), size = 2) +
   # Define color for predicted and actual values
   scale_color_manual(
-    values = c("Expectation" = adatheme::colour$ada$get("blue"), "Recorded" = adatheme::colour$ada$get("lightpink")),
+    values = c("Expectation" = ada_colour("blue"), "Recorded" = ada_colour("lightpink")),
     name = ""
   ) +
   labs(
@@ -1036,11 +1181,14 @@ expectations_plot <- ggplot(pred_df, aes(x = date)) +
 expectations_plot
 ```
 
+Use the plot to identify months that deserve audit follow-up. A point outside the interval is not automatically a misstatement, but it should be reconciled with corroborating evidence or business events.
+
 ## Exercise 5.35. Combining 12 monthly predictions
 
 We use Equations 5.29 and 5.30 to construct a prediction interval for total revenue for the year under audit. The annual expectation is the sum of the 12 monthly expectations.
 
 To keep the derivation transparent, we first collect the monthly expectations, then combine them into an annual expectation, and finally compute the prediction standard error of that annual total. The design-matrix calculation accounts for the covariance between the monthly expectations caused by using the same estimated regression coefficients in all 12 months.
+
 
 ```{r}
 # Residual degrees of freedom
@@ -1049,9 +1197,25 @@ df_res <- ussteamco.mod.5$df.residual
 # Monthly expectations from Exercise 5.34
 monthly_expectations <- pred_df$fit
 
+monthly_expectation_table <- data.frame(
+  month = format(pred_df$date, "%B"),
+  expected_revenue = monthly_expectations
+)
+
+monthly_expectation_table
+```
+
+The annual expectation is obtained by summing the 12 monthly expectations. This keeps the annual calculation tied directly to the month-by-month audit expectation inspected in the previous exercise.
+
+```{r}
 # Combined annual expectation
 annual_prediction <- sum(monthly_expectations)
+annual_prediction
+```
 
+The next step prepares the model information needed to quantify uncertainty in that annual expectation. The design matrix contains one row for each hold-out month and one column for each coefficient in the final regression model.
+
+```{r}
 # Construct the design matrix for the hold-out observations
 X_hold <- model.matrix(
   formula(ussteamco.mod.5),
@@ -1061,42 +1225,92 @@ X_hold <- model.matrix(
 # Vector of ones for summing the 12 monthly predictions
 one <- rep(1, nrow(X_hold))
 
-# Equation 5.38: variance contribution from uncertainty in the estimated regression coefficients
+data.frame(
+  quantity = c(
+    "hold-out months",
+    "model coefficients"
+  ),
+  value = c(
+    nrow(X_hold),
+    ncol(X_hold)
+  )
+)
+```
+
+The annual prediction variance has two parts. The first part comes from uncertainty in the estimated regression coefficients. The second part comes from the future residual variation of the 12 monthly observations.
+
+```{r}
+# Variance contribution from uncertainty in the estimated regression coefficients
 var_mean_annual <- as.numeric(
   t(one) %*% X_hold %*% vcov(ussteamco.mod.5) %*% t(X_hold) %*% one
 )
 
-# Equation 5.39: variance contribution from the future residual variation of 12 monthly observations
+# Variance contribution from the future residual variation of 12 monthly observations
 sigma2 <- summary(ussteamco.mod.5)$sigma^2
 var_future_annual <- nrow(X_hold) * sigma2
 
-# Equation 5.40: total prediction variance of the annual amount
+# Total prediction variance of the annual amount
 annual_var <- var_mean_annual + var_future_annual
 
-# Equation 5.41: prediction standard error of the annual amount
+# Prediction standard error of the annual amount
 annual_se <- sqrt(annual_var)
 
-# Equation 5.42: critical value for a 99% prediction interval
-t_score <- qt(0.995, df = df_res)
+annual_variance_components <- data.frame(
+  component = c(
+    "coefficient uncertainty",
+    "future residual variation",
+    "total annual prediction variance",
+    "annual prediction standard error"
+  ),
+  value = c(
+    var_mean_annual,
+    var_future_annual,
+    annual_var,
+    annual_se
+  )
+)
 
-# Equation 5.43: 99% prediction interval for the annual total
-annual_lower <- annual_prediction - t_score * annual_se
-annual_upper <- annual_prediction + t_score * annual_se
-
-# Print results
-cat("Variance from coefficient uncertainty:", var_mean_annual, "\n")
-cat("Variance from future residual variation:", var_future_annual, "\n")
-
-cat("99% Prediction Interval for Annual Revenue:\n")
-cat("Lower Bound:", round(annual_lower, 0), "\n")
-cat("Annual Prediction:", round(annual_prediction, 0), "\n")
-cat("Upper Bound:", round(annual_upper, 0), "\n")
-cat("Annual prediction standard error:", round(annual_se, 0), "\n")
+annual_variance_components
 ```
 
-The first variance component, `var_mean_annual`, captures the uncertainty in the estimated regression coefficients. The second component, `var_future_annual`, captures the future residual variation of the 12 monthly observations. The latter is calculated under the assumption that the future residual errors are uncorrelated.
+The coefficient-uncertainty component reflects that the regression coefficients are estimated from a sample. The future-residual component reflects that even a well-specified model will not predict each future month exactly. The latter is calculated under the assumption that the future residual errors are uncorrelated.
 
-Adjust the March prediction based on the corroborated evidence for the winter conditions and disruptions.
+Finally, we use the residual degrees of freedom to obtain the critical \(t\)-value and construct the 99% prediction interval for annual revenue.
+
+```{r}
+
+# Critical value for a 99% prediction interval
+t_score <- qt(0.995, df = df_res)
+annual_interval_half_width <- t_score * annual_se
+
+# 99% prediction interval for the annual total
+annual_lower <- annual_prediction - annual_interval_half_width
+annual_upper <- annual_prediction + annual_interval_half_width
+
+annual_prediction_interval <- data.frame(
+  quantity = c(
+    "lower bound",
+    "annual expectation",
+    "upper bound",
+    "annual prediction standard error"
+  ),
+  value = round(
+    c(
+      annual_lower,
+      annual_prediction,
+      annual_upper,
+      annual_se
+    ),
+    0
+  )
+)
+
+annual_prediction_interval
+```
+
+Read the annual interval as the range of total recorded revenue that would be expected from the model before considering specific corroborating evidence.
+
+Adjust the March prediction based on the corroborated evidence for the winter conditions and disruptions. This is an audit judgement step: the adjustment should be supported by documented evidence, not used merely to make the model fit the recorded amount.
 
 ```{r}
 storm_adjustment <- 8000000
@@ -1122,63 +1336,150 @@ annual_prediction_adj <- sum(pred_df$fit_adj)
 annual_prediction_adj
 ```
 
+The adjusted annual expectation carries the documented March explanation into the annual evaluation. The next exercise compares recorded revenue with this adjusted expectation.
+
 ## Exercise 5.36. Level of assurance for the annual prediction
+
+This exercise turns the annual prediction into an audit decision check. The practical task is to compare recorded annual revenue with the adjusted expectation and decide whether the difference is acceptable under the chosen materiality and risk parameters.
 
 We now compare the recorded annual revenue with the annual expectation. Consistent with the convention used throughout the book, the difference is defined as the recorded amount minus the expectation.
 
 We use the numbers adjusted for the winter storm conditions.
 ```{r}
 monthly_expectations_adj <- pred_df$fit_adj
-annual_prediction <- sum(monthly_expectations_adj)
+
+adjusted_monthly_expectation_table <- data.frame(
+  month = format(pred_df$date, "%B"),
+  adjusted_expected_revenue = monthly_expectations_adj
+)
+
+adjusted_monthly_expectation_table
 ```
+
+The adjusted annual expectation is the sum of these adjusted monthly expectations.
+
+```{r}
+annual_prediction <- sum(monthly_expectations_adj)
+annual_prediction
+```
+
+The recorded annual revenue is the benchmark amount being audited. Subtracting the adjusted expectation gives the observed difference for the year.
 
 ```{r}
 # Difference convention: recorded amount minus expectation
 annual_recorded <- sum(USSteamCoHold$revenue)
 annual_difference <- annual_recorded - annual_prediction
-
-cat("Recorded annual revenue:", annual_recorded, "\n")
-cat("Expected annual revenue:", annual_prediction, "\n")
-cat("Difference:", annual_difference, "\n")
-cat("Annual prediction standard error:", annual_se, "\n")
+annual_difference
 ```
+
+Standardizing the annual difference by the annual prediction standard error puts the observed difference on the same scale as the decision bounds calculated below.
+
+```{r}
+test_statistic <- annual_difference / annual_se
+
+annual_difference_summary <- data.frame(
+  quantity = c(
+    "recorded annual revenue",
+    "adjusted annual expectation",
+    "annual difference",
+    "annual prediction standard error",
+    "standardized difference"
+  ),
+  value = c(
+    annual_recorded,
+    annual_prediction,
+    annual_difference,
+    annual_se,
+    test_statistic
+  )
+)
+
+annual_difference_summary
+```
+
+Interpret the sign as well as the size of the difference. A positive difference means recorded revenue is above expectation; a negative difference means recorded revenue is below expectation.
 
 Next, we set the audit parameters and construct the acceptable difference range. The acceptable difference range is expressed around zero, because it is applied to the difference between the recorded amount and the expectation.
 
 ```{r}
 # Set audit parameters
 PM <- 15000000 # Performance materiality
-beta <- 0.01 # Efficiency risk used for the acceptable difference range
+beta <- 0.01 # Efficiency risk beta
+confidence_level <- 1 - beta
 df <- df_res
 
-# Equation 5.44: standardized materiality
+# Standardized materiality
 delta <- PM / annual_se
 
-# Critical values for a two-sided 99% acceptable difference range
+# Two-sided critical values
 c_L <- qt(beta / 2, df = df)
 c_U <- qt(1 - beta / 2, df = df)
 
 # Acceptable difference range for the annual difference
 ADR_lower <- c_L * annual_se
 ADR_upper <- c_U * annual_se
-
-cat("Acceptable Difference Range for the annual difference:\n")
-cat("Lower bound:", ADR_lower, "\n")
-cat("Upper bound:", ADR_upper, "\n")
 ```
 
-The quantities `c_L` and `c_U` are standardized decision bounds. Multiplying them by `annual_se` converts them into the acceptable difference range for the annual difference. Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+The quantities `c_L` and `c_U` are standardized decision bounds. Multiplying them by `annual_se` converts them into the acceptable difference range for the annual difference.
 
 ```{r}
-# Acceptable bounds for recorded annual revenue
+acceptable_difference_range <- data.frame(
+  boundary = c(
+    "lower acceptable difference",
+    "upper acceptable difference"
+  ),
+  value = c(
+    ADR_lower,
+    ADR_upper
+  )
+)
+
+acceptable_difference_range
+```
+
+Equivalently, this acceptable difference range can be translated into lower and upper bounds around the annual expectation.
+
+```{r}
+
+# Equivalent acceptable bounds for recorded annual revenue
 recorded_lower <- annual_prediction + ADR_lower
 recorded_upper <- annual_prediction + ADR_upper
 
-cat("Acceptable bounds for recorded annual revenue:\n")
-cat("Lower bound:", recorded_lower, "\n")
-cat("Annual expectation:", annual_prediction, "\n")
-cat("Upper bound:", recorded_upper, "\n")
+acceptable_recorded_revenue_bounds <- data.frame(
+  boundary = c(
+    "lower bound",
+    "annual expectation",
+    "upper bound"
+  ),
+  value = c(
+    recorded_lower,
+    annual_prediction,
+    recorded_upper
+  )
+)
+
+acceptable_recorded_revenue_bounds
 ```
+
+The audit decision compares the observed annual difference with this acceptable range. If the difference falls outside the range, the model points to a potential overstatement or understatement that requires follow-up.
+
+```{r}
+annual_decision_inputs <- data.frame(
+  quantity = c(
+    "observed annual difference",
+    "lower acceptable difference",
+    "upper acceptable difference"
+  ),
+  value = c(
+    annual_difference,
+    ADR_lower,
+    ADR_upper
+  )
+)
+
+annual_decision_inputs
+```
+
 
 The achieved assurance is calculated using the non-central \(t\) distribution. A material overstatement shifts the distribution of the standardized difference to the right. A material understatement shifts it to the left.
 
@@ -1188,18 +1489,26 @@ The achieved assurance is calculated using the non-central \(t\) distribution. A
 assurance_over <- 1 - pt(c_U, df = df, ncp = delta)
 assurance_under <- pt(c_L, df = df, ncp = -delta)
 
-cat(
-  "Achieved assurance for detecting overstatement:",
-  round(assurance_over * 100, 1), "%\n"
+achieved_assurance <- data.frame(
+  material_difference = c(
+    "overstatement",
+    "understatement"
+  ),
+  achieved_assurance_percent = round(
+    c(
+      assurance_over,
+      assurance_under
+    ) * 100,
+    1
+  )
 )
 
-cat(
-  "Achieved assurance for detecting understatement:",
-  round(assurance_under * 100, 1), "%\n"
-)
+achieved_assurance
 ```
 
 With the current implementation and the audit parameters above, the achieved assurance is approximately 36.9% in each direction.
+
+This assurance level describes how strongly the analytical procedure can detect a material difference under the selected assumptions. It should be considered together with the acceptable-difference conclusion, not read as a stand-alone pass or fail.
 
 
 Finally, we evaluate the observed annual difference.
@@ -1208,10 +1517,21 @@ Finally, we evaluate the observed annual difference.
 # Conclusion for the observed annual difference
 
 if (annual_difference < ADR_lower) {
-  cat("The annual difference indicates a potential understatement requiring investigation.\n")
+  conclusion <- "Understatement follow-up."
 } else if (annual_difference > ADR_upper) {
-  cat("The annual difference indicates a potential overstatement requiring investigation.\n")
+  conclusion <- "Overstatement follow-up."
 } else {
-  cat("The annual difference falls within the acceptable difference range.\n")
+  conclusion <- "Difference acceptable."
 }
+
+annual_decision <- data.frame(
+  observed_difference = annual_difference,
+  lower_acceptable_difference = ADR_lower,
+  upper_acceptable_difference = ADR_upper,
+  conclusion = conclusion
+)
+
+annual_decision
 ```
+
+Use this conclusion as the documented result of the analytical procedure. If the difference is acceptable, the model does not identify a material unexpected annual revenue difference under the assumptions used here.

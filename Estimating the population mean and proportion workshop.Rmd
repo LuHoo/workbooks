@@ -16,6 +16,8 @@ output:
 
 In this Chapter we will use one single data file, so you can get familiar with estimating a mean, a proportion, and their respective confidence intervals without learning the specifics of many different datasets. The `salaries` dataset contains salary details of 2,222 employees of the imaginary town of Winesbury, and is included with the `FSaudit` package. The data file indicates for each employee the Grade, Step within the Grade, and Gross salary, as well as a unique employee ID. The field Gender is coded with a 1 for female and a 0 for male.
 
+The practical task is to create the sample that will be used throughout the workshop. Keeping the dataset, population size, sample size, and seed explicit makes the later estimates reproducible.
+
 In order to replicate the experiment in the book, you need to use the same random number seed as we did. Note that as of version 3.6, fundamental changes have been made in the random number generator. The default setting of the random number generator should normally not be changed, but for the benefit of readers who use an older version of `R` we set it to `Rounding`, which was the default prior to version 3.6.
 
 Details of the data file can be obtained using base `R` functionality.
@@ -26,7 +28,7 @@ library(FSaudit)
 names(salaries)
 (N <- nrow(salaries))
 ```
-We sample 50 units from the `salaries` dataset by using the `sample()` function.
+We draw a reproducible sample of 50 units from the `salaries` dataset.
 
 ```{r}
 RNGkind(sample.kind = "Rounding")
@@ -35,7 +37,11 @@ set.seed(12345)
 sample1 <- salaries[sample(N, n), ]
 head(sample1)
 ```
+After running the code, check the first rows of `sample1`. This confirms that the later calculations are based on employee-level records, not only on summary numbers.
+
 ### Exercise 2.2 Point estimation of the mean
+
+This exercise calculates the first audit estimate from the sample: the average gross salary. The point estimate is useful, but it does not yet tell us how precise the estimate is.
 
 The point estimate of the mean ($\bar{y}$) is obtained by dividing the sum of $y$ in the sample by the sample size. In `R` we simply use the `mean` function.
 
@@ -50,39 +56,44 @@ We can use the sample mean as an estimate for the total payroll in the populatio
 N * y_bar
 ```
 
+Read the total as an extrapolation from the sample to all employees. The next exercises add uncertainty around this point estimate so it can be interpreted for audit purposes.
+
 ### Exercise 2.3 Confidence intervals around the mean
 
-First, we estimate the standard deviation in the population from the standard deviation of the sample.
+The sample mean from Exercise 2.2 is only a point estimate. In this exercise, we quantify the uncertainty around that estimate so we can judge how precise the payroll estimate is for audit work.
+
+We start by estimating the variation in gross salaries from the sample. This variation drives the width of the confidence interval.
 
 ```{r}
 (s <- sd(sample1$gross))
 ```
 
-The calculation of the standard error is then
+The standard error translates that salary variation to the uncertainty in the sample mean.
 
 ```{r}
 (se <- s / sqrt(n))
 ```
 
-For a 95% confidence interval the t-value is based on tail probabilities of 0.025 and 0.975.
+For a 95% confidence interval, the $t$-value is based on tail probabilities of 0.025 and 0.975. This value sets how much uncertainty we allow on each side of the estimate.
 
 ```{r}
 (tval <- qt(0.975, df = (n - 1)))
 ```
 
-We multiply the $t$-value with the standard error to obtain the precision achieved.
+We multiply the $t$-value with the standard error to obtain the precision achieved. Read this value as the half-width of the interval around the sample mean.
 
 ```{r}
 (precAch <- tval * se)
 ```
 
-The resulting lower and upper bounds are
+The resulting lower and upper bounds show the range of plausible values for the population mean monthly payroll. After running the code, compare the bounds with the point estimate and ask whether the interval is narrow enough for the intended audit purpose.
+
 ```{r}
 (lowerBound <- y_bar - precAch)
 (upperBound <- y_bar + precAch)
 ```
 
-For a 99\% confidence interval, the calculations are
+For a 99\% confidence interval, the calculations are similar but use more extreme tail probabilities. The wider interval is the price of using a higher confidence level.
 
 ```{r}
 (lowerBound <- y_bar + qt(0.005, 49) * se)
@@ -91,22 +102,30 @@ N * lowerBound
 N * upperBound
 ```
 
+Compare the 95\% and 99\% intervals. The key learning point is not only how to calculate the bounds, but how confidence level and precision move together when an auditor interprets an estimate.
+
 ### Exercise 2.4 Extending the sample
 
-To achieve the target precision of $E = $ 600,000, we extend the sample from Exercise 3.1 from 50 to 131 sampling units.
+Suppose the initial sample does not provide the desired precision for the total payroll estimate. The practical response is to collect more evidence. To work toward the target precision of $E = 600{,}000$, we extend the sample from Exercise 2.1 from 50 to 131 sampling units.
+
+The next code chunk recreates the sample with the same seed at the larger target size, so the extended sample remains reproducible.
 
 ```{r}
 set.seed(12345)
 sample2 <- salaries[sample(N, 131), ]
 ```
 
-The mean of the total sample is:
+The mean of the extended sample is:
 
 ```{r}
 mean(sample2$gross)
 ```
 
+Compare this estimate with the original sample mean. A larger sample does not guarantee a more convenient result, but it should reduce uncertainty around the estimate. The audit question is whether the additional evidence is enough to support the required precision.
+
 ### Exercise 2.5 Finite populations
+
+This exercise checks whether the finite size of the payroll population affects sample-size planning. The practical question is whether the desired precision is tight enough that the sample becomes large relative to the population.
 
 We saw in Section 3.2.3 that the finiteness of the population from which we sample has a noticeable effect when the sample size is greater than 10\% of the population size. In the example of the mean monthly payroll ($n = 50$, $N = 2,222$), it can be expected that this is the case if we want the precision around the total monthly payroll to be less than 300,000.
 
@@ -125,9 +144,13 @@ The total sample size required to obtain an estimate of the mean monthly payroll
 (N^2 * tval^2) * sd(sample1$gross)^2 / E^2
 ```
 
+Compare the corrected and uncorrected sample sizes. The audit planning point is that population size can materially change the evidence required when the planned sample is a substantial share of the population.
+
 ### Exercise 2.6 Confidence intervals around the proportion
 
-These bounds are calculated in R with the `upper` and `lower` functions, that are part of the `FSaudit` package.
+The same sample can also be used for a qualitative characteristic. Here, the task is to estimate the proportion of women in the payroll population using the `Gender` field introduced in Exercise 2.1.
+
+In the sample, `k = 31` employees are coded as female. These bounds are calculated in R with the `upper` and `lower` functions, which are part of the `FSaudit` package.
 
 
 ```{r}
@@ -135,7 +158,9 @@ lower(k = 31, popn = 2222, n = 50, alpha = .025)
 upper(k = 31, popn = 2222, n = 50, alpha = .025)
 ```
 
-Binomial bounds can be obtained, by adding the distribution to the respective functions.
+These bounds use the finite population size. They answer the practical question: based on the sample, what range of population proportions is still plausible?
+
+Binomial bounds can be obtained by adding the distribution to the respective functions. This gives a useful comparison because it treats the population differently.
 
 ```{r}
 lower(k = 31, n = 50, alpha = .025, dist = "binom")
@@ -143,4 +168,4 @@ upper(k = 31, n = 50, alpha = .025, dist = "binom")
 lower(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 upper(k = 31, popn = 2222, n = 50, alpha = .025, dist = "binom")
 ```
-Note that the hypergeometric distribution provides a more precise result.
+Compare the hypergeometric and binomial bounds. The hypergeometric distribution uses the finite population information directly, so it provides a more precise result here. The learning point is that distribution choice can affect how much uncertainty remains around a proportion estimate.

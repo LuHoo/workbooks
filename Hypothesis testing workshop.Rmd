@@ -14,16 +14,18 @@ output:
 
 ### Exercise 4.1. Effect of the critical region on the sample size
 
+This exercise examines how the critical region changes the amount of evidence needed for an attribute test. The practical task is to see how allowing more sample deviations changes the planned sample size before any fieldwork is performed.
+
 The results on page 119 are obtained with the `FSaudit` package, first by creating an attribute object, filling it with the parameters of the test, and then applying the `size()` function.
 The relevant parameters are the significance level `alpha`, the number of deviations in the population $M$ `popdev`, the population size $N$ `popn`, and the critical region `c`.
 
-```{r} 
+```{r}
 library(FSaudit)
 mySample <- att_obj(alpha = .1, popdev = 60, popn = 1200, c = 0)
 mySample <- size(mySample)
 mySample$n
 ```
-The sample size increases as we increase the critical region to `c = 2`.
+With `c = 0`, the plan rejects only when no deviations are found. The sample size increases as we increase the critical region to `c = 2`, because the design must still control the risk of drawing a misleading conclusion while tolerating more observed deviations.
 ```{r}
 mySample <- size(mySample, c = 2)
 mySample$n
@@ -42,7 +44,11 @@ mySample2 <- size(mySample2)
 mySample2$n
 ```
 
+Compare the hypergeometric and binomial sample sizes. The learning point is that distribution choice is not just syntax: it affects the evidence required to support the planned test conclusion.
+
 ### Exercise 4.2. Significance levels
+
+Here we read significance levels as evidence measures. The calculations ask how probable it is to observe the sample result or a more favorable result if the population contains the stated number of deviations.
 
 On page 120 we calculated significance levels for the occurrence of finding one or two errors. These probabilities are calculated in `R` with the following code:
 
@@ -51,6 +57,8 @@ On page 120 we calculated significance levels for the occurrence of finding one 
 phyper(q = 1, m = 60, n = 1140, k = 45)
 phyper(q = 2, m = 60, n = 1140, k = 102)
 ```
+After running the code, interpret the probabilities before looking up the formula details. Smaller values provide stronger evidence against the population deviation level used in the calculation.
+
 Refer to Equation 2.1.
 Remember that `R` uses `q` for the number of errors found $k$, `m` for the number of deviations in the population $M$, `n` for the number of correct items $N - M$, and `k` for the sample size $n$.
 
@@ -63,17 +71,23 @@ On page 121 we also calculated the Type II error, for a scenario with no errors 
 phyper(0, m = 24, n = 1176, k = 45, lower.tail = FALSE)
 ```
 
+Read this output as the risk that the sample does not support rejection even though the population contains the deviation rate specified in the scenario. This keeps the focus on what the test can miss, not only on what it can detect.
+
 ### Exercise 4.4. One-sided upper bounds
 
-The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
+This exercise converts sample findings into one-sided upper bounds for the population deviation rate. The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
 
 ```{r}
 upper(popn = 1200, n = 102, k = 0, alpha = 0.10) / 1200
 upper(popn = 1200, n = 102, k = 3, alpha = 0.10) / 1200
 ```
 
+Compare the two bounds. Finding more errors in the same sample increases the upper bound, which means more possible population deviation remains after the test.
+
 ### Exercise 4.5. Case: European innovation subsidies
-The sample size in the *Case: European innovation subsidies* depends on the critical region chosen. When the null hypothesis $H_0 : M \geq 120,000$ is rejected when the sample yields no errors, the critical region is $\{k | k = 0\}$. We first create an `mus_obj` object, and load it with the parameters.
+This exercise applies the critical-region idea to the *Case: European innovation subsidies*. The sample size depends on whether the auditor requires a sample with no errors or allows a small number of errors before rejecting the null hypothesis.
+
+When the null hypothesis $H_0 : M \geq 120,000$ is rejected when the sample yields no errors, the critical region is $\{k | k = 0\}$. We first create an `mus_obj` object, and load it with the parameters.
 ```{r}
 subsidies <- mus_obj(
   cl = 0.95,
@@ -85,7 +99,7 @@ subsidies <- size(subsidies,
 )
 subsidies$n
 ```
-This result is exactly equal to that of the fixed-attribute sample:
+This result is exactly equal to that of the fixed-attribute sample. The comparison checks whether the monetary-unit planning problem behaves like the equivalent attribute test in this all-or-nothing error setting:
 ```{r}
 myAttSample <- att_obj(alpha = 0.05, popn = 12000000, popdev = 120000)
 myAttSample <- size(myAttSample, c = 0)
@@ -98,9 +112,11 @@ myAttSample <- size(myAttSample, c = 1)
 myAttSample$n
 ```
 
-In MUS, we increase the critical region by anticipating on the expected error (in monetary terms) in the population. Thus, in applications where selected items are either completely correct or completely incorrect, it is easier to calculate the minimum required sample size using the `att_obj` than using the `mus_obj`.
+The larger sample size is the cost of allowing one observed error while keeping the planned risk under control. In MUS, we increase the critical region by anticipating on the expected error (in monetary terms) in the population. Thus, in applications where selected items are either completely correct or completely incorrect, it is easier to calculate the minimum required sample size using the `att_obj` than using the `mus_obj`.
 
 ### Exercise 4.6. Case: Accounts receivable circularization
+
+This exercise plans a monetary-unit sample for the accounts receivable case. The practical task is to connect the population book value, performance materiality, and expected error to the sample size required for Stringer evaluation.
 
 We start by setting up the MUS object `ar` (for Accounts Receivable) in `R` with the `FSaudit` package and first verify that the number of sampling units `popn` and the total book value `popBv` of the sampling frame match those in the population. Notice that these statistics are calculated as soon as the object is loaded with the detail amounts.
 
@@ -122,7 +138,7 @@ ar <- size(ar,
 )
 ar$n
 ```
-Compare this with the sample size calculated using fixed-attribute sampling.
+Interpret the resulting sample size as the fieldwork effort implied by this MUS design. We then compare this with the sample size calculated using fixed-attribute sampling.
 
 ```{r}
 ar2 <- att_obj(alpha = 0.05, popn = 13500000, popdev = 450000)
@@ -133,9 +149,11 @@ ar2 <- size(ar2, c = 2)
 ar2$n
 ```
 
-We can therefore infer that with an expected error of `ee = 100000`, we can tolerate between one and two 100% errors.
+We can therefore infer that with an expected error of `ee = 100000`, we can tolerate between one and two 100% errors. The learning point is to translate a monetary planning assumption into an equivalent attribute-sampling tolerance, rather than treating the sample size as a standalone number.
 
 ### Exercise 4.7. Multiple hits with random selection
+
+This exercise shows a practical sampling issue in MUS: large monetary items can be selected more than once when random selection is used. The goal is to recognize why high-value items need special attention in the sample output.
 
 If we draw a sample of size $n = 1,100$ from the `accounts_receivable` population, the largest sampling units have an almost 100% inclusion probability and with a selection method such as `random` are likely to be hit more than once.
 
@@ -157,18 +175,18 @@ multiple <- size(multiple)
 multiple$n
 ```
 
-We select the sample with the selection method `selMeth = "random"` and order it in decreasing order, displaying the six largest book values.
+The sample size is intentionally large enough to make repeated selection of high-value invoices visible. We select the sample with the selection method `selMeth = "random"` and order it in decreasing order, displaying the six largest book values.
 
 ```{r}
 multiple <- select(multiple, selMeth = "random", seed = 1)
 sample <- multiple$sample
 head(sample[order(-sample$bv), ])
 ```
-This example demonstrates that invoices 201719763 and 201710344 were selected twice.
+This example demonstrates that invoices 201719763 and 201710344 were selected twice. In practice, this is a cue to check how the method represents high-value items before interpreting the sample as a simple list of unique invoices.
 
 ### Exercise 4.8. Stringer bound
 
-We continue the case study sample, and select the sample, now with the "randomized fixed" selection method.
+We continue the accounts receivable case by selecting the sample with the "randomized fixed" selection method. The goal is to create the sample that will later be evaluated after audit values are supplied.
 
 ```{r}
 ar <- select(ar,
@@ -178,7 +196,7 @@ ar <- select(ar,
 head(ar$sample)
 ```
 
-Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values into a data frame.
+Before we can evaluate the sample, we must first provide audit values. These should be provided in a list of the same order as the list of sample book values. We first copy the list of book values into a data frame so correct items initially have audit value equal to book value.
 
 ```{r}
 myResults <- data.frame(item = ar$sample$item, av = ar$sample$bv)
@@ -187,7 +205,7 @@ Table 5.4. lists the three invoices (items 16, 52, and 124), that are assumed to
 ```{r}
 myResults[c(16, 52, 124), ]
 ```
-We update the audit values of the erroneous items.
+We update the audit values of the erroneous items. This step turns the selected sample into evaluated audit evidence.
 ```{r}
 myResults[16, 2] <- 4438.82
 myResults[52, 2] <- 0
@@ -207,7 +225,9 @@ The results of the Stringer bound evaluation as presented in Tables 5.6 and 5.7 
 ar$evalResults$Over$`Precision calculation`
 ```
 
-The upper bounds $M_U$ in Table 5.5 are calculated with the `upper` function from the `FSaudit` package.
+Use this output to inspect how observed misstatements are converted into an upper misstatement bound. The audit interpretation is whether that bound remains below the performance materiality used in planning.
+
+The upper bounds $M_U$ in Table 5.5 are calculated next.
 
 ```{r}
 upper(k = 0, popn = 13500000, n = 145, alpha = .05)
@@ -219,13 +239,17 @@ upper(k = 3, popn = 13500000, n = 145, alpha = .05)
 
 ### Exercise 4.9. Cell evaluation
 
-The results of the cell evaluation method, as presented in Table 5.8, can also be obtained, by changing the evaluation method.
+This exercise evaluates the same audit evidence with the cell evaluation method. The practical task is to compare how a different MUS evaluation method turns the observed errors into a precision calculation.
+
+The results of the cell evaluation method, as presented in Table 5.8, can also be obtained by changing the evaluation method.
 
 ```{r}
 options(width = 70)
 ar <- evaluate(ar, av = myResults$av, evalMeth = "cell")
 ar$evalResults$Over$`Precision calculation`
 ```
+
+Compare this precision calculation with the Stringer output from Exercise 4.8. The important question is whether the evaluation method changes the upper bound enough to affect the supported conclusion.
 
 ### Exercise 4.10. PPS estimation
 
@@ -238,10 +262,12 @@ ar <- evaluate(ar,
 )
 ar$evalResults$`Error estimate`
 ```
-A two-sided prediction interval around the PPS estimate is calculated according to Equations 5.6 and 5.7.
+Read the error estimate as the point estimate of misstatement under this evaluation method. A two-sided prediction interval around the PPS estimate is calculated according to Equations 5.6 and 5.7.
 
 ```{r}
 ar$evalResults$`pps estimate`
 ar$evalResults$`Lower bound`
 ar$evalResults$`Upper bound`
 ```
+
+Compare the interval with the point estimate. The practical question is not only what the most likely amount is, but how much uncertainty remains around that estimate when forming a supported conclusion.

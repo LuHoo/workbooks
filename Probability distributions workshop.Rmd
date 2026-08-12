@@ -10,19 +10,23 @@ output:
 <!-- GENERATED FILE: edit notebooks/support/probability-distributions/support.Rmd in the private ada repository. -->
 
 
- 
+
 ## Chapter 1. Probability distributions
- 
+
 ### Exercise 1.1 Hypergeometric distribution
- 
+
+This exercise uses the *Case: Number of students* to calculate probabilities for the number of errors in a sample without replacement. The practical goal is to read distribution output as audit evidence: how surprising is a particular sample result if the population contains 17 errors in 331 students?
+
 The `R` function `dhyper()` requires four arguments: $k, M, (N - M)$, and $n$.
 The prefix `d` indicates that the function is a density function.
 
- 
+
 ```{r}
 dhyper(x = 0, m = 17, n = 314, k = 60)
 dhyper(x = 1, m = 17, n = 314, k = 60)
 ```
+The two results are exact-outcome probabilities. Read them as the probability of finding exactly zero errors and exactly one error in the sample, given the population and sample-size assumptions above.
+
 *Cumulative probabilities* $P(k \leq k)$ (the probability of finding not more than $k$ errors) are obtained with `phyper()`. For example, if we are interested in the probability of finding no more than one error, we use `phyper(1, 17, 314, 60)`. In this case the prefix `p` indicates the (cumulative) probability function.
 
 
@@ -30,106 +34,132 @@ dhyper(x = 1, m = 17, n = 314, k = 60)
 phyper(1, 17, 314, 60)
 dhyper(0, 17, 314, 60) + dhyper(1, 17, 314, 60)
 ```
- 
-We see that the result for the cumulative function equals that of the sum of the two individual probabilities.
- 
+
+We see that the result for the cumulative function equals that of the sum of the two individual probabilities. This is a useful check on the computation and on the meaning of "no more than one error".
+
 Probabilities in the right-hand tail $P(k > k)$ can be calculated by passing the additional argument `lower.tail = FALSE`. For example, the probability $P(k > 1)$ is calculated by
 
- 
+
 ```{r}
 phyper(1, 17, 314, 60, lower.tail = FALSE)
 ```
- 
+
+The right-tail result is the probability of seeing more than one error. In an audit setting, this tail probability helps students connect a sample finding to the question of whether the observed number of errors is still compatible with the assumed population error count.
+
 ### Exercise 1.2 Binomial distribution
- 
+
+This exercise repeats the error-count question with the binomial distribution. The practical task is to see what changes when sampling is treated as independent trials with a fixed error probability.
+
 The relevant `R` functions are `dbinom()` for the probabilities $P(k = k)$ and `pbinom()` for cumulative probabilities $P(k \leq k)$. Both functions use the parameters `k`, `n` and $\pi = M / N$.
 
- 
+
 ```{r}
 dbinom(x = 1, size = 60, prob = 17 / 331)
 pbinom(1, 60, 17 / 331)
 ```
- 
+
+Compare the exact and cumulative results with the hypergeometric calculations from Exercise 1.1. The learning point is to notice how the modeling assumption affects the probability attached to the same sample finding.
+
 ### Exercise 1.3 Poisson distribution
- 
+
+This exercise uses the Poisson distribution as another way to approximate rare error counts. The setup stays with the *Case: Number of students*, using the expected number of errors in the sample as $\mu$.
+
 The functions `dpois()` and `ppois()` are used for the calculation of probabilities from the Poisson distribution.
 They require two parameter values as arguments: the number of errors $k$ and the value of $\mu = n\pi$.
 For the *Case: Number of students* remember that $n = 60$ and $\pi = 17 / 331$.
- 
+
 ```{r}
 dpois(1, 60 * 17 / 331)
 dpois(3, 60 * 17 / 331)
 ```
- 
-The probability of finding one error is 14.14%.
- 
+
+The probability of finding one error is 14.14%. Read the two outputs as exact-count probabilities before moving to the cumulative calculation.
+
 To calculate the probability of finding no more than one error in the sample of 60 Ph.D.s, use
- 
+
 ```{r}
 ppois(1, 60 * 17 / 331)
 ```
- 
+
+Use the cumulative probability to decide how often a result of no more than one error would occur under this approximation.
+
 ### Exercise 1.4 Normal distribution
- 
+
+This exercise moves from counting errors to evaluating a monetary sample mean. The audit task is to assess how unusual a sample mean of 1,012 is if the population mean is assumed to be 1,030 and the standard deviation is estimated at 115.26 for a sample of 200.
+
 In `R` we use the function `pnorm`, that uses the arguments `q` for the sampling result that we evaluate, `mean` for the population mean, and `sd` for the standard deviation of the mean.
 
- 
+
 ```{r}
 pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
 ```
- 
+
+The output is a left-tail probability. Ask whether a result this far below the assumed mean would be common enough to treat as ordinary sampling variation, or whether it should prompt more audit attention.
+
 Note that the syntax is more elaborate than what we have done so far. In `R` we can choose between passing the values of the arguments only and passing values specifically assigned to the arguments that the function uses.
 
 There are two advantages to using argument names and values. First, the command is easier to interpret by a reviewer. Second, we can pass the arguments in any order. The following commands are therefore equivalent:
 
- 
+
 ```{r}
 pnorm(1012, 1030, 115.26 / sqrt(200))
 pnorm(q = 1012, mean = 1030, sd = 115.26 / sqrt(200))
 pnorm(sd = 115.26 / sqrt(200), mean = 1030, q = 1012)
 ```
- 
+
+Because all three commands return the same probability, the learning point is about authoring reliable audit code: named arguments make the computation easier to review without changing the statistical result.
+
 ### Exercise 1.5 Student's $t$ distribution
- 
+
+This exercise evaluates a sample mean with a small sample size, where uncertainty is represented with the $t$ distribution. The practical question is how unusual the observed sample mean is under the assumed population mean.
+
 To calculate the probability found of 14.7%, we use the function `pt()` with arguments `x` for the boundary value and `df` for the number of degrees of freedom.
 
- 
+
 ```{r}
 (t_val <- (1004 - 1030) / (73.8 / sqrt(10)))
 pt(t_val, 9)
 ```
- 
-The probability is 14.7%. Notice that we used another shortcut notation: we added brackets to the assignment of the `t_val` variable, so that the assigned value is returned immediately.
- 
+
+The probability is 14.7%. Interpret this as the left-tail area for the observed sample mean. Notice that we used another shortcut notation: we added brackets to the assignment of the `t_val` variable, so that the assigned value is returned immediately.
+
 ### Exercise 1.6 $\chi^2$ (chi-squared) distribution
- 
+
+This exercise uses $\chi^2$ quantiles to build confidence bounds for a variance. The goal is to see how lower and upper distribution cutoffs become bounds on population variability.
+
 The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
- 
+
 ```{r}
 qchisq(p = .95, df = 9)
 ```
- 
+
 Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$ distributed variable
- 
+
 ```{r}
 qchisq(p = .05, df = 9)
 ```
- 
+
 These two results are then used to calculate the upper and lower 90\% confidence bounds of the population variance.
- 
+
+Read the two cutoffs together. They define the range of variance values that remain plausible at the chosen confidence level.
+
 ### Exercise 1.7 $F$ distribution
- 
+
+This exercise calculates the decision boundary for an $F$ test. The practical task is to find the critical value first, then compare a test statistic with that boundary to decide whether the null hypothesis should be rejected.
+
 Hypothesis testing is done with the function `qf`, where we use the argument `lower.tail = FALSE` to indicate the direction of the test.
 
- 
+
 ```{r}
 (f_crit <- qf(p = 0.05, df1 = 25, df2 = 23, lower.tail = FALSE))
 ```
- 
-In the example above, the critical value of the $F$ statistic is the value shown in the output. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not.
- 
-The probability of obtaining this particular value of the test statistic is calculated with the `pf` function.
- 
+
+In the example above, the critical value of the $F$ statistic is the value shown in the output. Depending on whether the value of the test statistic is greater or smaller than this value, we then reject the null hypothesis or we do not. Before continuing, state the decision rule in words: if a later test statistic falls above this boundary, what conclusion follows?
+
+The upper-tail probability at this critical value is calculated next.
+
 ```{r}
 pf(q = f_crit, df1 = 25, df2 = 23, lower.tail = FALSE)
 ```
+
+The probability is the upper-tail area at the critical value. It should match the chosen significance level, which confirms that the critical value and test direction are aligned.

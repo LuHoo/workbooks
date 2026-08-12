@@ -16,6 +16,8 @@ output:
 
 In this Chapter we will work with the `inventoryData` data file, that serves as the sample frame for the *Case: Valuation of inventories*. The data file is included with the `FSaudit` package. The data file indicates for each of the 3,500 elements in the inventories population its `id`, a sequential number from 1 to 3,500, the book value $x$ is `bv`, and we have added an audit value $y =$ `av` to enable running simulations on the file to compare different sampling strategies.
 
+The practical task in this exercise is to inspect the sampling frame before any estimator is applied. Check that the identifiers, book values, audit values, and population size match the audit setting you are about to use.
+
 Details of the data file can be obtained using base `R` functionality.
 
 
@@ -36,11 +38,13 @@ sum(inventoryData$bv)
 head(inventoryData[1:3])
 ```
 
+Use these outputs as a data-readiness check. Later calculations rely on these records as the population evidence base, so a mismatch in variables or population size would affect every estimate that follows.
+
 ### Exercise 3.2. Working with the CVS object
 
 We first create a Classical Variables Sampling ("CVS") object. An object is a container that gathers all the data relevant to a particular sampling application. The `FSaudit` package recognizes three such objects. We work with the CVS object `cvs_obj` in this chapter, and with the attribute `att_obj` and MUS `mus_obj` objects in Chapter 5.
 
-We create the CVS object `mySample` by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiers `id`, and the random seed number `seed`.
+The practical goal is to keep the sampling plan, selected items, audit values, and evaluation results together so each later estimator is applied to the same audit evidence. We create the CVS object `mySample` by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiers `id`, and the random seed number `seed`.
 
 ```{r}
 mySample <- cvs_obj(
@@ -75,7 +79,7 @@ mySample <- select(mySample)
 head(mySample$sample)
 ```
 
-We audit the sampling units selected, and submit the audit values to the CVS object for the sample to be evaluated.
+The selected rows identify the inventory items that would be audited. We now look up the corresponding audit values and submit them to the CVS object for evaluation.
 
 ```{r}
 audit_values <-
@@ -83,14 +87,14 @@ audit_values <-
 mySample <- evaluate(mySample, av = audit_values)
 ```
 
-The evaluation results are stored in the `evalResults` attribute of the CVS object. This attribute itself is a list of 17 different attributes.
+The evaluation results are stored in the `evalResults` attribute of the CVS object. This attribute itself is a list of 17 different attributes. The next output is a map of where the estimates, precision measures, and supporting details are stored for later interpretation.
 
 ```{r}
 names(mySample$evalResults)
 ```
 
 ### Exercise 3.3. Mean-per-unit estimator
-In Section 4.1 we found an estimate of the population value $\hat{Y}_{MPU}$ = 7,561,859, and achieved precision of 684,415. These values are stored in the attribute `evalResults` of `mySample`.
+The mean-per-unit estimator is the baseline for this chapter. We first retrieve the estimated population audit value and achieved precision so later auxiliary-variable estimators can be judged against the same sample evidence.
 
 ```{r}
 mySample$evalResults$`Most likely total audited amount mpu`
@@ -99,13 +103,15 @@ mySample$evalResults$`Most likely total audited amount mpu`
 mySample$evalResults$`Achieved precision mpu`
 ```
 
-The prediction interval is stored in:
+Read the estimate together with the achieved precision. A wider precision value means more uncertainty remains around the estimated population value, even when the point estimate itself looks plausible.
+
+The prediction interval turns that uncertainty into lower and upper bounds:
 
 ```{r}
 mySample$evalResults$Estimates[4:5, 1]
 ```
 
-In this call, the numbers in brackets refer to the 4th and 5th row of the Estimates table. The first column stores the results of the mean-per-unit estimator.
+In this call, the numbers in brackets refer to the 4th and 5th row of the Estimates table. The first column stores the results of the mean-per-unit estimator. Before moving to other estimators, note the baseline interval width; this is what auxiliary variables should improve if they are useful in this audit setting.
 
 Alternatively, we can refer to the label of the relevant column.
 
@@ -114,6 +120,8 @@ mySample$evalResults$Estimates$mpu[4:5]
 ```
 
 ### Exercise 3.4. The Regression Estimator
+
+This exercise reviews the regression estimator for the same sample evidence. The practical question is whether the auxiliary relationship between book value and audit value reduces uncertainty compared with the mean-per-unit baseline.
 
 The results for the regression estimator are stored in a similar way.
 
@@ -124,13 +132,19 @@ mySample$evalResults$`Most likely total audited amount regression`
 mySample$evalResults$`Achieved precision regression`
 ```
 
+Interpret the point estimate and achieved precision together. A useful estimator is not only close to the expected audited amount; it should also give a narrower uncertainty range for the audit conclusion.
+
 The prediction interval is determined by:
 
 ```{r}
 mySample$evalResults$Estimates$regr[4:5]
 ```
 
+Read the lower and upper bounds as the range of audited inventory values supported by this regression estimate.
+
 ### Exercise 3.5. The Difference Estimator
+
+This exercise evaluates the difference estimator. Here the audit task is to estimate the total effect of differences between book values and audit values, then compare that adjustment with the other auxiliary-variable methods.
 
 The results for the difference estimator are as follows.
 
@@ -142,15 +156,19 @@ mySample$evalResults$`Most likely total audited amount difference`
 mySample$evalResults$`Achieved precision difference`
 ```
 
+Use the achieved precision to judge whether the difference adjustment gives enough practical benefit over the baseline estimate.
+
 The prediction interval is determined by:
 
 ```{r}
 mySample$evalResults$Estimates$diff[4:5]
 ```
 
+Before moving on, compare these bounds with the regression bounds. The stronger method for this sample is the one that gives a defensible estimate with less remaining uncertainty.
+
 ### Exercise 3.6. The Ratio Estimator
 
-Finally, the results of the ratio estimator.
+Finally, we retrieve the ratio estimator results. Like the regression and difference estimators, the ratio estimator uses the relationship between book value and audit value to try to reduce uncertainty.
 
 ```{r}
 mySample$evalResults$`Most likely total audited amount ratio`
@@ -170,7 +188,11 @@ An overview of all estimates is given by
 mySample$evalResults$Estimates
 ```
 
-### Exercise 3.7. Using CVS with sporadic errrors
+Use this table to compare methods on the same evidence base. Focus first on the precision row and the lower and upper bounds: the auxiliary-variable estimators should be evaluated by how much uncertainty they remove relative to the mean-per-unit baseline, not only by which point estimate is largest or smallest.
+
+### Exercise 3.7. Using CVS with sporadic errors
+
+This exercise switches from inventories to accounts receivable and uses CVS when errors are sporadic. The practical task is to select the sample, attach the audited values, and identify whether the sporadic-error calculation is triggered.
 
 We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
 
@@ -187,7 +209,7 @@ We select the sample, using a seed equal to 1.
 arSample <- select(arSample, seed = 1)
 ```
 
-We look up the audit values of the selected sampling units.
+We look up the audit values of the selected sampling units. This step connects the planned sample to the fieldwork evidence that will be evaluated.
 
 ```{r}
 audit_values <- accounts_receivable[
@@ -211,6 +233,8 @@ The number of differences is stored in the `#_Errors` attribute, under each of t
 arSample$evalResults$`Regression estimation`$`#_Errors`
 ```
 
+Use the number of errors as a method check before interpreting the interval. The audit conclusion should be based on the evaluation method that matches the observed error pattern.
+
 Most of the calculations presented in Section 4.7 are easy to follow, so we will not repeat them all in this workshop. Instead, we zoom in on some specific parts of the overall calculations.
 
 The value of $M_U$ that is used in, for example, Equation 4.23 is obtained as follows.
@@ -219,12 +243,16 @@ N <- nrow(accounts_receivable)
 m <- 6
 (m_u <- upper(k = m, popn = N, n = 100, alpha = 0.05) / N)
 ```
-The effective degrees of freedom is $m - 1$. This explains the $t$ value used when calculating the confidence intervals.
+The effective degrees of freedom is $m - 1$. This explains the $t$-value used when calculating the confidence intervals.
 ```{r}
 qt(0.975, df = m - 1)
 ```
 
+Treat these values as ingredients in the interval calculation rather than separate audit conclusions.
+
 ### Exercise 3.8. Stratification with equal recorded boundaries
+
+This exercise creates a first stratified design using equal recorded-value boundaries. The practical question is whether this simple rule divides the inventory population into useful groups before sample sizes are assigned.
 
 We start with creating a CVS object.
 ```{r}
@@ -244,7 +272,11 @@ equal <- stratify(equal,
 equal$stratSumm
 ```
 
+Inspect the stratum summary before comparing methods. If most book value is concentrated in only one stratum, equal boundaries may be less helpful than a stratification rule designed around the cumulative value distribution.
+
 ### Exercise 3.9. Stratification with the cumulative method
+
+This exercise applies stratification before sample selection. The practical question is whether grouping inventory items by book value can produce a sampling design that reaches the desired precision more efficiently.
 
 ```{r}
 cumul <- cvs_obj(
@@ -258,7 +290,7 @@ cumul <- stratify(cumul,
 )
 ```
 
-The classification in Table 4.6 is stored in the `classSum` attribute.
+The classification in Table 4.6 is stored in the `classSumm` attribute.
 
 ```{r}
 cumul$classSumm
@@ -270,20 +302,20 @@ The stratification summary is then:
 cumul$stratSumm
 ```
 
-We calculate the required sample size for a desired precision of 200,000.
+We calculate the required sample size for a desired precision of 200,000. Read the resulting sample size as a planning output: it tells us how much evidence this stratified design expects to need before audit values are collected.
 
 ```{r}
 cumul <- size(cumul, desPrec = 200000)
 cumul$n
 ```
-Select sample
+We then select the stratified sample using the fixed seed so the sample can be reproduced.
 
 ```{r}
 cumul <- select(cumul, seed = 12345)
 head(cumul$sample)
 ```
 
-Obtain the audit values and evaluate the sample.
+The selected items define the fieldwork target for this stratified design. We then obtain the audit values and evaluate the sample.
 
 ```{r}
 true_values <- inventoryData[match(
@@ -297,3 +329,5 @@ A summary table of the estimates for each of the estimation methods is stored in
 ```{r}
 cumul$evalResults$Estimates
 ```
+
+Compare this summary with the earlier unstratified results. The learning point is to interpret stratification as a design choice: it is useful when the reduction in uncertainty justifies the extra planning and implementation effort.
