@@ -235,9 +235,9 @@ arSample$evalResults$`Regression estimation`$`#_Errors`
 
 Use the number of errors as a method check before interpreting the interval. The audit conclusion should be based on the evaluation method that matches the observed error pattern.
 
-Most of the calculations presented in Section 4.7 are easy to follow, so we will not repeat them all in this workshop. Instead, we zoom in on some specific parts of the overall calculations.
+Most of the calculations presented in the manuscript section on using CVS with sporadic errors are easy to follow, so we will not repeat them all in this workshop. Instead, we zoom in on some specific parts of the overall calculations.
 
-The value of $M_U$ that is used in, for example, Equation 4.23 is obtained as follows.
+The value of $M_U$ that is used in, for example, the sporadic-difference standard-deviation equation is obtained as follows.
 ```{r}
 N <- nrow(accounts_receivable)
 m <- 6
@@ -290,7 +290,7 @@ cumul <- stratify(cumul,
 )
 ```
 
-The classification in Table 4.6 is stored in the `classSumm` attribute.
+The classification in the manuscript inventory-classification table is stored in the `classSumm` attribute.
 
 ```{r}
 cumul$classSumm

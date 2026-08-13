@@ -47,7 +47,7 @@ theme_set(ggplot2::theme_bw())
 
 ### Exercise 6.2.  Customer satisfaction survey
 
-The client satisfaction results from Table 6.3
+The client satisfaction results from the manuscript client-satisfaction table
 
 ```{r}
 # Hypothesized population proportions from the base year
@@ -363,7 +363,7 @@ benford_digit_plot
 
 
 
-```{r}
+```{r, eval=exists("ussteamco.mod.3")}
 library(ggplot2)
 library(grid)
 library(gridExtra)
