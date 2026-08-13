@@ -27,10 +27,22 @@ library(tidyverse)
 library(lmtest) # Diagnostic tests for linear models
 # library(latex2exp)       # Use LaTeX expressions in plots
 # library(scales)
-if (requireNamespace("kthemes", quietly = TRUE)) {
-  library(kthemes)
+ada_colour <- function(name) {
+  palette <- c(
+    blue = "#3c4b99",
+    mediumblue = "#6098d2",
+    lightblue = "#62b8e7",
+    red = "#c93f55",
+    yellow = "#eacc62",
+    green = "#469d76",
+    purple = "#924099",
+    lightpurple = "#df9ed4",
+    blue50 = "#d3d8ef",
+    lightpink = "#e36877"
+  )
+  unname(palette[[name]])
 }
-theme_set(theme_grey())
+theme_set(ggplot2::theme_bw())
 ```
 
 ### Exercise 6.2.  Customer satisfaction survey
@@ -105,7 +117,7 @@ benford <- data.frame(
 
 # Figure
 benford_plot <- ggplot(benford, aes(x = Digit, y = Probability)) +
-  geom_col(fill = "#00338D", width = 0.7) +
+  geom_col(fill = ada_colour("blue"), width = 0.7) +
   scale_y_continuous(
     limits = c(0, 0.35),
     breaks = seq(0, 0.35, by = 0.05),
@@ -115,7 +127,7 @@ benford_plot <- ggplot(benford, aes(x = Digit, y = Probability)) +
     x = "First digit",
     y = "Probability"
   ) # +
-# theme_minimal(base_size = 12)
+# ggplot2::theme_bw() is set globally for ADA figures
 
 benford_plot
 ```
@@ -153,8 +165,17 @@ benford_examples_plot <- ggplot(
     color = Series
   )
 ) +
+  ggplot2::theme_bw() +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_color_manual(values = c(
+    "Rivers" = ada_colour("blue"),
+    "AmLeague" = ada_colour("red"),
+    "CostData" = ada_colour("yellow"),
+    "ReadersDigest" = ada_colour("green"),
+    "MolWgt" = ada_colour("purple"),
+    "Average" = ada_colour("lightpurple")
+  )) +
   scale_x_continuous(breaks = 1:9) +
   labs(
     x = "First digit",
@@ -190,8 +211,13 @@ benford_average_plot <- ggplot(
     linetype = Series
   )
 ) +
+  ggplot2::theme_bw() +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_color_manual(values = c(
+    "Benford" = ada_colour("blue"),
+    "Average" = ada_colour("red")
+  )) +
   scale_x_continuous(breaks = 1:9) +
   labs(
     x = "First digit",
@@ -226,8 +252,13 @@ inv_plot <- ggplot(
     linetype = Series
   )
 ) +
+  ggplot2::theme_bw() +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_color_manual(values = c(
+    "Expected" = ada_colour("blue"),
+    "Observed" = ada_colour("red")
+  )) +
   scale_x_continuous(breaks = 1:9) +
   theme(legend.position = "top") +
   guides(color = guide_legend(title = NULL), linetype = guide_legend(title = NULL)) + # Remove legend titles
@@ -269,11 +300,11 @@ data <- data.frame(
 
 # Create the plot
 chisq_plot <- ggplot(data, aes(x = x, y = y)) +
-  geom_line(color = "#00338D", size = 1) +
+  geom_line(color = ada_colour("blue"), size = 1) +
   geom_area(
     data = subset(data, x >= tail_start),
     aes(x = x, y = y),
-    fill = "#00338D",
+    fill = ada_colour("blue"),
     alpha = 1
   ) +
   labs(x = "x", y = "density")
@@ -316,8 +347,9 @@ benford_data <- bind_rows(first_digit, second_digit, third_digit)
 
 # Create line plots
 benford_digit_plot <- ggplot(benford_data, aes(x = digit, y = probability, group = position)) +
-  geom_line() +
-  geom_point() +
+  ggplot2::theme_bw() +
+  geom_line(color = ada_colour("blue")) +
+  geom_point(color = ada_colour("blue")) +
   facet_wrap(~position, ncol = 1, scales = "free_x") +
   labs(
     x = "Digit",
@@ -344,7 +376,7 @@ create_hist <- function(bins) {
   ggplot(model3, aes(nres)) +
     geom_histogram(aes(y = after_stat(density)),
       breaks = seq(min(nres), max(nres), length.out = bins + 1),
-      fill = "#00338D", color = "black"
+      fill = ada_colour("blue"), color = "black"
     ) +
     stat_function(
       fun = dnorm,
@@ -352,13 +384,13 @@ create_hist <- function(bins) {
         mean = mean(model3$nres),
         sd = sd(model3$nres)
       ),
-      color = "red", size = 1
+      color = ada_colour("red"), size = 1
     ) +
     labs(
       title = paste("Histogram with", bins, "bins"),
       x = "Standardized Residuals", y = "Density"
     ) +
-    theme_minimal()
+    ggplot2::theme_bw()
 }
 
 # Create the four histograms
