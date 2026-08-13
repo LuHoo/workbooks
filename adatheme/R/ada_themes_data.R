@@ -5,15 +5,19 @@
 colour <- list(ada = list(get = function(colour){
       if (colour == "blue"){
         return("#3c4b99");
-      }else if (colour == "lightblue"){
-        return("#c93f55");
-      }else if (colour == "lightpurple"){
-        return("#eacc62");
       }else if (colour == "mediumblue"){
-        return("#469d76");
-      }else if (colour == "green"){
-        return("#924099");
+        return("#6098D2");
+      }else if (colour == "lightblue"){
+        return("#62B8E7");
+      }else if (colour == "red"){
+        return("#c93f55");
       }else if (colour == "yellow"){
+        return("#eacc62");
+      }else if (colour == "green"){
+        return("#469d76");
+      }else if (colour == "purple"){
+        return("#924099");
+      }else if (colour == "lightpurple"){
         return("#df9ed4");
       }else if (colour == "darkgreen"){
         return("#009A44");
@@ -35,9 +39,9 @@ colour <- list(ada = list(get = function(colour){
         return("#C9C9C9");
       }else if (colour == "violet"){
         return("#483698");
-      }else if (colour == "purple"){
+      }else if (colour == "deeppurple"){
         return("#470A68");
-      }else if (colour == "red"){
+      }else if (colour == "darkred"){
         return("#BC204B");
       }else if (colour == "orange"){
         return("#F68D2E");
