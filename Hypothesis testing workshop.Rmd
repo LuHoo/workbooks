@@ -31,7 +31,7 @@ mySample <- size(mySample, c = 2)
 mySample$n
 ```
 
-This result is obtained using the default Hypergeometric distribution. To obtain the sample size with the binomial approximation, as in Table 5.3, we specify the distribution when setting up the attribute object.
+This result is obtained using the default Hypergeometric distribution. To obtain the sample size with the binomial approximation, as in the manuscript attribute sample-size table, we specify the distribution when setting up the attribute object.
 
 ```{r}
 mySample2 <- att_obj(
@@ -75,7 +75,7 @@ Read this output as the risk that the sample does not support rejection even tho
 
 ### Exercise 4.4. One-sided upper bounds
 
-This exercise converts sample findings into one-sided upper bounds for the population deviation rate. The one-sided upper bounds $p_U$ in Table 5.1 are obtained as follows:
+This exercise converts sample findings into one-sided upper bounds for the population deviation rate. The one-sided upper bounds $p_U$ in the manuscript confidence-interval table are obtained as follows:
 
 ```{r}
 upper(popn = 1200, n = 102, k = 0, alpha = 0.10) / 1200
@@ -201,7 +201,7 @@ Before we can evaluate the sample, we must first provide audit values. These sho
 ```{r}
 myResults <- data.frame(item = ar$sample$item, av = ar$sample$bv)
 ```
-Table 5.4. lists the three invoices (items 16, 52, and 124), that are assumed to be in error.
+The manuscript table of differences found lists the three invoices (items 16, 52, and 124), that are assumed to be in error.
 ```{r}
 myResults[c(16, 52, 124), ]
 ```
@@ -219,7 +219,7 @@ The updated list of audit values is then submitted to the MUS object for evaluat
 ar <- evaluate(ar, av = myResults$av, evalMeth = "stringer")
 ```
 
-The results of the Stringer bound evaluation as presented in Tables 5.6 and 5.7 are stored in the `Precision calculation` attribute.
+The results of the Stringer bound evaluation as presented in the manuscript Stringer point-estimate table and the manuscript Stringer precision table are stored in the `Precision calculation` attribute.
 
 ```{r}
 ar$evalResults$Over$`Precision calculation`
@@ -227,7 +227,7 @@ ar$evalResults$Over$`Precision calculation`
 
 Use this output to inspect how observed misstatements are converted into an upper misstatement bound. The audit interpretation is whether that bound remains below the performance materiality used in planning.
 
-The upper bounds $M_U$ in Table 5.5 are calculated next.
+The upper bounds $M_U$ in the manuscript MUS confidence-interval table are calculated next.
 
 ```{r}
 upper(k = 0, popn = 13500000, n = 145, alpha = .05)
@@ -241,7 +241,7 @@ upper(k = 3, popn = 13500000, n = 145, alpha = .05)
 
 This exercise evaluates the same audit evidence with the cell evaluation method. The practical task is to compare how a different MUS evaluation method turns the observed errors into a precision calculation.
 
-The results of the cell evaluation method, as presented in Table 5.8, can also be obtained by changing the evaluation method.
+The results of the cell evaluation method, as presented in the manuscript cell-bounds precision table, can also be obtained by changing the evaluation method.
 
 ```{r}
 options(width = 70)

@@ -20,22 +20,6 @@ To run the exercises in this workshop, we need to load a few packages.
 
 ```{r setup}
 library(ggplot2) # Data visualization
-ada_colour <- function(name) {
-  palette <- c(
-    blue = "#3c4b99",
-    mediumblue = "#6098d2",
-    lightblue = "#62b8e7",
-    red = "#c93f55",
-    yellow = "#eacc62",
-    green = "#469d76",
-    purple = "#924099",
-    lightpurple = "#df9ed4",
-    blue50 = "#d3d8ef",
-    lightpink = "#e36877"
-  )
-  unname(palette[[name]])
-}
-theme_set(ggplot2::theme_bw())
 library(aicpa) # Contains US SteamCo data
 library(car) # Companion to Applied Regression
 library(gridExtra) # Arrange multiple grid-based plots
@@ -45,6 +29,19 @@ library(lmtest) # Diagnostic tests for linear models
 library(latex2exp) # Use LaTeX expressions in plots
 library(scales)
 library(grid)
+
+ada_plot_colors <- c(
+  blue = "#3c4b99",
+  red = "#c93f55",
+  lightblue = "#8fa8e8",
+  lightpink = "#e36877"
+)
+
+ada_plot_color <- function(name) {
+  unname(ada_plot_colors[[name]])
+}
+
+theme_set(theme_classic(base_size = 12))
 ```
 
 ### Exercise 5.2. The US SteamCo data file
@@ -73,7 +70,7 @@ summary(USSteamCo)
 
 Check the output for scale and completeness. Large differences in units are not a problem by themselves, but they matter when you interpret coefficients and plots later.
 
-We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in Section 5.4.4.
+We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in the manuscript section on disaggregation.
 
 The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, `R` recycles this 12-month pattern across the four years automatically. Later, when we include `summer` in a regression model, the `lm` function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
 
@@ -97,37 +94,38 @@ USSteamCoEstim <- USSteamCo[1:36, ]
 USSteamCoHold <- USSteamCo[37:48, ]
 ```
 
+
 The estimation set is used to build the model; the hold-out set is kept separate so model performance can later be checked on months that were not used for fitting.
 
 
-Figure 5.2 shows the histograms of the data in the US SteamCo estimation set.
+The manuscript histogram figure shows the histograms of the data in the US SteamCo estimation set.
 
 ```{r}
 hist_revenue <-
   ggplot(USSteamCoEstim, aes(x = revenue)) +
-  geom_histogram(binwidth = 4000000, fill = ada_colour("blue")) +
+  geom_histogram(binwidth = 4000000, fill = ada_plot_color("blue")) +
   scale_x_continuous(labels = label_comma())
 
 hist_production <-
   ggplot(USSteamCoEstim, aes(x = production)) +
-  geom_histogram(binwidth = 50000, fill = ada_colour("blue")) +
+  geom_histogram(binwidth = 50000, fill = ada_plot_color("blue")) +
   scale_x_continuous(labels = label_comma()) +
   theme(plot.margin = unit(c(0, 1, 0, 0), "cm")) # top, right, bottom, left
 
 hist_coolDD <-
   ggplot(USSteamCoEstim, aes(x = coolDD)) +
-  geom_histogram(binwidth = 50, fill = ada_colour("blue")) +
+  geom_histogram(binwidth = 50, fill = ada_plot_color("blue")) +
   scale_x_continuous(labels = label_comma())
 
 hist_heatDD <-
   ggplot(USSteamCoEstim, aes(x = heatDD)) +
-  geom_histogram(binwidth = 100, fill = ada_colour("blue")) +
+  geom_histogram(binwidth = 100, fill = ada_plot_color("blue")) +
   scale_x_continuous(labels = label_comma())
 
 histograms_plot <- grid.arrange(hist_revenue, hist_production, hist_coolDD, hist_heatDD, ncol = 2)
 ```
 
-Figure 5.3 shows the time-series plots for the same dataset.
+The manuscript time-series figure shows the time-series plots for the same dataset.
 
 ```{r}
 # Calculate the range of revenue and production
@@ -137,10 +135,10 @@ prod_range <- range(USSteamCoEstim$production, na.rm = TRUE)
 # Create the plot
 time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   # First time series (revenue)
-  geom_line(aes(y = revenue), colour = ada_colour("blue")) +
+  geom_line(aes(y = revenue), colour = ada_plot_color("blue")) +
   # Second time series (production), rescaled to match revenue range
   geom_line(aes(y = scales::rescale(production, to = rev_range)),
-    colour = ada_colour("red")
+    colour = ada_plot_color("red")
   ) +
   scale_y_continuous(
     name = "Revenue ($)",
@@ -153,24 +151,24 @@ time_series_plot <- ggplot(data = USSteamCoEstim, aes(x = date)) +
   ) +
   theme(
     axis.title.x = element_blank(),
-    axis.title.y.left = element_text(color = ada_colour("blue")),
-    axis.title.y.right = element_text(color = ada_colour("red"))
+    axis.title.y.left = element_text(color = ada_plot_color("blue")),
+    axis.title.y.right = element_text(color = ada_plot_color("red"))
   )
 time_series_plot
 ```
 
 
-Figure 5.1 shows a scatter plot of the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
+The manuscript scatterplot shows the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
 
 ```{r}
 scatter_plot <- ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
-  geom_point(color = ada_colour("blue")) +
+  geom_point(color = ada_plot_color("blue")) +
   scale_x_continuous(name = "Production (x 1000 lb)", labels = scales::label_comma()) +
   scale_y_continuous(name = "Revenue ($)", labels = scales::label_comma())
 scatter_plot
 ```
 
-The enhanced scatter plot in Figure 5.4 is obtained by running the following code.
+The enhanced scatter plot in the manuscript enhanced scatterplot is obtained by running the following code.
 
 ```{r}
 scatterplot(revenue ~ production,
@@ -183,11 +181,11 @@ Use the plots together rather than separately. The histograms show scale and spr
 
 ### Exercise 5.4. The base model `mod.0`
 
-Figure 5.4 shows that there is a positive (increasing) relationship: as production increases, so does revenue.
+The manuscript enhanced scatterplot shows that there is a positive (increasing) relationship: as production increases, so does revenue.
 
 This exercise fits the first regression model for the audit analytics procedure. The goal is not to choose the final model yet, but to establish a simple baseline that links revenue to production.
 
-We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as explained in Section 5.1.1. A brief summary of the model is obtained with `car::brief()`, which is part of the `car` package loaded in Exercise 5.1.
+We use the function `lm` (for linear model) to estimate the coefficient values of $\beta_0$ and $\beta_1$. This is performed on the data of the estimation set `USSteamCoEstim`, as introduced in the manuscript estimation-period figure. A brief summary of the model is obtained with `car::brief()`, which is part of the `car` package loaded in Exercise 5.1.
 
 
 ```{r}
@@ -214,7 +212,7 @@ Read the output as a diagnostic summary, not as a final audit conclusion. The co
 
 This exercise checks pairwise relationships among candidate variables. The practical goal is to see which variables may help explain revenue and whether some predictors move together strongly enough to complicate interpretation.
 
-The correlations in Table 5.3 are calculated using the `cor` function.
+The correlations in the manuscript correlation table are calculated using the `cor` function.
 
 ```{r}
 (cor_ussteam <- cor(USSteamCoEstim[, 2:5]))
@@ -222,12 +220,12 @@ The correlations in Table 5.3 are calculated using the `cor` function.
 
 Use the signs and magnitudes as a screening tool. A strong correlation with revenue suggests potential explanatory value; strong correlations among predictors are a warning to interpret later coefficients with care.
 
-The correlogram in Figure 5.5 is produced by
+The correlogram in the manuscript correlogram is produced by
 
 ```{r echo=FALSE}
 corrplot(cor_ussteam,
   tl.col = "black",
-  col = colorRampPalette(c(ada_colour("red"), "white", ada_colour("blue")))(100),
+  col = colorRampPalette(c(ada_plot_color("red"), "white", ada_plot_color("blue")))(100),
   col.lim = c(-1, 1)
 )
 ```
@@ -307,11 +305,11 @@ For audit use, focus on what changed from `mod.0`: the unexplained variation is 
 
 ## Exercise 5.9. Interactions
 
-In Section 5.4.4 we developed `mod.2`, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable `summer`.
+In the manuscript section on disaggregation we developed `mod.2`, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable `summer`.
 
 This exercise tests whether one revenue relationship is sufficient across the year. The practical task is to allow the slope or intercept to differ between summer and non-summer months, then decide whether that extra structure improves the audit expectation.
 
-The scatterplot in Figure 5.6 is prepared using
+The scatterplot in the manuscript interaction scatterplot is prepared using
 
 ```{r}
 scat_rev2 <- scatterplot(revenue ~ production | summer,
@@ -327,7 +325,7 @@ scat_rev2 <- scatterplot(revenue ~ production | summer,
 USSteamCoEstim$summer_fact <- factor(USSteamCoEstim$summer, levels = c(0, 1), labels = c("No", "Yes"))
 
 # Define custom colors
-summer_colors <- c("No" = ada_colour("blue"), "Yes" = ada_colour("red"))
+summer_colors <- c("No" = ada_plot_color("blue"), "Yes" = ada_plot_color("red"))
 
 # Base plot with manual color scale and separate regression lines
 p <- ggplot(USSteamCoEstim, aes(x = production, y = revenue, color = summer_fact)) +
@@ -363,7 +361,7 @@ Interpret this improvement together with the plot. If the seasonal lines describ
 
 This exercise checks whether revenue and production move together at the same time or with a delay. The practical question is whether the model should use current-period predictors only, or whether a lagged relationship deserves attention.
 
-The cross-correlation plot in Figure 5.7 is created by running:
+The cross-correlation plot in the manuscript cross-correlation plot is created by running:
 
 ```{r}
 with(
@@ -383,7 +381,7 @@ Use the largest cross-correlations as a prompt for model judgment. If the strong
 
 This exercise starts the diagnostic review of the selected interaction model. The practical task is to inspect whether residuals look randomly scattered or whether visible patterns suggest a model misspecification.
 
-The residual plots in Figure 5.9 are obtained by:
+The residual plots in the manuscript residual-plots figure are obtained by:
 
 ```{r}
 # Add Pearson residuals to the data
@@ -397,7 +395,7 @@ make_resid_plot <- function(data, var) {
   n_unique <- length(unique(data[[var]]))
 
   p <- ggplot(data, aes(x = .data[[var]], y = resid)) +
-    geom_point(color = ada_colour("blue"), alpha = 0.7) +
+    geom_point(color = ada_plot_color("blue"), alpha = 0.7) +
     geom_hline(yintercept = 0, linetype = "dotted") +
     scale_x_continuous(labels = label_comma()) +
     scale_y_continuous(labels = label_comma()) +
@@ -409,7 +407,7 @@ make_resid_plot <- function(data, var) {
         method = "lm",
         formula = y ~ poly(x, 2),
         se = FALSE,
-        color = ada_colour("lightpink")
+        color = ada_plot_color("lightpink")
       )
   } else {
     p <- p +
@@ -417,7 +415,7 @@ make_resid_plot <- function(data, var) {
         method = "lm",
         formula = y ~ x,
         se = FALSE,
-        color = ada_colour("lightpink")
+        color = ada_plot_color("lightpink")
       )
   }
 
@@ -436,13 +434,13 @@ fitted_data <- data.frame(
 )
 
 fitted_plot <- ggplot(fitted_data, aes(x = fitted, y = resid)) +
-  geom_point(color = ada_colour("blue"), alpha = 0.7) +
+  geom_point(color = ada_plot_color("blue"), alpha = 0.7) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   geom_smooth(
     method = "lm",
     formula = y ~ poly(x, 2),
     se = FALSE,
-    color = ada_colour("lightpink")
+    color = ada_plot_color("lightpink")
   ) +
   scale_x_continuous(labels = label_comma()) +
   scale_y_continuous(labels = label_comma()) +
@@ -475,7 +473,7 @@ After creating the plots, look for curves, changing spread, or isolated points. 
 
 This exercise checks whether a small number of observations have too much influence on the fitted model. The practical question is whether the audit expectation is robust, or whether particular months drive the model result.
 
-Figure 5.10 provides the Influence index plots. From bottom to top: Leverage points, regression outliers, their respective Bonferroni $p$-values and influential observations.
+The manuscript influence-index figure provides the influence-index plots. From bottom to top: leverage points, regression outliers, their respective Bonferroni $p$-values and influential observations.
 
 ```{r}
 influenceIndexPlot(ussteamco.mod.2)
@@ -513,7 +511,7 @@ This check links the leverage values back to the number of model parameters. It 
 
 This exercise checks whether any months have unusually large residuals after fitting `mod.2`. The practical question is whether the model misses particular revenue observations badly enough to require explanation.
 
-Figure 5.11 provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
+The manuscript QQ plot provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
 
 ```{r}
 qqPlot(ussteamco.mod.2, id = list(n = 3))
@@ -541,7 +539,7 @@ Compare these observations with the leverage and outlier lists. An observation t
 
 ## Exercise 5.16. Influence plot
 
-Figure 5.12 shows the hat-values, Studentized residuals, and Cook’s distances for `ussteamco.mod.2`. The size of the circles is proportional to the Cook’s distance.
+The manuscript influence plot shows the hat-values, Studentized residuals, and Cook's distances for `ussteamco.mod.2`. The size of the circles is proportional to Cook's distance.
 
 ```{r}
 influencePlot(ussteamco.mod.2, id = list(n = 3, cex = 0.8))
@@ -560,6 +558,7 @@ USSteamCoEstim2 <- USSteamCoEstim
 p5 <- quantile(ussteamco.mod.2$residuals, 0.05)
 fit_22 <- fitted(ussteamco.mod.2)[22]
 USSteamCoEstim2$revenue[22] <- fit_22 + p5
+assign("USSteamCoEstim2", USSteamCoEstim2, envir = .GlobalEnv)
 ```
 
 We then fit a new linear model.
@@ -600,7 +599,7 @@ For audit interpretation, this means that the selected predictors do not appear 
 
 This exercise connects the variance of revenue to the total variation that regression models try to explain. The practical task is to understand the denominator behind later measures of explained and unexplained variation.
 
-Table 5.5 provides the analysis of variance for `mod.0`. We apply the `anova()` command to perform this analysis.
+The manuscript ANOVA table for mod.0 provides the analysis of variance for `mod.0`. We apply the `anova()` command to perform this analysis.
 
 ```{r}
 anova(ussteamco.mod.0)
@@ -642,7 +641,7 @@ Keep this calculation in mind when reading model-comparison tables: better model
 
 This exercise compares two ways to attribute explained variation to predictors. The practical reason is that variable importance can look different when the calculation depends on the order in which predictors enter the model.
 
-We now turn to a model with multiple independent variables, for example, `mod.1`, introduced in Section 5.4.3.
+We now turn to a model with multiple independent variables, for example, `mod.1`, introduced in the manuscript section on multiple regression.
 
 ```{r}
 (anova.mod.1 <- anova(ussteamco.mod.1))
@@ -728,7 +727,7 @@ Before moving to assumption tests, state which model is currently the best candi
 
 This exercise starts the formal assumption checks for `mod.3`. The practical question is whether the residual distribution is consistent enough with the modelling assumptions to support inference from the model.
 
-We can assess normality issues with a histogram or with a QQ plot. The histogram in Figure 5.14 is obtained by:
+We can assess normality issues with a histogram or with a QQ plot. The histogram in the manuscript normalized-residual histogram is obtained by:
 
 ```{r}
 # Calculate normalized residuals
@@ -738,7 +737,7 @@ hist_stand_res <-
   ggplot(model3, aes(nres)) +
   geom_histogram(aes(y = after_stat(density)),
     breaks = seq(-2.55, 1.65, by = 0.7),
-    fill = ada_colour("blue")
+    fill = ada_plot_color("blue")
   ) +
   stat_function(fun = dnorm, args = list(
     mean = mean(model3$nres),
@@ -766,7 +765,7 @@ Interpret the visual checks and the Shapiro-Wilk test together. A small p-value 
 
 This exercise checks whether residual variability changes across fitted values or predictors. The practical question is whether prediction uncertainty is reasonably stable across the range of the model.
 
-To test the assumption of constant variance, we can employ visual means, such as the `residualPlots` in Figure 5.15. We can construct it as follows.
+To test the assumption of constant variance, we can employ visual means, such as the `residualPlots` in the manuscript residual-plots figure for mod.3. We can construct it as follows.
 
 ```{r}
 residualPlots(ussteamco.mod.3,
@@ -786,7 +785,7 @@ Use the plot to look for changing spread and the Breusch-Pagan test as formal su
 
 This exercise checks whether residuals are related over time. Because the SteamCo data are monthly, the practical question is whether one month's unexplained revenue helps predict the next month's unexplained revenue.
 
-We use the `pacf` plot from Figure 5.17 to see if autocorrelation is present, and if so, which order is significant.
+We use the `pacf` plot from the manuscript PACF plot to see if autocorrelation is present, and if so, which order is significant.
 
 ```{r}
 pacf(ussteamco.mod.3$residuals)
@@ -937,7 +936,7 @@ The model-level test asks whether the refined model explains revenue better than
 
 ### Exercise 5.31. Showcase: Visualizing the uncertainty in the model parameters
 
-This exercise is a showcase rather than part of the US SteamCo case workflow. It supports Figure 5.20 by illustrating a general idea: repeated samples from the same underlying regression model produce different fitted lines, even when the true relationship is unchanged.
+This exercise is a showcase rather than part of the US SteamCo case workflow. It illustrates a general idea from the manuscript discussion of prediction uncertainty: repeated samples from the same underlying regression model produce different fitted lines, even when the true relationship is unchanged.
 
 First, we set the values of the parameters. Play around with these to see the effect on the ultimate graph!
 
@@ -1013,27 +1012,27 @@ All the elements created earlier are now plotted on a single canvas.
 regression_lines_plot <- ggplot() +
   geom_line(
     data = simulated_lines, aes(x = x, y = y, group = rep),
-    color = ada_colour("blue"), alpha = 0.1
+    color = ada_plot_color("blue"), alpha = 0.1
   ) + # Plot the simulated regression lines
-  geom_line(data = true_line, aes(x = x, y = y), color = ada_colour("lightpink"), linewidth = .5) + # Plot the true line
+  geom_line(data = true_line, aes(x = x, y = y), color = ada_plot_color("lightpink"), linewidth = .5) + # Plot the true line
   geom_line(
     data = ci_bounds_true, aes(x = x, y = ci_lower),
-    color = ada_colour("lightpink"), linewidth = .5, linetype = "solid"
+    color = ada_plot_color("lightpink"), linewidth = .5, linetype = "solid"
   ) + # Lower bound (true line)
   geom_line(
     data = ci_bounds_true, aes(x = x, y = ci_upper),
-    color = ada_colour("lightpink"), linewidth = .5, linetype = "solid"
+    color = ada_plot_color("lightpink"), linewidth = .5, linetype = "solid"
   ) + # Upper bound (true line)
   labs(
     title = paste(rep, " Regression Lines with Confidence Interval Based on True Model"),
     x = "x", y = "y"
   ) +
-  ggplot2::theme_bw() +
+  theme_classic(base_size = 12) +
   xlim(x_extended_min, x_extended_max) # Extend the x-axis limits
 regression_lines_plot
 ```
 
-The resulting graph is shown in Figure 5.20.
+The resulting graph is shown below.
 
 Use the figure as a reminder that a fitted regression line is an estimate. The same modelling process can produce different lines when the sample changes, which is why prediction intervals matter in the audit expectation exercises.
 
@@ -1041,7 +1040,7 @@ Use the figure as a reminder that a fitted regression line is an estimate. The s
 
 This exercise is also an illustration rather than a case step. It stays in the student notebook because it introduces the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation before we return to the case-based forecasting exercises.
 
-Figure 5.18 shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
+The manuscript confidence-and-prediction interval figure shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
 
 ```{r}
 # Calculate the standard error for prediction interval
@@ -1063,22 +1062,22 @@ intervals_plot <- ggplot() +
   geom_ribbon(
     data = pi_bounds_true,
     aes(x = x, ymin = pi_lower, ymax = pi_upper),
-    fill = ada_colour("blue"), alpha = 0.15
+    fill = ada_plot_color("blue"), alpha = 0.15
   ) + # 99% prediction interval as a ribbon
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_lower),
-    color = ada_colour("blue"), linewidth = .5, linetype = "dashed"
+    color = ada_plot_color("blue"), linewidth = .5, linetype = "dashed"
   ) + # 95% CI lower
   geom_line(
     data = ci_bounds_true,
     aes(x = x, y = ci_upper),
-    color = ada_colour("blue"), linewidth = .5, linetype = "dashed"
+    color = ada_plot_color("blue"), linewidth = .5, linetype = "dashed"
   ) + # 95% CI upper
   geom_line(
     data = true_line,
     aes(x = x, y = y),
-    color = ada_colour("blue"), linewidth = 1
+    color = ada_plot_color("blue"), linewidth = 1
   ) + # True regression line
   labs(
     x = "x", y = "y"
@@ -1140,7 +1139,7 @@ Use the monthly differences as a first exception scan. A month outside the predi
 
 This exercise visualizes the same monthly comparison. The practical question is whether any recorded revenue pattern falls outside the model-based expectation rather than only whether individual numbers differ.
 
-In Figure 5.19 we have plotted expectations against the recorded values of revenue, indicating which individual observations fall outside of the 99% prediction interval. The following code is used to create it.
+In the manuscript hold-out expectations figure we have plotted expectations against the recorded values of revenue, indicating which individual observations fall outside of the 99% prediction interval. The following code is used to create it.
 
 ```{r}
 # Convert predictions to a data frame and add the date column
@@ -1157,14 +1156,14 @@ expectations_plot <- ggplot(pred_df, aes(x = date)) +
   # Plot the predicted values as a line
   geom_line(aes(y = fit, color = "Expectation"), linewidth = 1) +
   # Add the prediction interval as a shaded area
-  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = ada_colour("blue"), alpha = 0.2) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = ada_plot_color("blue"), alpha = 0.2) +
   # Plot the actual values, with conditional coloring for outside interval points
   geom_line(aes(y = recorded, color = "Recorded"), linewidth = 1) +
   # Highlight points outside interval in red
-  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = ada_colour("lightpink"), size = 2) +
+  geom_point(data = subset(pred_df, outside), aes(y = recorded), color = ada_plot_color("lightpink"), size = 2) +
   # Define color for predicted and actual values
   scale_color_manual(
-    values = c("Expectation" = ada_colour("blue"), "Recorded" = ada_colour("lightpink")),
+    values = c("Expectation" = ada_plot_color("blue"), "Recorded" = ada_plot_color("lightpink")),
     name = ""
   ) +
   labs(
