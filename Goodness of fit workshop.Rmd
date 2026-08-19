@@ -7,9 +7,9 @@ output:
     df_print: paged
 ---
 
-**Volume 1 workbooks v0.1.0, published 2026-08-19.**
-
 <!-- GENERATED FILE: edit notebooks/support/goodness-of-fit/support.Rmd in the private ada repository. -->
+
+**Volume 1 workbooks v0.1.0, published 2026-08-19.**
 
 
 ## Goodness of fit
@@ -104,8 +104,6 @@ Using the built-in test
 chisq.test(x = observed, p = p)
 ```
 
-### Benford's Law
-
 ```{r}
 # Benford probabilities
 digits <- 1:9
@@ -133,8 +131,6 @@ benford_plot <- ggplot(benford, aes(x = Digit, y = Probability)) +
 
 benford_plot
 ```
-
-### Examples from Benford
 
 ```{r}
 library(tidyverse)
@@ -187,8 +183,6 @@ benford_examples_plot <- ggplot(
 benford_examples_plot
 ```
 
-### Comparison of average with theoretical
-
 ```{r}
 # Benford probabilities (%)
 benford <- 100 * probabilities
@@ -228,8 +222,6 @@ benford_average_plot <- ggplot(
 
 benford_average_plot
 ```
-## Inventory data
-
 ```{r}
 # Benford probabilities (%)
 inv_expected <- 300 * probabilities
@@ -320,8 +312,6 @@ Using the built-in test
 ```{r}
 chisq.test(x = inv_observed, p = probabilities)
 ```
-## Discrete Uniform Distribution
-
 ```{r}
 # First digit probabilities
 first_digit <- data.frame(
@@ -365,42 +355,46 @@ benford_digit_plot
 
 
 
-```{r, eval=exists("ussteamco.mod.3")}
-library(ggplot2)
-library(grid)
-library(gridExtra)
+```{r}
+# The ordinary business-day baseline gives the expected mix of journal-entry
+# types. The final two working days provide the observed counts for a focused
+# period-end screen.
+je_categories <- c(
+  "Sales entries",
+  "Purchase entries",
+  "Cash receipts/payments",
+  "Payroll entries",
+  "Inventory and cost-of-sales entries",
+  "Accruals and deferrals",
+  "Reclassifications",
+  "Manual adjustments"
+)
 
-nres <- ussteamco.mod.3$residuals / sd(ussteamco.mod.3$residuals)
-model3 <- as.data.frame(nres)
+je_baseline <- c(0.26, 0.22, 0.16, 0.07, 0.10, 0.08, 0.06, 0.05)
+je_observed <- c(82, 74, 51, 24, 38, 63, 42, 46)
+je_expected <- sum(je_observed) * je_baseline
 
-# Function to create a histogram with a given number of bins
-create_hist <- function(bins) {
-  ggplot(model3, aes(nres)) +
-    geom_histogram(aes(y = after_stat(density)),
-      breaks = seq(min(nres), max(nres), length.out = bins + 1),
-      fill = ada_colour("blue"), color = "black"
-    ) +
-    stat_function(
-      fun = dnorm,
-      args = list(
-        mean = mean(model3$nres),
-        sd = sd(model3$nres)
-      ),
-      color = ada_colour("red"), size = 1
-    ) +
-    labs(
-      title = paste("Histogram with", bins, "bins"),
-      x = "Standardized Residuals", y = "Density"
-    ) +
-    ggplot2::theme_bw()
-}
+je_summary <- data.frame(
+  category = je_categories,
+  observed = je_observed,
+  baseline_probability = je_baseline,
+  expected = je_expected,
+  chi_square_component = (je_observed - je_expected)^2 / je_expected
+)
 
-# Create the four histograms
-hist_6 <- create_hist(6)
-hist_7 <- create_hist(7)
-hist_8 <- create_hist(8)
-hist_9 <- create_hist(9)
+je_summary
 
-# Arrange in a 2x2 grid using grid
-grid.arrange(hist_6, hist_7, hist_8, hist_9, ncol = 2)
+je_chi_square <- sum(je_summary$chi_square_component)
+je_df <- length(je_categories) - 1
+je_critical_value <- qchisq(0.95, df = je_df)
+je_p_value <- pchisq(je_chi_square, df = je_df, lower.tail = FALSE)
+
+c(
+  chi_square = je_chi_square,
+  degrees_of_freedom = je_df,
+  critical_value = je_critical_value,
+  p_value = je_p_value
+)
+
+chisq.test(x = je_observed, p = je_baseline)
 ```

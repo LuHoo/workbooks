@@ -7,9 +7,9 @@ output:
     df_print: paged
 ---
 
-**Volume 1 workbooks v0.1.0, published 2026-08-19.**
-
 <!-- GENERATED FILE: edit notebooks/support/auxiliary-variables-and-stratification/support.Rmd in the private ada repository. -->
+
+**Volume 1 workbooks v0.1.0, published 2026-08-19.**
 
 
 ## Estimation with auxiliary variables and stratification
@@ -309,6 +309,28 @@ We calculate the required sample size for a desired precision of 200,000. Read t
 ```{r}
 cumul <- size(cumul, desPrec = 200000)
 cumul$n
+```
+The calculated sample size must be allocated to the strata before the fieldwork sample can be selected. Here we use proportional allocation: each stratum receives a share of the sample based on its share of population items. Inspect the allocation and explain which stratum receives the most audit effort and why that follows from the cumulative stratification summary.
+
+```{r}
+stratum_summary <- cumul$stratSumm
+allocation <- data.frame(
+  stratum = stratum_summary$strat,
+  items = stratum_summary$freq,
+  share = stratum_summary$freq / sum(stratum_summary$freq)
+)
+
+raw_allocation <- cumul$n * allocation$share
+allocation$planned_n <- floor(raw_allocation)
+
+remaining_items <- cumul$n - sum(allocation$planned_n)
+if (remaining_items > 0) {
+  largest_remainders <- order(raw_allocation - floor(raw_allocation), decreasing = TRUE)
+  allocation$planned_n[largest_remainders[seq_len(remaining_items)]] <-
+    allocation$planned_n[largest_remainders[seq_len(remaining_items)]] + 1
+}
+
+allocation
 ```
 We then select the stratified sample using the fixed seed so the sample can be reproduced.
 

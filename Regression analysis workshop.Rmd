@@ -7,9 +7,9 @@ output:
     df_print: paged
 ---
 
-**Volume 1 workbooks v0.1.0, published 2026-08-19.**
-
 <!-- GENERATED FILE: edit notebooks/support/regression-analysis/support.Rmd in the private ada repository. -->
+
+**Volume 1 workbooks v0.1.0, published 2026-08-19.**
 
 
 ## Regression analysis
@@ -18,7 +18,10 @@ output:
 
 This first exercise prepares the regression-analysis workspace. The practical goal is to load the tools used for data inspection, model fitting, plotting, and diagnostics before any audit model is built.
 
-To run the exercises in this workshop, we need to load a few packages.
+In R, the setup chunk loads the packages used throughout the workshop. The groups are practical: `aicpa` provides the SteamCo data, `ggplot2`, `gridExtra`, `grid`, `scales`, `latex2exp`, and `corrplot` support plots and visual checks, `tidyr` supports data reshaping, and `car` and `lmtest` provide regression summaries and diagnostics.
+
+
+Read this step as a readiness check: before inspecting audit data, confirm that the data, plotting, modelling, and diagnostic tools are available.
 
 ```{r setup}
 library(ggplot2) # Data visualization
@@ -383,91 +386,18 @@ Use the largest cross-correlations as a prompt for model judgment. If the strong
 
 This exercise starts the diagnostic review of the selected interaction model. The practical task is to inspect whether residuals look randomly scattered or whether visible patterns suggest a model misspecification.
 
-The residual plots in the manuscript residual-plots figure are obtained by:
+The manuscript residual-plots figure is produced with custom layout code. For the workshop, use a compact diagnostic plotting workflow to inspect the same modelling question.
 
 ```{r}
-# Add Pearson residuals to the data
-USSteamCoEstim$resid <- residuals(ussteamco.mod.2, type = "pearson")
-
-# Extract predictor names
-predictors <- all.vars(formula(ussteamco.mod.2))[-1]
-
-# Function to create residual plot
-make_resid_plot <- function(data, var) {
-  n_unique <- length(unique(data[[var]]))
-
-  p <- ggplot(data, aes(x = .data[[var]], y = resid)) +
-    geom_point(color = ada_plot_color("blue"), alpha = 0.7) +
-    geom_hline(yintercept = 0, linetype = "dotted") +
-    scale_x_continuous(labels = label_comma()) +
-    scale_y_continuous(labels = label_comma()) +
-    labs(x = var, y = "")
-
-  if (n_unique > 2) {
-    p <- p +
-      geom_smooth(
-        method = "lm",
-        formula = y ~ poly(x, 2),
-        se = FALSE,
-        color = ada_plot_color("lightpink")
-      )
-  } else {
-    p <- p +
-      geom_smooth(
-        method = "lm",
-        formula = y ~ x,
-        se = FALSE,
-        color = ada_plot_color("lightpink")
-      )
-  }
-
-  p
-}
-
-# Create residual plots for each predictor
-plots <- lapply(predictors, function(var) {
-  make_resid_plot(USSteamCoEstim, var)
-})
-
-# Fitted values vs residuals plot
-fitted_data <- data.frame(
-  fitted = fitted(ussteamco.mod.2),
-  resid = USSteamCoEstim$resid
+residualPlots(ussteamco.mod.2,
+  layout = c(2, 3),
+  quadratic = FALSE,
+  linear = TRUE
 )
-
-fitted_plot <- ggplot(fitted_data, aes(x = fitted, y = resid)) +
-  geom_point(color = ada_plot_color("blue"), alpha = 0.7) +
-  geom_hline(yintercept = 0, linetype = "dotted") +
-  geom_smooth(
-    method = "lm",
-    formula = y ~ poly(x, 2),
-    se = FALSE,
-    color = ada_plot_color("lightpink")
-  ) +
-  scale_x_continuous(labels = label_comma()) +
-  scale_y_continuous(labels = label_comma()) +
-  labs(x = "Fitted Values", y = "")
-
-# Top grid: 2x2 layout of the first 4 residual plots
-top <- arrangeGrob(
-  grobs = plots[1:4],
-  ncol = 2
-)
-
-# Combine top and bottom
-combined <- arrangeGrob(
-  top,
-  fitted_plot,
-  ncol = 1,
-  heights = c(2, 1)
-)
-
-# Display
-grid.newpage()
-grid.draw(combined)
 ```
 
 After creating the plots, look for curves, changing spread, or isolated points. A clean residual pattern supports using the model as an audit expectation; a visible pattern means the model may still be missing an important feature.
+
 
 
 
@@ -515,11 +445,13 @@ This exercise checks whether any months have unusually large residuals after fit
 
 The manuscript QQ plot provides the QQ plot for \ttblue{ussteamco.mod.2}, with the three largest Studentized residuals identified.
 
+
 ```{r}
 qqPlot(ussteamco.mod.2, id = list(n = 3))
 ```
 
 Use the labelled observations as a review list. They should be connected back to the business period or underlying records before deciding whether the model is unreliable or whether a particular month is unusual but explainable.
+
 
 ## Exercise 5.15. Influential observations
 
@@ -527,11 +459,13 @@ This exercise combines the previous ideas by measuring how much each observation
 
 We obtain the Cook's distances of a model by running the `cooks.distance` function on it.
 
+
 ```{r}
 cooks.mod.2 <- cooks.distance(ussteamco.mod.2)
 ```
 
 The three largest Cook's distances are then summarized by
+
 
 ```{r}
 cooks.mod.2[order(cooks.mod.2, decreasing = TRUE)[1:3]]
@@ -904,8 +838,6 @@ This exercise inspects the coefficient-level evidence for the refined model. The
 The summary of this model is:
 
 ```{r}
-options(scipen = 999)
-options(digits = 9)
 summary(ussteamco.mod.5)
 ```
 
@@ -1034,13 +966,13 @@ regression_lines_plot <- ggplot() +
 regression_lines_plot
 ```
 
-The resulting graph is shown below.
+The manuscript simulated-regression-lines figure shows the resulting graph.
 
-Use the figure as a reminder that a fitted regression line is an estimate. The same modelling process can produce different lines when the sample changes, which is why prediction intervals matter in the audit expectation exercises.
+Use the figure as a reminder that a fitted regression line is uncertain because it is estimated from a sample. Confidence intervals describe uncertainty around the mean response or fitted relationship. Prediction intervals are wider because they also include variation for individual future observations. This distinction matters before interpreting hold-out revenue predictions.
 
 ## Exercise 5.32. Showcase: Confidence and prediction intervals
 
-This exercise is also an illustration rather than a case step. It stays in the student notebook because it introduces the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation before we return to the case-based forecasting exercises.
+This illustration prepares the next forecasting exercises by showing the visual distinction between a confidence interval for the mean response and a prediction interval for a new observation.
 
 The manuscript confidence-and-prediction interval figure shows a regression line with a dotted confidence interval and a shaded prediction interval. It is created with the following code.
 
