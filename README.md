@@ -2,6 +2,8 @@
 
 Interactive workshop notebooks accompanying Volume 1 of the book.
 
+**Volume 1 workbooks v0.1.0, published 2026-08-19.**
+
 ## Launch on Binder
 
 Choose the interface that matches your workshop type:
