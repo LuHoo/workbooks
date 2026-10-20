@@ -16,7 +16,7 @@ output:
 
 ### Exercise 2.1 Drawing a sample
 
-In this Chapter we will use one single data file, so you can get familiar with estimating a mean, a proportion, and their respective confidence intervals without learning the specifics of many different datasets. The `salaries` dataset contains salary details of 2,222 employees of the imaginary town of Winesburg, and is included with the `FSaudit` package. The data file indicates for each employee the Grade, Step within the Grade, and Gross salary, as well as a unique employee ID. The field Gender is coded with a 1 for female and a 0 for male.
+In this Chapter we will use one single data file, so you can get familiar with estimating a mean, a proportion, and their respective confidence intervals without learning the specifics of many different datasets. The `salaries` dataset contains salary details of 2,222 employees of the imaginary town of Winesbury, and is included with the `FSaudit` package. The data file indicates for each employee the Grade, Step within the Grade, and Gross salary, as well as a unique employee ID. The field Gender is coded with a 1 for female and a 0 for male.
 
 The practical task is to create the sample that will be used throughout the workshop. Keeping the dataset, population size, sample size, and seed explicit makes the later estimates reproducible.
 

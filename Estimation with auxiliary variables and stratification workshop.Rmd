@@ -44,7 +44,7 @@ Use these outputs as a data-readiness check. Later calculations rely on these re
 
 ### Exercise 3.2. Working with the CVS object
 
-We first create a Classical Variables Sampling ("CVS") object. An object is a container that gathers all the data relevant to a particular sampling application. The `FSaudit` package recognizes three such objects. We work with the CVS object `cvs_obj` in this chapter, and with the attribute `att_obj` and MUS `mus_obj` objects in Chapter 5.
+We first create a Classical Variables Sampling ("CVS") object. An object is a container that gathers all the data relevant to a particular sampling application. The `FSaudit` package recognizes three such objects. We work with the CVS object `cvs_obj` in this chapter, and with the attribute `att_obj` and MUS `mus_obj` objects in Chapter 4 (Hypothesis testing).
 
 The practical goal is to keep the sampling plan, selected items, audit values, and evaluation results together so each later estimator is applied to the same audit evidence. We create the CVS object `mySample` by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiers `id`, and the random seed number `seed`.
 
@@ -197,7 +197,7 @@ Use this table to compare methods on the same evidence base. Focus first on the 
 
 This exercise switches from inventories to accounts receivable and uses CVS when errors are sporadic. The practical task is to select the sample, attach the audited values, and identify whether the sporadic-error calculation is triggered.
 
-We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
+We start with setting up a `cvs_obj` object named `arSample`, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
 
 
 ```{r}
@@ -231,7 +231,7 @@ We then evaluate the sample and look at the `Estimates` attribute.
 arSample <- evaluate(arSample, av = audit_values$av2)
 arSample$evalResults$Estimates
 ```
-The number of differences is stored in the `#_Errors` attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error (k = 4 to 19) method, or using the standard CVS method.
+The number of differences is stored in the `#_Errors` attribute, under each of the estimation methods. This way, you can tell if precision was calculated with the sporadic error (k = 3 to 19) method, or using the standard CVS method.
 
 ```{r}
 arSample$evalResults$`Regression estimation`$`#_Errors`
@@ -239,7 +239,7 @@ arSample$evalResults$`Regression estimation`$`#_Errors`
 
 Use the number of errors as a method check before interpreting the interval. The audit conclusion should be based on the evaluation method that matches the observed error pattern.
 
-Most of the calculations presented in the manuscript section on using CVS with sporadic errors are easy to follow, so we will not repeat them all in this workshop. Instead, we zoom in on some specific parts of the overall calculations.
+Most of the calculations presented in the manuscript section on using CVS with sporadic errors develop the full calculations step by step; here we highlight the two ingredients that are new compared with the unstratified case: the upper bound $M_U$ on the proportion of errors in the population, and the use of $m - 1$ degrees of freedom for the $t$-value.
 
 The value of $M_U$ that is used in, for example, the sporadic-difference standard-deviation equation is obtained as follows.
 ```{r}
@@ -258,7 +258,7 @@ Treat these values as ingredients in the interval calculation rather than separa
 
 This exercise creates a first stratified design using equal recorded-value boundaries. The practical question is whether this simple rule divides the inventory population into useful groups before sample sizes are assigned.
 
-We start with creating a CVS object.
+We start with creating a CVS object named `equal`.
 ```{r}
 equal <- cvs_obj(
   bv = inventoryData$bv,
@@ -276,11 +276,13 @@ equal <- stratify(equal,
 equal$stratSumm
 ```
 
-Inspect the stratum summary before comparing methods. If most book value is concentrated in only one stratum, equal boundaries may be less helpful than a stratification rule designed around the cumulative value distribution.
+Inspect the stratum summary before comparing methods. If most book value is concentrated in only one stratum, equal boundaries may be less helpful than a stratification rule designed around the cumulative value distribution. Once you have reproduced the summary, experiment with a larger number of strata (for example 5 or 10) to see how the boundaries and the number of items per stratum change.
 
 ### Exercise 3.9. Stratification with the cumulative method
 
 This exercise applies stratification before sample selection. The practical question is whether grouping inventory items by book value can produce a sampling design that reaches the desired precision more efficiently.
+
+We create a new CVS object named `cumul`, and use the stratification with the cumulative method rather than the equal recorded boundaries of Exercise 3.8: because the book values are strongly right-skewed, equal book-value strata concentrate almost all items in the first stratum, whereas the cumulative square root of frequencies method balances the number of items and the variability per stratum.
 
 ```{r}
 cumul <- cvs_obj(
@@ -306,7 +308,7 @@ The stratification summary is then:
 cumul$stratSumm
 ```
 
-We calculate the required sample size for a desired precision of 200,000. Read the resulting sample size as a planning output: it tells us how much evidence this stratified design expects to need before audit values are collected.
+We calculate the required sample size for a desired precision of 200,000. Read the resulting sample size as a planning output: it tells us how much evidence this stratified design expects to need before audit values are collected. Once you have reproduced the calculation, experiment with other values of `desPrec` to see how sensitive the required sample size is to the target precision.
 
 ```{r}
 cumul <- size(cumul, desPrec = 200000)
@@ -357,4 +359,4 @@ A summary table of the estimates for each of the estimation methods is stored in
 cumul$evalResults$Estimates
 ```
 
-Compare this summary with the earlier unstratified results. The learning point is to interpret stratification as a design choice: it is useful when the reduction in uncertainty justifies the extra planning and implementation effort.
+Compare this summary with the earlier unstratified results: in the manuscript, stratification brings the achieved precision of the MPU estimate down from 684,415 to 245,704, and the auxiliary-variable estimators to roughly 127,000, below the target precision of 200,000. The learning point is to interpret stratification as a design choice: it is useful when the reduction in uncertainty justifies the extra planning and implementation effort.
