@@ -74,7 +74,7 @@ proportions by the sample size.
 (expected <- n * p)
 ```
 
-The chi-square test statistic is
+The $\chi^2$ test statistic is
 
 ```{r}
 # Chi-square test statistic (manual calculation)
@@ -92,7 +92,7 @@ alpha <- 0.05
 (critical_value <- qchisq(1 - alpha, df))
 ```
 
-Calculation of the p-value
+Calculation of the $p$-value
 
 ```{r}
 (p_value <- pchisq(chi_sq, df, lower.tail = FALSE))
@@ -286,7 +286,7 @@ df <- 8 # Degrees of freedom
 x <- seq(0, 20, by = 0.1) # Range of x values
 tail_start <- 15.51 # Starting point for the shaded tail
 
-# Create a data frame for the chi-square distribution
+# Create a data frame for the $\chi^2$-distribution
 data <- data.frame(
   x = x,
   y = dchisq(x, df = df)

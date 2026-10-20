@@ -48,6 +48,7 @@ We first create a Classical Variables Sampling ("CVS") object. An object is a co
 
 The practical goal is to keep the sampling plan, selected items, audit values, and evaluation results together so each later estimator is applied to the same audit evidence. We create the CVS object `mySample` by running the `cvs_obj` function, and at the same time fill it with information on the required sample size `n`, the relevant book values `bv`, identifiers `id`, and the random seed number `seed`.
 
+
 ```{r}
 mySample <- cvs_obj(
   n = 400,
@@ -198,6 +199,7 @@ This exercise switches from inventories to accounts receivable and uses CVS when
 
 We start with setting up a cvs_obj object, and fill it with the parameters. We use the prefix `ar` for accounts receivable.
 
+
 ```{r}
 arSample <- cvs_obj(
   bv = accounts_receivable$amount,
@@ -333,6 +335,7 @@ if (remaining_items > 0) {
 allocation
 ```
 We then select the stratified sample using the fixed seed so the sample can be reproduced.
+
 
 ```{r}
 cumul <- select(cumul, seed = 12345)

@@ -631,7 +631,7 @@ The AIC values shown above can be compared directly because all four models are 
 
 The AIC value of the `model_backward` does not quite match the output of the `step` function. This can be explained as follows.
 
-The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
+The Akaike information criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
 where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters.
 
@@ -695,7 +695,7 @@ The Shapiro-Wilk normality test is executed through the `shapiro.test` function 
 shapiro.test(ussteamco.mod.3$residuals)
 ```
 
-Interpret the visual checks and the Shapiro-Wilk test together. A small p-value would suggest that the residuals depart from normality enough to question normal-theory intervals or tests.
+Interpret the visual checks and the Shapiro-Wilk test together. A small $p$-value would suggest that the residuals depart from normality enough to question normal-theory intervals or tests.
 
 ## Exercise 5.24. Testing heteroskedasticity
 
