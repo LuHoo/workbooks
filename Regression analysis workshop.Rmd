@@ -548,9 +548,21 @@ anova(ussteamco.mod.0)
 The `anova` table printed by `R` does not include a Total row; it can be added for completeness, as in the manuscript ANOVA table.
 
 ```{r}
-anova.mod.0 <- anova(ussteamco.mod.0)
-(total_row <- c(Df = sum(anova.mod.0$Df), `Sum Sq` = sum(anova.mod.0$`Sum Sq`)))
-rbind(anova.mod.0, Total = total_row)
+anova_mod0 <- anova(ussteamco.mod.0)
+anova_with_total <- rbind(
+  anova_mod0,
+  data.frame(
+    Df = sum(anova_mod0$Df),
+    `Sum Sq` = sum(anova_mod0$`Sum Sq`),
+    `Mean Sq` = NA,
+    `F value` = NA,
+    `Pr(>F)` = NA,
+    check.names = FALSE
+  )
+)
+rownames(anova_with_total)[nrow(anova_with_total)] <- "Total"
+class(anova_with_total) <- "data.frame"
+anova_with_total
 ```
 
 The variance of $y$, $s_y^2 = \frac{\sum(y_i - \bar{y})^2}{n - 1}$, is obtained from
@@ -1468,7 +1480,7 @@ achieved_assurance
 
 With the current implementation and the audit parameters above, the achieved assurance is approximately 36.9% in each direction.
 
-The 36.9% can be reconstructed in three steps. First, standardize the audit quantities: $\delta = PM / annual\_se$ and the standardized decision bound $c_U = qt(1 - \beta/2, df)$. Second, compute the probability that a non-central $t$ distribution with non-centrality parameter $\delta$ exceeds the upper bound, `pt(c_U, df, ncp = delta, lower.tail = FALSE)`; this is the assurance for detecting a material overstatement, and the lower tail with `ncp = -delta` gives the understatement counterpart. Third, express the resulting probability as a percentage, which gives approximately 36.9% in each direction.
+The 36.9% can be reconstructed in three steps. First, standardize the audit quantities: $\delta = PM / annual\_se$ and the standardized decision bound $c_U = qt(1 - \beta/2, df)$. Second, compute the probability that a non-central $t$-distribution with non-centrality parameter $\delta$ exceeds the upper bound, `pt(c_U, df, ncp = delta, lower.tail = FALSE)`; this is the assurance for detecting a material overstatement, and the lower tail with `ncp = -delta` gives the understatement counterpart. Third, express the resulting probability as a percentage, which gives approximately 36.9% in each direction.
 
 This assurance level describes how strongly the analytical procedure can detect a material difference under the selected assumptions. It should be considered together with the acceptable-difference conclusion, not read as a stand-alone pass or fail.
 
