@@ -47,7 +47,7 @@ ada_colour <- function(name) {
 theme_set(ggplot2::theme_bw())
 ```
 
-### Exercise 6.2.  Customer satisfaction survey
+### Exercise 6.2. Customer satisfaction survey
 
 The client satisfaction results from the manuscript client-satisfaction table
 
@@ -104,6 +104,8 @@ Using the built-in test
 chisq.test(x = observed, p = p)
 ```
 
+### Exercise 6.3. Benford's Law
+
 ```{r}
 # Benford probabilities
 digits <- 1:9
@@ -131,6 +133,8 @@ benford_plot <- ggplot(benford, aes(x = Digit, y = Probability)) +
 
 benford_plot
 ```
+
+### Exercise 6.4. Examples from Benford
 
 ```{r}
 library(tidyverse)
@@ -183,6 +187,8 @@ benford_examples_plot <- ggplot(
 benford_examples_plot
 ```
 
+### Exercise 6.5. Comparison of average with theoretical
+
 ```{r}
 # Benford probabilities (%)
 benford <- 100 * probabilities
@@ -222,6 +228,8 @@ benford_average_plot <- ggplot(
 
 benford_average_plot
 ```
+### Exercise 6.6. Inventory data
+
 ```{r}
 # Benford probabilities (%)
 inv_expected <- 300 * probabilities
@@ -276,7 +284,9 @@ round((inv_observed - inv_expected)^2, 2)
 ```{r}
 # Obs - Exp squared divided by expected
 round(((inv_observed - inv_expected)^2 / inv_expected), 2)
-sum(round(((inv_observed - inv_expected)^2 / inv_expected), 2))
+# Sum the components before rounding: rounding each component first
+# would give 19.77 instead of the exact 19.76
+round(sum((inv_observed - inv_expected)^2 / inv_expected), 2)
 ```
 
 Critical region
@@ -312,6 +322,8 @@ Using the built-in test
 ```{r}
 chisq.test(x = inv_observed, p = probabilities)
 ```
+### Exercise 6.7. Digit distributions
+
 ```{r}
 # First digit probabilities
 first_digit <- data.frame(
@@ -354,6 +366,8 @@ benford_digit_plot
 
 
 
+
+### Exercise 6.8. Journal-entry activity
 
 ```{r}
 # The ordinary business-day baseline gives the expected mix of journal-entry
