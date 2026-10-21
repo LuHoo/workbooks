@@ -18,7 +18,7 @@ output:
 
 This first exercise prepares the regression-analysis workspace. The practical goal is to load the tools used for data inspection, model fitting, plotting, and diagnostics before any audit model is built.
 
-In R, the setup chunk loads the packages used throughout the workshop. The groups are practical: `aicpa` provides the SteamCo data, `ggplot2`, `gridExtra`, `grid`, `scales`, `latex2exp`, and `corrplot` support plots and visual checks, `tidyr` supports data reshaping, and `car` and `lmtest` provide regression summaries and diagnostics.
+In R, the setup chunk loads the packages used throughout the workshop. The groups are practical: `aicpa` provides the US SteamCo data, `ggplot2`, `gridExtra`, `grid`, `scales`, `latex2exp`, and `corrplot` support plots and visual checks, `tidyr` supports data reshaping, and `car` and `lmtest` provide regression summaries and diagnostics.
 
 
 Read this step as a readiness check: before inspecting audit data, confirm that the data, plotting, modelling, and diagnostic tools are available.
@@ -53,7 +53,7 @@ theme_set(theme_classic(base_size = 12))
 
 Throughout this workshop, we work with the `USSteamCo` data file, this is available in the `aicpa` package. The data file is used in the AICPA Guide to Audit Analytics, Exhibit B-3.
 
-The audit task is to use production and weather-related information to explain revenue and later assess whether expected revenue is consistent with the observed data. Start by checking what variables are available and what one monthly record looks like.
+The audit task is to use production and weather-related information to explain revenue and later assess whether expected revenue is consistent with the observed data. The key variables are `revenue` (the dependent variable, expressed in US dollars), `production` (the steam production, in thousands of pounds), and `coolDD` and `heatDD` (the cooling and heating degree days, which count the days on which outside air temperatures were higher or lower than a specified base temperature). The dummy variable `summer` is added to the dataset in Exercise 5.3. Start by checking what variables are available and what one monthly record looks like.
 
 The `head` function shows the values of the variables (columns) in the first few observations (rows) from the dataset.
 
@@ -73,9 +73,9 @@ The `summary` command produces summary statistics of all variables in the datase
 summary(USSteamCo)
 ```
 
-Check the output for scale and completeness. Large differences in units are not a problem by themselves, but they matter when you interpret coefficients and plots later.
+Check the output for measurement scale and completeness. Large differences in units are not a problem by themselves, but they matter when you interpret coefficients and plots later.
 
-We create a dummy variable to distinguish between heating months and cooling months. Such a variable would have the value 1 in heating months and 0 in cooling months. The effect of this variable on the trajectory of the regression line is explained in the manuscript section on disaggregation.
+We create a dummy variable to distinguish between the heating months and the cooling months. Consistent with the seasonal pricing schedule of the Case, the variable `summer` takes the value 1 in the cooling months May through September, and the value 0 in the heating months November through March as well as in the shoulder months April and October. The effect of this variable on the trajectory of the regression line is explained in the manuscript section on disaggregation.
 
 The vector below contains one January-to-December pattern of 12 observations. Because the dataset contains 48 monthly observations, `R` recycles this 12-month pattern across the four years automatically. Later, when we include `summer` in a regression model, the `lm` function treats the 0/1 values as an indicator variable and estimates how the intercept and slope differ between the two seasons.
 
@@ -83,6 +83,8 @@ The vector below contains one January-to-December pattern of 12 observations. Be
 ```{r}
 USSteamCo$summer <- c(0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0)
 ```
+
+The variable `summer` has now been added to the data `USSteamCo`, which has now 7 variables.
 
 We reformat the month variable, that has a character type, into the `date` variable.
 
@@ -102,6 +104,16 @@ USSteamCoHold <- USSteamCo[37:48, ]
 
 The estimation set is used to build the model; the hold-out set is kept separate so model performance can later be checked on months that were not used for fitting.
 
+
+The manuscript scatterplot shows the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
+
+```{r}
+scatter_plot <- ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
+  geom_point(color = ada_plot_color("blue")) +
+  scale_x_continuous(name = "Production (x 1000 lb)", labels = scales::label_comma()) +
+  scale_y_continuous(name = "Revenue ($)", labels = scales::label_comma())
+scatter_plot
+```
 
 The manuscript histogram figure shows the histograms of the data in the US SteamCo estimation set.
 
@@ -163,16 +175,6 @@ time_series_plot
 ```
 
 
-The manuscript scatterplot shows the independent variable production ($x$-axis) and the dependent variable revenue ($y$-axis) for the Case: US SteamCo. The plot is an easy means to get a feel for the relationship.
-
-```{r}
-scatter_plot <- ggplot(USSteamCoEstim, aes(x = production, y = revenue)) +
-  geom_point(color = ada_plot_color("blue")) +
-  scale_x_continuous(name = "Production (x 1000 lb)", labels = scales::label_comma()) +
-  scale_y_continuous(name = "Revenue ($)", labels = scales::label_comma())
-scatter_plot
-```
-
 The enhanced scatter plot in the manuscript enhanced scatterplot is obtained by running the following code.
 
 ```{r}
@@ -209,6 +211,8 @@ A full summary of `mod.0` can be obtained with the `summary` function.
 summary(ussteamco.mod.0)
 ```
 In addition to the statistics produced by `car::brief()`, it provides insight into the residuals (minimum, first quartile, median, third quartile, and maximum), the $t$- and $p$-values of each of the coefficients and their significance, the adjusted $r^2$, and the $F$ statistic with its $p$-value.
+
+The number of printed digits follows the default R settings. The manuscript quotes rounded values, such as a residual standard error of 4,112,487 printed as 4,112,000; the number of displayed digits can be adjusted with `options(digits = ...)` without changing the underlying values.
 
 
 Read the output as a diagnostic summary, not as a final audit conclusion. The coefficient table indicates whether production contributes to the model, while residual spread and $r^2$ indicate how much uncertainty remains.
@@ -308,7 +312,7 @@ Adding the additional variables `coolDD` and `heatDD` has improved the fit of th
 
 For audit use, focus on what changed from `mod.0`: the unexplained variation is smaller and the model now reflects operational drivers beyond production. The next question is whether the relationship differs by season.
 
-## Exercise 5.9. Interactions
+## Exercise 5.9. Interactions `mod.2`
 
 In the manuscript section on disaggregation we developed `mod.2`, that incorporates two separate regression lines. In addition to the three independent variables, we also account for their interactions with the dummy variable `summer`.
 
@@ -483,7 +487,7 @@ influencePlot(ussteamco.mod.2, id = list(n = 3, cex = 0.8))
 
 Read the influence plot as a combined diagnostic view. The most important observations are those that are unusual on more than one dimension: high leverage, large residual, or large Cook's distance.
 
-## Exercise 5.17. Winsorizing observation # 22
+## Exercise 5.17. Winsorizing observation # 22 `mod.3`
 
 This exercise performs a sensitivity analysis for observation 22. The goal is not to declare the original value wrong automatically, but to see how much the model changes if the influence of that observation is reduced.
 
@@ -541,6 +545,14 @@ The manuscript ANOVA table for mod.0 provides the analysis of variance for `mod.
 anova(ussteamco.mod.0)
 ```
 
+The `anova` table printed by `R` does not include a Total row; it can be added for completeness, as in the manuscript ANOVA table.
+
+```{r}
+anova.mod.0 <- anova(ussteamco.mod.0)
+(total_row <- c(Df = sum(anova.mod.0$Df), `Sum Sq` = sum(anova.mod.0$`Sum Sq`)))
+rbind(anova.mod.0, Total = total_row)
+```
+
 The variance of $y$, $s_y^2 = \frac{\sum(y_i - \bar{y})^2}{n - 1}$, is obtained from
 
 ```{r}
@@ -586,6 +598,8 @@ We now turn to a model with multiple independent variables, for example, `mod.1`
 Declaring the independent variables in a different order shows that the calculation of the sum of squares is in sequential order.
 
 ```{r}
+# For comparison, the original call of mod.1 was:
+# ussteamco.mod.1 <- lm(revenue ~ production + coolDD + heatDD, data = USSteamCoEstim)
 ussteamco.mod.1b <- lm(revenue ~ heatDD + coolDD + production,
   data = USSteamCoEstim
 )
@@ -597,7 +611,7 @@ To address this issue, an alternative version of the analysis of variance, refer
 Anova(ussteamco.mod.1)
 ```
 
-We see that the marginal effect of adding `production`, assuming `coolDD` and `heatDD` have already been entered into the model, is 1.8260e+14. This is equal to the result obtained from the earlier `anova` command on `mod.1b`. We also see that the added value of entering `coolDD` into the model is limited: its sum of squares is much lower than that of the other two variables, and its related $F$ value is not significant.
+We see that the marginal effect of adding `production`, assuming `coolDD` and `heatDD` have already been entered into the model, is 182,600,000,000,000 (printed in scientific notation as 1.8260e+14). This is equal to the result obtained from the earlier `anova` command on `mod.1b`. We also see that the added value of entering `coolDD` into the model is limited: its sum of squares is much lower than that of the other two variables, and its related $F$ value is not significant.
 
 We have no clear preference for either `anova` or `Anova`, they both have their merits. `anova` decomposes TSS, but that decomposition is dependent on the order in which variables are entered into the equation. `Anova` shows the marginal effect of each independent variable, but these marginal effects do not add to TSS.
 
@@ -631,7 +645,7 @@ The AIC values shown above can be compared directly because all four models are 
 
 The AIC value of the `model_backward` does not quite match the output of the `step` function. This can be explained as follows.
 
-The Akaike Information Criterion (AIC) provides a penalized measure of model fit, defined as
+The Akaike information criterion (AIC) provides a penalized measure of model fit, defined as
 $\text{AIC} = -2 \log \hat{L} + 2k$,
 where $\log \hat{L}$ is the maximized log-likelihood of the model and $k$ is the number of estimated parameters.
 
@@ -695,7 +709,7 @@ The Shapiro-Wilk normality test is executed through the `shapiro.test` function 
 shapiro.test(ussteamco.mod.3$residuals)
 ```
 
-Interpret the visual checks and the Shapiro-Wilk test together. A small p-value would suggest that the residuals depart from normality enough to question normal-theory intervals or tests.
+Interpret the visual checks and the Shapiro-Wilk test together. A small $p$-value would suggest that the residuals depart from normality enough to question normal-theory intervals or tests.
 
 ## Exercise 5.24. Testing heteroskedasticity
 
@@ -719,7 +733,7 @@ Use the plot to look for changing spread and the Breusch-Pagan test as formal su
 
 ## Exercise 5.25. Testing autocorrelation
 
-This exercise checks whether residuals are related over time. Because the SteamCo data are monthly, the practical question is whether one month's unexplained revenue helps predict the next month's unexplained revenue.
+This exercise checks whether residuals are related over time. Because the US SteamCo data are monthly, the practical question is whether one month's unexplained revenue helps predict the next month's unexplained revenue.
 
 We use the `pacf` plot from the manuscript PACF plot to see if autocorrelation is present, and if so, which order is significant.
 
@@ -738,7 +752,7 @@ Note that the value labelled \texttt{LM test} in the software output is the Breu
 
 For audit use, treat this as a warning rather than a final rejection of the model. Marginal autocorrelation suggests that timing effects may still be present, so the next exercise tests a correction.
 
-## Exercise 5.26. First-order autocorrelation correction
+## Exercise 5.26. First-order autocorrelation correction `mod.4`
 
 A practical way to address first-order autocorrelation is to apply an AR(1) transformation. This method estimates the autocorrelation parameter and transforms the regression model by subtracting a multiple of the lagged value from the dependent variable and from each predictor. The transformed model can then be estimated by ordinary least squares.
 
@@ -813,7 +827,7 @@ bgtest(ussteamco.mod.4, order = 3)
 ```
 
 Compare the PACF plot and Breusch-Godfrey result with Exercise 5.25. The learning point is whether the correction reduced the autocorrelation problem enough for the model to remain a usable audit expectation.
-## Exercise 5.27. Constructing a refined model
+## Exercise 5.27. Constructing a refined model `mod.5`
 
 This exercise constructs the final candidate model for the hold-out expectation. The practical task is to simplify the interaction model while preserving a structure that remains interpretable for audit use.
 
@@ -860,7 +874,7 @@ Read these tests as a final reliability screen. If the refined model still shows
 The $F$ statistic used for testing the significance of the model as a whole can also be obtained from the \ttblue{summary()} table.
 
 
-Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests.
+Exercise 5.28 already displayed the full summary table. Here we isolate the $F$ statistic for the refined model so that the model-level significance test is distinguished from the coefficient-level tests. The number of printed decimals follows the default R settings; the manuscript rounds the values for readability, and this difference is a matter of display only.
 
 ```{r}
 summary(ussteamco.mod.5)
@@ -1262,6 +1276,18 @@ pred_df$outside_adj <- with(pred_df, recorded < lwr_adj | recorded > upr_adj)
 pred_df
 ```
 
+The table above is wide; the storm adjustment itself is isolated in the table below.
+
+```{r}
+storm_adjustment_table <- data.frame(
+  month = format(pred_df$date[march_row], "%B %Y"),
+  original_expectation = pred_df$fit[march_row],
+  storm_adjustment = storm_adjustment,
+  adjusted_expectation = pred_df$fit_adj[march_row]
+)
+storm_adjustment_table
+```
+
 For the annual calculations in the next exercise, the adjusted annual expectation is the sum of the adjusted monthly expectations.
 
 ```{r}
@@ -1295,6 +1321,7 @@ The adjusted annual expectation is the sum of these adjusted monthly expectation
 annual_prediction <- sum(monthly_expectations_adj)
 annual_prediction
 ```
+
 
 The recorded annual revenue is the benchmark amount being audited. Subtracting the adjusted expectation gives the observed difference for the year.
 
@@ -1440,6 +1467,8 @@ achieved_assurance
 ```
 
 With the current implementation and the audit parameters above, the achieved assurance is approximately 36.9% in each direction.
+
+The 36.9% can be reconstructed in three steps. First, standardize the audit quantities: $\delta = PM / annual\_se$ and the standardized decision bound $c_U = qt(1 - \beta/2, df)$. Second, compute the probability that a non-central $t$ distribution with non-centrality parameter $\delta$ exceeds the upper bound, `pt(c_U, df, ncp = delta, lower.tail = FALSE)`; this is the assurance for detecting a material overstatement, and the lower tail with `ncp = -delta` gives the understatement counterpart. Third, express the resulting probability as a percentage, which gives approximately 36.9% in each direction.
 
 This assurance level describes how strongly the analytical procedure can detect a material difference under the selected assumptions. It should be considered together with the acceptable-difference conclusion, not read as a stand-alone pass or fail.
 

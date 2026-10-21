@@ -46,7 +46,7 @@ Probabilities in the right-hand tail $P(k > k)$ can be calculated by passing the
 phyper(1, 17, 314, 60, lower.tail = FALSE)
 ```
 
-The right-tail result is the probability of seeing more than one error. In an audit setting, this tail probability helps students connect a sample finding to the question of whether the observed number of errors is still compatible with the assumed population error count.
+The right-tail result is the probability of seeing more than one error: because the distribution is discrete, it is the complement of the cumulative probability, $P(K > k) = 1 - P(K \leq k)$. In an audit setting, this tail probability helps students connect a sample finding to the question of whether the observed number of errors is still compatible with the assumed population error count.
  
 ### Exercise 1.2 Binomial distribution
  
@@ -130,9 +130,7 @@ for (sample_size in sample_sizes) {
     data.frame(
       sample_size = sample_size,
       mean_of_sample_means = mean(sample_means),
-      sd_of_sample_means = sd(sample_means),
       q05 = quantile(sample_means, 0.05),
-      median = median(sample_means),
       q95 = quantile(sample_means, 0.95)
     )
   )
@@ -143,9 +141,9 @@ clt_results
 
 Compare the rows for sample sizes 5, 25, and 100. Explain how the spread and symmetry of the simulated sample means change as the sample size increases, and decide at which sample size a normal approximation would be credible enough for a first audit calculation. Then change either the source distribution, the sample sizes, or the number of simulation runs and describe how your simulation design tests the same central-limit-theorem claim in a different setting. This is also where approximation judgment matters: even when software can simulate or compute directly, an approximation can be useful for planning and communication, but it should still be justified for the professional setting.
  
-### Exercise 1.5 Student's $t$ distribution
- 
-This exercise evaluates a sample mean with a small sample size, where uncertainty is represented with the $t$ distribution. The practical question is how unusual the observed sample mean is under the assumed population mean.
+### Exercise 1.5 Student's $t$-distribution
+
+This exercise evaluates a sample mean with a small sample size, where uncertainty is represented with the $t$-distribution. The practical question is how unusual the observed sample mean is under the assumed population mean.
 
 To calculate the probability found of 14.7%, we use the function `pt()` with arguments `x` for the boundary value and `df` for the number of degrees of freedom.
 
@@ -157,17 +155,17 @@ pt(t_val, 9)
  
 The probability is 14.7%. Interpret this as the left-tail area for the observed sample mean. Notice that we used another shortcut notation: we added brackets to the assignment of the `t_val` variable, so that the assigned value is returned immediately.
  
-### Exercise 1.6 $\chi^2$ (chi-squared) distribution
+### Exercise 1.6 $\chi^2$-distribution
  
 This exercise uses $\chi^2$ quantiles to build confidence bounds for a variance. The goal is to see how lower and upper distribution cutoffs become bounds on population variability.
 
-The 95\% upper bound on a $\chi^2$ distributed variable with (10 - 1) degrees of freedom is
+The 95\% upper bound on a $\chi^2$-distributed variable with (10 - 1) degrees of freedom is
  
 ```{r}
 qchisq(p = .95, df = 9)
 ```
  
-Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$ distributed variable
+Similarly, to calculate the upper bound for $\sigma^2$, we start with the lower bound of a $\chi^2$-distributed variable
  
 ```{r}
 qchisq(p = .05, df = 9)
@@ -177,7 +175,7 @@ These two results are then used to calculate the upper and lower 90\% confidence
 
 Read the two cutoffs together. They define the range of variance values that remain plausible at the chosen confidence level.
  
-### Exercise 1.7 $F$ distribution
+### Exercise 1.7 $F$-distribution
  
 This exercise calculates the decision boundary for an $F$ test. The practical task is to find the critical value first, then compare a test statistic with that boundary to decide whether the null hypothesis should be rejected.
 
