@@ -11,7 +11,7 @@ from .models import NotebookContext
 from .native_stats import lower_bound, upper_bound
 from .session import FSAuditSession
 
-BRIDGE_VERSION = "0.1.0"
+BRIDGE_VERSION = "0.3.0"
 
 _SESSION: FSAuditSession | None = None
 _CONTEXT = NotebookContext()
@@ -32,6 +32,7 @@ def configure_environment(
     r_seed: int | None = None,
     r_library_paths: list[str] | None = None,
     require_fsaudit_version: str | None = None,
+    r_sample_kind: str | None = None,
 ) -> dict[str, Any]:
     global _SESSION
     _SESSION = FSAuditSession(
@@ -40,6 +41,9 @@ def configure_environment(
     )
     session = _get_session()
     session.ensure_initialized()
+
+    if r_sample_kind is not None:
+        session.set_sample_kind(r_sample_kind)
 
     if seed is not None:
         random.seed(seed)
@@ -157,11 +161,33 @@ class ClassicalVariableSampler(_BaseSampler):
         return self._mutate("evaluate", **kwargs)
 
 
-def load_dataset(name: str) -> pd.DataFrame:
-    dataset = _get_session().load_dataset(name)
+def load_dataset(name: str, package: str = "FSaudit") -> pd.DataFrame:
+    dataset = _get_session().load_dataset(name, package=package)
     if not isinstance(dataset, pd.DataFrame):
         return pd.DataFrame(dataset)
     return dataset
+
+
+def sample_indices(
+    population_size: int,
+    sample_size: int,
+    seed: int | None = None,
+    sample_kind: str | None = None,
+) -> list[int]:
+    """Draw indices with base R sample() through the bridge session.
+
+    The draw runs in the persistent R session behind the bridge, using
+    R's own random number generator. Combined with sample_kind="Rounding"
+    and a fixed seed this reproduces the R workshop samples exactly. The
+    returned indices are zero-based so they can be used directly as
+    positional row indices for a pandas DataFrame.
+    """
+    return _get_session().sample_indices(
+        population_size,
+        sample_size,
+        seed=seed,
+        sample_kind=sample_kind,
+    )
 
 
 def att_sample(**kwargs: Any) -> AttributeSampler:
