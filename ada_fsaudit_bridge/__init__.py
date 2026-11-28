@@ -6,10 +6,12 @@ from .api import (
     cvs_sample,
     load_dataset,
     mus_sample,
+    sample_indices,
     reset_session,
     set_notebook_context,
 )
 from .native_stats import lower_bound, upper_bound
+from .manuscript_registry import RegistryEntry, RegistryValue, format_value
 
 __all__ = [
     "BRIDGE_VERSION",
@@ -20,7 +22,11 @@ __all__ = [
     "load_dataset",
     "lower_bound",
     "mus_sample",
+    "sample_indices",
+    "RegistryEntry",
+    "RegistryValue",
     "reset_session",
     "set_notebook_context",
+    "format_value",
     "upper_bound",
 ]

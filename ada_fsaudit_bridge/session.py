@@ -124,21 +124,67 @@ class FSAuditSession:
         self.ro.r["set.seed"](int(seed))
         self._configured_seed = int(seed)
 
-    def load_dataset(self, name: str) -> Any:
+    def set_sample_kind(self, sample_kind: str) -> None:
+        self.ensure_initialized()
+        if sample_kind not in ("Rounding", "Rejection"):
+            raise FSAuditExecutionError(
+                f"Unsupported sample kind '{sample_kind}'",
+                ErrorDetails(
+                    operation="set-sample-kind",
+                    function_name="RNGkind",
+                    notebook_context=self._context,
+                    remediation='Use "Rounding" or "Rejection" for sample.kind.',
+                    diagnostics=self.diagnostics(),
+                ),
+            )
+        self.ro.r(f'RNGkind(sample.kind = "{sample_kind}")')
+
+    def sample_indices(
+        self,
+        population_size: int,
+        sample_size: int,
+        seed: int | None = None,
+        sample_kind: str | None = None,
+    ) -> list[int]:
         self.ensure_initialized()
         try:
-            self.ro.r(f'data({name}, package = "FSaudit")')
+            if sample_kind is not None:
+                self.set_sample_kind(sample_kind)
+            if seed is not None:
+                self.ro.r["set.seed"](int(seed))
+                self._configured_seed = int(seed)
+            indices = self.ro.r["sample"](int(population_size), int(sample_size))
+            return [int(index) - 1 for index in indices]
+        except FSAuditExecutionError:
+            raise
+        except Exception as exc:
+            raise FSAuditExecutionError(
+                "R base sample() call failed",
+                ErrorDetails(
+                    operation="sample-indices",
+                    function_name="sample",
+                    notebook_context=self._context,
+                    r_error=str(exc),
+                    remediation="Check the population and sample sizes, and confirm the R session is healthy.",
+                    diagnostics=self.diagnostics(),
+                ),
+            ) from exc
+
+    def load_dataset(self, name: str, package: str = "FSaudit") -> Any:
+        self.ensure_initialized()
+        try:
+            self.ro.r(f'data({name}, package = "{package}")')
             value = self.ro.r[name]
             return r_to_python(value, context=self._context)
         except Exception as exc:
             raise FSAuditExecutionError(
-                f"Failed to load dataset '{name}' from FSaudit",
+                f"Failed to load dataset '{name}' from {package}",
                 ErrorDetails(
                     operation="load-dataset",
                     function_name="data",
                     notebook_context=self._context,
                     r_error=str(exc),
-                    remediation="Check that the dataset name exists in FSaudit and that the package is installed correctly.",
+                    remediation=f"Check that the dataset name exists in {package} and that the package is installed correctly.",
                     diagnostics=self.diagnostics(),
                 ),
             ) from exc
